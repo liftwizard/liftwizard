@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.liftwizard</groupId>
+        <artifactId>liftwizard</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>liftwizard-generator-plugins</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Liftwizard Generator Maven Plugins (Module Group)</name>
+
+    <modules>
+        <module>liftwizard-generator-xsd2bean-plugin</module>
+        <module>liftwizard-generator-reladomo-code-plugin</module>
+        <module>liftwizard-generator-reladomo-database-plugin</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.liftwizard</groupId>
+                <artifactId>liftwizard-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>
