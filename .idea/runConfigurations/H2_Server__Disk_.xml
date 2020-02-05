@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="H2 Server (Disk)" type="Application" factoryName="Application" singleton="true">
+    <option name="MAIN_CLASS_NAME" value="org.h2.tools.Server" />
+    <module name="liftwizard-bundle-h2" />
+    <option name="PROGRAM_PARAMETERS" value="-webAllowOthers -tcp -web -baseDir ." />
+    <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
