@@ -33,19 +33,20 @@
         <module>liftwizard-bundle-logging-config</module>
         <module>liftwizard-bundle-logging-http</module>
         <module>liftwizard-config-logging-config</module>
-        <module>liftwizard-config-logging-http</module>
         <module>liftwizard-config-logging-encoder</module>
         <module>liftwizard-config-logging-filter-requesturl</module>
+        <module>liftwizard-config-logging-http</module>
         <module>liftwizard-config-logging-logzio</module>
         <module>liftwizard-logging-filter-requesturl</module>
         <module>liftwizard-logging-mdc-closeable</module>
-        <module>liftwizard-servlet-logging-mdc-clear-keys</module>
-        <module>liftwizard-servlet-logging-mdc-clear-all</module>
+        <module>liftwizard-logging-p6spy</module>
         <module>liftwizard-servlet-logging-correlation-id</module>
+        <module>liftwizard-servlet-logging-mdc-clear-all</module>
+        <module>liftwizard-servlet-logging-mdc-clear-keys</module>
         <module>liftwizard-servlet-logging-resource-info</module>
-        <module>liftwizard-servlet-logging-structured-duration</module>
         <module>liftwizard-servlet-logging-structured-argument</module>
-        <module>liftwizard-servlet-logging-structured-status-info</module>
+        <module>liftwizard-servlet-logging-structured-duration</module>
         <module>liftwizard-servlet-logging-structured-reladomo</module>
+        <module>liftwizard-servlet-logging-structured-status-info</module>
     </modules>
 </project>
