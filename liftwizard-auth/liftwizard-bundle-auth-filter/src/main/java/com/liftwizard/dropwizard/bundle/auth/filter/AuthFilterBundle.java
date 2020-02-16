@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
 public class AuthFilterBundle
-        implements PrioritizedBundle<AuthFilterFactoryProvider>
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
 
@@ -40,10 +40,14 @@ public class AuthFilterBundle
     }
 
     @Override
-    public void run(AuthFilterFactoryProvider configuration, @Nonnull Environment environment)
+    public void run(Object configuration, @Nonnull Environment environment)
     {
-        List<AuthFilterFactory>                  authFilterFactories = configuration.getAuthFilterFactories();
-        List<AuthFilter<?, ? extends Principal>> authFilters         = this.getAuthFilters(authFilterFactories);
+        AuthFilterFactoryProvider authFilterFactoryProvider =
+                this.safeCastConfiguration(AuthFilterFactoryProvider.class, configuration);
+
+        List<AuthFilterFactory> authFilterFactories = authFilterFactoryProvider.getAuthFilterFactories();
+
+        List<AuthFilter<?, ? extends Principal>> authFilters = this.getAuthFilters(authFilterFactories);
 
         if (authFilters.isEmpty())
         {
