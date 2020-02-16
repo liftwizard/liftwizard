@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
 public class ReladomoBundle
-        implements PrioritizedBundle<ReladomoFactoryProvider>
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoBundle.class);
 
@@ -38,13 +38,17 @@ public class ReladomoBundle
     }
 
     @Override
-    public void run(@Nonnull ReladomoFactoryProvider configuration, @Nonnull Environment environment)
+    public void run(@Nonnull Object configuration, @Nonnull Environment environment)
     {
+        ReladomoFactoryProvider reladomoFactoryProvider = this.safeCastConfiguration(
+                ReladomoFactoryProvider.class,
+                configuration);
+
         LOGGER.info("Running {}.", ReladomoBundle.class.getSimpleName());
 
-        ReladomoFactory reladomoFactory = configuration.getReladomoFactory();
+        ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
-        Duration transactionTimeout        = reladomoFactory.getTransactionTimeout();
+        Duration transactionTimeout = reladomoFactory.getTransactionTimeout();
         int      transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
         ReladomoBundle.setTransactionTimeout(transactionTimeoutSeconds);
         // Notification should be configured here. Refer to notification/Notification.html under reladomo-javadoc.jar.
