@@ -12,8 +12,7 @@ import org.slf4j.LoggerFactory;
 public class NamedDataSourceBundle
         implements PrioritizedBundle<Object>
 {
-    private static final Logger LOGGER       = LoggerFactory.getLogger(NamedDataSourceBundle.class);
-    private static final String ERROR_FORMAT = "Expected configuration to implement %s but found %s";
+    private static final Logger LOGGER = LoggerFactory.getLogger(NamedDataSourceBundle.class);
 
     @Override
     public int getPriority()
@@ -29,18 +28,12 @@ public class NamedDataSourceBundle
     @Override
     public void run(Object configuration, Environment environment)
     {
-        if (!(configuration instanceof NamedDataSourceProvider))
-        {
-            String message = String.format(
-                    ERROR_FORMAT,
-                    NamedDataSourceProvider.class.getCanonicalName(),
-                    configuration.getClass().getCanonicalName());
-            throw new IllegalStateException(message);
-        }
+        NamedDataSourceProvider namedDataSourceProvider = this.safeCastConfiguration(
+                NamedDataSourceProvider.class,
+                configuration);
 
         LOGGER.info("Running {}.", NamedDataSourceBundle.class.getSimpleName());
 
-        NamedDataSourceProvider namedDataSourceProvider = (NamedDataSourceProvider) configuration;
         namedDataSourceProvider.initializeDataSources(environment.metrics(), environment.lifecycle());
 
         LOGGER.info("Completing {}.", NamedDataSourceBundle.class.getSimpleName());

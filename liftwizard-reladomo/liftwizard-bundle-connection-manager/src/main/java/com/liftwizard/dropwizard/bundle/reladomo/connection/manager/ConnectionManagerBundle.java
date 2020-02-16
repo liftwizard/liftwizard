@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 public class ConnectionManagerBundle
         implements PrioritizedBundle<Object>
 {
-    private static final Logger LOGGER       = LoggerFactory.getLogger(ConnectionManagerBundle.class);
-    private static final String ERROR_FORMAT = "Expected configuration to implement %s but found %s";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManagerBundle.class);
 
     @Override
     public int getPriority()
@@ -32,31 +31,17 @@ public class ConnectionManagerBundle
     @Override
     public void run(Object configuration, Environment environment)
     {
-        if (!(configuration instanceof NamedDataSourceProvider))
-        {
-            String message = String.format(
-                    ERROR_FORMAT,
-                    NamedDataSourceProvider.class.getCanonicalName(),
-                    configuration.getClass().getCanonicalName());
-            throw new IllegalStateException(message);
-        }
-
-        if (!(configuration instanceof ConnectionManagerFactoryProvider))
-        {
-            String message = String.format(
-                    ERROR_FORMAT,
-                    ConnectionManagerFactoryProvider.class.getCanonicalName(),
-                    configuration.getClass().getCanonicalName());
-            throw new IllegalStateException(message);
-        }
+        NamedDataSourceProvider namedDataSourceProvider = this.safeCastConfiguration(
+                NamedDataSourceProvider.class,
+                configuration);
+        ConnectionManagerFactoryProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
+                ConnectionManagerFactoryProvider.class,
+                configuration);
 
         LOGGER.info("Running {}.", ConnectionManagerBundle.class.getSimpleName());
 
-        NamedDataSourceProvider namedDataSourceProvider = (NamedDataSourceProvider) configuration;
         MapIterable<String, ManagedDataSource> dataSourcesByName = namedDataSourceProvider.getDataSourcesByName();
 
-        ConnectionManagerFactoryProvider connectionManagerFactoryProvider =
-                (ConnectionManagerFactoryProvider) configuration;
         connectionManagerFactoryProvider.initializeConnectionManagers(dataSourcesByName);
 
         LOGGER.info("Completing {}.", ConnectionManagerBundle.class.getSimpleName());

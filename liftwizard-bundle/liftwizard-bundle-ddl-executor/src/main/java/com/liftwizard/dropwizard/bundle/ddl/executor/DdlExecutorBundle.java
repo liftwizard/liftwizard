@@ -19,11 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class DdlExecutorBundle implements PrioritizedBundle<Object>
+public class DdlExecutorBundle
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(DdlExecutorBundle.class);
-
-    private static final String ERROR_FORMAT = "Expected configuration to implement %s but found %s";
 
     @Override
     public int getPriority()
@@ -39,26 +38,14 @@ public class DdlExecutorBundle implements PrioritizedBundle<Object>
     @Override
     public void run(Object configuration, Environment environment) throws SQLException
     {
-        if (!(configuration instanceof DdlExecutorFactoryProvider))
-        {
-            String message = String.format(
-                    ERROR_FORMAT,
-                    DdlExecutorFactoryProvider.class.getCanonicalName(),
-                    configuration.getClass().getCanonicalName());
-            throw new IllegalStateException(message);
-        }
+        DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
+                DdlExecutorFactoryProvider.class,
+                configuration);
+        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+                NamedDataSourceProvider.class,
+                configuration);
 
-        if (!(configuration instanceof NamedDataSourceProvider))
-        {
-            String message = String.format(
-                    ERROR_FORMAT,
-                    NamedDataSourceProvider.class.getCanonicalName(),
-                    configuration.getClass().getCanonicalName());
-            throw new IllegalStateException(message);
-        }
-
-        DdlExecutorFactoryProvider ddlExecutorFactoryProvider = (DdlExecutorFactoryProvider) configuration;
-        List<DdlExecutorFactory>   ddlExecutorFactories       = ddlExecutorFactoryProvider.getDdlExecutorFactories();
+        List<DdlExecutorFactory> ddlExecutorFactories = ddlExecutorFactoryProvider.getDdlExecutorFactories();
 
         if (ddlExecutorFactories.isEmpty())
         {
@@ -68,7 +55,6 @@ public class DdlExecutorBundle implements PrioritizedBundle<Object>
 
         LOGGER.info("Running {}.", DdlExecutorBundle.class.getSimpleName());
 
-        NamedDataSourceProvider dataSourceProvider = (NamedDataSourceProvider) configuration;
         for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories)
         {
             String dataSourceName     = ddlExecutorFactory.getDataSourceName();

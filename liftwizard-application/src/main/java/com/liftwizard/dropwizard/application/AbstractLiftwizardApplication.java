@@ -13,6 +13,7 @@ import com.liftwizard.dropwizard.bundle.dynamic.bundles.DynamicBundlesBundle;
 import com.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
 import com.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import com.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
+import com.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import com.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import com.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
 import com.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
@@ -27,7 +28,7 @@ import io.dropwizard.bundles.redirect.RedirectBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-public abstract class AbstractLiftwizardApplication<T extends Configuration>
+public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider>
         extends Application<T>
 {
     protected final String name;

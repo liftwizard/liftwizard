@@ -16,7 +16,6 @@ public class ConnectionManagerHolderBundle
         implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManagerHolderBundle.class);
-    private static final String ERROR_FORMAT = "Expected configuration to implement %s but found %s";
 
     @Override
     public int getPriority()
@@ -32,19 +31,12 @@ public class ConnectionManagerHolderBundle
     @Override
     public void run(Object configuration, Environment environment)
     {
-        if (!(configuration instanceof ConnectionManagerFactoryProvider))
-        {
-            String message = String.format(
-                    ERROR_FORMAT,
-                    ConnectionManagerFactoryProvider.class.getCanonicalName(),
-                    configuration.getClass().getCanonicalName());
-            throw new IllegalStateException(message);
-        }
+        ConnectionManagerFactoryProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
+                ConnectionManagerFactoryProvider.class,
+                configuration);
 
         LOGGER.info("Running {}.", ConnectionManagerHolderBundle.class.getSimpleName());
 
-        ConnectionManagerFactoryProvider connectionManagerFactoryProvider =
-                (ConnectionManagerFactoryProvider) configuration;
         ImmutableMap<String, SourcelessConnectionManager> connectionManagersByName =
                 connectionManagerFactoryProvider.getConnectionManagersByName();
 
