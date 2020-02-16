@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
 public class ObjectMapperBundle
-        implements PrioritizedBundle<ObjectMapperFactoryProvider>
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectMapperBundle.class);
 
@@ -32,9 +32,11 @@ public class ObjectMapperBundle
     }
 
     @Override
-    public void run(ObjectMapperFactoryProvider configuration, @Nonnull Environment environment)
+    public void run(Object configuration, @Nonnull Environment environment)
     {
-        ObjectMapperFactory objectMapperFactory = configuration.getObjectMapperFactory();
+        ObjectMapperFactoryProvider objectMapperFactoryProvider =
+                this.safeCastConfiguration(ObjectMapperFactoryProvider.class, configuration);
+        ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
         ObjectMapper        objectMapper        = environment.getObjectMapper();
 
         ObjectMapperBundle.configureObjectMapper(objectMapperFactory, objectMapper);
@@ -42,7 +44,7 @@ public class ObjectMapperBundle
 
     public static ObjectMapper configureObjectMapper()
     {
-        return configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
+        return ObjectMapperBundle.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
     }
 
     public static ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper)
