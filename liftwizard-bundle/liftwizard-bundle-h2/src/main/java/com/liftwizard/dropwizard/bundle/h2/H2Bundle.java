@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
  * @see <a href="https://github.com/jhipster/jhipster/blob/master/jhipster-framework/src/main/java/io/github/jhipster/config/h2/H2ConfigurationHelper.java">H2ConfigurationHelper</a>
  */
 @AutoService(PrioritizedBundle.class)
-public class H2Bundle implements PrioritizedBundle<H2FactoryProvider>
+public class H2Bundle
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2Bundle.class);
 
@@ -39,9 +40,10 @@ public class H2Bundle implements PrioritizedBundle<H2FactoryProvider>
     }
 
     @Override
-    public void run(H2FactoryProvider configuration, Environment environment)
+    public void run(Object configuration, Environment environment)
     {
-        H2Factory h2Factory = configuration.getH2Factory();
+        H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
+        H2Factory         h2Factory         = h2FactoryProvider.getH2Factory();
         if (!h2Factory.isEnabled())
         {
             LOGGER.info("{} disabled.", H2Bundle.class.getSimpleName());
