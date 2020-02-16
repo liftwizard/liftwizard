@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
 public class JerseyHttpLoggingBundle
-        implements PrioritizedBundle<JerseyHttpLoggingFactoryProvider>
+        implements PrioritizedBundle<Object>
 {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
@@ -27,9 +27,13 @@ public class JerseyHttpLoggingBundle
     }
 
     @Override
-    public void run(JerseyHttpLoggingFactoryProvider configuration, @Nonnull Environment environment)
+    public void run(Object configuration, @Nonnull Environment environment)
     {
-        JerseyHttpLoggingFactory factory = configuration.getJerseyHttpLoggingFactory();
+        JerseyHttpLoggingFactoryProvider jerseyHttpLoggingFactoryProvider = this.safeCastConfiguration(
+                JerseyHttpLoggingFactoryProvider.class,
+                configuration);
+
+        JerseyHttpLoggingFactory factory = jerseyHttpLoggingFactoryProvider.getJerseyHttpLoggingFactory();
         if (!factory.isEnabled())
         {
             LOGGER.info("{} disabled.", JerseyHttpLoggingBundle.class.getSimpleName());
