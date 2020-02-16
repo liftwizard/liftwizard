@@ -17,7 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class CorsBundle implements PrioritizedBundle<CorsFactoryProvider>
+public class CorsBundle
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(CorsBundle.class);
 
@@ -27,11 +28,10 @@ public class CorsBundle implements PrioritizedBundle<CorsFactoryProvider>
     }
 
     @Override
-    public void run(CorsFactoryProvider configuration, @Nonnull Environment environment)
+    public void run(Object configuration, @Nonnull Environment environment)
     {
-        // https://stackoverflow.com/a/25801822/23572
-
-        CorsFactory corsFactory = configuration.getCorsFactory();
+        CorsFactoryProvider corsFactoryProvider = this.safeCastConfiguration(CorsFactoryProvider.class, configuration);
+        CorsFactory         corsFactory         = corsFactoryProvider.getCorsFactory();
         if (!corsFactory.isEnabled())
         {
             LOGGER.info("{} disabled.", CorsBundle.class.getSimpleName());
@@ -40,6 +40,7 @@ public class CorsBundle implements PrioritizedBundle<CorsFactoryProvider>
 
         LOGGER.info("Running {}.", CorsBundle.class.getSimpleName());
 
+        // https://stackoverflow.com/a/25801822/23572
         Dynamic cors = environment.servlets().addFilter(corsFactory.getFilterName(), CrossOriginFilter.class);
 
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, corsFactory.getAllowedOrigins());
