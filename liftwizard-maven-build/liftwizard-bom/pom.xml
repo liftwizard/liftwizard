@@ -290,6 +290,12 @@
 
             <dependency>
                 <groupId>com.liftwizard</groupId>
+                <artifactId>liftwizard-logging-p6spy</artifactId>
+                <version>0.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-connection-manager</artifactId>
                 <version>0.1.0</version>
             </dependency>
