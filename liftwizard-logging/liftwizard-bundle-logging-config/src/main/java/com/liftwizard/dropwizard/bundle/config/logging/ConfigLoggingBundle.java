@@ -14,7 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class ConfigLoggingBundle implements PrioritizedBundle<ConfigLoggingFactoryProvider>
+public class ConfigLoggingBundle
+        implements PrioritizedBundle<Object>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoggingBundle.class);
 
@@ -31,10 +32,13 @@ public class ConfigLoggingBundle implements PrioritizedBundle<ConfigLoggingFacto
 
     @Override
     public void run(
-            @Nonnull ConfigLoggingFactoryProvider configuration,
+            @Nonnull Object configuration,
             @Nonnull Environment environment) throws JsonProcessingException, ReflectiveOperationException
     {
-        EnabledFactory configLoggingFactory = configuration.getConfigLoggingFactory();
+        ConfigLoggingFactoryProvider configLoggingFactoryProvider =
+                this.safeCastConfiguration(ConfigLoggingFactoryProvider.class, configuration);
+
+        EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
         if (!configLoggingFactory.isEnabled())
         {
             LOGGER.info("{} disabled.", ConfigLoggingBundle.class.getSimpleName());
