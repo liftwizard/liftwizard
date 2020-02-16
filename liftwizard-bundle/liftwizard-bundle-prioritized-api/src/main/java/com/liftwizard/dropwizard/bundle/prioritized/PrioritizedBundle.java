@@ -9,4 +9,18 @@ public interface PrioritizedBundle<T>
     {
         return 0;
     }
+
+    default <C> C safeCastConfiguration(Class<C> aClass, Object configuration)
+    {
+        if (aClass.isInstance(configuration))
+        {
+            return aClass.cast(configuration);
+        }
+
+        String message = String.format(
+                "Expected configuration to implement %s but found %s",
+                aClass.getCanonicalName(),
+                configuration.getClass().getCanonicalName());
+        throw new IllegalStateException(message);
+    }
 }
