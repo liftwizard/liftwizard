@@ -9,7 +9,6 @@ import com.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory
 import com.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import com.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +26,7 @@ public class ObjectMapperBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, @Nonnull Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         ObjectMapperFactoryProvider objectMapperFactoryProvider =
                 this.safeCastConfiguration(ObjectMapperFactoryProvider.class, configuration);

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 import com.google.auto.service.AutoService;
@@ -13,7 +14,6 @@ import com.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvide
 import com.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactory;
 import com.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactoryProvider;
 import com.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +31,7 @@ public class DdlExecutorBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, Environment environment) throws SQLException
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws SQLException
     {
         DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
                 DdlExecutorFactoryProvider.class,

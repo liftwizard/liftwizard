@@ -14,7 +14,6 @@ import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.reladomo.ReladomoFactory;
 import com.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
 import org.slf4j.Logger;
@@ -33,12 +32,9 @@ public class ReladomoBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(@Nonnull Object configuration, @Nonnull Environment environment)
+    public void runWithMdc(
+            @Nonnull Object configuration,
+            @Nonnull Environment environment)
     {
         ReladomoFactoryProvider reladomoFactoryProvider = this.safeCastConfiguration(
                 ReladomoFactoryProvider.class,
@@ -48,7 +44,7 @@ public class ReladomoBundle
 
         ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
-        Duration transactionTimeout = reladomoFactory.getTransactionTimeout();
+        Duration transactionTimeout        = reladomoFactory.getTransactionTimeout();
         int      transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
         ReladomoBundle.setTransactionTimeout(transactionTimeoutSeconds);
         // Notification should be configured here. Refer to notification/Notification.html under reladomo-javadoc.jar.

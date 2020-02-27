@@ -10,6 +10,8 @@ import com.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.slf4j.MDC;
+import org.slf4j.MDC.MDCCloseable;
 
 public class UUIDBundle
         implements ConfiguredBundle<UUIDSupplierFactoryProvider>
@@ -21,6 +23,16 @@ public class UUIDBundle
 
     @Override
     public void run(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment)
+    {
+        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
+        {
+            this.runWithMdc(configuration, environment);
+        }
+    }
+
+    private void runWithMdc(
+            UUIDSupplierFactoryProvider configuration,
+            @Nonnull Environment environment)
     {
         UUIDSupplierFactory uuidSupplierFactory = configuration.getUuidSupplierFactory();
         Supplier<UUID>      uuidSupplier        = uuidSupplierFactory.createUUIDSupplier();

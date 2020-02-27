@@ -10,7 +10,6 @@ import com.google.auto.service.AutoService;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.h2.H2Factory;
 import com.liftwizard.dropwizard.configuration.h2.H2FactoryProvider;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.h2.server.web.WebServlet;
 import org.h2.tools.Server;
@@ -35,12 +34,7 @@ public class H2Bundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
         H2Factory         h2Factory         = h2FactoryProvider.getH2Factory();

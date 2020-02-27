@@ -12,6 +12,8 @@ import graphql.schema.idl.RuntimeWiring;
 import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
+import org.slf4j.MDC;
+import org.slf4j.MDC.MDCCloseable;
 
 public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryProvider>
         extends GraphQLBundle<T>
@@ -26,6 +28,14 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 
     @Override
     public void initialize(@Nonnull Bootstrap<?> bootstrap)
+    {
+        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
+        {
+            this.initializeWithMdc(bootstrap);
+        }
+    }
+
+    private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap)
     {
         AssetsBundle assetsBundle = new AssetsBundle("/assets", "/graphiql", "index.htm", "graphiql");
         bootstrap.addBundle(assetsBundle);

@@ -19,7 +19,6 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.AuthValueFactoryProvider.Binder;
 import io.dropwizard.auth.chained.ChainedAuthFilter;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
@@ -35,12 +34,7 @@ public class AuthFilterBundle
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, @Nonnull Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         AuthFilterFactoryProvider authFilterFactoryProvider =
                 this.safeCastConfiguration(AuthFilterFactoryProvider.class, configuration);
