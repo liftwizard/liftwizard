@@ -1,11 +1,12 @@
 package com.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder;
 
+import javax.annotation.Nonnull;
+
 import com.google.auto.service.AutoService;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
 import com.liftwizard.reladomo.connection.manager.holder.ConnectionManagerHolder;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.collections.api.map.ImmutableMap;
 import org.slf4j.Logger;
@@ -24,12 +25,7 @@ public class ConnectionManagerHolderBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         ConnectionManagerFactoryProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
                 ConnectionManagerFactoryProvider.class,

@@ -8,7 +8,6 @@ import com.google.auto.service.AutoService;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactoryProvider;
 import com.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +25,8 @@ public class ConfigLoggingBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(
-            @Nonnull Object configuration,
-            @Nonnull Environment environment) throws JsonProcessingException, ReflectiveOperationException
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+            throws JsonProcessingException, ReflectiveOperationException
     {
         ConfigLoggingFactoryProvider configLoggingFactoryProvider =
                 this.safeCastConfiguration(ConfigLoggingFactoryProvider.class, configuration);

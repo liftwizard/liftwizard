@@ -10,7 +10,6 @@ import com.google.auto.service.AutoService;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.cors.CorsFactory;
 import com.liftwizard.dropwizard.configuration.cors.CorsFactoryProvider;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
@@ -23,12 +22,7 @@ public class CorsBundle
     private static final Logger LOGGER = LoggerFactory.getLogger(CorsBundle.class);
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, @Nonnull Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         CorsFactoryProvider corsFactoryProvider = this.safeCastConfiguration(CorsFactoryProvider.class, configuration);
         CorsFactory         corsFactory         = corsFactoryProvider.getCorsFactory();

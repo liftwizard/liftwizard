@@ -1,9 +1,10 @@
 package com.liftwizard.dropwizard.bundle.named.data.source;
 
+import javax.annotation.Nonnull;
+
 import com.google.auto.service.AutoService;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +22,7 @@ public class NamedDataSourceBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         NamedDataSourceProvider namedDataSourceProvider = this.safeCastConfiguration(
                 NamedDataSourceProvider.class,

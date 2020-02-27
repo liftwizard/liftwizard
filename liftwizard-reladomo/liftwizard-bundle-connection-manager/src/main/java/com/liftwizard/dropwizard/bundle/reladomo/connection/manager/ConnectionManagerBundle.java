@@ -1,11 +1,12 @@
 package com.liftwizard.dropwizard.bundle.reladomo.connection.manager;
 
+import javax.annotation.Nonnull;
+
 import com.google.auto.service.AutoService;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
 import com.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
 import io.dropwizard.db.ManagedDataSource;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.collections.api.map.MapIterable;
 import org.slf4j.Logger;
@@ -24,12 +25,7 @@ public class ConnectionManagerBundle
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         NamedDataSourceProvider namedDataSourceProvider = this.safeCastConfiguration(
                 NamedDataSourceProvider.class,

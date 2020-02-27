@@ -10,6 +10,8 @@ import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.slf4j.MDC.MDCCloseable;
 
 public class DynamicBundlesBundle
         implements ConfiguredBundle<Object>
@@ -18,6 +20,14 @@ public class DynamicBundlesBundle
 
     @Override
     public void initialize(Bootstrap<?> bootstrap)
+    {
+        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
+        {
+            this.initializeWithMdc(bootstrap);
+        }
+    }
+
+    private void initializeWithMdc(Bootstrap<?> bootstrap)
     {
         ServiceLoader<PrioritizedBundle> serviceLoader = ServiceLoader.load(PrioritizedBundle.class);
         ImmutableList<PrioritizedBundle> prioritizedBundles = Lists.immutable.withAll(serviceLoader)

@@ -9,7 +9,6 @@ import com.google.auto.service.AutoService;
 import com.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import com.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
 import com.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactoryProvider;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.logging.LoggingFeature.Verbosity;
@@ -22,12 +21,7 @@ public class JerseyHttpLoggingBundle
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
-
-    @Override
-    public void run(Object configuration, @Nonnull Environment environment)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         JerseyHttpLoggingFactoryProvider jerseyHttpLoggingFactoryProvider = this.safeCastConfiguration(
                 JerseyHttpLoggingFactoryProvider.class,
