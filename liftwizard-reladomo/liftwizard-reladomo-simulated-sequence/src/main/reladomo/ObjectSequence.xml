@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MithraObject
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/goldmansachs/reladomo/master/reladomogen/src/main/xsd/mithraobject.xsd"
+        objectType="transactional">
+
+    <PackageName>com.liftwizard.reladomo.simseq</PackageName>
+    <ClassName>ObjectSequence</ClassName>
+    <!--TODO ObjectSequence is a reserved keyword-->
+    <DefaultTable>OBJECT_SEQUENCE</DefaultTable>
+
+    <Attribute
+            name="sequenceName"
+            javaType="String"
+            columnName="sequence_name"
+            primaryKey="true"
+            trim="false"
+            maxLength="256" />
+
+    <Attribute name="nextId" javaType="long" columnName="next_id" />
+
+</MithraObject>
+
+

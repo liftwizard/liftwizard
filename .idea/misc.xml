@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EntryPointsManager">
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="com.fasterxml.jackson.annotation.JsonProperty" />
+      <item index="1" class="java.lang.String" itemvalue="com.google.auto.service.AutoService" />
+      <item index="2" class="java.lang.String" itemvalue="io.dropwizard.validation.ValidationMethod" />
+      <item index="3" class="java.lang.String" itemvalue="javax.inject.Inject" />
+    </list>
+    <pattern value="org.apache.maven.plugin.Mojo" hierarchically="true" />
+    <pattern value="com.gs.fw.common.mithra.MithraTransactionalObject" hierarchically="true" />
+    <pattern value="com.liftwizard.reladomo.simulatedsequence.ObjectSequenceDatabaseObject" />
+    <pattern value="com.liftwizard.reladomo.simulatedsequence.ObjectSequenceList" method="ObjectSequenceList" />
+    <pattern value="com.liftwizard.reladomo.simulatedsequence.ObjectSequenceObjectFactory" />
+    <writeAnnotations>
+      <writeAnnotation name="org.apache.maven.plugins.annotations.Parameter" />
+      <writeAnnotation name="org.apache.maven.plugins.annotations.Component" />
+      <writeAnnotation name="javax.ws.rs.core.Context" />
+    </writeAnnotations>
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="NullableNotNullManager">
+    <option name="myDefaultNullable" value="javax.annotation.Nullable" />
+    <option name="myDefaultNotNull" value="javax.annotation.Nonnull" />
+    <option name="myNullables">
+      <value>
+        <list size="11">
+          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
+          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
+          <item index="2" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
+          <item index="3" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
+          <item index="4" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
+          <item index="5" class="java.lang.String" itemvalue="androidx.annotation.Nullable" />
+          <item index="6" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
+          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
+          <item index="9" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNullable" />
+          <item index="10" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
+        </list>
+      </value>
+    </option>
+    <option name="myNotNulls">
+      <value>
+        <list size="11">
+          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
+          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
+          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
+          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
+          <item index="4" class="java.lang.String" itemvalue="androidx.annotation.NonNull" />
+          <item index="5" class="java.lang.String" itemvalue="javax.validation.constraints.NotNull" />
+          <item index="6" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
+          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
+          <item index="9" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNonNull" />
+          <item index="10" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
+        </list>
+      </value>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/classes" />
+  </component>
+</project>
