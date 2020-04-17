@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.servlet.DispatcherType;
@@ -49,10 +48,11 @@ public class AuthFilterBundle
             return;
         }
 
-        Stream<String> authFilterNames = authFilters
+        List<String> authFilterNames = authFilters
                 .stream()
                 .map(Object::getClass)
-                .map(Class::getSimpleName);
+                .map(Class::getSimpleName)
+                .collect(Collectors.toList());
 
         LOGGER.info("Running {} with auth filters {}.", AuthFilterBundle.class.getSimpleName(), authFilterNames);
 

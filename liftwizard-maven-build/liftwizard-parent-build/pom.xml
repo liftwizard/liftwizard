@@ -62,7 +62,7 @@
 
                 <plugin>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
+                    <version>3.0.0</version>
                 </plugin>
 
                 <plugin>
@@ -322,7 +322,7 @@
 
                 <plugin>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.2.3</version>
                 </plugin>
 
             </plugins>
