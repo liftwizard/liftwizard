@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.liftwizard</groupId>
+        <artifactId>liftwizard-reladomo</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>liftwizard-reladomo-simulated-sequence-ddls</artifactId>
+
+    <name>Liftwizard Reladomo: Object Sequence DDLs</name>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>com.liftwizard</groupId>
+                <artifactId>liftwizard-generator-reladomo-database-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <definitionsXmlFile>
+                        ${project.basedir}/../liftwizard-reladomo-simulated-sequence/src/main/reladomo/ObjectSequenceClassList.xml
+                    </definitionsXmlFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-reladomo-database</id>
+                        <goals>
+                            <goal>generate-reladomo-database</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.goldmansachs.reladomo</groupId>
+                        <artifactId>reladomogen</artifactId>
+                        <version>17.1.4</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>com.goldmansachs.reladomo</groupId>
+                        <artifactId>reladomo-gen-util</artifactId>
+                        <version>17.1.4</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>liftwizard-reladomo-simulated-sequence</artifactId>
+                        <version>${project.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
