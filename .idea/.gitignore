@@ -1,0 +1,13 @@
+# https://raw.githubusercontent.com/github/gitignore/master/Global/JetBrains.gitignore
+
+# User-specific stuff
+/shelf
+/workspace.xml
+
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.
+/*.iml
+/compiler.xml
+/encodings.xml
+/libraries
+/modules.xml
