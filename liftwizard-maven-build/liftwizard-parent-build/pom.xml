@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>com.liftwizard</groupId>
+    <artifactId>liftwizard-parent-build</artifactId>
+    <version>0.1.0</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>pom</packaging>
+    <name>Liftwizard Parent Build</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+
+        <project.build.outputTimestamp>1970-01-01T00:00:00Z</project.build.outputTimestamp>
+    </properties>
+
+    <build>
+        <defaultGoal>clean install</defaultGoal>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>de.qaware.maven</groupId>
+                <artifactId>go-offline-maven-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <compilerArgs>
+                            <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
+                            <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.1.2</version>
+                    <executions>
+
+                        <execution>
+                            <id>analyze</id>
+                            <goals>
+                                <goal>analyze-only</goal>
+                            </goals>
+                            <configuration>
+                                <failOnWarning>true</failOnWarning>
+                            </configuration>
+                        </execution>
+
+                        <execution>
+                            <id>tree-txt</id>
+                            <goals>
+                                <goal>tree</goal>
+                            </goals>
+                            <phase>verify</phase>
+                            <configuration>
+                                <includes>com.liftwizard*</includes>
+                                <outputType>txt</outputType>
+                                <outputFile>${project.build.directory}/dependency-tree.txt</outputFile>
+                                <tokens>extended</tokens>
+                            </configuration>
+                        </execution>
+
+                        <execution>
+                            <id>tree-dot</id>
+                            <goals>
+                                <goal>tree</goal>
+                            </goals>
+                            <phase>verify</phase>
+                            <configuration>
+                                <includes>com.liftwizard*</includes>
+                                <outputType>dot</outputType>
+                                <outputFile>${project.build.directory}/dependency-tree.dot</outputFile>
+                                <tokens>extended</tokens>
+                            </configuration>
+                        </execution>
+
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <notimestamp>true</notimestamp>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.6.0</version>
+                    <executions>
+                        <execution>
+                            <id>mojo-descriptor</id>
+                            <goals>
+                                <goal>descriptor</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>help-goal</id>
+                            <goals>
+                                <goal>helpmojo</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <pushChanges>false</pushChanges>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.9.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+                    <executions>
+                        <execution>
+                            <id>enforce</id>
+                            <configuration>
+                                <rules>
+                                    <DependencyConvergence />
+                                    <requireJavaVersion>
+                                        <version>1.8.0</version>
+                                    </requireJavaVersion>
+                                    <requireMavenVersion>
+                                        <version>3.1.0</version>
+                                    </requireMavenVersion>
+                                    <bannedDependencies>
+                                        <excludes>
+                                            <exclude>log4j:log4j</exclude>
+                                            <exclude>commons-logging-api</exclude>
+                                            <exclude>commons-logging</exclude>
+                                            <exclude>org.apache.logging.log4j:log4j</exclude>
+                                            <exclude>org.slf4j:slf4j-simple</exclude>
+                                            <exclude>org.slf4j:slf4j-log4j12</exclude>
+                                            <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                            <exclude>org.slf4j:nop</exclude>
+                                            <exclude>org.slf4j:jcl</exclude>
+                                        </excludes>
+                                    </bannedDependencies>
+                                    <banDuplicatePomDependencyVersions />
+                                    <requireUpperBoundDeps>
+                                        <excludes>
+                                            <!--Deliberately downgraded reflections to get around error where it logs thousands of not found classes-->
+                                            <exclude>org.reflections:reflections</exclude>
+                                        </excludes>
+                                    </requireUpperBoundDeps>
+                                </rules>
+                            </configuration>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.7</version>
+                    <configuration>
+                        <processAllModules>true</processAllModules>
+                        <generateBackupPoms>false</generateBackupPoms>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*Test.java</include>
+                        </includes>
+                        <argLine>-XX:-OmitStackTraceInFastThrow -Xms1024m -Xmx2048m</argLine>
+                        <runOrder>random</runOrder>
+                        <trimStackTrace>false</trimStackTrace>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.1.1</version>
+                    <configuration>
+                        <logViolationsToConsole>true</logViolationsToConsole>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <configLocation>${checkstyle.configuration}</configLocation>
+                        <suppressionsLocation>${checkstyle.suppressions}</suppressionsLocation>
+                        <cacheFile>${checkstyle.cache}</cacheFile>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>8.33</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>de.qaware.maven</groupId>
+                    <artifactId>go-offline-maven-plugin</artifactId>
+                    <version>1.2.5</version>
+                    <configuration>
+                        <dynamicDependencies>
+                            <DynamicDependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit4</artifactId>
+                                <version>2.22.2</version>
+                                <repositoryType>PLUGIN</repositoryType>
+                            </DynamicDependency>
+                        </dynamicDependencies>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.3</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+
+        <profile>
+            <id>enforcer-strict</id>
+
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.0.0-M3</version>
+                        <executions>
+                            <execution>
+                                <id>enforce</id>
+                                <configuration>
+                                    <rules>
+                                        <DependencyConvergence />
+                                        <requireJavaVersion>
+                                            <version>1.8.0</version>
+                                        </requireJavaVersion>
+                                        <requireMavenVersion>
+                                            <version>3.1.0</version>
+                                        </requireMavenVersion>
+                                        <bannedDependencies>
+                                            <excludes>
+                                                <exclude>log4j:log4j</exclude>
+                                                <exclude>commons-logging-api</exclude>
+                                                <exclude>commons-logging</exclude>
+                                                <exclude>org.apache.logging.log4j:log4j</exclude>
+                                                <exclude>org.slf4j:slf4j-simple</exclude>
+                                                <exclude>org.slf4j:slf4j-log4j12</exclude>
+                                                <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                                <exclude>org.slf4j:nop</exclude>
+                                                <exclude>org.slf4j:jcl</exclude>
+                                            </excludes>
+                                        </bannedDependencies>
+                                        <banDuplicatePomDependencyVersions />
+                                        <reactorModuleConvergence />
+                                        <requireUpperBoundDeps>
+                                            <excludes>
+                                                <!--Deliberately downgraded reflections to get around error where it logs thousands of not found classes-->
+                                                <exclude>org.reflections:reflections</exclude>
+                                            </excludes>
+                                        </requireUpperBoundDeps>
+                                    </rules>
+                                </configuration>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>

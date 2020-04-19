@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.liftwizard</groupId>
+        <artifactId>liftwizard</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>liftwizard-clock</artifactId>
+
+    <name>Liftwizard Clock (Module Group)</name>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.liftwizard</groupId>
+                <artifactId>liftwizard-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>liftwizard-bundle-clock</module>
+        <module>liftwizard-clock-incrementing</module>
+        <module>liftwizard-config-clock-fixed</module>
+        <module>liftwizard-config-clock-incrementing</module>
+        <module>liftwizard-config-clock-system</module>
+        <module>liftwizard-config-clock</module>
+    </modules>
+</project>
