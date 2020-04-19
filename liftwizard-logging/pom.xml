@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2020 Craig Motlin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.liftwizard</groupId>
+        <artifactId>liftwizard</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>liftwizard-logging</artifactId>
+
+    <name>Liftwizard Logging (Module Group)</name>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.liftwizard</groupId>
+                <artifactId>liftwizard-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>liftwizard-bundle-logging-config</module>
+        <module>liftwizard-bundle-logging-http</module>
+        <module>liftwizard-config-logging-config</module>
+        <module>liftwizard-config-logging-logstash-file</module>
+        <module>liftwizard-config-logging-filter-requesturl</module>
+        <module>liftwizard-config-logging-http</module>
+        <module>liftwizard-config-logging-logzio</module>
+        <module>liftwizard-logging-filter-requesturl</module>
+        <module>liftwizard-logging-mdc-closeable</module>
+        <module>liftwizard-logging-p6spy</module>
+        <module>liftwizard-servlet-logging-correlation-id</module>
+        <module>liftwizard-servlet-logging-mdc-clear-all</module>
+        <module>liftwizard-servlet-logging-mdc-clear-keys</module>
+        <module>liftwizard-servlet-logging-resource-info</module>
+        <module>liftwizard-servlet-logging-structured-argument</module>
+        <module>liftwizard-servlet-logging-structured-duration</module>
+        <module>liftwizard-servlet-logging-structured-reladomo</module>
+        <module>liftwizard-servlet-logging-structured-status-info</module>
+    </modules>
+</project>

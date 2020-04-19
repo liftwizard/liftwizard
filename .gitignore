@@ -1,0 +1,14 @@
+# Java
+hs_err_pid*
+
+# maven
+target/
+.maven/
+.m2/
+dependency-reduced-pom.xml
+pom.xml.versionsBackup
+pom.xml.releaseBackup
+
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.
+**/*.iml

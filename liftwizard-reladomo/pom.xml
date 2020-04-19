@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2020 Craig Motlin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.liftwizard</groupId>
+        <artifactId>liftwizard</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>liftwizard-reladomo</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Liftwizard Reladomo (Module Group)</name>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.liftwizard</groupId>
+                <artifactId>liftwizard-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>liftwizard-bundle-connection-manager-holder</module>
+        <module>liftwizard-bundle-connection-manager</module>
+        <module>liftwizard-bundle-named-data-source</module>
+        <module>liftwizard-bundle-reladomo</module>
+        <module>liftwizard-config-connection-manager</module>
+        <module>liftwizard-config-reladomo</module>
+        <module>liftwizard-connection-manager-h2-memory</module>
+        <module>liftwizard-connection-manager-heroku</module>
+        <module>liftwizard-connection-manager-holder</module>
+        <module>liftwizard-connection-manager</module>
+        <module>liftwizard-ddl-executor</module>
+        <module>liftwizard-healthcheck-reladomo</module>
+        <module>liftwizard-maven-reladomo-logger</module>
+        <module>liftwizard-named-data-source-factory</module>
+        <module>liftwizard-reladomo-graphql-data-fetcher</module>
+        <module>liftwizard-reladomo-graphql-deep-fetcher</module>
+        <module>liftwizard-reladomo-serialize</module>
+        <module>liftwizard-reladomo-simulated-sequence-ddls</module>
+        <module>liftwizard-reladomo-simulated-sequence</module>
+        <module>liftwizard-reladomo-test-rule</module>
+        <module>liftwizard-reladomo-timestamp</module>
+        <module>liftwizard-task-reladomo-clear-cache</module>
+    </modules>
+
+</project>
