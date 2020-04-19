@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.liftwizard</groupId>
+        <artifactId>liftwizard-parent-build</artifactId>
+        <version>0.1.0</version>
+        <relativePath>liftwizard-maven-build/liftwizard-parent-build</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>liftwizard</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Liftwizard (Root Module Group)</name>
+
+    <modules>
+        <module>liftwizard-application</module>
+        <module>liftwizard-auth</module>
+        <module>liftwizard-bundle</module>
+        <module>liftwizard-clock</module>
+        <module>liftwizard-config</module>
+        <module>liftwizard-generator-plugins</module>
+        <module>liftwizard-jackson</module>
+        <module>liftwizard-logging</module>
+        <module>liftwizard-maven-build</module>
+        <module>liftwizard-reladomo</module>
+        <module>liftwizard-servlet</module>
+        <module>liftwizard-utility</module>
+        <module>liftwizard-uuid</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+
+        <checkstyle.configuration>${maven.multiModuleProjectDirectory}/checkstyle-configuration.xml</checkstyle.configuration>
+        <checkstyle.suppressions>${maven.multiModuleProjectDirectory}/checkstyle-suppressions.xml</checkstyle.suppressions>
+        <checkstyle.cache>${project.build.directory}/checkstyle-cache</checkstyle.cache>
+    </properties>
+
+    <url>https://github.com/motlin/liftwizard</url>
+
+    <issueManagement>
+        <url>https://github.com/motlin/liftwizard/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/motlin/liftwizard</url>
+        <connection>scm:git:git://github.com/motlin/liftwizard.git</connection>
+        <developerConnection>scm:git:git@github.com:motlin/liftwizard.git</developerConnection>
+    </scm>
+
+    <inceptionYear>2020</inceptionYear>
+
+    <developers>
+        <developer>
+            <email>cmotlin@gmail.com</email>
+            <name>Craig Motlin</name>
+            <url>https://github.com/motlin</url>
+            <id>motlin</id>
+        </developer>
+    </developers>
+
+    <build>
+        <defaultGoal>clean install</defaultGoal>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+
+                        <execution>
+                            <id>analyze</id>
+                            <goals>
+                                <goal>analyze-only</goal>
+                            </goals>
+                            <configuration>
+                                <failOnWarning>true</failOnWarning>
+                                <ignoredUnusedDeclaredDependencies>
+                                    <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>com.h2database:h2:jar</ignoredUnusedDeclaredDependency>
+                                </ignoredUnusedDeclaredDependencies>
+                            </configuration>
+                        </execution>
+
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+    <profiles>
+
+        <profile>
+            <id>enforcer-strict</id>
+
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.0.0-M3</version>
+                        <executions>
+                            <execution>
+                                <id>enforce</id>
+                                <configuration>
+                                    <rules>
+                                        <DependencyConvergence />
+                                        <requireJavaVersion>
+                                            <version>1.8.0</version>
+                                        </requireJavaVersion>
+                                        <requireMavenVersion>
+                                            <version>3.1.0</version>
+                                        </requireMavenVersion>
+                                        <requirePluginVersions>
+                                            <unCheckedPluginList>
+                                                com.liftwizard:liftwizard-generator-reladomo-code-plugin,
+                                                com.liftwizard:liftwizard-generator-reladomo-database-plugin,
+                                                com.liftwizard:liftwizard-generator-xsd2bean-plugin
+                                            </unCheckedPluginList>
+                                        </requirePluginVersions>
+                                        <bannedDependencies>
+                                            <excludes>
+                                                <exclude>log4j:log4j</exclude>
+                                                <exclude>commons-logging-api</exclude>
+                                                <exclude>commons-logging</exclude>
+                                                <exclude>org.apache.logging.log4j:log4j</exclude>
+                                                <exclude>org.slf4j:slf4j-simple</exclude>
+                                                <exclude>org.slf4j:slf4j-log4j12</exclude>
+                                                <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                                <exclude>org.slf4j:nop</exclude>
+                                                <exclude>org.slf4j:jcl</exclude>
+                                            </excludes>
+                                        </bannedDependencies>
+                                        <banDuplicatePomDependencyVersions />
+                                        <reactorModuleConvergence />
+                                        <requireUpperBoundDeps>
+                                            <excludes>
+                                                <!--Deliberately downgraded reflections to get around error where it logs thousands of not found classes-->
+                                                <exclude>org.reflections:reflections</exclude>
+                                            </excludes>
+                                        </requireUpperBoundDeps>
+                                    </rules>
+                                </configuration>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
