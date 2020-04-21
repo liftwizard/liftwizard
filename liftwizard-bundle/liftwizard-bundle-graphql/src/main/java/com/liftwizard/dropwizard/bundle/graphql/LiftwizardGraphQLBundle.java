@@ -37,8 +37,17 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 
     private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap)
     {
-        AssetsBundle assetsBundle = new AssetsBundle("/assets", "/graphiql", "index.htm", "graphiql");
-        bootstrap.addBundle(assetsBundle);
+        bootstrap.addBundle(new AssetsBundle(
+                "/graphiql",
+                "/graphiql",
+                "index.htm",
+                "graphiql"));
+
+        bootstrap.addBundle(new AssetsBundle(
+                "/assets",
+                "/graphql-playground",
+                "index.htm",
+                "graphql-playground"));
     }
 
     @Nonnull
