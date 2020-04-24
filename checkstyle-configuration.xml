@@ -282,9 +282,6 @@
         <module name="InnerAssignment" />
         <module name="MissingSwitchDefault" />
         <module name="ModifiedControlVariable" />
-        <module name="MultipleStringLiterals">
-            <property name="ignoreStringsRegexp" value="^.{0,4}$" />
-        </module>
         <module name="MultipleVariableDeclarations" />
         <module name="NestedForDepth">
             <property name="max" value="2" />
@@ -317,10 +314,6 @@
         <module name="SuppressionXpathSingleFilter">
             <property name="files" value=".*[\\/]src[\\/](test|it)[\\/]" />
             <property name="checks" value="MagicNumber" />
-        </module>
-        <module name="SuppressionXpathSingleFilter">
-            <property name="files" value=".*[\\/]src[\\/](test|it)[\\/]" />
-            <property name="checks" value="MultipleStringLiterals" />
         </module>
         <module name="SuppressWithNearbyCommentFilter">
             <property name="commentFormat"
