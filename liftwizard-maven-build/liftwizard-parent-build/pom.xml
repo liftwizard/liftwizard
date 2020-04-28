@@ -51,6 +51,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
 
+            <plugin>
+                <groupId>de.qaware.maven</groupId>
+                <artifactId>go-offline-maven-plugin</artifactId>
+            </plugin>
+
         </plugins>
 
         <pluginManagement>
