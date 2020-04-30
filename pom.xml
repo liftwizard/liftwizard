@@ -18,17 +18,17 @@
 
     <modules>
         <module>liftwizard-application</module>
-        <module>liftwizard-generator-plugins</module>
-        <module>liftwizard-reladomo</module>
-        <module>liftwizard-servlet</module>
-        <module>liftwizard-utility</module>
-        <module>liftwizard-clock</module>
         <module>liftwizard-auth</module>
         <module>liftwizard-bundle</module>
+        <module>liftwizard-clock</module>
         <module>liftwizard-config</module>
+        <module>liftwizard-generator-plugins</module>
         <module>liftwizard-jackson</module>
         <module>liftwizard-logging</module>
         <module>liftwizard-maven-build</module>
+        <module>liftwizard-reladomo</module>
+        <module>liftwizard-servlet</module>
+        <module>liftwizard-utility</module>
         <module>liftwizard-uuid</module>
     </modules>
 
