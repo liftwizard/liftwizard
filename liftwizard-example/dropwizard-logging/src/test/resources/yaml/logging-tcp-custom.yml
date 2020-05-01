@@ -1,8 +1,0 @@
-level: INFO
-appenders:
-  - type: tcp
-    host: 172.16.11.245
-    port: 17001
-    connectionTimeout: 100ms
-    immediateFlush: false
-    sendBufferSize: 2KB
