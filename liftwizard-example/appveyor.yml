@@ -1,3 +1,0 @@
-test_script:
-  - mvn package
-build: off
