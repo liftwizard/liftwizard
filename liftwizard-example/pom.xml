@@ -67,6 +67,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.liftwizard</groupId>
+            <artifactId>liftwizard-configuration-factory-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
         </dependency>
