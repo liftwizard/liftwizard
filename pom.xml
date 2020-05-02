@@ -33,6 +33,7 @@
     <name>Liftwizard (Root Module Group)</name>
 
     <modules>
+        <module>docs</module>
         <module>liftwizard-application</module>
         <module>liftwizard-auth</module>
         <module>liftwizard-bundle</module>
