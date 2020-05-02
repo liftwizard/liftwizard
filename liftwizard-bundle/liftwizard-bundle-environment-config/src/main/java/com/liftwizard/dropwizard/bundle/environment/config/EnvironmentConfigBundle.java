@@ -12,10 +12,22 @@ import org.slf4j.MDC.MDCCloseable;
 public class EnvironmentConfigBundle
         implements ConfiguredBundle<Object>
 {
+    private final boolean strict;
+
+    public EnvironmentConfigBundle()
+    {
+        this(false);
+    }
+
+    public EnvironmentConfigBundle(boolean strict)
+    {
+        this.strict = strict;
+    }
+
     @Override
     public void initialize(Bootstrap<?> bootstrap)
     {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
+        try (MDCCloseable ignored = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
         {
             this.initializeWithMdc(bootstrap);
         }
@@ -25,7 +37,7 @@ public class EnvironmentConfigBundle
     {
         ConfigurationSourceProvider configurationSourceProvider = bootstrap.getConfigurationSourceProvider();
 
-        EnvironmentVariableSubstitutor environmentVariableSubstitutor = new EnvironmentVariableSubstitutor();
+        EnvironmentVariableSubstitutor environmentVariableSubstitutor = new EnvironmentVariableSubstitutor(this.strict);
         environmentVariableSubstitutor.setPreserveEscapes(true);
 
         ConfigurationSourceProvider wrapped = new SubstitutingSourceProvider(
