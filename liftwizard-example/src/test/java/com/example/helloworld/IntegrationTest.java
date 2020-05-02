@@ -1,5 +1,16 @@
 package com.example.helloworld;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import com.example.helloworld.api.Saying;
 import com.example.helloworld.core.Person;
 import io.dropwizard.testing.ConfigOverride;
@@ -10,23 +21,13 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IntegrationTest {
 
     private static final String TMP_FILE = createTempFile();
-    private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.yml");
+    private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
     @ClassRule
     public static final DropwizardAppRule<HelloWorldConfiguration> RULE = new DropwizardAppRule<>(

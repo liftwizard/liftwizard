@@ -19,6 +19,7 @@ import com.example.helloworld.resources.ProtectedResource;
 import com.example.helloworld.resources.ViewResource;
 import com.example.helloworld.tasks.EchoTask;
 import com.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
+import com.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -52,6 +53,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
     @Override
     public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+        bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
         bootstrap.addBundle(new EnvironmentConfigBundle());
 
         bootstrap.addCommand(new RenderCommand());
