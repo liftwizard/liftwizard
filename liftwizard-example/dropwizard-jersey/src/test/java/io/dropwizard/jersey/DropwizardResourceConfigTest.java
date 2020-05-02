@@ -1,0 +1,283 @@
+package io.dropwizard.jersey;
+
+import com.codahale.metrics.MetricRegistry;
+import io.dropwizard.jersey.dummy.DummyResource;
+import io.dropwizard.logging.BootstrapLogging;
+import org.glassfish.jersey.server.model.Resource;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class DropwizardResourceConfigTest {
+    static {
+        BootstrapLogging.bootstrap();
+    }
+
+    private DropwizardResourceConfig rc;
+
+    @Before
+    public void setUp() {
+        rc = DropwizardResourceConfig.forTesting(new MetricRegistry());
+    }
+
+    @Test
+    public void findsResourceClassInPackage() {
+        rc.packages(DummyResource.class.getPackage().getName());
+
+        assertThat(rc.getClasses()).contains(DummyResource.class);
+    }
+
+    @Test
+    public void findsResourceClassesInPackageAndSubpackage() {
+        rc.packages(getClass().getPackage().getName());
+
+        assertThat(rc.getClasses()).contains(
+                DummyResource.class,
+                TestResource.class,
+                ResourceInterface.class);
+    }
+
+    @Test
+    public void combinesAlRegisteredClasses() {
+        rc.register(new TestResource());
+        rc.registerClasses(ResourceInterface.class, ImplementingResource.class);
+
+        assertThat(rc.allClasses()).contains(
+                TestResource.class,
+                ResourceInterface.class,
+                ImplementingResource.class
+        );
+    }
+
+    @Test
+    public void combinesAlRegisteredClassesPathOnMethodLevel() {
+        rc.register(new TestResource());
+        rc.register(new ResourcePathOnMethodLevel());
+
+        assertThat(rc.allClasses()).contains(
+                TestResource.class,
+                ResourcePathOnMethodLevel.class
+        );
+
+        assertThat(rc.getEndpointsInfo())
+                .contains("GET     /bar (io.dropwizard.jersey.DropwizardResourceConfigTest.ResourcePathOnMethodLevel)")
+                .contains("GET     /dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource)");
+    }
+
+    @Test
+    public void logsNoInterfaces() {
+        rc.packages(getClass().getPackage().getName());
+
+        assertThat(rc.getEndpointsInfo()).doesNotContain("io.dropwizard.jersey.DropwizardResourceConfigTest.ResourceInterface");
+    }
+
+    @Test
+    public void logsNoEndpointsWhenNoResourcesAreRegistered() {
+        assertThat(rc.getEndpointsInfo()).contains("    NONE");
+    }
+
+    @Test
+    public void logsEndpoints() {
+        rc.register(TestResource.class);
+        rc.register(ImplementingResource.class);
+
+        assertThat(rc.getEndpointsInfo())
+                .contains("GET     /dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource)")
+                .contains("GET     /another (io.dropwizard.jersey.DropwizardResourceConfigTest.ImplementingResource)");
+    }
+
+    @Test
+    public void logsEndpointsSorted() {
+        rc.register(DummyResource.class);
+        rc.register(TestResource2.class);
+        rc.register(TestResource.class);
+        rc.register(ImplementingResource.class);
+
+        final String expectedLog = String.format(
+                "The following paths were found for the configured resources:%n"
+                + "%n"
+                + "    GET     / (io.dropwizard.jersey.dummy.DummyResource)%n"
+                + "    GET     /another (io.dropwizard.jersey.DropwizardResourceConfigTest.ImplementingResource)%n"
+                + "    GET     /async (io.dropwizard.jersey.dummy.DummyResource)%n"
+                + "    DELETE  /dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource2)%n"
+                + "    GET     /dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource)%n"
+                + "    POST    /dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource2)%n");
+        assertThat(rc.getEndpointsInfo()).isEqualTo(expectedLog);
+    }
+
+    @Test
+    public void logsNestedEndpoints() {
+        rc.register(WrapperResource.class);
+
+        assertThat(rc.getEndpointsInfo())
+                .contains("    GET     /wrapper/bar (io.dropwizard.jersey.DropwizardResourceConfigTest.ResourcePathOnMethodLevel)")
+                .contains("    GET     /locator/bar (io.dropwizard.jersey.DropwizardResourceConfigTest.ResourcePathOnMethodLevel)")
+                .contains("    UNKNOWN /obj/{it} (java.lang.Object)");
+    }
+
+    @Test
+    public void logsProgrammaticalEndpoints() {
+        Resource.Builder resourceBuilder = Resource.builder("/prefix");
+        resourceBuilder.addChildResource(Resource.from(DummyResource.class));
+        resourceBuilder.addChildResource(Resource.from(TestResource.class));
+        resourceBuilder.addChildResource(Resource.from(ImplementingResource.class));
+
+        rc.registerResources(resourceBuilder.build());
+
+        final String expectedLog = String.format(
+                "The following paths were found for the configured resources:%n"
+                + "%n"
+                + "    GET     /prefix/ (io.dropwizard.jersey.dummy.DummyResource)%n"
+                + "    GET     /prefix/another (io.dropwizard.jersey.DropwizardResourceConfigTest.ImplementingResource)%n"
+                + "    GET     /prefix/async (io.dropwizard.jersey.dummy.DummyResource)%n"
+                + "    GET     /prefix/dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource)%n"
+        );
+
+        assertThat(rc.getEndpointsInfo()).isEqualTo(expectedLog);
+    }
+
+    @Test
+    public void testEndpointLoggerPathCleaning() {
+        String dirtyPath = " /this//is///a/dirty//path/     ";
+        String anotherDirtyPath = "a/l//p/h/  /a/b /////  e/t";
+
+        assertThat(rc.cleanUpPath(dirtyPath)).isEqualTo("/this/is/a/dirty/path/");
+        assertThat(rc.cleanUpPath(anotherDirtyPath)).isEqualTo("a/l/p/h/a/b/e/t");
+    }
+
+    @Test
+    public void duplicatePathsTest() {
+        rc.register(TestDuplicateResource.class);
+        final String expectedLog = String.format("The following paths were found for the configured resources:%n" + "%n"
+                + "    GET     /anotherMe (io.dropwizard.jersey.DropwizardResourceConfigTest.TestDuplicateResource)%n"
+                + "    GET     /callme (io.dropwizard.jersey.DropwizardResourceConfigTest.TestDuplicateResource)%n");
+
+        assertThat(rc.getEndpointsInfo()).contains(expectedLog);
+        assertThat(rc.getEndpointsInfo()).containsOnlyOnce("    GET     /callme (io.dropwizard.jersey.DropwizardResourceConfigTest.TestDuplicateResource)");
+    }
+
+    @Test
+    public void logsEndpointsContextPath() {
+        rc.setContextPath("/context");
+        rc.register(TestResource.class);
+        rc.register(ImplementingResource.class);
+
+        assertThat(rc.getEndpointsInfo())
+            .contains("GET     /context/dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource)")
+            .contains("GET     /context/another (io.dropwizard.jersey.DropwizardResourceConfigTest.ImplementingResource)");
+    }
+
+    @Test
+    public void logsEndpointsNoSlashContextPath() {
+        rc.setContextPath("context");
+        rc.register(TestResource.class);
+        rc.register(ImplementingResource.class);
+
+        assertThat(rc.getEndpointsInfo())
+            .contains("GET     /context/dummy (io.dropwizard.jersey.DropwizardResourceConfigTest.TestResource)")
+            .contains("GET     /context/another (io.dropwizard.jersey.DropwizardResourceConfigTest.ImplementingResource)");
+    }
+
+    @Path("/dummy")
+    public static class TestResource {
+        @GET
+        public String foo() {
+            return "bar";
+        }
+    }
+
+    @Path("/dummy")
+    public static class TestResource2 {
+        @POST
+        public String fooPost() {
+            return "bar";
+        }
+
+        @DELETE
+        public String fooDelete() {
+            return "bar";
+        }
+    }
+
+    @Path("/")
+    public static class TestDuplicateResource {
+
+        @GET
+        @Path("callme")
+        @Produces(MediaType.APPLICATION_JSON)
+        public String fooGet() {
+            return "bar";
+        }
+
+        @GET
+        @Path("callme")
+        @Produces(MediaType.TEXT_HTML)
+        public String fooGet2() {
+            return "bar2";
+        }
+
+        @GET
+        @Path("callme")
+        @Produces(MediaType.APPLICATION_XML)
+        public String fooGet3() {
+            return "bar3";
+        }
+
+        @GET
+        @Path("anotherMe")
+        public String fooGet4() {
+            return "bar4";
+        }
+
+    }
+
+    @Path("/another")
+    public static interface ResourceInterface {
+        @GET
+        public String bar();
+    }
+
+    @Path("/")
+    public static class WrapperResource {
+        @Path("wrapper")
+        public ResourcePathOnMethodLevel getNested() {
+            return new ResourcePathOnMethodLevel();
+        }
+
+        @Path("locator")
+        public Class<ResourcePathOnMethodLevel> getNested2() {
+            return ResourcePathOnMethodLevel.class;
+        }
+
+        @Path("obj/{it}")
+        public Object getNested3(@PathParam("it") String path) {
+            if (path.equals("implement")) {
+                return new ImplementingResource();
+            }
+            return new ResourcePathOnMethodLevel();
+        }
+    }
+
+    public static class ResourcePathOnMethodLevel {
+        @GET @Path("/bar")
+        public String bar() {
+            return "";
+        }
+    }
+
+    public static class ImplementingResource implements ResourceInterface {
+        @Override
+        public String bar() {
+            return "";
+        }
+    }
+}

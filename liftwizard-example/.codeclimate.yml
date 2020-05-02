@@ -1,0 +1,22 @@
+engines:
+  pmd:
+    enabled: true
+    channel: "beta"
+  checkstyle:
+    enabled: true
+    config:
+      file: "checkstyle.xml"
+    channel: "beta"
+
+ratings:
+  paths:
+  - "**.java"
+
+exclude_paths:
+- "dropwizard-archetypes/"
+- "**.png"
+- "**.ts"
+- "**.p12"
+- "**.jts"
+- "**.jks"
+- "**.keystore"
