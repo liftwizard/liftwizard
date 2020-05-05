@@ -41,7 +41,7 @@ public class CorrelationIdFilter implements ContainerRequestFilter, ContainerRes
             @Nonnull Optional<String> headerName,
             @Nonnull Optional<String> mdcName)
     {
-        this.uuidSupplier = Objects.requireNonNull(uuidSupplier);
+        this.uuidSupplier = Objects.requireNonNull(uuidSupplier, "Could not find Supplier<UUID>. Make sure you've registered the bundle com.liftwizard.dropwizard.bundle.uuid.UUIDBundle with Dropwizard.");
         this.headerName   = headerName.orElse(DEFAULT_HEADER_NAME);
         this.mdcName      = mdcName.orElse(DEFAULT_HEADER_NAME);
     }
