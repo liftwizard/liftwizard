@@ -30,10 +30,11 @@
     </dependencyManagement>
 
     <modules>
+        <module>liftwizard-bundle-clock</module>
         <module>liftwizard-clock-incrementing</module>
-        <module>liftwizard-config-clock</module>
         <module>liftwizard-config-clock-fixed</module>
         <module>liftwizard-config-clock-incrementing</module>
         <module>liftwizard-config-clock-system</module>
+        <module>liftwizard-config-clock</module>
     </modules>
 </project>
