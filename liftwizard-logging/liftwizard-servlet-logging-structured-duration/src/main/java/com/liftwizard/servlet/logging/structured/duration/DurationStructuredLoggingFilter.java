@@ -1,6 +1,5 @@
 package com.liftwizard.servlet.logging.structured.duration;
 
-import java.io.IOException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -9,20 +8,21 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Priority;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.ws.rs.Priorities;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 // Priority must be less than the priority of StructuredArgumentLoggingFilter
 @Provider
 @Priority(Priorities.USER - 30)
-public class DurationStructuredLoggingFilter implements Filter
+public class DurationStructuredLoggingFilter
+        implements ContainerRequestFilter, ContainerResponseFilter
 {
     public static final String STRUCTURED_ARGUMENTS_ATTRIBUTE_NAME = "structuredArguments";
     public static final String START_TIME_KEY                      = "liftwizard.time.startTime";
@@ -33,7 +33,7 @@ public class DurationStructuredLoggingFilter implements Filter
     private final String structuredArgumentsAttributeName;
     private final String startTimeKey;
 
-    public DurationStructuredLoggingFilter(Clock clock)
+    public DurationStructuredLoggingFilter(@Nonnull @Context Clock clock)
     {
         this(clock, STRUCTURED_ARGUMENTS_ATTRIBUTE_NAME, START_TIME_KEY);
     }
@@ -46,47 +46,21 @@ public class DurationStructuredLoggingFilter implements Filter
     }
 
     @Override
-    public void init(FilterConfig filterConfig)
-    {
-    }
-
-    @Override
-    public void destroy()
-    {
-    }
-
-    @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain)
-            throws IOException, ServletException
-    {
-        try
-        {
-            this.before(request);
-            chain.doFilter(request, response);
-        }
-        finally
-        {
-            this.after(request);
-        }
-    }
-
-    private void before(ServletRequest servletRequest)
+    public void filter(ContainerRequestContext requestContext)
     {
         Instant startTime = this.clock.instant();
 
-        Object structuredArguments = servletRequest.getAttribute(this.structuredArgumentsAttributeName);
+        Object structuredArguments = requestContext.getProperty(this.structuredArgumentsAttributeName);
         Objects.requireNonNull(structuredArguments);
         Map<String, Object> structuredArgumentsMap = (Map<String, Object>) structuredArguments;
 
         structuredArgumentsMap.put(this.startTimeKey, startTime);
     }
 
-    private void after(ServletRequest servletRequest)
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
     {
-        Object structuredArguments = servletRequest.getAttribute(this.structuredArgumentsAttributeName);
+        Object structuredArguments = requestContext.getProperty(this.structuredArgumentsAttributeName);
         Objects.requireNonNull(structuredArguments);
         Map<String, Object> structuredArgumentsMap = (Map<String, Object>) structuredArguments;
 
