@@ -1,4 +1,4 @@
-package com.liftwizard.dropwizard.configuration.logging.appender.encoder;
+package com.liftwizard.dropwizard.configuration.logging.appender.file.logstash;
 
 import javax.annotation.Nonnull;
 

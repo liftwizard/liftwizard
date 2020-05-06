@@ -1,4 +1,4 @@
-package com.liftwizard.dropwizard.configuration.logging.appender.encoder;
+package com.liftwizard.dropwizard.configuration.logging.appender.file.logstash;
 
 import java.util.Objects;
 
@@ -36,9 +36,10 @@ import io.dropwizard.validation.ValidationMethod;
 import net.logstash.logback.encoder.LogstashEncoder;
 
 // TODO: Break inheritance since we don't need layout
-@JsonTypeName("encoder")
+@JsonTypeName("logstash-file")
 @AutoService(AppenderFactory.class)
-public class FileEncoderAppenderFactory extends AbstractAppenderFactory<ILoggingEvent>
+public class LogstashFileAppenderFactory
+        extends AbstractAppenderFactory<ILoggingEvent>
 {
     @Nullable
     private String currentLogFilename;
@@ -214,7 +215,7 @@ public class FileEncoderAppenderFactory extends AbstractAppenderFactory<ILogging
     private OutputStreamAppender<ILoggingEvent> appender(LoggerContext context)
     {
         FileAppender<ILoggingEvent> appender = this.buildAppender(context);
-        appender.setName("encoder-file-appender");
+        appender.setName("logstash-file-appender");
         appender.setAppend(true);
         appender.setContext(context);
         appender.setImmediateFlush(this.immediateFlush);

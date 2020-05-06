@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>liftwizard-config-logging-encoder</artifactId>
+    <artifactId>liftwizard-config-logging-logstash-file</artifactId>
 
     <name>Liftwizard Config Factory: Logback File Appender with Encoder</name>
 

@@ -33,7 +33,7 @@
         <module>liftwizard-bundle-logging-config</module>
         <module>liftwizard-bundle-logging-http</module>
         <module>liftwizard-config-logging-config</module>
-        <module>liftwizard-config-logging-encoder</module>
+        <module>liftwizard-config-logging-logstash-file</module>
         <module>liftwizard-config-logging-filter-requesturl</module>
         <module>liftwizard-config-logging-http</module>
         <module>liftwizard-config-logging-logzio</module>
