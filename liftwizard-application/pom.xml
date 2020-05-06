@@ -103,6 +103,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.liftwizard</groupId>
+            <artifactId>liftwizard-servlet-logging-structured-duration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.goldmansachs.reladomo</groupId>
             <artifactId>reladomo-serial</artifactId>
         </dependency>

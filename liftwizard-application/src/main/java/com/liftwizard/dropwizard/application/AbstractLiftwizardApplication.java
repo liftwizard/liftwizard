@@ -19,6 +19,7 @@ import com.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTas
 import com.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
 import com.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
 import com.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter;
+import com.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
 import com.liftwizard.servlet.logging.structured.reladomo.ReladomoStructuredLoggingFilter;
 import com.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
 import io.dropwizard.Application;
@@ -110,6 +111,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
         environment.jersey().register(CorrelationIdFilter.class);
         environment.jersey().register(ResourceInfoLoggingFilter.class);
         environment.jersey().register(StatusInfoStructuredLoggingFilter.class);
+        environment.jersey().register(DurationStructuredLoggingFilter.class);
         environment.jersey().register(ReladomoStructuredLoggingFilter.class);
     }
 
