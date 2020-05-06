@@ -212,7 +212,7 @@
 
             <dependency>
                 <groupId>com.liftwizard</groupId>
-                <artifactId>liftwizard-config-logging-encoder</artifactId>
+                <artifactId>liftwizard-config-logging-logstash-file</artifactId>
                 <version>0.1.0</version>
             </dependency>
 

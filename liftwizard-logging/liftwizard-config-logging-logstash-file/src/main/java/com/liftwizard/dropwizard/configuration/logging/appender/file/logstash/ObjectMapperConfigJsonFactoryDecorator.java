@@ -1,4 +1,4 @@
-package com.liftwizard.dropwizard.configuration.logging.appender.encoder;
+package com.liftwizard.dropwizard.configuration.logging.appender.file.logstash;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
