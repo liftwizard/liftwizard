@@ -6,6 +6,16 @@ public class EnabledFactory
 {
     private boolean enabled;
 
+    public EnabledFactory()
+    {
+        this(false);
+    }
+
+    public EnabledFactory(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
+
     public boolean isEnabled()
     {
         return this.enabled;
