@@ -18,6 +18,7 @@ import com.example.helloworld.resources.PersonResource;
 import com.example.helloworld.resources.ProtectedResource;
 import com.example.helloworld.resources.ViewResource;
 import com.example.helloworld.tasks.EchoTask;
+import com.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import com.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
 import com.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import io.dropwizard.Application;
@@ -55,6 +56,8 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
     public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
         bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
         bootstrap.addBundle(new EnvironmentConfigBundle());
+
+        bootstrap.addBundle(new ConfigLoggingBundle());
 
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());

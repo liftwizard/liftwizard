@@ -1,18 +1,24 @@
 package com.example.helloworld;
 
+import java.util.Collections;
+import java.util.Map;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.example.helloworld.core.Template;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableMap;
+import com.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactoryProvider;
+import com.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Collections;
-import java.util.Map;
-
-public class HelloWorldConfiguration extends Configuration {
+public class HelloWorldConfiguration
+        extends Configuration
+        implements ConfigLoggingFactoryProvider
+{
     @NotEmpty
     private String template;
 
@@ -25,6 +31,8 @@ public class HelloWorldConfiguration extends Configuration {
 
     @NotNull
     private Map<String, Map<String, String>> viewRendererConfiguration = Collections.emptyMap();
+
+    private @NotNull @Valid EnabledFactory      configLogging = new EnabledFactory(true);
 
     @JsonProperty
     public String getTemplate() {
@@ -72,5 +80,16 @@ public class HelloWorldConfiguration extends Configuration {
             builder.put(entry.getKey(), ImmutableMap.copyOf(entry.getValue()));
         }
         this.viewRendererConfiguration = builder.build();
+    }
+
+    @Override
+    public EnabledFactory getConfigLoggingFactory()
+    {
+        return this.configLogging;
+    }
+
+    public void setConfigLogging(EnabledFactory configLogging)
+    {
+        this.configLogging = configLogging;
     }
 }
