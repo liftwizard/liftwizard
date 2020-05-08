@@ -1,6 +1,9 @@
 package com.example.helloworld;
 
+import java.util.EnumSet;
 import java.util.Map;
+
+import javax.servlet.DispatcherType;
 
 import com.example.helloworld.auth.ExampleAuthenticator;
 import com.example.helloworld.auth.ExampleAuthorizer;
@@ -18,9 +21,16 @@ import com.example.helloworld.resources.PersonResource;
 import com.example.helloworld.resources.ProtectedResource;
 import com.example.helloworld.resources.ViewResource;
 import com.example.helloworld.tasks.EchoTask;
+import com.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import com.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import com.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
+import com.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import com.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
+import com.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
+import com.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
+import com.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter;
+import com.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
+import com.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -59,6 +69,9 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
         bootstrap.addBundle(new ConfigLoggingBundle());
 
+        bootstrap.addBundle(new ClockBundle());
+        bootstrap.addBundle(new UUIDBundle());
+
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new MigrationsBundle<HelloWorldConfiguration>() {
@@ -83,6 +96,16 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
+        environment.getApplicationContext().addFilter(
+                StructuredArgumentLoggingFilter.class,
+                "/*",
+                EnumSet.of(DispatcherType.REQUEST));
+
+        environment.jersey().register(CorrelationIdFilter.class);
+        environment.jersey().register(ResourceInfoLoggingFilter.class);
+        environment.jersey().register(StatusInfoStructuredLoggingFilter.class);
+        environment.jersey().register(DurationStructuredLoggingFilter.class);
+
         environment.jersey().register(DateRequiredFeature.class);
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(new ExampleAuthenticator())
