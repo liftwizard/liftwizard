@@ -14,6 +14,8 @@ import com.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import com.liftwizard.dropwizard.configuration.clock.system.SystemClockFactory;
 import com.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactoryProvider;
 import com.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
+import com.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
+import com.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import com.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import com.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import com.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFactory;
@@ -25,7 +27,8 @@ public class HelloWorldConfiguration
         extends Configuration
         implements ConfigLoggingFactoryProvider,
         ClockFactoryProvider,
-        UUIDSupplierFactoryProvider
+        UUIDSupplierFactoryProvider,
+        ObjectMapperFactoryProvider
 {
     @NotEmpty
     private String template;
@@ -43,6 +46,7 @@ public class HelloWorldConfiguration
     private @NotNull @Valid EnabledFactory      configLogging = new EnabledFactory(true);
     private @NotNull @Valid ClockFactory        clockFactory  = new SystemClockFactory();
     private @NotNull @Valid UUIDSupplierFactory uuidFactory   = new SystemUUIDSupplierFactory();
+    private @NotNull @Valid ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
 
     @JsonProperty
     public String getTemplate() {
@@ -127,5 +131,18 @@ public class HelloWorldConfiguration
     public void setUuidFactory(UUIDSupplierFactory uuidFactory)
     {
         this.uuidFactory = uuidFactory;
+    }
+
+    @Override
+    @JsonProperty("objectMapper")
+    public ObjectMapperFactory getObjectMapperFactory()
+    {
+        return this.objectMapperFactory;
+    }
+
+    @JsonProperty("objectMapper")
+    public void setObjectMapperFactory(ObjectMapperFactory objectMapperFactory)
+    {
+        this.objectMapperFactory = objectMapperFactory;
     }
 }

@@ -93,6 +93,12 @@
 
         <dependency>
             <groupId>com.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-object-mapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liftwizard</groupId>
             <artifactId>liftwizard-bundle-uuid</artifactId>
             <version>${project.version}</version>
         </dependency>

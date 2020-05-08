@@ -24,6 +24,7 @@ import com.example.helloworld.tasks.EchoTask;
 import com.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import com.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import com.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
+import com.liftwizard.dropwizard.bundle.objectmapper.ObjectMapperBundle;
 import com.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import com.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import com.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
@@ -67,6 +68,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
         bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
         bootstrap.addBundle(new EnvironmentConfigBundle());
 
+        bootstrap.addBundle(new ObjectMapperBundle());
         bootstrap.addBundle(new ConfigLoggingBundle());
 
         bootstrap.addBundle(new ClockBundle());
