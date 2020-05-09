@@ -1,19 +1,20 @@
-# Table of Contents
+# Liftwizard
 
-## Step 1: Accept configuration substitutions from environment variables
-liftwizard-bundle/liftwizard-bundle-environment-config/README.md
+## Summary
 
-## Step 2: Convert configuration files from yaml to json
-liftwizard-config/liftwizard-configuration-factory-json/README.md
+Liftwizard is a collection of bundles and add-ons for the [Dropwizard](https://www.dropwizard.io/) framework for writing Java web services.
 
-## Step 3: Log actual and default configuration objects as json
-liftwizard-logging/liftwizard-bundle-logging-config/README.md
+There are very few dependencies between the bundles, so you can pick and choose the ones you want.
 
-## Step 4: Configure Jackson's ObjectMapper with pretty printing, json5 features, and formatted timestamps
-liftwizard-jackson/liftwizard-bundle-object-mapper/README.md
+# Liftwizard modules: Table of Contents
 
-## Step 5: Add servlet/jersey filters for logging
-liftwizard-logging/README.md
-
-## TODO:
-liftwizard-logging/liftwizard-config-logging-filter-requesturl/README.md
+* Configuration
+    * [`liftwizard-bundle-environment-config`](liftwizard-bundle/liftwizard-bundle-environment-config/README.md): Accept configuration substitutions from environment variables
+    * [`liftwizard-configuration-factory-json`](liftwizard-config/liftwizard-configuration-factory-json/README.md): Convert configuration files from yaml to json
+    * [`liftwizard-bundle-logging-config`](liftwizard-logging/liftwizard-bundle-logging-config/README.md) Log actual and default configuration objects as json
+* Jackson
+    * [`liftwizard-bundle-object-mapper`](liftwizard-jackson/liftwizard-bundle-object-mapper/README.md) Configure Jackson's ObjectMapper with pretty printing, json5 features, and formatted timestamps
+* Logging
+    * [`liftwizard-logging`](liftwizard-logging/README.md) Add servlet/jersey filters for logging
+* Additional utility
+    * [`liftwizard-config-logging-filter-requesturl`](liftwizard-logging/liftwizard-config-logging-filter-requesturl/README.md)
