@@ -1,8 +1,8 @@
 {
-  "title": "Your Product",
+  "title": "LiftWizard",
   "type": "Guide",
   "viewOn": {
-    "link": "your-custom-base-url",
-    "title": "View On Label"
+    "link": "https://github.com/motlin/liftwizard/blob/master/liftwizard/docs/src/main/znai",
+    "title": "View On GitHub"
   }
 }
