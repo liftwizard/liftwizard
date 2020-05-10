@@ -12,3 +12,5 @@ pom.xml.releaseBackup
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.
 **/*.iml
+
+.vertx
