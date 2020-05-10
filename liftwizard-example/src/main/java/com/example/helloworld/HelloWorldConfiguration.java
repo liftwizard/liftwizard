@@ -14,6 +14,8 @@ import com.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import com.liftwizard.dropwizard.configuration.clock.system.SystemClockFactory;
 import com.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactoryProvider;
 import com.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
+import com.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
+import com.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactoryProvider;
 import com.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
 import com.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import com.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
@@ -28,7 +30,8 @@ public class HelloWorldConfiguration
         implements ConfigLoggingFactoryProvider,
         ClockFactoryProvider,
         UUIDSupplierFactoryProvider,
-        ObjectMapperFactoryProvider
+        ObjectMapperFactoryProvider,
+        JerseyHttpLoggingFactoryProvider
 {
     @NotEmpty
     private String template;
@@ -43,10 +46,11 @@ public class HelloWorldConfiguration
     @NotNull
     private Map<String, Map<String, String>> viewRendererConfiguration = Collections.emptyMap();
 
-    private @NotNull @Valid EnabledFactory      configLogging = new EnabledFactory(true);
-    private @NotNull @Valid ClockFactory        clockFactory  = new SystemClockFactory();
-    private @NotNull @Valid UUIDSupplierFactory uuidFactory   = new SystemUUIDSupplierFactory();
-    private @NotNull @Valid ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
+    private @NotNull @Valid EnabledFactory           configLogging            = new EnabledFactory(true);
+    private @NotNull @Valid ClockFactory             clockFactory             = new SystemClockFactory();
+    private @NotNull @Valid UUIDSupplierFactory      uuidFactory              = new SystemUUIDSupplierFactory();
+    private @NotNull @Valid ObjectMapperFactory      objectMapperFactory      = new ObjectMapperFactory();
+    private @Valid @NotNull JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
 
     @JsonProperty
     public String getTemplate() {
@@ -144,5 +148,18 @@ public class HelloWorldConfiguration
     public void setObjectMapperFactory(ObjectMapperFactory objectMapperFactory)
     {
         this.objectMapperFactory = objectMapperFactory;
+    }
+
+    @Override
+    @JsonProperty("jerseyHttpLogging")
+    public JerseyHttpLoggingFactory getJerseyHttpLoggingFactory()
+    {
+        return this.jerseyHttpLoggingFactory;
+    }
+
+    @JsonProperty("jerseyHttpLogging")
+    public void setJerseyHttpLoggingFactory(JerseyHttpLoggingFactory jerseyHttpLoggingFactory)
+    {
+        this.jerseyHttpLoggingFactory = jerseyHttpLoggingFactory;
     }
 }
