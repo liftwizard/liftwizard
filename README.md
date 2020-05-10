@@ -15,6 +15,7 @@ There are very few dependencies between the bundles, so you can pick and choose 
 * Jackson
     * [`liftwizard-bundle-object-mapper`](liftwizard-jackson/liftwizard-bundle-object-mapper/README.md) Configure Jackson's ObjectMapper with pretty printing, json5 features, and formatted timestamps
 * Logging
-    * [`liftwizard-logging`](liftwizard-logging/README.md) Add servlet/jersey filters for logging
+    * [`liftwizard-logging`](liftwizard-logging/README.md) Add servlet/jersey filters for logging request and response metadata
+    * [`liftwizard-bundle-logging-http`](liftwizard-logging/liftwizard-bundle-logging-http/README.md) Add Jersey filter for logging request and response data
 * Additional utility
     * [`liftwizard-config-logging-filter-requesturl`](liftwizard-logging/liftwizard-config-logging-filter-requesturl/README.md)
