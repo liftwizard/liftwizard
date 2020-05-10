@@ -1,3 +1,3 @@
-# Your product
+# Lift Wizard
 
 quick summary

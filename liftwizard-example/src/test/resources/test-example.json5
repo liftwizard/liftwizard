@@ -28,7 +28,6 @@
       }
     ]
   },
-  // Logging settings.
   logging: {
     level: "INFO",
     appenders: [

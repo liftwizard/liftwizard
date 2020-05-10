@@ -20,11 +20,19 @@
             <plugin>
                 <groupId>org.testingisdocumenting.znai</groupId>
                 <artifactId>znai-maven-plugin</artifactId>
-                <version>1.30</version>
+                <version>1.31</version>
                 <configuration>
-                    <docId>${project.artifactId}</docId>
+                    <docId>liftwizard</docId>
                     <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.dropwizard</groupId>
+                        <artifactId>dropwizard-core</artifactId>
+                        <version>1.3.23</version>
+                        <classifier>sources</classifier>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>

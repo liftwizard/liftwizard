@@ -1,2 +1,2 @@
-../../path-to-files
-../../path-to-test-artifacts
+../../../../liftwizard-example/src/main/java
+../../../../liftwizard-example/src/test/resources
