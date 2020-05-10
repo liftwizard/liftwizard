@@ -153,6 +153,12 @@
 
         <dependency>
             <groupId>com.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-logging-http</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liftwizard</groupId>
             <artifactId>liftwizard-config-logging-logstash-file</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
