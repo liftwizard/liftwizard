@@ -33,8 +33,18 @@
                         <classifier>sources</classifier>
                     </dependency>
                 </dependencies>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>io.dropwizard</groupId>
+                        <artifactId>dropwizard-example</artifactId>
+                        <version>1.3.23</version>
+                        <classifier>sources</classifier>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>
     </build>
+
 </project>
