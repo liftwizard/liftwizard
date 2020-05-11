@@ -7,9 +7,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.example.helloworld.api.Saying;
 import com.example.helloworld.core.Person;
@@ -17,12 +20,16 @@ import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class IntegrationTest {
 
@@ -49,12 +56,30 @@ public class IntegrationTest {
 
     @Test
     public void testHelloWorld() throws Exception {
-        final Optional<String> name = Optional.of("Dr. IntegrationTest");
-        final Saying saying = RULE.client().target("http://localhost:" + RULE.getLocalPort() + "/hello-world")
-                .queryParam("name", name.get())
+        Response response = RULE
+                .client()
+                .target(String.format("http://localhost:%d/hello-world", RULE.getLocalPort()))
+                .queryParam("name", "Dr. IntegrationTest")
                 .request()
-                .get(Saying.class);
-        assertThat(saying.getContent()).isEqualTo(RULE.getConfiguration().buildTemplate().render(name));
+                .get();
+
+            this.assertResponseStatus(response, Status.OK);
+
+            String jsonResponse = response.readEntity(String.class);
+            //language=JSON
+            String expected = ""
+                    + "{\n"
+                    + "  \"id\"     : 1,\n"
+                    + "  \"content\": \"Hello, Dr. IntegrationTest!\"\n"
+                    + "}\n";
+            JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+    }
+
+    protected void assertResponseStatus(@Nonnull Response response, Status status)
+    {
+        response.bufferEntity();
+        String entityAsString = response.readEntity(String.class);
+        Assert.assertThat(entityAsString, response.getStatusInfo(), is(status));
     }
 
     @Test
