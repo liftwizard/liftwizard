@@ -10,6 +10,7 @@ Now `HelloWorldApplication` will log something like this on startup:
 
 ```
 INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingBundle} com.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle: Inferred Dropwizard configuration:
+
 ```
 ```json5 {title: "Output configuration"}
 {
@@ -26,7 +27,7 @@ INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingB
 }
 ```
 
-:include-json: test-example.json5 {title: "Original configuration", collapsedPaths: ['root.database', 'root.server', 'root.logging']}}
+:include-json: test-example.json5 {title: "Original configuration", collapsedPaths: ['root.database', 'root.server', 'root.logging']}
 
 Note that the `metrics` section at the end was not specified in `test-example.json5`. It comes from serializing the output of `io.dropwizard.Configuration.getMetricsFactory()`.
 
