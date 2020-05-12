@@ -373,12 +373,12 @@
         <module name="JavadocParagraph" />
         <module name="JavadocStyle">
             <property name="scope" value="public" />
+            <property name="checkFirstSentence" value="false" />
         </module>
         <module name="JavadocTagContinuationIndentation" />
         <module name="MissingJavadocPackage" />
         <module name="NonEmptyAtclauseDescription" />
         <module name="SingleLineJavadoc" />
-        <module name="SummaryJavadoc" />
 
         <!-- Misc -->
         <module name="ArrayTypeStyle" />
