@@ -1,2 +1,11 @@
+configuration
+    environment-variables
+    json5-configuration
+    ConfigLoggingBundle
+jackson
+    ObjectMapperBundle
 logging
-    logging-bundle
+    logging-modules
+    JerseyHttpLoggingBundle
+utility
+    liftwizard-config-logging-filter-requesturl
