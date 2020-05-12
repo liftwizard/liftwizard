@@ -50,6 +50,18 @@
 
         <dependency>
             <groupId>com.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-clock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liftwizard</groupId>
+            <artifactId>liftwizard-config-clock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liftwizard</groupId>
             <artifactId>liftwizard-config-uuid</artifactId>
             <version>${project.version}</version>
         </dependency>

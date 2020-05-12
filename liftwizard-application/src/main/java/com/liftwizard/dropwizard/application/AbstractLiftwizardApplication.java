@@ -9,9 +9,11 @@ import javax.servlet.DispatcherType;
 import ch.qos.logback.classic.Level;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import com.gs.reladomo.serial.jackson.JacksonReladomoModule;
+import com.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import com.liftwizard.dropwizard.bundle.dynamic.bundles.DynamicBundlesBundle;
 import com.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
 import com.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
+import com.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import com.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import com.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import com.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
@@ -29,7 +31,7 @@ import io.dropwizard.bundles.redirect.RedirectBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider>
+public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider>
         extends Application<T>
 {
     protected final String name;
@@ -79,6 +81,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
         RedirectBundle redirectBundle = new RedirectBundle(httpsRedirect);
         bootstrap.addBundle(redirectBundle);
         bootstrap.addBundle(new UUIDBundle());
+        bootstrap.addBundle(new ClockBundle());
     }
 
     protected void initializeDynamicBundles(@Nonnull Bootstrap<T> bootstrap)
