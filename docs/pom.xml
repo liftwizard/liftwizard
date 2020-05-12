@@ -20,7 +20,7 @@
             <plugin>
                 <groupId>org.testingisdocumenting.znai</groupId>
                 <artifactId>znai-maven-plugin</artifactId>
-                <version>1.31</version>
+                <version>1.32</version>
                 <configuration>
                     <docId>liftwizard</docId>
                     <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
