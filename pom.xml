@@ -22,6 +22,7 @@
         <module>liftwizard-bundle</module>
         <module>liftwizard-clock</module>
         <module>liftwizard-config</module>
+        <module>liftwizard-example</module>
         <module>liftwizard-generator-plugins</module>
         <module>liftwizard-jackson</module>
         <module>liftwizard-logging</module>
