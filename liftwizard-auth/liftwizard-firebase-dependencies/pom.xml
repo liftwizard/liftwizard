@@ -54,7 +54,7 @@
             <dependency>
                 <groupId>com.google.api</groupId>
                 <artifactId>api-common</artifactId>
-                <version>1.8.1</version>
+                <version>1.9.1</version>
             </dependency>
 
             <dependency>
