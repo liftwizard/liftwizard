@@ -68,7 +68,7 @@
 
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
+            <name>Apache License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
@@ -76,16 +76,21 @@
 
     <scm>
         <url>https://github.com/motlin/liftwizard</url>
-        <connection>scm:git:git://github.com/motlin/liftwizard.git</connection>
-        <developerConnection>scm:git:git@github.com:motlin/liftwizard.git</developerConnection>
+        <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
+        <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
     </scm>
+
+    <ciManagement>
+        <system>CircleCI</system>
+        <url>https://app.circleci.com/pipelines/github/motlin/liftwizard</url>
+    </ciManagement>
 
     <inceptionYear>2020</inceptionYear>
 
     <developers>
         <developer>
-            <email>cmotlin@gmail.com</email>
             <name>Craig Motlin</name>
+            <email>cmotlin@gmail.com</email>
             <url>https://github.com/motlin</url>
             <id>motlin</id>
         </developer>
