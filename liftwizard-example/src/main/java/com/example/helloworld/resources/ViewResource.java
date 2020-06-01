@@ -1,11 +1,12 @@
 package com.example.helloworld.resources;
 
-import io.dropwizard.views.View;
+import java.nio.charset.StandardCharsets;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.nio.charset.StandardCharsets;
+
+import io.dropwizard.views.View;
 
 @Path("/views")
 public class ViewResource {
