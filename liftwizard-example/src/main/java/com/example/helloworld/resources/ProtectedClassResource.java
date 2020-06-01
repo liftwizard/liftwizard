@@ -1,14 +1,14 @@
 package com.example.helloworld.resources;
 
-import com.example.helloworld.core.User;
-import io.dropwizard.auth.Auth;
-
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
+
+import com.example.helloworld.core.User;
+import io.dropwizard.auth.Auth;
 
 /**
  * {@link RolesAllowed}, {@link PermitAll} are supported on the class level.<p>

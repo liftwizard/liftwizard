@@ -1,5 +1,7 @@
 package com.example.helloworld.cli;
 
+import java.util.Optional;
+
 import com.example.helloworld.HelloWorldConfiguration;
 import com.example.helloworld.core.Template;
 import io.dropwizard.cli.ConfiguredCommand;
@@ -9,8 +11,6 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RenderCommand.class);

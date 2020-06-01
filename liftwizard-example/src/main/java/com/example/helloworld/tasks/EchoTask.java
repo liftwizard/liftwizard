@@ -1,9 +1,9 @@
 package com.example.helloworld.tasks;
 
+import java.io.PrintWriter;
+
 import com.google.common.collect.ImmutableMultimap;
 import io.dropwizard.servlets.tasks.PostBodyTask;
-
-import java.io.PrintWriter;
 
 public class EchoTask extends PostBodyTask {
     public EchoTask() {
