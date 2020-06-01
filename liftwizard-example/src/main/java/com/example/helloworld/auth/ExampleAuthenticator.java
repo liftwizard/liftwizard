@@ -1,15 +1,15 @@
 package com.example.helloworld.auth;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import com.example.helloworld.core.User;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 public class ExampleAuthenticator implements Authenticator<BasicCredentials, User> {
     /**

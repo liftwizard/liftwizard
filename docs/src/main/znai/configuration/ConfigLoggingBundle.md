@@ -9,7 +9,7 @@ To turn it on, add `ConfigLoggingBundle` to the list of registered bundles.
 Now `HelloWorldApplication` will log something like this on startup:
 
 ```
-INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingBundle} com.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle: Inferred Dropwizard configuration:
+INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingBundle} io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle: Inferred Dropwizard configuration:
 
 ```
 ```json5 {title: "Output configuration"}
