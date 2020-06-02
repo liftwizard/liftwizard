@@ -20,8 +20,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>liftwizard</artifactId>
         <groupId>io.liftwizard</groupId>
+        <artifactId>liftwizard</artifactId>
         <version>0.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -49,6 +49,29 @@
                         <classifier>sources</classifier>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>export</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>export</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>validate-export</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
