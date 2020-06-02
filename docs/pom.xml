@@ -22,7 +22,7 @@
                 <artifactId>znai-maven-plugin</artifactId>
                 <version>1.37</version>
                 <configuration>
-                    <docId>${project.artifactId}</docId>
+                    <docId>docs</docId>
                     <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
                 </configuration>
             </plugin>
