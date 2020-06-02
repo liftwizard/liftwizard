@@ -1,0 +1,53 @@
+# Based on https://github.com/testingisdocumenting/znai/blob/master/.github/workflows/documentation-deploy.yaml
+
+name: Deploy Znai docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+      - refs/tags/*
+    tags:
+      - refs/tags/*
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # (true OR recursive)
+          submodules: true
+          # Fetch all history
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+#      - name: Set up grahpviz
+      - run: sudo apt-get install graphviz
+
+#      - name: Force non snapshot version
+#        run: mvn versions:set -DnewVersion=$(git describe --abbrev=0)
+
+      - name: Build docs with xvfb enabled
+        uses: GabrielBB/xvfb-action@v1.0
+        with:
+          run: mvn --batch-mode package
+
+      - name: Move files
+        run: |
+          mkdir ./deploy
+          mv ./docs/target/docs/ ./deploy/
+
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          cname: liftwizard.io
+          force_orphan: true
+          commit_message: "[skip ci] deploy to gh-pages"
