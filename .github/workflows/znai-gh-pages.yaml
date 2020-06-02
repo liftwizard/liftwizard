@@ -19,9 +19,9 @@ on: [push, release]
 #      - refs/tags/*
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.issue.title, 'deploy documentation')
+    # if: startsWith(github.event.issue.title, 'deploy documentation')
 
     steps:
       - uses: actions/checkout@v2
