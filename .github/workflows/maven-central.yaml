@@ -1,0 +1,31 @@
+# Based on https://help.github.com/en/actions/language-and-framework-guides/publishing-java-packages-with-maven
+
+name: Publish package to the Maven Central Repository
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Publish maven package
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.gpg_private_key }}
+          gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          nexus_username: ${{ secrets.nexus_username }}
+          nexus_password: ${{ secrets.nexus_password }}
+          maven_profiles: deploy
+          maven_goals_phases: deploy
+          server_id: ossrh
