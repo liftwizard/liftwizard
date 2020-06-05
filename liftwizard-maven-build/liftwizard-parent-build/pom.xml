@@ -233,7 +233,6 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <pushChanges>false</pushChanges>
                         <tagNameFormat>@{project.version}</tagNameFormat>
-                        <goals>deploy</goals>
                     </configuration>
                 </plugin>
 
