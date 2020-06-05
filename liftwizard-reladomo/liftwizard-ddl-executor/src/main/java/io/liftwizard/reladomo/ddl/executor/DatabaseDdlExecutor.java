@@ -23,11 +23,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.set.mutable.SetAdapter;
 import org.h2.tools.RunScript;
@@ -49,10 +49,11 @@ public final class DatabaseDdlExecutor
 
     public static void executeSql(Connection connection, String ddlLocationPattern, String idxLocationPattern)
     {
-        // I don't fully understand this classpath scanning stuff
-        // I think there was a difference between Maven's classloader and the standard one
-        // Collection<URL> urls = ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader());
-        Collection<URL> urls = ClasspathHelper.forJavaClassPath();
+        MutableSet<URL> urls = Sets.mutable
+                // Maven's classpath, including maven itself, appears here
+                .withAll(ClasspathHelper.forJavaClassPath())
+                // The "usual" classpath appears here
+                .withAll(ClasspathHelper.forClassLoader());
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .setScanners(new ResourcesScanner())
                 .setUrls(urls);
