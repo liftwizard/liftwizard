@@ -37,7 +37,7 @@ public class H2Factory
             "-web",
             "-webAllowOthers",
             "-webDaemon",
-            // https://stackoverflow.com/a/55368174/23572
+            // https://stackoverflow.com/a/55368174
             "-ifNotExists",
             "-baseDir",
             "./target/h2db");

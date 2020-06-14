@@ -50,7 +50,7 @@ public class CorsBundle
 
         LOGGER.info("Running {}.", CorsBundle.class.getSimpleName());
 
-        // https://stackoverflow.com/a/25801822/23572
+        // https://stackoverflow.com/a/25801822
         Dynamic cors = environment.servlets().addFilter(corsFactory.getFilterName(), CrossOriginFilter.class);
 
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, corsFactory.getAllowedOrigins());
