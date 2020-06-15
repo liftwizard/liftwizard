@@ -47,6 +47,7 @@ public final class H2InMemoryConnectionManager
     {
         // TODO: Consider using org.apache.tomcat.jdbc.pool.DataSourceProxy and org.apache.tomcat.jdbc.pool.PoolProperties instead
         XAConnectionManager connectionManager = new XAConnectionManager();
+        connectionManager.setDatabaseType(H2DatabaseType.getInstance());
         connectionManager.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
         connectionManager.setMaxWait(500);
         connectionManager.setJdbcConnectionString("jdbc:p6spy:h2:mem:");
