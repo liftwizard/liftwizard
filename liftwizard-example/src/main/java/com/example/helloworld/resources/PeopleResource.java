@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.example.helloworld.core.Person;
 import com.example.helloworld.db.PersonDAO;
+import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.hibernate.UnitOfWork;
 
 @Path("/people")
@@ -24,14 +25,20 @@ public class PeopleResource {
 
     @POST
     @UnitOfWork
-    public Person createPerson(Person person) {
-        return peopleDAO.create(person);
+    public PersonDTO createPerson(Person person) {
+        Person result = peopleDAO.create(person);
+        return new PersonDTO(result.getId(), result.getFullName(), result.getJobTitle());
     }
 
     @GET
     @UnitOfWork
-    public List<Person> listPeople() {
-        return peopleDAO.findAll();
+    public List<PersonDTO> listPeople() {
+        return this.peopleDAO.findAll()
+                .asEcList()
+                .collect(each -> new PersonDTO(
+                        each.getId(),
+                        each.getFullName(),
+                        each.getJobTitle()));
     }
 
 }

@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.example.helloworld.core.Person;
 import com.example.helloworld.db.PersonDAO;
+import com.example.helloworld.dto.PersonDTO;
 import com.example.helloworld.views.PersonView;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
@@ -25,8 +26,11 @@ public class PersonResource {
 
     @GET
     @UnitOfWork
-    public Person getPerson(@PathParam("personId") LongParam personId) {
-        return findSafely(personId.get());
+    public PersonDTO getPerson(@PathParam("personId") LongParam personId) {
+        Person person = this.findSafely(personId.get());
+        PersonDTO personDTO = new PersonDTO(personId.get(), person.getFullName(), person.getJobTitle());
+        personDTO.setId(person.getId());
+        return personDTO;
     }
 
     @GET

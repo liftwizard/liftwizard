@@ -1,29 +1,27 @@
 package com.example.helloworld;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import javax.annotation.Nonnull;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.example.helloworld.api.Saying;
-import com.example.helloworld.core.Person;
-import io.dropwizard.testing.ConfigOverride;
+import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.liftwizard.reladomo.test.rule.ReladomoInitializeTestRule;
+import io.liftwizard.reladomo.test.rule.ReladomoPurgeAllTestRule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExternalResource;
+import org.junit.rules.RuleChain;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -32,33 +30,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
 public class IntegrationTest {
-
-    private static final String TMP_FILE = createTempFile();
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
-    @ClassRule
-    public static final DropwizardAppRule<HelloWorldConfiguration> RULE = new DropwizardAppRule<>(
-            HelloWorldApplication.class, CONFIG_PATH,
-            ConfigOverride.config("database.url", "jdbc:h2:" + TMP_FILE));
+    private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
+            HelloWorldApplication.class,
+            CONFIG_PATH);
 
-    @BeforeClass
-    public static void migrateDb() throws Exception {
-        RULE.getApplication().run("db", "migrate", CONFIG_PATH);
-    }
-
-    private static String createTempFile() {
-        try {
-            return File.createTempFile("test-example", null).getAbsolutePath();
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
+    private final ExternalResource dbMigrateRule = new ExternalResource()
+    {
+        @Override
+        protected void before() throws Throwable
+        {
+            IntegrationTest.this.dropwizardAppRule.getApplication().run("db", "migrate", CONFIG_PATH);
         }
-    }
+    };
+
+    private final ReladomoInitializeTestRule initializeTestRule =
+            new ReladomoInitializeTestRule("reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml");
+
+
+    private final ReladomoPurgeAllTestRule purgeAllTestRule = new ReladomoPurgeAllTestRule();
+
+    @Rule
+    public final RuleChain ruleChain = RuleChain.emptyRuleChain()
+            .around(this.dropwizardAppRule)
+            .around(this.dbMigrateRule)
+            .around(this.initializeTestRule)
+            .around(this.purgeAllTestRule);
 
     @Test
     public void testHelloWorld() throws Exception {
-        Response response = RULE
+        Response response = this.dropwizardAppRule
                 .client()
-                .target(String.format("http://localhost:%d/hello-world", RULE.getLocalPort()))
+                .target(String.format("http://localhost:%d/hello-world", dropwizardAppRule.getLocalPort()))
                 .queryParam("name", "Dr. IntegrationTest")
                 .request()
                 .get();
@@ -84,8 +88,8 @@ public class IntegrationTest {
 
     @Test
     public void testPostPerson() throws Exception {
-        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard");
-        final Person newPerson = postPerson(person);
+        final PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
+        final PersonDTO newPerson = postPerson(person);
         assertThat(newPerson.getId()).isNotNull();
         assertThat(newPerson.getFullName()).isEqualTo(person.getFullName());
         assertThat(newPerson.getJobTitle()).isEqualTo(person.getJobTitle());
@@ -102,18 +106,18 @@ public class IntegrationTest {
     }
 
     private void testRenderingPerson(String viewName) throws Exception {
-        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard");
-        final Person newPerson = postPerson(person);
-        final String url = "http://localhost:" + RULE.getLocalPort() + "/people/" + newPerson.getId() + "/" + viewName;
-        Response response = RULE.client().target(url).request().get();
+        final PersonDTO person    = new PersonDTO( "Dr. IntegrationTest", "Chief Wizard");
+        final PersonDTO    newPerson = postPerson(person);
+        final String url = "http://localhost:" + dropwizardAppRule.getLocalPort() + "/people/" + newPerson.getId() + "/" + viewName;
+        Response response = dropwizardAppRule.client().target(url).request().get();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
     }
 
-    private Person postPerson(Person person) {
-        return RULE.client().target("http://localhost:" + RULE.getLocalPort() + "/people")
+    private PersonDTO postPerson(PersonDTO person) {
+        return dropwizardAppRule.client().target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/people")
                 .request()
                 .post(Entity.entity(person, MediaType.APPLICATION_JSON_TYPE))
-                .readEntity(Person.class);
+                .readEntity(PersonDTO.class);
     }
 
     @Test
@@ -124,6 +128,6 @@ public class IntegrationTest {
         final Path log = Paths.get("./logs/application.log");
         assertThat(log).exists();
         final String actual = new String(Files.readAllBytes(log), UTF_8);
-        assertThat(actual).contains("0.0.0.0:" + RULE.getLocalPort());
+        assertThat(actual).contains("0.0.0.0:" + dropwizardAppRule.getLocalPort());
     }
 }

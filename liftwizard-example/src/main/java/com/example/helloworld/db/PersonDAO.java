@@ -1,26 +1,27 @@
 package com.example.helloworld.db;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.example.helloworld.core.Person;
-import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.SessionFactory;
+import com.example.helloworld.core.PersonFinder;
+import com.example.helloworld.core.PersonList;
+import com.gs.fw.common.mithra.MithraManagerProvider;
 
-public class PersonDAO extends AbstractDAO<Person> {
-    public PersonDAO(SessionFactory factory) {
-        super(factory);
-    }
-
+public class PersonDAO {
     public Optional<Person> findById(Long id) {
-        return Optional.ofNullable(get(id));
+        return Optional.ofNullable(PersonFinder.findOne(PersonFinder.id().eq(id)));
     }
 
     public Person create(Person person) {
-        return persist(person);
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx ->
+        {
+            person.insert();
+            return null;
+        });
+        return person;
     }
 
-    public List<Person> findAll() {
-        return list(namedQuery("com.example.helloworld.core.Person.findAll"));
+    public PersonList findAll() {
+        return PersonFinder.findMany(PersonFinder.all());
     }
 }
