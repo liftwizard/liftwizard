@@ -1,36 +1,31 @@
 {
-  template: "Hello, %s!",
-  defaultName: "Stranger",
+  "template": "Hello, %s!",
+  "defaultName": "Stranger",
   "clock"                    : {
     "type"   : "incrementing"
   },
   "uuid"                     : {
-    type: "seed",
-    seed: "example seed"
+    "type": "seed",
+    "seed": "example seed"
   },
-  database: {
-    driverClass: "org.h2.Driver",
-    user: "sa",
-    password: "sa",
-    url: "jdbc:h2:./target/example"
-  },
-  server: {
-    applicationConnectors: [
+  "server": {
+    "detailedJsonProcessingExceptionMapper": true,
+    "applicationConnectors": [
       {
-        type: "http",
-        port: 0
+        "type": "http",
+        "port": 0
       }
     ],
-    adminConnectors: [
+    "adminConnectors": [
       {
-        type: "http",
-        port: 0
+        "type": "http",
+        "port": 0
       }
     ]
   },
-  logging: {
-    level: "INFO",
-    appenders: [
+  "logging": {
+    "level": "INFO",
+    "appenders": [
       {
         "type"             : "console",
         "timeZone"         : "system",
@@ -38,12 +33,12 @@
         "includeCallerData": true
       },
       {
-        type: "file",
-        currentLogFilename: "./logs/application.log",
-        archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
-        archive: true,
-        archivedFileCount: 7,
-        maxFileSize: '1mb'
+        "type": "file",
+        "currentLogFilename": "./logs/application.log",
+        "archivedLogFilenamePattern": "./logs/application-%d-%i.log.gz",
+        "archive": true,
+        "archivedFileCount": 7,
+        "maxFileSize": "1mb"
       },
       {
         "type"                      : "logstash-file",
@@ -51,6 +46,40 @@
         "archivedLogFilenamePattern": "./logs/logstash-%d.json",
         "includeCallerData"         : true
       }
+    ]
+  },
+  "configLogging"     : {
+    "enabled": true
+  },
+  "h2"                : {
+    "enabled": true
+  },
+  "dataSources"       : [
+    {
+      "name"                  : "liquibase",
+      "driverClass"           : "com.p6spy.engine.spy.P6SpyDriver",
+      "readOnlyByDefault"     : false,
+      "user"                  : "sa",
+      "password"              : "",
+      "url"                   : "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2",
+      "properties"            : {
+        "charSet": "UTF-8"
+      },
+      "logValidationErrors"   : true,
+      "maxWaitForConnection"  : "1 second",
+    },
+  ],
+  "connectionManagers": [
+    {
+      "connectionManagerName": "liquibase",
+      "dataSourceName"       : "liquibase",
+      "databaseType"         : "H2",
+      "schemaName"           : "liftwizard-app-h2"
+    },
+  ],
+  "reladomo"          : {
+    "runtimeConfigurationPaths": [
+      "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
     ]
   }
 }

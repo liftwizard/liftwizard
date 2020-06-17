@@ -8,7 +8,6 @@ import javax.servlet.DispatcherType;
 import com.example.helloworld.auth.ExampleAuthenticator;
 import com.example.helloworld.auth.ExampleAuthorizer;
 import com.example.helloworld.cli.RenderCommand;
-import com.example.helloworld.core.Person;
 import com.example.helloworld.core.Template;
 import com.example.helloworld.core.User;
 import com.example.helloworld.db.PersonDAO;
@@ -27,7 +26,6 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -35,8 +33,13 @@ import io.dropwizard.views.ViewBundle;
 import io.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
+import io.liftwizard.dropwizard.bundle.h2.H2Bundle;
 import io.liftwizard.dropwizard.bundle.httplogging.JerseyHttpLoggingBundle;
+import io.liftwizard.dropwizard.bundle.named.data.source.NamedDataSourceBundle;
 import io.liftwizard.dropwizard.bundle.objectmapper.ObjectMapperBundle;
+import io.liftwizard.dropwizard.bundle.reladomo.ReladomoBundle;
+import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.ConnectionManagerBundle;
+import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.ConnectionManagerHolderBundle;
 import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import io.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
@@ -44,20 +47,13 @@ import io.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
 import io.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter;
 import io.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
 import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
+import org.eclipse.collections.impl.utility.Iterate;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
     public static void main(String[] args) throws Exception {
         new HelloWorldApplication().run(args);
     }
-
-    private final HibernateBundle<HelloWorldConfiguration> hibernateBundle =
-        new HibernateBundle<HelloWorldConfiguration>(Person.class) {
-            @Override
-            public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
-                return configuration.getDataSourceFactory();
-            }
-        };
 
     @Override
     public String getName() {
@@ -77,15 +73,20 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
         bootstrap.addBundle(new ClockBundle());
         bootstrap.addBundle(new UUIDBundle());
 
+        bootstrap.addBundle(new H2Bundle());
+        bootstrap.addBundle(new NamedDataSourceBundle());
+        bootstrap.addBundle(new ConnectionManagerBundle());
+        bootstrap.addBundle(new ConnectionManagerHolderBundle());
+        bootstrap.addBundle(new ReladomoBundle());
+
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new MigrationsBundle<HelloWorldConfiguration>() {
             @Override
             public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
-                return configuration.getDataSourceFactory();
+                return Iterate.getOnly(configuration.getNamedDataSourceFactories());
             }
         });
-        bootstrap.addBundle(hibernateBundle);
         bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>() {
             @Override
             public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
@@ -96,7 +97,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
     @Override
     public void run(HelloWorldConfiguration configuration, Environment environment) {
-        final PersonDAO dao = new PersonDAO(hibernateBundle.getSessionFactory());
+        final PersonDAO dao = new PersonDAO();
         final Template template = configuration.buildTemplate();
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));

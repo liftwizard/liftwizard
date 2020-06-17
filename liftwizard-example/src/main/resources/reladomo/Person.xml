@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<MithraObject
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/goldmansachs/reladomo/master/reladomogen/src/main/xsd/mithraobject.xsd"
+        initializePrimitivesToNull="true"
+        objectType="transactional">
+    <PackageName>com.example.helloworld.core</PackageName>
+    <ClassName>Person</ClassName>
+    <DefaultTable>PERSON</DefaultTable>
+
+    <AsOfAttribute
+            name="system"
+            toIsInclusive="false"
+            infinityDate="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+            infinityIsNull="false"
+            defaultIfNotSpecified="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+            futureExpiringRowsExist="true"
+            isProcessingDate="true"
+            timezoneConversion="convert-to-utc"
+            finalGetter="true"
+            fromColumnName="system_from"
+            toColumnName="system_to" />
+    <Attribute
+            name="id"
+            javaType="long"
+            primaryKey="true"
+            primaryKeyGeneratorStrategy="SimulatedSequence"
+            nullable="false"
+            readonly="true"
+            finalGetter="true"
+            columnName="id">
+        <SimulatedSequence
+            sequenceName="Person"
+            sequenceObjectFactoryName="io.liftwizard.reladomo.simseq.ObjectSequenceObjectFactory"
+            hasSourceAttribute="false"
+            batchSize="10"
+            initialValue="1"
+            incrementSize="1" />
+    </Attribute>
+    <Attribute
+            name="fullName"
+            javaType="String"
+            primaryKey="false"
+            nullable="false"
+            columnName="full_name"
+            trim="false" />
+    <Attribute
+            name="jobTitle"
+            javaType="String"
+            primaryKey="false"
+            nullable="false"
+            columnName="job_title"
+            trim="false" />
+</MithraObject>
