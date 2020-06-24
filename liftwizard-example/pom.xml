@@ -281,10 +281,35 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>com.goldmansachs.reladomo</groupId>
+            <artifactId>reladomo</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-generator-reladomo-code-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <definitionsXmlFile>
+                        src/main/resources/reladomo/ReladomoClassList.xml
+                    </definitionsXmlFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-reladomo-pojos</id>
+                        <goals>
+                            <goal>generate-reladomo-pojos</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
