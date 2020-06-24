@@ -1,36 +1,36 @@
 {
-  template: "Hello, %s!",
-  defaultName: "Stranger",
+  "template": "Hello, %s!",
+  "defaultName": "Stranger",
   "clock"                    : {
     "type"   : "incrementing"
   },
   "uuid"                     : {
-    type: "seed",
-    seed: "example seed"
+    "type": "seed",
+    "seed": "example seed"
   },
-  database: {
-    driverClass: "org.h2.Driver",
-    user: "sa",
-    password: "sa",
-    url: "jdbc:h2:./target/example"
+  "database": {
+    "driverClass": "org.h2.Driver",
+    "user": "sa",
+    "password": "sa",
+    "url": "jdbc:h2:./target/example"
   },
-  server: {
-    applicationConnectors: [
+  "server": {
+    "applicationConnectors": [
       {
-        type: "http",
-        port: 0
+        "type": "http",
+        "port": 0
       }
     ],
-    adminConnectors: [
+    "adminConnectors": [
       {
-        type: "http",
-        port: 0
+        "type": "http",
+        "port": 0
       }
     ]
   },
-  logging: {
-    level: "INFO",
-    appenders: [
+  "logging": {
+    "level": "INFO",
+    "appenders": [
       {
         "type"             : "console",
         "timeZone"         : "system",
@@ -38,12 +38,12 @@
         "includeCallerData": true
       },
       {
-        type: "file",
-        currentLogFilename: "./logs/application.log",
-        archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
-        archive: true,
-        archivedFileCount: 7,
-        maxFileSize: '1mb'
+        "type": "file",
+        "currentLogFilename": "./logs/application.log",
+        "archivedLogFilenamePattern": "./logs/application-%d-%i.log.gz",
+        "archive": true,
+        "archivedFileCount": 7,
+        "maxFileSize": "1mb"
       },
       {
         "type"                      : "logstash-file",
