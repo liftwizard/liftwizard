@@ -1,92 +1,117 @@
 package com.example.helloworld.resources;
 
-import com.example.helloworld.core.Person;
-import com.example.helloworld.db.PersonDAO;
+import com.example.helloworld.HelloWorldApplication;
+import com.example.helloworld.HelloWorldConfiguration;
 import com.example.helloworld.dto.PersonDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.ImmutableList;
-import io.dropwizard.testing.junit.ResourceTestRule;
-import org.junit.After;
+import io.dropwizard.testing.ResourceHelpers;
+import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.liftwizard.reladomo.test.rule.ReladomoInitializeTestRule;
+import io.liftwizard.reladomo.test.rule.ReladomoLoadDataTestRule;
+import io.liftwizard.reladomo.test.rule.ReladomoPurgeAllTestRule;
+import org.json.JSONException;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.rules.ExternalResource;
+import org.junit.rules.RuleChain;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import javax.annotation.Nonnull;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link PeopleResource}.
  */
-@RunWith(MockitoJUnitRunner.class)
 public class PeopleResourceTest {
-    private static final PersonDAO PERSON_DAO = mock(PersonDAO.class);
-    @ClassRule
-    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
-            .addResource(new PeopleResource(PERSON_DAO))
-            .build();
-    @Captor
-    private ArgumentCaptor<Person> personCaptor;
-    private Person person;
-    private PersonDTO              personDTO = new PersonDTO(0, "Full Name", "Job Title");
+    private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
-    @Before
-    public void setUp() {
-        person = new Person();
-        person.setFullName("Full Name");
-        person.setJobTitle("Job Title");
-    }
+    private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
+            HelloWorldApplication.class,
+            CONFIG_PATH);
 
-    @After
-    public void tearDown() {
-        reset(PERSON_DAO);
-    }
+    private final ExternalResource dbMigrateRule = new ExternalResource()
+    {
+        @Override
+        protected void before() throws Throwable
+        {
+            PeopleResourceTest.this.dropwizardAppRule.getApplication().run("db", "migrate", CONFIG_PATH);
+        }
+    };
 
-    @Test
-    public void createPerson() throws JsonProcessingException {
-        when(PERSON_DAO.create(any(Person.class))).thenReturn(person);
-        final Response response = RESOURCES.target("/people")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(personDTO, MediaType.APPLICATION_JSON_TYPE));
+    private final ReladomoInitializeTestRule initializeTestRule =
+            new ReladomoInitializeTestRule("reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml");
 
-        assertResponseStatus(response, Status.OK);
-        verify(PERSON_DAO).create(personCaptor.capture());
-        assertThat(personCaptor.getValue()).isEqualTo(person);
-    }
+    private final ReladomoPurgeAllTestRule purgeAllTestRule = new ReladomoPurgeAllTestRule();
+    private final ReladomoLoadDataTestRule loadDataTestRule = new ReladomoLoadDataTestRule();
+
+    @Rule
+    public final RuleChain ruleChain = RuleChain.emptyRuleChain()
+            .around(this.dropwizardAppRule)
+            .around(this.dbMigrateRule)
+            .around(this.initializeTestRule)
+            .around(this.purgeAllTestRule)
+            .around(this.loadDataTestRule);
+
+    private final PersonDTO personDTO = new PersonDTO("Full Name", "Job Title");
 
     @Test
-    public void listPeople() throws Exception {
-        final ImmutableList<Person> people = ImmutableList.of(person);
-        final ImmutableList<PersonDTO> peopleDTOs = ImmutableList.of(personDTO);
-        when(PERSON_DAO.findAll()).thenReturn(people);
+    public void createPerson() throws JSONException
+    {
+        Client client = this.dropwizardAppRule.client();
 
-        final List<PersonDTO> response = RESOURCES.target("/people")
-            .request().get(new GenericType<List<PersonDTO>>() {
-            });
+        {
+            Response response = client.target(
+                    String.format("http://localhost:%d/people/", this.dropwizardAppRule.getLocalPort()))
+                    .request()
+                    .post(Entity.entity(this.personDTO, MediaType.APPLICATION_JSON_TYPE));
 
-        verify(PERSON_DAO).findAll();
-        assertThat(response).containsAll(peopleDTOs);
+            this.assertResponseStatus(response, Status.OK);
+            String jsonResponse = response.readEntity(String.class);
+
+            //<editor-fold desc="Expected JSON">
+            //language=JSON
+            String expected = ""
+                    + "{\n"
+                    + "  \"id\"      : 1,\n"
+                    + "  \"fullName\": \"Full Name\",\n"
+                    + "  \"jobTitle\": \"Job Title\"\n"
+                    + "}\n";
+            //</editor-fold>
+            JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+        }
+
+        {
+            Response response = client.target(
+                    String.format("http://localhost:%d/people/", this.dropwizardAppRule.getLocalPort()))
+                    .request()
+                    .get();
+
+            this.assertResponseStatus(response, Status.OK);
+            String jsonResponse = response.readEntity(String.class);
+
+            //<editor-fold desc="Expected JSON">
+            //language=JSON
+            String expected = ""
+                    + "[\n"
+                    + "  {\n"
+                    + "    \"id\"      : 1,\n"
+                    + "    \"fullName\": \"Full Name\",\n"
+                    + "    \"jobTitle\": \"Job Title\"\n"
+                    + "  }\n"
+                    + "]\n";
+            //</editor-fold>
+            JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+        }
     }
 
-    protected void assertResponseStatus(@Nonnull Response response, Status status)
+    private void assertResponseStatus(@Nonnull Response response, Status status)
     {
         response.bufferEntity();
         String entityAsString = response.readEntity(String.class);
