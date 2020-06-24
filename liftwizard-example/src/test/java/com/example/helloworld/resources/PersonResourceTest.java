@@ -2,6 +2,7 @@ package com.example.helloworld.resources;
 
 import com.example.helloworld.core.Person;
 import com.example.helloworld.db.PersonDAO;
+import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.After;
@@ -45,7 +46,7 @@ public class PersonResourceTest {
     public void getPersonSuccess() {
         when(DAO.findById(1L)).thenReturn(Optional.of(person));
 
-        Person found = RULE.target("/people/1").request().get(Person.class);
+        PersonDTO found = RULE.target("/people/1").request().get(PersonDTO.class);
 
         assertThat(found.getId()).isEqualTo(person.getId());
         verify(DAO).findById(1L);

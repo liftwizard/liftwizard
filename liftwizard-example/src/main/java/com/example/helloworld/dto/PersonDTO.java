@@ -3,16 +3,12 @@ package com.example.helloworld.dto;
 import java.time.Instant;
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class PersonDTO
 {
     private Long    id;
-    @NotNull
     private String  fullName;
-    @NotNull
     private String  jobTitle;
     private Instant system;
     private Instant systemFrom;
@@ -24,8 +20,8 @@ public class PersonDTO
     }
 
     public PersonDTO(
-            @NotNull String fullName,
-            @NotNull String jobTitle)
+            String fullName,
+            String jobTitle)
     {
         this.fullName = Objects.requireNonNull(fullName);
         this.jobTitle = Objects.requireNonNull(jobTitle);
@@ -33,12 +29,12 @@ public class PersonDTO
 
     public PersonDTO(
             long id,
-            @NotNull String fullName,
-            @NotNull String jobTitle)
+            String fullName,
+            String jobTitle)
     {
         this.id       = id;
-        this.fullName = Objects.requireNonNull(fullName);
-        this.jobTitle = Objects.requireNonNull(jobTitle);
+        this.fullName = fullName;
+        this.jobTitle = jobTitle;
     }
 
     public Long getId()
@@ -99,5 +95,67 @@ public class PersonDTO
     public void setSystemTo(Instant systemTo)
     {
         this.systemTo = systemTo;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "PersonDTO{" +
+                "id=" + this.id +
+                ", fullName='" + this.fullName + '\'' +
+                ", jobTitle='" + this.jobTitle + '\'' +
+                ", system=" + this.system +
+                ", systemFrom=" + this.systemFrom +
+                ", systemTo=" + this.systemTo +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        PersonDTO personDTO = (PersonDTO) o;
+
+        if (!Objects.equals(this.id, personDTO.id))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.fullName, personDTO.fullName))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.jobTitle, personDTO.jobTitle))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.system, personDTO.system))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.systemFrom, personDTO.systemFrom))
+        {
+            return false;
+        }
+        return Objects.equals(this.systemTo, personDTO.systemTo);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = Objects.hashCode(this.id);
+        result = 31 * result + Objects.hashCode(this.fullName);
+        result = 31 * result + Objects.hashCode(this.jobTitle);
+        result = 31 * result + Objects.hashCode(this.system);
+        result = 31 * result + Objects.hashCode(this.systemFrom);
+        result = 31 * result + Objects.hashCode(this.systemTo);
+        return result;
     }
 }

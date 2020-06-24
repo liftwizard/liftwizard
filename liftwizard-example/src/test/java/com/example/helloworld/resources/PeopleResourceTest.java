@@ -2,10 +2,12 @@ package com.example.helloworld.resources;
 
 import com.example.helloworld.core.Person;
 import com.example.helloworld.db.PersonDAO;
+import com.example.helloworld.dto.PersonDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableList;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -14,13 +16,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.annotation.Nonnull;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -40,6 +46,7 @@ public class PeopleResourceTest {
     @Captor
     private ArgumentCaptor<Person> personCaptor;
     private Person person;
+    private PersonDTO              personDTO = new PersonDTO(0, "Full Name", "Job Title");
 
     @Before
     public void setUp() {
@@ -58,9 +65,9 @@ public class PeopleResourceTest {
         when(PERSON_DAO.create(any(Person.class))).thenReturn(person);
         final Response response = RESOURCES.target("/people")
                 .request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(person, MediaType.APPLICATION_JSON_TYPE));
+                .post(Entity.entity(personDTO, MediaType.APPLICATION_JSON_TYPE));
 
-        assertThat(response.getStatusInfo()).isEqualTo(Response.Status.OK);
+        assertResponseStatus(response, Status.OK);
         verify(PERSON_DAO).create(personCaptor.capture());
         assertThat(personCaptor.getValue()).isEqualTo(person);
     }
@@ -68,13 +75,21 @@ public class PeopleResourceTest {
     @Test
     public void listPeople() throws Exception {
         final ImmutableList<Person> people = ImmutableList.of(person);
+        final ImmutableList<PersonDTO> peopleDTOs = ImmutableList.of(personDTO);
         when(PERSON_DAO.findAll()).thenReturn(people);
 
-        final List<Person> response = RESOURCES.target("/people")
-            .request().get(new GenericType<List<Person>>() {
+        final List<PersonDTO> response = RESOURCES.target("/people")
+            .request().get(new GenericType<List<PersonDTO>>() {
             });
 
         verify(PERSON_DAO).findAll();
-        assertThat(response).containsAll(people);
+        assertThat(response).containsAll(peopleDTOs);
+    }
+
+    protected void assertResponseStatus(@Nonnull Response response, Status status)
+    {
+        response.bufferEntity();
+        String entityAsString = response.readEntity(String.class);
+        Assert.assertThat(entityAsString, response.getStatusInfo(), is(status));
     }
 }
