@@ -423,6 +423,18 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-graphql-data-fetcher</artifactId>
+                <version>0.2.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-graphql-scalar-temporal</artifactId>
+                <version>0.2.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-serialize</artifactId>
                 <version>0.2.0-SNAPSHOT</version>
             </dependency>
