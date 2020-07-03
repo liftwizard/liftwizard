@@ -606,6 +606,31 @@
                     name="message"
                     value="System.err.println." />
         </module>
+
+        <module name="RegexpSinglelineJava">
+            <property name="ignoreComments" value="true" />
+
+            <property
+                    name="format"
+                    value=", \w+,\n" />
+
+            <property
+                    name="message"
+                    value="Comma separated list should have one item per line, or be all on a single line." />
+        </module>
+
+        <module name="RegexpSinglelineJava">
+            <property name="ignoreComments" value="true" />
+
+            <property
+                    name="format"
+                    value="\(\w+,\n" />
+
+            <property
+                    name="message"
+                    value="Comma separated list should have one item per line, or be all on a single line." />
+        </module>
+
     </module>
 
 </module>
