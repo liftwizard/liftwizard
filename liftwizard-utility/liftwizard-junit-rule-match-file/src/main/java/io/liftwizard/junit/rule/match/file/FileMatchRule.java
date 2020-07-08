@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -66,6 +67,10 @@ public class FileMatchRule extends ErrorCollector
         catch (@Nonnull URISyntaxException | FileNotFoundException e)
         {
             throw new RuntimeException(e);
+        }
+        catch (NoSuchElementException e)
+        {
+            throw new RuntimeException(resourceClassPathLocation, e);
         }
     }
 
