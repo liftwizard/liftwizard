@@ -226,7 +226,6 @@
         <module name="DeclarationOrder" />
         <module name="DefaultComesLast" />
         <module name="EmptyStatement" />
-        <module name="EqualsAvoidNull" />
         <!-- Effective Java Item 8 - Always override hashCode when you override equals -->
         <module name="EqualsHashCode" />
         <module name="ExplicitInitialization" />
