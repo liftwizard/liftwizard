@@ -38,7 +38,7 @@ import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
 
 /**
- * Derived from https://github.com/graphql-java/graphql-java but for Instant instead of OffsetDateTime.
+ * Derived from https://github.com/graphql-java/graphql-java-extended-scalars but for Instant instead of OffsetDateTime.
  */
 @Internal
 public class GraphQLTemporalScalar extends GraphQLScalarType
