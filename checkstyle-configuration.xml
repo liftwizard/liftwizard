@@ -257,7 +257,6 @@
             <property name="classes" value="java.lang.StringBuffer" />
             <property name="classes" value="java.util.Timer" />
             <property name="classes" value="java.util.TimerTask" />
-            <property name="classes" value="org.antlr.v4.runtime.misc.ParseCancellationException" />
             <property name="classes" value="org.apache.commons.beanutils.ConversionException" />
             <property name="classes" value="org.xml.sax.SAXException" />
             <property name="classes" value="org.xml.sax.SAXParseException" />
