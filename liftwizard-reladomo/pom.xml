@@ -59,6 +59,8 @@
         <module>liftwizard-named-data-source-factory</module>
         <module>liftwizard-reladomo-graphql-data-fetcher</module>
         <module>liftwizard-reladomo-graphql-deep-fetcher</module>
+        <module>liftwizard-reladomo-operation-compiler</module>
+        <module>liftwizard-reladomo-operation-grammar</module>
         <module>liftwizard-reladomo-serialize</module>
         <module>liftwizard-reladomo-simulated-sequence-ddls</module>
         <module>liftwizard-reladomo-simulated-sequence</module>
