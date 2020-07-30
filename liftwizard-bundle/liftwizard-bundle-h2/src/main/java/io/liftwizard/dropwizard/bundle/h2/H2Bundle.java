@@ -27,6 +27,8 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.h2.H2Factory;
 import io.liftwizard.dropwizard.configuration.h2.H2FactoryProvider;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
 import org.h2.server.web.WebServlet;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
@@ -62,7 +64,11 @@ public class H2Bundle
 
         LOGGER.info("Running {}.", H2Bundle.class.getSimpleName());
 
-        Server tcpServer = this.createTcpServer(h2Factory.getTcpServerArgs());
+        ImmutableList<String> args = Lists.immutable
+                .withAll(h2Factory.getTcpServerArgs())
+                .newWith("-tcpPort").newWith(String.valueOf(h2Factory.getTcpPort()))
+                .newWith("-webPort").newWith(String.valueOf(h2Factory.getWebPort()));
+        Server tcpServer = this.createTcpServer(args.castToList());
         environment.lifecycle().manage(new TcpServerShutdownHook(tcpServer));
 
         String servletName        = h2Factory.getServletName();

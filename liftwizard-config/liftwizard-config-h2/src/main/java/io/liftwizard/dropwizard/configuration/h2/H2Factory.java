@@ -41,6 +41,10 @@ public class H2Factory
             "-ifNotExists",
             "-baseDir",
             "./target/h2db");
+    // 8082
+    private @NotNull Integer      webPort;
+    // 9092
+    private @NotNull Integer      tcpPort;
 
     public boolean isEnabled()
     {
@@ -95,5 +99,27 @@ public class H2Factory
     public void setTcpServerArgs(List<String> tcpServerArgs)
     {
         this.tcpServerArgs = tcpServerArgs;
+    }
+
+    public Integer getWebPort()
+    {
+        return this.webPort;
+    }
+
+    @JsonProperty
+    public void setWebPort(Integer webPort)
+    {
+        this.webPort = webPort;
+    }
+
+    public Integer getTcpPort()
+    {
+        return this.tcpPort;
+    }
+
+    @JsonProperty
+    public void setTcpPort(Integer tcpPort)
+    {
+        this.tcpPort = tcpPort;
     }
 }
