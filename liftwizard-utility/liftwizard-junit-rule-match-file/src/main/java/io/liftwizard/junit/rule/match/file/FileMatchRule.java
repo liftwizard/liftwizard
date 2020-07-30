@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
@@ -42,14 +44,22 @@ public class FileMatchRule extends ErrorCollector
 {
     public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass)
     {
-        InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
-        Objects.requireNonNull(inputStream, resourceClassPathLocation);
-        return FileMatchRule.slurp(inputStream);
+        return FileMatchRule.slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
     }
 
-    public static String slurp(@Nonnull InputStream inputStream)
+    public static String slurp(
+            @Nonnull String resourceClassPathLocation,
+            @Nonnull Class<?> callingClass,
+            Charset charset)
     {
-        try (Scanner scanner = new Scanner(inputStream))
+        InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
+        Objects.requireNonNull(inputStream, resourceClassPathLocation);
+        return FileMatchRule.slurp(inputStream, charset);
+    }
+
+    public static String slurp(@Nonnull InputStream inputStream, Charset charset)
+    {
+        try (Scanner scanner = new Scanner(inputStream, charset))
         {
             return scanner.useDelimiter("\\A").next();
         }
@@ -94,7 +104,7 @@ public class FileMatchRule extends ErrorCollector
             fail(resourceClassPathLocation);
         }
 
-        String expectedStringFromFile = FileMatchRule.slurp(inputStream);
+        String expectedStringFromFile = FileMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
         URI    uri                    = callingClass.getResource(resourceClassPathLocation).toURI();
         if (!actualString.equals(expectedStringFromFile))
         {

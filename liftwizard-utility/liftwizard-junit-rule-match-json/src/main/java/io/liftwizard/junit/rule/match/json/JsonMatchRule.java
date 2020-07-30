@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -48,7 +50,11 @@ public class JsonMatchRule extends ErrorCollector
     {
         try
         {
-            JsonMatchRule.assertFileContentsOrThrow(resourceClassPathLocation, actualString, callingClass);
+            JsonMatchRule.assertFileContentsOrThrow(
+                    resourceClassPathLocation,
+                    StandardCharsets.UTF_8,
+                    actualString,
+                    callingClass);
         }
         catch (@Nonnull URISyntaxException | FileNotFoundException | JSONException e)
         {
@@ -58,6 +64,16 @@ public class JsonMatchRule extends ErrorCollector
 
     private static void assertFileContentsOrThrow(
             @Nonnull String resourceClassPathLocation,
+            @Nonnull String actualString,
+            @Nonnull Class<?> callingClass)
+            throws URISyntaxException, FileNotFoundException, JSONException
+    {
+        JsonMatchRule.assertFileContentsOrThrow(resourceClassPathLocation, StandardCharsets.UTF_8, actualString, callingClass);
+    }
+
+    private static void assertFileContentsOrThrow(
+            @Nonnull String resourceClassPathLocation,
+            @Nonnull Charset charset,
             @Nonnull String actualString,
             @Nonnull Class<?> callingClass)
             throws URISyntaxException, FileNotFoundException, JSONException
@@ -76,7 +92,7 @@ public class JsonMatchRule extends ErrorCollector
             fail(resourceClassPathLocation);
         }
 
-        String expectedStringFromFile = JsonMatchRule.slurp(inputStream);
+        String expectedStringFromFile = JsonMatchRule.slurp(inputStream, charset);
         URI    uri                    = callingClass.getResource(resourceClassPathLocation).toURI();
         if (!actualString.equals(expectedStringFromFile))
         {
@@ -86,9 +102,9 @@ public class JsonMatchRule extends ErrorCollector
         JSONAssert.assertEquals(actualString, expectedStringFromFile, actualString, JSONCompareMode.STRICT);
     }
 
-    private static String slurp(@Nonnull InputStream inputStream)
+    private static String slurp(@Nonnull InputStream inputStream, Charset charset)
     {
-        try (Scanner scanner = new Scanner(inputStream))
+        try (Scanner scanner = new Scanner(inputStream, charset))
         {
             return scanner.useDelimiter("\\A").next();
         }
