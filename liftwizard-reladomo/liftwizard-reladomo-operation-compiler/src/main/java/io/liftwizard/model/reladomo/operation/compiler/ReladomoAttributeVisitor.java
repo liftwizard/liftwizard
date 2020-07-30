@@ -19,14 +19,19 @@ package io.liftwizard.model.reladomo.operation.compiler;
 import java.util.Objects;
 
 import com.gs.fw.common.mithra.attribute.Attribute;
+import com.gs.fw.common.mithra.attribute.DateAttribute;
 import com.gs.fw.common.mithra.attribute.NumericAttribute;
 import com.gs.fw.common.mithra.attribute.StringAttribute;
+import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.AttributeContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionAbsoluteValueContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionDayOfMonthContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionMonthContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionToLowerCaseContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionToSubstringContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionUnknownContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionYearContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.SimpleAttributeContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
 import org.antlr.v4.runtime.RuleContext;
@@ -111,6 +116,75 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         }
 
         return (Attribute) ((NumericAttribute) attribute).absoluteValue();
+    }
+
+    @Override
+    public Attribute visitFunctionYear(FunctionYearContext ctx)
+    {
+        Attribute attribute = ctx.attribute().accept(this);
+
+        if (attribute instanceof TimestampAttribute)
+        {
+            return ((TimestampAttribute) attribute).year();
+        }
+        if (attribute instanceof DateAttribute)
+        {
+            return ((DateAttribute) attribute).year();
+        }
+
+        var error = String.format(
+                "Function 'year' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s",
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext);
+
+        throw new IllegalArgumentException(error);
+    }
+
+    @Override
+    public Attribute visitFunctionMonth(FunctionMonthContext ctx)
+    {
+        Attribute attribute = ctx.attribute().accept(this);
+
+        if (attribute instanceof TimestampAttribute)
+        {
+            return ((TimestampAttribute) attribute).month();
+        }
+        if (attribute instanceof DateAttribute)
+        {
+            return ((DateAttribute) attribute).month();
+        }
+
+        var error = String.format(
+                "Function 'month' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s",
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext);
+
+        throw new IllegalArgumentException(error);
+    }
+
+    @Override
+    public Attribute visitFunctionDayOfMonth(FunctionDayOfMonthContext ctx)
+    {
+        Attribute attribute = ctx.attribute().accept(this);
+
+        if (attribute instanceof TimestampAttribute)
+        {
+            return ((TimestampAttribute) attribute).dayOfMonth();
+        }
+        if (attribute instanceof DateAttribute)
+        {
+            return ((DateAttribute) attribute).dayOfMonth();
+        }
+
+        var error = String.format(
+                "Function 'dayOfMonth' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s",
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext);
+
+        throw new IllegalArgumentException(error);
     }
 
     @Override

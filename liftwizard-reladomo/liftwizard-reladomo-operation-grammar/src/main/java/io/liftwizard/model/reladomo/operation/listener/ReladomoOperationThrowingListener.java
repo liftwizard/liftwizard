@@ -30,9 +30,12 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.EqualsEdge
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionAbsoluteValueContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionDayOfMonthContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionMonthContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionToLowerCaseContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionToSubstringContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionUnknownContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionYearContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAllContext;
@@ -262,6 +265,48 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
                 + ".enterFunctionAbsoluteValue() not implemented yet");
+    }
+
+    @Override
+    public void enterFunctionYear(FunctionYearContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterFunctionYear() not implemented yet");
+    }
+
+    @Override
+    public void exitFunctionYear(FunctionYearContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitFunctionYear() not implemented yet");
+    }
+
+    @Override
+    public void enterFunctionMonth(FunctionMonthContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterFunctionMonth() not implemented yet");
+    }
+
+    @Override
+    public void exitFunctionMonth(FunctionMonthContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitFunctionMonth() not implemented yet");
+    }
+
+    @Override
+    public void enterFunctionDayOfMonth(FunctionDayOfMonthContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterFunctionDayOfMonth() not implemented yet");
+    }
+
+    @Override
+    public void exitFunctionDayOfMonth(FunctionDayOfMonthContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitFunctionDayOfMonth() not implemented yet");
     }
 
     @Override

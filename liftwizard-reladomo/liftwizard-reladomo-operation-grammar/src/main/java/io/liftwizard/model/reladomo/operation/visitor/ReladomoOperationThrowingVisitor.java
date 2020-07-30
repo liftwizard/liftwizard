@@ -29,9 +29,12 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.EqualsEdge
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionAbsoluteValueContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionDayOfMonthContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionMonthContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionToLowerCaseContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionToSubstringContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionUnknownContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionYearContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAllContext;
@@ -179,6 +182,27 @@ public class ReladomoOperationThrowingVisitor<T>
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
                 + ".visitFunctionAbsoluteValue() not implemented yet");
+    }
+
+    @Override
+    public T visitFunctionYear(FunctionYearContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitFunctionYear() not implemented yet");
+    }
+
+    @Override
+    public T visitFunctionMonth(FunctionMonthContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitFunctionMonth() not implemented yet");
+    }
+
+    @Override
+    public T visitFunctionDayOfMonth(FunctionDayOfMonthContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitFunctionDayOfMonth() not implemented yet");
     }
 
     @Override

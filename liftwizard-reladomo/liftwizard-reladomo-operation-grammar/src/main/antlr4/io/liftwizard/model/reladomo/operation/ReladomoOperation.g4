@@ -25,6 +25,9 @@ functionAttribute
     : functionName=('lower' | 'toLowerCase') '(' attribute ')'           # FunctionToLowerCase
     | 'substring' '(' attribute ',' IntegerLiteral ',' IntegerLiteral ')'# FunctionToSubstring
     | functionName=('abs' | 'absoluteValue') '(' attribute ')'           # FunctionAbsoluteValue
+    | 'year'       '(' attribute ')'                                     # FunctionYear
+    | 'month'      '(' attribute ')'                                     # FunctionMonth
+    | 'dayOfMonth' '(' attribute ')'                                     # FunctionDayOfMonth
     | functionName=Identifier '(' attribute ')'                          # FunctionUnknown
     ;
 
