@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoInitializeTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoPurgeAllTestRule;
 import org.eclipse.jetty.http.HttpStatus;
@@ -22,6 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -31,6 +33,9 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class IntegrationTest {
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
+
+    @Rule
+    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
     private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
             HelloWorldApplication.class,

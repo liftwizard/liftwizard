@@ -32,13 +32,19 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
+import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ConnectionManagerFactoryTest
 {
+    @Rule
+    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
+
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 

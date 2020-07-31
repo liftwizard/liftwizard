@@ -29,7 +29,10 @@ import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
+import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -37,9 +40,13 @@ import static org.junit.Assert.assertThat;
 
 public class FirebaseAuthFilterFactoryTest
 {
-    private final ObjectMapper                                objectMapper = Jackson.newObjectMapper();
-    private final Validator                                   validator    = Validators.newValidator();
-    private final YamlConfigurationFactory<AuthFilterFactory> factory      =
+    @Rule
+    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
+
+    private final ObjectMapper objectMapper = Jackson.newObjectMapper();
+    private final Validator    validator    = Validators.newValidator();
+
+    private final YamlConfigurationFactory<AuthFilterFactory> factory =
             new YamlConfigurationFactory<>(AuthFilterFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test

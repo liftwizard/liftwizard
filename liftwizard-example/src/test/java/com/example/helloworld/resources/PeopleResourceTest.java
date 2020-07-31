@@ -1,10 +1,18 @@
 package com.example.helloworld.resources;
 
+import javax.annotation.Nonnull;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.example.helloworld.HelloWorldApplication;
 import com.example.helloworld.HelloWorldConfiguration;
 import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoInitializeTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoLoadDataTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoPurgeAllTestRule;
@@ -14,15 +22,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-
-import javax.annotation.Nonnull;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -31,6 +33,9 @@ import static org.hamcrest.CoreMatchers.is;
  */
 public class PeopleResourceTest {
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
+
+    @Rule
+    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
     private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
             HelloWorldApplication.class,
