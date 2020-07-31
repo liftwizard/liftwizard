@@ -29,6 +29,7 @@
     <name>Liftwizard Utility (Module Group)</name>
 
     <modules>
+        <module>liftwizard-junit-rule-log-marker</module>
         <module>liftwizard-junit-rule-match-file</module>
         <module>liftwizard-junit-rule-match-json</module>
     </modules>

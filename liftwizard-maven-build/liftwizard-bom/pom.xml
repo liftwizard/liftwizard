@@ -282,6 +282,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-logging-buffered</artifactId>
+                <version>0.4.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-config</artifactId>
                 <version>0.4.0-SNAPSHOT</version>
             </dependency>
@@ -307,6 +313,12 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logzio</artifactId>
+                <version>0.4.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-logging-buffered-appender</artifactId>
                 <version>0.4.0-SNAPSHOT</version>
             </dependency>
 
@@ -544,6 +556,12 @@
             <!--endregion-->
 
             <!--region liftwizard-utility-->
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-junit-rule-log-marker</artifactId>
+                <version>0.4.0-SNAPSHOT</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-match-file</artifactId>
