@@ -158,34 +158,6 @@
                             </configuration>
                         </execution>
 
-                        <execution>
-                            <id>tree-txt</id>
-                            <goals>
-                                <goal>tree</goal>
-                            </goals>
-                            <phase>verify</phase>
-                            <configuration>
-                                <includes>io.liftwizard*</includes>
-                                <outputType>txt</outputType>
-                                <outputFile>${project.build.directory}/dependency-tree.txt</outputFile>
-                                <tokens>extended</tokens>
-                            </configuration>
-                        </execution>
-
-                        <execution>
-                            <id>tree-dot</id>
-                            <goals>
-                                <goal>tree</goal>
-                            </goals>
-                            <phase>verify</phase>
-                            <configuration>
-                                <includes>io.liftwizard*</includes>
-                                <outputType>dot</outputType>
-                                <outputFile>${project.build.directory}/dependency-tree.dot</outputFile>
-                                <tokens>extended</tokens>
-                            </configuration>
-                        </execution>
-
                     </executions>
                 </plugin>
 
