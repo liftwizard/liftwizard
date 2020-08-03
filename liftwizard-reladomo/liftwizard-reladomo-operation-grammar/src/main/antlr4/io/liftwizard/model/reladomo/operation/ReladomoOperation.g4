@@ -9,15 +9,15 @@ grammar ReladomoOperation;
 compilationUnit: compositeOperation EOF;
 
 compositeOperation
-    : compositeOperation '&' compositeOperation                            # OperationAnd
-    | compositeOperation '|' compositeOperation                            # OperationOr
-    | '(' compositeOperation ')'                                           # OperationGroup
-    | 'all' ('of' className)?                                              # OperationAll
-    | 'none'                                                               # OperationNone
+    : compositeOperation '&' compositeOperation                                  # OperationAnd
+    | compositeOperation '|' compositeOperation                                  # OperationOr
+    | '(' compositeOperation ')'                                                 # OperationGroup
+    | 'all' ('of' className)?                                                    # OperationAll
+    | 'none'                                                                     # OperationNone
     // Order matters here because '== null' can match both unary and binary
-    | attribute unaryOperator                                              # OperationUnaryOperator
-    | attribute binaryOperator parameter                                   # OperationBinaryOperator
-    | navigation notExistsOperation=compositeOperation existsOperator      # OperationExistence
+    | attribute unaryOperator                                                    # OperationUnaryOperator
+    | attribute binaryOperator parameter                                         # OperationBinaryOperator
+    | navigation ('{' notExistsOperation=compositeOperation '}')? existsOperator # OperationExistence
     ;
 
 attribute:         simpleAttribute | functionAttribute;

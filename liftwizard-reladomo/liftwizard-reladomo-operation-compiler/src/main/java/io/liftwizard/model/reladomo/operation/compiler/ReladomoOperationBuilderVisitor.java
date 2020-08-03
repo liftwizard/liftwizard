@@ -31,15 +31,22 @@ import com.gs.fw.common.mithra.attribute.IntegerAttribute;
 import com.gs.fw.common.mithra.attribute.LongAttribute;
 import com.gs.fw.common.mithra.attribute.StringAttribute;
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
+import com.gs.fw.common.mithra.finder.AbstractRelatedFinder;
 import com.gs.fw.common.mithra.finder.None;
 import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.AttributeContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.BinaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CompilationUnitContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CompositeOperationContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ExistsOperatorContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.NavigationContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAllContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationBinaryOperatorContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationExistenceContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationNoneContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationUnaryOperatorContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.UnaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.literal.many.BooleanListLiteralVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.literal.many.DoubleListLiteralVisitor;
@@ -79,8 +86,10 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.unary.UnaryOpera
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVisitor<Operation>
@@ -119,7 +128,7 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
     {
         String    contextString = this.getContextString(ctx);
         Attribute attribute     = this.getAttribute(ctx.attribute(), contextString);
-        return this.getUnaryOperation(ctx, attribute);
+        return this.getUnaryOperation(ctx.unaryOperator(), attribute);
     }
 
     @Override
@@ -133,7 +142,64 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
                 attribute,
                 parameterCardinality,
                 contextString);
-        return this.getBinaryOperation(ctx, attribute, parameterCardinality, parameter);
+        return this.getBinaryOperation(ctx.binaryOperator(), attribute, parameterCardinality, parameter);
+    }
+
+    @Override
+    public Operation visitOperationExistence(OperationExistenceContext ctx)
+    {
+        // navigation ('{' notExistsOperation=compositeOperation '}')? existsOperator
+        String                    contextString      = this.getContextString(ctx);
+        AbstractRelatedFinder     navigation         = this.getNavigation(ctx.navigation(), contextString);
+        CompositeOperationContext notExistsOperation = ctx.notExistsOperation;
+        if (notExistsOperation != null)
+        {
+            throw new IllegalArgumentException(navigation.getFinderClassName());
+        }
+        ExistsOperatorContext     existsOperatorContext = ctx.existsOperator();
+        return existsOperatorContext.accept(new ReladomoExistsOperatorVisitor(navigation));
+    }
+
+    private AbstractRelatedFinder getNavigation(NavigationContext ctx, String errorContext)
+    {
+        if (ctx.className() != null
+                && !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder)))
+        {
+            var error = String.format(
+                    "Expected 'this' or <" + this.getExpectedClassName(this.finder) + "> but found: <%s> in %s",
+                    ctx.className().getText(),
+                    errorContext);
+            throw new IllegalArgumentException(error);
+        }
+
+        RelatedFinder currentFinder = this.finder;
+        MutableList<String> relationshipNames = ListAdapter.adapt(ctx.relationshipName())
+                .collect(RuleContext::getText);
+        for (String relationshipName : relationshipNames)
+        {
+            RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
+            if (nextFinder == null)
+            {
+                var error = String.format(
+                        "Could not find relationship '%s' on type '%s' in %s",
+                        relationshipName,
+                        this.getExpectedClassName(currentFinder),
+                        errorContext);
+                throw new IllegalArgumentException(error);
+            }
+            currentFinder = nextFinder;
+        }
+
+        return (AbstractRelatedFinder) currentFinder;
+    }
+
+    public String getExpectedClassName(RelatedFinder relatedFinder)
+    {
+        return relatedFinder
+                .getMithraObjectPortal()
+                .getClassMetaData()
+                .getBusinessOrInterfaceClass()
+                .getSimpleName();
     }
 
     private ParameterCardinality getParameterCardinality(OperationBinaryOperatorContext ctx)
@@ -242,14 +308,14 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
         throw new AssertionError(parameterCardinality);
     }
 
-    private Operation getUnaryOperation(OperationUnaryOperatorContext ctx, Attribute attribute)
+    private Operation getUnaryOperation(UnaryOperatorContext unaryOperatorContext, Attribute attribute)
     {
         ReladomoOperationVisitor<Operation> operatorVisitor = this.getUnaryOperatorVisitor(attribute);
-        return ctx.unaryOperator().accept(operatorVisitor);
+        return unaryOperatorContext.accept(operatorVisitor);
     }
 
     private Operation getBinaryOperation(
-            OperationBinaryOperatorContext ctx,
+            BinaryOperatorContext binaryOperatorContext,
             Attribute attribute,
             ParameterCardinality parameterCardinality,
             Object parameter)
@@ -258,7 +324,7 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
                 attribute,
                 parameterCardinality,
                 parameter);
-        return ctx.binaryOperator().accept(operatorVisitor);
+        return binaryOperatorContext.accept(operatorVisitor);
     }
 
     private ReladomoOperationVisitor<Operation> getUnaryOperatorVisitor(Attribute attribute)
