@@ -27,6 +27,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CharacterL
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ClassNameContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CompilationUnitContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.EqualsEdgePointContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ExistsOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionAbsoluteValueContext;
@@ -38,9 +39,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionUn
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionYearContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.NavigationContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAllContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAndContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationBinaryOperatorContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationExistenceContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationGroupContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationNoneContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationOrContext;
@@ -48,6 +51,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationU
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorContainsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEndsWithContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEqContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorExistsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorGreaterThanContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorGreaterThanEqualsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
@@ -58,6 +62,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLe
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotContainsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEndsWithContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotExistsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotStartsWithContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorStartsWithContext;
@@ -93,34 +98,6 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
-    public void enterOperationAnd(OperationAndContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterOperationAnd() not implemented yet");
-    }
-
-    @Override
-    public void exitOperationAnd(OperationAndContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitOperationAnd() not implemented yet");
-    }
-
-    @Override
-    public void enterOperationOr(OperationOrContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterOperationOr() not implemented yet");
-    }
-
-    @Override
-    public void exitOperationOr(OperationOrContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitOperationOr() not implemented yet");
-    }
-
-    @Override
     public void enterOperationGroup(OperationGroupContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
@@ -135,17 +112,17 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
-    public void enterOperationAll(OperationAllContext ctx)
+    public void enterOperationAnd(OperationAndContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterOperationAll() not implemented yet");
+                + ".enterOperationAnd() not implemented yet");
     }
 
     @Override
-    public void exitOperationAll(OperationAllContext ctx)
+    public void exitOperationAnd(OperationAndContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitOperationAll() not implemented yet");
+                + ".exitOperationAnd() not implemented yet");
     }
 
     @Override
@@ -177,6 +154,20 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
+    public void enterOperationExistence(OperationExistenceContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterOperationExistence() not implemented yet");
+    }
+
+    @Override
+    public void exitOperationExistence(OperationExistenceContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitOperationExistence() not implemented yet");
+    }
+
+    @Override
     public void enterOperationBinaryOperator(OperationBinaryOperatorContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
@@ -191,45 +182,73 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
-    public void enterBinaryOperator(BinaryOperatorContext ctx)
+    public void enterOperationAll(OperationAllContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterBinaryOperator() not implemented yet");
+                + ".enterOperationAll() not implemented yet");
     }
 
     @Override
-    public void exitBinaryOperator(BinaryOperatorContext ctx)
+    public void exitOperationAll(OperationAllContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitBinaryOperator() not implemented yet");
+                + ".exitOperationAll() not implemented yet");
     }
 
     @Override
-    public void enterUnaryOperator(UnaryOperatorContext ctx)
+    public void enterOperationOr(OperationOrContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterUnaryOperator() not implemented yet");
+                + ".enterOperationOr() not implemented yet");
     }
 
     @Override
-    public void exitUnaryOperator(UnaryOperatorContext ctx)
+    public void exitOperationOr(OperationOrContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitUnaryOperator() not implemented yet");
+                + ".exitOperationOr() not implemented yet");
     }
 
     @Override
-    public void enterEqualsEdgePoint(EqualsEdgePointContext ctx)
+    public void enterAttribute(AttributeContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterEqualsEdgePoint() not implemented yet");
+                + ".enterAttribute() not implemented yet");
     }
 
     @Override
-    public void exitEqualsEdgePoint(EqualsEdgePointContext ctx)
+    public void exitAttribute(AttributeContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitEqualsEdgePoint() not implemented yet");
+                + ".exitAttribute() not implemented yet");
+    }
+
+    @Override
+    public void enterSimpleAttribute(SimpleAttributeContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterSimpleAttribute() not implemented yet");
+    }
+
+    @Override
+    public void exitSimpleAttribute(SimpleAttributeContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitSimpleAttribute() not implemented yet");
+    }
+
+    @Override
+    public void enterNavigation(NavigationContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterNavigation() not implemented yet");
+    }
+
+    @Override
+    public void exitNavigation(NavigationContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitNavigation() not implemented yet");
     }
 
     @Override
@@ -265,6 +284,13 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
                 + ".enterFunctionAbsoluteValue() not implemented yet");
+    }
+
+    @Override
+    public void exitFunctionAbsoluteValue(FunctionAbsoluteValueContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitFunctionAbsoluteValue() not implemented yet");
     }
 
     @Override
@@ -310,13 +336,6 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
-    public void exitFunctionAbsoluteValue(FunctionAbsoluteValueContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitFunctionAbsoluteValue() not implemented yet");
-    }
-
-    @Override
     public void enterFunctionUnknown(FunctionUnknownContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
@@ -331,255 +350,17 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
-    public void enterSimpleAttribute(SimpleAttributeContext ctx)
+    public void enterBinaryOperator(BinaryOperatorContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterSimpleAttribute() not implemented yet");
+                + ".enterBinaryOperator() not implemented yet");
     }
 
     @Override
-    public void exitSimpleAttribute(SimpleAttributeContext ctx)
+    public void exitBinaryOperator(BinaryOperatorContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitSimpleAttribute() not implemented yet");
-    }
-
-    @Override
-    public void enterAttribute(AttributeContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterAttribute() not implemented yet");
-    }
-
-    @Override
-    public void exitAttribute(AttributeContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitAttribute() not implemented yet");
-    }
-
-    @Override
-    public void enterClassName(ClassNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterClassName() not implemented yet");
-    }
-
-    @Override
-    public void exitClassName(ClassNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitClassName() not implemented yet");
-    }
-
-    @Override
-    public void enterRelationshipName(RelationshipNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterRelationshipName() not implemented yet");
-    }
-
-    @Override
-    public void exitRelationshipName(RelationshipNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitRelationshipName() not implemented yet");
-    }
-
-    @Override
-    public void enterAttributeName(AttributeNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterAttributeName() not implemented yet");
-    }
-
-    @Override
-    public void exitAttributeName(AttributeNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitAttributeName() not implemented yet");
-    }
-
-    @Override
-    public void enterParameter(ParameterContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterParameter() not implemented yet");
-    }
-
-    @Override
-    public void exitParameter(ParameterContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitParameter() not implemented yet");
-    }
-
-    @Override
-    public void visitTerminal(TerminalNode node)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitTerminal() not implemented yet");
-    }
-
-    @Override
-    public void visitErrorNode(ErrorNode node)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitErrorNode() not implemented yet");
-    }
-
-    @Override
-    public void enterEveryRule(ParserRuleContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterEveryRule() not implemented yet");
-    }
-
-    @Override
-    public void exitEveryRule(ParserRuleContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitEveryRule() not implemented yet");
-    }
-
-    @Override
-    public void enterStringLiteral(StringLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterStringLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitStringLiteral(StringLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitStringLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterBooleanLiteral(BooleanLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterBooleanLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitBooleanLiteral(BooleanLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitBooleanLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterCharacterLiteral(CharacterLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterCharacterLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitCharacterLiteral(CharacterLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitCharacterLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterIntegerLiteral(IntegerLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterIntegerLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitIntegerLiteral(IntegerLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitIntegerLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterFloatingPointLiteral(FloatingPointLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterFloatingPointLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitFloatingPointLiteral(FloatingPointLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitFloatingPointLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterStringListLiteral(StringListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterStringListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitStringListLiteral(StringListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitStringListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterBooleanListLiteral(BooleanListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterBooleanListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitBooleanListLiteral(BooleanListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitBooleanListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterCharacterListLiteral(CharacterListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterCharacterListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitCharacterListLiteral(CharacterListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitCharacterListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterIntegerListLiteral(IntegerListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterIntegerListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitIntegerListLiteral(IntegerListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitIntegerListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void enterFloatingPointListLiteral(FloatingPointListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterFloatingPointListLiteral() not implemented yet");
-    }
-
-    @Override
-    public void exitFloatingPointListLiteral(FloatingPointListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitFloatingPointListLiteral() not implemented yet");
+                + ".exitBinaryOperator() not implemented yet");
     }
 
     @Override
@@ -587,34 +368,6 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
                 + ".enterOperatorEq() not implemented yet");
-    }
-
-    @Override
-    public void enterOperatorIsNull(OperatorIsNullContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterOperatorIsNull() not implemented yet");
-    }
-
-    @Override
-    public void exitOperatorIsNull(OperatorIsNullContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitOperatorIsNull() not implemented yet");
-    }
-
-    @Override
-    public void enterOperatorIsNotNull(OperatorIsNotNullContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterOperatorIsNotNull() not implemented yet");
-    }
-
-    @Override
-    public void exitOperatorIsNotNull(OperatorIsNotNullContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitOperatorIsNotNull() not implemented yet");
     }
 
     @Override
@@ -779,6 +532,20 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
+    public void enterOperatorContains(OperatorContainsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterOperatorContains() not implemented yet");
+    }
+
+    @Override
+    public void exitOperatorContains(OperatorContainsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitOperatorContains() not implemented yet");
+    }
+
+    @Override
     public void enterOperatorNotContains(OperatorNotContainsContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
@@ -835,16 +602,324 @@ public class ReladomoOperationThrowingListener implements ReladomoOperationListe
     }
 
     @Override
-    public void enterOperatorContains(OperatorContainsContext ctx)
+    public void enterUnaryOperator(UnaryOperatorContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".enterOperatorContains() not implemented yet");
+                + ".enterUnaryOperator() not implemented yet");
     }
 
     @Override
-    public void exitOperatorContains(OperatorContainsContext ctx)
+    public void exitUnaryOperator(UnaryOperatorContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".exitOperatorContains() not implemented yet");
+                + ".exitUnaryOperator() not implemented yet");
+    }
+
+    @Override
+    public void enterOperatorIsNull(OperatorIsNullContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterOperatorIsNull() not implemented yet");
+    }
+
+    @Override
+    public void exitOperatorIsNull(OperatorIsNullContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitOperatorIsNull() not implemented yet");
+    }
+
+    @Override
+    public void enterOperatorIsNotNull(OperatorIsNotNullContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterOperatorIsNotNull() not implemented yet");
+    }
+
+    @Override
+    public void exitOperatorIsNotNull(OperatorIsNotNullContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitOperatorIsNotNull() not implemented yet");
+    }
+
+    @Override
+    public void enterEqualsEdgePoint(EqualsEdgePointContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterEqualsEdgePoint() not implemented yet");
+    }
+
+    @Override
+    public void exitEqualsEdgePoint(EqualsEdgePointContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitEqualsEdgePoint() not implemented yet");
+    }
+
+    @Override
+    public void enterExistsOperator(ExistsOperatorContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterExistsOperator() not implemented yet");
+    }
+
+    @Override
+    public void exitExistsOperator(ExistsOperatorContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitExistsOperator() not implemented yet");
+    }
+
+    @Override
+    public void enterOperatorExists(OperatorExistsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterOperatorExists() not implemented yet");
+    }
+
+    @Override
+    public void exitOperatorExists(OperatorExistsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitOperatorExists() not implemented yet");
+    }
+
+    @Override
+    public void enterOperatorNotExists(OperatorNotExistsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterOperatorNotExists() not implemented yet");
+    }
+
+    @Override
+    public void exitOperatorNotExists(OperatorNotExistsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitOperatorNotExists() not implemented yet");
+    }
+
+    @Override
+    public void enterParameter(ParameterContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterParameter() not implemented yet");
+    }
+
+    @Override
+    public void exitParameter(ParameterContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitParameter() not implemented yet");
+    }
+
+    @Override
+    public void enterStringLiteral(StringLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterStringLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitStringLiteral(StringLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitStringLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterBooleanLiteral(BooleanLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterBooleanLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitBooleanLiteral(BooleanLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitBooleanLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterCharacterLiteral(CharacterLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterCharacterLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitCharacterLiteral(CharacterLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitCharacterLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterIntegerLiteral(IntegerLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterIntegerLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitIntegerLiteral(IntegerLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitIntegerLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterFloatingPointLiteral(FloatingPointLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterFloatingPointLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitFloatingPointLiteral(FloatingPointLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitFloatingPointLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterStringListLiteral(StringListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterStringListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitStringListLiteral(StringListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitStringListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterBooleanListLiteral(BooleanListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterBooleanListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitBooleanListLiteral(BooleanListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitBooleanListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterCharacterListLiteral(CharacterListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterCharacterListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitCharacterListLiteral(CharacterListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitCharacterListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterIntegerListLiteral(IntegerListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterIntegerListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitIntegerListLiteral(IntegerListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitIntegerListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterFloatingPointListLiteral(FloatingPointListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterFloatingPointListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void exitFloatingPointListLiteral(FloatingPointListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitFloatingPointListLiteral() not implemented yet");
+    }
+
+    @Override
+    public void enterClassName(ClassNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterClassName() not implemented yet");
+    }
+
+    @Override
+    public void exitClassName(ClassNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitClassName() not implemented yet");
+    }
+
+    @Override
+    public void enterRelationshipName(RelationshipNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterRelationshipName() not implemented yet");
+    }
+
+    @Override
+    public void exitRelationshipName(RelationshipNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitRelationshipName() not implemented yet");
+    }
+
+    @Override
+    public void enterAttributeName(AttributeNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterAttributeName() not implemented yet");
+    }
+
+    @Override
+    public void exitAttributeName(AttributeNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitAttributeName() not implemented yet");
+    }
+
+    @Override
+    public void visitTerminal(TerminalNode terminalNode)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitTerminal() not implemented yet");
+    }
+
+    @Override
+    public void visitErrorNode(ErrorNode errorNode)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitErrorNode() not implemented yet");
+    }
+
+    @Override
+    public void enterEveryRule(ParserRuleContext parserRuleContext)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".enterEveryRule() not implemented yet");
+    }
+
+    @Override
+    public void exitEveryRule(ParserRuleContext parserRuleContext)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".exitEveryRule() not implemented yet");
     }
 }

@@ -26,6 +26,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CharacterL
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ClassNameContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CompilationUnitContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.EqualsEdgePointContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ExistsOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionAbsoluteValueContext;
@@ -37,9 +38,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionUn
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionYearContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerListLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.NavigationContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAllContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAndContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationBinaryOperatorContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationExistenceContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationGroupContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationNoneContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationOrContext;
@@ -47,6 +50,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationU
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorContainsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEndsWithContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEqContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorExistsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorGreaterThanContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorGreaterThanEqualsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
@@ -57,6 +61,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLe
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotContainsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEndsWithContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotExistsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotStartsWithContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorStartsWithContext;
@@ -71,7 +76,6 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLite
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.UnaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 // Deliberately not abstract
 // Implements every method of ReladomoOperationVisitor by throwing
@@ -108,6 +112,27 @@ public class ReladomoOperationThrowingVisitor<T>
     }
 
     @Override
+    public T visitOperationUnaryOperator(OperationUnaryOperatorContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperationUnaryOperator() not implemented yet");
+    }
+
+    @Override
+    public T visitOperationExistence(OperationExistenceContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperationExistence() not implemented yet");
+    }
+
+    @Override
+    public T visitOperationBinaryOperator(OperationBinaryOperatorContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperationBinaryOperator() not implemented yet");
+    }
+
+    @Override
     public T visitOperationAll(OperationAllContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
@@ -122,45 +147,24 @@ public class ReladomoOperationThrowingVisitor<T>
     }
 
     @Override
-    public T visitOperationUnaryOperator(OperationUnaryOperatorContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitOperationUnaryOperator() not implemented yet");
-    }
-
-    @Override
-    public T visitOperationBinaryOperator(OperationBinaryOperatorContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitOperationBinaryOperator() not implemented yet");
-    }
-
-    @Override
-    public T visitBinaryOperator(BinaryOperatorContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitBinaryOperator() not implemented yet");
-    }
-
-    @Override
-    public T visitUnaryOperator(UnaryOperatorContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitUnaryOperator() not implemented yet");
-    }
-
-    @Override
-    public T visitEqualsEdgePoint(EqualsEdgePointContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitEqualsEdgePoint() not implemented yet");
-    }
-
-    @Override
     public T visitAttribute(AttributeContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
                 + ".visitAttribute() not implemented yet");
+    }
+
+    @Override
+    public T visitSimpleAttribute(SimpleAttributeContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitSimpleAttribute() not implemented yet");
+    }
+
+    @Override
+    public T visitNavigation(NavigationContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitNavigation() not implemented yet");
     }
 
     @Override
@@ -213,122 +217,10 @@ public class ReladomoOperationThrowingVisitor<T>
     }
 
     @Override
-    public T visitSimpleAttribute(SimpleAttributeContext ctx)
+    public T visitBinaryOperator(BinaryOperatorContext ctx)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitSimpleAttribute() not implemented yet");
-    }
-
-    @Override
-    public T visitStringLiteral(StringLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitStringLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitBooleanLiteral(BooleanLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitBooleanLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitCharacterLiteral(CharacterLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitCharacterLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitIntegerLiteral(IntegerLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitIntegerLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitFloatingPointLiteral(FloatingPointLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitFloatingPointLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitStringListLiteral(StringListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitStringListLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitBooleanListLiteral(BooleanListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitBooleanListLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitCharacterListLiteral(CharacterListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitCharacterListLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitIntegerListLiteral(IntegerListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitIntegerListLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitFloatingPointListLiteral(FloatingPointListLiteralContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitFloatingPointListLiteral() not implemented yet");
-    }
-
-    @Override
-    public T visitClassName(ClassNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitClassName() not implemented yet");
-    }
-
-    @Override
-    public T visitRelationshipName(RelationshipNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitRelationshipName() not implemented yet");
-    }
-
-    @Override
-    public T visitAttributeName(AttributeNameContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitAttributeName() not implemented yet");
-    }
-
-    @Override
-    public T visitParameter(ParameterContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitParameter() not implemented yet");
-    }
-
-    @Override
-    public T visitOperatorIsNull(OperatorIsNullContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitOperatorIsNull() not implemented yet");
-    }
-
-    @Override
-    public T visitOperatorIsNotNull(OperatorIsNotNullContext ctx)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + ".visitOperatorIsNotNull() not implemented yet");
+                + ".visitBinaryOperator() not implemented yet");
     }
 
     @Override
@@ -451,8 +343,149 @@ public class ReladomoOperationThrowingVisitor<T>
     }
 
     @Override
-    public T visit(ParseTree tree)
+    public T visitUnaryOperator(UnaryOperatorContext ctx)
     {
-        throw new UnsupportedOperationException("Use tree.accept(this) instead.");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitUnaryOperator() not implemented yet");
+    }
+
+    @Override
+    public T visitOperatorIsNull(OperatorIsNullContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperatorIsNull() not implemented yet");
+    }
+
+    @Override
+    public T visitOperatorIsNotNull(OperatorIsNotNullContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperatorIsNotNull() not implemented yet");
+    }
+
+    @Override
+    public T visitEqualsEdgePoint(EqualsEdgePointContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitEqualsEdgePoint() not implemented yet");
+    }
+
+    @Override
+    public T visitExistsOperator(ExistsOperatorContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitExistsOperator() not implemented yet");
+    }
+
+    @Override
+    public T visitOperatorExists(OperatorExistsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperatorExists() not implemented yet");
+    }
+
+    @Override
+    public T visitOperatorNotExists(OperatorNotExistsContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitOperatorNotExists() not implemented yet");
+    }
+
+    @Override
+    public T visitParameter(ParameterContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitParameter() not implemented yet");
+    }
+
+    @Override
+    public T visitStringLiteral(StringLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitStringLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitBooleanLiteral(BooleanLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitBooleanLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitCharacterLiteral(CharacterLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitCharacterLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitIntegerLiteral(IntegerLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitIntegerLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitFloatingPointLiteral(FloatingPointLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitFloatingPointLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitStringListLiteral(StringListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitStringListLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitBooleanListLiteral(BooleanListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitBooleanListLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitCharacterListLiteral(CharacterListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitCharacterListLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitIntegerListLiteral(IntegerListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitIntegerListLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitFloatingPointListLiteral(FloatingPointListLiteralContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitFloatingPointListLiteral() not implemented yet");
+    }
+
+    @Override
+    public T visitClassName(ClassNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitClassName() not implemented yet");
+    }
+
+    @Override
+    public T visitRelationshipName(RelationshipNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitRelationshipName() not implemented yet");
+    }
+
+    @Override
+    public T visitAttributeName(AttributeNameContext ctx)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".visitAttributeName() not implemented yet");
     }
 }
