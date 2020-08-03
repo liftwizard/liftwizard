@@ -9,18 +9,20 @@ grammar ReladomoOperation;
 compilationUnit: compositeOperation EOF;
 
 compositeOperation
-    : compositeOperation '&' compositeOperation # OperationAnd
-    | compositeOperation '|' compositeOperation # OperationOr
-    | '(' compositeOperation ')'                # OperationGroup
-    | 'all' ('of' className)?                   # OperationAll
-    | 'none'                                    # OperationNone
+    : compositeOperation '&' compositeOperation                                  # OperationAnd
+    | compositeOperation '|' compositeOperation                                  # OperationOr
+    | '(' compositeOperation ')'                                                 # OperationGroup
+    | 'all' ('of' className)?                                                    # OperationAll
+    | 'none'                                                                     # OperationNone
     // Order matters here because '== null' can match both unary and binary
-    | attribute unaryOperator                   # OperationUnaryOperator
-    | attribute binaryOperator parameter        # OperationBinaryOperator
+    | attribute unaryOperator                                                    # OperationUnaryOperator
+    | attribute binaryOperator parameter                                         # OperationBinaryOperator
+    | navigation ('{' notExistsOperation=compositeOperation '}')? existsOperator # OperationExistence
     ;
 
 attribute:         simpleAttribute | functionAttribute;
 simpleAttribute:   ('this' | className) '.' (relationshipName '.')* attributeName;
+navigation:        ('this' | className) ('.' relationshipName)+;
 functionAttribute
     : functionName=('lower' | 'toLowerCase') '(' attribute ')'           # FunctionToLowerCase
     | 'substring' '(' attribute ',' IntegerLiteral ',' IntegerLiteral ')'# FunctionToSubstring
@@ -77,6 +79,10 @@ unaryOperator
 operatorIsNull:    ('is'       'null') | ('==' 'null');
 operatorIsNotNull: ('is' 'not' 'null') | ('!=' 'null');
 equalsEdgePoint:   'equalsEdgePoint';
+
+existsOperator: operatorExists | operatorNotExists;
+operatorExists:          'exists';
+operatorNotExists: 'not' 'exists';
 
 parameter
     : stringLiteral
