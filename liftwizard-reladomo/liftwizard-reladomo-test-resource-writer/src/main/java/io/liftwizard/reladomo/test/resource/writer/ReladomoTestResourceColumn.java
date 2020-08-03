@@ -25,7 +25,6 @@ import java.util.Objects;
 
 import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
-import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.factory.Lists;
@@ -89,7 +88,6 @@ public class ReladomoTestResourceColumn
         {
             ImmutableList<String> unpaddedValueStrings = this.values
                     .collect(String.class::cast)
-                    .collect(StringEscapeUtils::escapeJava)
                     .collect(ReladomoTestResourceColumn::quote)
                     .toImmutable();
             int maxValueLength = unpaddedValueStrings.asLazy()
