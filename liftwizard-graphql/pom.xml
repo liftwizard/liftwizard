@@ -26,7 +26,7 @@
     <artifactId>liftwizard-graphql</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liftiwzard GraphQL (Module Group)</name>
+    <name>Liftwizard GraphQL (Module Group)</name>
 
     <modules>
         <module>liftwizard-graphql-data-fetcher</module>
