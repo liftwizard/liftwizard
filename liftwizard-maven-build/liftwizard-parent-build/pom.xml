@@ -282,6 +282,8 @@
                         <argLine>-XX:-OmitStackTraceInFastThrow -Xms1024m -Xmx2048m</argLine>
                         <runOrder>random</runOrder>
                         <trimStackTrace>false</trimStackTrace>
+                        <encoding>UTF-8</encoding>
+                        <argLine>-Dfile.encoding=UTF-8</argLine>
                     </configuration>
                 </plugin>
 
