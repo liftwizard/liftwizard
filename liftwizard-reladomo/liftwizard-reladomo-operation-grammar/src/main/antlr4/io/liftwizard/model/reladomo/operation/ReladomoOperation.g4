@@ -351,6 +351,7 @@ SingleCharacter
 // §3.10.5 String Literals
 StringLiteral
     :    '"' StringCharacters? '"'
+    |    '\'' StringCharacters? '\''
     ;
 fragment
 StringCharacters
