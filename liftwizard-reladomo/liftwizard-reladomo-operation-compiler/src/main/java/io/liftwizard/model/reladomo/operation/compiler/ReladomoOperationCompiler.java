@@ -22,6 +22,7 @@ import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationLexer;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CompilationUnitContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationVisitor;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
@@ -47,6 +48,7 @@ public class ReladomoOperationCompiler
 
         ReladomoOperationVisitor<Operation> visitor = new ReladomoOperationBuilderVisitor(finder, tokenStream);
 
-        return parser.compilationUnit().accept(visitor);
+        CompilationUnitContext compilationUnitContext = parser.compilationUnit();
+        return compilationUnitContext.accept(visitor);
     }
 }

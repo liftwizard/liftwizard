@@ -41,9 +41,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.Compilatio
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ExistsOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.NavigationContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAllContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAndContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationBinaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationExistenceContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationNoneContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationOrContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationUnaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.UnaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationVisitor;
@@ -91,7 +93,8 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVisitor<Operation>
+public class ReladomoOperationBuilderVisitor
+        extends ReladomoOperationThrowingVisitor<Operation>
 {
     private final RelatedFinder     finder;
     private final CommonTokenStream tokenStream;
@@ -113,13 +116,29 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
     {
         // There's no method this.finder.none()
         // But this is similar to the internal implementation of all()
-        return new None(this.finder.getPrimaryKeyAttributes()[0]);
+        return this.getNone();
     }
 
     @Override
     public Operation visitOperationAll(OperationAllContext ctx)
     {
         return this.finder.all();
+    }
+
+    @Override
+    public Operation visitOperationAnd(OperationAndContext ctx)
+    {
+        return ListAdapter.adapt(ctx.compositeOperation())
+                .collect(this::visit)
+                .injectInto(this.finder.all(), Operation::and);
+    }
+
+    @Override
+    public Operation visitOperationOr(OperationOrContext ctx)
+    {
+        return ListAdapter.adapt(ctx.compositeOperation())
+                .collect(this::visit)
+                .injectInto(this.getNone(), Operation::or);
     }
 
     @Override
@@ -149,7 +168,7 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
     {
         String                contextString         = this.getContextString(ctx);
         AbstractRelatedFinder navigation            = this.getNavigation(ctx.navigation(), contextString);
-        RelatedFinder         relatedFinder                = navigation.getMithraObjectPortal().getFinder();
+        RelatedFinder         relatedFinder         = navigation.getMithraObjectPortal().getFinder();
         Operation             notExistsOperation    = this.getNotExistsOperation(ctx, relatedFinder);
         ExistsOperatorContext existsOperatorContext = ctx.existsOperator();
         return existsOperatorContext.accept(new ReladomoExistsOperatorVisitor(navigation, notExistsOperation));
@@ -458,5 +477,10 @@ public class ReladomoOperationBuilderVisitor extends ReladomoOperationThrowingVi
         return ListAdapter.adapt(tokens)
                 .collect(Token::getText)
                 .makeString("");
+    }
+
+    private None getNone()
+    {
+        return new None(this.finder.getPrimaryKeyAttributes()[0]);
     }
 }
