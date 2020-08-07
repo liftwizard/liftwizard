@@ -93,13 +93,13 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class ReladomoOperationBuilderVisitor
+public class ReladomoOperationBuilderVisitor<T>
         extends ReladomoOperationThrowingVisitor<Operation>
 {
-    private final RelatedFinder     finder;
+    private final RelatedFinder<T>     finder;
     private final CommonTokenStream tokenStream;
 
-    public ReladomoOperationBuilderVisitor(RelatedFinder finder, CommonTokenStream tokenStream)
+    public ReladomoOperationBuilderVisitor(RelatedFinder<T> finder, CommonTokenStream tokenStream)
     {
         this.finder      = Objects.requireNonNull(finder);
         this.tokenStream = Objects.requireNonNull(tokenStream);
@@ -174,7 +174,7 @@ public class ReladomoOperationBuilderVisitor
         return existsOperatorContext.accept(new ReladomoExistsOperatorVisitor(navigation, notExistsOperation));
     }
 
-    private Operation getNotExistsOperation(OperationExistenceContext ctx, RelatedFinder relatedFinder)
+    private <T> Operation getNotExistsOperation(OperationExistenceContext ctx, RelatedFinder<T> relatedFinder)
     {
         if (ctx.notExistsOperation == null)
         {
