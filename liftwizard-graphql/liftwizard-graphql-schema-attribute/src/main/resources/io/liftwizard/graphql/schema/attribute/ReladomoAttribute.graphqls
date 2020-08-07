@@ -1,0 +1,133 @@
+input StringAttribute {
+    eq: String
+    notEq: String
+    in: [String]
+    notIn: [String]
+
+    greaterThan: String
+    greaterThanEquals: String
+    lessThan: String
+    lessThanEquals: String
+
+    startsWith: String
+    notStartsWith: String
+    endsWith: String
+    notEndsWith: String
+    contains: String
+    notContains: String
+    toLowerCase: StringAttribute
+
+    wildCardEq: String
+    wildCardEquals: String
+    wildCardIn: [String]
+    wildCardNotEq: String
+    wildCardNotEquals: String
+
+    lower: StringAttribute
+    # Parameters not allowed in input types
+    # subString(start: Int, end: Int): StringAttribute
+}
+
+input BooleanAttribute {
+    eq: Boolean
+    notEq: Boolean
+    in: [Boolean]
+    notIn: [Boolean]
+}
+
+input IntegerAttribute {
+    eq: Int
+    notEq: Int
+    in: [Int]
+    notIn: [Int]
+
+    greaterThan: Int
+    greaterThanEquals: Int
+    lessThan: Int
+    lessThanEquals: Int
+
+    abs: IntegerAttribute
+}
+
+input LongAttribute {
+    eq: Long
+    notEq: Long
+    in: [Long]
+    notIn: [Long]
+
+    greaterThan: Long
+    greaterThanEquals: Long
+    lessThan: Long
+    lessThanEquals: Long
+
+    abs: LongAttribute
+}
+
+input DoubleAttribute {
+    eq: Float
+    notEq: Float
+    in: [Float]
+    notIn: [Float]
+
+    greaterThan: Float
+    greaterThanEquals: Float
+    lessThan: Float
+    lessThanEquals: Float
+
+    abs: DoubleAttribute
+}
+
+input FloatAttribute {
+    eq: Float
+    notEq: Float
+    in: [Float]
+    notIn: [Float]
+
+    greaterThan: Float
+    greaterThanEquals: Float
+    lessThan: Float
+    lessThanEquals: Float
+
+    abs: FloatAttribute
+}
+
+input DateAttribute {
+    eq: String
+    notEq: String
+    in: [String]
+    notIn: [String]
+
+    greaterThan: String
+    greaterThanEquals: String
+    lessThan: String
+    lessThanEquals: String
+
+    year: IntegerAttribute
+    month: IntegerAttribute
+    dayOfMonth: IntegerAttribute
+}
+
+input TimestampAttribute {
+    eq: String
+    notEq: String
+    in: [String]
+    notIn: [String]
+
+    greaterThan: String
+    greaterThanEquals: String
+    lessThan: String
+    lessThanEquals: String
+
+    year: IntegerAttribute
+    month: IntegerAttribute
+    dayOfMonth: IntegerAttribute
+}
+
+input AsOfAttribute {
+    eq: String
+    notEq: String
+    equalsEdgePoint: Empty
+}
+
+input Empty {
+}
