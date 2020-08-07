@@ -9,8 +9,8 @@ grammar ReladomoOperation;
 compilationUnit: compositeOperation EOF;
 
 compositeOperation
-    : compositeOperation '&' compositeOperation                                  # OperationAnd
-    | compositeOperation '|' compositeOperation                                  # OperationOr
+    : compositeOperation ('&' | '&&' | 'and') compositeOperation                 # OperationAnd
+    | compositeOperation ('|' | '||' | 'or')  compositeOperation                 # OperationOr
     | '(' compositeOperation ')'                                                 # OperationGroup
     | 'all' ('of' className)?                                                    # OperationAll
     | 'none'                                                                     # OperationNone
