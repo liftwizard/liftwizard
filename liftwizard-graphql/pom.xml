@@ -30,7 +30,11 @@
 
     <modules>
         <module>liftwizard-graphql-data-fetcher</module>
+        <module>liftwizard-graphql-exception</module>
+        <module>liftwizard-graphql-finder-fetcher</module>
+        <module>liftwizard-graphql-operation-fetcher</module>
         <module>liftwizard-graphql-scalar-temporal</module>
+        <module>liftwizard-graphql-schema-attribute</module>
     </modules>
 
     <dependencyManagement>
