@@ -16,6 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.gs.fw.common.mithra.attribute.Attribute;
@@ -23,6 +24,7 @@ import com.gs.fw.common.mithra.attribute.DateAttribute;
 import com.gs.fw.common.mithra.attribute.NumericAttribute;
 import com.gs.fw.common.mithra.attribute.StringAttribute;
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
+import com.gs.fw.common.mithra.finder.AbstractRelatedFinder;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.AttributeContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionAbsoluteValueContext;
@@ -36,6 +38,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.SimpleAttr
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
 import org.antlr.v4.runtime.RuleContext;
 import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<Attribute>
@@ -219,11 +222,17 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
             RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
             if (nextFinder == null)
             {
+                List<RelatedFinder> relationshipFinders = currentFinder.getRelationshipFinders();
+                MutableList<String> validRelationshipNames = ListAdapter.adapt(relationshipFinders)
+                        .selectInstancesOf(AbstractRelatedFinder.class)
+                        .collect(AbstractRelatedFinder::getRelationshipName);
+
                 var error = String.format(
-                        "Could not find relationship '%s' on type '%s' in %s",
+                        "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s",
                         relationshipName,
                         this.getExpectedClassName(currentFinder),
-                        this.errorContext);
+                        this.errorContext,
+                        validRelationshipNames);
                 throw new IllegalArgumentException(error);
             }
             currentFinder = nextFinder;
@@ -233,11 +242,15 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         Attribute attribute     = currentFinder.getAttributeByName(attributeName);
         if (attribute == null)
         {
+            Attribute[] persistentAttributes = currentFinder.getMithraObjectPortal().getFinder().getPersistentAttributes();
+            MutableList<String> validAttributeNames = ArrayAdapter.adapt(persistentAttributes)
+                    .collect(Attribute::getAttributeName);
             var error = String.format(
-                    "Could not find attribute '%s' on type '%s' in %s",
+                    "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s",
                     attributeName,
                     this.getExpectedClassName(currentFinder),
-                    this.errorContext);
+                    this.errorContext,
+                    validAttributeNames);
             throw new IllegalArgumentException(error);
         }
         return attribute;
