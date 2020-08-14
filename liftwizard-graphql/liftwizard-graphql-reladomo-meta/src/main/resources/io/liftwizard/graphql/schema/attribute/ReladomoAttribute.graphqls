@@ -131,3 +131,8 @@ input AsOfAttribute {
 
 input Empty {
 }
+
+enum OrderByDirection {
+    ASCENDING
+    DESCENDING
+}
