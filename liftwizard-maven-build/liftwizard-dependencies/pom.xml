@@ -130,7 +130,7 @@
             <dependency>
                 <groupId>org.eclipse.collections</groupId>
                 <artifactId>eclipse-collections</artifactId>
-                <version>10.3.0</version>
+                <version>10.4.0</version>
             </dependency>
 
             <dependency>
