@@ -57,7 +57,7 @@
                     <dependency>
                         <groupId>com.goldmansachs.reladomo</groupId>
                         <artifactId>reladomo-gen-util</artifactId>
-                        <version>17.1.4</version>
+                        <version>18.0.0</version>
                     </dependency>
 
                     <dependency>
