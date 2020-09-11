@@ -4,7 +4,8 @@ The Liftwizard logging modules add context to slf4j logging through MDC and thro
  
 In order to see the logging in action, we'll need to configure a log format that includes mdc and markers.
  
-### `src/test/resources/test-example.json5`
+### test-example.json5
+`src/test/resources/test-example.json5`
 ```json5
 {
   "type"             : "console",
@@ -16,7 +17,8 @@ In order to see the logging in action, we'll need to configure a log format that
  
 Next, lets turn on all the basic filters and see how they change what gets logged.
  
-### `src/main/java/com/example/helloworld/HelloWorldApplication.java`
+### HelloWorldApplication.java
+`src/main/java/com/example/helloworld/HelloWorldApplication.java`
 ```java
 @Override
 public void run(HelloWorldConfiguration configuration, Environment environment) {
@@ -139,7 +141,8 @@ For more information on configuring sources of randomness, see the documentation
  
 Let's add the logstash-file appender to the list of configured appenders.
  
-### `src/test/resources/test-example.json5`
+### test-example.json5
+`src/test/resources/test-example.json5`
 ```json5
   logging: {
     level: "INFO",
@@ -160,7 +163,8 @@ Let's add the logstash-file appender to the list of configured appenders.
   }
 ```
 
-### `logs/logstash.json` snippet
+### logstash.json 
+`logs/logstash.json` snippet
 ```json
 {
   "@timestamp": "2020-05-06T15:03:56.984-04:00",
