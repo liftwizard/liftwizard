@@ -17,13 +17,14 @@
 package io.liftwizard.dropwizard.bundle.graphql;
 
 import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
 import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import graphql.schema.idl.RuntimeWiring;
+import graphql.schema.idl.RuntimeWiring.Builder;
 import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -35,11 +36,11 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         extends GraphQLBundle<T>
 {
     @Nonnull
-    private final Supplier<RuntimeWiring> runtimeWiringSupplier;
+    private final Consumer<Builder> runtimeWiringBuilder;
 
-    public LiftwizardGraphQLBundle(@Nonnull Supplier<RuntimeWiring> runtimeWiringSupplier)
+    public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder> runtimeWiringBuilder)
     {
-        this.runtimeWiringSupplier = Objects.requireNonNull(runtimeWiringSupplier);
+        this.runtimeWiringBuilder = Objects.requireNonNull(runtimeWiringBuilder);
     }
 
     @Override
@@ -73,8 +74,10 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         // the RuntimeWiring must be configured prior to the run()
         // methods being called so the schema is connected properly.
 
-        GraphQLFactory factory       = configuration.getGraphQLFactory();
-        RuntimeWiring  runtimeWiring = this.runtimeWiringSupplier.get();
+        GraphQLFactory factory = configuration.getGraphQLFactory();
+        Builder        builder = RuntimeWiring.newRuntimeWiring();
+        this.runtimeWiringBuilder.accept(builder);
+        RuntimeWiring runtimeWiring = builder.build();
         factory.setRuntimeWiring(runtimeWiring);
         return factory;
     }
