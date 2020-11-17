@@ -247,12 +247,14 @@
                                         </excludes>
                                     </bannedDependencies>
                                     <banDuplicatePomDependencyVersions />
+                                    <!--
                                     <requireUpperBoundDeps>
                                         <excludes>
-                                            <!--Deliberately downgraded reflections to get around error where it logs thousands of not found classes-->
+                                            &lt;!&ndash;Deliberately downgraded reflections to get around error where it logs thousands of not found classes&ndash;&gt;
                                             <exclude>org.reflections:reflections</exclude>
                                         </excludes>
                                     </requireUpperBoundDeps>
+                                    -->
                                 </rules>
                             </configuration>
                             <goals>
@@ -491,12 +493,14 @@
                                         </bannedDependencies>
                                         <banDuplicatePomDependencyVersions />
                                         <!--<reactorModuleConvergence />-->
+                                        <!--
                                         <requireUpperBoundDeps>
                                             <excludes>
-                                                <!--Deliberately downgraded reflections to get around error where it logs thousands of not found classes-->
+                                                &lt;!&ndash;Deliberately downgraded reflections to get around error where it logs thousands of not found classes&ndash;&gt;
                                                 <exclude>org.reflections:reflections</exclude>
                                             </excludes>
                                         </requireUpperBoundDeps>
+                                        -->
                                     </rules>
                                 </configuration>
                                 <goals>
