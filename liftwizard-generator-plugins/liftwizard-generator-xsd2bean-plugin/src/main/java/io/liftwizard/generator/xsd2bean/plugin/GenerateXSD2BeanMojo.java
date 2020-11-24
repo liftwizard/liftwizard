@@ -53,7 +53,8 @@ import org.sonatype.plexus.build.incremental.BuildContext;
         defaultPhase = LifecyclePhase.GENERATE_SOURCES,
         threadSafe = true,
         requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class GenerateXSD2BeanMojo extends AbstractMojo
+public class GenerateXSD2BeanMojo
+        extends AbstractMojo
 {
     @Component
     private BuildContext buildContext;
@@ -82,10 +83,11 @@ public class GenerateXSD2BeanMojo extends AbstractMojo
     @Parameter(defaultValue = "${project.build.directory}/generated-sources/freya")
     private File outputDirectory;
 
-    @Parameter(property = "nonGeneratedSourcesDir",
-               defaultValue = "${project.build.sourceDirectory}",
-               required = true,
-               readonly = true)
+    @Parameter(
+            property = "nonGeneratedSourcesDir",
+            defaultValue = "${project.build.sourceDirectory}",
+            required = true,
+            readonly = true)
     private File nonGeneratedSourcesDir;
 
     @Parameter(property = "destinationPackage", required = true, readonly = true)
