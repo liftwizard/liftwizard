@@ -87,10 +87,10 @@ public class ReladomoBundle
     {
         metricRegistry.gauge(
                 "Reladomo database retrieve count",
-                () -> () -> MithraManagerProvider.getMithraManager().getDatabaseRetrieveCount());
+                () -> MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount);
         metricRegistry.gauge(
                 "Reladomo remote retrieve count",
-                () -> () -> MithraManagerProvider.getMithraManager().getRemoteRetrieveCount());
+                () -> MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount);
     }
 
     private static void setTransactionTimeout(int transactionTimeoutSeconds)
