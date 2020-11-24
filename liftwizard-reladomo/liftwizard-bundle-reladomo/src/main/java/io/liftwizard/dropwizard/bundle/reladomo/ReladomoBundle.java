@@ -86,10 +86,10 @@ public class ReladomoBundle
     private static void registerRetrieveCountMetrics(MetricRegistry metricRegistry)
     {
         metricRegistry.gauge(
-                "Reladomo database retrieve count",
+                MetricRegistry.name(ReladomoBundle.class, "DatabaseRetrieveCount"),
                 () -> MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount);
         metricRegistry.gauge(
-                "Reladomo remote retrieve count",
+                MetricRegistry.name(ReladomoBundle.class, "RemoteRetrieveCount"),
                 () -> MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount);
     }
 

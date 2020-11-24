@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.bundle.graphql;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -29,6 +30,8 @@ import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.liftwizard.dropwizard.configuration.graphql.GraphQLFactoryProvider;
+import io.liftwizard.graphql.instrumentation.logging.LiftwizardGraphQLLoggingInstrumentation;
+import io.liftwizard.graphql.instrumentation.metrics.LiftwizardGraphQLMetricsInstrumentation;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
@@ -37,6 +40,9 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 {
     @Nonnull
     private final Consumer<Builder> runtimeWiringBuilder;
+
+    private LiftwizardGraphQLMetricsInstrumentation metricsInstrumentation;
+    private LiftwizardGraphQLLoggingInstrumentation loggingInstrumentation;
 
     public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder> runtimeWiringBuilder)
     {
@@ -50,6 +56,9 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         {
             this.initializeWithMdc(bootstrap);
         }
+
+        this.metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(bootstrap.getMetricRegistry());
+        this.loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
     }
 
     private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap)
@@ -73,9 +82,9 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
     {
         // the RuntimeWiring must be configured prior to the run()
         // methods being called so the schema is connected properly.
-
         GraphQLFactory factory = configuration.getGraphQLFactory();
-        Builder        builder = RuntimeWiring.newRuntimeWiring();
+        factory.setInstrumentations(List.of(this.metricsInstrumentation, this.loggingInstrumentation));
+        Builder builder = RuntimeWiring.newRuntimeWiring();
         this.runtimeWiringBuilder.accept(builder);
         RuntimeWiring runtimeWiring = builder.build();
         factory.setRuntimeWiring(runtimeWiring);

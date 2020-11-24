@@ -21,63 +21,32 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.liftwizard</groupId>
-        <artifactId>liftwizard-bundle</artifactId>
+        <artifactId>liftwizard-graphql</artifactId>
         <version>0.8.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>liftwizard-bundle-graphql</artifactId>
+    <artifactId>liftwizard-graphql-instrumentation-logging</artifactId>
 
-    <name>Liftwizard Bundle: GraphQL</name>
+    <name>Liftwizard GraphQL: Logging Instrumentation</name>
 
     <dependencies>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-graphql-instrumentation-metrics</artifactId>
+            <artifactId>liftwizard-graphql-instrumentation</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-graphql-instrumentation-logging</artifactId>
+            <artifactId>liftwizard-logging-mdc-closeable</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-config-graphql</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-assets</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.smoketurner.dropwizard</groupId>
-            <artifactId>graphql-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
         </dependency>
 
         <dependency>
