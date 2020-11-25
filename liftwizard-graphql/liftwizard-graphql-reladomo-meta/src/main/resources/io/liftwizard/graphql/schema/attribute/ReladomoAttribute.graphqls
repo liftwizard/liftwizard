@@ -130,6 +130,7 @@ input AsOfAttribute {
 }
 
 input Empty {
+    dummyFieldDoNotUse: String
 }
 
 enum OrderByDirection {
