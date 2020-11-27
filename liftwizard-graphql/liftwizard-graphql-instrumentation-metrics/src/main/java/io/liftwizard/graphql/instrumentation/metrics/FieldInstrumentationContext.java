@@ -16,14 +16,12 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nonnull;
 
 import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import graphql.execution.instrumentation.InstrumentationContext;
@@ -33,40 +31,16 @@ public class FieldInstrumentationContext
 {
     private final Meter allFieldsExceptionsMeter;
 
-    private final Meter fieldExceptions;
-    private final Meter fieldFetched;
-    private final Meter fieldPathFetched;
-
-    private final Context fieldSyncClock;
     private final Context allFieldsSyncClock;
     private final Context allFieldsAsyncClock;
-    private final Context fieldAsyncClock;
 
     public FieldInstrumentationContext(
-            @Nonnull MetricRegistry metricRegistry,
             @Nonnull Timer allFieldsSyncTimer,
             @Nonnull Timer allFieldsAsyncTimer,
-            @Nonnull Meter allFieldsExceptionsMeter,
-            @Nonnull String path,
-            @Nonnull String fieldName,
-            @Nonnull String typeName)
+            @Nonnull Meter allFieldsExceptionsMeter)
     {
-        Objects.requireNonNull(typeName);
-        Objects.requireNonNull(fieldName);
-
-        String prefix = MetricRegistry.name("liftwizard", "graphql", "fetch", typeName, fieldName);
-
         this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
 
-        this.fieldExceptions  = metricRegistry.meter(MetricRegistry.name(prefix, "exceptions"));
-        this.fieldFetched     = metricRegistry.meter(MetricRegistry.name(prefix));
-        this.fieldPathFetched = metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "fetch", path));
-
-        Timer fieldSyncTimer  = metricRegistry.timer(MetricRegistry.name(prefix, "sync"));
-        Timer fieldAsyncTimer = metricRegistry.timer(MetricRegistry.name(prefix, "async"));
-
-        this.fieldSyncClock      = fieldSyncTimer.time();
-        this.fieldAsyncClock     = fieldAsyncTimer.time();
         this.allFieldsSyncClock  = allFieldsSyncTimer.time();
         this.allFieldsAsyncClock = allFieldsAsyncTimer.time();
     }
@@ -74,7 +48,6 @@ public class FieldInstrumentationContext
     @Override
     public void onDispatched(CompletableFuture<Object> result)
     {
-        this.fieldSyncClock.stop();
         this.allFieldsSyncClock.stop();
     }
 
@@ -84,14 +57,8 @@ public class FieldInstrumentationContext
         if (throwable != null)
         {
             this.allFieldsExceptionsMeter.mark();
-            this.fieldExceptions.mark();
         }
 
         this.allFieldsAsyncClock.stop();
-        this.fieldAsyncClock.stop();
-
-        int size = result instanceof Collection ? ((Collection<?>) result).size() : 1;
-        this.fieldFetched.mark(size);
-        this.fieldPathFetched.mark(size);
     }
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Timed;
 import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.finder.DomainList;
@@ -44,6 +46,8 @@ public class ReladomoOperationDataFetcher<T>
         this.finder = Objects.requireNonNull(finder);
     }
 
+    @Timed
+    @ExceptionMetered
     @Override
     public List<T> get(DataFetchingEnvironment environment)
     {

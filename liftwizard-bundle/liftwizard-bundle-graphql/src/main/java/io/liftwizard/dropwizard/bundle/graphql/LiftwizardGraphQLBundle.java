@@ -16,14 +16,17 @@
 
 package io.liftwizard.dropwizard.bundle.graphql;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+import com.codahale.metrics.MetricRegistry;
 import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
+import graphql.execution.instrumentation.Instrumentation;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.RuntimeWiring.Builder;
 import io.dropwizard.Configuration;
@@ -41,8 +44,7 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
     @Nonnull
     private final Consumer<Builder> runtimeWiringBuilder;
 
-    private LiftwizardGraphQLMetricsInstrumentation metricsInstrumentation;
-    private LiftwizardGraphQLLoggingInstrumentation loggingInstrumentation;
+    private MetricRegistry metricRegistry;
 
     public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder> runtimeWiringBuilder)
     {
@@ -57,8 +59,7 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
             this.initializeWithMdc(bootstrap);
         }
 
-        this.metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(bootstrap.getMetricRegistry());
-        this.loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
+        this.metricRegistry = bootstrap.getMetricRegistry();
     }
 
     private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap)
@@ -83,7 +84,16 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         // the RuntimeWiring must be configured prior to the run()
         // methods being called so the schema is connected properly.
         GraphQLFactory factory = configuration.getGraphQLFactory();
-        factory.setInstrumentations(List.of(this.metricsInstrumentation, this.loggingInstrumentation));
+
+        // TODO: Move the Clock to Configuration
+        Clock clock = Clock.systemUTC();
+
+        var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
+        var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
+
+        List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
+        factory.setInstrumentations(instrumentations);
+
         Builder builder = RuntimeWiring.newRuntimeWiring();
         this.runtimeWiringBuilder.accept(builder);
         RuntimeWiring runtimeWiring = builder.build();

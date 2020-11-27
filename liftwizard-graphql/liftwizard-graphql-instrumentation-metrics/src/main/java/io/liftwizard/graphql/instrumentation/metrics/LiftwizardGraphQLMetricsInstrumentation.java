@@ -16,6 +16,7 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,8 +41,10 @@ public class LiftwizardGraphQLMetricsInstrumentation
         extends SimpleInstrumentation
 {
     private final MetricRegistry metricRegistry;
-    private final Timer          allFieldsSyncTimer;
-    private final Timer          allFieldsAsyncTimer;
+    private final Clock clock;
+
+    private final Timer allFieldsSyncTimer;
+    private final Timer allFieldsAsyncTimer;
     private final Meter allFieldsExceptionsMeter;
     private final Timer executionTimer;
     private final Meter executionExceptionsMeter;
@@ -50,9 +53,10 @@ public class LiftwizardGraphQLMetricsInstrumentation
     private final Timer validationTimer;
     private final Meter validationExceptionsMeter;
 
-    public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry)
+    public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock)
     {
         this.metricRegistry = Objects.requireNonNull(metricRegistry);
+        this.clock          = Objects.requireNonNull(clock);
 
         this.allFieldsSyncTimer        = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
         this.allFieldsAsyncTimer       = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
@@ -91,19 +95,10 @@ public class LiftwizardGraphQLMetricsInstrumentation
             return super.beginFieldFetch(parameters);
         }
 
-        String fieldName = parameters.getField().getName();
-        GraphQLType type = parameters.getExecutionStepInfo().getParent().getType();
-        String typeName  = GraphQLInstrumentationUtils.getTypeName(type);
-        String path      = GraphQLInstrumentationUtils.getPathWithoutIndex(parameters.getExecutionStepInfo());
-
         return new FieldInstrumentationContext(
-                this.metricRegistry,
                 this.allFieldsSyncTimer,
                 this.allFieldsAsyncTimer,
-                this.allFieldsExceptionsMeter,
-                path,
-                fieldName,
-                typeName);
+                this.allFieldsExceptionsMeter);
     }
 
     @Override
@@ -116,6 +111,11 @@ public class LiftwizardGraphQLMetricsInstrumentation
             return dataFetcher;
         }
 
-        return new MeteredDataFetcher<>(dataFetcher, this.metricRegistry);
+        String      fieldName = parameters.getField().getName();
+        GraphQLType type      = parameters.getExecutionStepInfo().getParent().getType();
+        String      typeName  = GraphQLInstrumentationUtils.getTypeName(type);
+        String      path      = GraphQLInstrumentationUtils.getPathWithoutIndex(parameters.getExecutionStepInfo());
+
+        return new InstrumentedDataFetcher<>(this.metricRegistry, this.clock, dataFetcher, fieldName, typeName, path);
     }
 }

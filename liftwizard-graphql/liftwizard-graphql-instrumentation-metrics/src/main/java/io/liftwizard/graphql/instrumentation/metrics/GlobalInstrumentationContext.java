@@ -27,21 +27,19 @@ import graphql.execution.instrumentation.InstrumentationContext;
 public class GlobalInstrumentationContext<T>
         implements InstrumentationContext<T>
 {
-    private final Timer timer;
-    private final Meter exceptionsMeter;
-
-    private Context context;
+    private final Context clock;
+    private final Meter   exceptionsMeter;
 
     public GlobalInstrumentationContext(Timer timer, Meter exceptionsMeter)
     {
-        this.timer           = Objects.requireNonNull(timer);
+        Objects.requireNonNull(timer);
+        this.clock           = timer.time();
         this.exceptionsMeter = Objects.requireNonNull(exceptionsMeter);
     }
 
     @Override
     public void onDispatched(CompletableFuture<T> result)
     {
-        this.context = this.timer.time();
     }
 
     @Override
@@ -51,6 +49,7 @@ public class GlobalInstrumentationContext<T>
         {
             this.exceptionsMeter.mark();
         }
-        this.context.stop();
+        Objects.requireNonNull(this.clock);
+        this.clock.stop();
     }
 }
