@@ -19,10 +19,7 @@ package io.liftwizard.graphql.instrumentation.metrics;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nonnull;
-
 import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import graphql.execution.instrumentation.InstrumentationContext;
@@ -39,18 +36,6 @@ public class GlobalInstrumentationContext<T>
     {
         this.timer           = Objects.requireNonNull(timer);
         this.exceptionsMeter = Objects.requireNonNull(exceptionsMeter);
-    }
-
-    @Nonnull
-    public static <T> GlobalInstrumentationContext<T> build(
-            @Nonnull MetricRegistry metricRegistry,
-            @Nonnull String suffix)
-    {
-        Objects.requireNonNull(suffix);
-        Timer timer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", suffix));
-        Meter exceptionsMeter = metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", suffix, "exceptions"));
-
-        return new GlobalInstrumentationContext<>(timer, exceptionsMeter);
     }
 
     @Override
