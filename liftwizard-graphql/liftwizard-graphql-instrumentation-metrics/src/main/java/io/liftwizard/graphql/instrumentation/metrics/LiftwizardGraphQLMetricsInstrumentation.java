@@ -42,41 +42,45 @@ public class LiftwizardGraphQLMetricsInstrumentation
     private final MetricRegistry metricRegistry;
     private final Timer          allFieldsSyncTimer;
     private final Timer          allFieldsAsyncTimer;
-    private final Meter          allFieldsExceptionsMeter;
-
-    private final GlobalInstrumentationContext<ExecutionResult>       instrumentationExecution;
-    private final GlobalInstrumentationContext<Document>              instrumentationParse;
-    private final GlobalInstrumentationContext<List<ValidationError>> instrumentationValidation;
+    private final Meter allFieldsExceptionsMeter;
+    private final Timer executionTimer;
+    private final Meter executionExceptionsMeter;
+    private final Timer parseTimer;
+    private final Meter parseExceptionsMeter;
+    private final Timer validationTimer;
+    private final Meter validationExceptionsMeter;
 
     public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry)
     {
         this.metricRegistry = Objects.requireNonNull(metricRegistry);
 
-        this.allFieldsSyncTimer       = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
-        this.allFieldsAsyncTimer      = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
-        this.allFieldsExceptionsMeter = metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "field", "exceptions"));
-
-        this.instrumentationExecution  = GlobalInstrumentationContext.build(metricRegistry, "execution");
-        this.instrumentationParse      = GlobalInstrumentationContext.build(metricRegistry, "parse");
-        this.instrumentationValidation = GlobalInstrumentationContext.build(metricRegistry, "validation");
+        this.allFieldsSyncTimer        = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
+        this.allFieldsAsyncTimer       = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
+        this.allFieldsExceptionsMeter  = metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "field", "exceptions"));
+        this.executionTimer            = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "execution"));
+        this.executionExceptionsMeter  = this.metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "execution", "exceptions"));
+        this.parseTimer                = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "parse"));
+        this.parseExceptionsMeter      = this.metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "parse", "exceptions"));
+        this.validationTimer           = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "validation"));
+        this.validationExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "validation", "exceptions"));
     }
 
     @Override
     public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters)
     {
-        return this.instrumentationExecution;
+        return new GlobalInstrumentationContext<>(this.executionTimer, this.executionExceptionsMeter);
     }
 
     @Override
     public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters)
     {
-        return this.instrumentationParse;
+        return new GlobalInstrumentationContext<>(this.parseTimer, this.parseExceptionsMeter);
     }
 
     @Override
     public InstrumentationContext<List<ValidationError>> beginValidation(InstrumentationValidationParameters parameters)
     {
-        return this.instrumentationValidation;
+        return new GlobalInstrumentationContext<>(this.validationTimer, this.validationExceptionsMeter);
     }
 
     @Override
