@@ -18,6 +18,8 @@ package io.liftwizard.graphql.instrumentation.metrics;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.Nonnull;
 
@@ -40,8 +42,11 @@ public class LiftwizardGraphQLMetricsInstrumentation
         extends SimpleInstrumentation
 {
     private final MetricRegistry metricRegistry;
-    private final Timer          allFieldsSyncTimer;
-    private final Timer          allFieldsAsyncTimer;
+
+    private final ConcurrentMap<DataFetcher<?>, MeteredDataFetcher<?>> instrumentedDataFetchers = new ConcurrentHashMap<>();
+
+    private final Timer allFieldsSyncTimer;
+    private final Timer allFieldsAsyncTimer;
     private final Meter allFieldsExceptionsMeter;
     private final Timer executionTimer;
     private final Meter executionExceptionsMeter;
@@ -116,6 +121,8 @@ public class LiftwizardGraphQLMetricsInstrumentation
             return dataFetcher;
         }
 
-        return new MeteredDataFetcher<>(dataFetcher, this.metricRegistry);
+        return this.instrumentedDataFetchers.computeIfAbsent(
+                dataFetcher,
+                ignored -> new MeteredDataFetcher<>(dataFetcher, this.metricRegistry));
     }
 }

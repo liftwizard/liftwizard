@@ -16,15 +16,22 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Metered;
+import com.codahale.metrics.annotation.Timed;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
@@ -32,13 +39,15 @@ public class MeteredDataFetcher<T>
         implements DataFetcher<T>
 {
     @Nonnull
-    private final DataFetcher<T> dataFetcher;
+    private final DataFetcher<T>  dataFetcher;
     @Nonnull
-    private final Timer          timerSync;
+    private final Optional<Timer> timerSync;
     @Nonnull
-    private final Timer          timerAsync;
+    private final Optional<Timer> timerAsync;
     @Nonnull
-    private final Meter          exceptionMeter;
+    private final Optional<Meter> meter;
+    @Nonnull
+    private final Optional<Meter> exceptionMeter;
 
     public MeteredDataFetcher(
             @Nonnull DataFetcher<T> dataFetcher,
@@ -46,30 +55,155 @@ public class MeteredDataFetcher<T>
     {
         this.dataFetcher = Objects.requireNonNull(dataFetcher);
 
-        this.timerSync      = metricRegistry.timer(MetricRegistry.name(dataFetcher.getClass(), "sync"));
-        this.timerAsync     = metricRegistry.timer(MetricRegistry.name(dataFetcher.getClass(), "async"));
-        this.exceptionMeter = metricRegistry.meter(MetricRegistry.name(dataFetcher.getClass(), "exceptions"));
+        Class<? extends DataFetcher> dataFetcherClass = dataFetcher.getClass();
+
+        Timed timedAnnotation = MeteredDataFetcher.getAnnotation(dataFetcherClass, Timed.class);
+        this.timerSync = MeteredDataFetcher.getTimer(metricRegistry, dataFetcherClass, timedAnnotation, "sync");
+        this.timerAsync = MeteredDataFetcher.getTimer(metricRegistry, dataFetcherClass, timedAnnotation, "async");
+
+        Metered meteredAnnotation = MeteredDataFetcher.getAnnotation(dataFetcherClass, Metered.class);
+        this.meter = MeteredDataFetcher.getMeter(metricRegistry, dataFetcherClass, meteredAnnotation);
+
+        ExceptionMetered exceptionMeteredAnnotation = MeteredDataFetcher.getAnnotation(dataFetcherClass, ExceptionMetered.class);
+        this.exceptionMeter = MeteredDataFetcher.getExceptionsMeter(metricRegistry, dataFetcherClass, exceptionMeteredAnnotation);
+    }
+
+    @Nullable
+    private static <A extends Annotation> A getAnnotation(
+            Class<? extends DataFetcher> dataFetcherClass,
+            Class<A> annotationClass)
+    {
+        try
+        {
+            Method getMethod        = dataFetcherClass.getMethod("get", DataFetchingEnvironment.class);
+            A      methodAnnotation = getMethod.getAnnotation(annotationClass);
+            if (methodAnnotation != null)
+            {
+                return methodAnnotation;
+            }
+        }
+        catch (NoSuchMethodException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return dataFetcherClass.getAnnotation(annotationClass);
+    }
+
+    @Nonnull
+    private static Optional<Timer> getTimer(
+            @Nonnull MetricRegistry metricRegistry,
+            @Nonnull Class<? extends DataFetcher> dataFetcherClass,
+            @Nullable Timed annotation,
+            String suffix)
+    {
+        if (annotation == null)
+        {
+            return Optional.empty();
+        }
+
+        String name = MeteredDataFetcher.chooseName(annotation.name(), annotation.absolute(), dataFetcherClass, suffix);
+
+        return Optional.of(metricRegistry.timer(name));
+    }
+
+    @Nonnull
+    private static Optional<Meter> getMeter(
+            @Nonnull MetricRegistry metricRegistry,
+            @Nonnull Class<? extends DataFetcher> dataFetcherClass,
+            @Nullable Metered annotation)
+    {
+        if (annotation == null)
+        {
+            return Optional.empty();
+        }
+
+        String name = MeteredDataFetcher.chooseName(annotation.name(), annotation.absolute(), dataFetcherClass);
+
+        return Optional.of(metricRegistry.meter(name));
+    }
+
+    @Nonnull
+    public static Optional<Meter> getExceptionsMeter(
+            @Nonnull MetricRegistry metricRegistry,
+            @Nonnull Class<? extends DataFetcher> dataFetcherClass,
+            @Nullable ExceptionMetered annotation)
+    {
+        if (annotation == null)
+        {
+            return Optional.empty();
+        }
+
+        String name = MeteredDataFetcher.chooseName(
+                annotation.name(),
+                annotation.absolute(),
+                dataFetcherClass,
+                ExceptionMetered.DEFAULT_NAME_SUFFIX);
+
+        return Optional.of(metricRegistry.meter(name));
     }
 
     @Override
     public T get(DataFetchingEnvironment environment) throws Exception
     {
-        try (var sync = this.timerSync.time())
+        Optional<Context> syncClock  = this.timerSync.map(Timer::time);
+        Optional<Context> asyncClock = this.timerAsync.map(Timer::time);
+        this.meter.ifPresent(Meter::mark);
+
+        try
         {
-            // Deliberately not using try-with-resources for the second timer
-            // If a fetcher never returns CompletionStage, we'll never record async timings
-            Context asyncTime = this.timerAsync.time();
-            T       result    = this.dataFetcher.get(environment);
+            T result = this.dataFetcher.get(environment);
             if (result instanceof CompletionStage)
             {
-                ((CompletionStage<?>) result).thenRun(asyncTime::close);
+                // If a fetcher never returns CompletionStage, we'll never record async timings
+                CompletionStage<?> completionStage = (CompletionStage<?>) result;
+                completionStage.whenComplete((ignored, throwable) ->
+                {
+                    asyncClock.ifPresent(Context::stop);
+                    if (throwable != null)
+                    {
+                        this.exceptionMeter.ifPresent(Meter::mark);
+                    }
+                });
             }
             return result;
         }
         catch (Exception e)
         {
-            this.exceptionMeter.mark();
+            this.exceptionMeter.ifPresent(Meter::mark);
             throw e;
         }
+        finally
+        {
+            syncClock.ifPresent(Context::stop);
+        }
+    }
+
+    private static String chooseName(
+            String explicitName,
+            boolean absolute,
+            Class<?> aClass,
+            String... suffixes)
+    {
+        String metricName = MeteredDataFetcher.getMetricName(explicitName, absolute, aClass);
+        return MetricRegistry.name(metricName, suffixes);
+    }
+
+    private static String getMetricName(
+            String explicitName,
+            boolean absolute,
+            Class<?> aClass)
+    {
+        if (explicitName == null || explicitName.isEmpty())
+        {
+            return MetricRegistry.name(aClass, "get");
+        }
+
+        if (absolute)
+        {
+            return explicitName;
+        }
+
+        return MetricRegistry.name(aClass, explicitName);
     }
 }
