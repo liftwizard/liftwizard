@@ -23,6 +23,7 @@ import java.util.TimeZone;
 import javax.validation.Validator;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
@@ -33,6 +34,7 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -45,7 +47,7 @@ public class ConnectionManagerFactoryTest
     @Rule
     public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
-    private final ObjectMapper objectMapper = Jackson.newObjectMapper();
+    private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
     private final JsonConfigurationFactory<ConnectionManagerFactory> factory =
@@ -54,7 +56,7 @@ public class ConnectionManagerFactoryTest
     @Test
     public void createSourcelessConnectionManager() throws Exception
     {
-        URL                      resource                 = Resources.getResource("test-config.json");
+        URL                      resource                 = Resources.getResource("config-test.json5");
         File                     json                     = new File(resource.toURI());
         ConnectionManagerFactory connectionManagerFactory = this.factory.build(json);
 
@@ -67,5 +69,12 @@ public class ConnectionManagerFactoryTest
         assertThat(sourcelessConnectionManager.getDatabaseIdentifier(), is("schemaName"));
         assertThat(sourcelessConnectionManager.getDatabaseTimeZone(), is(TimeZone.getTimeZone("America/New_York")));
         assertThat(sourcelessConnectionManager.getDatabaseType(), is(GenericDatabaseType.getInstance()));
+    }
+
+    private static ObjectMapper newObjectMapper()
+    {
+        ObjectMapper objectMapper = Jackson.newObjectMapper();
+        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        return objectMapper;
     }
 }

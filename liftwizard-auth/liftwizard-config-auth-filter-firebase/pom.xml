@@ -151,6 +151,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-jackson-config</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

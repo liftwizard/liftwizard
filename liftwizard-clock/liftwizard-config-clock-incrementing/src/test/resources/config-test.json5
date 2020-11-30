@@ -1,0 +1,6 @@
+{
+  type           : "incrementing",
+  instant        : "2000-12-31T23:59:59Z",
+  timeZone       : "America/New_York",
+  incrementAmount: "1 second",
+}

@@ -24,6 +24,7 @@ import java.time.ZoneId;
 
 import javax.validation.Validator;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
@@ -33,6 +34,7 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -47,7 +49,7 @@ public class IncrementingClockFactoryTest
     @Rule
     public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
-    private final ObjectMapper objectMapper = Jackson.newObjectMapper();
+    private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
     private final JsonConfigurationFactory<ClockFactory> factory =
@@ -65,7 +67,7 @@ public class IncrementingClockFactoryTest
     @Test
     public void incrementingClock() throws Exception
     {
-        URL          resource     = Resources.getResource("test-config.json");
+        URL          resource     = Resources.getResource("config-test.json5");
         File         json         = new File(resource.toURI());
         ClockFactory clockFactory = this.factory.build(json);
         assertThat(clockFactory, instanceOf(IncrementingClockFactory.class));
@@ -73,5 +75,12 @@ public class IncrementingClockFactoryTest
         assertThat(clock.getZone(), is(ZoneId.of("America/New_York")));
         assertThat(clock.instant(), is(Instant.parse("2000-12-31T23:59:59Z")));
         assertThat(clock.instant(), is(Instant.parse("2001-01-01T00:00:00Z")));
+    }
+
+    private static ObjectMapper newObjectMapper()
+    {
+        ObjectMapper objectMapper = Jackson.newObjectMapper();
+        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        return objectMapper;
     }
 }
