@@ -24,7 +24,7 @@ import javax.validation.Validator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
-import io.dropwizard.configuration.YamlConfigurationFactory;
+import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -46,8 +46,8 @@ public class SystemClockFactoryTest
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
-    private final YamlConfigurationFactory<ClockFactory> factory =
-            new YamlConfigurationFactory<>(ClockFactory.class, this.validator, this.objectMapper, "dw");
+    private final JsonConfigurationFactory<ClockFactory> factory =
+            new JsonConfigurationFactory<>(ClockFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
     public void isDiscoverable()
@@ -61,9 +61,9 @@ public class SystemClockFactoryTest
     @Test
     public void systemClock() throws Exception
     {
-        URL          resource     = Resources.getResource("test-config.yml");
-        File         yml          = new File(resource.toURI());
-        ClockFactory clockFactory = this.factory.build(yml);
+        URL          resource     = Resources.getResource("config-test.json5");
+        File         json          = new File(resource.toURI());
+        ClockFactory clockFactory = this.factory.build(json);
         assertThat(clockFactory, instanceOf(SystemClockFactory.class));
     }
 }

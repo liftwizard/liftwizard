@@ -27,7 +27,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
-import io.dropwizard.configuration.YamlConfigurationFactory;
+import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -49,8 +49,8 @@ public class ImpersonationAuthFilterFactoryTest
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
-    private final YamlConfigurationFactory<AuthFilterFactory> factory =
-            new YamlConfigurationFactory<>(AuthFilterFactory.class, this.validator, this.objectMapper, "dw");
+    private final JsonConfigurationFactory<AuthFilterFactory> factory =
+            new JsonConfigurationFactory<>(AuthFilterFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
     public void isDiscoverable()
@@ -64,9 +64,9 @@ public class ImpersonationAuthFilterFactoryTest
     @Test
     public void impersonationAuthFilter() throws Exception
     {
-        URL               resource          = Resources.getResource("test-config.yml");
-        File              yml               = new File(resource.toURI());
-        AuthFilterFactory authFilterFactory = this.factory.build(yml);
+        URL               resource          = Resources.getResource("config-test.json5");
+        File              json              = new File(resource.toURI());
+        AuthFilterFactory authFilterFactory = this.factory.build(json);
         assertThat(authFilterFactory, instanceOf(ImpersonationAuthFilterFactory.class));
         AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();
         assertThat(authFilter, instanceOf(OAuthCredentialAuthFilter.class));

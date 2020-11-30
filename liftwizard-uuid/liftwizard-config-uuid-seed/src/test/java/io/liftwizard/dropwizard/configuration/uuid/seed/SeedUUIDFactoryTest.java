@@ -26,7 +26,7 @@ import javax.validation.Validator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
-import io.dropwizard.configuration.YamlConfigurationFactory;
+import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -49,7 +49,7 @@ public class SeedUUIDFactoryTest
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
-    private final YamlConfigurationFactory<UUIDSupplierFactory> factory = new YamlConfigurationFactory<>(
+    private final JsonConfigurationFactory<UUIDSupplierFactory> factory = new JsonConfigurationFactory<>(
             UUIDSupplierFactory.class,
             this.validator,
             this.objectMapper,
@@ -67,9 +67,9 @@ public class SeedUUIDFactoryTest
     @Test
     public void seedUUID() throws Exception
     {
-        URL                 resource    = Resources.getResource("test-config.yml");
-        File                yml         = new File(resource.toURI());
-        UUIDSupplierFactory uuidFactory = this.factory.build(yml);
+        URL                 resource    = Resources.getResource("config-test.json5");
+        File                json        = new File(resource.toURI());
+        UUIDSupplierFactory uuidFactory = this.factory.build(json);
         assertThat(uuidFactory, instanceOf(SeedUUIDSupplierFactory.class));
         Supplier<UUID> uuidSupplier     = uuidFactory.createUUIDSupplier();
         UUID           uuid             = uuidSupplier.get();
