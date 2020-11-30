@@ -13,7 +13,7 @@ jobs:
           # https://circleci.com/docs/2.0/caching/
           key: liftwizard-{{ checksum "pom.xml" }}
 
-      - run: ./mvnw de.qaware.maven:go-offline-maven-plugin:1.2.4:resolve-dependencies
+      - run: ./mvnw de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies
 
       - save_cache:
           paths:
