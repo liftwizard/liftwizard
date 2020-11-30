@@ -24,6 +24,7 @@ import javax.validation.Validator;
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
@@ -32,6 +33,7 @@ import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -46,7 +48,7 @@ public class UrlFilterFactoryTest
     @Rule
     public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
-    private final ObjectMapper objectMapper = Jackson.newObjectMapper();
+    private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
     private final JsonConfigurationFactory<RequestUrlFilterFactory> factory = new JsonConfigurationFactory<>(
@@ -67,7 +69,7 @@ public class UrlFilterFactoryTest
     @Test
     public void filterUrl() throws Exception
     {
-        URL                     resource         = Resources.getResource("test-config.json");
+        URL                     resource         = Resources.getResource("config-test.json5");
         File                    json             = new File(resource.toURI());
         RequestUrlFilterFactory urlFilterFactory = this.factory.build(json);
         Filter<IAccessEvent>    filter           = urlFilterFactory.build();
@@ -77,5 +79,12 @@ public class UrlFilterFactoryTest
         assertThat(urlFilterFactory, instanceOf(RequestUrlFilterFactory.class));
         assertThat(filter.decide(bannedEvent), is(FilterReply.DENY));
         assertThat(filter.decide(allowedEvent), is(FilterReply.NEUTRAL));
+    }
+
+    private static ObjectMapper newObjectMapper()
+    {
+        ObjectMapper objectMapper = Jackson.newObjectMapper();
+        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        return objectMapper;
     }
 }

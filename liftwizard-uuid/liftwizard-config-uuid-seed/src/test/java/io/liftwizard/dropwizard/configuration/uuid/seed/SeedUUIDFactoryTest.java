@@ -23,15 +23,17 @@ import java.util.function.Supplier;
 
 import javax.validation.Validator;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
-import io.dropwizard.configuration.YamlConfigurationFactory;
+import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -46,10 +48,10 @@ public class SeedUUIDFactoryTest
     @Rule
     public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
-    private final ObjectMapper objectMapper = Jackson.newObjectMapper();
+    private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator    validator    = Validators.newValidator();
 
-    private final YamlConfigurationFactory<UUIDSupplierFactory> factory = new YamlConfigurationFactory<>(
+    private final JsonConfigurationFactory<UUIDSupplierFactory> factory = new JsonConfigurationFactory<>(
             UUIDSupplierFactory.class,
             this.validator,
             this.objectMapper,
@@ -67,13 +69,20 @@ public class SeedUUIDFactoryTest
     @Test
     public void seedUUID() throws Exception
     {
-        URL                 resource    = Resources.getResource("test-config.yml");
-        File                yml         = new File(resource.toURI());
-        UUIDSupplierFactory uuidFactory = this.factory.build(yml);
+        URL                 resource    = Resources.getResource("config-test.json5");
+        File                json        = new File(resource.toURI());
+        UUIDSupplierFactory uuidFactory = this.factory.build(json);
         assertThat(uuidFactory, instanceOf(SeedUUIDSupplierFactory.class));
         Supplier<UUID> uuidSupplier     = uuidFactory.createUUIDSupplier();
         UUID           uuid             = uuidSupplier.get();
         String         actualUUIDString = uuid.toString();
         assertThat(actualUUIDString, is("4bb909d0-4c29-3f81-957f-aab6d7f73c9f"));
+    }
+
+    private static ObjectMapper newObjectMapper()
+    {
+        ObjectMapper objectMapper = Jackson.newObjectMapper();
+        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        return objectMapper;
     }
 }

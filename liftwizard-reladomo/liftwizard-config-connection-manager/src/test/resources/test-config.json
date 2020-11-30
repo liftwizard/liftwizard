@@ -1,7 +1,0 @@
-{
-  "connectionManagerName": "connectionManagerName",
-  "dataSourceName"       : "dataSourceName",
-  "databaseType"         : "GENERIC",
-  "schemaName"           : "schemaName",
-  "timeZone"             : "America/New_York"
-}
