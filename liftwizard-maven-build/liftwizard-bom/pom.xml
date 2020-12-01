@@ -525,7 +525,7 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-graphql-data-fetcher-async</artifactId>
-                <version>0.10.0-SNAPSHOT</version>
+                <version>0.11.0-SNAPSHOT-SNAPSHOT</version>
             </dependency>
 
             <dependency>
