@@ -31,62 +31,98 @@ import graphql.schema.GraphQLType;
 import graphql.validation.ValidationError;
 import io.liftwizard.instrumentation.GraphQLInstrumentationUtils;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LiftwizardGraphQLLoggingInstrumentation
         extends SimpleInstrumentation
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLLoggingInstrumentation.class);
+
     @Override
     public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters)
     {
-        ExecutionId       executionId = parameters.getExecutionInput().getExecutionId();
-        MultiMDCCloseable mdc         = new MultiMDCCloseable();
-        mdc.put("executionId", executionId.toString());
+        try
+        {
+            ExecutionId       executionId = parameters.getExecutionInput().getExecutionId();
+            MultiMDCCloseable mdc         = new MultiMDCCloseable();
+            mdc.put("executionId", executionId.toString());
 
-        return new MDCInstrumentationContext<>(mdc);
+            return new MDCInstrumentationContext<>(mdc);
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("", e);
+            throw e;
+        }
     }
 
     @Override
     public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters)
     {
-        MultiMDCCloseable mdc       = new MultiMDCCloseable();
-        String            operation = parameters.getOperation();
-        mdc.put("operation", operation);
-        return new MDCInstrumentationContext<>(mdc);
+        try
+        {
+            MultiMDCCloseable mdc       = new MultiMDCCloseable();
+            String            operation = parameters.getOperation();
+            mdc.put("operation", operation);
+            return new MDCInstrumentationContext<>(mdc);
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("", e);
+            throw e;
+        }
     }
 
     @Override
     public InstrumentationContext<List<ValidationError>> beginValidation(InstrumentationValidationParameters parameters)
     {
-        MultiMDCCloseable mdc       = new MultiMDCCloseable();
-        String            operation = parameters.getOperation();
-        mdc.put("operation", operation);
+        try
+        {
+            MultiMDCCloseable mdc       = new MultiMDCCloseable();
+            String            operation = parameters.getOperation();
+            mdc.put("operation", operation);
 
-        return new MDCInstrumentationContext<>(mdc);
+            return new MDCInstrumentationContext<>(mdc);
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("", e);
+            throw e;
+        }
     }
 
     @Override
     public InstrumentationContext<Object> beginFieldFetch(InstrumentationFieldFetchParameters parameters)
     {
-        if (parameters.isTrivialDataFetcher())
+        try
         {
-            return super.beginFieldFetch(parameters);
+            if (parameters.isTrivialDataFetcher())
+            {
+                return super.beginFieldFetch(parameters);
+            }
+
+            var         mdc            = new MultiMDCCloseable();
+            var         stepInfo       = parameters.getExecutionStepInfo();
+            String      path           = GraphQLInstrumentationUtils.getPathWithIndex(stepInfo);
+            GraphQLType parentType     = stepInfo.getParent().getType();
+            String      parentTypeName = GraphQLInstrumentationUtils.getTypeName(parentType);
+            String      fieldName      = parameters.getField().getName();
+            GraphQLType fieldType      = parameters.getField().getType();
+            String      fieldTypeName  = GraphQLInstrumentationUtils.getTypeName(fieldType);
+
+            mdc.put("liftwizard.graphql.field.path", path);
+            mdc.put("liftwizard.graphql.field.parentType", parentTypeName);
+            mdc.put("liftwizard.graphql.field.name", fieldName);
+            mdc.put("liftwizard.graphql.field.type", fieldTypeName);
+
+            return new MDCInstrumentationContext<>(mdc);
         }
-
-        var         mdc            = new MultiMDCCloseable();
-        var         stepInfo       = parameters.getExecutionStepInfo();
-        String      path           = GraphQLInstrumentationUtils.getPathWithIndex(stepInfo);
-        GraphQLType parentType     = stepInfo.getParent().getType();
-        String      parentTypeName = GraphQLInstrumentationUtils.getTypeName(parentType);
-        String      fieldName      = parameters.getField().getName();
-        GraphQLType fieldType      = parameters.getField().getType();
-        String      fieldTypeName  = GraphQLInstrumentationUtils.getTypeName(fieldType);
-
-        mdc.put("liftwizard.graphql.field.path", path);
-        mdc.put("liftwizard.graphql.field.parentType", parentTypeName);
-        mdc.put("liftwizard.graphql.field.name", fieldName);
-        mdc.put("liftwizard.graphql.field.type", fieldTypeName);
-
-        return new MDCInstrumentationContext<>(mdc);
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("", e);
+            throw e;
+        }
     }
 
     @Override
@@ -99,6 +135,14 @@ public class LiftwizardGraphQLLoggingInstrumentation
             return super.instrumentDataFetcher(dataFetcher, parameters);
         }
 
-        return new MDCDataFetcher<>(dataFetcher);
+        try
+        {
+            return new MDCDataFetcher<>(dataFetcher);
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("", e);
+            throw e;
+        }
     }
 }
