@@ -84,6 +84,6 @@ public final class GraphQLInstrumentationUtils
             return getTypeName(wrappedType);
         }
 
-        throw new AssertionError(type);
+        throw new IllegalStateException(String.valueOf(type));
     }
 }
