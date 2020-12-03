@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableMap;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
+import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
@@ -32,6 +33,7 @@ import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactoryProvider;
 import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
+import io.liftwizard.dropwizard.configuration.graphql.GraphQLFactoryProvider;
 import io.liftwizard.dropwizard.configuration.h2.H2Factory;
 import io.liftwizard.dropwizard.configuration.h2.H2FactoryProvider;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
@@ -58,7 +60,8 @@ public class HelloWorldConfiguration
         DdlExecutorFactoryProvider,
         ReladomoFactoryProvider,
         NamedDataSourceProvider,
-        ConnectionManagerFactoryProvider
+        ConnectionManagerFactoryProvider,
+        GraphQLFactoryProvider
 {
     @NotEmpty
     private String template;
@@ -74,9 +77,10 @@ public class HelloWorldConfiguration
     private @NotNull @Valid ClockFactory             clockFactory             = new SystemClockFactory();
     private @NotNull @Valid UUIDSupplierFactory      uuidFactory              = new SystemUUIDSupplierFactory();
     private @Valid @NotNull JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
-    private @Valid @NotNull H2Factory                h2Factory            = new H2Factory();
-    private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories = Arrays.asList();
-    private @Valid @NotNull ReladomoFactory          reladomoFactory      = new ReladomoFactory();
+    private @Valid @NotNull H2Factory                h2Factory                = new H2Factory();
+    private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories     = Arrays.asList();
+    private @Valid @NotNull ReladomoFactory          reladomoFactory          = new ReladomoFactory();
+    private @Valid @NotNull GraphQLFactory           graphQLFactory           = new GraphQLFactory();
 
     private @Valid @NotNull NamedDataSourceConfiguration   namedDataSourceConfiguration   =
             new NamedDataSourceConfiguration();
@@ -277,6 +281,20 @@ public class HelloWorldConfiguration
     public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories)
     {
         this.connectionManagerConfiguration.setConnectionManagerFactories(connectionManagerFactories);
+    }
+
+    @Override
+    @Nonnull
+    @JsonProperty("graphQL")
+    public GraphQLFactory getGraphQLFactory()
+    {
+        return this.graphQLFactory;
+    }
+
+    @JsonProperty("graphQL")
+    public void setGraphQLFactory(@Nonnull GraphQLFactory graphQLFactory)
+    {
+        this.graphQLFactory = graphQLFactory;
     }
 
     @JsonIgnore
