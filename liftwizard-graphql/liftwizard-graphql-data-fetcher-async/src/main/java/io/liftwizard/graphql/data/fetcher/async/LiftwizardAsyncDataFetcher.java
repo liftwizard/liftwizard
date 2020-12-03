@@ -26,13 +26,13 @@ import graphql.schema.DataFetchingEnvironment;
 public class LiftwizardAsyncDataFetcher<T>
         implements DataFetcher<CompletableFuture<T>>
 {
-    private final DataFetcher<T> dataFetcher;
+    private final DataFetcher<T> wrappedDataFetcher;
     private final Executor       executor;
 
-    public LiftwizardAsyncDataFetcher(DataFetcher<T> dataFetcher, Executor executor)
+    public LiftwizardAsyncDataFetcher(DataFetcher<T> wrappedDataFetcher, Executor executor)
     {
-        this.dataFetcher = Objects.requireNonNull(dataFetcher);
-        this.executor    = Objects.requireNonNull(executor);
+        this.wrappedDataFetcher = Objects.requireNonNull(wrappedDataFetcher);
+        this.executor           = Objects.requireNonNull(executor);
     }
 
     public static <T> LiftwizardAsyncDataFetcher<T> async(DataFetcher<T> wrappedDataFetcher, Executor executor)
@@ -40,11 +40,21 @@ public class LiftwizardAsyncDataFetcher<T>
         return new LiftwizardAsyncDataFetcher<>(wrappedDataFetcher, executor);
     }
 
+    public DataFetcher<T> getWrappedDataFetcher()
+    {
+        return this.wrappedDataFetcher;
+    }
+
+    public Executor getExecutor()
+    {
+        return this.executor;
+    }
+
     @Override
     public CompletableFuture<T> get(DataFetchingEnvironment environment)
     {
         return CompletableFuture.supplyAsync(
-                new AsyncDataSupplier<T>(this.dataFetcher, environment),
+                new AsyncDataSupplier<T>(this.wrappedDataFetcher, environment),
                 this.executor);
     }
 }

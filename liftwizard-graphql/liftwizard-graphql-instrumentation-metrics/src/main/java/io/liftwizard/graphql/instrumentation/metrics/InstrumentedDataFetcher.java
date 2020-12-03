@@ -39,6 +39,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 
 public class InstrumentedDataFetcher<T>
         implements DataFetcher<T>
@@ -114,12 +115,20 @@ public class InstrumentedDataFetcher<T>
         this.exceptionMeterPath    = this.getPathExceptionsMeter();
     }
 
-    @Nullable
-    private  <A extends Annotation> A getAnnotation(Class<A> annotationClass)
+    private DataFetcher<?> getAnnotatedDataFetcher()
     {
+        return this.dataFetcher instanceof LiftwizardAsyncDataFetcher
+                ? ((LiftwizardAsyncDataFetcher<?>) this.dataFetcher).getWrappedDataFetcher()
+                : this.dataFetcher;
+    }
+
+    @Nullable
+    private <A extends Annotation> A getAnnotation(Class<A> annotationClass)
+    {
+        DataFetcher<?> annotatedDataFetcher = this.getAnnotatedDataFetcher();
         try
         {
-            Method getMethod        = this.dataFetcher.getClass().getMethod("get", DataFetchingEnvironment.class);
+            Method getMethod        = annotatedDataFetcher.getClass().getMethod("get", DataFetchingEnvironment.class);
             A      methodAnnotation = getMethod.getAnnotation(annotationClass);
             if (methodAnnotation != null)
             {
@@ -131,7 +140,7 @@ public class InstrumentedDataFetcher<T>
             throw new RuntimeException(e);
         }
 
-        return this.dataFetcher.getClass().getAnnotation(annotationClass);
+        return annotatedDataFetcher.getClass().getAnnotation(annotationClass);
     }
 
     @Nonnull
@@ -145,21 +154,21 @@ public class InstrumentedDataFetcher<T>
         String name = InstrumentedDataFetcher.chooseName(
                 this.timedAnnotation.name(),
                 this.timedAnnotation.absolute(),
-                this.dataFetcher.getClass(),
+                this.getAnnotatedDataFetcher().getClass(),
                 suffix);
 
         return Optional.of(this.metricRegistry.timer(name));
     }
 
     @Nonnull
-    private  Optional<Timer> getFieldTimer(String suffix)
+    private Optional<Timer> getFieldTimer(String suffix)
     {
         if (this.timedAnnotation == null)
         {
             return Optional.empty();
         }
 
-        String name = MetricRegistry.name("liftwizard", "graphql", "field", this.typeName, this.fieldName, suffix);
+        String name  = MetricRegistry.name("liftwizard", "graphql", "field", this.typeName, this.fieldName, suffix);
         Timer  timer = this.metricRegistry.timer(name);
         return Optional.of(timer);
     }
@@ -188,7 +197,7 @@ public class InstrumentedDataFetcher<T>
         String name = InstrumentedDataFetcher.chooseName(
                 this.meteredAnnotation.name(),
                 this.meteredAnnotation.absolute(),
-                this.dataFetcher.getClass());
+                this.getAnnotatedDataFetcher().getClass());
 
         return Optional.of(this.metricRegistry.meter(name));
     }
@@ -230,7 +239,7 @@ public class InstrumentedDataFetcher<T>
         String name = InstrumentedDataFetcher.chooseName(
                 this.exceptionMeteredAnnotation.name(),
                 this.exceptionMeteredAnnotation.absolute(),
-                this.dataFetcher.getClass(),
+                this.getAnnotatedDataFetcher().getClass(),
                 ExceptionMetered.DEFAULT_NAME_SUFFIX);
 
         return Optional.of(this.metricRegistry.meter(name));
@@ -244,14 +253,14 @@ public class InstrumentedDataFetcher<T>
             return Optional.empty();
         }
 
-        String name  = MetricRegistry.name(
+        String name = MetricRegistry.name(
                 "liftwizard",
                 "graphql",
                 "field",
                 this.typeName,
                 this.fieldName,
                 ExceptionMetered.DEFAULT_NAME_SUFFIX);
-        Meter  meter = this.metricRegistry.meter(name);
+        Meter meter = this.metricRegistry.meter(name);
         return Optional.of(meter);
     }
 
@@ -263,13 +272,13 @@ public class InstrumentedDataFetcher<T>
             return Optional.empty();
         }
 
-        String name  = MetricRegistry.name(
+        String name = MetricRegistry.name(
                 "liftwizard",
                 "graphql",
                 "path",
                 this.path,
                 ExceptionMetered.DEFAULT_NAME_SUFFIX);
-        Meter  meter = this.metricRegistry.meter(name);
+        Meter meter = this.metricRegistry.meter(name);
         return Optional.of(meter);
     }
 
