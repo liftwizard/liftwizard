@@ -9,3 +9,7 @@ logging
     JerseyHttpLoggingBundle
 utility
     liftwizard-config-logging-filter-requesturl
+graphql
+    bundle
+    instrumentation-logging
+    instrumentation-metrics
