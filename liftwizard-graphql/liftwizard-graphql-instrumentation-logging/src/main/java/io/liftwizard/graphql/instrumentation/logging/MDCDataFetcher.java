@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 import org.slf4j.MDC;
 
 public class MDCDataFetcher<T>
@@ -35,10 +36,15 @@ public class MDCDataFetcher<T>
     @Override
     public T get(DataFetchingEnvironment environment) throws Exception
     {
+        DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
+                ? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
+                : this.dataFetcher;
+        String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
+
         try (
                 var ignored = MDC.putCloseable(
                         "liftwizard.graphql.fetcher.type",
-                        this.dataFetcher.getClass().getCanonicalName()))
+                        dataFetcherName))
         {
             return this.dataFetcher.get(environment);
         }
