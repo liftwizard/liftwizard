@@ -13,3 +13,4 @@ graphql
     bundle
     instrumentation-logging
     instrumentation-metrics
+    data-fetcher-async

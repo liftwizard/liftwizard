@@ -29,15 +29,16 @@
     <name>Liftwizard GraphQL (Module Group)</name>
 
     <modules>
+        <module>liftwizard-graphql-data-fetcher-async</module>
         <module>liftwizard-graphql-data-fetcher</module>
         <module>liftwizard-graphql-exception</module>
         <module>liftwizard-graphql-finder-fetcher</module>
-        <module>liftwizard-graphql-operation-fetcher</module>
-        <module>liftwizard-graphql-scalar-temporal</module>
-        <module>liftwizard-graphql-reladomo-meta</module>
         <module>liftwizard-graphql-instrumentation-logging</module>
         <module>liftwizard-graphql-instrumentation-metrics</module>
         <module>liftwizard-graphql-instrumentation</module>
+        <module>liftwizard-graphql-operation-fetcher</module>
+        <module>liftwizard-graphql-reladomo-meta</module>
+        <module>liftwizard-graphql-scalar-temporal</module>
     </modules>
 
     <dependencyManagement>
