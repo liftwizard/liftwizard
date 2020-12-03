@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.gs.fw.common.mithra.finder.AbstractRelatedFinder;
 import com.gs.fw.common.mithra.finder.Operation;
@@ -47,6 +48,7 @@ public class ReladomoFinderDataFetcher<T>
     }
 
     @Timed
+    @Metered
     @ExceptionMetered
     @Override
     public List<T> get(DataFetchingEnvironment environment)
