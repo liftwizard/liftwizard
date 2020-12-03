@@ -338,6 +338,8 @@ public class InstrumentedDataFetcher<T>
         catch (Exception e)
         {
             this.exceptionMeterFetcher.ifPresent(Meter::mark);
+            this.exceptionMeterField.ifPresent(Meter::mark);
+            this.exceptionMeterPath.ifPresent(Meter::mark);
             throw e;
         }
         finally
