@@ -46,7 +46,7 @@ public class LiftwizardGraphQLLoggingInstrumentation
         {
             ExecutionId       executionId = parameters.getExecutionInput().getExecutionId();
             MultiMDCCloseable mdc         = new MultiMDCCloseable();
-            mdc.put("executionId", executionId.toString());
+            mdc.put("liftwizard.graphql.executionId", executionId.toString());
 
             return new MDCInstrumentationContext<>(mdc);
         }
@@ -64,7 +64,7 @@ public class LiftwizardGraphQLLoggingInstrumentation
         {
             MultiMDCCloseable mdc       = new MultiMDCCloseable();
             String            operation = parameters.getOperation();
-            mdc.put("operation", operation);
+            mdc.put("liftwizard.graphql.operation", operation);
             return new MDCInstrumentationContext<>(mdc);
         }
         catch (RuntimeException e)
@@ -81,7 +81,7 @@ public class LiftwizardGraphQLLoggingInstrumentation
         {
             MultiMDCCloseable mdc       = new MultiMDCCloseable();
             String            operation = parameters.getOperation();
-            mdc.put("operation", operation);
+            mdc.put("liftwizard.graphql.operation", operation);
 
             return new MDCInstrumentationContext<>(mdc);
         }
