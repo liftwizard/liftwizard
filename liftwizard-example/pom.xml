@@ -386,6 +386,10 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-graphql</artifactId>
+        </dependency>
 
     </dependencies>
 

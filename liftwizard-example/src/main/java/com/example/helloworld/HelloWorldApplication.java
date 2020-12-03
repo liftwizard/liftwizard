@@ -50,18 +50,23 @@ import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructured
 import org.eclipse.collections.impl.utility.Iterate;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
-    public static void main(String[] args) throws Exception {
+public class HelloWorldApplication
+        extends Application<HelloWorldConfiguration>
+{
+    public static void main(String[] args) throws Exception
+    {
         new HelloWorldApplication().run(args);
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return "hello-world";
     }
 
     @Override
-    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
+    {
         bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
         bootstrap.addBundle(new EnvironmentConfigBundle());
 
@@ -81,24 +86,29 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());
-        bootstrap.addBundle(new MigrationsBundle<HelloWorldConfiguration>() {
+        bootstrap.addBundle(new MigrationsBundle<HelloWorldConfiguration>()
+        {
             @Override
-            public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+            public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration)
+            {
                 return Iterate.getOnly(configuration.getNamedDataSourceFactories());
             }
         });
-        bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>() {
+        bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>()
+        {
             @Override
-            public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
+            public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration)
+            {
                 return configuration.getViewRendererConfiguration();
             }
         });
     }
 
     @Override
-    public void run(HelloWorldConfiguration configuration, Environment environment) {
-        final PersonDAO dao = new PersonDAO();
-        final Template template = configuration.buildTemplate();
+    public void run(HelloWorldConfiguration configuration, Environment environment)
+    {
+        final PersonDAO dao      = new PersonDAO();
+        final Template  template = configuration.buildTemplate();
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
