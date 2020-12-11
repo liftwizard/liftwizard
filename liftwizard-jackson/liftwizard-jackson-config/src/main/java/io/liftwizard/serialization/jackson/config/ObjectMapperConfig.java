@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -67,6 +68,8 @@ public final class ObjectMapperConfig
         objectMapper.enable(Feature.ALLOW_UNQUOTED_CONTROL_CHARS);
         objectMapper.enable(Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER);
         objectMapper.enable(Feature.ALLOW_NON_NUMERIC_NUMBERS);
+
+        objectMapper.configure(MapperFeature.USE_BASE_TYPE_AS_DEFAULT_IMPL, true);
 
         objectMapper.setDateFormat(new StdDateFormat());
         objectMapper.setSerializationInclusion(serializationInclusion);
