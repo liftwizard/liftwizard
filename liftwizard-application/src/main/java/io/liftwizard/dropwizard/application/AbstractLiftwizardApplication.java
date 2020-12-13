@@ -46,6 +46,7 @@ import io.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggi
 import io.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
 import io.liftwizard.servlet.logging.structured.reladomo.ReladomoStructuredLoggingFilter;
 import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
+import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
 public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider>
         extends Application<T>
@@ -98,6 +99,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
         bootstrap.addBundle(redirectBundle);
         bootstrap.addBundle(new UUIDBundle());
         bootstrap.addBundle(new ClockBundle());
+        bootstrap.addBundle(new MetricsUIBundle());
     }
 
     protected void initializeDynamicBundles(@Nonnull Bootstrap<T> bootstrap)
