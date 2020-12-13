@@ -135,7 +135,9 @@
             <property name="tokens" value="IMPLEMENTS_CLAUSE" />
             <property name="tokens" value="ANNOTATION_FIELD_DEF" />
         </module>
-        <module name="AnnotationUseStyle" />
+        <module name="AnnotationUseStyle">
+            <property name="trailingArrayComma" value="always"/>
+        </module>
         <module name="MissingDeprecated" />
         <module name="MissingOverride" />
         <module name="PackageAnnotation" />
