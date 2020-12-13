@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
 
 public final class ObjectMapperConfig
@@ -70,6 +71,8 @@ public final class ObjectMapperConfig
         objectMapper.enable(Feature.ALLOW_NON_NUMERIC_NUMBERS);
 
         objectMapper.configure(MapperFeature.USE_BASE_TYPE_AS_DEFAULT_IMPL, true);
+
+        objectMapper.registerModule(new EclipseCollectionsModule());
 
         objectMapper.setDateFormat(new StdDateFormat());
         objectMapper.setSerializationInclusion(serializationInclusion);
