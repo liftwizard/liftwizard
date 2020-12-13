@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import javax.servlet.DispatcherType;
 
 import ch.qos.logback.classic.Level;
-import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import com.gs.reladomo.serial.jackson.JacksonReladomoModule;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
@@ -118,7 +117,6 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
 
     protected void registerJacksonModules(@Nonnull Environment environment)
     {
-        environment.getObjectMapper().registerModule(new EclipseCollectionsModule());
         environment.getObjectMapper().registerModule(new JacksonReladomoModule());
     }
 

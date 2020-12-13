@@ -138,12 +138,6 @@
             <artifactId>reladomo-serial</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-eclipse-collections</artifactId>
-            <version>2.11.3</version>
-        </dependency>
-
         <!--Unusual to have a dependency on logback, but this is used to set the bootstrap logging level-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
