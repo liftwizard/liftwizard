@@ -21,16 +21,32 @@ import java.util.Objects;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
-import org.slf4j.MDC;
+import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 
 public class MDCDataFetcher<T>
         implements DataFetcher<T>
 {
     private final DataFetcher<T> dataFetcher;
+    private final String         executionId;
+    private final String         path;
+    private final String         parentTypeName;
+    private final String         fieldName;
+    private final String         fieldTypeName;
 
-    public MDCDataFetcher(DataFetcher<T> dataFetcher)
+    public MDCDataFetcher(
+            DataFetcher<T> dataFetcher,
+            String executionId,
+            String path,
+            String parentTypeName,
+            String fieldName,
+            String fieldTypeName)
     {
-        this.dataFetcher = Objects.requireNonNull(dataFetcher);
+        this.dataFetcher    = Objects.requireNonNull(dataFetcher);
+        this.executionId    = executionId;
+        this.path           = path;
+        this.parentTypeName = parentTypeName;
+        this.fieldName      = fieldName;
+        this.fieldTypeName  = fieldTypeName;
     }
 
     @Override
@@ -41,11 +57,14 @@ public class MDCDataFetcher<T>
                 : this.dataFetcher;
         String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
 
-        try (
-                var ignored = MDC.putCloseable(
-                        "liftwizard.graphql.fetcher.type",
-                        dataFetcherName))
+        try (MultiMDCCloseable mdc = new MultiMDCCloseable())
         {
+            mdc.put("liftwizard.graphql.executionId", this.executionId);
+            mdc.put("liftwizard.graphql.field.path", this.path);
+            mdc.put("liftwizard.graphql.field.parentType", this.parentTypeName);
+            mdc.put("liftwizard.graphql.field.name", this.fieldName);
+            mdc.put("liftwizard.graphql.field.type", this.fieldTypeName);
+            mdc.put("liftwizard.graphql.fetcher.type", dataFetcherName);
             return this.dataFetcher.get(environment);
         }
     }
