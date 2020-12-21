@@ -354,6 +354,18 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-logging-logstash</artifactId>
+                <version>0.12.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-logging-logstash-console</artifactId>
+                <version>0.12.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logstash-file</artifactId>
                 <version>0.12.0-SNAPSHOT</version>
             </dependency>
@@ -361,6 +373,18 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logzio</artifactId>
+                <version>0.12.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-metrics-reporter-logback</artifactId>
+                <version>0.12.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-metrics-reporter-slf4j</artifactId>
                 <version>0.12.0-SNAPSHOT</version>
             </dependency>
 
@@ -385,6 +409,12 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-p6spy</artifactId>
+                <version>0.12.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-metrics-reporter-slf4j</artifactId>
                 <version>0.12.0-SNAPSHOT</version>
             </dependency>
 

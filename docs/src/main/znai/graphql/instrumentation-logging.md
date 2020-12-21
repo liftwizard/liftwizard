@@ -18,7 +18,7 @@ List<Instrumentation> instrumentations = List.of(loggingInstrumentation);
 factory.setInstrumentations(instrumentations);
 ```
 
-Here's an example of what SQL logging might look like with MDC attached when formatted by the "logstash-file" appender.
+Here's an example of what SQL logging might look like with MDC attached when formatted by the "file-logstash" appender.
 
 ```json
 {
