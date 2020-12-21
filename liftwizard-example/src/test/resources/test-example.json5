@@ -41,7 +41,7 @@
         maxFileSize: "1mb",
       },
       {
-        type: "logstash-file",
+        type: "file-logstash",
         currentLogFilename: "./logs/logstash.json",
         archivedLogFilenamePattern: "./logs/logstash-%d.json",
         includeCallerData: true,
