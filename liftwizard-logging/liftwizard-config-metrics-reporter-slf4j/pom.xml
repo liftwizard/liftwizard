@@ -15,7 +15,10 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-logging</artifactId>
@@ -23,43 +26,31 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>liftwizard-config-logging-logstash-file</artifactId>
+    <artifactId>liftwizard-config-metrics-reporter-slf4j</artifactId>
 
-    <name>Liftwizard Config Factory: Logback File Appender with Encoder</name>
+    <name>Liftwizard Config Factory: Structured Slf4j Metrics Reporter</name>
 
     <dependencies>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-config-logging-logstash</artifactId>
+            <artifactId>liftwizard-metrics-reporter-slf4j</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-logging</artifactId>
+            <artifactId>dropwizard-metrics</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-util</artifactId>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-validation</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>compile</scope>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <dependency>
@@ -68,18 +59,8 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <dependency>
@@ -87,6 +68,10 @@
             <artifactId>jsr305</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+        </dependency>
+
     </dependencies>
 </project>
-

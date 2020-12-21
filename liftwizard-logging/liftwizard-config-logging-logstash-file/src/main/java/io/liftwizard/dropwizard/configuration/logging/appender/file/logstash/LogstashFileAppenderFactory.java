@@ -21,13 +21,14 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.FileAppender;
 import ch.qos.logback.core.OutputStreamAppender;
-import ch.qos.logback.core.filter.Filter;
+import ch.qos.logback.core.encoder.Encoder;
 import ch.qos.logback.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy;
 import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
@@ -49,10 +50,9 @@ import io.dropwizard.logging.layout.LayoutFactory;
 import io.dropwizard.util.Size;
 import io.dropwizard.validation.MinSize;
 import io.dropwizard.validation.ValidationMethod;
-import net.logstash.logback.encoder.LogstashEncoder;
+import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashEncoderFactory;
 
-// TODO: Break inheritance since we don't need layout
-@JsonTypeName("logstash-file")
+@JsonTypeName("file-logstash")
 @AutoService(AppenderFactory.class)
 public class LogstashFileAppenderFactory
         extends AbstractAppenderFactory<ILoggingEvent>
@@ -73,6 +73,9 @@ public class LogstashFileAppenderFactory
     private @MinSize(1) Size bufferSize = Size.bytes(FileAppender.DEFAULT_BUFFER_SIZE);
 
     private boolean immediateFlush = true;
+
+    @NotNull
+    private LogstashEncoderFactory encoderFactory = new LogstashEncoderFactory();
 
     @JsonProperty
     @Nullable
@@ -160,6 +163,18 @@ public class LogstashFileAppenderFactory
         this.immediateFlush = immediateFlush;
     }
 
+    @JsonProperty
+    public LogstashEncoderFactory getEncoder()
+    {
+        return this.encoderFactory;
+    }
+
+    @JsonProperty
+    public void setEncoder(LogstashEncoderFactory newEncoderFactory)
+    {
+        this.encoderFactory = newEncoderFactory;
+    }
+
     @JsonIgnore
     @ValidationMethod(message = "must have archivedLogFilenamePattern if archive is true")
     public boolean isValidArchiveConfiguration()
@@ -205,25 +220,13 @@ public class LogstashFileAppenderFactory
             LevelFilterFactory<ILoggingEvent> levelFilterFactory,
             AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory)
     {
-        // TODO: Make this more generic so it works with access events
-        LogstashEncoder encoder = new LogstashEncoder();
-        encoder.setIncludeCallerData(this.isIncludeCallerData());
-        // encoder.setIncludeContext(true);
-        // encoder.setIncludeMdc(true);
-        // encoder.setIncludeNonStructuredArguments(false);
-        encoder.setIncludeStructuredArguments(true);
-        // encoder.setIncludeTags(true);
-        encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
-        encoder.setJsonFactoryDecorator(new ObjectMapperConfigJsonFactoryDecorator());
+        Encoder<ILoggingEvent>              encoder  = this.encoderFactory.build(this.isIncludeCallerData());
         OutputStreamAppender<ILoggingEvent> appender = this.appender(context);
         appender.setEncoder(encoder);
         encoder.start();
 
-        Filter<ILoggingEvent> filter = levelFilterFactory.build(this.threshold);
-        appender.addFilter(filter);
-
+        appender.addFilter(levelFilterFactory.build(this.threshold));
         this.getFilterFactories().stream().map(FilterFactory::build).forEach(appender::addFilter);
-
         appender.start();
         return this.wrapAsync(appender, asyncAppenderFactory);
     }
@@ -231,7 +234,7 @@ public class LogstashFileAppenderFactory
     private OutputStreamAppender<ILoggingEvent> appender(LoggerContext context)
     {
         FileAppender<ILoggingEvent> appender = this.buildAppender(context);
-        appender.setName("logstash-file-appender");
+        appender.setName("file-logstash-appender");
         appender.setAppend(true);
         appender.setContext(context);
         appender.setImmediateFlush(this.immediateFlush);
@@ -239,7 +242,7 @@ public class LogstashFileAppenderFactory
         return appender;
     }
 
-    protected FileAppender<ILoggingEvent> buildAppender(LoggerContext context)
+    private FileAppender<ILoggingEvent> buildAppender(LoggerContext context)
     {
         if (!this.archive)
         {

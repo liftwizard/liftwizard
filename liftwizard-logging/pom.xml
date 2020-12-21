@@ -49,14 +49,17 @@
         <module>liftwizard-config-logging-config</module>
         <module>liftwizard-config-logging-filter-requesturl</module>
         <module>liftwizard-config-logging-http</module>
+        <module>liftwizard-config-logging-logstash-console</module>
         <module>liftwizard-config-logging-logstash-file</module>
+        <module>liftwizard-config-logging-logstash</module>
         <module>liftwizard-config-logging-logzio</module>
-        <module>liftwizard-config-logging-structured-metrics</module>
+        <module>liftwizard-config-metrics-reporter-logback</module>
+        <module>liftwizard-config-metrics-reporter-slf4j</module>
         <module>liftwizard-logging-buffered-appender</module>
         <module>liftwizard-logging-filter-requesturl</module>
         <module>liftwizard-logging-mdc-closeable</module>
         <module>liftwizard-logging-p6spy</module>
-        <module>liftwizard-logging-structured-metrics</module>
+        <module>liftwizard-metrics-reporter-slf4j</module>
         <module>liftwizard-servlet-logging-correlation-id</module>
         <module>liftwizard-servlet-logging-mdc-clear-all</module>
         <module>liftwizard-servlet-logging-mdc-clear-keys</module>

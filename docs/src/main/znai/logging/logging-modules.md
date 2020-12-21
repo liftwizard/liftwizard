@@ -154,7 +154,7 @@ Let's add the logstash-file appender to the list of configured appenders.
         "includeCallerData": true
       },
       {
-        "type"                      : "logstash-file",
+        "type"                      : "file-logstash",
         "currentLogFilename"        : "./logs/logstash.json",
         "archivedLogFilenamePattern": "./logs/logstash-%d.json",
         "includeCallerData"         : true
