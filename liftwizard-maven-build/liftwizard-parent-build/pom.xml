@@ -105,6 +105,11 @@
                 <artifactId>go-offline-maven-plugin</artifactId>
             </plugin>
 
+            <plugin>
+                <groupId>com.github.ferstl</groupId>
+                <artifactId>depgraph-maven-plugin</artifactId>
+            </plugin>
+
         </plugins>
 
         <pluginManagement>
@@ -363,6 +368,16 @@
                         <listener>true</listener>
                         <visitor>true</visitor>
                         <treatWarningsAsErrors>true</treatWarningsAsErrors>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.github.ferstl</groupId>
+                    <artifactId>depgraph-maven-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <configuration>
+                        <createImage>true</createImage>
+                        <includes>${project.groupId}</includes>
                     </configuration>
                 </plugin>
 
