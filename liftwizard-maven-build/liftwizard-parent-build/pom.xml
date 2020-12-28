@@ -247,7 +247,6 @@
                                     </requireMavenVersion>
                                     <bannedDependencies>
                                         <excludes>
-                                            <exclude>log4j:log4j</exclude>
                                             <exclude>commons-logging-api</exclude>
                                             <exclude>commons-logging</exclude>
                                             <exclude>org.apache.logging.log4j:log4j</exclude>
@@ -500,7 +499,6 @@
                                         </requireMavenVersion>
                                         <bannedDependencies>
                                             <excludes>
-                                                <exclude>log4j:log4j</exclude>
                                                 <exclude>commons-logging-api</exclude>
                                                 <exclude>commons-logging</exclude>
                                                 <exclude>org.apache.logging.log4j:log4j</exclude>

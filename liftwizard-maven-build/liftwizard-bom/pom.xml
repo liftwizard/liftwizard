@@ -378,6 +378,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-metrics-reporter-log4j</artifactId>
+                <version>0.13.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-metrics-reporter-logback</artifactId>
                 <version>0.13.0-SNAPSHOT</version>
             </dependency>
@@ -409,6 +415,12 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-p6spy</artifactId>
+                <version>0.13.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-metrics-reporter-log4j</artifactId>
                 <version>0.13.0-SNAPSHOT</version>
             </dependency>
 
