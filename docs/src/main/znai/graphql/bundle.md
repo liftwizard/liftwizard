@@ -32,3 +32,12 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
     // ...
 }
 ```
+
+`LiftwizardGraphQLBundle` lives in the `liftwizard-bundle-graphql` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-graphql</artifactId>
+</dependency>
+```

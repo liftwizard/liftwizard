@@ -23,3 +23,12 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
 `JsonConfigurationFactoryFactory` uses json5 syntax by default, using optional features in Jackson. So you'll still be able to include comments inside your configuration files.
  
 You'll have to convert production configuration files. So `example.yml` becomes `example.json5`. You'll also have to convert configuration files used by `DropwizardAppRule` in tests. So `src/test/resources/test-example.yml` becomes `src/test/resources/test-example.json5`
+
+`JsonConfigurationFactoryFactory` lives in the `liftwizard-configuration-factory-json` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-configuration-factory-json</artifactId>
+</dependency>
+```
