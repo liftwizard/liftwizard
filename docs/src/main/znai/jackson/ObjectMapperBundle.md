@@ -25,3 +25,12 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
 ```
 
 You'll be able to see that `ObjectMapperBundle` is working because the output of `ConfigLoggingBundle` will now be pretty-printed by default.
+
+`ObjectMapperBundle` lives in the `liftwizard-bundle-object-mapper` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-object-mapper</artifactId>
+</dependency>
+```

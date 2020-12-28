@@ -47,3 +47,12 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
     // ...
 }
 ```
+
+`EnvironmentConfigBundle` lives in the `liftwizard-bundle-environment-config` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-environment-config</artifactId>
+</dependency>
+```
