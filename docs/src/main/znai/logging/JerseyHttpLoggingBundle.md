@@ -46,3 +46,12 @@ INFO  21:01:18 [dw-26 - POST /people]  {liftwizard.request.resourceMethodName=cr
   "jobTitle" : "Chief Wizard"
 }
 ```
+
+`JerseyHttpLoggingBundle` lives in the `liftwizard-bundle-logging-http` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-logging-http</artifactId>
+</dependency>
+```

@@ -19,3 +19,12 @@ ExecutorService executorService = environment
         .maxThreads(maxThreads)
         .build();
 ```
+
+`LiftwizardAsyncDataFetcher` lives in the `liftwizard-graphql-data-fetcher-async` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-graphql-data-fetcher-async</artifactId>
+</dependency>
+```
