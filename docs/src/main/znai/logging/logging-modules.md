@@ -197,3 +197,32 @@ Let's add the logstash-file appender to the list of configured appenders.
   "caller_line_number": 86
 }
 ```
+
+`StructuredArgumentLoggingFilter`, `CorrelationIdFilter`, `ResourceInfoLoggingFilter`, `StatusInfoStructuredLoggingFilter`, and `DurationStructuredLoggingFilter` live in the following modules.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-servlet-logging-structured-argument</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-servlet-logging-structured-duration</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-servlet-logging-structured-status-info</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-servlet-logging-correlation-id</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-servlet-logging-resource-info</artifactId>
+</dependency>
+```

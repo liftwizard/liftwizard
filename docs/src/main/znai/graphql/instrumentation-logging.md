@@ -47,3 +47,12 @@ Here's an example of what SQL logging might look like with MDC attached when for
   "caller_line_number": 82
 }
 ```
+
+`LiftwizardGraphQLLoggingInstrumentation` lives in the `liftwizard-graphql-instrumentation-logging` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-graphql-instrumentation-logging</artifactId>
+</dependency>
+```

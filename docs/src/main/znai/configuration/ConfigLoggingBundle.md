@@ -36,3 +36,12 @@ This output can be helpful for fleshing out the configuration file with default 
 :include-java: io/dropwizard/Configuration.java {title: "io.dropwizard.Configuration", entry: "getMetricsFactory"}
 
 The `ConfigLoggingBundle` also logs the "default" configuration at the `DEBUG` level. It does this by instantiating a new copy of the configuration class using the default no-arg constructor, serializing it to json, and logging it. The default configuration output can be useful for finding redundant configuration to remove.
+
+`ConfigLoggingBundle` lives in the `liftwizard-bundle-logging-config` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-logging-config</artifactId>
+</dependency>
+```

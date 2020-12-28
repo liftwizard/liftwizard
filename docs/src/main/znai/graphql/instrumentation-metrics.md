@@ -45,3 +45,12 @@ If you annotate your DataFetcher with `@Metered`, the Intrumentation will add me
 * {DataFetcher's fully-qualified class name}.get.exceptions
 * liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.exceptions
 * liftwizard.graphql.path.{path}.exceptions
+
+`LiftwizardGraphQLMetricsInstrumentation` lives in the `liftwizard-graphql-instrumentation-metrics` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-graphql-instrumentation-metrics</artifactId>
+</dependency>
+```
