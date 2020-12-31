@@ -47,13 +47,13 @@ public class ConnectionManagerHolderBundle
                 ConnectionManagerFactoryProvider.class,
                 configuration);
 
-        LOGGER.info("Running {}.", ConnectionManagerHolderBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ImmutableMap<String, SourcelessConnectionManager> connectionManagersByName =
                 connectionManagerFactoryProvider.getConnectionManagersByName();
 
         ConnectionManagerHolder.setConnectionManagersByName(connectionManagersByName);
 
-        LOGGER.info("Completing {}.", ConnectionManagerHolderBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 }

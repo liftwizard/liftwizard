@@ -50,12 +50,12 @@ public class ConnectionManagerBundle
                 ConnectionManagerFactoryProvider.class,
                 configuration);
 
-        LOGGER.info("Running {}.", ConnectionManagerBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         MapIterable<String, ManagedDataSource> dataSourcesByName = namedDataSourceProvider.getDataSourcesByName();
 
         connectionManagerFactoryProvider.initializeConnectionManagers(dataSourcesByName);
 
-        LOGGER.info("Completing {}.", ConnectionManagerBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 }

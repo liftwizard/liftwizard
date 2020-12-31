@@ -60,7 +60,7 @@ public class AuthFilterBundle
 
         if (authFilters.isEmpty())
         {
-            LOGGER.warn("{} disabled.", AuthFilterBundle.class.getSimpleName());
+            LOGGER.warn("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
@@ -70,7 +70,7 @@ public class AuthFilterBundle
                 .map(Class::getSimpleName)
                 .collect(Collectors.toList());
 
-        LOGGER.info("Running {} with auth filters {}.", AuthFilterBundle.class.getSimpleName(), authFilterNames);
+        LOGGER.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
 
         environment.jersey().register(this.getAuthDynamicFeature(authFilters));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
@@ -81,7 +81,7 @@ public class AuthFilterBundle
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST);
         environment.getApplicationContext().addFilter(filterHolder, "/*", dispatcherTypes);
 
-        LOGGER.info("Completing {}.", AuthFilterBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
     @Nonnull

@@ -60,11 +60,11 @@ public class DdlExecutorBundle
 
         if (ddlExecutorFactories.isEmpty())
         {
-            LOGGER.info("{} disabled.", DdlExecutorBundle.class.getSimpleName());
+            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
-        LOGGER.info("Running {}.", DdlExecutorBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories)
         {
@@ -72,7 +72,7 @@ public class DdlExecutorBundle
             String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
             String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
 
-            LOGGER.info("Running {} with data source {}.", DdlExecutorBundle.class.getSimpleName(), dataSourceName);
+            LOGGER.info("Running {} with data source {}.", this.getClass().getSimpleName(), dataSourceName);
 
             DataSource dataSource = dataSourceProvider.getDataSourceByName(dataSourceName);
             Objects.requireNonNull(dataSource, dataSourceName);
@@ -82,6 +82,6 @@ public class DdlExecutorBundle
             }
         }
 
-        LOGGER.info("Completing {}.", DdlExecutorBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 }
