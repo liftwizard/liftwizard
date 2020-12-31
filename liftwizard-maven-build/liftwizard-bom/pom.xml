@@ -123,6 +123,12 @@
                 <artifactId>liftwizard-bundle-prioritized-api</artifactId>
                 <version>0.13.0-SNAPSHOT</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-bundle-system-properties</artifactId>
+                <version>0.13.0-SNAPSHOT</version>
+            </dependency>
             <!--endregion-->
 
             <!--region liftwizard-clock-->
@@ -203,6 +209,12 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-h2</artifactId>
+                <version>0.13.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-system-properties</artifactId>
                 <version>0.13.0-SNAPSHOT</version>
             </dependency>
 

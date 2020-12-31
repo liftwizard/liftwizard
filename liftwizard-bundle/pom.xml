@@ -50,5 +50,6 @@
         <module>liftwizard-bundle-graphql</module>
         <module>liftwizard-bundle-h2</module>
         <module>liftwizard-bundle-prioritized-api</module>
+        <module>liftwizard-bundle-system-properties</module>
     </modules>
 </project>
