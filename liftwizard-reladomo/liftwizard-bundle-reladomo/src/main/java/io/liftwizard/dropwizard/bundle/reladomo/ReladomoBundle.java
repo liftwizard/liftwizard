@@ -60,6 +60,11 @@ public class ReladomoBundle
 
         ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
+        int defaultMinQueriesToKeep = reladomoFactory.getDefaultMinQueriesToKeep();
+        ReladomoBundle.setDefaultMinQueriesToKeep(defaultMinQueriesToKeep);
+        int defaultRelationshipCacheSize = reladomoFactory.getDefaultRelationshipCacheSize();
+        ReladomoBundle.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
+
         Duration transactionTimeout        = reladomoFactory.getTransactionTimeout();
         int      transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
         ReladomoBundle.setTransactionTimeout(transactionTimeoutSeconds);
@@ -91,6 +96,18 @@ public class ReladomoBundle
         metricRegistry.gauge(
                 MetricRegistry.name(ReladomoBundle.class, "RemoteRetrieveCount"),
                 () -> MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount);
+    }
+
+    private static void setDefaultRelationshipCacheSize(int defaultRelationshipCacheSize)
+    {
+        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+        mithraManager.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
+    }
+
+    private static void setDefaultMinQueriesToKeep(int defaultMinQueriesToKeep)
+    {
+        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+        mithraManager.setDefaultMinQueriesToKeep(defaultMinQueriesToKeep);
     }
 
     private static void setTransactionTimeout(int transactionTimeoutSeconds)
