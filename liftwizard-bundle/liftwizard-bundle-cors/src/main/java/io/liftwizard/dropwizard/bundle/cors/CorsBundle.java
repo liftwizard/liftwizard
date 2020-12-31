@@ -44,11 +44,11 @@ public class CorsBundle
         CorsFactory         corsFactory         = corsFactoryProvider.getCorsFactory();
         if (!corsFactory.isEnabled())
         {
-            LOGGER.info("{} disabled.", CorsBundle.class.getSimpleName());
+            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
-        LOGGER.info("Running {}.", CorsBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         // https://stackoverflow.com/a/25801822
         Dynamic cors = environment.servlets().addFilter(corsFactory.getFilterName(), CrossOriginFilter.class);
@@ -62,6 +62,6 @@ public class CorsBundle
                 true,
                 corsFactory.getUrlPatterns().toArray(new String[]{}));
 
-        LOGGER.info("Completing {}.", CorsBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 }

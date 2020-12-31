@@ -49,30 +49,30 @@ public class ObjectMapperBundle
         ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
         ObjectMapper        objectMapper        = environment.getObjectMapper();
 
-        ObjectMapperBundle.configureObjectMapper(objectMapperFactory, objectMapper);
+        this.configureObjectMapper(objectMapperFactory, objectMapper);
     }
 
-    public static ObjectMapper configureObjectMapper()
+    public ObjectMapper configureObjectMapper()
     {
-        return ObjectMapperBundle.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
+        return this.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
     }
 
-    public static ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper)
+    public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper)
     {
         if (!objectMapperFactory.isEnabled())
         {
-            LOGGER.info("{} disabled.", ObjectMapperBundle.class.getSimpleName());
+            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return objectMapper;
         }
 
-        LOGGER.info("Running {}.", ObjectMapperBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ObjectMapperConfig.configure(
                 objectMapper,
                 objectMapperFactory.isPrettyPrint(),
                 objectMapperFactory.getSerializationInclusion());
 
-        LOGGER.info("Completing {}.", ObjectMapperBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 
         return objectMapper;
     }

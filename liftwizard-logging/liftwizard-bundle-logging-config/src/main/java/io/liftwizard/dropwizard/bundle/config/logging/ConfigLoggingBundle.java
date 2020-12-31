@@ -50,15 +50,15 @@ public class ConfigLoggingBundle
         EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
         if (!configLoggingFactory.isEnabled())
         {
-            LOGGER.info("{} disabled.", ConfigLoggingBundle.class.getSimpleName());
+            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
-        LOGGER.info("Running {}.", ConfigLoggingBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ConfigLoggingBundle.logConfiguration(configuration, environment.getObjectMapper());
 
-        LOGGER.info("Completing {}.", ConfigLoggingBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
     private static void logConfiguration(
