@@ -27,6 +27,8 @@ import org.eclipse.collections.impl.factory.Lists;
 
 public class ReladomoFactory
 {
+    private          int          defaultRelationshipCacheSize           = 10_000;
+    private          int          defaultMinQueriesToKeep                = 32;
     // Something like 30 seconds to 2 minutes makes sense in production
     private          Duration     transactionTimeout                     = Duration.minutes(5);
     // reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml in production
@@ -34,6 +36,30 @@ public class ReladomoFactory
             "reladomo-runtime-configuration/TestReladomoRuntimeConfiguration.xml");
     private          boolean      enableRetrieveCountMetrics             = true;
     private          boolean      captureTransactionLevelPerformanceData = true;
+
+    @JsonProperty
+    public int getDefaultMinQueriesToKeep()
+    {
+        return this.defaultMinQueriesToKeep;
+    }
+
+    @JsonProperty
+    public void setDefaultMinQueriesToKeep(int defaultMinQueriesToKeep)
+    {
+        this.defaultMinQueriesToKeep = defaultMinQueriesToKeep;
+    }
+
+    @JsonProperty
+    public int getDefaultRelationshipCacheSize()
+    {
+        return this.defaultRelationshipCacheSize;
+    }
+
+    @JsonProperty
+    public void setDefaultRelationshipCacheSize(int defaultRelationshipCacheSize)
+    {
+        this.defaultRelationshipCacheSize = defaultRelationshipCacheSize;
+    }
 
     @JsonProperty
     public Duration getTransactionTimeout()
