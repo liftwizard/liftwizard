@@ -56,7 +56,7 @@ public class ReladomoBundle
                 ReladomoFactoryProvider.class,
                 configuration);
 
-        LOGGER.info("Running {}.", ReladomoBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
@@ -71,7 +71,7 @@ public class ReladomoBundle
         // Notification should be configured here. Refer to notification/Notification.html under reladomo-javadoc.jar.
 
         List<String> runtimeConfigurationPaths = reladomoFactory.getRuntimeConfigurationPaths();
-        runtimeConfigurationPaths.forEach(ReladomoBundle::loadRuntimeConfiguration);
+        runtimeConfigurationPaths.forEach(this::loadRuntimeConfiguration);
 
         boolean captureTransactionLevelPerformanceData =
                 reladomoFactory.isCaptureTransactionLevelPerformanceData();
@@ -80,21 +80,21 @@ public class ReladomoBundle
         boolean enableRetrieveCountMetrics = reladomoFactory.isEnableRetrieveCountMetrics();
         if (enableRetrieveCountMetrics)
         {
-            ReladomoBundle.registerRetrieveCountMetrics(environment.metrics());
+            this.registerRetrieveCountMetrics(environment.metrics());
         }
 
         environment.lifecycle().manage(new ManagedReladomoCleanup());
 
-        LOGGER.info("Completing {}.", ReladomoBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
-    private static void registerRetrieveCountMetrics(MetricRegistry metricRegistry)
+    private void registerRetrieveCountMetrics(MetricRegistry metricRegistry)
     {
         metricRegistry.gauge(
-                MetricRegistry.name(ReladomoBundle.class, "DatabaseRetrieveCount"),
+                MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"),
                 () -> MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount);
         metricRegistry.gauge(
-                MetricRegistry.name(ReladomoBundle.class, "RemoteRetrieveCount"),
+                MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"),
                 () -> MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount);
     }
 
@@ -122,11 +122,11 @@ public class ReladomoBundle
         mithraManager.setCaptureTransactionLevelPerformanceData(captureTransactionLevelPerformanceData);
     }
 
-    private static void loadRuntimeConfiguration(String runtimeConfigurationPath)
+    private void loadRuntimeConfiguration(String runtimeConfigurationPath)
     {
         LOGGER.info("Loading Reladomo configuration XML: {}", runtimeConfigurationPath);
         try (
-                InputStream inputStream = ReladomoBundle.class.getClassLoader()
+                InputStream inputStream = this.getClass().getClassLoader()
                         .getResourceAsStream(runtimeConfigurationPath))
         {
             MithraManagerProvider.getMithraManager().readConfiguration(inputStream);

@@ -58,11 +58,11 @@ public class H2Bundle
         H2Factory         h2Factory         = h2FactoryProvider.getH2Factory();
         if (!h2Factory.isEnabled())
         {
-            LOGGER.info("{} disabled.", H2Bundle.class.getSimpleName());
+            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
-        LOGGER.info("Running {}.", H2Bundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ImmutableList<String> args = Lists.immutable
                 .withAll(h2Factory.getTcpServerArgs())
@@ -82,7 +82,7 @@ public class H2Bundle
 
         // TODO: Add logging about what's happening here
 
-        LOGGER.info("Completing {}.", H2Bundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
     @Nonnull

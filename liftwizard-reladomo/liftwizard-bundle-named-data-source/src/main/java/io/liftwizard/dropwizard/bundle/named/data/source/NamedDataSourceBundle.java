@@ -44,10 +44,10 @@ public class NamedDataSourceBundle
                 NamedDataSourceProvider.class,
                 configuration);
 
-        LOGGER.info("Running {}.", NamedDataSourceBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         namedDataSourceProvider.initializeDataSources(environment.metrics(), environment.lifecycle());
 
-        LOGGER.info("Completing {}.", NamedDataSourceBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 }

@@ -46,11 +46,11 @@ public class JerseyHttpLoggingBundle
         JerseyHttpLoggingFactory factory = jerseyHttpLoggingFactoryProvider.getJerseyHttpLoggingFactory();
         if (!factory.isEnabled())
         {
-            LOGGER.info("{} disabled.", JerseyHttpLoggingBundle.class.getSimpleName());
+            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
-        LOGGER.info("Running {}.", JerseyHttpLoggingBundle.class.getSimpleName());
+        LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         Level     level         = Level.parse(factory.getLevel());
         Verbosity verbosity     = Verbosity.valueOf(factory.getVerbosity());
@@ -60,6 +60,6 @@ public class JerseyHttpLoggingBundle
         LoggingFeature loggingFeature = new LoggingFeature(logger, level, verbosity, maxEntitySize);
         environment.jersey().register(loggingFeature);
 
-        LOGGER.info("Completing {}.", JerseyHttpLoggingBundle.class.getSimpleName());
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 }
