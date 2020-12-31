@@ -37,7 +37,7 @@ public class ConfigLoggingBundle
     @Override
     public int getPriority()
     {
-        return -8;
+        return -9;
     }
 
     @Override
