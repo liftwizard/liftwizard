@@ -38,7 +38,7 @@ public class ObjectMapperBundle
     @Override
     public int getPriority()
     {
-        return -9;
+        return -10;
     }
 
     @Override
