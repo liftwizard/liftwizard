@@ -47,6 +47,7 @@
         <module>liftwizard-config-data-source</module>
         <module>liftwizard-config-ddl-executor</module>
         <module>liftwizard-config-enabled</module>
+        <module>liftwizard-config-executor-service</module>
         <module>liftwizard-config-graphql</module>
         <module>liftwizard-config-h2</module>
         <module>liftwizard-configuration-factory-json</module>
