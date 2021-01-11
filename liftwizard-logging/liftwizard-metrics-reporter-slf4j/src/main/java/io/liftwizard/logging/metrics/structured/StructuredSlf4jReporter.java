@@ -117,8 +117,8 @@ public class StructuredSlf4jReporter
     private void logTimer(String name, Timer timer)
     {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("type", "TIMER");
-        map.put("name", this.prefix(name));
+        map.put("metric_type", "TIMER");
+        map.put("metric_name", this.prefix(name));
         Snapshot snapshot = timer.getSnapshot();
         this.appendCountIfEnabled(map, timer);
         this.appendLongDurationIfEnabled(map, MetricAttribute.MIN, snapshot::getMin);
@@ -132,27 +132,27 @@ public class StructuredSlf4jReporter
         this.appendDoubleDurationIfEnabled(map, MetricAttribute.P99, snapshot::get99thPercentile);
         this.appendDoubleDurationIfEnabled(map, MetricAttribute.P999, snapshot::get999thPercentile);
         this.appendMetered(map, timer);
-        map.put("rate_unit", this.getRateUnit());
-        map.put("duration_unit", this.getDurationUnit());
+        map.put("metric_rate_unit", this.getRateUnit());
+        map.put("metric_duration_unit", this.getDurationUnit());
         this.log(map);
     }
 
     private void logMeter(String name, Meter meter)
     {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("type", "METER");
-        map.put("name", this.prefix(name));
+        map.put("metric_type", "METER");
+        map.put("metric_name", this.prefix(name));
         this.appendCountIfEnabled(map, meter);
         this.appendMetered(map, meter);
-        map.put("rate_unit", this.getRateUnit());
+        map.put("metric_rate_unit", this.getRateUnit());
         this.log(map);
     }
 
     private void logHistogram(String name, Histogram histogram)
     {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("type", "HISTOGRAM");
-        map.put("name", this.prefix(name));
+        map.put("metric_type", "HISTOGRAM");
+        map.put("metric_name", this.prefix(name));
         Snapshot snapshot = histogram.getSnapshot();
         this.appendCountIfEnabled(map, histogram);
         this.appendLongIfEnabled(map, MetricAttribute.MIN, snapshot::getMin);
@@ -171,8 +171,8 @@ public class StructuredSlf4jReporter
     private void logCounter(String name, Counter counter)
     {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("type", "COUNTER");
-        map.put("name", this.prefix(name));
+        map.put("metric_type", "COUNTER");
+        map.put("metric_name", this.prefix(name));
         map.put(MetricAttribute.COUNT.getCode(), counter.getCount());
         this.log(map);
     }
@@ -180,9 +180,9 @@ public class StructuredSlf4jReporter
     private void logGauge(String name, Gauge<?> gauge)
     {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("type", "GAUGE");
-        map.put("name", this.prefix(name));
-        map.put("value", gauge.getValue());
+        map.put("metric_type", "GAUGE");
+        map.put("metric_name", this.prefix(name));
+        map.put("metric_value", gauge.getValue());
         this.log(map);
     }
 
