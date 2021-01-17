@@ -10,7 +10,7 @@
           "filterFactories": [
             {
               "type": "url",
-              "bannedUrls": [
+              "urls": [
                 "/manifest.json",
                 "/assets-manifest.json",
                 "/favicon.ico",
