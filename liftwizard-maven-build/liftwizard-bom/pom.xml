@@ -360,6 +360,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-logging-filter-janino</artifactId>
+                <version>0.14.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-filter-requesturl</artifactId>
                 <version>0.14.0-SNAPSHOT</version>
             </dependency>
