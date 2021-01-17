@@ -22,7 +22,7 @@ import java.util.Map;
 
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
-import net.logstash.logback.marker.Markers;
+import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,19 +67,19 @@ public class P6SpySlf4jLogger
 
         if (category.equals(Category.ERROR))
         {
-            LOGGER.error(Markers.appendEntries(structuredArgumentsMap), sql);
+            LOGGER.error(sql, StructuredArguments.entries(structuredArgumentsMap));
         }
         else if (category.equals(Category.WARN))
         {
-            LOGGER.warn(Markers.appendEntries(structuredArgumentsMap), sql);
+            LOGGER.warn(sql, StructuredArguments.entries(structuredArgumentsMap));
         }
-        else if (category.equals(Category.DEBUG))
+        else if (category.equals(Category.INFO))
         {
-            LOGGER.debug(Markers.appendEntries(structuredArgumentsMap), sql);
+            LOGGER.info(sql, StructuredArguments.entries(structuredArgumentsMap));
         }
         else
         {
-            LOGGER.info(Markers.appendEntries(structuredArgumentsMap), sql);
+            LOGGER.debug(sql, StructuredArguments.entries(structuredArgumentsMap));
         }
     }
 
