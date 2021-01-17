@@ -72,7 +72,7 @@ public class DdlExecutorBundle
             String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
             String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
 
-            LOGGER.info("Running {} with data source {}.", this.getClass().getSimpleName(), dataSourceName);
+            LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 
             DataSource dataSource = dataSourceProvider.getDataSourceByName(dataSourceName);
             Objects.requireNonNull(dataSource, dataSourceName);
