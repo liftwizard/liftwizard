@@ -30,12 +30,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-logging-filter-requesturl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <scope>compile</scope>
@@ -146,5 +140,4 @@
         </dependency>
 
     </dependencies>
-
 </project>

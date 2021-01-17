@@ -41,7 +41,7 @@ import org.junit.rules.TestRule;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UrlFilterFactoryTest
 {
@@ -73,8 +73,8 @@ public class UrlFilterFactoryTest
         File                    json             = new File(resource.toURI());
         RequestUrlFilterFactory urlFilterFactory = this.factory.build(json);
         Filter<IAccessEvent>    filter           = urlFilterFactory.build();
-        FakeAccessEvent         bannedEvent      = new FakeAccessEvent("banned");
-        FakeAccessEvent         allowedEvent     = new FakeAccessEvent("allowed");
+        IAccessEvent            bannedEvent      = new FakeAccessEvent("banned");
+        IAccessEvent            allowedEvent     = new FakeAccessEvent("allowed");
 
         assertThat(urlFilterFactory, instanceOf(RequestUrlFilterFactory.class));
         assertThat(filter.decide(bannedEvent), is(FilterReply.DENY));

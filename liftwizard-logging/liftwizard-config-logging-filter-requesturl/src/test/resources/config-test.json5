@@ -1,6 +1,7 @@
 {
   type      : "url",
-  bannedUrls: [
+  onMatch: "DENY",
+  urls: [
     "banned",
   ],
 }
