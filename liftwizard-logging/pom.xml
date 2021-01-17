@@ -47,6 +47,7 @@
         <module>liftwizard-bundle-logging-http</module>
         <module>liftwizard-config-logging-buffered</module>
         <module>liftwizard-config-logging-config</module>
+        <module>liftwizard-config-logging-filter-janino</module>
         <module>liftwizard-config-logging-filter-requesturl</module>
         <module>liftwizard-config-logging-http</module>
         <module>liftwizard-config-logging-logstash-console</module>

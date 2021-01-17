@@ -1,0 +1,6 @@
+{
+  type: "janino",
+  javaExpression: "message.equals(\"banned\")",
+  onMatch: "DENY",
+  onMismatch: "NEUTRAL",
+}
