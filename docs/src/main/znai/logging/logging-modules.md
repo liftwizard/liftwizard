@@ -24,7 +24,7 @@ Next, lets turn on all the basic filters and see how they change what gets logge
 public void run(HelloWorldConfiguration configuration, Environment environment) {
     // ...
     environment.getApplicationContext().addFilter(
-            StructuredArgumentLoggingFilter.class,
+            StructuredLoggingServletFilter.class,
             "/*",
             EnumSet.of(DispatcherType.REQUEST));
     environment.getApplicationContext().addFilter(
@@ -45,7 +45,7 @@ public void run(HelloWorldConfiguration configuration, Environment environment) 
 With the logFormat and the filters in place, we can rerun `IntegrationTest` and see the new logs in action.
  
 ```
-INFO  15:03:56 [dw-22] {liftwizard.time.startTime=2020-05-06T19:03:56.967412Z, liftwizard.response.http.statusEnum=OK, liftwizard.response.http.statusCode=200, liftwizard.response.http.statusFamily=SUCCESSFUL, liftwizard.response.http.statusPhrase=OK, liftwizard.response.http.entityType=com.example.helloworld.api.Saying, liftwizard.time.endTime=2020-05-06T19:03:56.984585Z, liftwizard.time.duration.pretty=0.017173s, liftwizard.time.duration.ms=17, liftwizard.time.duration.ns=17173000} {liftwizard.request.resourceMethodName=sayHello, liftwizard.request.parameter.query.name=Dr. IntegrationTest, liftwizard.request.resourceClassName=com.example.helloworld.resources.HelloWorldResource, liftwizard.request.httpPath=hello-world, liftwizard.request.correlationId=82681aab-1a69-4fc0-b425-a5cbcbf98411, liftwizard.request.httpMethod=GET, liftwizard.request.httpPathTemplate=/hello-world} com.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter: structured logging
+INFO  15:03:56 [dw-22] {liftwizard.time.startTime=1999-12-31T23:59:59.000000Z, liftwizard.response.http.statusEnum=OK, liftwizard.response.http.statusCode=200, liftwizard.response.http.statusFamily=SUCCESSFUL, liftwizard.response.http.statusPhrase=OK, liftwizard.response.http.entityType=com.example.helloworld.api.Saying, liftwizard.time.endTime=2000-01-01T00:00:00.000000Z, liftwizard.time.duration.pretty=1.000000s, liftwizard.time.duration.ms=1000, liftwizard.time.duration.ns=1000000000} {liftwizard.request.resourceMethodName=sayHello, liftwizard.request.parameter.query.name=Dr. IntegrationTest, liftwizard.request.resourceClassName=com.example.helloworld.resources.HelloWorldResource, liftwizard.request.httpPath=hello-world, liftwizard.request.correlationId=82681aab-1a69-4fc0-b425-a5cbcbf98411, liftwizard.request.httpMethod=GET, liftwizard.request.httpPathTemplate=/hello-world} com.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter: structured logging
 ```
  
 This can be hard to see in a single line but it includes:
@@ -61,19 +61,19 @@ This can be hard to see in a single line but it includes:
 * liftwizard.response.http.statusEnum=OK
 * liftwizard.response.http.statusFamily=SUCCESSFUL
 * liftwizard.response.http.statusPhrase=OK
-* liftwizard.time.duration.ms=17
-* liftwizard.time.duration.ns=17173000
-* liftwizard.time.duration.pretty=0.017173s
-* liftwizard.time.endTime=2020-05-06T19:03:56.984585Z
-* liftwizard.time.startTime=2020-05-06T19:03:56.967412Z
+* liftwizard.time.duration.ms=1000
+* liftwizard.time.duration.ns=1000000000
+* liftwizard.time.duration.pretty=1.000000s
+* liftwizard.time.endTime=2000-01-01T00:00:00.000000Z
+* liftwizard.time.startTime=1999-12-31T23:59:59.000000Z
  
 Let's take a look at each filter individually.
  
-## StructuredArgumentLoggingFilter
+## StructuredLoggingServletFilter
  
-The `StructuredArgumentLoggingFilter` is a pre-requisite for structured logging. For the most part, you can pick and choose which dependencies you want to include, but `liftwizard-servlet-logging-structured-argument` is usually required.
+The `StructuredLoggingServletFilter` is a pre-requisite for structured logging. For the most part, you can pick and choose which dependencies you want to include, but `liftwizard-servlet-logging-structured-argument` is usually required.
  
-`StructuredArgumentLoggingFilter` is a servlet filter that puts a "structured-logging" `LinkedHashMap` into the `ServletRequest` at the beginning of each request. Next, all other structured logging filters put their context into the same map. Finally, `StructuredArgumentLoggingFilter` logs the text `"structured logging"` together with all context at the end of each servlet request.
+`StructuredLoggingServletFilter` is a servlet filter that puts a "structured-logging" `LinkedHashMap` into the `ServletRequest` at the beginning of each request. Next, all other structured logging filters put their context into the same map. Finally, `StructuredLoggingServletFilter` logs the text `"structured logging"` together with all context at the end of each servlet request.
  
 ## CorrelationIdFilter
  
@@ -144,33 +144,48 @@ Let's add the logstash-file appender to the list of configured appenders.
 ### test-example.json5
 `src/test/resources/test-example.json5`
 ```json5
-  logging: {
-    level: "INFO",
-    appenders: [
+{
+  // ...
+  "logging": {
+    "level": "INFO",
+    "appenders": [
       {
-        "type"             : "console",
-        "timeZone"         : "system",
-        "logFormat"        : "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
-        "includeCallerData": true
+        "type": "console",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %green(%logger): %message <%blue(%marker)> <%magenta(%mdc)>%n%red(%rootException)",
+        "timeZone": "UTC",
+        "includeCallerData": true,
       },
       {
-        "type"                      : "file-logstash",
-        "currentLogFilename"        : "./logs/logstash.json",
+        "type": "file-logstash",
+        "threshold": "ALL",
+        "timeZone": "UTC",
+        "includeCallerData": true,
+        "currentLogFilename": "./logs/logstash.json",
         "archivedLogFilenamePattern": "./logs/logstash-%d.json",
-        "includeCallerData"         : true
+        "encoder": {
+          "includeContext": true,
+          "includeMdc": true,
+          "includeStructuredArguments": true,
+          "includedNonStructuredArguments": false,
+          "includeTags": true,
+          "prettyPrint": true,
+          "serializationInclusion": "NON_ABSENT"
+        }
       }
     ]
-  }
+  },
+  // ...
+}
 ```
 
 ### logstash.json 
 `logs/logstash.json` snippet
 ```json
 {
-  "@timestamp": "2020-05-06T15:03:56.984-04:00",
+  "@timestamp": "1999-12-31T23:59:59.000-00:00",
   "@version": "1",
   "message": "structured logging",
-  "logger_name": "com.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter",
+  "logger_name": "com.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter",
   "thread_name": "dw-22",
   "level": "INFO",
   "level_value": 20000,
@@ -181,24 +196,24 @@ Let's add the logstash-file appender to the list of configured appenders.
   "liftwizard.request.correlationId": "82681aab-1a69-4fc0-b425-a5cbcbf98411",
   "liftwizard.request.httpMethod": "GET",
   "liftwizard.request.httpPathTemplate": "/hello-world",
-  "liftwizard.time.startTime": "2020-05-06T19:03:56.967412Z",
+  "liftwizard.time.startTime": "1999-12-31T23:59:59.000000Z",
   "liftwizard.response.http.statusEnum": "OK",
   "liftwizard.response.http.statusCode": 200,
   "liftwizard.response.http.statusFamily": "SUCCESSFUL",
   "liftwizard.response.http.statusPhrase": "OK",
   "liftwizard.response.http.entityType": "com.example.helloworld.api.Saying",
-  "liftwizard.time.endTime": "2020-05-06T19:03:56.984585Z",
-  "liftwizard.time.duration.pretty": "0.017173s",
-  "liftwizard.time.duration.ms": 17,
-  "liftwizard.time.duration.ns": 17173000,
-  "caller_class_name": "com.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter",
+  "liftwizard.time.endTime": "2000-01-01T00:00:00.000000Z",
+  "liftwizard.time.duration.pretty": "1.000000s",
+  "liftwizard.time.duration.ms": 1000,
+  "liftwizard.time.duration.ns": 1000000000,
+  "caller_class_name": "com.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter",
   "caller_method_name": "log",
-  "caller_file_name": "StructuredArgumentLoggingFilter.java",
+  "caller_file_name": "StructuredLoggingServletFilter.java",
   "caller_line_number": 86
 }
 ```
 
-`StructuredArgumentLoggingFilter`, `CorrelationIdFilter`, `ResourceInfoLoggingFilter`, `StatusInfoStructuredLoggingFilter`, and `DurationStructuredLoggingFilter` live in the following modules.
+`StructuredLoggingServletFilter`, `CorrelationIdFilter`, `ResourceInfoLoggingFilter`, `StatusInfoStructuredLoggingFilter`, and `DurationStructuredLoggingFilter` live in the following modules.
 
 ```xml
 <dependency>

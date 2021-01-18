@@ -38,22 +38,23 @@ import org.slf4j.LoggerFactory;
 
 @Provider
 @Priority(Priorities.USER - 40)
-public class StructuredArgumentLoggingFilter implements Filter
+public class StructuredLoggingServletFilter
+        implements Filter
 {
     public static final String STRUCTURED_ARGUMENTS_ATTRIBUTE_NAME = "structuredArguments";
     public static final String MDC_ATTRIBUTE_NAME                  = "mdc";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentLoggingFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredLoggingServletFilter.class);
 
     private final String structuredArgumentsAttributeName;
     private final String mdcAttributeName;
 
-    public StructuredArgumentLoggingFilter()
+    public StructuredLoggingServletFilter()
     {
         this(STRUCTURED_ARGUMENTS_ATTRIBUTE_NAME, MDC_ATTRIBUTE_NAME);
     }
 
-    public StructuredArgumentLoggingFilter(String structuredArgumentsAttributeName, String mdcAttributeName)
+    public StructuredLoggingServletFilter(String structuredArgumentsAttributeName, String mdcAttributeName)
     {
         this.structuredArgumentsAttributeName = Objects.requireNonNull(structuredArgumentsAttributeName);
         this.mdcAttributeName                 = Objects.requireNonNull(mdcAttributeName);

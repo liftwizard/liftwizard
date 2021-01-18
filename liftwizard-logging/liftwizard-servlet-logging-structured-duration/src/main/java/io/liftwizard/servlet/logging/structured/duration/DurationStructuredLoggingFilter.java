@@ -35,7 +35,7 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
-// Priority must be less than the priority of StructuredArgumentLoggingFilter
+// Priority must be greater than the priority of StructuredLoggingServletFilter
 @Provider
 @PreMatching
 @Priority(Priorities.USER - 30)
