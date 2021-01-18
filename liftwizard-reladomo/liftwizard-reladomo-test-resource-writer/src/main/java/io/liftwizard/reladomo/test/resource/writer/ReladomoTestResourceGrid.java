@@ -16,14 +16,19 @@
 
 package io.liftwizard.reladomo.test.resource.writer;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 
 import com.gs.fw.common.mithra.MithraList;
+import com.gs.fw.common.mithra.attribute.AsOfAttribute;
+import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.reladomo.metadata.ReladomoClassMetaData;
 import org.eclipse.collections.api.LazyIterable;
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.list.Interval;
-import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
+import org.eclipse.collections.impl.set.mutable.SetAdapter;
 
 public class ReladomoTestResourceGrid
 {
@@ -38,7 +43,20 @@ public class ReladomoTestResourceGrid
         this.metaData   = Objects.requireNonNull(metaData);
         this.mithraList = Objects.requireNonNull(mithraList);
 
-        this.columns = ArrayAdapter.adapt(metaData.getPersistentAttributes())
+        MutableSet<Attribute> attributes = SetAdapter.adapt(new LinkedHashSet<>());
+        if (metaData.getAsOfAttributes() != null)
+        {
+            for (AsOfAttribute asOfAttribute : metaData.getAsOfAttributes())
+            {
+                attributes.add(asOfAttribute.getFromAttribute());
+                attributes.add(asOfAttribute.getToAttribute());
+            }
+        }
+        attributes.addAll(Arrays.asList(metaData.getPrimaryKeyAttributes()));
+        attributes.addAll(Arrays.asList(metaData.getPersistentAttributes()));
+
+        this.columns = attributes
+                .toList()
                 .collectWith(ReladomoTestResourceColumn::new, this)
                 .toImmutable();
 
