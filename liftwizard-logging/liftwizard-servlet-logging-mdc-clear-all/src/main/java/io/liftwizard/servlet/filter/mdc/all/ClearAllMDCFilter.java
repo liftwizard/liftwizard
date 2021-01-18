@@ -30,7 +30,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.slf4j.MDC;
 
-// Priority must be less than the priority of StructuredArgumentLoggingFilter
+// Priority must be less than the priority of StructuredLoggingServletFilter
 @Provider
 @Priority(Priorities.USER - 60)
 public class ClearAllMDCFilter implements Filter

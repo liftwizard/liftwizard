@@ -41,7 +41,7 @@ import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
 import io.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
 import io.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
-import io.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter;
+import io.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter;
 import io.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
 import io.liftwizard.servlet.logging.structured.reladomo.ReladomoStructuredLoggingFilter;
 import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
@@ -123,7 +123,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     protected void registerLoggingFilters(@Nonnull Environment environment)
     {
         environment.getApplicationContext().addFilter(
-                StructuredArgumentLoggingFilter.class,
+                StructuredLoggingServletFilter.class,
                 "/*",
                 EnumSet.of(DispatcherType.REQUEST));
 

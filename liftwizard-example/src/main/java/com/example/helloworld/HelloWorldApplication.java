@@ -44,7 +44,7 @@ import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import io.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
 import io.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
-import io.liftwizard.servlet.logging.structured.argument.StructuredArgumentLoggingFilter;
+import io.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter;
 import io.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
 import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
 import org.eclipse.collections.impl.utility.Iterate;
@@ -113,7 +113,7 @@ public class HelloWorldApplication
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
         environment.getApplicationContext().addFilter(
-                StructuredArgumentLoggingFilter.class,
+                StructuredLoggingServletFilter.class,
                 "/*",
                 EnumSet.of(DispatcherType.REQUEST));
 

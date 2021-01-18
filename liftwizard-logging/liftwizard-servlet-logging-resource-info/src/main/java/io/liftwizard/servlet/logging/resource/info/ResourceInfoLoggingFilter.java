@@ -30,7 +30,7 @@ import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 import org.glassfish.jersey.server.ContainerRequest;
 
-// Priority must be less than the priority of StructuredArgumentLoggingFilter
+// Priority must be greater than the priority of StructuredLoggingServletFilter
 @Provider
 @Priority(Priorities.USER - 20)
 public class ResourceInfoLoggingFilter

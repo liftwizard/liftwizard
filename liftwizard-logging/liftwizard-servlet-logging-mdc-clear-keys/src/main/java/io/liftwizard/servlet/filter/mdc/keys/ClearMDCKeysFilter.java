@@ -32,7 +32,7 @@ import javax.ws.rs.ext.Provider;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.MDC;
 
-// Priority must be less than the priority of StructuredArgumentLoggingFilter
+// Priority must be less than the priority of StructuredLoggingServletFilter
 @Provider
 @Priority(Priorities.USER - 50)
 public class ClearMDCKeysFilter implements Filter

@@ -1,36 +1,36 @@
 {
-  template: "Hello, %s!",
-  defaultName: "Stranger",
-  clock: {
-    type: "incrementing"
+  "template": "Hello, %s!",
+  "defaultName": "Stranger",
+  "clock": {
+    "type": "incrementing"
   },
-  uuid: {
-    type: "seed",
-    seed: "example seed",
+  "uuid": {
+    "type": "seed",
+    "seed": "example seed",
   },
-  server: {
-    detailedJsonProcessingExceptionMapper: true,
-    applicationConnectors: [
+  "server": {
+    "detailedJsonProcessingExceptionMapper": true,
+    "applicationConnectors": [
       {
-        type: "http",
-        port: 0,
+        "type": "http",
+        "port": 0,
       }
     ],
-    adminConnectors: [
+    "adminConnectors": [
       {
-        type: "http",
-        port: 0,
+        "type": "http",
+        "port": 0,
       }
     ]
   },
-  logging: {
-    level: "INFO",
-    appenders: [
+  "logging": {
+    "level": "INFO",
+    "appenders": [
       {
-        type: "buffered",
-        timeZone: "system",
-        logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
-        includeCallerData: true,
+        "type": "buffered",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %green(%logger): %message <%blue(%marker)> <%magenta(%mdc)>%n%red(%rootException)",
+        "timeZone": "system",
+        "includeCallerData": true,
       },
       {
         type: "file",
@@ -41,46 +41,57 @@
         maxFileSize: "1mb",
       },
       {
-        type: "file-logstash",
-        currentLogFilename: "./logs/logstash.json",
-        archivedLogFilenamePattern: "./logs/logstash-%d.json",
-        includeCallerData: true,
+        "type": "file-logstash",
+        "threshold": "ALL",
+        "timeZone": "UTC",
+        "includeCallerData": true,
+        "currentLogFilename": "./logs/logstash.json",
+        "archivedLogFilenamePattern": "./logs/logstash-%d.json",
+        "encoder": {
+          "includeContext": true,
+          "includeMdc": true,
+          "includeStructuredArguments": true,
+          "includedNonStructuredArguments": false,
+          "includeTags": true,
+          "prettyPrint": true,
+          "serializationInclusion": "NON_ABSENT"
+        }
       }
     ]
   },
-  configLogging: {
-    enabled: true
+  "configLogging": {
+    "enabled": true
   },
-  h2: {
-    enabled: true,
-    webPort: 8083,
-    tcpPort: 9093,
+  "h2": {
+    "enabled": true,
+    "webPort": 8082,
+    "tcpPort": 9092,
   },
-  dataSources: [
+  "dataSources": [
     {
-      name: "liquibase",
-      driverClass: "com.p6spy.engine.spy.P6SpyDriver",
-      readOnlyByDefault: false,
-      user: "sa",
-      password: "",
-      url: "jdbc:p6spy:h2:tcp://localhost:9093/liftwizard-app-h2",
-      properties: {
-        charSet: "UTF-8"
+      "name": "liquibase",
+      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
+      "readOnlyByDefault": false,
+      "user": "sa",
+      "password": "",
+      "url": "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2",
+      "properties": {
+        "charSet": "UTF-8"
       },
-      logValidationErrors: true,
-      maxWaitForConnection: "1 second",
+      "logValidationErrors": true,
+      "maxWaitForConnection": "1 second",
     },
   ],
-  connectionManagers: [
+  "connectionManagers": [
     {
-      connectionManagerName: "liquibase",
-      dataSourceName: "liquibase",
-      databaseType: "H2",
-      schemaName: "liftwizard-app-h2",
+      "connectionManagerName": "liquibase",
+      "dataSourceName": "liquibase",
+      "databaseType": "H2",
+      "schemaName": "liftwizard-app-h2",
     },
   ],
-  reladomo: {
-    runtimeConfigurationPaths: [
+  "reladomo": {
+    "runtimeConfigurationPaths": [
       "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
     ]
   }
