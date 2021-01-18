@@ -33,7 +33,8 @@ import org.glassfish.jersey.server.ContainerRequest;
 // Priority must be less than the priority of StructuredArgumentLoggingFilter
 @Provider
 @Priority(Priorities.USER - 20)
-public class ResourceInfoLoggingFilter implements ContainerRequestFilter
+public class ResourceInfoLoggingFilter
+        implements ContainerRequestFilter
 {
     @Context
     private ResourceInfo resourceInfo;
@@ -45,7 +46,7 @@ public class ResourceInfoLoggingFilter implements ContainerRequestFilter
 
         UriInfo uriInfo = requestContext.getUriInfo();
 
-        String httpPath           = uriInfo.getPath();
+        String httpPath           = uriInfo.getAbsolutePath().getPath();
         String httpMethod         = requestContext.getMethod();
         String resourceClassName  = this.resourceInfo.getResourceClass().getCanonicalName();
         String resourceMethodName = this.resourceInfo.getResourceMethod().getName();
@@ -71,8 +72,18 @@ public class ResourceInfoLoggingFilter implements ContainerRequestFilter
 
         if (requestContext instanceof ContainerRequest)
         {
-            ContainerRequest containerRequest = (ContainerRequest) requestContext;
-            String           pathTemplate     = containerRequest.getUriInfo().getMatchedModelResource().getPath();
+            ContainerRequest containerRequest  = (ContainerRequest) requestContext;
+            String           pathPrefix        = uriInfo.getBaseUri().getPath();
+            String           pathWithoutPrefix = containerRequest.getUriInfo().getMatchedModelResource().getPath();
+            if (!pathPrefix.endsWith("/"))
+            {
+                throw new IllegalStateException(pathPrefix);
+            }
+            if (!pathWithoutPrefix.startsWith("/"))
+            {
+                throw new IllegalStateException(pathWithoutPrefix);
+            }
+            String pathTemplate = pathPrefix + pathWithoutPrefix.substring(1);
             mdc.put("liftwizard.request.httpPathTemplate", pathTemplate);
         }
     }
