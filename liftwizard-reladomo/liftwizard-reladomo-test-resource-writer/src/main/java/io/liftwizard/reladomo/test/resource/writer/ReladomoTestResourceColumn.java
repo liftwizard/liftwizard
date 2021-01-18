@@ -61,6 +61,11 @@ public class ReladomoTestResourceColumn
 
     private Timestamp adjustTimestamp(Timestamp timestamp)
     {
+        if (timestamp == null)
+        {
+            return null;
+        }
+
         TimestampAttribute timestampAttribute = (TimestampAttribute) this.attribute;
         Timestamp          infinityTimestamp  = timestampAttribute.getAsOfAttributeInfinity();
 
@@ -125,7 +130,6 @@ public class ReladomoTestResourceColumn
         {
             ImmutableList<String> unpaddedValueStrings = this.values
                     .collect(Timestamp.class::cast)
-                    .collect(Timestamp::toString)
                     .collect(ReladomoTestResourceColumn::quote)
                     .toImmutable();
             int maxValueLength = unpaddedValueStrings.asLazy()
@@ -143,7 +147,6 @@ public class ReladomoTestResourceColumn
         {
             ImmutableList<String> unpaddedValueStrings = this.values
                     .collect(Date.class::cast)
-                    .collect(Date::toString)
                     .collect(ReladomoTestResourceColumn::quote)
                     .toImmutable();
             int maxValueLength = unpaddedValueStrings.asLazy()
@@ -167,7 +170,7 @@ public class ReladomoTestResourceColumn
     {
         ImmutableList<String> unpaddedValueStrings = this.values
                 .collect(aClass::cast)
-                .collect(Object::toString)
+                .collect(String::valueOf)
                 .toImmutable();
         int maxValueLength = unpaddedValueStrings.asLazy()
                 .collectInt(String::length)
@@ -190,9 +193,13 @@ public class ReladomoTestResourceColumn
         return this.frozen.getPaddedValueStrings().get(index);
     }
 
-    private static String quote(String string)
+    private static String quote(Object object)
     {
-        return "\"" + string + "\"";
+        if (object == null)
+        {
+            return "null";
+        }
+        return "\"" + object + "\"";
     }
 
     // https://stackoverflow.com/a/391978
@@ -205,5 +212,11 @@ public class ReladomoTestResourceColumn
     private static String padLeft(String string, int length)
     {
         return String.format("%" + length + "s", string);
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.attribute.toString();
     }
 }

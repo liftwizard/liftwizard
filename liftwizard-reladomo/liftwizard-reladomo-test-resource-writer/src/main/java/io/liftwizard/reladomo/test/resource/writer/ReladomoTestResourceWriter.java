@@ -21,6 +21,8 @@ import java.util.Set;
 
 import com.gs.fw.common.mithra.MithraList;
 import com.gs.fw.common.mithra.MithraManagerProvider;
+import com.gs.fw.common.mithra.attribute.AsOfAttribute;
+import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.common.mithra.util.MithraRuntimeCacheController;
 import com.gs.reladomo.metadata.ReladomoClassMetaData;
@@ -45,13 +47,23 @@ public final class ReladomoTestResourceWriter
                 .reject(ReladomoTestResourceGrid::isEmpty)
                 .tap(ReladomoTestResourceGrid::freeze)
                 .collect(Objects::toString)
-                .makeString("");
+                .makeString("\n");
     }
 
     private static ReladomoTestResourceGrid getReladomoTestResourceGrid(MithraRuntimeCacheController eachController)
     {
         RelatedFinder finderInstance = eachController.getFinderInstance();
-        MithraList<?> mithraList     = finderInstance.findMany(finderInstance.all());
+        AsOfAttribute[] asOfAttributes = finderInstance.getAsOfAttributes();
+        Operation     operation        = finderInstance.all();
+        if (asOfAttributes != null)
+        {
+            for (AsOfAttribute asOfAttribute : asOfAttributes)
+            {
+                Operation equalsEdgePoint = asOfAttribute.equalsEdgePoint();
+                operation = operation.and(equalsEdgePoint);
+            }
+        }
+        MithraList<?> mithraList = finderInstance.findMany(operation);
 
         ReladomoClassMetaData metaData = eachController.getMetaData();
 
