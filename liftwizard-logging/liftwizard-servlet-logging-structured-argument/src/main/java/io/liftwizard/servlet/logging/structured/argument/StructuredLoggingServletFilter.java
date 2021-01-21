@@ -100,7 +100,7 @@ public class StructuredLoggingServletFilter
         Objects.requireNonNull(structuredArguments);
         Map<String, Object> structuredArgumentsMap = (Map<String, Object>) structuredArguments;
 
-        LOGGER.info(Markers.appendEntries(structuredArgumentsMap), "structured logging");
+        LOGGER.info(Markers.appendEntries(structuredArgumentsMap), "Completed response.");
 
         MultiMDCCloseable mdc = (MultiMDCCloseable) servletRequest.getAttribute(this.mdcAttributeName);
         mdc.close();
