@@ -110,6 +110,7 @@ public class ReladomoLoadDataTestRule
         private void loadTestData(String testDataFileName)
                 throws ReflectiveOperationException
         {
+            LOGGER.debug("Loading test data from file: {}", testDataFileName);
             MithraTestDataParser   parser         = new MithraTestDataParser(testDataFileName);
             List<MithraParsedData> parsedDataList = parser.getResults();
 
@@ -119,11 +120,11 @@ public class ReladomoLoadDataTestRule
             }
         }
 
-        private void handleMithraParsedData(MithraParsedData mithraParsedData)
+        private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
                 throws ReflectiveOperationException
         {
-            List<Attribute<?, ?>>  attributes  = mithraParsedData.getAttributes();
-            List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
+            List<Attribute<?, ?>>  attributes      = mithraParsedData.getAttributes();
+            List<MithraDataObject> dataObjects     = mithraParsedData.getDataObjects();
             String                 parsedClassName = mithraParsedData.getParsedClassName();
 
             if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName))
@@ -140,7 +141,7 @@ public class ReladomoLoadDataTestRule
             SourcelessConnectionManager databaseObjectConnectionManager =
                     (SourcelessConnectionManager) databaseObject.getConnectionManager();
 
-            LOGGER.info("Connection manager: {}", databaseObjectConnectionManager);
+            LOGGER.debug("Loading test data for class {} using connection manager: {}", parsedClassName, databaseObjectConnectionManager);
 
             Class<? extends MithraDatabaseObject> databaseObjectClass = databaseObject.getClass();
 
