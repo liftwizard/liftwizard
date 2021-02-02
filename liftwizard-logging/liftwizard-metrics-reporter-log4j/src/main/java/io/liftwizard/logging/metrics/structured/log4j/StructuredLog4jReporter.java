@@ -44,8 +44,8 @@ import io.liftwizard.logging.metrics.structured.log4j.proxy.AbstractLoggerProxy;
 public class StructuredLog4jReporter
         extends ScheduledReporter
 {
-    private final AbstractLoggerProxy              loggerProxy;
-    private final String                           prefix;
+    private final AbstractLoggerProxy loggerProxy;
+    private final String              prefix;
 
     public StructuredLog4jReporter(
             MetricRegistry registry,
@@ -67,8 +67,8 @@ public class StructuredLog4jReporter
                 executor,
                 shutdownExecutorOnStop,
                 disabledMetricAttributes);
-        this.loggerProxy                   = loggerProxy;
-        this.prefix                        = prefix;
+        this.loggerProxy = loggerProxy;
+        this.prefix      = prefix;
     }
 
     /**
@@ -167,10 +167,16 @@ public class StructuredLog4jReporter
 
     private void logGauge(String name, Gauge<?> gauge)
     {
+        Object value = gauge.getValue();
+        if (!(value instanceof Number))
+        {
+            return;
+        }
+
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("metric_type", "GAUGE");
         map.put("metric_name", this.prefix(name));
-        map.put("metric_value", gauge.getValue());
+        map.put("metric_value", value);
         this.log(map);
     }
 
