@@ -60,6 +60,7 @@ public final class DatabaseDdlExecutor
         Reflections reflections = new Reflections(configurationBuilder);
         MutableSet<String> ddlLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(ddlLocationPattern)));
         MutableSet<String> idxLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(idxLocationPattern)));
+        LOGGER.info("Scanning urls: {}", urls.toSortedList());
         LOGGER.info("Found {} SQL ddl scripts.", ddlLocations.size());
         LOGGER.info("Found {} SQL idx scripts.", idxLocations.size());
 
