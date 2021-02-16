@@ -98,7 +98,7 @@ public class FirebaseOAuthAuthenticator implements Authenticator<String, Firebas
             {
                 throw new RuntimeException(e);
             }
-            LOGGER.warn("", e);
+            LOGGER.warn(credentials, e);
             return Optional.empty();
         }
     }
