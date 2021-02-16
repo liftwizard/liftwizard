@@ -32,7 +32,7 @@ public class CorsFactory
     // allowedOrigins = "*" is convenient during development but must be changed in production
     private @Valid @NotNull String       allowedOrigins   = "*";
     private @Valid @NotNull String       allowedHeaders   = "X-Requested-With,Content-Type,Accept,Origin,Authorization";
-    private @Valid @NotNull String       allowedMethods   = "OPTIONS,GET,PUT,POST,DELETE,HEAD";
+    private @Valid @NotNull String       allowedMethods   = "OPTIONS,GET,PUT,POST,PATCH,DELETE,HEAD";
     private @Valid @NotNull String       allowCredentials = "true";
     private @Valid @NotNull List<String> urlPatterns      = Arrays.asList("/*");
 
