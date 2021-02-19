@@ -124,7 +124,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     {
         environment.getApplicationContext().addFilter(
                 StructuredLoggingServletFilter.class,
-                "/*",
+                "/api/*",
                 EnumSet.of(DispatcherType.REQUEST));
 
         environment.jersey().register(CorrelationIdFilter.class);
