@@ -140,11 +140,10 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.1</version>
                     <configuration>
-                        <compilerArgs>
-                            <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
-                            <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
-                            <arg>-parameters</arg>
-                        </compilerArgs>
+                        <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
+                        <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
+                        <parameters>true</parameters>
+                        <useIncrementalCompilation>false</useIncrementalCompilation>
                     </configuration>
                 </plugin>
 
