@@ -404,6 +404,7 @@
             <property name="braceAdjustment" value="0" />
             <property name="caseIndent" value="4" />
             <property name="throwsIndent" value="8" />
+            <property name="arrayInitIndent" value="4" />
             <property name="lineWrappingIndentation" value="8" />
         </module>
         <module name="OuterTypeFilename" />
@@ -558,10 +559,6 @@
             <property name="allowEmptyMethods" value="true" />
             <property name="allowEmptyTypes" value="true" />
             <property name="allowEmptyLoops" value="true" />
-        </module>
-
-        <module name="Indentation">
-            <property name="lineWrappingIndentation" value="8" />
         </module>
 
         <!-- Miscellaneous other checks.                   -->
