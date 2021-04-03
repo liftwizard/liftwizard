@@ -52,6 +52,11 @@ import io.dropwizard.validation.MinSize;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashEncoderFactory;
 
+/**
+ * A Dropwizard AppenderFactory that sets up a file appender that logs one json object per log statement. The json is formatted by <a href="https://github.com/logstash/logstash-logback-encoder">logstash-logback-encoder</a> and is ready to be parsed by logstash.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/logging-modules#logging-modules-logstash-encoder">https://liftwizard.io/docs/logging/logging-modules#logging-modules-logstash-encoder</a>
+ */
 @JsonTypeName("file-logstash")
 @AutoService(AppenderFactory.class)
 public class LogstashFileAppenderFactory

@@ -20,9 +20,19 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+import graphql.schema.AsyncDataFetcher;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import org.slf4j.MDC;
 
+/**
+ * An enhanced alternative to {@link AsyncDataFetcher}.
+ *
+ * <p>
+ * Both have the ability to wrap a synchronous {@link DataFetcher} together with an {@link Executor}, and return CompleteableFutures that execute on the Executor. LiftwizardAsyncDataFetcher also copies slf4j's {@link MDC} to the background tasks, and restores the MDC when each task completes.
+ *
+ * @see <a href="https://liftwizard.io/docs/graphql/data-fetcher-async">https://liftwizard.io/docs/graphql/data-fetcher-async</a>
+ */
 public class LiftwizardAsyncDataFetcher<T>
         implements DataFetcher<CompletableFuture<T>>
 {

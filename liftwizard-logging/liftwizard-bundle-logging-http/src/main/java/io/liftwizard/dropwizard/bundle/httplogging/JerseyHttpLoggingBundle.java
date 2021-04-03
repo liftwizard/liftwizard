@@ -30,6 +30,11 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.logging.LoggingFeature.Verbosity;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Logs all requests and responses to slf4j. The verbosity and maxEntitySize are configurable.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/JerseyHttpLoggingBundle#jerseyhttploggingbundle">https://liftwizard.io/docs/logging/JerseyHttpLoggingBundle#jerseyhttploggingbundle</a>
+ */
 @AutoService(PrioritizedBundle.class)
 public class JerseyHttpLoggingBundle
         implements PrioritizedBundle<Object>

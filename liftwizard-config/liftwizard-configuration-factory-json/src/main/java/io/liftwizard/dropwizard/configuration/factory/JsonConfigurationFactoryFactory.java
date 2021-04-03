@@ -32,8 +32,10 @@ import io.dropwizard.configuration.JsonConfigurationFactory;
  * Based on {@link DefaultConfigurationFactoryFactory} but replacing yml with json.
  *
  * @see DefaultConfigurationFactoryFactory
+ * @see <a href="https://liftwizard.io/docs/configuration/json5-configuration#configuration-through-json5-instead-of-yaml">https://liftwizard.io/docs/configuration/json5-configuration#configuration-through-json5-instead-of-yaml</a>
  */
-public class JsonConfigurationFactoryFactory<T> implements ConfigurationFactoryFactory<T>
+public class JsonConfigurationFactoryFactory<T>
+        implements ConfigurationFactoryFactory<T>
 {
     @Override
     public ConfigurationFactory<T> create(

@@ -37,6 +37,11 @@ import graphql.schema.GraphQLType;
 import graphql.validation.ValidationError;
 import io.liftwizard.instrumentation.GraphQLInstrumentationUtils;
 
+/**
+ * An Instrumentation that registers performance metrics about data fetching with Dropwizard's MetricsRegistry.
+ *
+ * @see <a href="https://liftwizard.io/docs/graphql/instrumentation-metrics">https://liftwizard.io/docs/graphql/instrumentation-metrics</a>
+ */
 public class LiftwizardGraphQLMetricsInstrumentation
         extends SimpleInstrumentation
 {

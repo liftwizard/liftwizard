@@ -28,6 +28,10 @@ import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The ConfigLoggingBundle logs the Dropwizard configuration to slf4j at INFO level, by serializing the in-memory configuration object to json.
+ * @see <a href="https://liftwizard.io/docs/configuration/ConfigLoggingBundle#configloggingbundle">https://liftwizard.io/docs/configuration/ConfigLoggingBundle#configloggingbundle</a>
+ */
 @AutoService(PrioritizedBundle.class)
 public class ConfigLoggingBundle
         implements PrioritizedBundle<Object>
