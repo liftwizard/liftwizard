@@ -18,6 +18,9 @@ package io.liftwizard.dropwizard.bundle.objectmapper;
 
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auto.service.AutoService;
 import io.dropwizard.jackson.Jackson;
@@ -29,6 +32,17 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Configures the Jackson {@link ObjectMapper} used by Dropwizard for serializing and deserializing all responses, as well as for logging by bundles such as liftwizard-bundle-logging-config.
+ *
+ * <p>
+ * Supports configuring pretty-printing on or off, and serialization inclusion to any value in Jackson's {@link JsonInclude.Include}.
+ *
+ * <p>
+ * Also turns on all json5 features, turns on {@link DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES}, turns on {@link Feature.STRICT_DUPLICATE_DETECTION}, and turns on serialization of dates and Strings.
+ *
+ * @see <a href="https://liftwizard.io/docs/jackson/ObjectMapperBundle#objectmapperbundle">https://liftwizard.io/docs/jackson/ObjectMapperBundle#objectmapperbundle</a>
+ */
 @AutoService(PrioritizedBundle.class)
 public class ObjectMapperBundle
         implements PrioritizedBundle<Object>

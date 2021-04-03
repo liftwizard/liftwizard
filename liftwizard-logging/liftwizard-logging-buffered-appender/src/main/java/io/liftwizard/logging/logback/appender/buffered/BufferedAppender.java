@@ -29,6 +29,11 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import org.slf4j.Marker;
 
+/**
+ * Logback appender that buffers all logging until it receives a CLEAR or FLUSH marker.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappender">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappender</a>
+ */
 public class BufferedAppender<E extends DeferredProcessingAware>
         extends UnsynchronizedAppenderBase<E>
         implements AppenderAttachable<E>

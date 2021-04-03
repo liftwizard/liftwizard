@@ -32,14 +32,21 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
+import org.slf4j.MDC;
 
 /**
+ * Gets the correlation id from a request header, adds it to the {@link ContainerResponseContext}, and adds it to {@link MDC}. If there is no correlation id, CorrelationIdFilter creates one first. The default header name and MDC key are both "liftwizard.request.correlationId".
+ *
+ * <p>
  * Adapted from Beadledom's CorrelationIdFilter.
- * https://raw.githubusercontent.com/cerner/beadledom/master/jaxrs/src/main/java/com/cerner/beadledom/jaxrs/provider/CorrelationIdFilter.java
+ *
+ * @see <a href="https://raw.githubusercontent.com/cerner/beadledom/master/jaxrs/src/main/java/com/cerner/beadledom/jaxrs/provider/CorrelationIdFilter.java">https://raw.githubusercontent.com/cerner/beadledom/master/jaxrs/src/main/java/com/cerner/beadledom/jaxrs/provider/CorrelationIdFilter.java</a>
+ * @see <a href="https://liftwizard.io/docs/logging/logging-modules#logging-modules-correlationidfilter">https://liftwizard.io/docs/logging/logging-modules#logging-modules-correlationidfilter</a>
  */
 @Provider
 @Priority(Priorities.HEADER_DECORATOR)
-public class CorrelationIdFilter implements ContainerRequestFilter, ContainerResponseFilter
+public class CorrelationIdFilter
+        implements ContainerRequestFilter, ContainerResponseFilter
 {
     private static final String DEFAULT_HEADER_NAME = "liftwizard.request.correlationId";
     private final        String headerName;
@@ -57,7 +64,9 @@ public class CorrelationIdFilter implements ContainerRequestFilter, ContainerRes
             @Nonnull Optional<String> headerName,
             @Nonnull Optional<String> mdcName)
     {
-        this.uuidSupplier = Objects.requireNonNull(uuidSupplier, "Could not find Supplier<UUID>. Make sure you've registered the bundle io.liftwizard.dropwizard.bundle.uuid.UUIDBundle with Dropwizard.");
+        this.uuidSupplier = Objects.requireNonNull(
+                uuidSupplier,
+                "Could not find Supplier<UUID>. Make sure you've registered the bundle io.liftwizard.dropwizard.bundle.uuid.UUIDBundle with Dropwizard.");
         this.headerName   = headerName.orElse(DEFAULT_HEADER_NAME);
         this.mdcName      = mdcName.orElse(DEFAULT_HEADER_NAME);
     }

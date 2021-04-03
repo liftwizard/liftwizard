@@ -23,7 +23,13 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
-public class LogMarkerTestRule extends TestWatcher
+/**
+ * A JUnit {@link Rule} that clears the buffer before all tests and flushes the buffer after failed tests. It does this by logging CLEAR and FLUSH markers.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule</a>
+ */
+public class LogMarkerTestRule
+        extends TestWatcher
 {
     private static final Logger LOGGER       = LoggerFactory.getLogger(LogMarkerTestRule.class);
     private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");

@@ -32,9 +32,13 @@ import io.dropwizard.logging.filter.LevelFilterFactory;
 import io.dropwizard.logging.layout.LayoutFactory;
 import io.liftwizard.logging.logback.appender.buffered.BufferedAppender;
 
+/**
+ * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappenderfactory">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappenderfactory</a>
+ */
 @JsonTypeName("buffered")
 @AutoService(AppenderFactory.class)
-public class BufferedAppenderFactory<E extends DeferredProcessingAware> extends AbstractAppenderFactory<E>
+public class BufferedAppenderFactory<E extends DeferredProcessingAware>
+        extends AbstractAppenderFactory<E>
 {
     private String appenderName = "buffered-appender";
 

@@ -35,6 +35,11 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
+/**
+ * A servlet filter that adds request/response timing information to the structured argument map.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/logging-modules#logging-modules-durationstructuredloggingfilter">https://liftwizard.io/docs/logging/logging-modules#logging-modules-durationstructuredloggingfilter</a>
+ */
 // Priority must be greater than the priority of StructuredLoggingServletFilter
 @Provider
 @PreMatching

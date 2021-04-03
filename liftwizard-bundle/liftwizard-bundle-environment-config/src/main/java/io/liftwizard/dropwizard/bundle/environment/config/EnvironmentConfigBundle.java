@@ -25,6 +25,13 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
+/**
+ * Supports environment variable substitution inside Dropwizard configuration files.
+ *
+ * @see EnvironmentVariableSubstitutor
+ * @see SubstitutingSourceProvider
+ * @see <a href="https://liftwizard.io/docs/configuration/environment-variables#environmentconfigbundle">https://liftwizard.io/docs/configuration/environment-variables#environmentconfigbundle</a>
+ */
 public class EnvironmentConfigBundle
         implements ConfiguredBundle<Object>
 {

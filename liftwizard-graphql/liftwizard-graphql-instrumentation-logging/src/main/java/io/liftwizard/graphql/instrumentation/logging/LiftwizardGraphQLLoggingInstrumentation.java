@@ -21,7 +21,13 @@ import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchPar
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLType;
 import io.liftwizard.instrumentation.GraphQLInstrumentationUtils;
+import org.slf4j.MDC;
 
+/**
+ * An Instrumentation that adds helpful context to slf4j's {@link MDC}.
+ *
+ * @see <a href="https://liftwizard.io/docs/graphql/instrumentation-logging">https://liftwizard.io/docs/graphql/instrumentation-logging</a>
+ */
 public class LiftwizardGraphQLLoggingInstrumentation
         extends SimpleInstrumentation
 {

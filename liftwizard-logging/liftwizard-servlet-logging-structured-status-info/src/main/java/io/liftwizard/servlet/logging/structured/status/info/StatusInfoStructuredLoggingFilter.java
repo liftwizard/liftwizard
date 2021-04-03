@@ -28,6 +28,11 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Response.StatusType;
 
+/**
+ * Gets information from the jax-rs {@link StatusType} and adds it to the structured argument map.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/logging-modules#logging-modules-statusinfostructuredloggingfilter">https://liftwizard.io/docs/logging/logging-modules#logging-modules-statusinfostructuredloggingfilter</a>
+ */
 public class StatusInfoStructuredLoggingFilter implements ContainerResponseFilter
 {
     @Override

@@ -36,6 +36,14 @@ import net.logstash.logback.marker.Markers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This filter is a pre-requisite for structured logging. For the most part, you can pick and choose which dependencies you want to include, but liftwizard-servlet-logging-structured-argument is usually required.
+ *
+ * <p>
+ * This servlet filter puts a "structured-logging" LinkedHashMap into the ServletRequest at the beginning of each request. Next, all other structured logging filters put their context into the same map. Finally, StructuredLoggingServletFilter logs the text "structured logging" together with all context at the end of each servlet request.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/logging-modules#logging-modules-structuredloggingservletfilter">https://liftwizard.io/docs/logging/logging-modules#logging-modules-structuredloggingservletfilter</a>
+ */
 @Provider
 @Priority(Priorities.USER - 40)
 public class StructuredLoggingServletFilter

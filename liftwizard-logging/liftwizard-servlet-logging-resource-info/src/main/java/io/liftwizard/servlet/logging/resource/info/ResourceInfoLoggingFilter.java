@@ -29,7 +29,13 @@ import javax.ws.rs.ext.Provider;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 import org.glassfish.jersey.server.ContainerRequest;
+import org.slf4j.MDC;
 
+/**
+ * Gets information from the jax-rs {@link UriInfo} and adds it to {@link MDC}.
+ *
+ * @see <a href="https://liftwizard.io/docs/logging/logging-modules#logging-modules-resourceinfologgingfilter">https://liftwizard.io/docs/logging/logging-modules#logging-modules-resourceinfologgingfilter</a>
+ */
 // Priority must be greater than the priority of StructuredLoggingServletFilter
 @Provider
 @Priority(Priorities.USER - 20)

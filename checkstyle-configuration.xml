@@ -136,7 +136,7 @@
             <property name="tokens" value="ANNOTATION_FIELD_DEF" />
         </module>
         <module name="AnnotationUseStyle">
-            <property name="trailingArrayComma" value="always"/>
+            <property name="trailingArrayComma" value="always" />
         </module>
         <module name="MissingDeprecated" />
         <module name="MissingOverride" />
@@ -382,7 +382,9 @@
         <module name="JavadocMethod">
             <property name="validateThrows" value="true" />
         </module>
-        <module name="JavadocParagraph" />
+        <module name="JavadocParagraph">
+            <property name="allowNewlineParagraph" value="false" />
+        </module>
         <module name="JavadocStyle">
             <property name="scope" value="public" />
             <property name="checkFirstSentence" value="false" />

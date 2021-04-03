@@ -38,6 +38,14 @@ import io.liftwizard.graphql.instrumentation.metrics.LiftwizardGraphQLMetricsIns
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
+/**
+ * The bundle registers the GraphIQL UI at /graphiql and the GraphQL Playground UI at /graphql-playground, by delegating to AssetsBundle. This overrides the behavior of the smoketurner bundle {@link GraphQLBundle}, which registers just one UI (graphiql in older versions, and graphql-playground in newer versions) and registers the UI at the root.
+ *
+ * <p>
+ * The bundle also registers two instrumentations for logging and metrics.
+ *
+ * @see <a href="https://liftwizard.io/docs/graphql/bundle#liftwizardgraphqlbundle">https://liftwizard.io/docs/graphql/bundle#liftwizardgraphqlbundle</a>
+ */
 public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryProvider>
         extends GraphQLBundle<T>
 {
