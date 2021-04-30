@@ -44,6 +44,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationA
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationAndContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationBinaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationExistenceContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationGroupContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationNoneContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationOrContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperationUnaryOperatorContext;
@@ -139,6 +140,12 @@ public class ReladomoOperationBuilderVisitor<T>
         return ListAdapter.adapt(ctx.compositeOperation())
                 .collect(this::visit)
                 .injectInto(this.getNone(), Operation::or);
+    }
+
+    @Override
+    public Operation visitOperationGroup(OperationGroupContext ctx)
+    {
+        return this.visit(ctx.compositeOperation());
     }
 
     @Override
