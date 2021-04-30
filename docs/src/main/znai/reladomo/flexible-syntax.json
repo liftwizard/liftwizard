@@ -1,0 +1,82 @@
+[
+  {
+    "Original": "`&`",
+    "Alternatives": "`&&`, `and`"
+  },
+  {
+    "Original": "`|`",
+    "Alternatives": "`||`, `or`"
+  },
+  {
+    "Original": "`<class name>`",
+    "Alternatives": "`this`"
+  },
+  {
+    "Original": "`lower`",
+    "Alternatives": "`toLowerCase`"
+  },
+  {
+    "Original": "`abs`",
+    "Alternatives": "`absoluteValue`"
+  },
+  {
+    "Original": "`=`",
+    "Alternatives": "`==`, `eq`"
+  },
+  {
+    "Original": "`!=`",
+    "Alternatives": "`not eq`, `notEq`"
+  },
+  {
+    "Original": "`>`",
+    "Alternatives": "`greaterThan`"
+  },
+  {
+    "Original": "`>=`",
+    "Alternatives": "`greaterThanEquals`"
+  },
+  {
+    "Original": "`<`",
+    "Alternatives": "`lessThan`"
+  },
+  {
+    "Original": "`<=`",
+    "Alternatives": "`lessThanEquals`"
+  },
+  {
+    "Original": "`not in`",
+    "Alternatives": "`notIn`"
+  },
+  {
+    "Original": "`not startsWith`",
+    "Alternatives": "`notStartsWith`"
+  },
+  {
+    "Original": "`not endsWith`",
+    "Alternatives": "`notEndsWith`"
+  },
+  {
+    "Original": "`not contains`",
+    "Alternatives": "`notContains`"
+  },
+  {
+    "Original": "`not wildCardEquals`",
+    "Alternatives": "`wildCardNotEquals`"
+  },
+  {
+    "Original": "`all of <class name>`",
+    "Alternatives": "`all`"
+  },
+  {
+    "Original": "`is null`",
+    "Alternatives": "`== null`"
+  },
+  {
+    "Original": "`is not null`",
+    "Alternatives": "`!= null`"
+  },
+  {
+    "Original": "`all of <class name}`",
+    "Alternatives": "`all`"
+  }
+]
