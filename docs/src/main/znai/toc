@@ -15,3 +15,5 @@ graphql
     instrumentation-logging
     instrumentation-metrics
     data-fetcher-async
+reladomo
+    reladomo-operation-compiler
