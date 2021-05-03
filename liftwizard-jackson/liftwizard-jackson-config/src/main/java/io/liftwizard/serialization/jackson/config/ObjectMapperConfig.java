@@ -66,7 +66,6 @@ public final class ObjectMapperConfig
 
         objectMapper.enable(Feature.ALLOW_UNQUOTED_FIELD_NAMES);
         objectMapper.enable(Feature.ALLOW_SINGLE_QUOTES);
-        objectMapper.enable(Feature.ALLOW_UNQUOTED_CONTROL_CHARS);
         objectMapper.enable(Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER);
         objectMapper.enable(Feature.ALLOW_NON_NUMERIC_NUMBERS);
 
