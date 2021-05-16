@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * Supports configuring pretty-printing on or off, and serialization inclusion to any value in Jackson's {@link JsonInclude.Include}.
  *
  * <p>
- * Also turns on all json5 features, turns on {@link DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES}, turns on {@link Feature.STRICT_DUPLICATE_DETECTION}, and turns on serialization of dates and Strings.
+ * Also turns on all json5 features, turns on {@link DeserializationFeature#FAIL_ON_UNKNOWN_PROPERTIES}, turns on {@link Feature#STRICT_DUPLICATE_DETECTION}, and turns on serialization of dates and Strings.
  *
  * @see <a href="https://liftwizard.io/docs/jackson/ObjectMapperBundle#objectmapperbundle">https://liftwizard.io/docs/jackson/ObjectMapperBundle#objectmapperbundle</a>
  */

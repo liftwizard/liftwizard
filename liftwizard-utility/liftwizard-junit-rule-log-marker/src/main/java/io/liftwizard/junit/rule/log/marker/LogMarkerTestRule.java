@@ -16,6 +16,7 @@
 
 package io.liftwizard.junit.rule.log.marker;
 
+import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
