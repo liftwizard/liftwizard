@@ -32,7 +32,7 @@ public class ReladomoOperationCompiler
 {
     private static final Pattern NEWLINE_PATTERN = Pattern.compile("\\r?\\n");
 
-    public <T> Operation compile(RelatedFinder<T> finder, String sourceCodeText)
+    public Operation compile(RelatedFinder<?> finder, String sourceCodeText)
     {
         String[]            lines      = NEWLINE_PATTERN.split(sourceCodeText);
         CodePointCharStream charStream = CharStreams.fromString(sourceCodeText);
