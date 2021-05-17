@@ -3,7 +3,7 @@ When using [Reladomo](https://github.com/goldmansachs/reladomo), queries are usu
 
 ```java
 Operation operation = MyTypeFinder.optionalString().eq("value")
-.and(MyTypeFinder.optionalInteger().eq(4));
+    .and(MyTypeFinder.optionalInteger().eq(4));
 
 MyTypeList mithraList = MyTypeFinder.findMany(operation);
 ```

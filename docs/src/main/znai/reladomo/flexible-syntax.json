@@ -1,82 +1,82 @@
 [
   {
-    "Original": "`&`",
+    "toString()": "`&`",
     "Alternatives": "`&&`, `and`"
   },
   {
-    "Original": "`|`",
+    "toString()": "`|`",
     "Alternatives": "`||`, `or`"
   },
   {
-    "Original": "`<class name>`",
+    "toString()": "`<class name>`",
     "Alternatives": "`this`"
   },
   {
-    "Original": "`lower`",
+    "toString()": "`lower`",
     "Alternatives": "`toLowerCase`"
   },
   {
-    "Original": "`abs`",
+    "toString()": "`abs`",
     "Alternatives": "`absoluteValue`"
   },
   {
-    "Original": "`=`",
+    "toString()": "`=`",
     "Alternatives": "`==`, `eq`"
   },
   {
-    "Original": "`!=`",
+    "toString()": "`!=`",
     "Alternatives": "`not eq`, `notEq`"
   },
   {
-    "Original": "`>`",
+    "toString()": "`>`",
     "Alternatives": "`greaterThan`"
   },
   {
-    "Original": "`>=`",
+    "toString()": "`>=`",
     "Alternatives": "`greaterThanEquals`"
   },
   {
-    "Original": "`<`",
+    "toString()": "`<`",
     "Alternatives": "`lessThan`"
   },
   {
-    "Original": "`<=`",
+    "toString()": "`<=`",
     "Alternatives": "`lessThanEquals`"
   },
   {
-    "Original": "`not in`",
+    "toString()": "`not in`",
     "Alternatives": "`notIn`"
   },
   {
-    "Original": "`not startsWith`",
+    "toString()": "`not startsWith`",
     "Alternatives": "`notStartsWith`"
   },
   {
-    "Original": "`not endsWith`",
+    "toString()": "`not endsWith`",
     "Alternatives": "`notEndsWith`"
   },
   {
-    "Original": "`not contains`",
+    "toString()": "`not contains`",
     "Alternatives": "`notContains`"
   },
   {
-    "Original": "`not wildCardEquals`",
+    "toString()": "`not wildCardEquals`",
     "Alternatives": "`wildCardNotEquals`"
   },
   {
-    "Original": "`all of <class name>`",
+    "toString()": "`all of <class name>`",
     "Alternatives": "`all`"
   },
   {
-    "Original": "`is null`",
+    "toString()": "`is null`",
     "Alternatives": "`== null`"
   },
   {
-    "Original": "`is not null`",
+    "toString()": "`is not null`",
     "Alternatives": "`!= null`"
   },
   {
-    "Original": "`all of <class name}`",
+    "toString()": "`all of <class name}`",
     "Alternatives": "`all`"
   }
 ]
