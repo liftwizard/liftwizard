@@ -184,7 +184,7 @@ public class LogstashFileAppenderFactory
     @ValidationMethod(message = "must have archivedLogFilenamePattern if archive is true")
     public boolean isValidArchiveConfiguration()
     {
-        return !this.archive || (this.archivedLogFilenamePattern != null);
+        return !this.archive || this.archivedLogFilenamePattern != null;
     }
 
     @JsonIgnore
