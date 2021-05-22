@@ -15,6 +15,6 @@ jobs:
         with:
           java-version: 11
 
-      - run: ./mvnw verify --threads 2C
+      - run: ./mvnw verify javadoc:javadoc --threads 2C
         env:
           MAVEN_OPTS: "-Xmx1g"
