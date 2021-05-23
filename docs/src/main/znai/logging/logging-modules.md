@@ -44,28 +44,29 @@ public void run(HelloWorldConfiguration configuration, Environment environment) 
  
 With the logFormat and the filters in place, we can rerun `IntegrationTest` and see the new logs in action.
  
+```console {title: "Logging output (newlines added for clarity)"}
+INFO  15:03:56 [dw-22] { \
+    liftwizard.response.http.statusCode=200, \
+    liftwizard.response.http.statusEnum=OK, \
+    liftwizard.response.http.statusPhrase=OK, \
+    liftwizard.response.http.statusFamily=SUCCESSFUL, \
+    liftwizard.response.http.entityType=com.example.helloworld.api.Saying, \
+    liftwizard.time.startTime=1999-12-31T23:59:59.000000Z, \
+    liftwizard.time.endTime=2000-01-01T00:00:00.000000Z, \
+    liftwizard.time.duration.ms=1000, \
+    liftwizard.time.duration.ns=1000000000 \
+    liftwizard.time.duration.pretty=1.000000s, \
+} \
+{ \
+    liftwizard.request.correlationId=82681aab-1a69-4fc0-b425-a5cbcbf98411, \
+    liftwizard.request.httpMethod=GET, \
+    liftwizard.request.httpPath=hello-world, \
+    liftwizard.request.httpPathTemplate=/hello-world \
+    liftwizard.request.parameter.query.name=Dr. IntegrationTest, \
+    liftwizard.request.resourceClassName=com.example.helloworld.resources.HelloWorldResource, \
+    liftwizard.request.resourceMethodName=sayHello, \
+} com.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter: structured logging
 ```
-INFO  15:03:56 [dw-22] {liftwizard.time.startTime=1999-12-31T23:59:59.000000Z, liftwizard.response.http.statusEnum=OK, liftwizard.response.http.statusCode=200, liftwizard.response.http.statusFamily=SUCCESSFUL, liftwizard.response.http.statusPhrase=OK, liftwizard.response.http.entityType=com.example.helloworld.api.Saying, liftwizard.time.endTime=2000-01-01T00:00:00.000000Z, liftwizard.time.duration.pretty=1.000000s, liftwizard.time.duration.ms=1000, liftwizard.time.duration.ns=1000000000} {liftwizard.request.resourceMethodName=sayHello, liftwizard.request.parameter.query.name=Dr. IntegrationTest, liftwizard.request.resourceClassName=com.example.helloworld.resources.HelloWorldResource, liftwizard.request.httpPath=hello-world, liftwizard.request.correlationId=82681aab-1a69-4fc0-b425-a5cbcbf98411, liftwizard.request.httpMethod=GET, liftwizard.request.httpPathTemplate=/hello-world} com.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter: structured logging
-```
- 
-This can be hard to see in a single line but it includes:
-* liftwizard.request.correlationId=82681aab-1a69-4fc0-b425-a5cbcbf98411
-* liftwizard.request.httpMethod=GET
-* liftwizard.request.httpPath=hello-world
-* liftwizard.request.httpPathTemplate=/hello-world
-* liftwizard.request.parameter.query.name=Dr. IntegrationTest
-* liftwizard.request.resourceClassName=com.example.helloworld.resources.HelloWorldResource
-* liftwizard.request.resourceMethodName=sayHello
-* liftwizard.response.http.entityType=com.example.helloworld.api.Saying
-* liftwizard.response.http.statusCode=200
-* liftwizard.response.http.statusEnum=OK
-* liftwizard.response.http.statusFamily=SUCCESSFUL
-* liftwizard.response.http.statusPhrase=OK
-* liftwizard.time.duration.ms=1000
-* liftwizard.time.duration.ns=1000000000
-* liftwizard.time.duration.pretty=1.000000s
-* liftwizard.time.endTime=2000-01-01T00:00:00.000000Z
-* liftwizard.time.startTime=1999-12-31T23:59:59.000000Z
  
 Let's take a look at each filter individually.
  
