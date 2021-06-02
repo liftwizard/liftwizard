@@ -35,6 +35,14 @@ Operation recompiled    = compiler.compile(finder, operationText);
 assertThat(recompiled, is(operation));
 ```
 
+## Error messages
+
+The compiler is designed to give helpful error messages on inputs that parse but don't compile.
+
+For example, running the compiler on `this.invalidAttributeName = "Value"` might throw an error like:
+
+`Could not find attribute 'invalidAttributeName' on type 'MyType' in this.invalidAttributeName = "Value". Valid attributes: [idProperty, stringProperty, integerProperty, longProperty, doubleProperty, floatProperty, booleanProperty, instantProperty, localDateProperty, createdById, createdOn, lastUpdatedById, systemFrom, systemTo]`
+
 ## Flexible syntax
 
 The compiler allows some flexibility in the syntax.
