@@ -144,6 +144,13 @@
                         <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
                         <parameters>true</parameters>
                         <useIncrementalCompilation>false</useIncrementalCompilation>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>com.google.auto.service</groupId>
+                                <artifactId>auto-service</artifactId>
+                                <version>1.0</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
 

@@ -41,9 +41,8 @@
 
         <dependency>
             <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
+            <artifactId>auto-service-annotations</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>
