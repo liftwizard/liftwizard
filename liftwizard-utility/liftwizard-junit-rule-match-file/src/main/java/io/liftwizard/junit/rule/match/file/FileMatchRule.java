@@ -38,9 +38,9 @@ import org.junit.rules.ErrorCollector;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-public class FileMatchRule extends ErrorCollector
+public class FileMatchRule
+        extends ErrorCollector
 {
     public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass)
     {
@@ -101,20 +101,22 @@ public class FileMatchRule extends ErrorCollector
 
             assertThat(resourceFile.exists(), is(false));
             this.writeStringToFile(actualString, resourceFile);
-            fail(resourceClassPathLocation);
+            this.addError(new AssertionError(resourceClassPathLocation));
         }
-
-        String expectedStringFromFile = FileMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
-        URI    uri                    = callingClass.getResource(resourceClassPathLocation).toURI();
-        if (!actualString.equals(expectedStringFromFile))
+        else
         {
-            File file = new File(uri);
-            this.writeStringToFile(actualString, file);
+            String expectedStringFromFile = FileMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
+            URI    uri                    = callingClass.getResource(resourceClassPathLocation).toURI();
+            if (!actualString.equals(expectedStringFromFile))
+            {
+                File file = new File(uri);
+                this.writeStringToFile(actualString, file);
+            }
+            this.checkThat(
+                    "Writing expected file to: " + uri,
+                    actualString,
+                    is(expectedStringFromFile));
         }
-        this.checkThat(
-                "Writing expected file to: " + uri,
-                actualString,
-                is(expectedStringFromFile));
     }
 
     private void writeStringToFile(@Nonnull String string, @Nonnull File file) throws FileNotFoundException
