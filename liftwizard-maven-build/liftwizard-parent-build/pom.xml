@@ -348,6 +348,13 @@
                                 <version>2.22.2</version>
                                 <repositoryType>PLUGIN</repositoryType>
                             </DynamicDependency>
+
+                            <DynamicDependency>
+                                <groupId>com.google.auto.service</groupId>
+                                <artifactId>auto-service</artifactId>
+                                <version>1.0</version>
+                                <repositoryType>MAIN</repositoryType>
+                            </DynamicDependency>
                         </dynamicDependencies>
                     </configuration>
                 </plugin>
