@@ -1,5 +1,3 @@
-# ConfigLoggingBundle
-
 The `ConfigLoggingBundle` logs the Dropwizard configuration to slf4j at INFO level, by serializing the in-memory configuration object to json. It does not echo the contents of the configuration file back. The output will contain default values that were not specified in the original configuration file. Some other values will be normalized or pretty printed.
 
 To turn it on, add `ConfigLoggingBundle` to the list of registered bundles.

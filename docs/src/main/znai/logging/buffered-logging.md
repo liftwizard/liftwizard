@@ -1,5 +1,3 @@
-# Buffered logging in tests
-
 In unit tests, it can be useful to suppress all logging for successful tests, but still log everything when tests fail.
 
 In order to accomplish this, we need to buffer all logging before we know the result of the test, and then flush or clear the buffer once we know the outcome.
