@@ -1,5 +1,3 @@
-# ObjectMapperBundle
- 
 The `ObjectMapperBundle` configures the Jackson `ObjectMapper` used by Dropwizard for serializing and deserializing all responses, as well as for logging by bundles such as `liftwizard-bundle-logging-config`.
  
 `ObjectMapperBundle` supports configuring pretty-printing on or off, and serialization inclusion to any value in Jackson's `JsonInclude.Include`.

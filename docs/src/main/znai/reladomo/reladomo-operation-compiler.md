@@ -1,4 +1,3 @@
-## Overview
 When using [Reladomo](https://github.com/goldmansachs/reladomo), queries are usually expressed using its code-generated Finder language. 
 
 ```java

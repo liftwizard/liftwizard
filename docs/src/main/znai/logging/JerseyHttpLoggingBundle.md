@@ -1,5 +1,3 @@
-# JerseyHttpLoggingBundle
- 
 The `JerseyHttpLoggingBundle` logs all requests and responses to slf4j. The `verbosity` and `maxEntitySize` are configurable.
  
 To turn it on, add `JerseyHttpLoggingBundle` to the list of registered bundles.

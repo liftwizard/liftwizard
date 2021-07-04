@@ -1,5 +1,3 @@
-# GraphQL Logging Instrumentation
-
 `LiftwizardGraphQLLoggingInstrumentation` is an implementation of `Instrumentation` from [GraphQL Java](https://www.graphql-java.com/) that adds helpful context to slf4j's [Mapped Diagnostic Context
 ](http://www.slf4j.org/manual.html#mdc).
 

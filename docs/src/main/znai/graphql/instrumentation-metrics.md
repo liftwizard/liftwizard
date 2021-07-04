@@ -1,5 +1,3 @@
-# GraphQL Metrics Instrumentation
-
 `LiftwizardGraphQLMetricsInstrumentation` is an implementation of `Instrumentation` from [GraphQL Java](https://www.graphql-java.com/) that registers [performance metrics](https://metrics.dropwizard.io/) about data fetching with Dropwizard's MetricsRegistry.
 
 To turn it on, either run the entire [`LiftwizardGraphQLBundle`](graphql/bundle.md) or just add `LiftwizardGraphQLMetricsInstrumentation` to the list of instrumentations on your `GraphQLFactory`.
