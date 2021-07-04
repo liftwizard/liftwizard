@@ -1,5 +1,3 @@
-# LiftwizardGraphQLBundle
-
 The `LiftwizardGraphQLBundle` extends `com.smoketurner.dropwizard.graphql.GraphQLBundle`. 
 
 The bundle registers [the GraphIQL UI](https://github.com/graphql/graphiql) at `/graphiql` and [the GraphQL Playground UI](https://github.com/graphql/graphql-playground) at `/graphql-playground`, by delegating to `AssetsBundle`. This overrides the behavior of the smoketurner bundle, which registers just one UI at `/` (graphiql in older versions, and graphql-playground in newer versions).

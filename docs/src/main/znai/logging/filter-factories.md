@@ -1,5 +1,3 @@
-# Filter factories
-
 Dropwizard comes with support for dynamic configuration of [log filters](https://www.dropwizard.io/en/latest/manual/core.html#logging-filters). However, it ships with just a single filter, the [UriFilterFactory](https://www.dropwizard.io/en/latest/manual/core.html#filtering-request-logs-for-a-specific-uri).
 
 > One can create logging filters that will intercept log statements before they are written and decide if they’re allowed. Log filters can work on both regular statements and request log statements.
