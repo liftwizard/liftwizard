@@ -1,5 +1,3 @@
-# LiftwizardAsyncDataFetcher
-
 `LiftwizardAsyncDataFetcher` is an enhanced alternative to `AsyncDataFetcher` from [GraphQL Java](https://www.graphql-java.com/).
 
 Both have the ability to wrap a synchronous `DataFetcher` together with an `Executor`, and return `CompleteableFuture`s that execute on the `Executor`. `LiftwizardAsyncDataFetcher` also copies slf4j's [Mapped Diagnostic Context](http://www.slf4j.org/manual.html#mdc) to the background tasks, and restores the MDC when each task completes.

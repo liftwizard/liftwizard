@@ -1,5 +1,3 @@
-# Logging modules
- 
 The Liftwizard logging modules add context to slf4j logging through MDC and through "structured logging". There are several bundles and servlet filters to choose from. You can use all of them or cherry-pick the ones that are useful to you.
  
 In order to see the logging in action, we'll need to configure a log format that includes mdc and markers.

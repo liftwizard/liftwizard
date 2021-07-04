@@ -1,5 +1,3 @@
-# EnvironmentConfigBundle
- 
 The `EnvironmentConfigBundle` supports environment variable substitution inside Dropwizard configuration files.
  
 ## Environment variable substitution in example applications

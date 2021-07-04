@@ -9,8 +9,6 @@ logging
     JerseyHttpLoggingBundle
     buffered-logging
     filter-factories
-utility
-    liftwizard-config-logging-filter-requesturl
 graphql
     bundle
     instrumentation-logging
