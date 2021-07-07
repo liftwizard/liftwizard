@@ -43,6 +43,7 @@
     </dependencyManagement>
 
     <modules>
+        <module>liftwizard-ansi-color-strip</module>
         <module>liftwizard-bundle-logging-config</module>
         <module>liftwizard-bundle-logging-http</module>
         <module>liftwizard-config-logging-buffered</module>
