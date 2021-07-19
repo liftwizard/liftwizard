@@ -94,7 +94,7 @@ public class IntegrationTest {
     @Test
     public void testPostPerson() throws Exception {
         final PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
-        final PersonDTO newPerson = postPerson(person);
+        final PersonDTO newPerson = this.postPerson(person);
         assertThat(newPerson.getId()).isNotNull();
         assertThat(newPerson.getFullName()).isEqualTo(person.getFullName());
         assertThat(newPerson.getJobTitle()).isEqualTo(person.getJobTitle());
@@ -102,17 +102,17 @@ public class IntegrationTest {
 
     @Test
     public void testRenderingPersonFreemarker() throws Exception {
-        testRenderingPerson("view_freemarker");
+        this.testRenderingPerson("view_freemarker");
     }
 
     @Test
     public void testRenderingPersonMustache() throws Exception {
-        testRenderingPerson("view_mustache");
+        this.testRenderingPerson("view_mustache");
     }
 
     private void testRenderingPerson(String viewName) throws Exception {
         final PersonDTO person    = new PersonDTO( "Dr. IntegrationTest", "Chief Wizard");
-        final PersonDTO    newPerson = postPerson(person);
+        final PersonDTO    newPerson = this.postPerson(person);
         final String url = "http://localhost:" + dropwizardAppRule.getLocalPort() + "/people/" + newPerson.getId() + "/" + viewName;
         Response response = dropwizardAppRule.client().target(url).request().get();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
