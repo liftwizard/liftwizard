@@ -34,9 +34,6 @@ import static org.hamcrest.CoreMatchers.is;
 public class IntegrationTest {
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
-    @Rule
-    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
-
     private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
             HelloWorldApplication.class,
             CONFIG_PATH);
@@ -53,15 +50,17 @@ public class IntegrationTest {
     private final ReladomoInitializeTestRule initializeTestRule =
             new ReladomoInitializeTestRule("reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml");
 
-
     private final ReladomoPurgeAllTestRule purgeAllTestRule = new ReladomoPurgeAllTestRule();
 
+    private final TestRule logMarkerTestRule = new LogMarkerTestRule();
+
     @Rule
-    public final RuleChain ruleChain = RuleChain.emptyRuleChain()
-            .around(this.dropwizardAppRule)
+    public final RuleChain ruleChain = RuleChain
+            .outerRule(this.dropwizardAppRule)
             .around(this.dbMigrateRule)
             .around(this.initializeTestRule)
-            .around(this.purgeAllTestRule);
+            .around(this.purgeAllTestRule)
+            .around(this.logMarkerTestRule);
 
     @Test
     public void testHelloWorld() throws Exception {
