@@ -34,9 +34,6 @@ import static org.hamcrest.CoreMatchers.is;
 public class PeopleResourceTest {
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
-    @Rule
-    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
-
     private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
             HelloWorldApplication.class,
             CONFIG_PATH);
@@ -56,13 +53,16 @@ public class PeopleResourceTest {
     private final ReladomoPurgeAllTestRule purgeAllTestRule = new ReladomoPurgeAllTestRule();
     private final ReladomoLoadDataTestRule loadDataTestRule = new ReladomoLoadDataTestRule();
 
+    private final TestRule logMarkerTestRule = new LogMarkerTestRule();
+
     @Rule
-    public final RuleChain ruleChain = RuleChain.emptyRuleChain()
-            .around(this.dropwizardAppRule)
+    public final RuleChain ruleChain = RuleChain
+            .outerRule(this.dropwizardAppRule)
             .around(this.dbMigrateRule)
             .around(this.initializeTestRule)
             .around(this.purgeAllTestRule)
-            .around(this.loadDataTestRule);
+            .around(this.loadDataTestRule)
+            .around(this.logMarkerTestRule);
 
     private final PersonDTO personDTO = new PersonDTO("Full Name", "Job Title");
 

@@ -60,18 +60,24 @@ The `BufferedAppenderFactory` allows you to use an appender with the type `buffe
  This is primarily useful for tests that use `DropwizardAppRule`.
  
 ```java
-@Rule
-public final TestRule logMarkerTestRule = new LogMarkerTestRule();
+private final TestRule logMarkerTestRule=new LogMarkerTestRule();
 
-@Rule
-public final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
+private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule=new DropwizardAppRule<>(
         HelloWorldApplication.class,
         ResourceHelpers.resourceFilePath("test-example.json5"));
+
+@Rule
+public final RuleChain ruleChain=RuleChain
+        .outerRule(this.dropwizardAppRule)
+        .around(this.logMarkerTestRule);
 ```
+
+Note that `LogMarkerTestRule` needs to be an inner rule, with any other rules that tear down logging outer to it.
 
 `BufferedAppenderFactory` lives in the `liftwizard-config-logging-buffered` module.
 
 ```xml
+
 <dependency>
     <groupId>io.liftwizard</groupId>
     <artifactId>liftwizard-config-logging-buffered</artifactId>
