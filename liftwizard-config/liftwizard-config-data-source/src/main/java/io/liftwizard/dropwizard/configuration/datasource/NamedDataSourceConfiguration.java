@@ -48,6 +48,7 @@ public class NamedDataSourceConfiguration
 
     private boolean initialized;
 
+    @Override
     @JsonProperty("dataSources")
     public List<NamedDataSourceFactory> getNamedDataSourceFactories()
     {
