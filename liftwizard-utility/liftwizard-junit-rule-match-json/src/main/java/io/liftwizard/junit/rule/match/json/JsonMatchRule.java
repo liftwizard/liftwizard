@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import javax.annotation.Nonnull;
@@ -39,10 +40,18 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-public class JsonMatchRule extends ErrorCollector
+public class JsonMatchRule
+        extends ErrorCollector
 {
+    public static String slurp(@Nonnull InputStream inputStream, Charset charset)
+    {
+        try (Scanner scanner = new Scanner(inputStream, charset))
+        {
+            return scanner.useDelimiter("\\A").next();
+        }
+    }
+
     public void assertFileContents(
             @Nonnull String resourceClassPathLocation,
             @Nonnull String actualString,
@@ -50,9 +59,8 @@ public class JsonMatchRule extends ErrorCollector
     {
         try
         {
-            JsonMatchRule.assertFileContentsOrThrow(
+            this.assertFileContentsOrThrow(
                     resourceClassPathLocation,
-                    StandardCharsets.UTF_8,
                     actualString,
                     callingClass);
         }
@@ -60,20 +68,14 @@ public class JsonMatchRule extends ErrorCollector
         {
             throw new RuntimeException(e);
         }
+        catch (NoSuchElementException e)
+        {
+            throw new RuntimeException(resourceClassPathLocation, e);
+        }
     }
 
-    private static void assertFileContentsOrThrow(
+    private void assertFileContentsOrThrow(
             @Nonnull String resourceClassPathLocation,
-            @Nonnull String actualString,
-            @Nonnull Class<?> callingClass)
-            throws URISyntaxException, FileNotFoundException, JSONException
-    {
-        JsonMatchRule.assertFileContentsOrThrow(resourceClassPathLocation, StandardCharsets.UTF_8, actualString, callingClass);
-    }
-
-    private static void assertFileContentsOrThrow(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull Charset charset,
             @Nonnull String actualString,
             @Nonnull Class<?> callingClass)
             throws URISyntaxException, FileNotFoundException, JSONException
@@ -88,29 +90,27 @@ public class JsonMatchRule extends ErrorCollector
             File                 resourceFile     = packagePath.resolve(resourceClassPathLocation).toFile();
 
             assertThat(resourceFile.exists(), is(false));
-            JsonMatchRule.writeStringToFile(actualString, resourceFile);
-            fail(resourceClassPathLocation);
+            this.writeStringToFile(actualString, resourceFile);
+            this.addError(new AssertionError(resourceClassPathLocation));
         }
-
-        String expectedStringFromFile = JsonMatchRule.slurp(inputStream, charset);
-        URI    uri                    = callingClass.getResource(resourceClassPathLocation).toURI();
-        if (!actualString.equals(expectedStringFromFile))
+        else
         {
-            File file = new File(uri);
-            JsonMatchRule.writeStringToFile(actualString, file);
+            String expectedStringFromFile = JsonMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
+            URI    uri                    = callingClass.getResource(resourceClassPathLocation).toURI();
+            if (!actualString.equals(expectedStringFromFile))
+            {
+                File file = new File(uri);
+                this.writeStringToFile(actualString, file);
+            }
+            JSONAssert.assertEquals(
+                    actualString,
+                    expectedStringFromFile,
+                    actualString,
+                    JSONCompareMode.STRICT);
         }
-        JSONAssert.assertEquals(actualString, expectedStringFromFile, actualString, JSONCompareMode.STRICT);
     }
 
-    private static String slurp(@Nonnull InputStream inputStream, Charset charset)
-    {
-        try (Scanner scanner = new Scanner(inputStream, charset))
-        {
-            return scanner.useDelimiter("\\A").next();
-        }
-    }
-
-    private static void writeStringToFile(@Nonnull String string, @Nonnull File file) throws FileNotFoundException
+    private void writeStringToFile(@Nonnull String string, @Nonnull File file) throws FileNotFoundException
     {
         try (PrintWriter printWriter = new PrintWriter(file))
         {
