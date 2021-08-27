@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
-public interface PrioritizedBundle<T>
-        extends ConfiguredBundle<T>
+public interface PrioritizedBundle
+        extends ConfiguredBundle<Object>
 {
     String MDC_BUNDLE   = "liftwizard.bundle";
     String MDC_PRIORITY = "liftwizard.priority";
@@ -65,7 +65,7 @@ public interface PrioritizedBundle<T>
     }
 
     @Override
-    default void run(@Nonnull T configuration, @Nonnull Environment environment) throws Exception
+    default void run(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception
     {
         try (
                 MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
@@ -75,5 +75,5 @@ public interface PrioritizedBundle<T>
         }
     }
 
-    void runWithMdc(@Nonnull T configuration, @Nonnull Environment environment) throws Exception;
+    void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception;
 }

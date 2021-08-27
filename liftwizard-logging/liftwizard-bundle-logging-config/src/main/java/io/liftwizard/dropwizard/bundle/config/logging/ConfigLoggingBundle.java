@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 @AutoService(PrioritizedBundle.class)
 public class ConfigLoggingBundle
-        implements PrioritizedBundle<Object>
+        implements PrioritizedBundle
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoggingBundle.class);
 
