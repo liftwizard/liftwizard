@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2020 Craig Motlin
+  ~ Copyright 2021 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@
         <module>liftwizard-ansi-color-strip</module>
         <module>liftwizard-bundle-logging-config</module>
         <module>liftwizard-bundle-logging-http</module>
+        <module>liftwizard-bundle-logging-uncaught-exception-handler</module>
         <module>liftwizard-config-logging-buffered</module>
         <module>liftwizard-config-logging-config</module>
         <module>liftwizard-config-logging-filter-janino</module>
