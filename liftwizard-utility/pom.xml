@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2020 Craig Motlin
+  ~ Copyright 2021 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
     <name>Liftwizard Utility (Module Group)</name>
 
     <modules>
+        <module>liftwizard-healthcheck-common-pool</module>
         <module>liftwizard-junit-rule-log-marker</module>
         <module>liftwizard-junit-rule-match-file</module>
         <module>liftwizard-junit-rule-match-json</module>
