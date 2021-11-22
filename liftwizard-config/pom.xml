@@ -50,6 +50,7 @@
         <module>liftwizard-config-executor-service</module>
         <module>liftwizard-config-graphql</module>
         <module>liftwizard-config-h2</module>
+        <module>liftwizard-config-healthcheck-common-pool</module>
         <module>liftwizard-config-system-properties</module>
         <module>liftwizard-configuration-factory-json</module>
     </modules>

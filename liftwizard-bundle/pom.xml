@@ -49,6 +49,7 @@
         <module>liftwizard-bundle-environment-config</module>
         <module>liftwizard-bundle-graphql</module>
         <module>liftwizard-bundle-h2</module>
+        <module>liftwizard-bundle-healthcheck-common-pool</module>
         <module>liftwizard-bundle-prioritized-api</module>
         <module>liftwizard-bundle-system-properties</module>
     </modules>
