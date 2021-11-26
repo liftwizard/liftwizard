@@ -18,7 +18,7 @@ package io.liftwizard.dropwizard.bundle.objectmapper;
 
 import javax.annotation.Nonnull;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * Configures the Jackson {@link ObjectMapper} used by Dropwizard for serializing and deserializing all responses, as well as for logging by bundles such as liftwizard-bundle-logging-config.
  *
  * <p>
- * Supports configuring pretty-printing on or off, and serialization inclusion to any value in Jackson's {@link JsonInclude.Include}.
+ * Supports configuring pretty-printing on or off, and serialization inclusion to any value in Jackson's {@link Include}.
  *
  * <p>
  * Also turns on all json5 features, turns on {@link DeserializationFeature#FAIL_ON_UNKNOWN_PROPERTIES}, turns on {@link Feature#STRICT_DUPLICATE_DETECTION}, and turns on serialization of dates and Strings.
@@ -84,7 +84,9 @@ public class ObjectMapperBundle
         ObjectMapperConfig.configure(
                 objectMapper,
                 objectMapperFactory.isPrettyPrint(),
-                objectMapperFactory.getSerializationInclusion());
+                objectMapperFactory.getFailOnUnknownProperties(),
+                objectMapperFactory.getSerializationInclusion(),
+                objectMapperFactory.getDefaultNullSetterInfo());
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 
