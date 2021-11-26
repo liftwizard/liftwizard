@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,16 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.Nulls;
 
 public class ObjectMapperFactory
 {
-    private          boolean enabled                = true;
+    private          boolean enabled                 = true;
     // Should usually be false in production
-    private          boolean prettyPrint            = true;
-    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
+    private          boolean prettyPrint             = true;
+    private          boolean failOnUnknownProperties = true;
+    private @NotNull Include serializationInclusion  = Include.NON_ABSENT;
+    private @NotNull Nulls   defaultNullSetterInfo   = Nulls.AS_EMPTY;
 
     public boolean isEnabled()
     {
@@ -50,6 +53,17 @@ public class ObjectMapperFactory
         this.prettyPrint = prettyPrint;
     }
 
+    public boolean getFailOnUnknownProperties()
+    {
+        return this.failOnUnknownProperties;
+    }
+
+    @JsonProperty
+    public void setFailOnUnknownProperties(boolean failOnUnknownProperties)
+    {
+        this.failOnUnknownProperties = failOnUnknownProperties;
+    }
+
     public Include getSerializationInclusion()
     {
         return this.serializationInclusion;
@@ -59,5 +73,16 @@ public class ObjectMapperFactory
     public void setSerializationInclusion(Include serializationInclusion)
     {
         this.serializationInclusion = serializationInclusion;
+    }
+
+    public Nulls getDefaultNullSetterInfo()
+    {
+        return this.defaultNullSetterInfo;
+    }
+
+    @JsonProperty
+    public void setDefaultNullSetterInfo(Nulls defaultNullSetterInfo)
+    {
+        this.defaultNullSetterInfo = defaultNullSetterInfo;
     }
 }

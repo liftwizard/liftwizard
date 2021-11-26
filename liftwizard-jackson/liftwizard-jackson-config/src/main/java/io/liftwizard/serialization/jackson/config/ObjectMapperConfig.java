@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package io.liftwizard.serialization.jackson.config;
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonSetter.Value;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -38,10 +40,41 @@ public final class ObjectMapperConfig
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static void configure(
+    public static ObjectMapper configure(@Nonnull ObjectMapper objectMapper)
+    {
+        return configure(objectMapper, true);
+    }
+
+    public static ObjectMapper configure(
+            @Nonnull ObjectMapper objectMapper,
+            boolean prettyPrint)
+    {
+        return configure(objectMapper, prettyPrint, true);
+    }
+
+    public static ObjectMapper configure(
             @Nonnull ObjectMapper objectMapper,
             boolean prettyPrint,
+            boolean failOnUnknownProperties)
+    {
+        return configure(objectMapper, prettyPrint, failOnUnknownProperties, Include.NON_ABSENT);
+    }
+
+    public static ObjectMapper configure(
+            @Nonnull ObjectMapper objectMapper,
+            boolean prettyPrint,
+            boolean failOnUnknownProperties,
             @Nonnull Include serializationInclusion)
+    {
+        return configure(objectMapper, prettyPrint, failOnUnknownProperties, serializationInclusion, Nulls.AS_EMPTY);
+    }
+
+    public static ObjectMapper configure(
+            @Nonnull ObjectMapper objectMapper,
+            boolean prettyPrint,
+            boolean failOnUnknownProperties,
+            @Nonnull Include serializationInclusion,
+            @Nonnull Nulls defaultNullSetterInfo)
     {
         if (prettyPrint)
         {
@@ -49,9 +82,10 @@ public final class ObjectMapperConfig
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         }
 
-        // Default behavior in Dropwizard 1.2.x
-        // Necessary in Dropwizard 2.x
-        objectMapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        // Default behavior in Dropwizard 1.x is DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES enabled
+        // Default behavior in Dropwizard 2.x is DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES disabled
+        // Default behavior in Liftwizard is DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES enabled
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, failOnUnknownProperties);
         objectMapper.enable(Feature.STRICT_DUPLICATE_DETECTION);
 
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -75,5 +109,8 @@ public final class ObjectMapperConfig
 
         objectMapper.setDateFormat(new StdDateFormat());
         objectMapper.setSerializationInclusion(serializationInclusion);
+        objectMapper.setDefaultSetterInfo(Value.forContentNulls(defaultNullSetterInfo));
+
+        return objectMapper;
     }
 }
