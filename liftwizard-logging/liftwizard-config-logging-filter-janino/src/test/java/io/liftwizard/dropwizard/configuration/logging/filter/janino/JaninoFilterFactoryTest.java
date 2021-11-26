@@ -26,7 +26,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.boolex.EventEvaluator;
 import ch.qos.logback.core.filter.EvaluatorFilter;
 import ch.qos.logback.core.filter.Filter;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
@@ -85,7 +84,7 @@ public class JaninoFilterFactoryTest
     private static ObjectMapper newObjectMapper()
     {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        ObjectMapperConfig.configure(objectMapper);
         return objectMapper;
     }
 }

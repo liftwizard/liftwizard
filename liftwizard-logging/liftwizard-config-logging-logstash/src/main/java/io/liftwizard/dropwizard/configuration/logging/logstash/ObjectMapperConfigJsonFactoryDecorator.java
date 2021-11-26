@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class ObjectMapperConfigJsonFactoryDecorator
     public JsonFactory decorate(JsonFactory factory)
     {
         ObjectMapper objectMapper = (ObjectMapper) factory.getCodec();
-        ObjectMapperConfig.configure(objectMapper, this.prettyPrint, this.serializationInclusion);
+        ObjectMapperConfig.configure(objectMapper, this.prettyPrint, true, this.serializationInclusion);
         return factory;
     }
 }

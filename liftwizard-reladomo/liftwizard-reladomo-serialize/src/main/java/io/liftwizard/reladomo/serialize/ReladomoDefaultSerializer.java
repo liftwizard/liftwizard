@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package io.liftwizard.reladomo.serialize;
 
 import javax.annotation.Nonnull;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gs.fw.common.mithra.MithraObject;
@@ -39,7 +38,7 @@ public final class ReladomoDefaultSerializer
     {
         // TODO: Initialize with shared ObjectMapper
         ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        ObjectMapperConfig.configure(objectMapper);
         return serialize(mithraObject, objectMapper);
     }
 

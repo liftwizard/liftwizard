@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.TimeZone;
 import javax.validation.Validator;
 
 import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
@@ -74,7 +73,7 @@ public class ConnectionManagerFactoryTest
     private static ObjectMapper newObjectMapper()
     {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper, true, Include.NON_ABSENT);
+        ObjectMapperConfig.configure(objectMapper);
         return objectMapper;
     }
 }
