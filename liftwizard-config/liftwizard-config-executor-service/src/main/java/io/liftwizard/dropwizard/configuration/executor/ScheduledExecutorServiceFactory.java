@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,12 @@ public class ScheduledExecutorServiceFactory
     @Valid
     @NotEmpty
     private String   nameFormat;
+    private boolean  useDaemonThreads = true;
     @Min(0)
-    private int      threads      = 1;
+    private int      threads          = 1;
     @NotNull
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private Duration shutdownTime = Duration.seconds(5);
+    private Duration shutdownTime     = Duration.seconds(5);
     private boolean  removeOnCancelPolicy;
 
     @JsonIgnore
@@ -53,7 +54,7 @@ public class ScheduledExecutorServiceFactory
     public ScheduledExecutorServiceBuilder build(LifecycleEnvironment environment)
     {
         return environment
-                .scheduledExecutorService(this.nameFormat)
+                .scheduledExecutorService(this.nameFormat, this.useDaemonThreads)
                 .threads(this.threads)
                 .shutdownTime(this.shutdownTime)
                 .removeOnCancelPolicy(this.removeOnCancelPolicy);
@@ -69,6 +70,18 @@ public class ScheduledExecutorServiceFactory
     public void setNameFormat(String nameFormat)
     {
         this.nameFormat = nameFormat;
+    }
+
+    @JsonProperty
+    public boolean isUseDaemonThreads()
+    {
+        return this.useDaemonThreads;
+    }
+
+    @JsonProperty
+    public void setUseDaemonThreads(boolean useDaemonThreads)
+    {
+        this.useDaemonThreads = useDaemonThreads;
     }
 
     @JsonProperty
