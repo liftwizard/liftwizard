@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +37,13 @@ public class AsyncDataSupplier<T>
     {
         this.dataFetcher      = Objects.requireNonNull(dataFetcher);
         this.environment      = Objects.requireNonNull(environment);
-        this.copyOfContextMap = MDC.getCopyOfContextMap();
+        this.copyOfContextMap = AsyncDataSupplier.getCopyOfContextMap();
     }
 
     @Override
     public T get()
     {
-        Map<String, String> oldContextMap = MDC.getCopyOfContextMap();
+        Map<String, String> oldContextMap = AsyncDataSupplier.getCopyOfContextMap();
         MDC.setContextMap(this.copyOfContextMap);
         try
         {
@@ -61,5 +61,11 @@ public class AsyncDataSupplier<T>
         {
             MDC.setContextMap(oldContextMap);
         }
+    }
+
+    private static Map<String, String> getCopyOfContextMap()
+    {
+        Map<String, String> result = MDC.getCopyOfContextMap();
+        return result == null ? Map.of() : result;
     }
 }
