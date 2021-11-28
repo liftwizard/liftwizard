@@ -1,9 +1,6 @@
 package com.example.helloworld;
 
-import java.util.EnumSet;
 import java.util.Map;
-
-import javax.servlet.DispatcherType;
 
 import com.example.helloworld.auth.ExampleAuthenticator;
 import com.example.helloworld.auth.ExampleAuthorizer;
@@ -42,11 +39,7 @@ import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.ConnectionMan
 import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.ConnectionManagerHolderBundle;
 import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
-import io.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
-import io.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
-import io.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter;
-import io.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
-import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
+import io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
@@ -73,7 +66,8 @@ public class HelloWorldApplication
         bootstrap.addBundle(new ObjectMapperBundle());
         bootstrap.addBundle(new ConfigLoggingBundle());
 
-        bootstrap.addBundle(new JerseyHttpLoggingBundle());
+        StructuredArgumentsMDCLogger structuredLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
+        bootstrap.addBundle(new JerseyHttpLoggingBundle(structuredLogger));
 
         bootstrap.addBundle(new ClockBundle());
         bootstrap.addBundle(new UUIDBundle());
@@ -112,15 +106,6 @@ public class HelloWorldApplication
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
-        environment.getApplicationContext().addFilter(
-                StructuredLoggingServletFilter.class,
-                "/*",
-                EnumSet.of(DispatcherType.REQUEST));
-
-        environment.jersey().register(CorrelationIdFilter.class);
-        environment.jersey().register(ResourceInfoLoggingFilter.class);
-        environment.jersey().register(StatusInfoStructuredLoggingFilter.class);
-        environment.jersey().register(DurationStructuredLoggingFilter.class);
 
         environment.jersey().register(DateRequiredFeature.class);
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()

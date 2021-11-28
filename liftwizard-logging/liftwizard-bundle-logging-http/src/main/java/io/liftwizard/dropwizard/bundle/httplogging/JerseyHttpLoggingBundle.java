@@ -16,39 +16,52 @@
 
 package io.liftwizard.dropwizard.bundle.httplogging;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import javax.annotation.Nonnull;
 
-import com.google.auto.service.AutoService;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactoryProvider;
-import org.glassfish.jersey.logging.LoggingFeature;
-import org.glassfish.jersey.logging.LoggingFeature.Verbosity;
+import io.liftwizard.servlet.logging.feature.LoggingConfig;
+import io.liftwizard.servlet.logging.feature.LoggingFeature;
+import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Logs all requests and responses to slf4j. The verbosity and maxEntitySize are configurable.
+ * Logs all requests and responses to slf4j. The maxEntitySize is configurable.
  *
  * @see <a href="https://liftwizard.io/docs/logging/JerseyHttpLoggingBundle#jerseyhttploggingbundle">https://liftwizard.io/docs/logging/JerseyHttpLoggingBundle#jerseyhttploggingbundle</a>
  */
-@AutoService(PrioritizedBundle.class)
 public class JerseyHttpLoggingBundle
-        implements PrioritizedBundle
+        implements ConfiguredBundle<JerseyHttpLoggingFactoryProvider>
 {
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
+
+    @Nonnull
+    private final BiConsumer<StructuredArguments, Optional<String>> structuredLogger;
+
+    public JerseyHttpLoggingBundle(@Nonnull BiConsumer<StructuredArguments, Optional<String>> structuredLogger)
+    {
+        this.structuredLogger = Objects.requireNonNull(structuredLogger);
+    }
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+    public void initialize(Bootstrap<?> bootstrap)
     {
-        JerseyHttpLoggingFactoryProvider jerseyHttpLoggingFactoryProvider = this.safeCastConfiguration(
-                JerseyHttpLoggingFactoryProvider.class,
-                configuration);
+    }
 
-        JerseyHttpLoggingFactory factory = jerseyHttpLoggingFactoryProvider.getJerseyHttpLoggingFactory();
+    @Override
+    public void run(JerseyHttpLoggingFactoryProvider configuration, Environment environment)
+            throws Exception
+    {
+        JerseyHttpLoggingFactory factory = configuration.getJerseyHttpLoggingFactory();
         if (!factory.isEnabled())
         {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
@@ -57,13 +70,23 @@ public class JerseyHttpLoggingBundle
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        Level     level         = Level.parse(factory.getLevel());
-        Verbosity verbosity     = Verbosity.valueOf(factory.getVerbosity());
-        int       maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
+        int maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
 
-        Logger         logger         = Logger.getLogger(JerseyHttpLoggingBundle.class.getName());
-        LoggingFeature loggingFeature = new LoggingFeature(logger, level, verbosity, maxEntitySize);
-        environment.jersey().register(loggingFeature);
+        LoggingConfig loggingBuilder = new LoggingConfig(
+                factory.isLogRequests(),
+                factory.isLogRequestBodies(),
+                factory.isLogResponses(),
+                factory.isLogResponseBodies(),
+                factory.isLogExcludedHeaderNames(),
+                factory.getIncludedHeaders(),
+                maxEntitySize);
+
+        JerseyEnvironment jersey = environment.jersey();
+        if (loggingBuilder.isLogRequests() || loggingBuilder.isLogResponses())
+        {
+            LoggingFeature loggingFeature = new LoggingFeature(loggingBuilder, this.structuredLogger);
+            jersey.register(loggingFeature);
+        }
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }

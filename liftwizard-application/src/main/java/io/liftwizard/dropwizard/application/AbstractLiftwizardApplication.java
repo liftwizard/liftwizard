@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package io.liftwizard.dropwizard.application;
 
-import java.util.EnumSet;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-import javax.servlet.DispatcherType;
 
 import ch.qos.logback.classic.Level;
 import com.gs.reladomo.serial.jackson.JacksonReladomoModule;
@@ -39,12 +37,6 @@ import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFa
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
-import io.liftwizard.servlet.logging.correlation.id.CorrelationIdFilter;
-import io.liftwizard.servlet.logging.resource.info.ResourceInfoLoggingFilter;
-import io.liftwizard.servlet.logging.structured.argument.StructuredLoggingServletFilter;
-import io.liftwizard.servlet.logging.structured.duration.DurationStructuredLoggingFilter;
-import io.liftwizard.servlet.logging.structured.reladomo.ReladomoStructuredLoggingFilter;
-import io.liftwizard.servlet.logging.structured.status.info.StatusInfoStructuredLoggingFilter;
 import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
 public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider>
@@ -110,7 +102,6 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     public void run(@Nonnull T configuration, @Nonnull Environment environment) throws Exception
     {
         this.registerJacksonModules(environment);
-        this.registerLoggingFilters(environment);
         this.registerHealthChecks(environment);
         this.registerTasks(environment);
     }
@@ -118,20 +109,6 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     protected void registerJacksonModules(@Nonnull Environment environment)
     {
         environment.getObjectMapper().registerModule(new JacksonReladomoModule());
-    }
-
-    protected void registerLoggingFilters(@Nonnull Environment environment)
-    {
-        environment.getApplicationContext().addFilter(
-                StructuredLoggingServletFilter.class,
-                "/api/*",
-                EnumSet.of(DispatcherType.REQUEST));
-
-        environment.jersey().register(CorrelationIdFilter.class);
-        environment.jersey().register(ResourceInfoLoggingFilter.class);
-        environment.jersey().register(StatusInfoStructuredLoggingFilter.class);
-        environment.jersey().register(DurationStructuredLoggingFilter.class);
-        environment.jersey().register(ReladomoStructuredLoggingFilter.class);
     }
 
     protected void registerHealthChecks(@Nonnull Environment environment)
