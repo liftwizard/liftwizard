@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2021 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,34 @@ package io.liftwizard.dropwizard.configuration.http.logging;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.util.Size;
+import io.dropwizard.util.SizeUnit;
+import io.dropwizard.validation.MinSize;
+import io.dropwizard.validation.ValidationMethod;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
 
 public class JerseyHttpLoggingFactory
 {
     // Should usually be disabled in production
-    private          boolean enabled       = true;
-    private @NotNull String  level         = "INFO";
-    private @NotNull String  verbosity     = "PAYLOAD_ANY";
-    private @NotNull Size    maxEntitySize = Size.kilobytes(8);
+    private boolean enabled                = true;
+    private boolean logRequests            = true;
+    private boolean logRequestBodies       = true;
+    private boolean logResponses           = true;
+    private boolean logResponseBodies      = true;
+    private boolean logExcludedHeaderNames = true;
 
+    private @NotNull ImmutableList<String> includedHeaders = Lists.immutable.with(
+            "Host",
+            "User-Agent",
+            "Content-Type");
+
+    @MinSize(value = 1, unit = SizeUnit.BYTES)
+    private @NotNull Size maxEntitySize = Size.kilobytes(8);
+
+    @JsonProperty
     public boolean isEnabled()
     {
         return this.enabled;
@@ -40,28 +57,79 @@ public class JerseyHttpLoggingFactory
         this.enabled = enabled;
     }
 
-    public String getLevel()
+    @JsonProperty
+    public boolean isLogRequests()
     {
-        return this.level;
+        return this.logRequests;
     }
 
     @JsonProperty
-    public void setLevel(String level)
+    public void setLogRequests(boolean logRequests)
     {
-        this.level = level;
-    }
-
-    public String getVerbosity()
-    {
-        return this.verbosity;
+        this.logRequests = logRequests;
     }
 
     @JsonProperty
-    public void setVerbosity(String verbosity)
+    public boolean isLogRequestBodies()
     {
-        this.verbosity = verbosity;
+        return this.logRequestBodies;
     }
 
+    @JsonProperty
+    public void setLogRequestBodies(boolean logRequestBodies)
+    {
+        this.logRequestBodies = logRequestBodies;
+    }
+
+    @JsonProperty
+    public boolean isLogResponses()
+    {
+        return this.logResponses;
+    }
+
+    @JsonProperty
+    public void setLogResponses(boolean logResponses)
+    {
+        this.logResponses = logResponses;
+    }
+
+    @JsonProperty
+    public boolean isLogResponseBodies()
+    {
+        return this.logResponseBodies;
+    }
+
+    @JsonProperty
+    public void setLogResponseBodies(boolean logResponseBodies)
+    {
+        this.logResponseBodies = logResponseBodies;
+    }
+
+    @JsonProperty
+    public boolean isLogExcludedHeaderNames()
+    {
+        return this.logExcludedHeaderNames;
+    }
+
+    @JsonProperty
+    public void setLogExcludedHeaderNames(boolean logExcludedHeaderNames)
+    {
+        this.logExcludedHeaderNames = logExcludedHeaderNames;
+    }
+
+    @JsonProperty
+    public ImmutableList<String> getIncludedHeaders()
+    {
+        return this.includedHeaders;
+    }
+
+    @JsonProperty
+    public void setIncludedHeaders(ImmutableList<String> includedHeaders)
+    {
+        this.includedHeaders = includedHeaders;
+    }
+
+    @JsonProperty
     public Size getMaxEntitySize()
     {
         return this.maxEntitySize;
@@ -71,5 +139,19 @@ public class JerseyHttpLoggingFactory
     public void setMaxEntitySize(Size maxEntitySize)
     {
         this.maxEntitySize = maxEntitySize;
+    }
+
+    @ValidationMethod(message = "Logging request bodies requires logging requests")
+    @JsonIgnore
+    public boolean isValidRequest()
+    {
+        return !this.logRequestBodies || this.logRequests;
+    }
+
+    @ValidationMethod(message = "Logging response bodies requires logging responses")
+    @JsonIgnore
+    public boolean isValidResponse()
+    {
+        return !this.logResponseBodies || this.logResponses;
     }
 }
