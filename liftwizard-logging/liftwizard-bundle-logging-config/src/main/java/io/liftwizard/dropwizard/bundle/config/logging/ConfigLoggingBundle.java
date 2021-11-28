@@ -16,6 +16,9 @@
 
 package io.liftwizard.dropwizard.bundle.config.logging;
 
+import java.lang.reflect.Constructor;
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The ConfigLoggingBundle logs the Dropwizard configuration to slf4j at INFO level, by serializing the in-memory configuration object to json.
+ *
  * @see <a href="https://liftwizard.io/docs/configuration/ConfigLoggingBundle#configloggingbundle">https://liftwizard.io/docs/configuration/ConfigLoggingBundle#configloggingbundle</a>
  */
 @AutoService(PrioritizedBundle.class)
@@ -67,13 +71,51 @@ public class ConfigLoggingBundle
 
     private static void logConfiguration(
             @Nonnull Object configuration,
-            @Nonnull ObjectMapper objectMapper) throws JsonProcessingException, ReflectiveOperationException
+            @Nonnull ObjectMapper objectMapper) throws JsonProcessingException
     {
         String configurationString = objectMapper.writeValueAsString(configuration);
         LOGGER.info("Inferred Dropwizard configuration:\n{}", configurationString);
 
-        Object defaultConfiguration       = configuration.getClass().getConstructor().newInstance();
+        Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration)
+                .flatMap(ConfigLoggingBundle::getDefaultConfiguration);
+        if (maybeDefaultConfiguration.isEmpty())
+        {
+            return;
+        }
+        Object defaultConfiguration       = maybeDefaultConfiguration.get();
         String defaultConfigurationString = objectMapper.writeValueAsString(defaultConfiguration);
         LOGGER.debug("Default Dropwizard configuration:\n{}", defaultConfigurationString);
+    }
+
+    @Nonnull
+    private static Optional<Object> getDefaultConfiguration(@Nonnull Constructor<?> constructor)
+    {
+        try
+        {
+            return Optional.of(constructor.newInstance());
+        }
+        catch (ReflectiveOperationException e)
+        {
+            LOGGER.debug(
+                    "Could not log Default Dropwizard configuration because {} is not instantiable through its no-arg constructor.",
+                    constructor.getDeclaringClass().getCanonicalName());
+            return Optional.empty();
+        }
+    }
+
+    @Nonnull
+    private static Optional<Constructor<?>> getConstructor(@Nonnull Object configuration)
+    {
+        try
+        {
+            return Optional.of(configuration.getClass().getConstructor());
+        }
+        catch (NoSuchMethodException e)
+        {
+            LOGGER.debug(
+                    "Could not log Default Dropwizard configuration because {} does not implement a no-arg constructor.",
+                    configuration.getClass().getCanonicalName());
+            return Optional.empty();
+        }
     }
 }
