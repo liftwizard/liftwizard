@@ -35,7 +35,6 @@
       <option name="XML_KEEP_BLANK_LINES" value="1" />
       <option name="XML_ALIGN_ATTRIBUTES" value="false" />
       <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
-      <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
     </XML>
     <codeStyleSettings language="JAVA">
       <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
@@ -106,6 +105,9 @@
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Markdown">
+      <option name="RIGHT_MARGIN" value="999" />
     </codeStyleSettings>
     <codeStyleSettings language="XML">
       <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
