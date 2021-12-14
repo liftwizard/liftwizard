@@ -3,7 +3,7 @@
 
 For example, say that during the execution of a `DataFetcher`, we execute a database query and log its sql. It would be helpful to see the query in the context of the DataFetcher that executed it, along with the GraphQL field and its type, and the path we took through the graph on the way to this field.
 
-This Instrumentation adds these fields to MDC, prefixed with `liftwizard.graphql`. See [logging-modules](logging/logging-modules.md) for other Liftwizard modules that can add additional context.
+This Instrumentation adds these fields to MDC, prefixed with `liftwizard.graphql`.
 
 To turn it on, either run the entire [`LiftwizardGraphQLBundle`](graphql/bundle.md) or just add `LiftwizardGraphQLLoggingInstrumentation` to the list of instrumentations on your `GraphQLFactory`.
 

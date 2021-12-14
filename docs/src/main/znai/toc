@@ -5,7 +5,6 @@ configuration
 jackson
     ObjectMapperBundle
 logging
-    logging-modules
     JerseyHttpLoggingBundle
     buffered-logging
     filter-factories
