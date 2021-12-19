@@ -42,7 +42,8 @@ public class StructuredArgumentsStatus
         {
             throw new AssertionError(name);
         }
-        this.name = Objects.requireNonNull(name);
+        // Name can occasionally be null, for http codes like 422 which are used by Dropwizard but don't appear in the Status enumeration
+        this.name = name;
     }
 
     @JsonProperty
