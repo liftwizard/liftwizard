@@ -57,7 +57,7 @@ public class StructuredArgumentsOpenTracingLogger
 
         ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
         this.structuredArgumentsToSpans(objectNode);
-        LOGGER.debug(message);
+        LOGGER.info(message);
     }
 
     private void structuredArgumentsToSpans(@Nonnull ObjectNode objectNode)
@@ -65,7 +65,7 @@ public class StructuredArgumentsOpenTracingLogger
         Span span = GlobalTracer.get().activeSpan();
         if (span == null)
         {
-            throw new IllegalStateException();
+            return;
         }
 
         this.structuredArgumentsToSpans(span, Stacks.immutable.empty(), objectNode);
