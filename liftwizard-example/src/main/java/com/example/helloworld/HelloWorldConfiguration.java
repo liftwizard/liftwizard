@@ -46,7 +46,6 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFactory;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
-import org.eclipse.collections.api.map.MapIterable;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class HelloWorldConfiguration
@@ -246,7 +245,7 @@ public class HelloWorldConfiguration
 
     @Override
     @JsonIgnore
-    public MapIterable<String, ManagedDataSource> getDataSourcesByName()
+    public Map<String, ManagedDataSource> getDataSourcesByName()
     {
         return this.namedDataSourceConfiguration.getDataSourcesByName();
     }
@@ -265,7 +264,7 @@ public class HelloWorldConfiguration
     }
 
     @Override
-    public void initializeConnectionManagers(@Nonnull MapIterable<String, ManagedDataSource> dataSourcesByName)
+    public void initializeConnectionManagers(@Nonnull Map<String, ManagedDataSource> dataSourcesByName)
     {
         this.connectionManagerConfiguration.initializeConnectionManagers(dataSourcesByName);
     }
@@ -307,12 +306,12 @@ public class HelloWorldConfiguration
                 sourcelessConnectionManager,
                 () -> String.format("Could not find connection manager with name %s. Valid choices are %s",
                         name,
-                        this.connectionManagerConfiguration.getConnectionManagersByName().keysView()));
+                        this.connectionManagerConfiguration.getConnectionManagersByName().keySet()));
     }
 
     @JsonIgnore
     @Override
-    public org.eclipse.collections.api.map.ImmutableMap<String, SourcelessConnectionManager> getConnectionManagersByName()
+    public Map<String, SourcelessConnectionManager> getConnectionManagersByName()
     {
         return this.connectionManagerConfiguration.getConnectionManagersByName();
     }

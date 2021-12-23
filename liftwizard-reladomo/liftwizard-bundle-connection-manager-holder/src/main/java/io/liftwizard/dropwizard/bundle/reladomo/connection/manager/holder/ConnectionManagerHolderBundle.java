@@ -16,6 +16,8 @@
 
 package io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import com.google.auto.service.AutoService;
@@ -24,7 +26,7 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
 import io.liftwizard.reladomo.connection.manager.holder.ConnectionManagerHolder;
-import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.factory.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,10 +51,10 @@ public class ConnectionManagerHolderBundle
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        ImmutableMap<String, SourcelessConnectionManager> connectionManagersByName =
+        Map<String, SourcelessConnectionManager> connectionManagersByName =
                 connectionManagerFactoryProvider.getConnectionManagersByName();
 
-        ConnectionManagerHolder.setConnectionManagersByName(connectionManagersByName);
+        ConnectionManagerHolder.setConnectionManagersByName(Maps.immutable.withAll(connectionManagersByName));
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
