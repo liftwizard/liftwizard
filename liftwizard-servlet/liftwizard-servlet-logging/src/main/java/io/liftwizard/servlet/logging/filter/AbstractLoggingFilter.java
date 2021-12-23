@@ -199,26 +199,27 @@ public abstract class AbstractLoggingFilter
             @Nonnull UriInfo uriInfo,
             @Nonnull StructuredArgumentsRequestHttp http)
     {
-        if (requestContext instanceof ContainerRequest)
+        if (!(requestContext instanceof ContainerRequest))
         {
-            ContainerRequest containerRequest = (ContainerRequest) requestContext;
-            String           pathPrefix = uriInfo.getBaseUri().getPath();
-            ExtendedUriInfo  extendedUriInfo = containerRequest.getUriInfo();
-            Resource         matchedModelResource = extendedUriInfo.getMatchedModelResource();
-            if (matchedModelResource != null)
-            {
-                String pathWithoutPrefix = matchedModelResource.getPath();
-                if (!pathPrefix.endsWith("/"))
-                {
-                    throw new IllegalStateException(pathPrefix);
-                }
-                if (!pathWithoutPrefix.startsWith("/"))
-                {
-                    throw new IllegalStateException(pathWithoutPrefix);
-                }
-                String pathTemplate = pathPrefix + pathWithoutPrefix.substring(1);
-                http.getPath().setTemplate(pathTemplate);
-            }
+            return;
         }
+
+        ContainerRequest containerRequest = (ContainerRequest) requestContext;
+        String           pathPrefix = uriInfo.getBaseUri().getPath();
+        ExtendedUriInfo  extendedUriInfo = containerRequest.getUriInfo();
+        Resource         matchedModelResource = extendedUriInfo.getMatchedModelResource();
+        if (matchedModelResource == null)
+        {
+            return;
+        }
+
+        String path              = matchedModelResource.getPath();
+        if (!pathPrefix.endsWith("/"))
+        {
+            throw new IllegalStateException(pathPrefix);
+        }
+        String pathWithoutPrefix = path.startsWith("/") ? path.substring(1) : path;
+        String pathTemplate = pathPrefix + pathWithoutPrefix;
+        http.getPath().setTemplate(pathTemplate);
     }
 }
