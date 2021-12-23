@@ -16,6 +16,9 @@
 
 package io.liftwizard.dropwizard.configuration.http.logging;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,8 +27,6 @@ import io.dropwizard.util.Size;
 import io.dropwizard.util.SizeUnit;
 import io.dropwizard.validation.MinSize;
 import io.dropwizard.validation.ValidationMethod;
-import org.eclipse.collections.api.factory.Lists;
-import org.eclipse.collections.api.list.ImmutableList;
 
 public class JerseyHttpLoggingFactory
 {
@@ -37,7 +38,7 @@ public class JerseyHttpLoggingFactory
     private boolean logResponseBodies      = true;
     private boolean logExcludedHeaderNames = true;
 
-    private @NotNull ImmutableList<String> includedHeaders = Lists.immutable.with(
+    private @NotNull List<String> includedHeaders = List.of(
             "Host",
             "User-Agent",
             "Content-Type");
@@ -118,15 +119,15 @@ public class JerseyHttpLoggingFactory
     }
 
     @JsonProperty
-    public ImmutableList<String> getIncludedHeaders()
+    public List<String> getIncludedHeaders()
     {
         return this.includedHeaders;
     }
 
     @JsonProperty
-    public void setIncludedHeaders(ImmutableList<String> includedHeaders)
+    public void setIncludedHeaders(List<String> includedHeaders)
     {
-        this.includedHeaders = includedHeaders;
+        this.includedHeaders = Collections.unmodifiableList(includedHeaders);
     }
 
     @JsonProperty
