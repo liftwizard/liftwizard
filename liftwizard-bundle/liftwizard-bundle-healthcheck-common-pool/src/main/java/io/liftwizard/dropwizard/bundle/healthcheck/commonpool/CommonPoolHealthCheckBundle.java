@@ -24,6 +24,7 @@ import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.config.healthcheck.commonpool.CommonPoolHealthCheckFactory;
 import io.liftwizard.dropwizard.config.healthcheck.commonpool.CommonPoolHealthCheckFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck;
+import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,9 +52,9 @@ public class CommonPoolHealthCheckBundle
 
         CommonPoolHealthCheck healthCheck = new CommonPoolHealthCheck(
                 factory.getThreadNamePrefix(),
-                factory.getThreadStates(),
-                factory.getAlwaysAllowedPatterns(),
-                factory.getBannedPatterns());
+                Lists.immutable.withAll(factory.getThreadStates()),
+                Lists.immutable.withAll(factory.getAlwaysAllowedPatterns()),
+                Lists.immutable.withAll(factory.getBannedPatterns()));
         environment.healthChecks().register("common-pool", healthCheck);
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());

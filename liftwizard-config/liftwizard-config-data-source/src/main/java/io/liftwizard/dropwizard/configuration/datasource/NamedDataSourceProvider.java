@@ -17,6 +17,7 @@
 package io.liftwizard.dropwizard.configuration.datasource;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
@@ -25,7 +26,6 @@ import com.codahale.metrics.MetricRegistry;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
-import org.eclipse.collections.api.map.MapIterable;
 
 public interface NamedDataSourceProvider
 {
@@ -38,5 +38,5 @@ public interface NamedDataSourceProvider
     DataSource getDataSourceByName(@Nonnull String name);
 
     @Nonnull
-    MapIterable<String, ManagedDataSource> getDataSourcesByName();
+    Map<String, ManagedDataSource> getDataSourcesByName();
 }

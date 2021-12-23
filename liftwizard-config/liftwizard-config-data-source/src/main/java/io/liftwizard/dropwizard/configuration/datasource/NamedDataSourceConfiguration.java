@@ -17,9 +17,14 @@
 package io.liftwizard.dropwizard.configuration.datasource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
@@ -33,18 +38,13 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
-import org.eclipse.collections.api.bag.MutableBag;
-import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.api.map.MapIterable;
-import org.eclipse.collections.impl.list.mutable.ListAdapter;
-import org.eclipse.collections.impl.map.ordered.mutable.OrderedMapAdapter;
 
 public class NamedDataSourceConfiguration
         implements NamedDataSourceProvider
 {
     private @Valid @NotNull List<NamedDataSourceFactory> namedDataSourceFactories = new ArrayList<>();
 
-    private MapIterable<String, ManagedDataSource> dataSourcesByName;
+    private Map<String, ManagedDataSource> dataSourcesByName;
 
     private boolean initialized;
 
@@ -64,20 +64,30 @@ public class NamedDataSourceConfiguration
     @ValidationMethod
     public boolean isValidDataSourceNames()
     {
-        ImmutableList<String> orderedDataSourceNames = ListAdapter.adapt(this.namedDataSourceFactories)
-                .collect(NamedDataSourceFactory::getName)
-                .toImmutable();
-        MutableBag<String> duplicateDataSourceNames = orderedDataSourceNames
-                .toBag()
-                .selectDuplicates();
+        List<String> orderedDataSourceNames = this.namedDataSourceFactories
+                .stream()
+                .map(NamedDataSourceFactory::getName)
+                .collect(Collectors.toList());
+        Map<String, Long> frequencies = orderedDataSourceNames
+                .stream()
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+                        Collectors.counting()));
+
+        List<String> duplicateDataSourceNames = frequencies
+                .entrySet()
+                .stream()
+                .filter(m -> m.getValue() > 1)
+                .map(Entry::getKey)
+                .collect(Collectors.toList());
+
         if (duplicateDataSourceNames.isEmpty())
         {
             return true;
         }
 
-        ImmutableList<String> orderedDuplicateDataSourceNames =
-                orderedDataSourceNames.select(duplicateDataSourceNames::contains);
-        String errorMessage = "Duplicate names found in dataSources: " + orderedDuplicateDataSourceNames.makeString();
+        String errorMessage = "Duplicate names found in dataSources: " + duplicateDataSourceNames;
         throw new IllegalStateException(errorMessage);
     }
 
@@ -93,12 +103,18 @@ public class NamedDataSourceConfiguration
 
         Objects.requireNonNull(metricRegistry);
 
-        this.dataSourcesByName = ListAdapter.adapt(this.namedDataSourceFactories)
-                .groupByUniqueKey(NamedDataSourceFactory::getName, OrderedMapAdapter.adapt(new LinkedHashMap<>()))
-                .collectValues((name, factory) -> factory.build(metricRegistry))
-                .asUnmodifiable();
+        this.dataSourcesByName = Collections.unmodifiableMap(this.namedDataSourceFactories
+                .stream()
+                .collect(Collectors.toMap(
+                        NamedDataSourceFactory::getName,
+                        factory -> factory.build(metricRegistry),
+                        (duplicate1, duplicate2) ->
+                        {
+                            throw new IllegalStateException("Duplicate named data source: " + duplicate1);
+                        },
+                        LinkedHashMap::new)));
 
-        this.dataSourcesByName.valuesView().each(lifecycle::manage);
+        this.dataSourcesByName.values().forEach(lifecycle::manage);
 
         this.initialized = true;
     }
@@ -117,7 +133,7 @@ public class NamedDataSourceConfiguration
 
     @Override
     @JsonIgnore
-    public MapIterable<String, ManagedDataSource> getDataSourcesByName()
+    public Map<String, ManagedDataSource> getDataSourcesByName()
     {
         if (!this.initialized)
         {

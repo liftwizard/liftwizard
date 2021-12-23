@@ -31,6 +31,7 @@ import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFact
 import io.liftwizard.servlet.logging.feature.LoggingConfig;
 import io.liftwizard.servlet.logging.feature.LoggingFeature;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +79,7 @@ public class JerseyHttpLoggingBundle
                 factory.isLogResponses(),
                 factory.isLogResponseBodies(),
                 factory.isLogExcludedHeaderNames(),
-                factory.getIncludedHeaders(),
+                Lists.immutable.withAll(factory.getIncludedHeaders()),
                 maxEntitySize);
 
         JerseyEnvironment jersey = environment.jersey();

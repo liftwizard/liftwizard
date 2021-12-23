@@ -16,6 +16,8 @@
 
 package io.liftwizard.dropwizard.bundle.reladomo.connection.manager;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import com.google.auto.service.AutoService;
@@ -24,7 +26,6 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
-import org.eclipse.collections.api.map.MapIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,7 @@ public class ConnectionManagerBundle
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        MapIterable<String, ManagedDataSource> dataSourcesByName = namedDataSourceProvider.getDataSourcesByName();
+        Map<String, ManagedDataSource> dataSourcesByName = namedDataSourceProvider.getDataSourcesByName();
 
         connectionManagerFactoryProvider.initializeConnectionManagers(dataSourcesByName);
 
