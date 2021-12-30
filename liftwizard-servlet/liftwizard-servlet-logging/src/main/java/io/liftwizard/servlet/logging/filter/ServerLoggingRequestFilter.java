@@ -40,105 +40,144 @@
 
 package io.liftwizard.servlet.logging.filter;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.util.LinkedHashMap;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
-import io.liftwizard.servlet.logging.feature.LoggingConfig;
-import io.liftwizard.servlet.logging.mediatype.MediaTypeUtility;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
-import org.glassfish.jersey.message.MessageUtils;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsParameters;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequest;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequestHttp;
+import org.eclipse.collections.api.map.MapIterable;
+import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.impl.list.mutable.ListAdapter;
+import org.eclipse.collections.impl.map.mutable.MapAdapter;
+import org.glassfish.jersey.server.ContainerRequest;
+import org.glassfish.jersey.server.ExtendedUriInfo;
+import org.glassfish.jersey.server.model.Resource;
 
 @ConstrainedTo(RuntimeType.SERVER)
 public final class ServerLoggingRequestFilter
-        extends AbstractLoggingFilter
         implements ContainerRequestFilter
 {
-    private final BiConsumer<StructuredArguments, Optional<String>> logger;
-
-    public ServerLoggingRequestFilter(
-            @Nonnull LoggingConfig loggingConfig,
-            @Nonnull BiConsumer<StructuredArguments, Optional<String>> logger)
-    {
-        super(loggingConfig);
-        this.logger = Objects.requireNonNull(logger);
-    }
+    @Context
+    private ResourceInfo resourceInfo;
 
     @Override
     public void filter(@Nonnull ContainerRequestContext requestContext)
             throws IOException
     {
-        if (requestContext.getProperty("structuredArguments") != null)
-        {
-            throw new IllegalStateException();
-        }
-        StructuredArguments structuredArguments = this.initRequestStructuredArguments(
-                requestContext,
-                "Server has received a request");
-        Optional<String> body = this.getBody(requestContext);
-        this.logger.accept(structuredArguments, body);
+        StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty("structuredArguments");
+        UriInfo             uriInfo             = requestContext.getUriInfo();
+
+        StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
+
+        this.addResourceInfo(structuredArguments.getRequest());
+        this.addParameters(uriInfo, http);
+        this.addPath(requestContext, uriInfo, http);
     }
 
-    private Optional<String> getBody(@Nonnull ContainerRequestContext requestContext)
-            throws IOException
+    private void addResourceInfo(@Nonnull StructuredArgumentsRequest request)
     {
-        if (!this.loggingConfig.isLogRequestBodies()
-                || !requestContext.hasEntity()
-                || !MediaTypeUtility.isReadable(requestContext.getMediaType()))
+        Objects.requireNonNull(this.resourceInfo);
+
+        Class<?> resourceClass  = this.resourceInfo.getResourceClass();
+        Method   resourceMethod = this.resourceInfo.getResourceMethod();
+
+        // Could be null during error responses like 404 and 405
+        if (resourceClass != null)
         {
-            return Optional.empty();
+            request.setResourceClass(resourceClass);
         }
-
-        int maxEntitySize = this.loggingConfig.getMaxEntitySize();
-
-        InputStream inputStream = this.getMarkSupportedInputStream(requestContext.getEntityStream());
-        inputStream.mark(maxEntitySize + 1);
-        byte[] entity = new byte[maxEntitySize + 1];
-
-        int entitySize = 0;
-        while (entitySize < entity.length)
+        if (resourceMethod != null)
         {
-            int readBytes = inputStream.read(entity, entitySize, entity.length - entitySize);
-            if (readBytes < 0)
-            {
-                break;
-            }
-            entitySize += readBytes;
+            request.setResourceMethod(resourceMethod);
         }
+    }
 
-        String mainBody = new String(
-                entity,
-                0,
-                Math.min(entitySize, maxEntitySize),
-                MessageUtils.getCharset(requestContext.getMediaType()));
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(mainBody);
-        if (entitySize > maxEntitySize)
-        {
-            stringBuilder.append("...more...");
-        }
-        stringBuilder.append('\n');
-        String body = stringBuilder.toString();
-
-        inputStream.reset();
-        requestContext.setEntityStream(inputStream);
-
-        return Optional.of(body);
+    private void addParameters(@Nonnull UriInfo uriInfo, @Nonnull StructuredArgumentsRequestHttp http)
+    {
+        StructuredArgumentsParameters parameters = this.buildParameters(uriInfo);
+        http.setParameters(parameters);
     }
 
     @Nonnull
-    private InputStream getMarkSupportedInputStream(@Nonnull InputStream stream)
+    private StructuredArgumentsParameters buildParameters(@Nonnull UriInfo uriInfo)
     {
-        return stream.markSupported() ? stream : new BufferedInputStream(stream);
+        MapIterable<String, String> queryParameters = this.buildParameters(uriInfo.getQueryParameters());
+        MapIterable<String, String> pathParameters  = this.buildParameters(uriInfo.getPathParameters());
+        return new StructuredArgumentsParameters(
+                queryParameters,
+                pathParameters);
+    }
+
+    private MutableMap<String, String> buildParameters(@Nonnull MultivaluedMap<String, String> inputParameters)
+    {
+        MutableMap<String, String> outputParameters = MapAdapter.adapt(new LinkedHashMap<>());
+
+        inputParameters.forEach((parameterName, parameterValues) ->
+        {
+            String value     = ListAdapter.adapt(parameterValues).makeString();
+            String duplicate = outputParameters.put(parameterName, value);
+            if (duplicate != null)
+            {
+                throw new IllegalStateException(duplicate);
+            }
+        });
+
+        return outputParameters.asUnmodifiable();
+    }
+
+    private void addPath(
+            @Nonnull ContainerRequestContext requestContext,
+            @Nonnull UriInfo uriInfo,
+            @Nonnull StructuredArgumentsRequestHttp http)
+    {
+        String pathTemplate = this.getPathTemplate(requestContext, uriInfo);
+        http.getPath().setTemplate(pathTemplate);
+        URI absolutePath = uriInfo.getAbsolutePath();
+        if (!Objects.equals(http.getPath().getAbsolute(), absolutePath.toString()))
+        {
+            throw new AssertionError();
+        }
+    }
+
+    @Nullable
+    private String getPathTemplate(@Nonnull ContainerRequestContext requestContext, @Nonnull UriInfo uriInfo)
+    {
+        if (!(requestContext instanceof ContainerRequest))
+        {
+            return null;
+        }
+
+        ContainerRequest containerRequest     = (ContainerRequest) requestContext;
+        String           pathPrefix           = uriInfo.getBaseUri().getPath();
+        ExtendedUriInfo  extendedUriInfo      = containerRequest.getUriInfo();
+        Resource         matchedModelResource = extendedUriInfo.getMatchedModelResource();
+        if (matchedModelResource == null)
+        {
+            return null;
+        }
+
+        String path = matchedModelResource.getPath();
+        if (!pathPrefix.endsWith("/"))
+        {
+            throw new IllegalStateException(pathPrefix);
+        }
+        String pathWithoutPrefix = path.startsWith("/") ? path.substring(1) : path;
+        return pathPrefix + pathWithoutPrefix;
     }
 }

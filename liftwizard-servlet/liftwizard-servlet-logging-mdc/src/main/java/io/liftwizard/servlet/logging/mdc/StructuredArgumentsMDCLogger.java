@@ -18,8 +18,7 @@ package io.liftwizard.servlet.logging.mdc;
 
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
@@ -36,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsMDCLogger
-        implements BiConsumer<StructuredArguments, Optional<String>>
+        implements Consumer<StructuredArguments>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
 
@@ -49,15 +48,12 @@ public class StructuredArgumentsMDCLogger
     }
 
     @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments, @Nonnull Optional<String> maybeBody)
+    public void accept(@Nonnull StructuredArguments structuredArguments)
     {
-        String message = maybeBody.orElseGet(structuredArguments::getEvent);
-        // TODO 2021-12-07: Null out the event here
-
         ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
         try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode))
         {
-            LOGGER.debug(message);
+            LOGGER.debug("Response sent");
         }
     }
 
