@@ -17,19 +17,19 @@
 package io.liftwizard.dropwizard.bundle.httplogging;
 
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
 import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactoryProvider;
 import io.liftwizard.servlet.logging.feature.LoggingConfig;
-import io.liftwizard.servlet.logging.feature.LoggingFeature;
+import io.liftwizard.servlet.logging.filter.ServerLoggingFilter;
+import io.liftwizard.servlet.logging.filter.ServerLoggingRequestFilter;
+import io.liftwizard.servlet.logging.filter.ServerLoggingResponseFilter;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
@@ -46,9 +46,9 @@ public class JerseyHttpLoggingBundle
     private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
     @Nonnull
-    private final BiConsumer<StructuredArguments, Optional<String>> structuredLogger;
+    private final Consumer<StructuredArguments> structuredLogger;
 
-    public JerseyHttpLoggingBundle(@Nonnull BiConsumer<StructuredArguments, Optional<String>> structuredLogger)
+    public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger)
     {
         this.structuredLogger = Objects.requireNonNull(structuredLogger);
     }
@@ -73,21 +73,34 @@ public class JerseyHttpLoggingBundle
 
         int maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
 
-        LoggingConfig loggingBuilder = new LoggingConfig(
+        LoggingConfig loggingConfig = new LoggingConfig(
                 factory.isLogRequests(),
                 factory.isLogRequestBodies(),
                 factory.isLogResponses(),
                 factory.isLogResponseBodies(),
-                factory.isLogExcludedHeaderNames(),
-                Lists.immutable.withAll(factory.getIncludedHeaders()),
+                factory.isLogRequestHeaderNames(),
+                factory.isLogResponseHeaderNames(),
+                Lists.immutable.withAll(factory.getIncludedRequestHeaders()),
+                Lists.immutable.withAll(factory.getIncludedResponseHeaders()),
                 maxEntitySize);
 
-        JerseyEnvironment jersey = environment.jersey();
-        if (loggingBuilder.isLogRequests() || loggingBuilder.isLogResponses())
+        if (loggingConfig.isLogRequests())
         {
-            LoggingFeature loggingFeature = new LoggingFeature(loggingBuilder, this.structuredLogger);
-            jersey.register(loggingFeature);
+            var loggingRequestFilter = new ServerLoggingRequestFilter();
+            environment.jersey().register(loggingRequestFilter);
         }
+
+        if (loggingConfig.isLogResponses())
+        {
+            var loggingResponseFilter = new ServerLoggingResponseFilter();
+            environment.jersey().register(loggingResponseFilter);
+        }
+
+        ServerLoggingFilter loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger);
+        environment
+                .servlets()
+                .addFilter("ServerLoggingFilter", loggingFilter)
+                .addMappingForUrlPatterns(null, true, "/*");
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }

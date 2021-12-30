@@ -23,17 +23,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StructuredArgumentsRequestHttp
         extends StructuredArgumentsHttp
 {
-    @JsonProperty
-    private final StructuredArgumentsPath path = new StructuredArgumentsPath();
+    private StructuredArgumentsPath path;
 
     private String method;
 
     private StructuredArgumentsParameters parameters;
 
+    private StructuredArgumentsClient client;
+    private StructuredArgumentsServer server;
+
+    private String body;
+
     @JsonProperty
     public StructuredArgumentsPath getPath()
     {
         return this.path;
+    }
+
+    public void setPath(StructuredArgumentsPath path)
+    {
+        if (this.path != null)
+        {
+            throw new AssertionError(this.path);
+        }
+        this.path = Objects.requireNonNull(path);
     }
 
     @JsonProperty
@@ -57,23 +70,57 @@ public class StructuredArgumentsRequestHttp
         return this.parameters;
     }
 
-    public void addQueryParameter(String key, String value)
+    public void setParameters(StructuredArgumentsParameters parameters)
     {
-        if (this.parameters == null)
+        if (this.parameters != null)
         {
-            this.parameters = new StructuredArgumentsParameters();
+            throw new AssertionError(this.parameters);
         }
-
-        this.parameters.addQueryParameter(key, value);
+        this.parameters = Objects.requireNonNull(parameters);
     }
 
-    public void addPathParameter(String key, String value)
+    @JsonProperty
+    public StructuredArgumentsClient getClient()
     {
-        if (this.parameters == null)
-        {
-            this.parameters = new StructuredArgumentsParameters();
-        }
+        return this.client;
+    }
 
-        this.parameters.addPathParameter(key, value);
+    public void setClient(StructuredArgumentsClient client)
+    {
+        if (this.client != null)
+        {
+            throw new AssertionError(this.client);
+        }
+        this.client = Objects.requireNonNull(client);
+    }
+
+    @JsonProperty
+    public StructuredArgumentsServer getServer()
+    {
+        return this.server;
+    }
+
+    public void setServer(StructuredArgumentsServer server)
+    {
+        if (this.server != null)
+        {
+            throw new AssertionError(this.server);
+        }
+        this.server = Objects.requireNonNull(server);
+    }
+
+    @JsonProperty
+    public String getBody()
+    {
+        return this.body;
+    }
+
+    public void setBody(String body)
+    {
+        if (this.body != null)
+        {
+            throw new AssertionError(this.body);
+        }
+        this.body = Objects.requireNonNull(body);
     }
 }
