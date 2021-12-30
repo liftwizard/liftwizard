@@ -29,8 +29,10 @@ public class LoggingConfig
     private final boolean               logRequestBodies;
     private final boolean               logResponses;
     private final boolean               logResponseBodies;
-    private final boolean               logExcludedHeaderNames;
-    private final ImmutableList<String> includedHeaders;
+    private final boolean               logRequestHeaderNames;
+    private final boolean               logResponseHeaderNames;
+    private final ImmutableList<String> includedRequestHeaders;
+    private final ImmutableList<String> includedResponseHeaders;
     private final int                   maxEntitySize;
 
     public LoggingConfig(
@@ -38,17 +40,21 @@ public class LoggingConfig
             boolean logRequestBodies,
             boolean logResponses,
             boolean logResponseBodies,
-            boolean logExcludedHeaderNames,
-            ImmutableList<String> includedHeaders,
+            boolean logRequestHeaderNames,
+            boolean logResponseHeaderNames,
+            ImmutableList<String> includedRequestHeaders,
+            ImmutableList<String> includedResponseHeaders,
             int maxEntitySize)
     {
-        this.logRequests            = logRequests;
-        this.logRequestBodies       = logRequestBodies;
-        this.logResponses           = logResponses;
-        this.logResponseBodies      = logResponseBodies;
-        this.logExcludedHeaderNames = logExcludedHeaderNames;
-        this.includedHeaders        = Objects.requireNonNull(includedHeaders);
-        this.maxEntitySize          = maxEntitySize;
+        this.logRequests             = logRequests;
+        this.logRequestBodies        = logRequestBodies;
+        this.logResponses            = logResponses;
+        this.logResponseBodies       = logResponseBodies;
+        this.logRequestHeaderNames   = logRequestHeaderNames;
+        this.logResponseHeaderNames  = logResponseHeaderNames;
+        this.includedRequestHeaders  = Objects.requireNonNull(includedRequestHeaders);
+        this.includedResponseHeaders = Objects.requireNonNull(includedResponseHeaders);
+        this.maxEntitySize           = maxEntitySize;
     }
 
     public boolean isLogRequests()
@@ -71,14 +77,24 @@ public class LoggingConfig
         return this.logResponseBodies;
     }
 
-    public boolean isLogExcludedHeaderNames()
+    public boolean isLogRequestHeaderNames()
     {
-        return this.logExcludedHeaderNames;
+        return this.logRequestHeaderNames;
     }
 
-    public ImmutableList<String> getIncludedHeaders()
+    public boolean isLogResponseHeaderNames()
     {
-        return this.includedHeaders;
+        return this.logResponseHeaderNames;
+    }
+
+    public ImmutableList<String> getIncludedRequestHeaders()
+    {
+        return this.includedRequestHeaders;
+    }
+
+    public ImmutableList<String> getIncludedResponseHeaders()
+    {
+        return this.includedResponseHeaders;
     }
 
     public int getMaxEntitySize()

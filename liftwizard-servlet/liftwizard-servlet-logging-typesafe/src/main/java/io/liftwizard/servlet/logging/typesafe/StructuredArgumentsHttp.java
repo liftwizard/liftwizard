@@ -16,65 +16,45 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.LinkedHashMap;
+import java.util.Objects;
 
-import org.eclipse.collections.api.list.ListIterable;
-import org.eclipse.collections.api.list.MutableList;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
-import org.eclipse.collections.impl.factory.Lists;
-import org.eclipse.collections.impl.map.mutable.MapAdapter;
 
 public class StructuredArgumentsHttp
 {
-    private MutableMap<String, String> headers;
+    private MapIterable<String, String> headers;
+    private ImmutableList<String>       excludedHeaders;
 
-    private MutableList<String> excludedHeaders;
-
+    @JsonProperty
     public MapIterable<String, String> getHeaders()
     {
-        if (this.headers == null)
-        {
-            return null;
-        }
-        return this.headers.asUnmodifiable();
+        return this.headers;
     }
 
-    public void addHeader(String key, String value)
+    public void setHeaders(MutableMap<String, String> headers)
     {
-        if (this.headers == null)
+        if (this.headers != null)
         {
-            this.headers = MapAdapter.adapt(new LinkedHashMap<>());
+            throw new AssertionError(this.headers);
         }
-
-        String duplicateValue = this.headers.put(key, value);
-        if (duplicateValue != null)
-        {
-            throw new AssertionError(duplicateValue);
-        }
+        this.headers = headers.asUnmodifiable();
     }
 
-    public void initializeExcludedHeaders()
+    @JsonProperty
+    public ImmutableList<String> getExcludedHeaders()
+    {
+        return this.excludedHeaders;
+    }
+
+    public void setExcludedHeaders(ImmutableList<String> excludedHeaders)
     {
         if (this.excludedHeaders != null)
         {
             throw new AssertionError(this.excludedHeaders);
         }
-
-        this.excludedHeaders = Lists.mutable.empty();
-    }
-
-    public ListIterable<String> getExcludedHeaders()
-    {
-        if (this.excludedHeaders == null)
-        {
-            return null;
-        }
-        return this.excludedHeaders.asUnmodifiable();
-    }
-
-    public void addExcludedHeader(String header)
-    {
-        this.excludedHeaders.add(header);
+        this.excludedHeaders = Objects.requireNonNull(excludedHeaders);
     }
 }

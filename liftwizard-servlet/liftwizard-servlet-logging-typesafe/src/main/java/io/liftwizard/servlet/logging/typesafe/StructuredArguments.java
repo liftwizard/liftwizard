@@ -16,44 +16,17 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArguments
 {
-    private       String                      event;
-    private final StructuredArgumentsRequest  request = new StructuredArgumentsRequest();
-    private       StructuredArgumentsResponse response;
-
-    @JsonProperty
-    public String getEvent()
-    {
-        return this.event;
-    }
-
-    public void setEvent(String event)
-    {
-        if (Objects.equals(this.event, event))
-        {
-            throw new AssertionError(this.event);
-        }
-        this.event = event;
-    }
+    private final StructuredArgumentsRequest  request  = new StructuredArgumentsRequest();
+    private final StructuredArgumentsResponse response = new StructuredArgumentsResponse();
 
     @JsonProperty
     public StructuredArgumentsRequest getRequest()
     {
         return this.request;
-    }
-
-    public void initializeResponse()
-    {
-        if (this.response != null)
-        {
-            throw new AssertionError(this.response);
-        }
-        this.response = new StructuredArgumentsResponse();
     }
 
     @JsonProperty

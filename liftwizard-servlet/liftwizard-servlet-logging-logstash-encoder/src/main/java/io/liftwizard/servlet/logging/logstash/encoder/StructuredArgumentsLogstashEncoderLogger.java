@@ -16,8 +16,7 @@
 
 package io.liftwizard.servlet.logging.logstash.encoder;
 
-import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
@@ -27,18 +26,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsLogstashEncoderLogger
-        implements BiConsumer<StructuredArguments, Optional<String>>
+        implements Consumer<StructuredArguments>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsLogstashEncoderLogger.class);
 
     @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments, @Nonnull Optional<String> maybeBody)
+    public void accept(@Nonnull StructuredArguments structuredArguments)
     {
-        String message = maybeBody.orElseGet(structuredArguments::getEvent);
-        // TODO 2021-12-07: Null out the event here
-
         LOGGER.debug(
                 Markers.appendFields(structuredArguments),
-                message);
+                "Response sent");
     }
 }

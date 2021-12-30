@@ -36,15 +36,24 @@ public class JerseyHttpLoggingFactory
     private boolean logRequestBodies       = true;
     private boolean logResponses           = true;
     private boolean logResponseBodies      = true;
-    private boolean logExcludedHeaderNames = true;
+    private boolean logRequestHeaderNames  = true;
+    private boolean logResponseHeaderNames = true;
 
-    private @NotNull List<String> includedHeaders = List.of(
+    @NotNull
+    private List<String> includedRequestHeaders = List.of(
             "Host",
             "User-Agent",
             "Content-Type");
 
+    @NotNull
+    private List<String> includedResponseHeaders = List.of(
+            "Host",
+            "User-Agent",
+            "Content-Type");
+
+    @NotNull
     @MinSize(value = 1, unit = SizeUnit.BYTES)
-    private @NotNull Size maxEntitySize = Size.kilobytes(8);
+    private Size maxEntitySize = Size.kilobytes(8);
 
     @JsonProperty
     public boolean isEnabled()
@@ -107,27 +116,51 @@ public class JerseyHttpLoggingFactory
     }
 
     @JsonProperty
-    public boolean isLogExcludedHeaderNames()
+    public boolean isLogRequestHeaderNames()
     {
-        return this.logExcludedHeaderNames;
+        return this.logRequestHeaderNames;
     }
 
     @JsonProperty
-    public void setLogExcludedHeaderNames(boolean logExcludedHeaderNames)
+    public void setLogRequestHeaderNames(boolean logRequestHeaderNames)
     {
-        this.logExcludedHeaderNames = logExcludedHeaderNames;
+        this.logRequestHeaderNames = logRequestHeaderNames;
     }
 
     @JsonProperty
-    public List<String> getIncludedHeaders()
+    public boolean isLogResponseHeaderNames()
     {
-        return this.includedHeaders;
+        return this.logResponseHeaderNames;
     }
 
     @JsonProperty
-    public void setIncludedHeaders(List<String> includedHeaders)
+    public void setLogResponseHeaderNames(boolean logResponseHeaderNames)
     {
-        this.includedHeaders = Collections.unmodifiableList(includedHeaders);
+        this.logResponseHeaderNames = logResponseHeaderNames;
+    }
+
+    @JsonProperty
+    public List<String> getIncludedRequestHeaders()
+    {
+        return Collections.unmodifiableList(this.includedRequestHeaders);
+    }
+
+    @JsonProperty
+    public void setIncludedRequestHeaders(List<String> includedRequestHeaders)
+    {
+        this.includedRequestHeaders = Collections.unmodifiableList(includedRequestHeaders);
+    }
+
+    @JsonProperty
+    public List<String> getIncludedResponseHeaders()
+    {
+        return Collections.unmodifiableList(this.includedResponseHeaders);
+    }
+
+    @JsonProperty
+    public void setIncludedResponseHeaders(List<String> includedResponseHeaders)
+    {
+        this.includedResponseHeaders = Collections.unmodifiableList(includedResponseHeaders);
     }
 
     @JsonProperty
@@ -144,15 +177,43 @@ public class JerseyHttpLoggingFactory
 
     @ValidationMethod(message = "Logging request bodies requires logging requests")
     @JsonIgnore
-    public boolean isValidRequest()
+    public boolean isValidRequestBodies()
     {
         return !this.logRequestBodies || this.logRequests;
     }
 
+    @ValidationMethod(message = "Logging request header names requires logging requests")
+    @JsonIgnore
+    public boolean isValidRequestHeaderNames()
+    {
+        return !this.logRequestHeaderNames || this.logRequests;
+    }
+
+    @ValidationMethod(message = "Logging request headers requires logging requests")
+    @JsonIgnore
+    public boolean isValidRequestHeaders()
+    {
+        return this.includedRequestHeaders.isEmpty() || this.logRequests;
+    }
+
     @ValidationMethod(message = "Logging response bodies requires logging responses")
     @JsonIgnore
-    public boolean isValidResponse()
+    public boolean isValidResponseBodies()
     {
         return !this.logResponseBodies || this.logResponses;
+    }
+
+    @ValidationMethod(message = "Logging response header names requires logging responses")
+    @JsonIgnore
+    public boolean isValidResponseHeaderNames()
+    {
+        return !this.logResponseHeaderNames || this.logResponses;
+    }
+
+    @ValidationMethod(message = "Logging response headers requires logging responses")
+    @JsonIgnore
+    public boolean isValidResponseHeaders()
+    {
+        return this.includedResponseHeaders.isEmpty() || this.logResponses;
     }
 }

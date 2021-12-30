@@ -27,8 +27,8 @@ public class StructuredArgumentsStatus
 {
     private Status  name;
     private Integer code;
-    private Family family;
-    private String phrase;
+    private Family  family;
+    private String  phrase;
 
     @JsonProperty
     public Status getName()
