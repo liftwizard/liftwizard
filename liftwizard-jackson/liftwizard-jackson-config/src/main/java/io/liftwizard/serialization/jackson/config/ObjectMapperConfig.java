@@ -16,6 +16,9 @@
 
 package io.liftwizard.serialization.jackson.config;
 
+import java.util.Collection;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -30,6 +33,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
+import org.eclipse.collections.api.collection.ImmutableCollection;
 
 public final class ObjectMapperConfig
 {
@@ -109,7 +113,11 @@ public final class ObjectMapperConfig
 
         objectMapper.setDateFormat(new StdDateFormat());
         objectMapper.setSerializationInclusion(serializationInclusion);
-        objectMapper.setDefaultSetterInfo(Value.forContentNulls(defaultNullSetterInfo));
+
+        Value valueNulls = Value.forValueNulls(defaultNullSetterInfo);
+        objectMapper.configOverride(Map.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(Collection.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(ImmutableCollection.class).setSetterInfo(valueNulls);
 
         return objectMapper;
     }
