@@ -41,13 +41,10 @@
 package io.liftwizard.servlet.logging.filter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import javax.annotation.Nonnull;
 import javax.ws.rs.ConstrainedTo;
@@ -59,30 +56,15 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.StatusType;
 
-import io.liftwizard.servlet.logging.feature.LoggingConfig;
-import io.liftwizard.servlet.logging.interceptor.LoggingStream;
-import io.liftwizard.servlet.logging.mediatype.MediaTypeUtility;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
 
 @ConstrainedTo(RuntimeType.SERVER)
 public final class ServerLoggingResponseFilter
-        extends AbstractLoggingFilter
         implements ContainerResponseFilter
 {
     @Context
     private ResourceInfo resourceInfo;
-
-    @Nonnull
-    private final BiConsumer<StructuredArguments, Optional<String>> logger;
-
-    public ServerLoggingResponseFilter(
-            @Nonnull LoggingConfig loggingConfig,
-            @Nonnull BiConsumer<StructuredArguments, Optional<String>> logger)
-    {
-        super(loggingConfig);
-        this.logger = Objects.requireNonNull(logger);
-    }
 
     @Override
     public void filter(
@@ -90,54 +72,21 @@ public final class ServerLoggingResponseFilter
             @Nonnull ContainerResponseContext responseContext)
             throws IOException
     {
-        StructuredArguments structuredArguments = this.getStructuredArguments(requestContext);
-        structuredArguments.initializeResponse();
+        StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty("structuredArguments");
+
+        if (structuredArguments.getResponse() == null)
+        {
+            throw new IllegalStateException();
+        }
 
         StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 
         StatusType statusInfo = responseContext.getStatusInfo();
         http.getStatus().setName(statusInfo.toEnum());
-        http.getStatus().setCode(statusInfo.getStatusCode());
         http.getStatus().setFamily(statusInfo.getFamily());
         http.getStatus().setPhrase(statusInfo.getReasonPhrase());
 
         this.getTypeName(responseContext).ifPresent(http::setEntityType);
-
-        this.addHeaders(http, responseContext.getStringHeaders());
-
-        if (this.loggingConfig.isLogResponseBodies()
-                && responseContext.hasEntity()
-                && MediaTypeUtility.isReadable(responseContext.getMediaType()))
-        {
-            OutputStream stream = new LoggingStream(
-                    responseContext.getEntityStream(),
-                    this.loggingConfig.getMaxEntitySize(),
-                    this.logger,
-                    structuredArguments);
-            responseContext.setEntityStream(stream);
-            requestContext.setProperty(ENTITY_LOGGER_PROPERTY, stream);
-            // not calling this.logger.accept() here - it will be called by the LoggingInterceptor
-        }
-        else
-        {
-            this.logger.accept(structuredArguments, Optional.empty());
-        }
-    }
-
-    @Nonnull
-    private StructuredArguments getStructuredArguments(@Nonnull ContainerRequestContext requestContext)
-    {
-        StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty("structuredArguments");
-        if (structuredArguments != null)
-        {
-            structuredArguments.setEvent("Server responded with a response");
-            return structuredArguments;
-        }
-
-        // This happens during errors, like 405 Method Not Allowed
-        return this.initRequestStructuredArguments(
-                requestContext,
-                "Server responded with a response");
     }
 
     private Optional<String> getTypeName(@Nonnull ContainerResponseContext responseContext)

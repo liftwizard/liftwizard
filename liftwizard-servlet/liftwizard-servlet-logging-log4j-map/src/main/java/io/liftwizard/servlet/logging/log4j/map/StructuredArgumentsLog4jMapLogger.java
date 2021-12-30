@@ -19,8 +19,7 @@ package io.liftwizard.servlet.logging.log4j.map;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
@@ -29,7 +28,7 @@ import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import org.apache.log4j.Logger;
 
 public class StructuredArgumentsLog4jMapLogger
-        implements BiConsumer<StructuredArguments, Optional<String>>
+        implements Consumer<StructuredArguments>
 {
     private static final Logger LOGGER = Logger.getLogger(StructuredArgumentsLog4jMapLogger.class);
 
@@ -42,18 +41,15 @@ public class StructuredArgumentsLog4jMapLogger
     }
 
     @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments, @Nonnull Optional<String> maybeBody)
+    public void accept(StructuredArguments structuredArguments)
     {
-        String message = maybeBody.orElseGet(structuredArguments::getEvent);
-        // TODO 2021-12-07: Null out the event here
-
         Map<?, ?> structuredArgumentsMap = this.objectMapper.convertValue(structuredArguments, Map.class);
         Map<?, ?> mapWithToString = new HashMap<Object, Object>(structuredArgumentsMap)
         {
             @Override
             public String toString()
             {
-                return message;
+                return "Response sent";
             }
         };
         LOGGER.debug(mapWithToString);
