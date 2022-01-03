@@ -16,11 +16,11 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,7 +35,7 @@ import io.dropwizard.validation.ValidationMethod;
 public class ExecutorServiceFactory
 {
     @Valid
-    @NotEmpty
+    @NotNull
     private String   nameFormat;
     @Min(0)
     private int      minThreads;
@@ -54,7 +54,7 @@ public class ExecutorServiceFactory
     @JsonIgnore
     public boolean isValidPoolSize()
     {
-        return this.maxThreads < this.minThreads;
+        return this.minThreads <= this.maxThreads;
     }
 
     @JsonIgnore
@@ -81,6 +81,13 @@ public class ExecutorServiceFactory
         return this.nameFormat;
     }
 
+    @JsonIgnore
+    public ExecutorServiceFactory nameFormat(String nameFormat)
+    {
+        this.nameFormat = Objects.requireNonNull(nameFormat);
+        return this;
+    }
+
     @JsonProperty
     public void setNameFormat(String nameFormat)
     {
@@ -93,6 +100,13 @@ public class ExecutorServiceFactory
         return this.minThreads;
     }
 
+    @JsonIgnore
+    public ExecutorServiceFactory minThreads(int minThreads)
+    {
+        this.minThreads = minThreads;
+        return this;
+    }
+
     @JsonProperty
     public void setMinThreads(int minThreads)
     {
@@ -103,6 +117,13 @@ public class ExecutorServiceFactory
     public int getMaxThreads()
     {
         return this.maxThreads;
+    }
+
+    @JsonIgnore
+    public ExecutorServiceFactory maxThreads(int maxThreads)
+    {
+        this.maxThreads = maxThreads;
+        return this;
     }
 
     @JsonProperty

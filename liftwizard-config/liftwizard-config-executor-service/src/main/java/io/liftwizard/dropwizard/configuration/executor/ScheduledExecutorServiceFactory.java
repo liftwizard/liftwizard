@@ -16,11 +16,11 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +34,7 @@ import io.dropwizard.validation.MinDuration;
 public class ScheduledExecutorServiceFactory
 {
     @Valid
-    @NotEmpty
+    @NotNull
     private String   nameFormat;
     private boolean  useDaemonThreads = true;
     @Min(0)
@@ -66,6 +66,13 @@ public class ScheduledExecutorServiceFactory
         return this.nameFormat;
     }
 
+    @JsonIgnore
+    public ScheduledExecutorServiceFactory nameFormat(String nameFormat)
+    {
+        this.nameFormat = Objects.requireNonNull(nameFormat);
+        return this;
+    }
+
     @JsonProperty
     public void setNameFormat(String nameFormat)
     {
@@ -78,6 +85,13 @@ public class ScheduledExecutorServiceFactory
         return this.useDaemonThreads;
     }
 
+    @JsonIgnore
+    public ScheduledExecutorServiceFactory useDaemonThreads(boolean useDaemonThreads)
+    {
+        this.useDaemonThreads = useDaemonThreads;
+        return this;
+    }
+
     @JsonProperty
     public void setUseDaemonThreads(boolean useDaemonThreads)
     {
@@ -88,6 +102,13 @@ public class ScheduledExecutorServiceFactory
     public int getThreads()
     {
         return this.threads;
+    }
+
+    @JsonIgnore
+    public ScheduledExecutorServiceFactory threads(int threads)
+    {
+        this.threads = threads;
+        return this;
     }
 
     @JsonProperty
