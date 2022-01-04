@@ -110,18 +110,18 @@ public class ServerLoggingFilter
 
     private void addInitialRequestAttributes(
             StructuredArguments structuredArguments,
-            HttpServletRequest httpServletRequest)
+            @Nonnull HttpServletRequest httpServletRequest)
     {
         String authType = httpServletRequest.getAuthType();
         if (authType != null)
         {
-            LOGGER.info(authType);
+            LOGGER.trace("authType: {}", authType);
         }
 
         String contextPath = httpServletRequest.getContextPath();
         if (!contextPath.isEmpty())
         {
-            LOGGER.info(contextPath);
+            LOGGER.trace("contextPath: {}", contextPath);
         }
 
         StructuredArgumentsRequestHttp http   = structuredArguments.getRequest().getHttp();
@@ -131,33 +131,27 @@ public class ServerLoggingFilter
         String pathTranslated = httpServletRequest.getPathTranslated();
         if (pathTranslated != null)
         {
-            LOGGER.info(pathTranslated);
+            LOGGER.trace("pathTranslated: {}", pathTranslated);
         }
         String queryString = httpServletRequest.getQueryString();
         if (queryString != null)
         {
-            LOGGER.info(queryString);
+            LOGGER.trace("queryString: {}", queryString);
         }
         String remoteUser = httpServletRequest.getRemoteUser();
         if (remoteUser != null)
         {
-            LOGGER.info(remoteUser);
+            LOGGER.trace("remoteUser: {}", remoteUser);
         }
         String requestedSessionId = httpServletRequest.getRequestedSessionId();
         if (requestedSessionId != null)
         {
-            LOGGER.info(requestedSessionId);
+            LOGGER.trace("requestedSessionId: {}", requestedSessionId);
         }
         Principal userPrincipal = httpServletRequest.getUserPrincipal();
         if (userPrincipal != null)
         {
-            LOGGER.info(userPrincipal.getName());
-        }
-
-        Enumeration<String> parameterNames = httpServletRequest.getParameterNames();
-        if (parameterNames.hasMoreElements())
-        {
-            LOGGER.info(parameterNames.toString());
+            LOGGER.trace("userPrincipal: {}", userPrincipal.getName());
         }
 
         StructuredArgumentsPath path = new StructuredArgumentsPath(
@@ -226,9 +220,9 @@ public class ServerLoggingFilter
     }
 
     private void addFinalResponseAttributes(
-            StructuredArguments structuredArguments,
+            @Nonnull StructuredArguments structuredArguments,
             @Nonnull ContentCachingResponseWrapper responseWrapper,
-            HttpServletResponse httpServletResponse)
+            @Nonnull HttpServletResponse httpServletResponse)
             throws IOException
     {
         StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
@@ -257,7 +251,7 @@ public class ServerLoggingFilter
     }
 
     @Nonnull
-    private String getTruncatedPayload(String payload)
+    private String getTruncatedPayload(@Nonnull String payload)
     {
         int maxEntitySize = this.loggingConfig.getMaxEntitySize();
         if (payload.length() <= maxEntitySize)
@@ -268,7 +262,9 @@ public class ServerLoggingFilter
         return payload.substring(0, maxEntitySize) + "...more...";
     }
 
-    private void addResponseHeaders(HttpServletResponse httpServletResponse, StructuredArgumentsResponseHttp http)
+    private void addResponseHeaders(
+            @Nonnull HttpServletResponse httpServletResponse,
+            StructuredArgumentsResponseHttp http)
     {
         MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
         MutableList<String> newExcludedHeaders = this.loggingConfig.isLogResponseHeaderNames()
@@ -299,6 +295,7 @@ public class ServerLoggingFilter
         }
     }
 
+    @Nonnull
     private String getPayloadFromByteArray(byte[] requestBuffer, String charEncoding)
     {
         try
