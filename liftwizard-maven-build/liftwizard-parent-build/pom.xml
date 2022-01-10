@@ -389,7 +389,7 @@
                 <plugin>
                     <groupId>com.github.ferstl</groupId>
                     <artifactId>depgraph-maven-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.3.1</version>
                     <configuration>
                         <createImage>true</createImage>
                         <includes>${project.groupId}</includes>
