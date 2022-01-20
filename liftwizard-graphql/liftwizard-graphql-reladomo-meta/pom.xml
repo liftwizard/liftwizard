@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-graphql</artifactId>
-        <version>0.22.0-SNAPSHOT</version>
+        <version>0.22.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,4 +27,8 @@
 
     <name>Liftwizard GraphQL Reladomo Attribute Schema</name>
 
+
+  <scm>
+    <tag>0.22.0</tag>
+  </scm>
 </project>
