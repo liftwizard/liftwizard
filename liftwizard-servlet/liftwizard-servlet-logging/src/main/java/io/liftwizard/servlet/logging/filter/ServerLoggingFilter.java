@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,11 +132,6 @@ public class ServerLoggingFilter
         if (pathTranslated != null)
         {
             LOGGER.trace("pathTranslated: {}", pathTranslated);
-        }
-        String queryString = httpServletRequest.getQueryString();
-        if (queryString != null)
-        {
-            LOGGER.trace("queryString: {}", queryString);
         }
         String remoteUser = httpServletRequest.getRemoteUser();
         if (remoteUser != null)
