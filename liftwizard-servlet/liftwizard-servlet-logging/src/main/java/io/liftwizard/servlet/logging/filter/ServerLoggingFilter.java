@@ -118,35 +118,17 @@ public class ServerLoggingFilter
             LOGGER.trace("authType: {}", authType);
         }
 
-        String contextPath = httpServletRequest.getContextPath();
-        if (!contextPath.isEmpty())
-        {
-            LOGGER.trace("contextPath: {}", contextPath);
-        }
-
         StructuredArgumentsRequestHttp http   = structuredArguments.getRequest().getHttp();
         String                         method = httpServletRequest.getMethod();
         http.setMethod(method);
 
-        String pathTranslated = httpServletRequest.getPathTranslated();
-        if (pathTranslated != null)
-        {
-            LOGGER.trace("pathTranslated: {}", pathTranslated);
-        }
-        String remoteUser = httpServletRequest.getRemoteUser();
-        if (remoteUser != null)
-        {
-            LOGGER.trace("remoteUser: {}", remoteUser);
-        }
-        String requestedSessionId = httpServletRequest.getRequestedSessionId();
-        if (requestedSessionId != null)
-        {
-            LOGGER.trace("requestedSessionId: {}", requestedSessionId);
-        }
+        http.setContextPath(httpServletRequest.getContextPath());
+        http.setRemoteUser(httpServletRequest.getRemoteUser());
+
         Principal userPrincipal = httpServletRequest.getUserPrincipal();
         if (userPrincipal != null)
         {
-            LOGGER.trace("userPrincipal: {}", userPrincipal.getName());
+            http.setUserPrincipal(userPrincipal.getName());
         }
 
         StructuredArgumentsPath path = new StructuredArgumentsPath(
