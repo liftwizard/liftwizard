@@ -23,31 +23,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StructuredArgumentsRequestHttp
         extends StructuredArgumentsHttp
 {
-    private StructuredArgumentsPath path;
-
-    private String method;
-
+    private String                        method;
+    private String                        contextPath;
+    private String                        remoteUser;
+    private String                        userPrincipal;
+    private StructuredArgumentsPath       path;
     private StructuredArgumentsParameters parameters;
-
-    private StructuredArgumentsClient client;
-    private StructuredArgumentsServer server;
+    private StructuredArgumentsClient     client;
+    private StructuredArgumentsServer     server;
 
     private String body;
-
-    @JsonProperty
-    public StructuredArgumentsPath getPath()
-    {
-        return this.path;
-    }
-
-    public void setPath(StructuredArgumentsPath path)
-    {
-        if (this.path != null)
-        {
-            throw new AssertionError(this.path);
-        }
-        this.path = Objects.requireNonNull(path);
-    }
 
     @JsonProperty
     public String getMethod()
@@ -62,6 +47,66 @@ public class StructuredArgumentsRequestHttp
             throw new AssertionError(this.method);
         }
         this.method = Objects.requireNonNull(method);
+    }
+
+    @JsonProperty
+    public String getContextPath()
+    {
+        return this.contextPath;
+    }
+
+    public void setContextPath(String contextPath)
+    {
+        if (this.contextPath != null)
+        {
+            throw new AssertionError(this.contextPath);
+        }
+        this.contextPath = contextPath;
+    }
+
+    @JsonProperty
+    public String getRemoteUser()
+    {
+        return this.remoteUser;
+    }
+
+    public void setRemoteUser(String remoteUser)
+    {
+        if (this.remoteUser != null)
+        {
+            throw new AssertionError(this.remoteUser);
+        }
+        this.remoteUser = remoteUser;
+    }
+
+    @JsonProperty
+    public String getUserPrincipal()
+    {
+        return this.userPrincipal;
+    }
+
+    public void setUserPrincipal(String userPrincipal)
+    {
+        if (this.userPrincipal != null)
+        {
+            throw new AssertionError(this.userPrincipal);
+        }
+        this.userPrincipal = userPrincipal;
+    }
+
+    @JsonProperty
+    public StructuredArgumentsPath getPath()
+    {
+        return this.path;
+    }
+
+    public void setPath(StructuredArgumentsPath path)
+    {
+        if (this.path != null)
+        {
+            throw new AssertionError(this.path);
+        }
+        this.path = Objects.requireNonNull(path);
     }
 
     @JsonProperty
