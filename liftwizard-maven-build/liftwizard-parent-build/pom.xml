@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2021 Craig Motlin
+  ~ Copyright 2022 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -95,11 +95,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
 
@@ -159,7 +154,7 @@
 
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.3.0</version>
                     <executions>
 
                         <execution>
@@ -169,6 +164,11 @@
                             </goals>
                             <configuration>
                                 <failOnWarning>true</failOnWarning>
+                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
+                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.3.0 support Java 17. -->
+                                <ignoredNonTestScopedDependencies>
+                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
+                                </ignoredNonTestScopedDependencies>
                             </configuration>
                         </execution>
 
