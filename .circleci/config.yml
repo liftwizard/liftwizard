@@ -1,35 +1,12 @@
-version: 2.1
-
-jobs:
-  build:
-    working_directory: ~/liftwizard
+executors:
+  example:
     docker:
-      - image: cimg/openjdk:17.0
-    steps:
-      - checkout
-
-      - restore_cache:
-          # restore the saved cache after the first run or if `pom.xml` has changed
-          # https://circleci.com/docs/2.0/caching/
-          key: liftwizard-{{ checksum "pom.xml" }}
-
-      - run: ./mvnw de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: liftwizard-{{ checksum "pom.xml" }}
-
-      - run: ./mvnw verify --offline --threads 2C
-
-      # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/junit
+      - image: 'cimg/openjdk:17.0'
+orbs:
+  maven: circleci/maven@1.1
+version: 2.1
+workflows:
+  maven_test:
+    jobs:
+      - maven/test:
+          executor: example
