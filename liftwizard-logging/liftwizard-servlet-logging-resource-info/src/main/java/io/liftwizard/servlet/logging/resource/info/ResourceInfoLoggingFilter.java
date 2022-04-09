@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,9 @@ import javax.ws.rs.ext.Provider;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 import org.glassfish.jersey.server.ContainerRequest;
+import org.glassfish.jersey.server.ExtendedUriInfo;
+import org.glassfish.jersey.server.model.Resource;
+import org.glassfish.jersey.server.model.ResourceMethod;
 import org.slf4j.MDC;
 
 /**
@@ -78,9 +81,12 @@ public class ResourceInfoLoggingFilter
 
         if (requestContext instanceof ContainerRequest)
         {
-            ContainerRequest containerRequest  = (ContainerRequest) requestContext;
-            String           pathPrefix        = uriInfo.getBaseUri().getPath();
-            String           pathWithoutPrefix = containerRequest.getUriInfo().getMatchedModelResource().getPath();
+            ContainerRequest containerRequest      = (ContainerRequest) requestContext;
+            String           pathPrefix            = uriInfo.getBaseUri().getPath();
+            ExtendedUriInfo  extendedUriInfo       = containerRequest.getUriInfo();
+            Resource         matchedModelResource  = extendedUriInfo.getMatchedModelResource();
+            ResourceMethod   matchedResourceMethod = extendedUriInfo.getMatchedResourceMethod();
+            String           pathWithoutPrefix     = matchedModelResource.getPath();
             if (!pathPrefix.endsWith("/"))
             {
                 throw new IllegalStateException(pathPrefix);
