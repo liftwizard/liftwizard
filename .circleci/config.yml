@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/liftwizard
     docker:
-      - image: circleci/openjdk:11-jdk-browsers
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
 
