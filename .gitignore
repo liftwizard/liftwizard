@@ -15,3 +15,5 @@ pom.xml.releaseBackup
 **/*.iml
 
 .vertx
+/spy.log
+/logs/
