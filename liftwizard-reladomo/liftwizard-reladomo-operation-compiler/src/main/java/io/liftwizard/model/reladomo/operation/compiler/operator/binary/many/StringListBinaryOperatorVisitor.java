@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,14 +30,12 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public class StringListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final StringAttribute       attribute;
-    private final ImmutableList<String> parameter;
-    private final Set<String>           stringSet;
+    private final StringAttribute<?> attribute;
+    private final Set<String>        stringSet;
 
-    public StringListBinaryOperatorVisitor(StringAttribute attribute, ImmutableList<String> parameter)
+    public StringListBinaryOperatorVisitor(StringAttribute<?> attribute, ImmutableList<String> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
         this.stringSet = new LinkedHashSet<>(parameter.castToList());
     }
 

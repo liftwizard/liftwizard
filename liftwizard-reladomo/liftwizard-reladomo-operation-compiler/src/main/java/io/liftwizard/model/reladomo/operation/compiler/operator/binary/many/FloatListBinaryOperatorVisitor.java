@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,13 @@ import org.eclipse.collections.impl.factory.primitive.FloatSets;
 
 public class FloatListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final FloatAttribute       attribute;
-    private final ImmutableList<Float> parameter;
-    private final ImmutableFloatSet    floatSet;
+    private final FloatAttribute<?> attribute;
+    private final ImmutableFloatSet floatSet;
 
-    public FloatListBinaryOperatorVisitor(FloatAttribute attribute, ImmutableList<Float> parameter)
+    public FloatListBinaryOperatorVisitor(FloatAttribute<?> attribute, ImmutableList<Float> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
-        this.floatSet  = FloatSets.immutable.withAll(this.parameter);
+        this.floatSet  = FloatSets.immutable.withAll(parameter);
     }
 
     @Override
