@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,13 @@ import org.eclipse.collections.impl.factory.primitive.LongSets;
 
 public class LongListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final LongAttribute       attribute;
-    private final ImmutableList<Long> parameter;
-    private final ImmutableLongSet    longSet;
+    private final LongAttribute<?> attribute;
+    private final ImmutableLongSet longSet;
 
-    public LongListBinaryOperatorVisitor(LongAttribute attribute, ImmutableList<Long> parameter)
+    public LongListBinaryOperatorVisitor(LongAttribute<?> attribute, ImmutableList<Long> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
-        this.longSet   = LongSets.immutable.withAll(this.parameter);
+        this.longSet   = LongSets.immutable.withAll(parameter);
     }
 
     @Override

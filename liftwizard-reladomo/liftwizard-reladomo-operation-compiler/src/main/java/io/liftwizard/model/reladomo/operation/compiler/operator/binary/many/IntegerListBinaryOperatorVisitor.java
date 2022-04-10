@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,13 @@ import org.eclipse.collections.impl.factory.primitive.IntSets;
 
 public class IntegerListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final IntegerAttribute       attribute;
-    private final ImmutableList<Integer> parameter;
-    private final ImmutableIntSet        intSet;
+    private final IntegerAttribute<?> attribute;
+    private final ImmutableIntSet     intSet;
 
-    public IntegerListBinaryOperatorVisitor(IntegerAttribute attribute, ImmutableList<Integer> parameter)
+    public IntegerListBinaryOperatorVisitor(IntegerAttribute<?> attribute, ImmutableList<Integer> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
-        this.intSet    = IntSets.immutable.withAll(this.parameter);
+        this.intSet    = IntSets.immutable.withAll(parameter);
     }
 
     @Override

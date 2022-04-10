@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,13 @@ import org.eclipse.collections.impl.factory.primitive.DoubleSets;
 
 public class DoubleListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final DoubleAttribute       attribute;
-    private final ImmutableList<Double> parameter;
-    private final ImmutableDoubleSet    doubleSet;
+    private final DoubleAttribute<?> attribute;
+    private final ImmutableDoubleSet doubleSet;
 
-    public DoubleListBinaryOperatorVisitor(DoubleAttribute attribute, ImmutableList<Double> parameter)
+    public DoubleListBinaryOperatorVisitor(DoubleAttribute<?> attribute, ImmutableList<Double> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
-        this.doubleSet = DoubleSets.immutable.withAll(this.parameter);
+        this.doubleSet = DoubleSets.immutable.withAll(parameter);
     }
 
     @Override
