@@ -15,6 +15,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.example.helloworld.core.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.collect.ImmutableMap;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
@@ -48,6 +49,7 @@ import io.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFact
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@JsonPropertyOrder({"template", "defaultName", "viewRendererConfiguration"})
 public class HelloWorldConfiguration
         extends Configuration
         implements ConfigLoggingFactoryProvider,
