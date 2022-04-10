@@ -1,78 +1,126 @@
 {
-  "template": "Hello, %s!",
-  "defaultName": "${DW_DEFAULT_NAME:-Stranger}",
-
-  // Database settings.
-  "database": {
-    // the name of your JDBC driver
-    "driverClass": "org.h2.Driver",
-
-    // the username
-    "user": "sa",
-
-    // the password
-    "password": "sa",
-
-    // the JDBC URL
-    "url": "jdbc:h2:./target/example"
+  "template"                 : "Hello, %s!",
+  // the key needs to match the configuration key of the renderer (ViewRenderer::getConfigurationKey)
+  "defaultName"              : "${DW_DEFAULT_NAME:-Stranger}",
+  "viewRendererConfiguration": {
+    "freemarker": {
+      "strict_syntax"       : "yes",
+      "whitespace_stripping": "yes"
+    }
   },
-  // use the simple server factory if you only want to run on a single port
-  //server:
-  //  type: simple
-  //  connector:
-  //    type: http
-  //    port: 8080
-
-  "server": {
-    //  softNofileLimit: 1000
-    //  hardNofileLimit: 1000
-    "detailedJsonProcessingExceptionMapper": true,
-    "applicationConnectors": [
-      {
-        "type": "http",
-        "port": 8080
-      },
-      {
-        "type": "https",
-        "port": 8443,
-        "keyStorePath": "example.keystore",
-        "keyStorePassword": "example"
-      }
+  "configLogging"            : {
+    "enabled": true
+  },
+  "objectMapper"             : {
+    "enabled"                : true,
+    "prettyPrint"            : true,
+    "failOnUnknownProperties": true,
+    "serializationInclusion" : "NON_ABSENT",
+    "defaultNullSetterInfo"  : "AS_EMPTY"
+  },
+  "jerseyHttpLogging"        : {
+    "enabled"                : true,
+    "includedRequestHeaders" : [
+      "Host",
+      "User-Agent",
+      "Content-Type"
     ],
-    //this requires the alpn-boot library on the JVM's boot classpath
-    //- type: h2
-    //  port: 8445
-    //  keyStorePath: example.keystore
-    //  keyStorePassword: example
-    "adminConnectors": [
-      {
-        "type": "http",
-        "port": 8081
-      },
-      {
-        "type": "https",
-        "port": 8444,
-        "keyStorePath": "example.keystore",
-        "keyStorePassword": "example"
-      }
+    "includedResponseHeaders": [
+      "Host",
+      "User-Agent",
+      "Content-Type"
+    ],
+    "maxEntitySize"          : "8 kilobytes"
+  },
+  "h2"                       : {
+    "enabled": true,
+    "webPort": 8075,
+    "tcpPort": 9075
+  },
+  "reladomo"                 : {
+    "transactionTimeout"       : "5 minutes",
+    "runtimeConfigurationPaths": [
+      "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
     ]
   },
-  // Logging settings.
-  "logging": {
-    // The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
-    "level": "INFO",
-    // Logger-specific levels.
-    "loggers": {
-      // Sets the level for 'com.example.app' to DEBUG.
-      "com.example.app": "DEBUG",
-      // Redirects SQL logs to a separate file
-      "org.hibernate.SQL": {
-        "level": "DEBUG"
+  "dataSources"              : [
+    {
+      "driverClass"                : "com.p6spy.engine.spy.P6SpyDriver",
+      "abandonWhenPercentageFull"  : 0,
+      "alternateUsernamesAllowed"  : false,
+      "commitOnReturn"             : false,
+      "rollbackOnReturn"           : false,
+      "readOnlyByDefault"          : false,
+      "user"                       : "sa",
+      "password"                   : "",
+      "url"                        : "jdbc:p6spy:h2:tcp://localhost:9075/liftwizard-app-h2",
+      "properties"                 : {
+        "charSet": "UTF-8"
+      },
+      "defaultTransactionIsolation": "DEFAULT",
+      "useFairQueue"               : true,
+      "initialSize"                : 10,
+      "minSize"                    : 10,
+      "maxSize"                    : 100,
+      "logAbandonedConnections"    : false,
+      "logValidationErrors"        : true,
+      "maxWaitForConnection"       : "1 second",
+      "minIdleTime"                : "1 minute",
+      "validationQuery"            : "/* Health Check */ SELECT 1",
+      "checkConnectionWhileIdle"   : true,
+      "checkConnectionOnBorrow"    : false,
+      "checkConnectionOnConnect"   : true,
+      "checkConnectionOnReturn"    : false,
+      "autoCommentsEnabled"        : true,
+      "evictionInterval"           : "5 seconds",
+      "validationInterval"         : "30 seconds",
+      "removeAbandoned"            : false,
+      "removeAbandonedTimeout"     : "60 seconds",
+      "ignoreExceptionOnPreLoad"   : false,
+      "name"                       : "liquibase",
+      "defaultReadOnly"            : false
+    }
+  ],
+  "connectionManagers"       : [
+    {
+      "connectionManagerName": "liquibase",
+      "dataSourceName"       : "liquibase",
+      "databaseType"         : "H2",
+      "schemaName"           : "liftwizard-app-h2",
+      "timeZone"             : "UTC"
+    }
+  ],
+  "server"                   : {
+    "detailedJsonProcessingExceptionMapper": true,
+    "applicationConnectors"                : [
+      {
+        "type": "http",
+        "port": 8080,
       }
+    ],
+    "adminConnectors"                      : [
+      {
+        "type": "http",
+        "port": 8081,
+      }
+    ],
+    rootPath                               : "/api/"
+  },
+  "logging": {
+    "level"    : "DEBUG",
+    "loggers"  : {
+      // Sets the level for 'com.example.app' to DEBUG.
+      "com.example.app"                          : "DEBUG",
+      // Redirects SQL logs to a separate file
+      "org.hibernate.SQL"                        : {
+        "level": "DEBUG"
+      },
+      "klass.model.meta.domain"                  : "INFO",
+      "com.gs.fw.common.mithra.connectionmanager": "INFO",
+      "org.eclipse.jetty"                        : "INFO",
+      "org.apache.http"                          : "INFO",
+      "org.hibernate.validator.internal"         : "INFO"
     },
-    // Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log.gz
-    // Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz
-    // Logback's Fixed Window Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%i.log.gz
     "appenders": [
       {
         "type": "console",
@@ -81,12 +129,12 @@
         "includeCallerData": true,
       },
       {
-        "type": "file",
-        "currentLogFilename": "./logs/application.log",
+        "type"                      : "file",
+        "currentLogFilename"        : "./logs/application.log",
+        "archive"                   : true,
         "archivedLogFilenamePattern": "./logs/application-%d-%i.log.gz",
-        "archive": true,
-        "archivedFileCount": 7,
-        "maxFileSize": "1mb",
+        "archivedFileCount"         : 7,
+        "maxFileSize"               : "1 megabyte"
       },
       {
         "type": "file-logstash",
@@ -104,24 +152,6 @@
           "prettyPrint": true,
           "serializationInclusion": "NON_ABSENT"
         }
-      }
-    ]
-  },
-  // the key needs to match the configuration key of the renderer (ViewRenderer::getConfigurationKey)
-  "viewRendererConfiguration": {
-    "freemarker": {
-      "strict_syntax": "yes",
-      "whitespace_stripping": "yes"
-    }
-  },
-  "metrics": {
-    "reporters": [
-      {
-        "type": "graphite",
-        "host": "localhost",
-        "port": 2003,
-        "prefix": "example",
-        "frequency": "1m"
       }
     ]
   }
