@@ -44,8 +44,6 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 import org.eclipse.collections.impl.map.mutable.MapAdapter;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.ExtendedUriInfo;
-import org.glassfish.jersey.server.model.Resource;
-import org.glassfish.jersey.server.model.ResourceMethod;
 import org.glassfish.jersey.uri.UriTemplate;
 
 @ConstrainedTo(RuntimeType.SERVER)
@@ -59,8 +57,9 @@ public final class ServerLoggingRequestFilter
     public void filter(@Nonnull ContainerRequestContext requestContext)
             throws IOException
     {
-        StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty("structuredArguments");
-        UriInfo             uriInfo             = requestContext.getUriInfo();
+        StructuredArguments structuredArguments =
+                (StructuredArguments) requestContext.getProperty("structuredArguments");
+        UriInfo uriInfo = requestContext.getUriInfo();
 
         StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
 
@@ -125,7 +124,7 @@ public final class ServerLoggingRequestFilter
             @Nonnull UriInfo uriInfo,
             @Nonnull StructuredArgumentsRequestHttp http)
     {
-        String pathTemplate = this.getPathTemplate(requestContext, uriInfo);
+        String pathTemplate = this.getPathTemplate(requestContext);
         http.getPath().setTemplate(pathTemplate);
         URI absolutePath = uriInfo.getAbsolutePath();
         if (!Objects.equals(http.getPath().getAbsolute(), absolutePath.toString()))
@@ -135,30 +134,23 @@ public final class ServerLoggingRequestFilter
     }
 
     @Nullable
-    private String getPathTemplate(@Nonnull ContainerRequestContext requestContext, @Nonnull UriInfo uriInfo)
+    private String getPathTemplate(@Nonnull ContainerRequestContext requestContext)
     {
         if (!(requestContext instanceof ContainerRequest))
         {
             return null;
         }
 
-        ContainerRequest  containerRequest      = (ContainerRequest) requestContext;
-        String            pathPrefix            = uriInfo.getBaseUri().getPath();
-        ExtendedUriInfo   extendedUriInfo       = containerRequest.getUriInfo();
-        ResourceMethod    matchedResourceMethod = extendedUriInfo.getMatchedResourceMethod();
-        List<UriTemplate> matchedTemplates      = extendedUriInfo.getMatchedTemplates();
-        Resource          matchedModelResource  = extendedUriInfo.getMatchedModelResource();
-        if (matchedModelResource == null)
+        ContainerRequest  containerRequest = (ContainerRequest) requestContext;
+        ExtendedUriInfo   extendedUriInfo  = containerRequest.getUriInfo();
+        List<UriTemplate> matchedTemplates = extendedUriInfo.getMatchedTemplates();
+        if (matchedTemplates.isEmpty())
         {
             return null;
         }
 
-        String path = matchedModelResource.getPath();
-        if (!pathPrefix.endsWith("/"))
-        {
-            throw new IllegalStateException(pathPrefix);
-        }
-        String pathWithoutPrefix = path.startsWith("/") ? path.substring(1) : path;
-        return pathPrefix + pathWithoutPrefix;
+        return ListAdapter.adapt(matchedTemplates)
+                .collect(UriTemplate::getTemplate)
+                .makeString();
     }
 }
