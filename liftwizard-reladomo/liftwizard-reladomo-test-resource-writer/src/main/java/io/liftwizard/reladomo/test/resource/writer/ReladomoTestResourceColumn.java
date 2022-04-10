@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,16 +31,14 @@ import org.eclipse.collections.impl.factory.Lists;
 
 public class ReladomoTestResourceColumn
 {
-    private final ReladomoTestResourceGrid grid;
     private final Attribute                attribute;
     private final MutableList<Object>      values = Lists.mutable.empty();
 
     private FrozenReladomoTestResourceColumn frozen;
 
-    public ReladomoTestResourceColumn(Attribute attribute, ReladomoTestResourceGrid grid)
+    public ReladomoTestResourceColumn(Attribute attribute)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.grid      = Objects.requireNonNull(grid);
     }
 
     public void addMithraObject(Object mithraObject)

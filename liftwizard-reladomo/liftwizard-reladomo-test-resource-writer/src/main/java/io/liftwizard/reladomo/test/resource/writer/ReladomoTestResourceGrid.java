@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class ReladomoTestResourceGrid
 
         this.columns = attributes
                 .toList()
-                .collectWith(ReladomoTestResourceColumn::new, this)
+                .collect(ReladomoTestResourceColumn::new)
                 .toImmutable();
 
         Class<?> aClass = metaData.getBusinessOrInterfaceClass();
