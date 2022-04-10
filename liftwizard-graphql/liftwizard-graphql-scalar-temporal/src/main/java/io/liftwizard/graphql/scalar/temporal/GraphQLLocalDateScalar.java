@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,18 +47,18 @@ public class GraphQLLocalDateScalar extends GraphQLScalarType
         super("LocalDate", "An RFC-3339 compliant LocalDate Scalar", new LocalDateCoercing());
     }
 
-    @Nonnull
-    private static String typeName(@Nullable Object input)
-    {
-        if (input == null)
-        {
-            return "null";
-        }
-        return input.getClass().getSimpleName();
-    }
-
     private static class LocalDateCoercing implements Coercing<LocalDate, String>
     {
+        @Nonnull
+        private static String typeName(@Nullable Object input)
+        {
+            if (input == null)
+            {
+                return "null";
+            }
+            return input.getClass().getSimpleName();
+        }
+
         @Nonnull
         @Override
         public String serialize(Object input)
@@ -88,7 +88,7 @@ public class GraphQLLocalDateScalar extends GraphQLScalarType
 
             String error = String.format(
                     "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.",
-                    GraphQLLocalDateScalar.typeName(input));
+                    LocalDateCoercing.typeName(input));
             throw new CoercingSerializeException(error);
         }
 
@@ -120,7 +120,7 @@ public class GraphQLLocalDateScalar extends GraphQLScalarType
 
             String error = String.format(
                     "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.",
-                    GraphQLLocalDateScalar.typeName(input));
+                    LocalDateCoercing.typeName(input));
             throw new CoercingParseValueException(error);
         }
 
@@ -129,7 +129,9 @@ public class GraphQLLocalDateScalar extends GraphQLScalarType
         {
             if (!(input instanceof StringValue))
             {
-                throw new CoercingParseLiteralException("Expected AST type 'StringValue' but was '" + GraphQLLocalDateScalar.typeName(input) + "'.");
+                throw new CoercingParseLiteralException("Expected AST type 'StringValue' but was '"
+                        + LocalDateCoercing.typeName(input)
+                        + "'.");
             }
             return this.parseLocalDate(((StringValue) input).getValue(), CoercingParseLiteralException::new);
         }
