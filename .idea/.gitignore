@@ -12,3 +12,7 @@
 /libraries
 /modules.xml
 /jarRepositories.xml
+
+# Other IntelliJ plugins
+/checkstyle-idea.xml
+/git_toolbox_prj.xml
