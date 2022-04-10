@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,18 +48,18 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
         super(name, "An RFC-3339 compliant " + name + " Scalar", new InstantCoercing());
     }
 
-    @Nonnull
-    private static String typeName(@Nullable Object input)
-    {
-        if (input == null)
-        {
-            return "null";
-        }
-        return input.getClass().getSimpleName();
-    }
-
     private static class InstantCoercing implements Coercing<Instant, String>
     {
+        @Nonnull
+        private static String typeName(@Nullable Object input)
+        {
+            if (input == null)
+            {
+                return "null";
+            }
+            return input.getClass().getSimpleName();
+        }
+
         @Nonnull
         @Override
         public String serialize(Object input)
@@ -112,7 +112,7 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
 
             String error = String.format(
                     "Expected something we can convert to 'java.time.OffsetDateTime' but was '%s'.",
-                    GraphQLTemporalScalar.typeName(input));
+                    InstantCoercing.typeName(input));
             throw new CoercingSerializeException(error);
         }
 
@@ -143,7 +143,7 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
                 return parsedOffsetDateTime.toInstant();
             }
 
-            String error = String.format("Expected a 'String' but was '%s'.", GraphQLTemporalScalar.typeName(input));
+            String error = String.format("Expected a 'String' but was '%s'.", InstantCoercing.typeName(input));
             throw new CoercingParseValueException(error);
         }
 
@@ -154,7 +154,7 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
             {
                 String error = String.format(
                         "Expected AST type 'StringValue' but was '%s'.",
-                        GraphQLTemporalScalar.typeName(input));
+                        InstantCoercing.typeName(input));
                 throw new CoercingParseLiteralException(error);
             }
             return InstantCoercing.parseOffsetDateTime(
