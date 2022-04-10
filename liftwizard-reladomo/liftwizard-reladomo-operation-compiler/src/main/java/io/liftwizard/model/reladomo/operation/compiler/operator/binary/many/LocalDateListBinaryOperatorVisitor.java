@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,12 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public class LocalDateListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final DateAttribute            attribute;
-    private final ImmutableList<LocalDate> parameter;
-    private final Set<Timestamp>           timestamps;
+    private final DateAttribute  attribute;
+    private final Set<Timestamp> timestamps;
 
     public LocalDateListBinaryOperatorVisitor(DateAttribute attribute, ImmutableList<LocalDate> parameter)
     {
         this.attribute  = Objects.requireNonNull(attribute);
-        this.parameter  = Objects.requireNonNull(parameter);
         this.timestamps = new LinkedHashSet<>(parameter.collect(this::getTimestamp).castToList());
     }
 

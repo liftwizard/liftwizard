@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +31,16 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public class InstantListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final TimestampAttribute     attribute;
-    private final ImmutableList<Instant> parameter;
-    private final Set<Timestamp>         timestamps;
+    private final TimestampAttribute<?> attribute;
+    private final Set<Timestamp>        timestamps;
 
-    public InstantListBinaryOperatorVisitor(TimestampAttribute attribute, ImmutableList<Instant> parameter)
+    public InstantListBinaryOperatorVisitor(TimestampAttribute<?> attribute, ImmutableList<Instant> parameter)
     {
         this.attribute  = Objects.requireNonNull(attribute);
-        this.parameter  = Objects.requireNonNull(parameter);
         this.timestamps = new LinkedHashSet<>(parameter.collect(this::getTimestamp).castToList());
     }
 
-    public Timestamp getTimestamp(Instant instant)
+    private Timestamp getTimestamp(Instant instant)
     {
         if (instant == null)
         {

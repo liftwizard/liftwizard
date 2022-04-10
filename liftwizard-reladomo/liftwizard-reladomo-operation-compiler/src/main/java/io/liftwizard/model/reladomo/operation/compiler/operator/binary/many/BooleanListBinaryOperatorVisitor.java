@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,13 @@ import org.eclipse.collections.impl.factory.primitive.BooleanSets;
 
 public class BooleanListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
-    private final BooleanAttribute       attribute;
-    private final ImmutableList<Boolean> parameter;
-    private final ImmutableBooleanSet    booleanSet;
+    private final BooleanAttribute<?> attribute;
+    private final ImmutableBooleanSet booleanSet;
 
-    public BooleanListBinaryOperatorVisitor(BooleanAttribute attribute, ImmutableList<Boolean> parameter)
+    public BooleanListBinaryOperatorVisitor(BooleanAttribute<?> attribute, ImmutableList<Boolean> parameter)
     {
         this.attribute  = Objects.requireNonNull(attribute);
-        this.parameter  = Objects.requireNonNull(parameter);
-        this.booleanSet = BooleanSets.immutable.withAll(this.parameter);
+        this.booleanSet = BooleanSets.immutable.withAll(parameter);
     }
 
     @Override
