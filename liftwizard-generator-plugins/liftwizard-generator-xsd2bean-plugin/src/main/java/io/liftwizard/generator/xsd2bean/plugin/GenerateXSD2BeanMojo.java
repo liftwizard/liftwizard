@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,11 +62,9 @@ public class GenerateXSD2BeanMojo
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
 
-    @SuppressWarnings("FieldMayBeFinal")
     @Parameter
     private Set<String> includes = Sets.mutable.empty();
 
-    @SuppressWarnings("FieldMayBeFinal")
     @Nonnull
     @Parameter
     private Set<String> excludes = new HashSet<>();
