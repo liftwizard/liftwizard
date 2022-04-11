@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-bundle</artifactId>
-        <version>0.24.0</version>
+        <version>0.25.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -45,8 +45,4 @@
         </dependency>
 
     </dependencies>
-
-  <scm>
-    <tag>0.24.0</tag>
-  </scm>
 </project>
