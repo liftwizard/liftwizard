@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,18 @@
 package io.liftwizard.dropwizard.configuration.executor;
 
 import java.util.Objects;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.codahale.metrics.InstrumentedScheduledExecutorService;
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.lifecycle.setup.ScheduledExecutorServiceBuilder;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
 import io.dropwizard.validation.MinDuration;
@@ -45,19 +47,21 @@ public class ScheduledExecutorServiceFactory
     private boolean  removeOnCancelPolicy;
 
     @JsonIgnore
-    public ScheduledExecutorServiceBuilder build(Environment environment)
+    public ScheduledExecutorService build(Environment environment)
     {
-        return this.build(environment.lifecycle());
+        return this.build(environment.lifecycle(), environment.metrics());
     }
 
     @JsonIgnore
-    public ScheduledExecutorServiceBuilder build(LifecycleEnvironment environment)
+    public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry)
     {
-        return environment
+        ScheduledExecutorService scheduledExecutorService = environment
                 .scheduledExecutorService(this.nameFormat, this.useDaemonThreads)
                 .threads(this.threads)
                 .shutdownTime(this.shutdownTime)
-                .removeOnCancelPolicy(this.removeOnCancelPolicy);
+                .removeOnCancelPolicy(this.removeOnCancelPolicy)
+                .build();
+        return new InstrumentedScheduledExecutorService(scheduledExecutorService, metricRegistry, this.nameFormat);
     }
 
     @JsonProperty
