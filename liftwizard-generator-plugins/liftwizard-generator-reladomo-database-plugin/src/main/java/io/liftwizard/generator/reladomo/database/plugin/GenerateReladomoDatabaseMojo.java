@@ -72,6 +72,7 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo
         }
 
         CoreMithraDbDefinitionGenerator coreGenerator = new CoreMithraDbDefinitionGenerator();
+        coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
         coreGenerator.setXml(this.definitionsXmlFile.getAbsolutePath());
         coreGenerator.setGeneratedDir(this.outputDirectory.getAbsolutePath());
         coreGenerator.setDatabaseType(this.databaseType);
@@ -81,7 +82,6 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo
         coreGenerator.setDefaultFinalGetters(this.defaultFinalGetters);
         coreGenerator.setForceOffHeap(this.forceOffHeap);
         coreGenerator.setGenerateFileHeaders(this.generateFileHeaders);
-        coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
         coreGenerator.execute();
 
         Resource resource = new Resource();
