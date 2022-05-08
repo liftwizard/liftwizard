@@ -137,6 +137,9 @@
 
         <profile>
             <id>enforcer-strict</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
 
             <build>
                 <plugins>
