@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-reladomo</artifactId>
-        <version>0.25.0-SNAPSHOT</version>
+        <version>0.25.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -61,4 +61,8 @@
         </dependency>
 
     </dependencies>
+
+  <scm>
+    <tag>0.25.0</tag>
+  </scm>
 </project>
