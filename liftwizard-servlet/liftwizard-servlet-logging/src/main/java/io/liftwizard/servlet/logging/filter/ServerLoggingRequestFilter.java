@@ -151,6 +151,6 @@ public final class ServerLoggingRequestFilter
 
         return ListAdapter.adapt(matchedTemplates)
                 .collect(UriTemplate::getTemplate)
-                .makeString();
+                .makeString("");
     }
 }
