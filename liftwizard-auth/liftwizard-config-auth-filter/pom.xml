@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-auth</artifactId>
-        <version>0.25.0</version>
+        <version>0.26.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -54,8 +54,4 @@
             <artifactId>auto-service-annotations</artifactId>
         </dependency>
     </dependencies>
-
-  <scm>
-    <tag>0.25.0</tag>
-  </scm>
 </project>
