@@ -16,8 +16,9 @@
 
 package io.liftwizard.serialization.jackson.config;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -33,7 +34,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
-import org.eclipse.collections.api.collection.ImmutableCollection;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.api.set.ImmutableSet;
+import org.eclipse.collections.api.set.MutableSet;
 
 public final class ObjectMapperConfig
 {
@@ -116,8 +122,14 @@ public final class ObjectMapperConfig
 
         Value valueNulls = Value.forValueNulls(defaultNullSetterInfo);
         objectMapper.configOverride(Map.class).setSetterInfo(valueNulls);
-        objectMapper.configOverride(Collection.class).setSetterInfo(valueNulls);
-        objectMapper.configOverride(ImmutableCollection.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(List.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(Set.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(ImmutableMap.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(ImmutableList.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(ImmutableSet.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(MutableMap.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(MutableList.class).setSetterInfo(valueNulls);
+        objectMapper.configOverride(MutableSet.class).setSetterInfo(valueNulls);
 
         return objectMapper;
     }
