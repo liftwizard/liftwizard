@@ -41,7 +41,7 @@ public class ImpersonationAuthenticator implements Authenticator<String, Imperso
     public Optional<ImpersonatedPrincipal> authenticate(String principalName)
     {
         MDC.put(IMPERSONATION_PRINCIPAL_NAME, principalName);
-        ImpersonatedPrincipal impersonatedUser = new ImpersonatedPrincipal(principalName);
-        return Optional.of(impersonatedUser);
+        ImpersonatedPrincipal principal = new ImpersonatedPrincipal(principalName);
+        return Optional.of(principal);
     }
 }
