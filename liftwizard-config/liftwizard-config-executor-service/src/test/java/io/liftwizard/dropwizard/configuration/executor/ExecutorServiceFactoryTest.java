@@ -59,7 +59,7 @@ public class ExecutorServiceFactoryTest
     }
 
     @Test
-    public void scheduledExecutorServiceFactory()
+    public void defaultScheduledExecutorServiceFactory()
             throws Exception
     {
         URL  resource = Resources.getResource("executor-service-config-test.json5");
@@ -72,8 +72,26 @@ public class ExecutorServiceFactoryTest
                         this.objectMapper,
                         "dw");
 
-        ScheduledExecutorServiceFactory executorServiceFactory = factory.build(json);
+        DefaultScheduledExecutorServiceFactory executorServiceFactory = (DefaultScheduledExecutorServiceFactory) factory.build(json);
     }
+
+    @Test
+    public void noopScheduledExecutorServiceFactory()
+            throws Exception
+    {
+        URL  resource = Resources.getResource("noop-executor-service-config-test.json5");
+        File json     = new File(resource.toURI());
+
+        JsonConfigurationFactory<ScheduledExecutorServiceFactory> factory =
+                new JsonConfigurationFactory<>(
+                        ScheduledExecutorServiceFactory.class,
+                        this.validator,
+                        this.objectMapper,
+                        "dw");
+
+        NoopScheduledExecutorServiceFactory executorServiceFactory = (NoopScheduledExecutorServiceFactory) factory.build(json);
+    }
+
 
     @Test
     public void invalidExecutorServiceFactory()
