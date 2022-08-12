@@ -16,9 +16,10 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
-import javax.validation.Validator;
+import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.configuration.ConfigurationException;
 import io.dropwizard.configuration.ConfigurationValidationException;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
@@ -32,6 +33,7 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ExecutorServiceFactoryTest
@@ -39,45 +41,54 @@ public class ExecutorServiceFactoryTest
     @Rule
     public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 
-    private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator    validator    = Validators.newValidator();
+    private <T> T getConfiguredType(Class<T> klass, String path)
+            throws IOException, ConfigurationException
+    {
+        JsonConfigurationFactory<T> factory = new JsonConfigurationFactory<>(
+                klass,
+                Validators.newValidator(),
+                ExecutorServiceFactoryTest.newObjectMapper(),
+                "dw");
+        return factory.build(new ResourceConfigurationSourceProvider(), path);
+    }
 
     @Test
     public void executorServiceFactory()
             throws Exception
     {
-        JsonConfigurationFactory<ExecutorServiceFactory> factory =
-                new JsonConfigurationFactory<>(ExecutorServiceFactory.class, this.validator, this.objectMapper, "dw");
-
-        ExecutorServiceFactory executorServiceFactory = factory.build(
-                new ResourceConfigurationSourceProvider(),
-                "executor-service-config-test.json5");
+        ExecutorServiceFactory executorServiceFactory = this.getConfiguredType(
+                ExecutorServiceFactory.class,
+                "default-executor-service-config-test.json5");
+        assertThat(executorServiceFactory, instanceOf(ExecutorServiceFactory.class));
     }
 
     @Test
-    public void scheduledExecutorServiceFactory()
+    public void defaultScheduledExecutorServiceFactory()
             throws Exception
     {
-        JsonConfigurationFactory<ScheduledExecutorServiceFactory> factory =
-                new JsonConfigurationFactory<>(
-                        ScheduledExecutorServiceFactory.class,
-                        this.validator,
-                        this.objectMapper,
-                        "dw");
+        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
+                ScheduledExecutorServiceFactory.class,
+                "default-executor-service-config-test.json5");
+        assertThat(scheduledExecutorServiceFactory, instanceOf(DefaultScheduledExecutorServiceFactory.class));
+    }
 
-        ScheduledExecutorServiceFactory executorServiceFactory = factory.build(new ResourceConfigurationSourceProvider(), "executor-service-config-test.json5");
+    @Test
+    public void noopScheduledExecutorServiceFactory()
+            throws Exception
+    {
+        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
+                ScheduledExecutorServiceFactory.class,
+                "noop-executor-service-config-test.json5");
+        assertThat(scheduledExecutorServiceFactory, instanceOf(NoopScheduledExecutorServiceFactory.class));
     }
 
     @Test
     public void invalidExecutorServiceFactory()
             throws Exception
     {
-        JsonConfigurationFactory<ExecutorServiceFactory> factory =
-                new JsonConfigurationFactory<>(ExecutorServiceFactory.class, this.validator, this.objectMapper, "dw");
-
         try
         {
-            ExecutorServiceFactory executorServiceFactory = factory.build(new ResourceConfigurationSourceProvider(), "invalid-executor-service-config-test.json5");
+            getConfiguredType(ExecutorServiceFactory.class, "invalid-executor-service-config-test.json5");
             Assert.fail();
         }
         catch (ConfigurationValidationException e)
