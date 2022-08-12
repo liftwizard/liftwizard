@@ -36,8 +36,16 @@ public class Slf4jUncaughtExceptionHandler
             mdc.put("exceptionClass", throwable.getClass().getCanonicalName());
             mdc.put("exceptionMessage", throwable.getMessage());
 
+            mdc.put("liftwizard.error.thread", thread.getName());
+            mdc.put("liftwizard.error.kind", throwable.getClass().getCanonicalName());
+            mdc.put("liftwizard.error.message", throwable.getMessage());
+
             String message = "Exception in thread \"" + thread.getName() + "\"";
             LOGGER.warn(message, throwable);
+
+            System.err.print(message);
+            System.err.print(" ");
+            throwable.printStackTrace(System.err);
         }
     }
 }
