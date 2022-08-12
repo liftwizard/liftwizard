@@ -38,6 +38,10 @@ public class Slf4jUncaughtExceptionHandler
 
             String message = "Exception in thread \"" + thread.getName() + "\"";
             LOGGER.warn(message, throwable);
+
+            System.err.print(message);
+            System.err.print(" ");
+            throwable.printStackTrace(System.err);
         }
     }
 }
