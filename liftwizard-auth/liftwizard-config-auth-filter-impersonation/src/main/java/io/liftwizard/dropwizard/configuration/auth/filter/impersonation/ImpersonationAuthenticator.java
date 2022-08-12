@@ -29,7 +29,7 @@ public class ImpersonationAuthenticator
     @Override
     public Optional<ImpersonatedPrincipal> authenticate(String principalName)
     {
-        ImpersonatedPrincipal impersonatedUser = new ImpersonatedPrincipal(principalName);
-        return Optional.of(impersonatedUser);
+        ImpersonatedPrincipal principal = new ImpersonatedPrincipal(principalName);
+        return Optional.of(principal);
     }
 }
