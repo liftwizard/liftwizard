@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthFilter;
-import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter.Builder;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 
 @JsonTypeName("impersonation")
@@ -32,7 +32,7 @@ public class ImpersonationAuthFilterFactory implements AuthFilterFactory
     @Override
     public AuthFilter<?, ImpersonatedPrincipal> createAuthFilter()
     {
-        return new Builder<ImpersonatedPrincipal>()
+        return new OAuthCredentialAuthFilter.Builder<ImpersonatedPrincipal>()
                 .setAuthenticator(new ImpersonationAuthenticator())
                 .setPrefix("Impersonation")
                 .buildAuthFilter();
