@@ -22,9 +22,13 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsStatus
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
+
     private Status  name;
     private Integer code;
     private Family  family;
@@ -40,7 +44,7 @@ public class StructuredArgumentsStatus
     {
         if (this.name != null)
         {
-            throw new AssertionError(name);
+            LOGGER.warn("Overwriting name '{}' with '{}'.", this.name, name);
         }
         // Name can occasionally be null, for http codes like 422 which are used by Dropwizard but don't appear in the Status enumeration
         this.name = name;
