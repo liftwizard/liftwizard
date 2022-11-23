@@ -58,6 +58,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-auth-filter-header</artifactId>
+                <version>0.36.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-auth-filter-impersonation</artifactId>
                 <version>0.36.0-SNAPSHOT</version>
             </dependency>
