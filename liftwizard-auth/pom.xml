@@ -47,6 +47,7 @@
         <module>liftwizard-config-auth-filter</module>
         <module>liftwizard-config-auth-filter-firebase</module>
         <module>liftwizard-config-auth-filter-impersonation</module>
+        <module>liftwizard-config-auth-filter-header</module>
         <module>liftwizard-firebase-dependencies</module>
         <module>liftwizard-principal-firebase</module>
     </modules>
