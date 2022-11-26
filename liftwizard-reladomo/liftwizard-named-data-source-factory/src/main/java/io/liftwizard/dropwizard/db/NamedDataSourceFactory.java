@@ -64,4 +64,10 @@ public class NamedDataSourceFactory extends DataSourceFactory
 
         return this.managedDataSource;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
+    }
 }
