@@ -56,7 +56,7 @@ public class H2Bundle
     {
         H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
         H2Factory         h2Factory         = h2FactoryProvider.getH2Factory();
-        if (!h2Factory.isEnabled())
+        if (h2Factory == null || !h2Factory.isEnabled())
         {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
