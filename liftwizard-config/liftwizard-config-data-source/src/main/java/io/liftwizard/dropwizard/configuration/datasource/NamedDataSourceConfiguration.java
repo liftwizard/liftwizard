@@ -27,7 +27,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -121,7 +120,7 @@ public class NamedDataSourceConfiguration
 
     @Override
     @JsonIgnore
-    public DataSource getDataSourceByName(@Nonnull String name)
+    public ManagedDataSource getDataSourceByName(@Nonnull String name)
     {
         Objects.requireNonNull(name);
         if (!this.initialized)
