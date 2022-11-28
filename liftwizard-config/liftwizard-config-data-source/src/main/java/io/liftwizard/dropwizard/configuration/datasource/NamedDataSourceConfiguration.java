@@ -125,9 +125,17 @@ public class NamedDataSourceConfiguration
         Objects.requireNonNull(name);
         if (!this.initialized)
         {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Not initialized. Did you remember to run NamedDataSourceBundle?");
         }
-        return this.dataSourcesByName.get(name);
+        if (this.dataSourcesByName.containsKey(name))
+        {
+            return this.dataSourcesByName.get(name);
+        }
+        String message = String.format(
+                "No data source named: '%s'. Known data sources: %s",
+                name,
+                this.dataSourcesByName.keySet());
+        throw new IllegalStateException(message);
     }
 
     @Override
