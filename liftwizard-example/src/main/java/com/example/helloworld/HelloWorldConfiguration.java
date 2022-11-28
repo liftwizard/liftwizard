@@ -240,7 +240,7 @@ public class HelloWorldConfiguration
 
     @Override
     @JsonIgnore
-    public DataSource getDataSourceByName(@Nonnull String name)
+    public ManagedDataSource getDataSourceByName(@Nonnull String name)
     {
         return this.namedDataSourceConfiguration.getDataSourceByName(name);
     }
