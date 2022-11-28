@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -240,7 +239,7 @@ public class HelloWorldConfiguration
 
     @Override
     @JsonIgnore
-    public DataSource getDataSourceByName(@Nonnull String name)
+    public ManagedDataSource getDataSourceByName(@Nonnull String name)
     {
         return this.namedDataSourceConfiguration.getDataSourceByName(name);
     }

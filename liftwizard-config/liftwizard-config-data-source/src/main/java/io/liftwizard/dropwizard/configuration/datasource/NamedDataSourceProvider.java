@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 
 import com.codahale.metrics.MetricRegistry;
 import io.dropwizard.db.ManagedDataSource;
@@ -35,7 +34,7 @@ public interface NamedDataSourceProvider
             @Nonnull MetricRegistry metricRegistry,
             @Nonnull LifecycleEnvironment lifecycle);
 
-    DataSource getDataSourceByName(@Nonnull String name);
+    ManagedDataSource getDataSourceByName(@Nonnull String name);
 
     @Nonnull
     Map<String, ManagedDataSource> getDataSourcesByName();
