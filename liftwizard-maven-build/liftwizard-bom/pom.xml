@@ -120,6 +120,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-bundle-healthcheck-common-pool</artifactId>
+                <version>0.28.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-prioritized-api</artifactId>
                 <version>0.28.0-SNAPSHOT</version>
             </dependency>
@@ -209,6 +215,12 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-h2</artifactId>
+                <version>0.28.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-healthcheck-common-pool</artifactId>
                 <version>0.28.0-SNAPSHOT</version>
             </dependency>
 
