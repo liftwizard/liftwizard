@@ -14,7 +14,7 @@ INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingB
 {
   "template": "Hello, %s!",
   "defaultName": "Stranger",
-  "configLoggingFactory": {
+  "configLogging": {
     "enabled": true
   },
   // ...
@@ -25,7 +25,7 @@ INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingB
 }
 ```
 
-:include-json: test-example.json5 {title: "Original configuration", collapsedPaths: ['root.database', 'root.server', 'root.logging']}
+:include-json: test-example.json5 {title: "Original configuration", include: "$['configLogging', 'template', 'metrics']"}
 
 Note that the `metrics` section at the end was not specified in `test-example.json5`. It comes from serializing the output of `io.dropwizard.Configuration.getMetricsFactory()`.
 
