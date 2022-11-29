@@ -57,7 +57,7 @@ public final class ServerLoggingResponseFilter
         StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 
         StatusType statusInfo = responseContext.getStatusInfo();
-        http.getStatus().setName(statusInfo.toEnum());
+        http.getStatus().setStatus(statusInfo.toEnum());
         http.getStatus().setFamily(statusInfo.getFamily());
         http.getStatus().setPhrase(statusInfo.getReasonPhrase());
 

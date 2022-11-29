@@ -29,25 +29,25 @@ public class StructuredArgumentsStatus
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
 
-    private Status  name;
+    private Status  status;
     private Integer code;
     private Family  family;
     private String  phrase;
 
     @JsonProperty
-    public Status getName()
+    public Status getStatus()
     {
-        return this.name;
+        return this.status;
     }
 
-    public void setName(Status name)
+    public void setStatus(Status status)
     {
-        if (this.name != null)
+        if (this.status != null)
         {
-            LOGGER.warn("Overwriting name '{}' with '{}'.", this.name, name);
+            LOGGER.warn("Overwriting status '{}' with '{}'.", this.status, status);
         }
         // Name can occasionally be null, for http codes like 422 which are used by Dropwizard but don't appear in the Status enumeration
-        this.name = name;
+        this.status = status;
     }
 
     @JsonProperty
@@ -60,7 +60,7 @@ public class StructuredArgumentsStatus
     {
         if (this.code != null)
         {
-            throw new AssertionError(this.code);
+            LOGGER.warn("Overwriting code '{}' with '{}'.", this.code, code);
         }
         this.code = code;
     }
@@ -75,7 +75,7 @@ public class StructuredArgumentsStatus
     {
         if (this.family != null)
         {
-            throw new AssertionError(this.family);
+            LOGGER.warn("Overwriting family '{}' with '{}'.", this.family, family);
         }
         this.family = Objects.requireNonNull(family);
     }
@@ -90,7 +90,7 @@ public class StructuredArgumentsStatus
     {
         if (this.phrase != null)
         {
-            throw new AssertionError(this.phrase);
+            LOGGER.warn("Overwriting phrase '{}' with '{}'.", this.phrase, phrase);
         }
         this.phrase = Objects.requireNonNull(phrase);
     }
