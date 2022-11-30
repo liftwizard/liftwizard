@@ -44,10 +44,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class LiquibaseBundle
+public class LiftwizardLiquibaseMigrationBundle
         implements PrioritizedBundle
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseBundle.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardLiquibaseMigrationBundle.class);
 
     @Override
     public int getPriority()
@@ -87,9 +87,8 @@ public class LiquibaseBundle
 
         for (LiquibaseDataSourceMigrationFactory factory : liquibaseMigrationFactory.getDataSourceMigrations())
         {
-            String            dataSourceName = factory.getDataSourceName();
-            ManagedDataSource dataSource     = dataSourceProvider.getDataSourceByName(dataSourceName);
-
+            String                dataSourceName        = factory.getDataSourceName();
+            ManagedDataSource     dataSource            = dataSourceProvider.getDataSourceByName(dataSourceName);
             String                catalogName           = factory.getCatalogName();
             String                schemaName            = factory.getSchemaName();
             String                migrationFile         = factory.getMigrationFileName();
