@@ -51,11 +51,6 @@
       "user"                       : "sa",
       "password"                   : "",
       "url": "jdbc:p6spy:h2:mem:",
-      "properties": {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors": true,
-      "maxWaitForConnection": "1 second",
     },
     {
       "name": "h2-tcp",
@@ -63,12 +58,7 @@
       "readOnlyByDefault": false,
       "user": "sa",
       "password": "",
-      "url": "jdbc:p6spy:h2:tcp://localhost:9092/\${rootArtifactId}-h2",
-      "properties": {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors": true,
-      "maxWaitForConnection": "1 second",
+      "url": "jdbc:p6spy:h2:tcp://localhost:9075/\${rootArtifactId}-h2",
     },
     {
       "name": "h2-file",
@@ -77,11 +67,6 @@
       "user": "sa",
       "password": "",
       "url": "jdbc:p6spy:h2:file:./target/h2db/\${rootArtifactId}-h2",
-      "properties": {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors": true,
-      "maxWaitForConnection": "1 second",
     },
     {
       "name"                : "postgres",
@@ -90,11 +75,6 @@
       "user"                : "${JDBC_DATABASE_USERNAME}",
       "password"            : "${JDBC_DATABASE_PASSWORD}",
       "url"                 : "${JDBC_DATABASE_URL}",
-      "properties"                 : {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors"        : true,
-      "maxWaitForConnection"       : "1 second",
     }
   ],
   "connectionManagers"       : [

@@ -70,15 +70,9 @@
     {
       "name": "h2-mem",
       "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
-      "readOnlyByDefault": false,
       "user": "sa",
       "password": "",
       "url": "jdbc:p6spy:h2:mem:",
-      "properties": {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors": true,
-      "maxWaitForConnection": "1 second",
     },
     {
       "name": "h2-tcp",
@@ -90,15 +84,9 @@
     {
       "name": "h2-file",
       "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
-      "readOnlyByDefault": false,
       "user": "sa",
       "password": "",
       "url": "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2",
-      "properties": {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors": true,
-      "maxWaitForConnection": "1 second",
     },
     {
       "name"                : "postgres",
@@ -107,11 +95,6 @@
       "user"                : "${JDBC_DATABASE_USERNAME}",
       "password"            : "${JDBC_DATABASE_PASSWORD}",
       "url"                 : "${JDBC_DATABASE_URL}",
-      "properties"          : {
-        "charSet": "UTF-8"
-      },
-      "logValidationErrors" : true,
-      "maxWaitForConnection": "1 second",
     }
   ],
   "connectionManagers": [

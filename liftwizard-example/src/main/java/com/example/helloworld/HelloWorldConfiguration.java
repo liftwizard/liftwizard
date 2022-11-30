@@ -78,11 +78,11 @@ public class HelloWorldConfiguration
     private @Valid @NotNull ReladomoFactory          reladomoFactory          = new ReladomoFactory();
     private @Valid @NotNull GraphQLFactory           graphQLFactory           = new GraphQLFactory();
 
-    // include-namedDataSourceFactory
+    // include-namedDataSourcesFactory
     @JsonUnwrapped
     private @Valid @NotNull NamedDataSourcesFactory   namedDataSourcesFactory   =
             new NamedDataSourcesFactory();
-    // include-namedDataSourceFactory
+    // include-namedDataSourcesFactory
 
     // include-connectionManagersFactory
     @JsonUnwrapped

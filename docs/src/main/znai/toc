@@ -15,3 +15,6 @@ graphql
     data-fetcher-async
 reladomo
     reladomo-operation-compiler
+database
+    named-data-source
+    liquibase-migrations
