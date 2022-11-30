@@ -32,6 +32,7 @@ import io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
 import io.liftwizard.dropwizard.bundle.h2.H2Bundle;
 import io.liftwizard.dropwizard.bundle.httplogging.JerseyHttpLoggingBundle;
+import io.liftwizard.dropwizard.bundle.liquibase.LiftwizardLiquibaseMigrationBundle;
 import io.liftwizard.dropwizard.bundle.objectmapper.ObjectMapperBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.ReladomoBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.ConnectionManagerHolderBundle;
@@ -90,6 +91,7 @@ public class HelloWorldApplication
                         .get();
             }
         });
+        bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());
         bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>()
         {
             @Override

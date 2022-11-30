@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/goldmansachs/reladomo/master/reladomo/src/main/xsd/mithraruntime.xsd">
     <ConnectionManager className="io.liftwizard.reladomo.connection.manager.holder.ConnectionManagerHolder">
-        <Property name="connectionManagerName" value="liquibase" />
+        <Property name="connectionManagerName" value="h2-tcp" />
         <MithraObjectConfiguration className="io.liftwizard.reladomo.simseq.ObjectSequence" cacheType="none" />
         <MithraObjectConfiguration className="com.example.helloworld.core.Person" cacheType="full" />
     </ConnectionManager>

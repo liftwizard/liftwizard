@@ -46,20 +46,18 @@ public class ConnectionManagerHolderBundle
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
+        ConnectionManagerProvider connectionManagerProvider = this.safeCastConfiguration(
+                ConnectionManagerProvider.class,
+                configuration);
         NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
                 NamedDataSourceProvider.class,
                 configuration);
 
-        ConnectionManagerProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
-                ConnectionManagerProvider.class,
-                configuration);
-
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        Map<String, SourcelessConnectionManager> connectionManagersByName =
-                connectionManagerFactoryProvider
-                        .getConnectionManagersFactory()
-                        .getConnectionManagersByName(dataSourceProvider, environment);
+        Map<String, SourcelessConnectionManager> connectionManagersByName = connectionManagerProvider
+                .getConnectionManagersFactory()
+                .getConnectionManagersByName(dataSourceProvider, environment);
 
         ConnectionManagerHolder.setConnectionManagersByName(Maps.immutable.withAll(connectionManagersByName));
 

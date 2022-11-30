@@ -32,6 +32,8 @@ import io.liftwizard.dropwizard.configuration.h2.H2Factory;
 import io.liftwizard.dropwizard.configuration.h2.H2FactoryProvider;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactoryProvider;
+import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactory;
+import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactoryProvider;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactory;
@@ -54,7 +56,8 @@ public class HelloWorldConfiguration
         ReladomoFactoryProvider,
         NamedDataSourceProvider,
         ConnectionManagerProvider,
-        GraphQLFactoryProvider
+        GraphQLFactoryProvider,
+        LiquibaseMigrationFactoryProvider
 {
     @NotEmpty
     private String template;
@@ -82,6 +85,7 @@ public class HelloWorldConfiguration
     // include-namedDataSourceFactory
 
     // include-connectionManagersFactory
+    @JsonUnwrapped
     private @Valid @NotNull ConnectionManagersFactory connectionManagersFactory =
             new ConnectionManagersFactory();
     // include-connectionManagersFactory
@@ -270,5 +274,18 @@ public class HelloWorldConfiguration
     public void setGraphQLFactory(@Nonnull GraphQLFactory graphQLFactory)
     {
         this.graphQLFactory = graphQLFactory;
+    }
+
+    @JsonProperty("liquibase")
+    @Override
+    public LiquibaseMigrationFactory getLiquibaseMigrationFactory()
+    {
+        return this.liquibaseMigrationFactory;
+    }
+
+    @JsonProperty("liquibase")
+    public void setLiquibaseMigrationFactory(LiquibaseMigrationFactory liquibaseMigrationFactory)
+    {
+        this.liquibaseMigrationFactory = liquibaseMigrationFactory;
     }
 }
