@@ -45,46 +45,62 @@
   },
   "dataSources"              : [
     {
+      "name": "h2-mem",
       "driverClass"                : "com.p6spy.engine.spy.P6SpyDriver",
-      "abandonWhenPercentageFull"  : 0,
-      "alternateUsernamesAllowed"  : false,
-      "commitOnReturn"             : false,
-      "rollbackOnReturn"           : false,
       "readOnlyByDefault"          : false,
       "user"                       : "sa",
       "password"                   : "",
-      "url"                        : "jdbc:p6spy:h2:tcp://localhost:9075/liftwizard-app-h2",
+      "url": "jdbc:p6spy:h2:mem:",
+      "properties": {
+        "charSet": "UTF-8"
+      },
+      "logValidationErrors": true,
+      "maxWaitForConnection": "1 second",
+    },
+    {
+      "name": "h2-tcp",
+      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
+      "readOnlyByDefault": false,
+      "user": "sa",
+      "password": "",
+      "url": "jdbc:p6spy:h2:tcp://localhost:9092/\${rootArtifactId}-h2",
+      "properties": {
+        "charSet": "UTF-8"
+      },
+      "logValidationErrors": true,
+      "maxWaitForConnection": "1 second",
+    },
+    {
+      "name": "h2-file",
+      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
+      "readOnlyByDefault": false,
+      "user": "sa",
+      "password": "",
+      "url": "jdbc:p6spy:h2:file:./target/h2db/\${rootArtifactId}-h2",
+      "properties": {
+        "charSet": "UTF-8"
+      },
+      "logValidationErrors": true,
+      "maxWaitForConnection": "1 second",
+    },
+    {
+      "name"                : "postgres",
+      "driverClass"         : "org.postgresql.Driver",
+      "readOnlyByDefault"   : false,
+      "user"                : "${JDBC_DATABASE_USERNAME}",
+      "password"            : "${JDBC_DATABASE_PASSWORD}",
+      "url"                 : "${JDBC_DATABASE_URL}",
       "properties"                 : {
         "charSet": "UTF-8"
       },
-      "defaultTransactionIsolation": "DEFAULT",
-      "useFairQueue"               : true,
-      "initialSize"                : 10,
-      "minSize"                    : 10,
-      "maxSize"                    : 100,
-      "logAbandonedConnections"    : false,
       "logValidationErrors"        : true,
       "maxWaitForConnection"       : "1 second",
-      "minIdleTime"                : "1 minute",
-      "validationQuery"            : "/* Health Check */ SELECT 1",
-      "checkConnectionWhileIdle"   : true,
-      "checkConnectionOnBorrow"    : false,
-      "checkConnectionOnConnect"   : true,
-      "checkConnectionOnReturn"    : false,
-      "autoCommentsEnabled"        : true,
-      "evictionInterval"           : "5 seconds",
-      "validationInterval"         : "30 seconds",
-      "removeAbandoned"            : false,
-      "removeAbandonedTimeout"     : "60 seconds",
-      "ignoreExceptionOnPreLoad"   : false,
-      "name"                       : "liquibase",
-      "defaultReadOnly"            : false
     }
   ],
   "connectionManagers"       : [
     {
-      "connectionManagerName": "liquibase",
-      "dataSourceName"       : "liquibase",
+      "connectionManagerName": "h2-tcp",
+      "dataSourceName": "h2-tcp",
       "databaseType"         : "H2",
       "schemaName"           : "liftwizard-app-h2",
       "timeZone"             : "UTC"
@@ -154,5 +170,17 @@
         }
       }
     ]
+  },
+  "liquibase": {
+    "enabled": true,
+    "dataSourceMigrations": [
+      {
+        "dataSourceName": "h2-tcp",
+        "migrationFileName": "migrations.xml",
+        "migrationFileLocation": "classpath",
+        "contexts": [],
+      }
+    ],
+    "dryRun": false
   }
 }

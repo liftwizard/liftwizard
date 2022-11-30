@@ -42,7 +42,6 @@
       },
       {
         "type": "file-logstash",
-        "threshold": "ALL",
         "timeZone": "UTC",
         "includeCallerData": true,
         "currentLogFilename": "./logs/logstash.json",
@@ -69,23 +68,56 @@
   },
   "dataSources": [
     {
-      "name": "liquibase",
+      "name": "h2-mem",
       "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
       "readOnlyByDefault": false,
       "user": "sa",
       "password": "",
-      "url": "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2",
+      "url": "jdbc:p6spy:h2:mem:",
       "properties": {
         "charSet": "UTF-8"
       },
       "logValidationErrors": true,
       "maxWaitForConnection": "1 second",
     },
+    {
+      "name": "h2-tcp",
+      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
+      "user": "sa",
+      "password": "",
+      "url": "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2",
+    },
+    {
+      "name": "h2-file",
+      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
+      "readOnlyByDefault": false,
+      "user": "sa",
+      "password": "",
+      "url": "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2",
+      "properties": {
+        "charSet": "UTF-8"
+      },
+      "logValidationErrors": true,
+      "maxWaitForConnection": "1 second",
+    },
+    {
+      "name"                : "postgres",
+      "driverClass"         : "org.postgresql.Driver",
+      "readOnlyByDefault"   : false,
+      "user"                : "${JDBC_DATABASE_USERNAME}",
+      "password"            : "${JDBC_DATABASE_PASSWORD}",
+      "url"                 : "${JDBC_DATABASE_URL}",
+      "properties"          : {
+        "charSet": "UTF-8"
+      },
+      "logValidationErrors" : true,
+      "maxWaitForConnection": "1 second",
+    }
   ],
   "connectionManagers": [
     {
-      "connectionManagerName": "liquibase",
-      "dataSourceName": "liquibase",
+      "connectionManagerName": "h2-tcp",
+      "dataSourceName": "h2-tcp",
       "databaseType": "H2",
       "schemaName": "liftwizard-app-h2",
     },
@@ -94,5 +126,17 @@
     "runtimeConfigurationPaths": [
       "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
     ]
+  },
+  "liquibase": {
+    "enabled": true,
+    "dataSourceMigrations": [
+      {
+        "dataSourceName": "h2-tcp",
+        "migrationFileName": "migrations.xml",
+        "migrationFileLocation": "classpath",
+        "contexts": [],
+      }
+    ],
+    "dryRun": false
   }
 }
