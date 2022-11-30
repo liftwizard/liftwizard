@@ -88,7 +88,10 @@ public class LiftwizardLiquibaseMigrationBundle
         for (LiquibaseDataSourceMigrationFactory factory : liquibaseMigrationFactory.getDataSourceMigrations())
         {
             String                dataSourceName        = factory.getDataSourceName();
-            ManagedDataSource     dataSource            = dataSourceProvider.getDataSourceByName(dataSourceName);
+            ManagedDataSource     dataSource            = dataSourceProvider.getNamedDataSourcesFactory().getDataSourceByName(
+                    dataSourceName,
+                    environment.metrics(),
+                    environment.lifecycle());
             String                catalogName           = factory.getCatalogName();
             String                schemaName            = factory.getSchemaName();
             String                migrationFile         = factory.getMigrationFileName();

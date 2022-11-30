@@ -7,21 +7,19 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.codahale.metrics.MetricRegistry;
 import com.example.helloworld.core.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.ImmutableMap;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.ManagedDataSource;
-import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.system.SystemClockFactory;
@@ -29,8 +27,8 @@ import io.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactor
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerConfiguration;
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactory;
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
-import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceConfiguration;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
+import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourcesFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactoryProvider;
 import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
@@ -46,7 +44,6 @@ import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFactory;
-import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @JsonPropertyOrder({"template", "defaultName", "viewRendererConfiguration"})
@@ -83,10 +80,16 @@ public class HelloWorldConfiguration
     private @Valid @NotNull ReladomoFactory          reladomoFactory          = new ReladomoFactory();
     private @Valid @NotNull GraphQLFactory           graphQLFactory           = new GraphQLFactory();
 
-    private @Valid @NotNull NamedDataSourceConfiguration   namedDataSourceConfiguration   =
-            new NamedDataSourceConfiguration();
+    // include-namedDataSourceFactory
+    @JsonUnwrapped
+    private @Valid @NotNull NamedDataSourcesFactory   namedDataSourcesFactory   =
+            new NamedDataSourcesFactory();
+    // include-namedDataSourceFactory
+
+    // include-connectionManagersFactory
     private @Valid @NotNull ConnectionManagerConfiguration connectionManagerConfiguration =
             new ConnectionManagerConfiguration();
+    // include-connectionManagersFactory
 
     @JsonProperty
     public String getTemplate() {
@@ -217,39 +220,36 @@ public class HelloWorldConfiguration
         this.reladomoFactory = reladomoFactory;
     }
 
-    @Override
-    public void initializeDataSources(
-            @Nonnull MetricRegistry metricRegistry,
-            @Nonnull LifecycleEnvironment lifecycle)
-    {
-        this.namedDataSourceConfiguration.initializeDataSources(metricRegistry, lifecycle);
-    }
-
-    @Override
     @JsonProperty("dataSources")
-    public List<NamedDataSourceFactory> getNamedDataSourceFactories()
+    @JsonUnwrapped
+    public NamedDataSourcesFactory getNamedDataSourcesFactory()
     {
-        return this.namedDataSourceConfiguration.getNamedDataSourceFactories();
+        return this.namedDataSourcesFactory;
     }
 
     @JsonProperty("dataSources")
-    public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories)
+    @JsonUnwrapped
+    public void setNamedDataSourcesFactory(NamedDataSourcesFactory namedDataSourcesFactory)
     {
-        this.namedDataSourceConfiguration.setNamedDataSourceFactories(namedDataSourceFactories);
+        this.namedDataSourcesFactory = namedDataSourcesFactory;
     }
 
     @Override
-    @JsonIgnore
-    public ManagedDataSource getDataSourceByName(@Nonnull String name)
+    public void initializeConnectionManagers(@Nonnull Map<String, ManagedDataSource> dataSourcesByName)
     {
-        return this.namedDataSourceConfiguration.getDataSourceByName(name);
+        this.connectionManagerConfiguration.initializeConnectionManagers(dataSourcesByName);
     }
 
-    @Override
-    @JsonIgnore
-    public Map<String, ManagedDataSource> getDataSourcesByName()
+    @JsonProperty("connectionManagers")
+    public List<ConnectionManagerFactory> getConnectionManagerFactories()
     {
-        return this.namedDataSourceConfiguration.getDataSourcesByName();
+        return this.connectionManagerConfiguration.getConnectionManagerFactories();
+    }
+
+    @JsonProperty("connectionManagers")
+    public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories)
+    {
+        this.connectionManagerConfiguration.setConnectionManagerFactories(connectionManagerFactories);
     }
 
     @Override
@@ -263,25 +263,6 @@ public class HelloWorldConfiguration
     public void setDdlExecutorFactories(List<DdlExecutorFactory> ddlExecutorFactories)
     {
         this.ddlExecutorFactories = ddlExecutorFactories;
-    }
-
-    @Override
-    public void initializeConnectionManagers(@Nonnull Map<String, ManagedDataSource> dataSourcesByName)
-    {
-        this.connectionManagerConfiguration.initializeConnectionManagers(dataSourcesByName);
-    }
-
-    @Override
-    @JsonProperty("connectionManagers")
-    public List<ConnectionManagerFactory> getConnectionManagerFactories()
-    {
-        return this.connectionManagerConfiguration.getConnectionManagerFactories();
-    }
-
-    @JsonProperty("connectionManagers")
-    public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories)
-    {
-        this.connectionManagerConfiguration.setConnectionManagerFactories(connectionManagerFactories);
     }
 
     @Override

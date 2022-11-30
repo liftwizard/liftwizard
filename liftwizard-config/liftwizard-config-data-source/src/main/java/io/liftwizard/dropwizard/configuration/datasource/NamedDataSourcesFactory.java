@@ -17,12 +17,10 @@
 package io.liftwizard.dropwizard.configuration.datasource;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,16 +36,14 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
 
-public class NamedDataSourceConfiguration
-        implements NamedDataSourceProvider
+public class NamedDataSourcesFactory
 {
     private @Valid @NotNull List<NamedDataSourceFactory> namedDataSourceFactories = new ArrayList<>();
 
-    private Map<String, ManagedDataSource> dataSourcesByName;
+    private Map<String, NamedDataSourceFactory> namedDataSourceFactoriesByName = new LinkedHashMap<>();
 
-    private boolean initialized;
+    private final Map<String, ManagedDataSource> dataSourcesByName = new LinkedHashMap<>();
 
-    @Override
     @JsonProperty("dataSources")
     public List<NamedDataSourceFactory> getNamedDataSourceFactories()
     {
@@ -57,7 +53,14 @@ public class NamedDataSourceConfiguration
     @JsonProperty("dataSources")
     public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories)
     {
-        this.namedDataSourceFactories = namedDataSourceFactories;
+        this.namedDataSourceFactories       = namedDataSourceFactories;
+        this.namedDataSourceFactoriesByName = new LinkedHashMap<>();
+        for (NamedDataSourceFactory namedDataSourceFactory : namedDataSourceFactories)
+        {
+            this.namedDataSourceFactoriesByName.put(
+                    namedDataSourceFactory.getName(),
+                    namedDataSourceFactory);
+        }
     }
 
     @ValidationMethod
@@ -90,62 +93,41 @@ public class NamedDataSourceConfiguration
         throw new IllegalStateException(errorMessage);
     }
 
-    @Override
-    public void initializeDataSources(
+    @Nonnull
+    @JsonIgnore
+    public NamedDataSourceFactory getNamedDataSourceFactoryByName(String name)
+    {
+        return this.namedDataSourceFactories
+                .stream()
+                .filter(namedDataSourceFactory -> namedDataSourceFactory.getName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Unknown data source name: " + name));
+    }
+
+    @JsonIgnore
+    public ManagedDataSource getDataSourceByName(
+            @Nonnull String name,
             @Nonnull MetricRegistry metricRegistry,
             @Nonnull LifecycleEnvironment lifecycle)
     {
-        if (this.initialized)
-        {
-            throw new IllegalStateException("Already initialized.");
-        }
-
-        Objects.requireNonNull(metricRegistry);
-
-        this.dataSourcesByName = Collections.unmodifiableMap(this.namedDataSourceFactories
-                .stream()
-                .collect(Collectors.toMap(
-                        NamedDataSourceFactory::getName,
-                        factory -> factory.build(metricRegistry),
-                        (duplicate1, duplicate2) ->
-                        {
-                            throw new IllegalStateException("Duplicate named data source: " + duplicate1);
-                        },
-                        LinkedHashMap::new)));
-
-        this.dataSourcesByName.values().forEach(lifecycle::manage);
-
-        this.initialized = true;
-    }
-
-    @Override
-    @JsonIgnore
-    public ManagedDataSource getDataSourceByName(@Nonnull String name)
-    {
-        Objects.requireNonNull(name);
-        if (!this.initialized)
-        {
-            throw new IllegalStateException("Not initialized. Did you remember to run NamedDataSourceBundle?");
-        }
         if (this.dataSourcesByName.containsKey(name))
         {
             return this.dataSourcesByName.get(name);
         }
-        String message = String.format(
-                "No data source named: '%s'. Known data sources: %s",
-                name,
-                this.dataSourcesByName.keySet());
-        throw new IllegalStateException(message);
-    }
 
-    @Override
-    @JsonIgnore
-    public Map<String, ManagedDataSource> getDataSourcesByName()
-    {
-        if (!this.initialized)
+        if (!this.namedDataSourceFactoriesByName.containsKey(name))
         {
-            throw new IllegalStateException("Not initialized. Did you remember to run NamedDataSourceBundle?");
+            String message = String.format(
+                    "No data source named: '%s'. Known data sources: %s",
+                    name,
+                    this.namedDataSourceFactoriesByName.keySet());
+            throw new IllegalStateException(message);
         }
-        return Objects.requireNonNull(this.dataSourcesByName);
+
+        NamedDataSourceFactory namedDataSourceFactory = this.namedDataSourceFactoriesByName.get(name);
+        ManagedDataSource      managedDataSource      = namedDataSourceFactory.build(metricRegistry);
+        lifecycle.manage(managedDataSource);
+        this.dataSourcesByName.put(name, managedDataSource);
+        return managedDataSource;
     }
 }

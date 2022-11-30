@@ -25,9 +25,13 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NamedDataSourceFactory extends DataSourceFactory
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NamedDataSourceFactory.class);
+
     private @Valid @NotNull String name;
 
     private ManagedDataSource managedDataSource;
@@ -49,10 +53,13 @@ public class NamedDataSourceFactory extends DataSourceFactory
     {
         if (!Objects.equals(this.name, equalNameParameter))
         {
-            throw new IllegalArgumentException(equalNameParameter);
+            LOGGER.warn(
+                    "The name of the data source ({}) does not match the name parameter ({}).",
+                    this.name,
+                    equalNameParameter);
         }
 
-        return super.build(metricRegistry, this.name);
+        return super.build(metricRegistry, equalNameParameter);
     }
 
     public ManagedDataSource build(MetricRegistry metricRegistry)
