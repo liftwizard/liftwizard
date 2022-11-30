@@ -17,6 +17,7 @@
 package io.liftwizard.dropwizard.bundle.reladomo.connection.manager;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -26,6 +27,8 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
+import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourcesFactory;
+import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +56,13 @@ public class ConnectionManagerBundle
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        Map<String, ManagedDataSource> dataSourcesByName = namedDataSourceProvider.getDataSourcesByName();
+        NamedDataSourcesFactory namedDataSourcesFactory = namedDataSourceProvider.getNamedDataSourcesFactory();
+        Map<String, ManagedDataSource> dataSourcesByName = namedDataSourcesFactory.getNamedDataSourceFactories()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                NamedDataSourceFactory::getName,
+                                each -> each.build(environment.metrics(), this.getClass().getSimpleName())));
 
         connectionManagerFactoryProvider.initializeConnectionManagers(dataSourcesByName);
 

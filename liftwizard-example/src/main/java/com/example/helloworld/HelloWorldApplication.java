@@ -32,7 +32,6 @@ import io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
 import io.liftwizard.dropwizard.bundle.h2.H2Bundle;
 import io.liftwizard.dropwizard.bundle.httplogging.JerseyHttpLoggingBundle;
-import io.liftwizard.dropwizard.bundle.named.data.source.NamedDataSourceBundle;
 import io.liftwizard.dropwizard.bundle.objectmapper.ObjectMapperBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.ReladomoBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.ConnectionManagerBundle;
@@ -40,13 +39,13 @@ import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.Connec
 import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger;
-import org.eclipse.collections.impl.utility.Iterate;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 public class HelloWorldApplication
         extends Application<HelloWorldConfiguration>
 {
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
+            throws Exception
     {
         new HelloWorldApplication().run(args);
     }
@@ -73,7 +72,6 @@ public class HelloWorldApplication
         bootstrap.addBundle(new UUIDBundle());
 
         bootstrap.addBundle(new H2Bundle());
-        bootstrap.addBundle(new NamedDataSourceBundle());
         bootstrap.addBundle(new ConnectionManagerBundle());
         bootstrap.addBundle(new ConnectionManagerHolderBundle());
         bootstrap.addBundle(new ReladomoBundle());
@@ -85,7 +83,13 @@ public class HelloWorldApplication
             @Override
             public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration)
             {
-                return Iterate.getOnly(configuration.getNamedDataSourceFactories());
+                return configuration
+                        .getNamedDataSourcesFactory()
+                        .getNamedDataSourceFactories()
+                        .stream()
+                        .filter(namedDataSourceFactory -> namedDataSourceFactory.getName().equals("liquibase"))
+                        .findFirst()
+                        .get();
             }
         });
         bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>()

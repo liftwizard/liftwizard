@@ -28,6 +28,7 @@ import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
+import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourcesFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactoryProvider;
 import io.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
@@ -47,7 +48,8 @@ public class DdlExecutorBundle
     }
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws SQLException
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+            throws SQLException
     {
         DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
                 DdlExecutorFactoryProvider.class,
@@ -57,6 +59,8 @@ public class DdlExecutorBundle
                 configuration);
 
         List<DdlExecutorFactory> ddlExecutorFactories = ddlExecutorFactoryProvider.getDdlExecutorFactories();
+
+        NamedDataSourcesFactory namedDataSourcesFactory = dataSourceProvider.getNamedDataSourcesFactory();
 
         if (ddlExecutorFactories.isEmpty())
         {
@@ -74,7 +78,10 @@ public class DdlExecutorBundle
 
             LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 
-            DataSource dataSource = dataSourceProvider.getDataSourceByName(dataSourceName);
+            DataSource dataSource = namedDataSourcesFactory.getDataSourceByName(
+                    dataSourceName,
+                    environment.metrics(),
+                    environment.lifecycle());
             Objects.requireNonNull(dataSource, dataSourceName);
             try (Connection connection = dataSource.getConnection())
             {

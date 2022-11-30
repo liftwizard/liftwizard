@@ -45,7 +45,6 @@
     <modules>
         <module>liftwizard-bundle-connection-manager-holder</module>
         <module>liftwizard-bundle-connection-manager</module>
-        <module>liftwizard-bundle-named-data-source</module>
         <module>liftwizard-bundle-reladomo</module>
         <module>liftwizard-config-connection-manager</module>
         <module>liftwizard-config-reladomo</module>

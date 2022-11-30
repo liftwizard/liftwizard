@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2022 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.datasource;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import com.codahale.metrics.MetricRegistry;
-import io.dropwizard.db.ManagedDataSource;
-import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
-
 public interface NamedDataSourceProvider
 {
-    List<NamedDataSourceFactory> getNamedDataSourceFactories();
-
-    void initializeDataSources(
-            @Nonnull MetricRegistry metricRegistry,
-            @Nonnull LifecycleEnvironment lifecycle);
-
-    ManagedDataSource getDataSourceByName(@Nonnull String name);
-
-    @Nonnull
-    Map<String, ManagedDataSource> getDataSourcesByName();
+    NamedDataSourcesFactory getNamedDataSourcesFactory();
 }
