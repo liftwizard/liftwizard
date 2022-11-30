@@ -542,12 +542,6 @@
             <!--region liftwizard-reladomo-->
             <dependency>
                 <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-bundle-connection-manager</artifactId>
-                <version>0.28.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-connection-manager-holder</artifactId>
                 <version>0.28.0-SNAPSHOT</version>
             </dependency>

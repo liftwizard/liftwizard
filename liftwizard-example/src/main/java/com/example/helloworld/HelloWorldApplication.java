@@ -34,7 +34,6 @@ import io.liftwizard.dropwizard.bundle.h2.H2Bundle;
 import io.liftwizard.dropwizard.bundle.httplogging.JerseyHttpLoggingBundle;
 import io.liftwizard.dropwizard.bundle.objectmapper.ObjectMapperBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.ReladomoBundle;
-import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.ConnectionManagerBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.ConnectionManagerHolderBundle;
 import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
@@ -72,7 +71,6 @@ public class HelloWorldApplication
         bootstrap.addBundle(new UUIDBundle());
 
         bootstrap.addBundle(new H2Bundle());
-        bootstrap.addBundle(new ConnectionManagerBundle());
         bootstrap.addBundle(new ConnectionManagerHolderBundle());
         bootstrap.addBundle(new ReladomoBundle());
 

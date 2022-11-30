@@ -16,21 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
-import io.dropwizard.db.ManagedDataSource;
-
-public interface ConnectionManagerFactoryProvider
+public interface ConnectionManagerProvider
 {
-    List<ConnectionManagerFactory> getConnectionManagerFactories();
-
-    void initializeConnectionManagers(@Nonnull Map<String, ManagedDataSource> dataSourcesByName);
-
-    SourcelessConnectionManager getConnectionManagerByName(@Nonnull String name);
-
-    Map<String, SourcelessConnectionManager> getConnectionManagersByName();
+    ConnectionManagersFactory getConnectionManagersFactory();
 }
