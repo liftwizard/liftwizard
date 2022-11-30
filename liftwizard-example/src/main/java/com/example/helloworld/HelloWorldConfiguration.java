@@ -4,29 +4,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.example.helloworld.core.Template;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.ImmutableMap;
-import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.Configuration;
-import io.dropwizard.db.ManagedDataSource;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.system.SystemClockFactory;
 import io.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactoryProvider;
-import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerConfiguration;
-import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactory;
-import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
+import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerProvider;
+import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagersFactory;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourcesFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactory;
@@ -58,7 +53,7 @@ public class HelloWorldConfiguration
         DdlExecutorFactoryProvider,
         ReladomoFactoryProvider,
         NamedDataSourceProvider,
-        ConnectionManagerFactoryProvider,
+        ConnectionManagerProvider,
         GraphQLFactoryProvider
 {
     @NotEmpty
@@ -87,8 +82,8 @@ public class HelloWorldConfiguration
     // include-namedDataSourceFactory
 
     // include-connectionManagersFactory
-    private @Valid @NotNull ConnectionManagerConfiguration connectionManagerConfiguration =
-            new ConnectionManagerConfiguration();
+    private @Valid @NotNull ConnectionManagersFactory connectionManagersFactory =
+            new ConnectionManagersFactory();
     // include-connectionManagersFactory
 
     @JsonProperty
@@ -234,23 +229,21 @@ public class HelloWorldConfiguration
         this.namedDataSourcesFactory = namedDataSourcesFactory;
     }
 
+    @JsonProperty("connectionManagers")
+    @JsonUnwrapped
     @Override
-    public void initializeConnectionManagers(@Nonnull Map<String, ManagedDataSource> dataSourcesByName)
+    public ConnectionManagersFactory getConnectionManagersFactory()
     {
-        this.connectionManagerConfiguration.initializeConnectionManagers(dataSourcesByName);
+        return this.connectionManagersFactory;
     }
 
     @JsonProperty("connectionManagers")
-    public List<ConnectionManagerFactory> getConnectionManagerFactories()
+    @JsonUnwrapped
+    public void setConnectionManagersFactory(ConnectionManagersFactory connectionManagersFactory)
     {
-        return this.connectionManagerConfiguration.getConnectionManagerFactories();
+        this.connectionManagersFactory = connectionManagersFactory;
     }
 
-    @JsonProperty("connectionManagers")
-    public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories)
-    {
-        this.connectionManagerConfiguration.setConnectionManagerFactories(connectionManagerFactories);
-    }
 
     @Override
     @JsonProperty("ddlExecutors")
@@ -277,25 +270,5 @@ public class HelloWorldConfiguration
     public void setGraphQLFactory(@Nonnull GraphQLFactory graphQLFactory)
     {
         this.graphQLFactory = graphQLFactory;
-    }
-
-    @JsonIgnore
-    @Override
-    public SourcelessConnectionManager getConnectionManagerByName(@Nonnull String name)
-    {
-        SourcelessConnectionManager sourcelessConnectionManager =
-                this.connectionManagerConfiguration.getConnectionManagerByName(name);
-        return Objects.requireNonNull(
-                sourcelessConnectionManager,
-                () -> String.format("Could not find connection manager with name %s. Valid choices are %s",
-                        name,
-                        this.connectionManagerConfiguration.getConnectionManagersByName().keySet()));
-    }
-
-    @JsonIgnore
-    @Override
-    public Map<String, SourcelessConnectionManager> getConnectionManagersByName()
-    {
-        return this.connectionManagerConfiguration.getConnectionManagersByName();
     }
 }
