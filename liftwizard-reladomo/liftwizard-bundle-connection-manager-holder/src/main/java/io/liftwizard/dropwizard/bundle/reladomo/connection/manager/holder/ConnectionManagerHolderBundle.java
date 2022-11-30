@@ -24,7 +24,8 @@ import com.google.auto.service.AutoService;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
-import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerFactoryProvider;
+import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerProvider;
+import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
 import io.liftwizard.reladomo.connection.manager.holder.ConnectionManagerHolder;
 import org.eclipse.collections.api.factory.Maps;
 import org.slf4j.Logger;
@@ -45,14 +46,20 @@ public class ConnectionManagerHolderBundle
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
-        ConnectionManagerFactoryProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
-                ConnectionManagerFactoryProvider.class,
+        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+                NamedDataSourceProvider.class,
+                configuration);
+
+        ConnectionManagerProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
+                ConnectionManagerProvider.class,
                 configuration);
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         Map<String, SourcelessConnectionManager> connectionManagersByName =
-                connectionManagerFactoryProvider.getConnectionManagersByName();
+                connectionManagerFactoryProvider
+                        .getConnectionManagersFactory()
+                        .getConnectionManagersByName(dataSourceProvider, environment);
 
         ConnectionManagerHolder.setConnectionManagersByName(Maps.immutable.withAll(connectionManagersByName));
 
