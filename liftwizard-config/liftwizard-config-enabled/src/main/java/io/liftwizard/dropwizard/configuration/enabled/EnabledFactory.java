@@ -32,6 +32,7 @@ public class EnabledFactory
         this.enabled = enabled;
     }
 
+    @JsonProperty
     public boolean isEnabled()
     {
         return this.enabled;
