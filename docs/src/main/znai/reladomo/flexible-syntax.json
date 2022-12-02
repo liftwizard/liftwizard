@@ -64,10 +64,6 @@
     "Alternatives": "`wildCardNotEquals`"
   },
   {
-    "toString()": "`all of <class name>`",
-    "Alternatives": "`all`"
-  },
-  {
     "toString()": "`is null`",
     "Alternatives": "`== null`"
   },
