@@ -110,7 +110,8 @@ public class ConnectionManagersFactory
         return connectionManagersByName;
     }
 
-    private SourcelessConnectionManager getConnectionManagerByName(
+    @JsonIgnore
+    public SourcelessConnectionManager getConnectionManagerByName(
             NamedDataSourceProvider dataSourceProvider,
             @Nonnull Environment environment,
             ConnectionManagerFactory connectionManagerFactory)
