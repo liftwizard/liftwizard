@@ -16,7 +16,6 @@
 
 package io.liftwizard.logging.p6spy;
 
-import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class P6SpySlf4jLogger
     @Override
     public void logException(Exception e)
     {
-        LOGGER.debug("", e);
+        LOGGER.warn("", e);
     }
 
     @Override
@@ -53,13 +52,10 @@ public class P6SpySlf4jLogger
             String sql,
             String url)
     {
-        long    epochMilli = Long.parseLong(now);
-        Instant instant    = Instant.ofEpochMilli(epochMilli);
-
         Map<String, Object> structuredArgumentsMap = new LinkedHashMap<>();
         structuredArgumentsMap.put("liftwizard.p6spy.connectionId", connectionId);
-        structuredArgumentsMap.put("liftwizard.p6spy.now", instant);
-        structuredArgumentsMap.put("liftwizard.p6spy.elapsed", elapsed);
+        structuredArgumentsMap.put("liftwizard.p6spy.elapsedMillis", elapsed);
+        structuredArgumentsMap.put("liftwizard.p6spy.elapsedNanos", elapsed * 1_000_000);
         structuredArgumentsMap.put("liftwizard.p6spy.category", category.getName());
         structuredArgumentsMap.put("liftwizard.p6spy.prepared", prepared);
         structuredArgumentsMap.put("liftwizard.p6spy.sql", sql);
