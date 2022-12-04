@@ -148,7 +148,7 @@ public class ServerLoggingFilter
         http.setServer(server);
 
         MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
-        MutableList<String> newExcludedHeaders = this.loggingConfig.isLogRequestHeaderNames()
+        MutableList<String> newExcludedHeaders = this.loggingConfig.isLogExcludedRequestHeaderNames()
                 ? Lists.mutable.empty()
                 : null;
 
@@ -161,7 +161,7 @@ public class ServerLoggingFilter
             {
                 newHeaders.put(headerName, headerValue);
             }
-            else if (this.loggingConfig.isLogRequestHeaderNames())
+            else if (this.loggingConfig.isLogExcludedRequestHeaderNames())
             {
                 newExcludedHeaders.add(headerName);
             }
@@ -171,7 +171,7 @@ public class ServerLoggingFilter
         {
             http.setHeaders(newHeaders);
         }
-        if (this.loggingConfig.isLogRequestHeaderNames())
+        if (this.loggingConfig.isLogExcludedRequestHeaderNames())
         {
             http.setExcludedHeaders(newExcludedHeaders.toImmutable());
         }
@@ -244,7 +244,7 @@ public class ServerLoggingFilter
             StructuredArgumentsResponseHttp http)
     {
         MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
-        MutableList<String> newExcludedHeaders = this.loggingConfig.isLogResponseHeaderNames()
+        MutableList<String> newExcludedHeaders = this.loggingConfig.isLogExcludedResponseHeaderNames()
                 ? Lists.mutable.empty()
                 : null;
 
@@ -256,7 +256,7 @@ public class ServerLoggingFilter
             {
                 newHeaders.put(headerName, headerValue);
             }
-            else if (this.loggingConfig.isLogResponseHeaderNames())
+            else if (this.loggingConfig.isLogExcludedResponseHeaderNames())
             {
                 newExcludedHeaders.add(headerName);
             }
@@ -266,7 +266,7 @@ public class ServerLoggingFilter
         {
             http.setHeaders(newHeaders);
         }
-        if (this.loggingConfig.isLogResponseHeaderNames())
+        if (this.loggingConfig.isLogExcludedResponseHeaderNames())
         {
             http.setExcludedHeaders(newExcludedHeaders.toImmutable());
         }

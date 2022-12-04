@@ -34,6 +34,7 @@ public class StructuredArgumentsHttp
         return this.headers;
     }
 
+    @JsonProperty
     public void setHeaders(MutableMap<String, String> headers)
     {
         if (this.headers != null)
@@ -49,6 +50,7 @@ public class StructuredArgumentsHttp
         return this.excludedHeaders;
     }
 
+    @JsonProperty
     public void setExcludedHeaders(ImmutableList<String> excludedHeaders)
     {
         if (this.excludedHeaders != null)

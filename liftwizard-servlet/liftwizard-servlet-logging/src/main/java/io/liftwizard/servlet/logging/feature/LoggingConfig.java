@@ -30,7 +30,9 @@ public class LoggingConfig
     private final boolean               logResponses;
     private final boolean               logResponseBodies;
     private final boolean               logRequestHeaderNames;
+    private final boolean               logExcludedRequestHeaderNames = false;
     private final boolean               logResponseHeaderNames;
+    private final boolean               logExcludedResponseHeaderNames = false;
     private final ImmutableList<String> includedRequestHeaders;
     private final ImmutableList<String> includedResponseHeaders;
     private final int                   maxEntitySize;
@@ -82,9 +84,19 @@ public class LoggingConfig
         return this.logRequestHeaderNames;
     }
 
+    public boolean isLogExcludedRequestHeaderNames()
+    {
+        return this.logExcludedRequestHeaderNames;
+    }
+
     public boolean isLogResponseHeaderNames()
     {
         return this.logResponseHeaderNames;
+    }
+
+    public boolean isLogExcludedResponseHeaderNames()
+    {
+        return this.logExcludedResponseHeaderNames;
     }
 
     public ImmutableList<String> getIncludedRequestHeaders()
