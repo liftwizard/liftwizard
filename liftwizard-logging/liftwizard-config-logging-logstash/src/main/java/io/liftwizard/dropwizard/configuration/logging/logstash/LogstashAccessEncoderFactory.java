@@ -18,22 +18,18 @@ package io.liftwizard.dropwizard.configuration.logging.logstash;
 
 import javax.validation.constraints.NotNull;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.core.encoder.Encoder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.logstash.logback.decorate.JsonFactoryDecorator;
-import net.logstash.logback.encoder.LogstashEncoder;
+import net.logstash.logback.encoder.LogstashAccessEncoder;
 
-public class LogstashEncoderFactory
+public class LogstashAccessEncoderFactory
 {
-    private          boolean includeContext             = true;
-    private          boolean includeMdc                 = true;
-    private          boolean includeStructuredArguments = true;
-    private          boolean includedNonStructuredArguments;
-    private          boolean includeTags                = true;
+    private          boolean includeContext         = true;
     private          boolean prettyPrint;
-    private @NotNull Include serializationInclusion     = Include.NON_ABSENT;
+    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
 
     @JsonProperty
     public boolean isIncludeContext()
@@ -45,54 +41,6 @@ public class LogstashEncoderFactory
     public void setIncludeContext(boolean includeContext)
     {
         this.includeContext = includeContext;
-    }
-
-    @JsonProperty
-    public boolean isIncludeMdc()
-    {
-        return this.includeMdc;
-    }
-
-    @JsonProperty
-    public void setIncludeMdc(boolean includeMdc)
-    {
-        this.includeMdc = includeMdc;
-    }
-
-    @JsonProperty
-    public boolean isIncludeStructuredArguments()
-    {
-        return this.includeStructuredArguments;
-    }
-
-    @JsonProperty
-    public void setIncludeStructuredArguments(boolean includeStructuredArguments)
-    {
-        this.includeStructuredArguments = includeStructuredArguments;
-    }
-
-    @JsonProperty
-    public boolean isIncludedNonStructuredArguments()
-    {
-        return this.includedNonStructuredArguments;
-    }
-
-    @JsonProperty
-    public void setIncludedNonStructuredArguments(boolean includedNonStructuredArguments)
-    {
-        this.includedNonStructuredArguments = includedNonStructuredArguments;
-    }
-
-    @JsonProperty
-    public boolean isIncludeTags()
-    {
-        return this.includeTags;
-    }
-
-    @JsonProperty
-    public void setIncludeTags(boolean includeTags)
-    {
-        this.includeTags = includeTags;
     }
 
     @JsonProperty
@@ -119,15 +67,10 @@ public class LogstashEncoderFactory
         this.serializationInclusion = serializationInclusion;
     }
 
-    public Encoder<ILoggingEvent> build(boolean includeCallerData)
+    public Encoder<IAccessEvent> build()
     {
-        LogstashEncoder encoder = new LogstashEncoder();
-        encoder.setIncludeCallerData(includeCallerData);
+        LogstashAccessEncoder encoder = new LogstashAccessEncoder();
         encoder.setIncludeContext(this.includeContext);
-        encoder.setIncludeMdc(this.includeMdc);
-        encoder.setIncludeStructuredArguments(this.includeStructuredArguments);
-        encoder.setIncludeNonStructuredArguments(this.includedNonStructuredArguments);
-        encoder.setIncludeTags(this.includeTags);
         if (this.prettyPrint)
         {
             encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
