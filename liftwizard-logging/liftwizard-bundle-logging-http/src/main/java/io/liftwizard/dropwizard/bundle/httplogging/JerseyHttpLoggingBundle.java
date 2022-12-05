@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.bundle.httplogging;
 
+import java.time.Clock;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -24,6 +25,8 @@ import javax.annotation.Nonnull;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
+import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactory;
 import io.liftwizard.dropwizard.configuration.http.logging.JerseyHttpLoggingFactoryProvider;
 import io.liftwizard.servlet.logging.feature.LoggingConfig;
@@ -71,6 +74,8 @@ public class JerseyHttpLoggingBundle
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
+        Clock clock = getClock(configuration);
+
         int maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
 
         LoggingConfig loggingConfig = new LoggingConfig(
@@ -96,12 +101,28 @@ public class JerseyHttpLoggingBundle
             environment.jersey().register(loggingResponseFilter);
         }
 
-        ServerLoggingFilter loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger);
+        ServerLoggingFilter loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger, clock);
         environment
                 .servlets()
                 .addFilter("ServerLoggingFilter", loggingFilter)
                 .addMappingForUrlPatterns(null, true, "/*");
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+    }
+
+    private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration)
+    {
+        if (!(configuration instanceof ClockFactoryProvider))
+        {
+            LOGGER.warn(
+                    "Configuration {} does not implement {}. Using system clock.",
+                    configuration.getClass().getSimpleName(),
+                    ClockFactoryProvider.class.getSimpleName());
+            return Clock.systemUTC();
+        }
+
+        ClockFactoryProvider clockFactoryProvider = (ClockFactoryProvider) configuration;
+        ClockFactory         clockFactory         = clockFactoryProvider.getClockFactory();
+        return clockFactory.createClock();
     }
 }
