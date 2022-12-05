@@ -61,7 +61,10 @@ public class StructuredArgumentsRequestHttp
         {
             throw new AssertionError(this.contextPath);
         }
-        this.contextPath = contextPath;
+        if (!contextPath.isEmpty())
+        {
+            this.contextPath = contextPath;
+        }
     }
 
     @JsonProperty
