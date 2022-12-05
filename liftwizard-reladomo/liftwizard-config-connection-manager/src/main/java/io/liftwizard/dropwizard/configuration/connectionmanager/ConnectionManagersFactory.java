@@ -61,6 +61,7 @@ public class ConnectionManagersFactory
     }
 
     @ValidationMethod
+    @JsonIgnore
     public boolean isValidConnectionManagerNames()
     {
         /* TODO: We could validate more here. If multiple connectionManagers share a data source,
