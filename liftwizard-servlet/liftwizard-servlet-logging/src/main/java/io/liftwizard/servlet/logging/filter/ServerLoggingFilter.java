@@ -183,7 +183,7 @@ public class ServerLoggingFilter
     {
         if (!this.loggingConfig.isLogRequestBodies()
                 || requestWrapper == null
-                || requestWrapper.getContentAsByteArray().length <= 0)
+                || requestWrapper.getContentLengthLong() <= 0)
         {
             return;
         }
@@ -194,6 +194,7 @@ public class ServerLoggingFilter
 
         String truncatedPayload = this.getTruncatedPayload(payload);
         structuredArguments.getRequest().getHttp().setBody(truncatedPayload);
+        structuredArguments.getRequest().getHttp().setContentLength(requestWrapper.getContentLengthLong());
     }
 
     private void addFinalResponseAttributes(
@@ -222,6 +223,7 @@ public class ServerLoggingFilter
 
             String truncatedPayload = this.getTruncatedPayload(payload);
             http.setBody(truncatedPayload);
+            http.setContentLength(responseWrapper.getContentSize());
         }
 
         responseWrapper.copyBodyToResponse();

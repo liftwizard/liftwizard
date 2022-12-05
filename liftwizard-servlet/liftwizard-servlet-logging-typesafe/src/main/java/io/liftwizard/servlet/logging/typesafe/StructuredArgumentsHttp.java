@@ -27,6 +27,8 @@ public class StructuredArgumentsHttp
 {
     private MapIterable<String, String> headers;
     private ImmutableList<String>       excludedHeaders;
+    private String                      body;
+    private Long                        contentLength;
 
     @JsonProperty
     public MapIterable<String, String> getHeaders()
@@ -58,5 +60,35 @@ public class StructuredArgumentsHttp
             throw new AssertionError(this.excludedHeaders);
         }
         this.excludedHeaders = Objects.requireNonNull(excludedHeaders);
+    }
+
+    @JsonProperty
+    public String getBody()
+    {
+        return this.body;
+    }
+
+    public void setBody(String body)
+    {
+        if (this.body != null)
+        {
+            throw new AssertionError(this.body);
+        }
+        this.body = Objects.requireNonNull(body);
+    }
+
+    @JsonProperty
+    public Long getContentLength()
+    {
+        return this.contentLength;
+    }
+
+    public void setContentLength(long contentLength)
+    {
+        if (this.contentLength != null)
+        {
+            throw new AssertionError(this.contentLength);
+        }
+        this.contentLength = contentLength;
     }
 }

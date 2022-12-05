@@ -27,7 +27,6 @@ public class StructuredArgumentsResponseHttp
 
     private String entityType;
     private String contentType;
-    private String body;
 
     @JsonProperty
     public StructuredArgumentsStatus getStatus()
@@ -63,20 +62,5 @@ public class StructuredArgumentsResponseHttp
             throw new AssertionError(this.contentType);
         }
         this.contentType = Objects.requireNonNull(contentType);
-    }
-
-    @JsonProperty
-    public String getBody()
-    {
-        return this.body;
-    }
-
-    public void setBody(String body)
-    {
-        if (this.body != null)
-        {
-            throw new AssertionError(this.body);
-        }
-        this.body = Objects.requireNonNull(body);
     }
 }
