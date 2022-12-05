@@ -48,6 +48,7 @@ public class JaninoFilterFactory
         var evaluator = new JaninoEventEvaluator();
         evaluator.setExpression(this.javaExpression);
         evaluator.setContext(LoggingUtil.getLoggerContext());
+        evaluator.setName(JaninoFilterFactory.class.getSimpleName() + ": '" + this.javaExpression + "'");
         evaluator.start();
 
         var filter = new EvaluatorFilter<ILoggingEvent>();
