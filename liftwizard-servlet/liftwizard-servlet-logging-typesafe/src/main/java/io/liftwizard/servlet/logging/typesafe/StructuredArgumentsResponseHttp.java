@@ -16,6 +16,7 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
+import java.time.Duration;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,6 +28,7 @@ public class StructuredArgumentsResponseHttp
 
     private String entityType;
     private String contentType;
+    private Long elapsedNanos;
 
     @JsonProperty
     public StructuredArgumentsStatus getStatus()
@@ -62,5 +64,20 @@ public class StructuredArgumentsResponseHttp
             throw new AssertionError(this.contentType);
         }
         this.contentType = Objects.requireNonNull(contentType);
+    }
+
+    @JsonProperty
+    public Long getElapsedNanos()
+    {
+        return this.elapsedNanos;
+    }
+
+    public void setElapsed(Duration elapsed)
+    {
+        if (this.elapsedNanos != null)
+        {
+            throw new AssertionError(this.elapsedNanos);
+        }
+        this.elapsedNanos = elapsed.toNanos();
     }
 }

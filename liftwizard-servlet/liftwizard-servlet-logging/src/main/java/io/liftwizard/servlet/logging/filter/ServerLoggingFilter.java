@@ -19,6 +19,9 @@ package io.liftwizard.servlet.logging.filter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -57,13 +60,15 @@ public class ServerLoggingFilter
 
     private final LoggingConfig                 loggingConfig;
     private final Consumer<StructuredArguments> structuredLogger;
+    private final Clock                         clock;
 
     public ServerLoggingFilter(
             LoggingConfig loggingConfig,
-            Consumer<StructuredArguments> structuredLogger)
+            Consumer<StructuredArguments> structuredLogger, Clock clock)
     {
         this.loggingConfig    = Objects.requireNonNull(loggingConfig);
         this.structuredLogger = Objects.requireNonNull(structuredLogger);
+        this.clock            = Objects.requireNonNull(clock);
     }
 
     @Override
@@ -86,6 +91,8 @@ public class ServerLoggingFilter
             return;
         }
 
+        Instant startTime = this.clock.instant();
+
         StructuredArguments structuredArguments = new StructuredArguments();
         request.setAttribute("structuredArguments", structuredArguments);
 
@@ -102,8 +109,10 @@ public class ServerLoggingFilter
         }
         finally
         {
+            Instant endTime = this.clock.instant();
+            Duration duration = Duration.between(startTime, endTime);
             this.addFinalRequestAttributes(structuredArguments, requestWrapper);
-            this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse);
+            this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse, duration);
             this.structuredLogger.accept(structuredArguments);
         }
     }
@@ -200,10 +209,13 @@ public class ServerLoggingFilter
     private void addFinalResponseAttributes(
             @Nonnull StructuredArguments structuredArguments,
             @Nonnull ContentCachingResponseWrapper responseWrapper,
-            @Nonnull HttpServletResponse httpServletResponse)
+            @Nonnull HttpServletResponse httpServletResponse,
+            @Nonnull Duration elapsed)
             throws IOException
     {
         StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
+
+        http.setElapsed(elapsed);
 
         String contentType = httpServletResponse.getContentType();
         if (contentType != null)
