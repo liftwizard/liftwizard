@@ -124,7 +124,9 @@ public final class ServerLoggingRequestFilter
             @Nonnull UriInfo uriInfo,
             @Nonnull StructuredArgumentsRequestHttp http)
     {
+        String baseUriPath         = uriInfo.getBaseUri().getPath();
         String pathTemplate = this.getPathTemplate(requestContext);
+        http.getPath().setBaseUriPath(baseUriPath);
         http.getPath().setTemplate(pathTemplate);
         URI absolutePath = uriInfo.getAbsolutePath();
         if (!Objects.equals(http.getPath().getAbsolute(), absolutePath.toString()))

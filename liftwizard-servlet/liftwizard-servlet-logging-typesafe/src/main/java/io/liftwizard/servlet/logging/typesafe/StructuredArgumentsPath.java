@@ -25,6 +25,7 @@ public class StructuredArgumentsPath
     private final String absolute;
     private final String full;
     private       String template;
+    private       String baseUriPath;
 
     public StructuredArgumentsPath(String absolute, String full)
     {
@@ -57,5 +58,14 @@ public class StructuredArgumentsPath
     public String getTemplate()
     {
         return this.template;
+    }
+
+    public void setBaseUriPath(String baseUriPath)
+    {
+        if (this.baseUriPath != null)
+        {
+            throw new IllegalStateException(this.baseUriPath);
+        }
+        this.baseUriPath = Objects.requireNonNull(baseUriPath);
     }
 }
