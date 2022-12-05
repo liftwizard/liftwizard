@@ -64,6 +64,7 @@ public class NamedDataSourcesFactory
     }
 
     @ValidationMethod
+    @JsonIgnore
     public boolean isValidDataSourceNames()
     {
         List<String> orderedDataSourceNames = this.namedDataSourceFactories
