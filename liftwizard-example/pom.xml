@@ -181,12 +181,6 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-servlet-logging-structured-argument</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-logging-http</artifactId>
             <version>${project.version}</version>
         </dependency>
