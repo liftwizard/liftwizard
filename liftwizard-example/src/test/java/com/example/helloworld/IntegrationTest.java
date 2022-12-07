@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.annotation.Nonnull;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,6 +30,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.hamcrest.CoreMatchers.is;
 
 public class IntegrationTest {
@@ -91,7 +93,33 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testPostPerson() throws Exception {
+    public void validDateParameter() {
+        final String date = dropwizardAppRule.client().target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/hello-world/date")
+                .queryParam("date", "2022-01-20")
+                .request()
+                .get(String.class);
+        assertThat(date).isEqualTo("2022-01-20T00:00:00.000Z");
+    }
+
+    @Test
+    public void invalidDateParameter() {
+        assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> dropwizardAppRule.client().target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/hello-world/date")
+                        .queryParam("date", "abc")
+                        .request()
+                        .get(String.class));
+    }
+
+    @Test
+    public void noDateParameter() {
+        final String date = dropwizardAppRule.client().target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/hello-world/date")
+                .request()
+                .get(String.class);
+        assertThat(date).isEmpty();
+    }
+
+    @Test
+    public void testPostPerson() {
         final PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
         final PersonDTO newPerson = this.postPerson(person);
         assertThat(newPerson.getId()).isNotNull();
