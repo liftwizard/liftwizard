@@ -42,12 +42,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-servlet-logging-mdc-clear-keys</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
         </dependency>
