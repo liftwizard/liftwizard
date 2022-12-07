@@ -33,12 +33,12 @@
         "includeCallerData": true,
       },
       {
-        type: "file",
-        currentLogFilename: "./logs/application.log",
-        archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
-        archive: true,
-        archivedFileCount: 7,
-        maxFileSize: "1mb",
+        "type": "file",
+        "currentLogFilename": "./logs/application.log",
+        "archive": true,
+        "archivedLogFilenamePattern": "./logs/application-%d-%i.log.gz",
+        "archivedFileCount": 7,
+        "maxFileSize": "1 megabyte",
       },
       {
         "type": "file-logstash",
