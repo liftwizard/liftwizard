@@ -187,12 +187,6 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-servlet-logging-correlation-id</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-servlet-logging-resource-info</artifactId>
             <version>${project.version}</version>
         </dependency>
