@@ -17,6 +17,7 @@
 package io.liftwizard.firebase.principal;
 
 import java.security.Principal;
+import java.util.Map;
 
 public class FirebasePrincipal implements Principal
 {
@@ -44,6 +45,18 @@ public class FirebasePrincipal implements Principal
         this.issuer         = issuer;
         this.picture        = picture;
         this.signInProvider = signInProvider;
+    }
+
+    public Map<String, Object> toMap()
+    {
+        return Map.of(
+                "name", this.name,
+                "displayName", this.displayName,
+                "email", this.email,
+                "emailVerified", this.emailVerified,
+                "issuer", this.issuer,
+                "picture", this.picture,
+                "signInProvider", this.signInProvider);
     }
 
     @Override

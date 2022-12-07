@@ -16,7 +16,9 @@
 
 package io.liftwizard.dropwizard.bundle.httplogging;
 
+import java.security.Principal;
 import java.time.Clock;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -34,6 +36,7 @@ import io.liftwizard.servlet.logging.filter.ServerLoggingFilter;
 import io.liftwizard.servlet.logging.filter.ServerLoggingRequestFilter;
 import io.liftwizard.servlet.logging.filter.ServerLoggingResponseFilter;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import org.eclipse.collections.api.block.function.Function;
 import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,11 +52,21 @@ public class JerseyHttpLoggingBundle
     private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
     @Nonnull
-    private final Consumer<StructuredArguments> structuredLogger;
+    private final Consumer<StructuredArguments>      structuredLogger;
+    @Nonnull
+    private final Function<Principal, Map<String, Object>> principalBuilder;
 
     public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger)
     {
+        this(structuredLogger, principal -> Map.of("name", principal.getName()));
+    }
+
+    public JerseyHttpLoggingBundle(
+            @Nonnull Consumer<StructuredArguments> structuredLogger,
+            @Nonnull Function<Principal, Map<String, Object>> principalBuilder)
+    {
         this.structuredLogger = Objects.requireNonNull(structuredLogger);
+        this.principalBuilder = Objects.requireNonNull(principalBuilder);
     }
 
     @Override
@@ -91,7 +104,7 @@ public class JerseyHttpLoggingBundle
 
         if (loggingConfig.isLogRequests())
         {
-            var loggingRequestFilter = new ServerLoggingRequestFilter();
+            var loggingRequestFilter = new ServerLoggingRequestFilter(this.principalBuilder);
             environment.jersey().register(loggingRequestFilter);
         }
 
