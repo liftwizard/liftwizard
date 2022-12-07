@@ -291,11 +291,6 @@ Let's add the logstash-file appender to the list of configured appenders.
 
 <dependency>
     <groupId>io.liftwizard</groupId>
-    <artifactId>liftwizard-servlet-logging-correlation-id</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>io.liftwizard</groupId>
     <artifactId>liftwizard-servlet-logging-resource-info</artifactId>
 </dependency>
 ```
