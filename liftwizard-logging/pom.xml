@@ -71,6 +71,5 @@
         <module>liftwizard-servlet-logging-resource-info</module>
         <module>liftwizard-servlet-logging-structured-argument</module>
         <module>liftwizard-servlet-logging-structured-reladomo</module>
-        <module>liftwizard-servlet-logging-structured-status-info</module>
     </modules>
 </project>
