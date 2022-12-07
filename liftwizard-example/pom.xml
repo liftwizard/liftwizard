@@ -22,7 +22,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-parent-build</artifactId>
-        <version>0.30.0</version>
+        <version>0.31.0-SNAPSHOT</version>
         <relativePath>../liftwizard-maven-build/liftwizard-parent-build</relativePath>
     </parent>
 
