@@ -24,21 +24,21 @@
     ]
   },
   "logging": {
-    "level": "INFO",
+    "level": "DEBUG",
     "appenders": [
       {
-        "type": "buffered",
+        "type": "console",
         "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %green(%logger): %message <%blue(%marker)> <%magenta(%mdc)>%n%red(%rootException)",
         "timeZone": "system",
         "includeCallerData": true,
       },
       {
-        type: "file",
-        currentLogFilename: "./logs/application.log",
-        archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
-        archive: true,
-        archivedFileCount: 7,
-        maxFileSize: "1mb",
+        "type": "file",
+        "currentLogFilename": "./logs/application.log",
+        "archive": true,
+        "archivedLogFilenamePattern": "./logs/application-%d-%i.log.gz",
+        "archivedFileCount": 7,
+        "maxFileSize": "1 megabyte",
       },
       {
         "type": "file-logstash",
