@@ -23,7 +23,6 @@ import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter.Builder;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
-import org.eclipse.collections.api.list.ImmutableList;
 
 @JsonTypeName("impersonation")
 @AutoService(AuthFilterFactory.class)
@@ -37,11 +36,5 @@ public class ImpersonationAuthFilterFactory implements AuthFilterFactory
                 .setAuthenticator(new ImpersonationAuthenticator())
                 .setPrefix("Impersonation")
                 .buildAuthFilter();
-    }
-
-    @Override
-    public ImmutableList<String> getMDCKeys()
-    {
-        return ImpersonationAuthenticator.getMDCKeys();
     }
 }

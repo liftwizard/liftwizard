@@ -17,13 +17,10 @@
 package io.liftwizard.dropwizard.bundle.auth.filter;
 
 import java.security.Principal;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
 
 import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -34,10 +31,6 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
-import io.liftwizard.servlet.filter.mdc.keys.ClearMDCKeysFilter;
-import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.impl.list.mutable.ListAdapter;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,11 +69,6 @@ public class AuthFilterBundle
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new Binder<>(Principal.class));
 
-        Filter                  clearMDCFilter  = this.getClearMDCFilter(authFilterFactories);
-        FilterHolder            filterHolder    = new FilterHolder(clearMDCFilter);
-        EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST);
-        environment.getApplicationContext().addFilter(filterHolder, "/*", dispatcherTypes);
-
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
@@ -98,14 +86,5 @@ public class AuthFilterBundle
     {
         ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(authFilters);
         return new AuthDynamicFeature(chainedAuthFilter);
-    }
-
-    @Nonnull
-    private Filter getClearMDCFilter(List<AuthFilterFactory> authFilterFactories)
-    {
-        ImmutableList<String> mdcKeys = ListAdapter.adapt(authFilterFactories)
-                .flatCollect(AuthFilterFactory::getMDCKeys)
-                .toImmutable();
-        return new ClearMDCKeysFilter(mdcKeys);
     }
 }
