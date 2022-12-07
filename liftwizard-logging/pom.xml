@@ -67,7 +67,6 @@
         <module>liftwizard-metrics-reporter-slf4j</module>
         <module>liftwizard-servlet-logging-mdc-clear-all</module>
         <module>liftwizard-servlet-logging-mdc-clear-keys</module>
-        <module>liftwizard-servlet-logging-resource-info</module>
         <module>liftwizard-servlet-logging-structured-argument</module>
         <module>liftwizard-servlet-logging-structured-reladomo</module>
     </modules>

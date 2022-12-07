@@ -288,9 +288,4 @@ Let's add the logstash-file appender to the list of configured appenders.
     <groupId>io.liftwizard</groupId>
     <artifactId>liftwizard-servlet-logging-structured-argument</artifactId>
 </dependency>
-
-<dependency>
-    <groupId>io.liftwizard</groupId>
-    <artifactId>liftwizard-servlet-logging-resource-info</artifactId>
-</dependency>
 ```
