@@ -28,7 +28,6 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter.Builder;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.firebase.principal.FirebasePrincipal;
-import org.eclipse.collections.api.list.ImmutableList;
 
 @JsonTypeName("firebase")
 @AutoService(AuthFilterFactory.class)
@@ -52,12 +51,6 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory
                 .setAuthenticator(authenticator)
                 .setPrefix("Bearer")
                 .buildAuthFilter();
-    }
-
-    @Override
-    public ImmutableList<String> getMDCKeys()
-    {
-        return FirebaseOAuthAuthenticator.getMDCKeys();
     }
 
     @JsonProperty

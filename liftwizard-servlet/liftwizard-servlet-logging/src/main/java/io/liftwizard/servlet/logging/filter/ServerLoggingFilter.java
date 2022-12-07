@@ -50,6 +50,7 @@ import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.map.mutable.MapAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
@@ -114,6 +115,7 @@ public class ServerLoggingFilter
             this.addFinalRequestAttributes(structuredArguments, requestWrapper);
             this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse, duration);
             this.structuredLogger.accept(structuredArguments);
+            MDC.clear();
         }
     }
 
