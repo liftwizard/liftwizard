@@ -16,6 +16,7 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
+import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,7 +27,8 @@ public class StructuredArgumentsRequestHttp
     private String                        method;
     private String                        contextPath;
     private String                        remoteUser;
-    private String                        userPrincipal;
+    private String                        authenticationScheme;
+    private Map<String, Object>           principal;
     private StructuredArgumentsPath       path;
     private StructuredArgumentsParameters parameters;
     private StructuredArgumentsClient     client;
@@ -83,18 +85,33 @@ public class StructuredArgumentsRequestHttp
     }
 
     @JsonProperty
-    public String getUserPrincipal()
+    public Map<String, Object> getPrincipal()
     {
-        return this.userPrincipal;
+        return this.principal;
     }
 
-    public void setUserPrincipal(String userPrincipal)
+    public void setPrincipal(Map<String, Object> principal)
     {
-        if (this.userPrincipal != null)
+        if (this.principal != null)
         {
-            throw new AssertionError(this.userPrincipal);
+            throw new AssertionError(this.principal);
         }
-        this.userPrincipal = userPrincipal;
+        this.principal = Objects.requireNonNull(principal);
+    }
+
+    @JsonProperty
+    public String getAuthenticationScheme()
+    {
+        return this.authenticationScheme;
+    }
+
+    public void setAuthenticationScheme(String authenticationScheme)
+    {
+        if (this.authenticationScheme != null)
+        {
+            throw new AssertionError(this.authenticationScheme);
+        }
+        this.authenticationScheme = authenticationScheme;
     }
 
     @JsonProperty

@@ -19,8 +19,10 @@ package io.liftwizard.servlet.logging.filter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -32,12 +34,14 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsParameters;
 import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequest;
 import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequestHttp;
+import org.eclipse.collections.api.block.function.Function;
 import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
@@ -53,6 +57,13 @@ public final class ServerLoggingRequestFilter
     @Context
     private ResourceInfo resourceInfo;
 
+    private final Function<Principal, Map<String, Object>> principalBuilder;
+
+    public ServerLoggingRequestFilter(Function<Principal, Map<String, Object>> principalBuilder)
+    {
+        this.principalBuilder = Objects.requireNonNull(principalBuilder);
+    }
+
     @Override
     public void filter(@Nonnull ContainerRequestContext requestContext)
             throws IOException
@@ -66,6 +77,7 @@ public final class ServerLoggingRequestFilter
         this.addResourceInfo(structuredArguments.getRequest());
         this.addParameters(uriInfo, http);
         this.addPath(requestContext, uriInfo, http);
+        this.addSecurityContext(requestContext, http);
     }
 
     private void addResourceInfo(@Nonnull StructuredArgumentsRequest request)
@@ -124,7 +136,7 @@ public final class ServerLoggingRequestFilter
             @Nonnull UriInfo uriInfo,
             @Nonnull StructuredArgumentsRequestHttp http)
     {
-        String baseUriPath         = uriInfo.getBaseUri().getPath();
+        String baseUriPath  = uriInfo.getBaseUri().getPath();
         String pathTemplate = this.getPathTemplate(requestContext);
         http.getPath().setBaseUriPath(baseUriPath);
         http.getPath().setTemplate(pathTemplate);
@@ -154,5 +166,20 @@ public final class ServerLoggingRequestFilter
         return ListAdapter.adapt(matchedTemplates)
                 .collect(UriTemplate::getTemplate)
                 .makeString("");
+    }
+
+    private void addSecurityContext(
+            @Nonnull ContainerRequestContext requestContext,
+            StructuredArgumentsRequestHttp http)
+    {
+        SecurityContext securityContext      = requestContext.getSecurityContext();
+        String          authenticationScheme = securityContext.getAuthenticationScheme();
+        Principal       userPrincipal        = securityContext.getUserPrincipal();
+
+        http.setAuthenticationScheme(authenticationScheme);
+        if (userPrincipal != null)
+        {
+            http.setPrincipal(this.principalBuilder.apply(userPrincipal));
+        }
     }
 }

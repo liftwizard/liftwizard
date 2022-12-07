@@ -18,7 +18,6 @@ package io.liftwizard.servlet.logging.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -135,12 +134,6 @@ public class ServerLoggingFilter
 
         http.setContextPath(httpServletRequest.getContextPath());
         http.setRemoteUser(httpServletRequest.getRemoteUser());
-
-        Principal userPrincipal = httpServletRequest.getUserPrincipal();
-        if (userPrincipal != null)
-        {
-            http.setUserPrincipal(userPrincipal.getName());
-        }
 
         StructuredArgumentsPath path = new StructuredArgumentsPath(
                 httpServletRequest.getRequestURL().toString(),
