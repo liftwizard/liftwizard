@@ -414,7 +414,7 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-config-logging-logstash</artifactId>
+                <artifactId>liftwizard-config-logging-logstash-encoder</artifactId>
                 <version>0.30.0-SNAPSHOT</version>
             </dependency>
 
