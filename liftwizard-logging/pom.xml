@@ -54,7 +54,7 @@
         <module>liftwizard-config-logging-http</module>
         <module>liftwizard-config-logging-logstash-console</module>
         <module>liftwizard-config-logging-logstash-file</module>
-        <module>liftwizard-config-logging-logstash</module>
+        <module>liftwizard-config-logging-logstash-encoder</module>
         <module>liftwizard-config-logging-logzio</module>
         <module>liftwizard-config-metrics-reporter-log4j</module>
         <module>liftwizard-config-metrics-reporter-logback</module>

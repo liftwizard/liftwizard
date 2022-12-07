@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-config-logging-logstash</artifactId>
+            <artifactId>liftwizard-config-logging-logstash-encoder</artifactId>
             <version>${project.version}</version>
         </dependency>
 
