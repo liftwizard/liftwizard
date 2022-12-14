@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
@@ -36,14 +35,10 @@ import io.liftwizard.reladomo.graphql.deep.fetcher.GraphQLDeepFetcher;
 import io.liftwizard.reladomo.graphql.operation.GraphQLQueryToOperationConverter;
 import io.liftwizard.reladomo.graphql.operation.LiftwizardGraphQLContextException;
 import io.liftwizard.reladomo.graphql.orderby.GraphQLQueryToOrderByConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ReladomoFinderDataFetcher<T>
         implements DataFetcher<List<T>>
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoFinderDataFetcher.class);
-
     private final AbstractRelatedFinder<T, ?, ?, ?, ?> finder;
 
     public ReladomoFinderDataFetcher(AbstractRelatedFinder<T, ?, ?, ?, ?> finder)
@@ -60,9 +55,11 @@ public class ReladomoFinderDataFetcher<T>
         Map<String, Object> arguments      = environment.getArguments();
         Object              inputOperation = arguments.get("operation");
         Operation           operation      = this.getOperation((Map<?, ?>) inputOperation);
-        LOGGER.debug("Executing operation: {}", operation);
+        Object              inputOrderBy   = arguments.get("orderBy");
+        Optional<OrderBy>   orderBys       = this.getOrderBys((List<Map<String, ?>>) inputOrderBy);
         DomainList<T> result = (DomainList<T>) this.finder.findMany(operation);
         GraphQLDeepFetcher.deepFetch(result, this.finder, environment.getSelectionSet());
+        orderBys.ifPresent(result::setOrderBy);
         return result;
     }
 
@@ -79,34 +76,14 @@ public class ReladomoFinderDataFetcher<T>
         }
     }
 
-    public Optional<OrderBy> getOrderBys(List<Map<String, ?>> inputOrderBys)
+    public Optional<OrderBy> getOrderBys(List<Map<String, ?>> inputOrderBy)
     {
-        if (inputOrderBys == null)
-        {
-            return Optional.empty();
-        }
-        List<OrderBy>        orderBys         = inputOrderBys
-                .stream()
-                .map(this::getOrderBy)
-                .map(orderBy -> orderBy.orElse(null))
-                .collect(Collectors.toList());
-        return orderBys.stream().reduce(OrderBy::and);
-    }
-
-    private Optional<OrderBy> getOrderBy(Map<String, ?> inputOrderBy)
-    {
-        Map<String, ?> inputAttributes       = (Map<String, ?>) inputOrderBy.get("attribute");
-        String         inputDirection        = (String) inputOrderBy.get("direction");
-        String         nonNullInputDirection = inputDirection == null ? "ASCENDING" : inputDirection;
-
         try
         {
-            var converter = new GraphQLQueryToOrderByConverter();
-            return converter.convert(this.finder, inputAttributes, nonNullInputDirection);
+            return GraphQLQueryToOrderByConverter.convertOrderByList(this.finder, inputOrderBy);
         }
         catch (LiftwizardGraphQLContextException e)
         {
-            LOGGER.error("Error converting order by", e);
             throw new LiftwizardGraphQLException(e.getMessage(), e.getContext(), e);
         }
     }
