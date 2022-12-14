@@ -19,6 +19,8 @@ package io.liftwizard.firebase.principal;
 import java.security.Principal;
 import java.util.Map;
 
+import org.eclipse.collections.api.factory.Maps;
+
 public class FirebasePrincipal implements Principal
 {
     private final String  name;
@@ -49,14 +51,14 @@ public class FirebasePrincipal implements Principal
 
     public Map<String, Object> toMap()
     {
-        return Map.of(
-                "name", this.name,
-                "displayName", this.displayName,
-                "email", this.email,
-                "emailVerified", this.emailVerified,
-                "issuer", this.issuer,
-                "picture", this.picture,
-                "signInProvider", this.signInProvider);
+        return Maps.mutable.<String, Object>empty()
+                .withKeyValue("name", this.name)
+                .withKeyValue("displayName", this.displayName)
+                .withKeyValue("email", this.email)
+                .withKeyValue("emailVerified", this.emailVerified)
+                .withKeyValue("issuer", this.issuer)
+                .withKeyValue("picture", this.picture)
+                .withKeyValue("signInProvider", this.signInProvider);
     }
 
     @Override

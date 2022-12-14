@@ -26,4 +26,12 @@
     <artifactId>liftwizard-principal-firebase</artifactId>
 
     <name>Liftwizard Firebase Principal</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections-api</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
