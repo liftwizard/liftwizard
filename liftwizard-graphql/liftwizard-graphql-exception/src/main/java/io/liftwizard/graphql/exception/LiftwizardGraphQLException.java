@@ -28,9 +28,9 @@ public class LiftwizardGraphQLException
         extends RuntimeException
         implements GraphQLError
 {
-    public LiftwizardGraphQLException(String message, ImmutableList<String> context)
+    public LiftwizardGraphQLException(String message, ImmutableList<String> context, RuntimeException e)
     {
-        super(String.format("%s in %s", message, context.makeString(".")));
+        super(String.format("%s in %s", message, context.makeString(".")), e);
     }
 
     @Override
