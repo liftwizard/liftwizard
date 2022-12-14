@@ -71,7 +71,7 @@ public class ReladomoFinderDataFetcher<T>
         }
         catch (LiftwizardGraphQLContextException e)
         {
-            throw new LiftwizardGraphQLException(e.getMessage(), e.getContext());
+            throw new LiftwizardGraphQLException(e.getMessage(), e.getContext(), e);
         }
     }
 }

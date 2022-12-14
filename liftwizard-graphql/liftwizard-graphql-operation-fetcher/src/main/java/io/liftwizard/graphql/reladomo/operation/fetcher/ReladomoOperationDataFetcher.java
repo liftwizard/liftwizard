@@ -71,7 +71,7 @@ public class ReladomoOperationDataFetcher<T>
         }
         catch (RuntimeException e)
         {
-            throw new LiftwizardGraphQLException(e.getMessage(), Lists.immutable.with(inputOperation));
+            throw new LiftwizardGraphQLException(e.getMessage(), Lists.immutable.with(inputOperation), e);
         }
     }
 }
