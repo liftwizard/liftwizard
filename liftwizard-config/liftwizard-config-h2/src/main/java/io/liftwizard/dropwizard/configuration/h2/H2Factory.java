@@ -22,6 +22,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.validation.ValidationMethod;
 
 public class H2Factory
 {
@@ -42,9 +43,9 @@ public class H2Factory
             "-baseDir",
             "./target/h2db");
     // 8082
-    private @NotNull Integer      webPort;
+    private Integer      webPort;
     // 9092
-    private @NotNull Integer      tcpPort;
+    private Integer      tcpPort;
 
     public boolean isEnabled()
     {
@@ -121,5 +122,11 @@ public class H2Factory
     public void setTcpPort(Integer tcpPort)
     {
         this.tcpPort = tcpPort;
+    }
+
+    @ValidationMethod(message = "webPort and tcpPort must be non-null if enabled is true")
+    public boolean isWebPortAndTcpPortDifferent()
+    {
+        return !this.enabled || this.webPort != null && this.tcpPort != null;
     }
 }
