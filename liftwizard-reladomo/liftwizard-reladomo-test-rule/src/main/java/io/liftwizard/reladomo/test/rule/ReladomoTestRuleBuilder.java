@@ -28,10 +28,10 @@ import org.junit.rules.TestRule;
 
 public class ReladomoTestRuleBuilder
 {
-    private       Optional<ExecuteSqlTestRule>         executeSqlTestRule = Optional.empty();
-    private       Optional<ReladomoInitializeTestRule> initializeTestRule = Optional.empty();
-    private final ReladomoPurgeAllTestRule             purgeAllTestRule   = new ReladomoPurgeAllTestRule();
-    private       ReladomoLoadDataTestRule             loadDataTestRule   = new ReladomoLoadDataTestRule();
+    private Optional<ExecuteSqlTestRule>         executeSqlTestRule = Optional.empty();
+    private Optional<ReladomoInitializeTestRule> initializeTestRule = Optional.empty();
+    private Optional<ReladomoPurgeAllTestRule>   purgeAllTestRule   = Optional.empty();
+    private ReladomoLoadDataTestRule             loadDataTestRule   = new ReladomoLoadDataTestRule();
 
     public ReladomoTestRuleBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath)
     {
@@ -96,12 +96,24 @@ public class ReladomoTestRuleBuilder
         return this;
     }
 
+    public ReladomoTestRuleBuilder withPurgeAllTestRule()
+    {
+        this.purgeAllTestRule = Optional.of(new ReladomoPurgeAllTestRule());
+        return this;
+    }
+
+    public ReladomoTestRuleBuilder withoutPurgeAllTestRule()
+    {
+        this.purgeAllTestRule = Optional.empty();
+        return this;
+    }
+
     public TestRule build()
     {
         return RuleChain.emptyRuleChain()
                 .around(this.executeSqlTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
                 .around(this.initializeTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
-                .around(this.purgeAllTestRule)
+                .around(this.purgeAllTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
                 .around(this.loadDataTestRule);
     }
 }
