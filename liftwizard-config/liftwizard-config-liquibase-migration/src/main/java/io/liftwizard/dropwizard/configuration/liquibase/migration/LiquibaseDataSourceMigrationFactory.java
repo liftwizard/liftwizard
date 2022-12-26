@@ -30,6 +30,7 @@ public class LiquibaseDataSourceMigrationFactory
     private          String                migrationFileName     = "migrations.xml";
     private @NotNull MigrationFileLocation migrationFileLocation = MigrationFileLocation.CLASSPATH;
     private @NotNull List<String>          contexts              = List.of();
+    private          String                rollbackToTag;
 
     @JsonProperty
     public String getDataSourceName()
@@ -101,5 +102,17 @@ public class LiquibaseDataSourceMigrationFactory
     public void setContexts(List<String> contexts)
     {
         this.contexts = contexts;
+    }
+
+    @JsonProperty
+    public String getRollbackToTag()
+    {
+        return this.rollbackToTag;
+    }
+
+    @JsonProperty
+    public void setRollbackToTag(String rollbackToTag)
+    {
+        this.rollbackToTag = rollbackToTag;
     }
 }
