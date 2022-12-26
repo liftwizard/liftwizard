@@ -84,6 +84,7 @@ public class LiftwizardLiquibaseMigrationBundle
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         boolean dryRun = liquibaseMigrationFactory.isDryRun();
+        boolean rollbackOnShutdown = liquibaseMigrationFactory.isRollbackOnShutdown();
 
         for (LiquibaseDataSourceMigrationFactory factory : liquibaseMigrationFactory.getDataSourceMigrations())
         {
@@ -115,6 +116,22 @@ public class LiftwizardLiquibaseMigrationBundle
                 {
                     liquibase.update(context);
                 }
+
+                if (!rollbackOnShutdown)
+                {
+                    continue;
+                }
+
+                String rollbackToTag = factory.getRollbackToTag();
+                environment.lifecycle().manage(new LiquibaseRollbackManaged(
+                        dataSource,
+                        catalogName,
+                        schemaName,
+                        migrationFile,
+                        migrationFileLocation,
+                        dryRun,
+                        context,
+                        rollbackToTag));
             }
             catch (Exception e)
             {
