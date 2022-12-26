@@ -82,6 +82,7 @@ public class ReladomoBundle
         {
             this.registerRetrieveCountMetrics(environment.metrics());
         }
+        MithraManagerProvider.getMithraManager().fullyInitialize();
 
         environment.lifecycle().manage(new ManagedReladomoCleanup());
 
