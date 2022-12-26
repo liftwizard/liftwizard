@@ -115,6 +115,23 @@ public class LiftwizardLiquibaseMigrationBundle
                 {
                     liquibase.update(context);
                 }
+
+                boolean rollbackOnShutdown = factory.isRollbackOnShutdown();
+                if (!rollbackOnShutdown)
+                {
+                    continue;
+                }
+
+                String rollbackToTag = factory.getRollbackToTag();
+                environment.lifecycle().manage(new LiquibaseRollbackManaged(
+                        dataSource,
+                        catalogName,
+                        schemaName,
+                        migrationFile,
+                        migrationFileLocation,
+                        dryRun,
+                        context,
+                        rollbackToTag));
             }
             catch (Exception e)
             {
