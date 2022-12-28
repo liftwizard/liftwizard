@@ -49,9 +49,9 @@ entry: ["getLiquibaseMigrationFactory", "setLiquibaseMigrationFactory"],
 
 ## Configuration
 
-The `LiftwizardLiquibaseMigrationBundle` requires that you're already using [named data sources](database/named-data-source.md).
+The `LiftwizardLiquibaseMigrationBundle` requires that you're already using [named data sources](database/named-data-source).
 
-Add a liquibase section to your [json](configuration/json5-configuration.md) or yaml configuration.
+Add a liquibase section to your [json](configuration/json5-configuration) or yaml configuration.
 
 :include-json: test-example.json5 {
 title: "example.json5",
