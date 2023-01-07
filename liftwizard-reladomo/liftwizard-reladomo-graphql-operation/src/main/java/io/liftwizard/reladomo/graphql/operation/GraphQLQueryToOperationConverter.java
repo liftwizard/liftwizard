@@ -105,7 +105,7 @@ public class GraphQLQueryToOperationConverter
             if (!graphQlOperation.equals(Maps.immutable.empty()))
             {
                 var converter = new GraphQLQueryToOperationConverter();
-                Operation nestedOperation = converter.convert(finder, (Map<?, ?>) graphQlOperation);
+                Operation nestedOperation = converter.convert(finder.zWithoutParent(), (Map<?, ?>) graphQlOperation);
                 return finder.notExists(nestedOperation);
             }
 
@@ -117,7 +117,7 @@ public class GraphQLQueryToOperationConverter
             if (!graphQlOperation.equals(Maps.immutable.empty()))
             {
                 var converter = new GraphQLQueryToOperationConverter();
-                Operation nestedOperation = converter.convert(finder, (Map<?, ?>) graphQlOperation);
+                Operation nestedOperation = converter.convert(finder.zWithoutParent(), (Map<?, ?>) graphQlOperation);
                 return finder.recursiveNotExists(nestedOperation);
             }
 
