@@ -42,10 +42,10 @@ public class StructuredArgumentsStatus
 
     public void setStatus(Status status)
     {
-        if (this.status != null)
-        {
-            LOGGER.warn("Overwriting status '{}' with '{}'.", this.status, status);
-        }
+        // It's possible to overwrite a non-null status with another non-null status due to the try-catch block in org.glassfish.jersey.server.ServerRuntime.process().
+        // It happens when there is an error while processing an otherwise successful response.
+        // For example, we try to return a successful response, but there is an error serializing the response body, because Jackson calls a getter which throws.
+
         // Name can occasionally be null, for http codes like 422 which are used by Dropwizard but don't appear in the Status enumeration
         this.status = status;
     }
