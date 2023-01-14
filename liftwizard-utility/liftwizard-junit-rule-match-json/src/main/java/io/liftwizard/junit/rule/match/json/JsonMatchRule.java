@@ -39,7 +39,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class JsonMatchRule
         extends ErrorCollector
@@ -89,7 +89,7 @@ public class JsonMatchRule
             Path                 packagePath      = packageNameParts.injectInto(testResources, Path::resolve);
             File                 resourceFile     = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            assertThat(resourceFile.exists(), is(false));
+            assertThat(resourceFile.getAbsolutePath(), resourceFile.exists(), is(false));
             this.writeStringToFile(actualString, resourceFile);
             this.addError(new AssertionError(resourceClassPathLocation));
         }

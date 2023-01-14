@@ -37,7 +37,7 @@ import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.junit.rules.ErrorCollector;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FileMatchRule
         extends ErrorCollector
@@ -99,7 +99,7 @@ public class FileMatchRule
             Path                 packagePath      = packageNameParts.injectInto(testResources, Path::resolve);
             File                 resourceFile     = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            assertThat(resourceFile.exists(), is(false));
+            assertThat(resourceFile.getAbsolutePath(), resourceFile.exists(), is(false));
             this.writeStringToFile(actualString, resourceFile);
             this.addError(new AssertionError(resourceClassPathLocation));
         }
