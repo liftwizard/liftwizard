@@ -16,8 +16,6 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 import javax.annotation.Nonnull;
@@ -34,7 +32,7 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.FileSystemResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 
-public class LiquibaseRollbackManaged
+public class LiquibaseDropAllManaged
         implements Managed
 {
     private final ManagedDataSource     dataSource;
@@ -42,28 +40,19 @@ public class LiquibaseRollbackManaged
     private final String                schemaName;
     private final String                migrationFile;
     private final MigrationFileLocation migrationFileLocation;
-    private final boolean               dryRun;
-    private final String                context;
-    private final String                rollbackToTag;
 
-    public LiquibaseRollbackManaged(
+    public LiquibaseDropAllManaged(
             ManagedDataSource dataSource,
             String catalogName,
             String schemaName,
             String migrationFile,
-            MigrationFileLocation migrationFileLocation,
-            boolean dryRun,
-            String context,
-            String rollbackToTag)
+            MigrationFileLocation migrationFileLocation)
     {
         this.dataSource            = dataSource;
         this.catalogName           = catalogName;
         this.schemaName            = schemaName;
         this.migrationFile         = migrationFile;
         this.migrationFileLocation = migrationFileLocation;
-        this.dryRun                = dryRun;
-        this.context               = context;
-        this.rollbackToTag         = rollbackToTag;
     }
 
     @Override
@@ -83,17 +72,7 @@ public class LiquibaseRollbackManaged
                         this.migrationFile,
                         this.migrationFileLocation))
         {
-            if (this.dryRun)
-            {
-                liquibase.rollback(
-                        this.rollbackToTag,
-                        this.context,
-                        new OutputStreamWriter(System.out, StandardCharsets.UTF_8));
-            }
-            else
-            {
-                liquibase.rollback(this.rollbackToTag, this.context);
-            }
+            liquibase.dropAll();
         }
         catch (Exception e)
         {
@@ -110,7 +89,7 @@ public class LiquibaseRollbackManaged
             throws SQLException, LiquibaseException
     {
         Database         database         = this.createDatabase(dataSource, catalogName, schemaName);
-        ResourceAccessor resourceAccessor = LiquibaseRollbackManaged.getResourceAccessor(migrationFileLocation);
+        ResourceAccessor resourceAccessor = LiquibaseDropAllManaged.getResourceAccessor(migrationFileLocation);
         return new CloseableLiquibase(migrationsFile, resourceAccessor, database, dataSource);
     }
 
