@@ -27,7 +27,7 @@ public class LiquibaseMigrationFactory
 {
     private List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = new ArrayList<>();
 
-    private          boolean               rollbackOnShutdown;
+    private          boolean dropEntireSchemaOnStartupAndShutdown;
 
     private boolean dryRun;
 
@@ -44,15 +44,15 @@ public class LiquibaseMigrationFactory
     }
 
     @JsonProperty
-    public boolean isRollbackOnShutdown()
+    public boolean isDropEntireSchemaOnStartupAndShutdown()
     {
-        return this.rollbackOnShutdown;
+        return this.dropEntireSchemaOnStartupAndShutdown;
     }
 
     @JsonProperty
-    public void setRollbackOnShutdown(boolean rollbackOnShutdown)
+    public void setDropEntireSchemaOnStartupAndShutdown(boolean dropEntireSchemaOnStartupAndShutdown)
     {
-        this.rollbackOnShutdown = rollbackOnShutdown;
+        this.dropEntireSchemaOnStartupAndShutdown = dropEntireSchemaOnStartupAndShutdown;
     }
 
     @JsonProperty
