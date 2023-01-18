@@ -102,7 +102,7 @@ public class ReladomoLoadDataTestRule
                 }
                 catch (ReflectiveOperationException e)
                 {
-                    throw new RuntimeException(testDataFileName, e);
+                    throw new RuntimeException("Error while loading test data file: " + testDataFileName, e);
                 }
             }
         }
