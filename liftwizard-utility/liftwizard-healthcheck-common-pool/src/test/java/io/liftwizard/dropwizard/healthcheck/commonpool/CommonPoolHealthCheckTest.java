@@ -29,8 +29,8 @@ import org.junit.rules.TestRule;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CommonPoolHealthCheckTest
 {
@@ -41,7 +41,7 @@ public class CommonPoolHealthCheckTest
     public void healthy()
     {
         Result result = new CommonPoolHealthCheck().check();
-        assertEquals(Result.healthy(), result);
+        assertTrue(result.toString(), result.isHealthy());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class CommonPoolHealthCheckTest
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
                 Lists.immutable.empty());
         Result result = commonPoolHealthCheck.check();
-        assertEquals(Result.healthy(), result);
+        assertTrue(result.toString(), result.isHealthy());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class CommonPoolHealthCheckTest
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.allow"));
         Result result = commonPoolHealthCheck.check();
-        assertEquals(Result.healthy(), result);
+        assertTrue(result.toString(), result.isHealthy());
     }
 
     private static ImmutableList<Pattern> pattern(String string)
