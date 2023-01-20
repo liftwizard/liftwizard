@@ -313,6 +313,17 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.openrewrite.maven</groupId>
+                    <artifactId>rewrite-maven-plugin</artifactId>
+                    <version>4.38.2</version>
+                    <configuration>
+                        <activeRecipes>
+                            <recipe>org.openrewrite.java.cleanup.Cleanup</recipe>
+                        </activeRecipes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>3.2.1</version>
                     <configuration>
