@@ -47,7 +47,11 @@ public final class DatabaseDdlExecutor
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static void executeSql(Connection connection, String ddlLocationPattern, String idxLocationPattern)
+    public static void executeSql(
+            Connection connection,
+            String ddlLocationPattern,
+            String idxLocationPattern,
+            String fkLocationPattern)
     {
         MutableSet<URL> urls = Sets.mutable
                 // Maven's classpath, including maven itself, appears here
@@ -57,15 +61,18 @@ public final class DatabaseDdlExecutor
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .setScanners(new ResourcesScanner())
                 .setUrls(urls);
-        Reflections reflections = new Reflections(configurationBuilder);
+        Reflections        reflections  = new Reflections(configurationBuilder);
         MutableSet<String> ddlLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(ddlLocationPattern)));
         MutableSet<String> idxLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(idxLocationPattern)));
+        MutableSet<String> fkLocations  = SetAdapter.adapt(reflections.getResources(Pattern.compile(fkLocationPattern)));
         LOGGER.info("Scanning urls: {}", urls.collect(URL::toString).toSortedList());
         LOGGER.info("Found {} SQL ddl scripts.", ddlLocations.size());
         LOGGER.info("Found {} SQL idx scripts.", idxLocations.size());
+        LOGGER.info("Found {} SQL fk scripts.", fkLocations.size());
 
         ddlLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
         idxLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
+        fkLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
     }
 
     private static void runScript(String ddlLocation, @Nonnull Connection connection)
