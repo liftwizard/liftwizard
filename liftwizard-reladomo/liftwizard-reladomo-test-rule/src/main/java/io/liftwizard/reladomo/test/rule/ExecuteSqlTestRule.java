@@ -33,6 +33,7 @@ public class ExecuteSqlTestRule
 {
     private String ddlLocationPattern = ".*\\.ddl";
     private String idxLocationPattern = ".*\\.idx";
+    private String fkLocationPattern  = ".*\\.fk";
 
     @Nonnull
     private Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager
@@ -51,6 +52,12 @@ public class ExecuteSqlTestRule
         return this;
     }
 
+    public ExecuteSqlTestRule setFkLocationPattern(@Nonnull String fkLocationPattern)
+    {
+        this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
+        return this;
+    }
+
     public ExecuteSqlTestRule setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
     {
         this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
@@ -64,14 +71,16 @@ public class ExecuteSqlTestRule
         return new Statement()
         {
             @Override
-            public void evaluate() throws Throwable
+            public void evaluate()
+                    throws Throwable
             {
                 try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get())
                 {
                     DatabaseDdlExecutor.executeSql(
                             connection,
                             ExecuteSqlTestRule.this.ddlLocationPattern,
-                            ExecuteSqlTestRule.this.idxLocationPattern);
+                            ExecuteSqlTestRule.this.idxLocationPattern,
+                            ExecuteSqlTestRule.this.fkLocationPattern);
                 }
                 base.evaluate();
             }

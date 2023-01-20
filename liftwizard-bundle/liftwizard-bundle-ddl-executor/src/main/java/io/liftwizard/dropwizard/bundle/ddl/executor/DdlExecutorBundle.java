@@ -75,6 +75,7 @@ public class DdlExecutorBundle
             String dataSourceName     = ddlExecutorFactory.getDataSourceName();
             String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
             String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
+            String fkLocationPattern  = ddlExecutorFactory.getFkLocationPattern();
 
             LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 
@@ -85,7 +86,7 @@ public class DdlExecutorBundle
             Objects.requireNonNull(dataSource, dataSourceName);
             try (Connection connection = dataSource.getConnection())
             {
-                DatabaseDdlExecutor.executeSql(connection, ddlLocationPattern, idxLocationPattern);
+                DatabaseDdlExecutor.executeSql(connection, ddlLocationPattern, idxLocationPattern, fkLocationPattern);
             }
         }
 

@@ -86,6 +86,16 @@ public class ReladomoTestRuleBuilder
         return this;
     }
 
+    public ReladomoTestRuleBuilder setFkLocationPattern(@Nonnull String fkLocationPattern)
+    {
+        if (this.executeSqlTestRule.isEmpty())
+        {
+            this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
+        }
+        this.executeSqlTestRule.get().setFkLocationPattern(fkLocationPattern);
+        return this;
+    }
+
     public ReladomoTestRuleBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
     {
         if (this.executeSqlTestRule.isEmpty())

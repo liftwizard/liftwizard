@@ -31,6 +31,7 @@ public class DdlExecutorFactory
     private @Valid @NotNull String dataSourceName;
     private @Valid @NotNull String ddlLocationPattern = ".*\\.ddl";
     private @Valid @NotNull String idxLocationPattern = ".*\\.idx";
+    private @Valid @NotNull String fkLocationPattern  = ".*\\.fk";
 
     @JsonProperty
     public String getDataSourceName()
@@ -68,6 +69,18 @@ public class DdlExecutorFactory
         this.idxLocationPattern = idxLocationPattern;
     }
 
+    @JsonProperty
+    public String getFkLocationPattern()
+    {
+        return this.fkLocationPattern;
+    }
+
+    @JsonProperty
+    public void setFkLocationPattern(String fkLocationPattern)
+    {
+        this.fkLocationPattern = fkLocationPattern;
+    }
+
     @ValidationMethod(message = "ddlLocationPattern must be a valid regex")
     @JsonIgnore
     public boolean isDdlLocationPatternValid()
@@ -90,6 +103,21 @@ public class DdlExecutorFactory
         try
         {
             Pattern.compile(this.idxLocationPattern);
+            return true;
+        }
+        catch (PatternSyntaxException e)
+        {
+            return false;
+        }
+    }
+
+    @ValidationMethod(message = "fkLocationPattern must be a valid regex")
+    @JsonIgnore
+    public boolean isFkLocationPatternValid()
+    {
+        try
+        {
+            Pattern.compile(this.fkLocationPattern);
             return true;
         }
         catch (PatternSyntaxException e)
