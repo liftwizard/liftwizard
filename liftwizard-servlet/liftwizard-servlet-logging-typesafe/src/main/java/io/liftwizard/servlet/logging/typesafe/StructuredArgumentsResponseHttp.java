@@ -44,10 +44,6 @@ public class StructuredArgumentsResponseHttp
 
     public void setEntityType(String entityType)
     {
-        if (this.entityType != null)
-        {
-            throw new AssertionError(this.entityType);
-        }
         this.entityType = Objects.requireNonNull(entityType);
     }
 
