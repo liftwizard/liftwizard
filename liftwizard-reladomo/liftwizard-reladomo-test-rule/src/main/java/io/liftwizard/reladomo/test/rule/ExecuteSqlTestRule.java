@@ -76,6 +76,7 @@ public class ExecuteSqlTestRule
             {
                 try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get())
                 {
+                    DatabaseDdlExecutor.dropAllObjects(connection);
                     DatabaseDdlExecutor.executeSql(
                             connection,
                             ExecuteSqlTestRule.this.ddlLocationPattern,
@@ -83,6 +84,10 @@ public class ExecuteSqlTestRule
                             ExecuteSqlTestRule.this.fkLocationPattern);
                 }
                 base.evaluate();
+                try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get())
+                {
+                    DatabaseDdlExecutor.dropAllObjects(connection);
+                }
             }
         };
     }
