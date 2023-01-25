@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -73,6 +74,20 @@ public final class DatabaseDdlExecutor
         ddlLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
         idxLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
         fkLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
+    }
+
+    public static void dropAllObjects(Connection connection)
+    {
+        try (Statement statement = connection.createStatement())
+        {
+            String dropSql = "DROP ALL OBJECTS";
+            LOGGER.info("Executing SQL: {}", dropSql);
+            statement.execute(dropSql);
+        }
+        catch (@Nonnull SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void runScript(String ddlLocation, @Nonnull Connection connection)
