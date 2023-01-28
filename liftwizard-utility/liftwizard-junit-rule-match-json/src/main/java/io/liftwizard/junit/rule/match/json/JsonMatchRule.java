@@ -59,10 +59,7 @@ public class JsonMatchRule
     {
         try
         {
-            this.assertFileContentsOrThrow(
-                    resourceClassPathLocation,
-                    actualString,
-                    callingClass);
+            this.assertFileContentsOrThrow(resourceClassPathLocation, actualString, callingClass);
         }
         catch (@Nonnull URISyntaxException | FileNotFoundException | JSONException e)
         {
@@ -103,18 +100,24 @@ public class JsonMatchRule
                 this.writeStringToFile(actualString, file);
             }
             JSONAssert.assertEquals(
-                    actualString,
+                    "Writing expected file to: " + uri,
                     expectedStringFromFile,
                     actualString,
                     JSONCompareMode.STRICT);
         }
     }
 
-    private void writeStringToFile(@Nonnull String string, @Nonnull File file) throws FileNotFoundException
+    private void writeStringToFile(@Nonnull String string, @Nonnull File file)
+            throws FileNotFoundException
     {
+        if (!file.exists())
+        {
+            file.getParentFile().mkdirs();
+        }
+
         try (PrintWriter printWriter = new PrintWriter(file))
         {
-            printWriter.write(string);
+            printWriter.print(string);
         }
     }
 }
