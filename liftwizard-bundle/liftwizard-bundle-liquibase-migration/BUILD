@@ -1,0 +1,20 @@
+java_library(
+    name = "liftwizard-bundle-liquibase-migration",
+    srcs = glob(["src/main/**/*.java"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//liftwizard-bundle/liftwizard-bundle-prioritized-api",
+        "//liftwizard-config/liftwizard-config-data-source",
+        "//liftwizard-config/liftwizard-config-liquibase-migration",
+        "@maven//:com_google_auto_service_auto_service_annotations",
+        "@maven//:com_google_code_findbugs_jsr305",
+        "@maven//:io_dropwizard_dropwizard_core",
+        "@maven//:io_dropwizard_dropwizard_db",
+        "@maven//:io_dropwizard_dropwizard_lifecycle",
+        "@maven//:janino_janino",
+        "@maven//:org_eclipse_collections_eclipse_collections",
+        "@maven//:org_eclipse_collections_eclipse_collections_api",
+        "@maven//:org_liquibase_liquibase_core",
+        "@maven//:org_slf4j_slf4j_api",
+    ],
+)

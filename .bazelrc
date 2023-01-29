@@ -1,0 +1,6 @@
+
+# The Java language versions here should match those in pom.xml.
+
+build \
+    --java_language_version=17 \
+    --java_runtime_version=remotejdk_17

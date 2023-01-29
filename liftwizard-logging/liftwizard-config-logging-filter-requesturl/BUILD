@@ -1,0 +1,42 @@
+java_library(
+    name = "liftwizard-config-logging-filter-requesturl",
+    srcs = glob(["src/main/**/*.java"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@maven//:ch_qos_logback_logback_access",
+        "@maven//:ch_qos_logback_logback_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_google_auto_service_auto_service_annotations",
+        "@maven//:io_dropwizard_dropwizard_logging",
+        "@maven//:javax_validation_validation_api",
+        "@maven//:org_eclipse_collections_eclipse_collections",
+        "@maven//:org_eclipse_collections_eclipse_collections_api",
+        "@maven//:org_hibernate_hibernate_validator",
+    ],
+)
+
+java_test(
+    name = "UrlFilterFactoryTest",
+    size = "small",
+    srcs = glob(["src/test/java/**/*.java"]),
+    classpath_resources = glob(["src/test/resources/*"]),
+    deps = [
+        ":liftwizard-config-logging-filter-requesturl",
+        "//liftwizard-jackson/liftwizard-jackson-config",
+        "//liftwizard-utility/liftwizard-junit-rule-log-marker",
+        "@maven//:ch_qos_logback_logback_access",
+        "@maven//:ch_qos_logback_logback_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_google_guava_guava",
+        "@maven//:io_dropwizard_dropwizard_configuration",
+        "@maven//:io_dropwizard_dropwizard_jackson",
+        "@maven//:io_dropwizard_dropwizard_jersey",
+        "@maven//:janino_janino",
+        "@maven//:javax_servlet_javax_servlet_api",
+        "@maven//:javax_validation_validation_api",
+        "@maven//:junit_junit",
+        "@maven//:org_eclipse_collections_eclipse_collections",
+        "@maven//:org_eclipse_collections_eclipse_collections_api",
+        "@maven//:org_hamcrest_hamcrest_core",
+    ],
+)
