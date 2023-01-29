@@ -1,0 +1,20 @@
+directories:
+  liftwizard-application
+  liftwizard-auth
+  liftwizard-bundle
+  liftwizard-clock
+  liftwizard-config
+  liftwizard-example
+  liftwizard-generator-plugins
+  liftwizard-graphql
+  liftwizard-jackson
+  liftwizard-logging
+  liftwizard-maven-build
+  liftwizard-reladomo
+  liftwizard-servlet
+  liftwizard-utility
+  liftwizard-uuid
+targets:
+  //...
+workspace_type: java
+java_language_level: 17

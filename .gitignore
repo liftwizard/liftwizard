@@ -18,3 +18,9 @@ pom.xml.releaseBackup
 .vertx
 /spy.log
 /logs/
+
+# Bazel
+bazel-bin
+bazel-liftwizard
+bazel-out
+bazel-testlogs

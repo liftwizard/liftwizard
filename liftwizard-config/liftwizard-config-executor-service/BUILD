@@ -1,0 +1,42 @@
+java_library(
+    name = "liftwizard-config-executor-service",
+    srcs = glob(["src/main/**/*.java"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_google_auto_service_auto_service_annotations",
+        "@maven//:com_google_code_findbugs_jsr305",
+        "@maven//:io_dropwizard_dropwizard_core",
+        "@maven//:io_dropwizard_dropwizard_jackson",
+        "@maven//:io_dropwizard_dropwizard_lifecycle",
+        "@maven//:io_dropwizard_dropwizard_util",
+        "@maven//:io_dropwizard_dropwizard_validation",
+        "@maven//:io_dropwizard_metrics_metrics_core",
+        "@maven//:janino_janino",
+        "@maven//:javax_validation_validation_api",
+        "@maven//:org_eclipse_collections_eclipse_collections",
+        "@maven//:org_eclipse_collections_eclipse_collections_api",
+        "@maven//:org_slf4j_slf4j_api",
+    ],
+)
+
+java_test(
+    name = "ExecutorServiceFactoryTest",
+    size = "small",
+    srcs = glob(["src/test/java/**/*.java"]),
+    classpath_resources = glob(["src/test/resources/**"]),
+    deps = [
+        ":liftwizard-config-executor-service",
+        "//liftwizard-jackson/liftwizard-jackson-config",
+        "//liftwizard-utility/liftwizard-junit-rule-log-marker",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:io_dropwizard_dropwizard_configuration",
+        "@maven//:io_dropwizard_dropwizard_jackson",
+        "@maven//:io_dropwizard_dropwizard_jersey",
+        "@maven//:janino_janino",
+        "@maven//:junit_junit",
+        "@maven//:org_eclipse_collections_eclipse_collections",
+        "@maven//:org_eclipse_collections_eclipse_collections_api",
+        "@maven//:org_hamcrest_hamcrest_core",
+    ],
+)
