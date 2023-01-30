@@ -16,9 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.url;
 
-import java.io.File;
-import java.net.URL;
-
 import javax.validation.Validator;
 
 import ch.qos.logback.access.spi.IAccessEvent;
@@ -26,8 +23,8 @@ import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -68,9 +65,9 @@ public class UrlFilterFactoryTest
     @Test
     public void filterUrl() throws Exception
     {
-        URL                     resource         = Resources.getResource("config-test.json5");
-        File                    json             = new File(resource.toURI());
-        RequestUrlFilterFactory urlFilterFactory = this.factory.build(json);
+        RequestUrlFilterFactory urlFilterFactory = this.factory.build(
+                new ResourceConfigurationSourceProvider(),
+                "config-test.json5");
         Filter<IAccessEvent>    filter           = urlFilterFactory.build();
         IAccessEvent            bannedEvent      = new FakeAccessEvent("banned");
         IAccessEvent            allowedEvent     = new FakeAccessEvent("allowed");

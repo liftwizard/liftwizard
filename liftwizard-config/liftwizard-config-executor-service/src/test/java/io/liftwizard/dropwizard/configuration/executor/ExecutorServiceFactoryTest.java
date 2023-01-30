@@ -16,15 +16,12 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
-import java.io.File;
-import java.net.URL;
-
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
 import io.dropwizard.configuration.ConfigurationValidationException;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
@@ -49,22 +46,18 @@ public class ExecutorServiceFactoryTest
     public void executorServiceFactory()
             throws Exception
     {
-        URL  resource = Resources.getResource("executor-service-config-test.json5");
-        File json     = new File(resource.toURI());
-
         JsonConfigurationFactory<ExecutorServiceFactory> factory =
                 new JsonConfigurationFactory<>(ExecutorServiceFactory.class, this.validator, this.objectMapper, "dw");
 
-        ExecutorServiceFactory executorServiceFactory = factory.build(json);
+        ExecutorServiceFactory executorServiceFactory = factory.build(
+                new ResourceConfigurationSourceProvider(),
+                "executor-service-config-test.json5");
     }
 
     @Test
     public void scheduledExecutorServiceFactory()
             throws Exception
     {
-        URL  resource = Resources.getResource("executor-service-config-test.json5");
-        File json     = new File(resource.toURI());
-
         JsonConfigurationFactory<ScheduledExecutorServiceFactory> factory =
                 new JsonConfigurationFactory<>(
                         ScheduledExecutorServiceFactory.class,
@@ -72,22 +65,19 @@ public class ExecutorServiceFactoryTest
                         this.objectMapper,
                         "dw");
 
-        ScheduledExecutorServiceFactory executorServiceFactory = factory.build(json);
+        ScheduledExecutorServiceFactory executorServiceFactory = factory.build(new ResourceConfigurationSourceProvider(), "executor-service-config-test.json5");
     }
 
     @Test
     public void invalidExecutorServiceFactory()
             throws Exception
     {
-        URL  resource = Resources.getResource("invalid-executor-service-config-test.json5");
-        File json     = new File(resource.toURI());
-
         JsonConfigurationFactory<ExecutorServiceFactory> factory =
                 new JsonConfigurationFactory<>(ExecutorServiceFactory.class, this.validator, this.objectMapper, "dw");
 
         try
         {
-            ExecutorServiceFactory executorServiceFactory = factory.build(json);
+            ExecutorServiceFactory executorServiceFactory = factory.build(new ResourceConfigurationSourceProvider(), "invalid-executor-service-config-test.json5");
             Assert.fail();
         }
         catch (ConfigurationValidationException e)
