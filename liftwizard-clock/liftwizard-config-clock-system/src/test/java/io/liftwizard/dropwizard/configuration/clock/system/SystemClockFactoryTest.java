@@ -16,15 +16,12 @@
 
 package io.liftwizard.dropwizard.configuration.clock.system;
 
-import java.io.File;
-import java.net.URL;
-
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -62,9 +59,7 @@ public class SystemClockFactoryTest
     @Test
     public void systemClock() throws Exception
     {
-        URL          resource     = Resources.getResource("config-test.json5");
-        File         json         = new File(resource.toURI());
-        ClockFactory clockFactory = this.factory.build(json);
+        ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
         assertThat(clockFactory, instanceOf(SystemClockFactory.class));
     }
 

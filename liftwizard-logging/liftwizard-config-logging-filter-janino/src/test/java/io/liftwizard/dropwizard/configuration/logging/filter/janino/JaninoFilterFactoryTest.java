@@ -16,9 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.janino;
 
-import java.io.File;
-import java.net.URL;
-
 import javax.validation.Validator;
 
 import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
@@ -28,8 +25,8 @@ import ch.qos.logback.core.filter.EvaluatorFilter;
 import ch.qos.logback.core.filter.Filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -69,10 +66,10 @@ public class JaninoFilterFactoryTest
     @Test
     public void filterJanino() throws Exception
     {
-        URL                   resource            = Resources.getResource("config-test.json5");
-        File                  json                = new File(resource.toURI());
-        JaninoFilterFactory   janinoFilterFactory = this.factory.build(json);
-        Filter<ILoggingEvent> filter              = janinoFilterFactory.build();
+        JaninoFilterFactory janinoFilterFactory = this.factory.build(
+                new ResourceConfigurationSourceProvider(),
+                "config-test.json5");
+        Filter<ILoggingEvent> filter = janinoFilterFactory.build();
 
         assertThat(janinoFilterFactory, instanceOf(JaninoFilterFactory.class));
         assertThat(filter, instanceOf(EvaluatorFilter.class));

@@ -16,8 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.uuid.seed;
 
-import java.io.File;
-import java.net.URL;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -25,8 +23,8 @@ import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -68,9 +66,9 @@ public class SeedUUIDFactoryTest
     @Test
     public void seedUUID() throws Exception
     {
-        URL                 resource    = Resources.getResource("config-test.json5");
-        File                json        = new File(resource.toURI());
-        UUIDSupplierFactory uuidFactory = this.factory.build(json);
+        UUIDSupplierFactory uuidFactory = this.factory.build(
+                new ResourceConfigurationSourceProvider(),
+                "config-test.json5");
         assertThat(uuidFactory, instanceOf(SeedUUIDSupplierFactory.class));
         Supplier<UUID> uuidSupplier     = uuidFactory.createUUIDSupplier();
         UUID           uuid             = uuidSupplier.get();

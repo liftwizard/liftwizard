@@ -16,18 +16,16 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.io.File;
-import java.net.URL;
 import java.util.TimeZone;
 
 import javax.validation.Validator;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.GenericDatabaseType;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.jackson.Jackson;
@@ -55,9 +53,9 @@ public class ConnectionManagerFactoryTest
     @Test
     public void createSourcelessConnectionManager() throws Exception
     {
-        URL                      resource                 = Resources.getResource("config-test.json5");
-        File                     json                     = new File(resource.toURI());
-        ConnectionManagerFactory connectionManagerFactory = this.factory.build(json);
+        ConnectionManagerFactory connectionManagerFactory = this.factory.build(
+                new ResourceConfigurationSourceProvider(),
+                "config-test.json5");
 
         DataSourceFactory dataSourceFactory = new DataSourceFactory();
         ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");

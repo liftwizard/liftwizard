@@ -16,18 +16,16 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.impersonation;
 
-import java.io.File;
-import java.net.URL;
 import java.security.Principal;
 
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.configuration.JsonConfigurationFactory;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
@@ -65,9 +63,9 @@ public class ImpersonationAuthFilterFactoryTest
     @Test
     public void impersonationAuthFilter() throws Exception
     {
-        URL               resource          = Resources.getResource("config-test.json5");
-        File              json              = new File(resource.toURI());
-        AuthFilterFactory authFilterFactory = this.factory.build(json);
+        AuthFilterFactory authFilterFactory = this.factory.build(
+                new ResourceConfigurationSourceProvider(),
+                "config-test.json5");
         assertThat(authFilterFactory, instanceOf(ImpersonationAuthFilterFactory.class));
         AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();
         assertThat(authFilter, instanceOf(OAuthCredentialAuthFilter.class));
