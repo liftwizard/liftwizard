@@ -2,7 +2,7 @@ The `ConfigLoggingBundle` logs the Dropwizard configuration to slf4j at INFO lev
 
 To turn it on, add `ConfigLoggingBundle` to the list of registered bundles.
 
-:include-java: com/example/helloworld/HelloWorldApplication.java {entry: "initialize", readMore: true, readMoreLines: 8}
+:include-java: com/example/helloworld/HelloWorldApplication.java {entry: "initialize", readMore: true, readMoreVisibleLines: 8}
 
 Now `HelloWorldApplication` will log something like this on startup:
 
