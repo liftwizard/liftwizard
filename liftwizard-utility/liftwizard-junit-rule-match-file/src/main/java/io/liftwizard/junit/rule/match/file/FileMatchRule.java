@@ -101,7 +101,7 @@ public class FileMatchRule
 
             assertThat(resourceFile.getAbsolutePath(), resourceFile.exists(), is(false));
             this.writeStringToFile(actualString, resourceFile);
-            this.addError(new AssertionError(resourceClassPathLocation));
+            this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
         }
         else
         {
