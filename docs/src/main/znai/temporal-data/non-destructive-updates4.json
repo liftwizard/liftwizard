@@ -1,0 +1,33 @@
+{
+  "version": {
+    "number": 1
+  },
+  "title": "Edited blueprint title",
+  "imgurImage": {
+    "imgurId": "2nd Imgur ID"
+  },
+  "tags": [
+    {
+      "tag": {
+        "category": "moderation",
+        "name": "scheduled for deletion"
+      }
+    },
+    {
+      "tag": {
+        "category": "belt",
+        "name": "balancer"
+      }
+    },
+    {
+      "tag": {
+        "category": "belt",
+        "name": "prioritizer"
+      }
+    }
+  ],
+  "descriptionMarkdown": "Edited Blueprint description markdown",
+  "blueprintString": {
+    "sha": "b11911083a0cf471a5156108389f9899675ccb0c"
+  }
+}

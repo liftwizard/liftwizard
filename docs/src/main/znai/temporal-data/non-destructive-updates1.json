@@ -1,0 +1,18 @@
+{
+  "title": "Blueprint title",
+  "blueprintString": {
+    "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595"
+  },
+  "imgurImage": {
+    "imgurId": "Imgur ID 1"
+  },
+  "descriptionMarkdown": "Blueprint description markdown",
+  "tags": [
+    {
+      "tag": {
+        "category": "moderation",
+        "name": "scheduled for deletion"
+      }
+    }
+  ]
+}

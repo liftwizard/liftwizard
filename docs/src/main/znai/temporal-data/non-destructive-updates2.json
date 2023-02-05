@@ -1,0 +1,51 @@
+{
+  "key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+  "systemFrom": "2001-01-03T23:59:59Z",
+  "systemTo": null,
+  "version": {
+    "number": 1,
+    "systemFrom": "2001-01-03T23:59:59Z",
+    "systemTo": null,
+    "createdOn": "2001-01-03T23:59:59Z",
+    "createdBy": {
+      "userId": "User ID"
+    },
+    "lastUpdatedBy": {
+      "userId": "User ID"
+    }
+  },
+  "title": "Blueprint title",
+  "voteSummary": {
+    "numberOfUpvotes": 0,
+    "systemFrom": "2001-01-03T23:59:59Z",
+    "systemTo": null
+  },
+  "blueprintString": {
+    "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+    "createdOn": "2001-01-02T23:59:59Z",
+    "createdBy": {
+      "userId": "User ID"
+    }
+  },
+  "imgurImage": {
+    "imgurId": "Imgur ID 1",
+    "imgurType": "image/png",
+    "height": 300,
+    "width": 300,
+    "systemFrom": "2001-01-01T23:59:59Z",
+    "systemTo": null
+  },
+  "descriptionMarkdown": "Blueprint description markdown",
+  "tags": [
+    {
+      "systemFrom": "2001-01-03T23:59:59Z",
+      "systemTo": null,
+      "tag": {
+        "category": "moderation",
+        "name": "scheduled for deletion",
+        "systemFrom": "2000-01-01T00:00:00Z",
+        "systemTo": null
+      }
+    }
+  ]
+}
