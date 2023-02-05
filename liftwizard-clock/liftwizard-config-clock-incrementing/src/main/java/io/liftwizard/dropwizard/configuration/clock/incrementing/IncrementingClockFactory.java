@@ -48,9 +48,20 @@ public class IncrementingClockFactory implements ClockFactory
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private io.dropwizard.util.Duration incrementAmount = io.dropwizard.util.Duration.seconds(1);
 
+    private IncrementingClock incrementingClock;
+
     @Nonnull
     @Override
     public Clock createClock()
+    {
+        if (this.incrementingClock == null)
+        {
+            this.incrementingClock = this.createIncrementingClock();
+        }
+        return this.incrementingClock;
+    }
+
+    private IncrementingClock createIncrementingClock()
     {
         ZoneId   zoneId      = ZoneId.of(this.timeZoneName);
         long     nanoseconds = this.incrementAmount.toNanoseconds();

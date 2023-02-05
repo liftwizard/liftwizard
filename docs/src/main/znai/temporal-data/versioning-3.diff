@@ -1,0 +1,89 @@
+ {
+   "key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+-  "systemFrom": "2001-01-04T23:59:59Z",
++  "systemFrom": "2001-01-05T23:59:59Z",
+   "systemTo": null,
+   "version": {
+-    "number": 2,
+-    "systemFrom": "2001-01-04T23:59:59Z",
++    "number": 3,
++    "systemFrom": "2001-01-05T23:59:59Z",
+     "systemTo": null,
+     "createdOn": "2001-01-03T23:59:59Z",
+     "createdBy": {
+       "userId": "User ID"
+     },
+     "lastUpdatedBy": {
+       "userId": "User ID"
+     }
+   },
+   "title": "Edited blueprint title",
+   "voteSummary": {
+     "numberOfUpvotes": 0,
+     "systemFrom": "2001-01-03T23:59:59Z",
+     "systemTo": null
+   },
+   "blueprintString": {
+-    "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+-    "createdOn": "2001-01-02T23:59:59Z",
++    "sha": "b11911083a0cf471a5156108389f9899675ccb0c",
++    "createdOn": "2001-01-03T00:00:00Z",
+     "createdBy": {
+       "userId": "User ID"
+     }
+   },
+   "imgurImage": {
+-    "imgurId": "Imgur ID 1",
+-    "imgurType": "image/png",
+-    "height": 300,
+-    "width": 300,
++    "imgurId": "2nd Imgur ID",
++    "imgurType": "2nd Imgur Type",
++    "height": 200,
++    "width": 200,
+     "systemFrom": "2001-01-01T23:59:59Z",
+     "systemTo": null
+   },
+   "descriptionMarkdown": "Edited Blueprint description markdown",
+   "tags": [
+     {
+       "tagCategory": "belt",
+       "tagName": "balancer",
+       "systemFrom": "2001-01-03T23:59:59Z",
+       "systemTo": null,
+       "tag": {
+         "category": "belt",
+         "name": "balancer",
+         "ordinal": 1,
+         "systemFrom": "2000-01-01T00:00:00Z",
+         "systemTo": null
+       }
++    },
++    {
++      "tagCategory": "belt",
++      "tagName": "prioritizer",
++      "systemFrom": "2001-01-05T23:59:59Z",
++      "systemTo": null,
++      "tag": {
++        "category": "belt",
++        "name": "prioritizer",
++        "ordinal": 2,
++        "systemFrom": "2000-01-01T00:00:00Z",
++        "systemTo": null
++      }
++    },
++    {
++      "tagCategory": "moderation",
++      "tagName": "scheduled for deletion",
++      "systemFrom": "2001-01-05T23:59:59Z",
++      "systemTo": null,
++      "tag": {
++        "category": "moderation",
++        "name": "scheduled for deletion",
++        "ordinal": 18,
++        "systemFrom": "2000-01-01T00:00:00Z",
++        "systemTo": null
++      }
+     }
+   ]
+ }

@@ -1,0 +1,76 @@
+[ ImgurImage |
+imgurId: String // key;
+imgurType: String;
+height: Integer;
+width: Integer;
+systemFrom: TemporalInstant;
+systemTo: TemporalInstant
+]
+
+[ BlueprintString |
+sha: String // key;
+blueprintString: String;
+createdOn: Instant;
+createdById: String // userId
+]
+
+[ Blueprint |
+key: String // id key;
+title: String;
+descriptionMarkdown: String;
+createdById: String // userId;
+lastUpdatedById: String // userId;
+systemFrom: TemporalInstant;
+systemTo: TemporalInstant;
+createdOn: Instant // final
+]
+
+[ BlueprintVoteSummary |
+key: String // id key;
+numberOfUpvotes: Integer;
+systemFrom: TemporalInstant;
+systemTo: TemporalInstant
+]
+
+// BlueprintHasBlueprintVoteSummary
+[Blueprint] blueprint 1..1 -> voteSummary 0..1 [BlueprintVoteSummary]
+
+// BlueprintHasString
+[Blueprint] blueprints 0..* -> blueprintString 1..1 [BlueprintString]
+
+// BlueprintHasImgurImageModMappings
+[Blueprint] blueprint 0..1 -> imgurImage 1..1 [ImgurImage]
+
+[ Tag |
+category: TagCategory // key;
+name: String // key;
+ordinal: Integer;
+systemFrom: TemporalInstant;
+systemTo: TemporalInstant
+]
+
+[ BlueprintTag |
+tagCategory: TagCategory // key;
+tagName: String // key;
+systemFrom: TemporalInstant;
+systemTo: TemporalInstant
+]
+
+// BlueprintHasBlueprintTags
+[Blueprint] blueprint 1..1 +-> tags 0..* [BlueprintTag]
+
+// BlueprintTagHasTag
+[BlueprintTag] blueprintTags 0..* -> tag 1..1 [Tag]
+
+[ BlueprintVersion |
+key: String // key;
+createdById: String // userId;
+lastUpdatedById: String // userId;
+number: Integer // version;
+systemFrom: TemporalInstant;
+systemTo: TemporalInstant;
+createdOn: Instant // final
+]
+
+// BlueprintHasVersion
+[Blueprint] blueprint 1..1 +-> version 1..1 [BlueprintVersion]
