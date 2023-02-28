@@ -25,7 +25,7 @@ where t0.key = '6ed1f638-a63c-3a54-af67-ba494f27bff2'
   and t0.number = 1
 ```
 
-This query returns version 1, which existed for the duration [`2001-01-03`, `2001-01-04`).
+This query returns version 1, which existed for the duration `[2001-01-03, 2001-01-04)`.
 
 :include-table: versioning-1-BlueprintVersion.csv {wide: true, title: "BlueprintVersion", systemFrom: {width: 215, align: "right"}, systemTo: {width: 215, align: "right"}}
 
