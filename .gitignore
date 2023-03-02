@@ -8,6 +8,7 @@ target/
 dependency-reduced-pom.xml
 pom.xml.versionsBackup
 pom.xml.releaseBackup
+**/pom.xml.releaseBackup
 /release.properties
 
 # When using Gradle or Maven with auto-import, you should exclude module files,
