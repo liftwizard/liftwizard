@@ -16,30 +16,168 @@
 
 package io.liftwizard.graphql.scalar.temporal;
 
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import java.util.function.Function;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import graphql.Internal;
+import graphql.language.StringValue;
+import graphql.schema.Coercing;
+import graphql.schema.CoercingParseLiteralException;
+import graphql.schema.CoercingParseValueException;
+import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
 
 /**
  * Derived from https://github.com/graphql-java/graphql-java-extended-scalars but for Instant instead of OffsetDateTime.
  */
 @Internal
-public final class GraphQLTemporalScalar
+public class GraphQLTemporalScalar extends GraphQLScalarType
 {
-    public static final GraphQLScalarType INSTANT_INSTANCE          = getGraphQLScalarType("Instant");
-    public static final GraphQLScalarType TEMPORAL_INSTANT_INSTANCE = getGraphQLScalarType("TemporalInstant");
-    public static final GraphQLScalarType TEMPORAL_RANGE_INSTANCE   = getGraphQLScalarType("TemporalRange");
-
-    private GraphQLTemporalScalar()
+    public GraphQLTemporalScalar(@Nonnull String name)
     {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
+        super(name, "An RFC-3339 compliant " + name + " Scalar", new InstantCoercing());
     }
 
-    private static GraphQLScalarType getGraphQLScalarType(String name)
+    private static class InstantCoercing implements Coercing<Instant, String>
     {
-        return GraphQLScalarType.newScalar()
-                .name(name)
-                .description("A slightly refined version of RFC-3339 compliant " + name + " Scalar")
-                .coercing(InstantCoercing.INSTANCE)
-                .build();
+        @Nonnull
+        private static String typeName(@Nullable Object input)
+        {
+            if (input == null)
+            {
+                return "null";
+            }
+            return input.getClass().getSimpleName();
+        }
+
+        @Nonnull
+        @Override
+        public String serialize(Object input)
+        {
+            Instant instant = InstantCoercing.getInstant(input);
+            try
+            {
+                return DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                        .withZone(ZoneOffset.UTC)
+                        .format(instant);
+            }
+            catch (DateTimeException e)
+            {
+                throw new CoercingSerializeException(
+                        "Unable to turn TemporalAccessor into OffsetDateTime because of : '" + e.getMessage() + "'.", e);
+            }
+        }
+
+        private static Instant getInstant(Object input)
+        {
+            if (input instanceof Instant)
+            {
+                return (Instant) input;
+            }
+
+            if (input instanceof OffsetDateTime)
+            {
+                return ((OffsetDateTime) input).toInstant();
+            }
+
+            if (input instanceof ZonedDateTime)
+            {
+                return ((ZonedDateTime) input).toInstant();
+            }
+
+            if (input instanceof Date)
+            {
+                Date date = (Date) input;
+                return date.toInstant();
+            }
+
+            if (input instanceof String)
+            {
+                String inputString = input.toString();
+                OffsetDateTime parsedOffsetDateTime = InstantCoercing.parseOffsetDateTime(
+                        inputString,
+                        CoercingSerializeException::new);
+                return parsedOffsetDateTime.toInstant();
+            }
+
+            String error = String.format(
+                    "Expected something we can convert to 'java.time.OffsetDateTime' but was '%s'.",
+                    InstantCoercing.typeName(input));
+            throw new CoercingSerializeException(error);
+        }
+
+        @Override
+        public Instant parseValue(Object input)
+        {
+            if (input instanceof Instant)
+            {
+                return (Instant) input;
+            }
+
+            if (input instanceof OffsetDateTime)
+            {
+                return ((OffsetDateTime) input).toInstant();
+            }
+
+            if (input instanceof ZonedDateTime)
+            {
+                return ((ZonedDateTime) input).toOffsetDateTime().toInstant();
+            }
+
+            if (input instanceof String)
+            {
+                String inputString = input.toString();
+                OffsetDateTime parsedOffsetDateTime = InstantCoercing.parseOffsetDateTime(
+                        inputString,
+                        CoercingParseValueException::new);
+                return parsedOffsetDateTime.toInstant();
+            }
+
+            String error = String.format("Expected a 'String' but was '%s'.", InstantCoercing.typeName(input));
+            throw new CoercingParseValueException(error);
+        }
+
+        @Override
+        public Instant parseLiteral(Object input)
+        {
+            if (!(input instanceof StringValue))
+            {
+                String error = String.format(
+                        "Expected AST type 'StringValue' but was '%s'.",
+                        InstantCoercing.typeName(input));
+                throw new CoercingParseLiteralException(error);
+            }
+            return InstantCoercing.parseOffsetDateTime(
+                    ((StringValue) input).getValue(),
+                    CoercingParseLiteralException::new).toInstant();
+        }
+
+        private static OffsetDateTime parseOffsetDateTime(
+                @Nonnull String s,
+                @Nonnull Function<String, RuntimeException> exceptionMaker)
+        {
+            try
+            {
+                return OffsetDateTime.parse(s, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            }
+            catch (DateTimeParseException e)
+            {
+                throw exceptionMaker.apply("Invalid RFC3339 value : '"
+                        + s
+                        + "'. because of : '"
+                        + e.getMessage()
+                        + "'");
+            }
+        }
     }
 }
