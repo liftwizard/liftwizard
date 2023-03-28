@@ -87,7 +87,10 @@ public interface PrioritizedBundle
         }
         Instant end = Instant.now();
         Duration duration = Duration.between(start, end);
-        LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), duration);
+        String durationPrettyString = duration.toString().substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
+        LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
     }
 
     void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception;
