@@ -38,10 +38,7 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject mavenProject;
 
-    @Parameter(
-            property = "definitionsXmlFile",
-            required = true,
-            readonly = true)
+    @Parameter(property = "definitionsXmlFile", required = true)
     private File definitionsXmlFile;
 
     @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}/generated-resources/sql")
