@@ -84,23 +84,22 @@ public class GenerateXSD2BeanMojo
     @Parameter(
             property = "nonGeneratedSourcesDir",
             defaultValue = "${project.build.sourceDirectory}",
-            required = true,
-            readonly = true)
+            required = true)
     private File nonGeneratedSourcesDir;
 
-    @Parameter(property = "destinationPackage", required = true, readonly = true)
+    @Parameter(property = "destinationPackage", required = true)
     private String destinationPackage;
 
-    @Parameter(property = "parserName", required = true, readonly = true)
+    @Parameter(property = "parserName", required = true)
     private String parserName;
 
-    @Parameter(property = "validateAttributes", readonly = true, defaultValue = "true")
+    @Parameter(property = "validateAttributes", defaultValue = "true")
     private boolean validateAttributes;
-    @Parameter(property = "ignoreNonGeneratedAbstractClasses", readonly = true)
+    @Parameter(property = "ignoreNonGeneratedAbstractClasses")
     private boolean ignoreNonGeneratedAbstractClasses;
-    @Parameter(property = "ignorePackageNamingConvention", readonly = true)
+    @Parameter(property = "ignorePackageNamingConvention")
     private boolean ignorePackageNamingConvention;
-    @Parameter(property = "generateTopLevelSubstitutionElements", readonly = true)
+    @Parameter(property = "generateTopLevelSubstitutionElements")
     private boolean generateTopLevelSubstitutionElements;
 
     private void addSourceRoot(@Nonnull File outputDir)
