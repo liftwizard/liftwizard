@@ -1,14 +1,14 @@
-As-of queries over rest are performed by adding an `asOf` query parameter to the URL.
+To confirm that we have not lost any data, we can perform an as-of query. We want to query the state of the blueprint at time 3 (`2001-01-03`), before the non-destructive update.
 
-Our template is `GET /api/blueprint/{blueprintKey}?asOf={asOf}`.
+We `GET` from `/api/blueprint/{blueprintKey}?asOf={asOf}`.
 
-We created a blueprint with key `6ed1f638-a63c-3a54-af67-ba494f27bff2` at time 3: `2001-01-03` and edited it at time 4: `2001-01-04`. We can query as-of any time in the range `[2001-01-03, 2001-01-04)`. Let's use the beginning of the range: `2001-01-03`.
+We created a blueprint with key `6ed1f638-a63c-3a54-af67-ba494f27bff2` at time 3 (`2001-01-03`) and edited it at time 4 (`2001-01-04`). We can query as-of any time in the range `[2001-01-03, 2001-01-04)`. We'll use the beginning of the range: `2001-01-03`.
 
 Plugging these values into the template, we GET `/api/blueprint/6ed1f638-a63c-3a54-af67-ba494f27bff2?asOf=2001-01-03T23:59:59Z`
 
 :include-file: as-of-queries-2-getBlueprintAsOf.diff {title: "GET /api/blueprint/{blueprintKey}?asOf=2001-01-03T23:59:59Z", commentsType: "inline"}
 
-The response we get from `/api/blueprint/{blueprintKey}?asOf=2001-01-03T23:59:59Z` is identical to the response we would have got from `/api/blueprint/{blueprintKey}` had we run the query at time 3: `2001-01-03`. This makes sense!
+The response we get from `/api/blueprint/{blueprintKey}?asOf=2001-01-03T23:59:59Z` is nearly identical to the response we would have got from `/api/blueprint/{blueprintKey}` had we run the query at time 3: `2001-01-03`. This makes sense!
 
 There's a small difference in the data. Some of the `systemTo` values that used to be `null` are now time 4: `2001-01-04`. This illustrates an important rule of temporal data.
 

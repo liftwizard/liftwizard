@@ -6,7 +6,7 @@ Note: This section is language and framework agnostic. If you’re interested in
 
 In an application with temporal data storage, data is stored along with timestamps. Here are some key features of temporal support:
 
-[Non-destructive edits](temporal-data/non-destructive-updates): updates and deletes **won't lose any information**. Old data is phased out with a timestamp, and new data is phased in at the same timestamp.
+[Non-destructive edits](temporal-data/non-destructive-updates): Updates and deletes **won't lose any information**. Old data is phased out with a timestamp, and new data is phased in at the same timestamp.
 
 [As-of queries](temporal-data/as-of-queries): Retrieve data as it existed at a specific **point in time**.
 
