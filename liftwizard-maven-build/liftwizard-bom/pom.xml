@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-maven-build</artifactId>
-        <version>0.36.0</version>
+        <version>0.37.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -34,56 +34,56 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-application</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-example</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <!--region liftwizard-auth-->
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-auth-filter</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-auth-filter-firebase</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-auth-filter-header</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-auth-filter-impersonation</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-auth-filter</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-firebase-dependencies</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-principal-firebase</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -91,61 +91,61 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-cors</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-ddl-executor</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-dynamic-bundles</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-environment-config</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-graphql</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-h2</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-healthcheck-common-pool</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-liquibase-migration</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-prioritized-api</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-system-properties</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -153,37 +153,37 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-clock</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-clock-incrementing</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-clock</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-clock-fixed</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-clock-incrementing</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-clock-system</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -191,67 +191,67 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-cors</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-data-source</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-ddl-executor</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-enabled</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-executor-service</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-graphql</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-h2</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-healthcheck-common-pool</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-liquibase-migration</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-system-properties</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-configuration-factory-json</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -259,19 +259,19 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-generator-reladomo-code-plugin</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-generator-reladomo-database-plugin</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-generator-xsd2bean-plugin</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -279,61 +279,61 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-data-fetcher</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-data-fetcher-async</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-exception</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-finder-fetcher</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-instrumentation</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-instrumentation-logging</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-instrumentation-metrics</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-operation-fetcher</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-scalar-temporal</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-reladomo-meta</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -341,25 +341,25 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-object-mapper</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-object-mapper</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-jackson-config</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-jackson-pretty-printer</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -367,133 +367,133 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-ansi-color-strip</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-logging-config</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-logging-http</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-logging-uncaught-exception-handler</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-buffered</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-config</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-filter-janino</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-filter-requesturl</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-http</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logstash-encoder</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logstash-console</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logstash-file</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-logzio</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-metrics-reporter-log4j</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-metrics-reporter-logback</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-metrics-reporter-slf4j</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-buffered-appender</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-mdc-closeable</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-p6spy</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-uncaught-exception-handler</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-metrics-reporter-log4j</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-metrics-reporter-slf4j</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -501,145 +501,145 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-connection-manager-holder</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-reladomo</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-connection-manager</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-reladomo</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-connection-manager</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-connection-manager-h2-memory</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-connection-manager-heroku</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-connection-manager-holder</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-ddl-executor</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-healthcheck-reladomo</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-maven-reladomo-logger</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-named-data-source-factory</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-graphql-data-fetcher</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-graphql-deep-fetcher</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-graphql-operation</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-operation-compiler</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-operation-grammar</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-serialize</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-simulated-sequence</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-simulated-sequence-ddls</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-test-resource-writer</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-test-rule</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-timestamp</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-task-reladomo-clear-cache</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -647,43 +647,43 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-jetty-admin-login-service</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-servlet-logging</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-servlet-logging-log4j-map</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-servlet-logging-logstash-encoder</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-servlet-logging-mdc</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-servlet-logging-opentracing</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-servlet-logging-typesafe</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -691,25 +691,25 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-healthcheck-common-pool</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-log-marker</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-match-file</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-match-json</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
@@ -717,25 +717,25 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-bundle-uuid</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-uuid-seed</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-uuid-system</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-uuid</artifactId>
-                <version>0.36.0</version>
+                <version>0.37.0-SNAPSHOT</version>
             </dependency>
             <!--endregion-->
 
