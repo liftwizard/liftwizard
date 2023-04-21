@@ -68,7 +68,10 @@ public interface PrioritizedBundle
         }
         Instant end = Instant.now();
         Duration duration = Duration.between(start, end);
-        LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), duration);
+        String durationPrettyString = duration.toString().substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
+        LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
     }
 
     default void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap)
