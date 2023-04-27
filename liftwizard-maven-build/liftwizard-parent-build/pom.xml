@@ -396,6 +396,11 @@
                     </configuration>
                 </plugin>
 
+                <plugin>
+                    <artifactId>maven-wrapper-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
