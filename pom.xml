@@ -37,6 +37,7 @@
         <module>liftwizard-clock</module>
         <module>liftwizard-config</module>
         <module>liftwizard-example</module>
+        <module>liftwizard-example-resources</module>
         <module>liftwizard-generator-plugins</module>
         <module>liftwizard-graphql</module>
         <module>liftwizard-jackson</module>

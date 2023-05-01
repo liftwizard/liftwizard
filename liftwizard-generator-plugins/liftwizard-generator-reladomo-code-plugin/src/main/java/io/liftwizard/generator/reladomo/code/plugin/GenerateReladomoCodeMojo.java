@@ -17,6 +17,20 @@
 package io.liftwizard.generator.reladomo.code.plugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import com.gs.fw.common.mithra.generator.CoreMithraGenerator;
 import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
@@ -26,19 +40,27 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mojo(
         name = "generate-reladomo-pojos",
         defaultPhase = LifecyclePhase.GENERATE_SOURCES,
         threadSafe = true,
         requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class GenerateReladomoCodeMojo extends AbstractMojo
+public class GenerateReladomoCodeMojo
+        extends AbstractMojo
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoCodeMojo.class);
+
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject mavenProject;
 
-    @Parameter(property = "definitionsXmlFile")
-    private File definitionsXmlFile;
+    @Parameter(property = "definitionsAndClassListDirectory", defaultValue = "reladomo")
+    private String definitionsAndClassListDirectory;
+
+    @Parameter(property = "classListFileName", defaultValue = "ReladomoClassList.xml")
+    private String classListFileName;
 
     @Parameter(property = "generatedDir", defaultValue = "${project.build.directory}/generated-sources/reladomo")
     private File generatedDir;
@@ -61,16 +83,87 @@ public class GenerateReladomoCodeMojo extends AbstractMojo
             this.generatedDir.mkdirs();
         }
 
+        Path tempFile = this.getTempFile();
+        if (!tempFile.toFile().exists())
+        {
+            throw new IllegalStateException("Could not find " + tempFile);
+        }
+
         CoreMithraGenerator coreGenerator = new CoreMithraGenerator();
-        coreGenerator.setXml(this.definitionsXmlFile.getAbsolutePath());
+        coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
+        coreGenerator.setXml(tempFile.toString());
         coreGenerator.setGeneratedDir(this.generatedDir.getAbsolutePath());
         coreGenerator.setNonGeneratedDir(this.nonGeneratedDir.getAbsolutePath());
         coreGenerator.setGenerateConcreteClasses(this.generateConcreteClasses);
         coreGenerator.setWarnAboutConcreteClasses(this.warnAboutConcreteClasses);
         coreGenerator.setGenerateEcListMethod(this.generateEcListMethod);
-        coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
         coreGenerator.execute();
 
         this.mavenProject.addCompileSourceRoot(this.generatedDir.getAbsolutePath());
+    }
+
+    @Nonnull
+    private Path getTempFile()
+    {
+        if (this.definitionsAndClassListDirectory.startsWith("/"))
+        {
+            throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
+        }
+
+        try
+        {
+            URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
+            Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
+            URI uri = resource.toURI();
+            try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Map.of()))
+            {
+                Path from = fileSystem.getPath("/");
+                Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
+
+                this.copyDirectory(from, to);
+                return to
+                        .resolve(this.definitionsAndClassListDirectory)
+                        .resolve(this.classListFileName);
+            }
+        }
+        catch (URISyntaxException | IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void copyDirectory(Path from, Path to)
+            throws IOException
+    {
+        try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory)))
+        {
+            sources.forEach(src -> GenerateReladomoCodeMojo.handleOneFile(from, src, to));
+        }
+    }
+
+    // Based on https://stackoverflow.com/a/29659925/
+    private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target)
+    {
+        Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
+        try
+        {
+            if (Files.isDirectory(fileSystemSource))
+            {
+                if (Files.notExists(copyDestination))
+                {
+                    LOGGER.info("Creating directory {}", copyDestination);
+                    Files.createDirectories(copyDestination);
+                }
+            }
+            else
+            {
+                LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
+                Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Failed target unzip file.", e);
+        }
     }
 }
