@@ -17,6 +17,20 @@
 package io.liftwizard.generator.reladomo.database.plugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import com.gs.fw.common.mithra.generator.dbgenerator.CoreMithraDbDefinitionGenerator;
 import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
@@ -27,19 +41,27 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mojo(
         name = "generate-reladomo-database",
         defaultPhase = LifecyclePhase.GENERATE_SOURCES,
         threadSafe = true,
         requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class GenerateReladomoDatabaseMojo extends AbstractMojo
+public class GenerateReladomoDatabaseMojo
+        extends AbstractMojo
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoDatabaseMojo.class);
+
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject mavenProject;
 
-    @Parameter(property = "definitionsXmlFile", required = true)
-    private File definitionsXmlFile;
+    @Parameter(property = "definitionsAndClassListDirectory", defaultValue = "reladomo")
+    private String definitionsAndClassListDirectory;
+
+    @Parameter(property = "classListFileName", defaultValue = "ReladomoClassList.xml")
+    private String classListFileName;
 
     @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}/generated-resources/sql")
     private File outputDirectory;
@@ -68,9 +90,15 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo
             this.outputDirectory.mkdirs();
         }
 
+        Path tempFile = this.getTempFile();
+        if (!tempFile.toFile().exists())
+        {
+            throw new IllegalStateException("Could not find " + tempFile);
+        }
+
         CoreMithraDbDefinitionGenerator coreGenerator = new CoreMithraDbDefinitionGenerator();
         coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
-        coreGenerator.setXml(this.definitionsXmlFile.getAbsolutePath());
+        coreGenerator.setXml(tempFile.toString());
         coreGenerator.setGeneratedDir(this.outputDirectory.getAbsolutePath());
         coreGenerator.setDatabaseType(this.databaseType);
         coreGenerator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
@@ -86,5 +114,70 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo
         // TODO: Should be based on the output path
         resource.setTargetPath("sql");
         this.mavenProject.addResource(resource);
+    }
+
+    @Nonnull
+    private Path getTempFile()
+    {
+        if (this.definitionsAndClassListDirectory.startsWith("/"))
+        {
+            throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
+        }
+
+        try
+        {
+            URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
+            Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
+            URI uri = resource.toURI();
+            try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Map.of()))
+            {
+                Path from = fileSystem.getPath("/");
+                Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
+
+                this.copyDirectory(from, to);
+                return to
+                        .resolve(this.definitionsAndClassListDirectory)
+                        .resolve(this.classListFileName);
+            }
+        }
+        catch (URISyntaxException | IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void copyDirectory(Path from, Path to)
+            throws IOException
+    {
+        try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory)))
+        {
+            sources.forEach(src -> GenerateReladomoDatabaseMojo.handleOneFile(from, src, to));
+        }
+    }
+
+    // Based on https://stackoverflow.com/a/29659925/
+    private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target)
+    {
+        Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
+        try
+        {
+            if (Files.isDirectory(fileSystemSource))
+            {
+                if (Files.notExists(copyDestination))
+                {
+                    LOGGER.info("Creating directory {}", copyDestination);
+                    Files.createDirectories(copyDestination);
+                }
+            }
+            else
+            {
+                LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
+                Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Failed target unzip file.", e);
+        }
     }
 }

@@ -35,9 +35,7 @@
                 <artifactId>liftwizard-generator-reladomo-database-plugin</artifactId>
                 <version>${project.version}</version>
                 <configuration>
-                    <definitionsXmlFile>
-                        ${project.basedir}/../liftwizard-reladomo-simulated-sequence/src/main/reladomo/ObjectSequenceClassList.xml
-                    </definitionsXmlFile>
+                    <classListFileName>ObjectSequenceClassList.xml</classListFileName>
                 </configuration>
                 <executions>
                     <execution>
@@ -48,6 +46,12 @@
                     </execution>
                 </executions>
                 <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>liftwizard-reladomo-simulated-sequence</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+
                     <dependency>
                         <groupId>com.goldmansachs.reladomo</groupId>
                         <artifactId>reladomogen</artifactId>
