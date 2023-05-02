@@ -15,13 +15,11 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-reladomo</artifactId>
-        <version>0.37.0-SNAPSHOT</version>
+        <version>0.37.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -71,17 +69,9 @@
                             <target>
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <taskdef
-                                        name="gen-reladomo"
-                                        classpath="plugin_classpath"
-                                        classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
+                                <taskdef name="gen-reladomo" classpath="plugin_classpath" classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
 
-                                <gen-reladomo
-                                        xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml"
-                                        generateEcListMethod="true"
-                                        generatedDir="${project.build.directory}/generated-sources/reladomo"
-                                        nonGeneratedDir="${project.build.sourceDirectory}"
-                                        generateConcreteClasses="true" />
+                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml" generateEcListMethod="true" generatedDir="${project.build.directory}/generated-sources/reladomo" nonGeneratedDir="${project.build.sourceDirectory}" generateConcreteClasses="true" />
                             </target>
                         </configuration>
                     </execution>
