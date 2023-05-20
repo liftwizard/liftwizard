@@ -16,13 +16,14 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.url;
 
+import java.util.List;
+
 import javax.validation.Validator;
 
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -57,20 +58,21 @@ public class UrlFilterFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(RequestUrlFilterFactory.class));
     }
 
     @Test
-    public void filterUrl() throws Exception
+    public void filterUrl()
+            throws Exception
     {
         RequestUrlFilterFactory urlFilterFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
-        Filter<IAccessEvent>    filter           = urlFilterFactory.build();
-        IAccessEvent            bannedEvent      = new FakeAccessEvent("banned");
-        IAccessEvent            allowedEvent     = new FakeAccessEvent("allowed");
+        Filter<IAccessEvent> filter       = urlFilterFactory.build();
+        IAccessEvent         bannedEvent  = new FakeAccessEvent("banned");
+        IAccessEvent         allowedEvent = new FakeAccessEvent("allowed");
 
         assertThat(urlFilterFactory, instanceOf(RequestUrlFilterFactory.class));
         assertThat(filter.decide(bannedEvent), is(FilterReply.DENY));

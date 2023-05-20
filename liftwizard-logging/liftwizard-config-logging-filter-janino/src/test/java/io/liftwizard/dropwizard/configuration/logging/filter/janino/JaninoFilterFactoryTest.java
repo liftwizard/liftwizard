@@ -16,6 +16,8 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.janino;
 
+import java.util.List;
+
 import javax.validation.Validator;
 
 import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
@@ -24,7 +26,6 @@ import ch.qos.logback.core.boolex.EventEvaluator;
 import ch.qos.logback.core.filter.EvaluatorFilter;
 import ch.qos.logback.core.filter.Filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -58,13 +59,14 @@ public class JaninoFilterFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(JaninoFilterFactory.class));
     }
 
     @Test
-    public void filterJanino() throws Exception
+    public void filterJanino()
+            throws Exception
     {
         JaninoFilterFactory janinoFilterFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),

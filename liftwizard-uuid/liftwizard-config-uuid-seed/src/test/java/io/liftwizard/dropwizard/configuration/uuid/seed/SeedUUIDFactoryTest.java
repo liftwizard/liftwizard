@@ -16,13 +16,13 @@
 
 package io.liftwizard.dropwizard.configuration.uuid.seed;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -58,13 +58,14 @@ public class SeedUUIDFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(SeedUUIDSupplierFactory.class));
     }
 
     @Test
-    public void seedUUID() throws Exception
+    public void seedUUID()
+            throws Exception
     {
         UUIDSupplierFactory uuidFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
