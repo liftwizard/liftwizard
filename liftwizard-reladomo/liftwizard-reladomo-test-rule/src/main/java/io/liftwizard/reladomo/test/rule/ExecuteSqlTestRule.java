@@ -16,6 +16,7 @@
 
 package io.liftwizard.reladomo.test.rule;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -27,13 +28,20 @@ import io.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.reflections.Reflections;
 
 public class ExecuteSqlTestRule
         implements TestRule
 {
-    private String ddlLocationPattern = ".*\\.ddl";
-    private String idxLocationPattern = ".*\\.idx";
-    private String fkLocationPattern  = ".*\\.fk";
+    /**
+     *  The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
+     */
+    //language=RegExp
+    private String ddlLocationPattern = "^(?!META-INF\\.).*\\.ddl$";
+    //language=RegExp
+    private String idxLocationPattern = "^(?!META-INF\\.).*\\.idx$";
+    //language=RegExp
+    private String fkLocationPattern  = "^(?!META-INF\\.).*\\.fk$";
 
     @Nonnull
     private Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager
