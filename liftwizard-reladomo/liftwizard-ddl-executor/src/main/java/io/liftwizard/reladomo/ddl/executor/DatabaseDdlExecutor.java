@@ -36,6 +36,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,8 +60,14 @@ public final class DatabaseDdlExecutor
                 .withAll(ClasspathHelper.forJavaClassPath())
                 // The "usual" classpath appears here
                 .withAll(ClasspathHelper.forClassLoader());
+        FilterBuilder filterBuilder = new FilterBuilder()
+                .include(ddlLocationPattern)
+                .include(idxLocationPattern)
+                .include(fkLocationPattern)
+                .exclude("^META-INF\\.");
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .setScanners(new ResourcesScanner())
+                .filterInputsBy(filterBuilder)
                 .setUrls(urls);
         Reflections        reflections  = new Reflections(configurationBuilder);
         MutableSet<String> ddlLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(ddlLocationPattern)));
