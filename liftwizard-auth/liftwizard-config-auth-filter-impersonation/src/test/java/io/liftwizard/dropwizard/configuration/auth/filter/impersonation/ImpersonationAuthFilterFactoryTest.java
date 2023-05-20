@@ -17,11 +17,11 @@
 package io.liftwizard.dropwizard.configuration.auth.filter.impersonation;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.configuration.JsonConfigurationFactory;
@@ -55,13 +55,14 @@ public class ImpersonationAuthFilterFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(ImpersonationAuthFilterFactory.class));
     }
 
     @Test
-    public void impersonationAuthFilter() throws Exception
+    public void impersonationAuthFilter()
+            throws Exception
     {
         AuthFilterFactory authFilterFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),

@@ -19,11 +19,11 @@ package io.liftwizard.dropwizard.configuration.clock.fixed;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.List;
 
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -56,13 +56,14 @@ public class FixedClockFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(FixedClockFactory.class));
     }
 
     @Test
-    public void fixedClock() throws Exception
+    public void fixedClock()
+            throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
         assertThat(clockFactory, instanceOf(FixedClockFactory.class));

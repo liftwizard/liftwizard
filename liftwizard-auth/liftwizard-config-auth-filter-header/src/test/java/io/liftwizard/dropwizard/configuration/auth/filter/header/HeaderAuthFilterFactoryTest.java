@@ -19,11 +19,11 @@ package io.liftwizard.dropwizard.configuration.auth.filter.header;
 import java.io.File;
 import java.net.URL;
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.configuration.JsonConfigurationFactory;
@@ -56,8 +56,8 @@ public class HeaderAuthFilterFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(HeaderAuthFilterFactory.class));
     }
 

@@ -16,10 +16,11 @@
 
 package io.liftwizard.dropwizard.configuration.clock.system;
 
+import java.util.List;
+
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -51,13 +52,14 @@ public class SystemClockFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(SystemClockFactory.class));
     }
 
     @Test
-    public void systemClock() throws Exception
+    public void systemClock()
+            throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
         assertThat(clockFactory, instanceOf(SystemClockFactory.class));

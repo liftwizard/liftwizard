@@ -19,11 +19,11 @@ package io.liftwizard.dropwizard.configuration.clock.incrementing;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.List;
 
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -56,13 +56,14 @@ public class IncrementingClockFactoryTest
     public void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        DiscoverableSubtypeResolver discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        ImmutableList<Class<?>>     discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes, hasItem(IncrementingClockFactory.class));
     }
 
     @Test
-    public void incrementingClock() throws Exception
+    public void incrementingClock()
+            throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
         assertThat(clockFactory, instanceOf(IncrementingClockFactory.class));
