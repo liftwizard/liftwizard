@@ -154,7 +154,7 @@
 
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                     <executions>
 
                         <execution>
@@ -165,7 +165,7 @@
                             <configuration>
                                 <failOnWarning>true</failOnWarning>
                                 <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
-                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.5.0 support Java 17. -->
+                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.6.0 support Java 17. -->
                                 <ignoredNonTestScopedDependencies>
                                     <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
                                 </ignoredNonTestScopedDependencies>
