@@ -97,7 +97,9 @@ public class JerseyHttpLoggingBundle
                 factory.isLogResponses(),
                 factory.isLogResponseBodies(),
                 factory.isLogRequestHeaderNames(),
+                factory.isLogExcludedRequestHeaderNames(),
                 factory.isLogResponseHeaderNames(),
+                factory.isLogExcludedResponseHeaderNames(),
                 Lists.immutable.withAll(factory.getIncludedRequestHeaders()),
                 Lists.immutable.withAll(factory.getIncludedResponseHeaders()),
                 maxEntitySize);

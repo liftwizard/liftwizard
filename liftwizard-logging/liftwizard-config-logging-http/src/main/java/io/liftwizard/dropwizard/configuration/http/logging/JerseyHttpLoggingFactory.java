@@ -37,7 +37,9 @@ public class JerseyHttpLoggingFactory
     private boolean logResponses           = true;
     private boolean logResponseBodies      = true;
     private boolean logRequestHeaderNames  = true;
+    private boolean logExcludedRequestHeaderNames;
     private boolean logResponseHeaderNames = true;
+    private boolean logExcludedResponseHeaderNames;
 
     @NotNull
     private List<String> includedRequestHeaders = List.of(
@@ -128,6 +130,18 @@ public class JerseyHttpLoggingFactory
     }
 
     @JsonProperty
+    public boolean isLogExcludedRequestHeaderNames()
+    {
+        return this.logExcludedRequestHeaderNames;
+    }
+
+    @JsonProperty
+    public void setLogExcludedRequestHeaderNames(boolean logExcludedRequestHeaderNames)
+    {
+        this.logExcludedRequestHeaderNames = logExcludedRequestHeaderNames;
+    }
+
+    @JsonProperty
     public boolean isLogResponseHeaderNames()
     {
         return this.logResponseHeaderNames;
@@ -137,6 +151,18 @@ public class JerseyHttpLoggingFactory
     public void setLogResponseHeaderNames(boolean logResponseHeaderNames)
     {
         this.logResponseHeaderNames = logResponseHeaderNames;
+    }
+
+    @JsonProperty
+    public boolean isLogExcludedResponseHeaderNames()
+    {
+        return this.logExcludedResponseHeaderNames;
+    }
+
+    @JsonProperty
+    public void setLogExcludedResponseHeaderNames(boolean logExcludedResponseHeaderNames)
+    {
+        this.logExcludedResponseHeaderNames = logExcludedResponseHeaderNames;
     }
 
     @JsonProperty
