@@ -30,9 +30,9 @@ public class LoggingConfig
     private final boolean               logResponses;
     private final boolean               logResponseBodies;
     private final boolean               logRequestHeaderNames;
-    private final boolean               logExcludedRequestHeaderNames = false;
+    private final boolean               logExcludedRequestHeaderNames;
     private final boolean               logResponseHeaderNames;
-    private final boolean               logExcludedResponseHeaderNames = false;
+    private final boolean               logExcludedResponseHeaderNames;
     private final ImmutableList<String> includedRequestHeaders;
     private final ImmutableList<String> includedResponseHeaders;
     private final int                   maxEntitySize;
@@ -43,20 +43,24 @@ public class LoggingConfig
             boolean logResponses,
             boolean logResponseBodies,
             boolean logRequestHeaderNames,
+            boolean logExcludedRequestHeaderNames,
             boolean logResponseHeaderNames,
+            boolean logExcludedResponseHeaderNames,
             ImmutableList<String> includedRequestHeaders,
             ImmutableList<String> includedResponseHeaders,
             int maxEntitySize)
     {
-        this.logRequests             = logRequests;
-        this.logRequestBodies        = logRequestBodies;
-        this.logResponses            = logResponses;
-        this.logResponseBodies       = logResponseBodies;
-        this.logRequestHeaderNames   = logRequestHeaderNames;
-        this.logResponseHeaderNames  = logResponseHeaderNames;
-        this.includedRequestHeaders  = Objects.requireNonNull(includedRequestHeaders);
-        this.includedResponseHeaders = Objects.requireNonNull(includedResponseHeaders);
-        this.maxEntitySize           = maxEntitySize;
+        this.logRequests                    = logRequests;
+        this.logRequestBodies               = logRequestBodies;
+        this.logResponses                   = logResponses;
+        this.logResponseBodies              = logResponseBodies;
+        this.logRequestHeaderNames          = logRequestHeaderNames;
+        this.logExcludedRequestHeaderNames  = logExcludedRequestHeaderNames;
+        this.logResponseHeaderNames         = logResponseHeaderNames;
+        this.logExcludedResponseHeaderNames = logExcludedResponseHeaderNames;
+        this.includedRequestHeaders         = Objects.requireNonNull(includedRequestHeaders);
+        this.includedResponseHeaders        = Objects.requireNonNull(includedResponseHeaders);
+        this.maxEntitySize                  = maxEntitySize;
     }
 
     public boolean isLogRequests()
