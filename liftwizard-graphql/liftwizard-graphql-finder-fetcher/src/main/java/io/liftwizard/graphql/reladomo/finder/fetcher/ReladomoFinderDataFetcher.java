@@ -19,12 +19,15 @@ package io.liftwizard.graphql.reladomo.finder.fetcher;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.gs.fw.common.mithra.finder.AbstractRelatedFinder;
 import com.gs.fw.common.mithra.finder.Operation;
+import com.gs.fw.common.mithra.finder.orderby.OrderBy;
 import com.gs.fw.finder.DomainList;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -32,6 +35,7 @@ import io.liftwizard.graphql.exception.LiftwizardGraphQLException;
 import io.liftwizard.reladomo.graphql.deep.fetcher.GraphQLDeepFetcher;
 import io.liftwizard.reladomo.graphql.operation.GraphQLQueryToOperationConverter;
 import io.liftwizard.reladomo.graphql.operation.LiftwizardGraphQLContextException;
+import io.liftwizard.reladomo.graphql.orderby.GraphQLQueryToOrderByConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +75,38 @@ public class ReladomoFinderDataFetcher<T>
         }
         catch (LiftwizardGraphQLContextException e)
         {
+            throw new LiftwizardGraphQLException(e.getMessage(), e.getContext(), e);
+        }
+    }
+
+    public Optional<OrderBy> getOrderBys(List<Map<String, ?>> inputOrderBys)
+    {
+        if (inputOrderBys == null)
+        {
+            return Optional.empty();
+        }
+        List<OrderBy>        orderBys         = inputOrderBys
+                .stream()
+                .map(this::getOrderBy)
+                .map(orderBy -> orderBy.orElse(null))
+                .collect(Collectors.toList());
+        return orderBys.stream().reduce(OrderBy::and);
+    }
+
+    private Optional<OrderBy> getOrderBy(Map<String, ?> inputOrderBy)
+    {
+        Map<String, ?> inputAttributes       = (Map<String, ?>) inputOrderBy.get("attribute");
+        String         inputDirection        = (String) inputOrderBy.get("direction");
+        String         nonNullInputDirection = inputDirection == null ? "ASCENDING" : inputDirection;
+
+        try
+        {
+            var converter = new GraphQLQueryToOrderByConverter();
+            return converter.convert(this.finder, inputAttributes, nonNullInputDirection);
+        }
+        catch (LiftwizardGraphQLContextException e)
+        {
+            LOGGER.error("Error converting order by", e);
             throw new LiftwizardGraphQLException(e.getMessage(), e.getContext(), e);
         }
     }
