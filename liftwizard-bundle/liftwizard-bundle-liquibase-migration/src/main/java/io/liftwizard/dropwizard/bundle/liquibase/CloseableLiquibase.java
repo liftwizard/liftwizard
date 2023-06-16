@@ -19,6 +19,7 @@ package io.liftwizard.dropwizard.bundle.liquibase;
 import io.dropwizard.db.ManagedDataSource;
 import liquibase.Liquibase;
 import liquibase.database.Database;
+import liquibase.exception.LiquibaseException;
 import liquibase.resource.ResourceAccessor;
 
 public class CloseableLiquibase
@@ -34,7 +35,7 @@ public class CloseableLiquibase
 
     @Override
     public void close()
-            throws Exception
+            throws LiquibaseException
     {
         try
         {
@@ -42,7 +43,14 @@ public class CloseableLiquibase
         }
         finally
         {
-            this.dataSource.stop();
+            try
+            {
+                this.dataSource.stop();
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
