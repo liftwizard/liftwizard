@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.ImmutableMap;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.system.SystemClockFactory;

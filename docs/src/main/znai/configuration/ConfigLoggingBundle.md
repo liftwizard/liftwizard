@@ -31,7 +31,8 @@ Note that the `metrics` section at the end was not specified in `test-example.js
 
 This output can be helpful for fleshing out the configuration file with default options to make it easier to edit. For example, it's much easier to flip a boolean flag from `false` to `true` than to first figure out where in the configuration file it belongs and the exact spelling of its key.
 
-:include-java: io/dropwizard/Configuration.java {title: "io.dropwizard.Configuration", entry: "getMetricsFactory"}
+:include-java: io/dropwizard/core/Configuration.java {title: "io.dropwizard.core.
+Configuration", entry: "getMetricsFactory"}
 
 The `ConfigLoggingBundle` also logs the "default" configuration at the `DEBUG` level. It does this by instantiating a new copy of the configuration class using the default no-arg constructor, serializing it to json, and logging it. The default configuration output can be useful for finding redundant configuration to remove.
 

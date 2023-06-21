@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 import com.google.auto.service.AutoService;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.connectionmanager.ConnectionManagerProvider;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;

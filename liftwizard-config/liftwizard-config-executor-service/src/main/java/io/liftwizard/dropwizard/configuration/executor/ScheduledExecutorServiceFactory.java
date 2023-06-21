@@ -23,9 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.google.auto.service.AutoService;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.jackson.Discoverable;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.setup.Environment;
 
 @JsonTypeInfo(use = Id.NAME, property = "type", defaultImpl = DefaultScheduledExecutorServiceFactory.class)
 @AutoService(Discoverable.class)
