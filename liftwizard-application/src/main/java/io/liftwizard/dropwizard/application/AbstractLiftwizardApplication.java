@@ -22,8 +22,6 @@ import javax.annotation.Nonnull;
 
 import ch.qos.logback.classic.Level;
 import com.gs.reladomo.serial.jackson.JacksonReladomoModule;
-import io.dropwizard.bundles.redirect.HttpsRedirect;
-import io.dropwizard.bundles.redirect.RedirectBundle;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
@@ -37,7 +35,6 @@ import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFa
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
-import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
 public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider>
         extends Application<T>
@@ -85,12 +82,8 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
 
     protected void initializeBundles(@Nonnull Bootstrap<T> bootstrap)
     {
-        HttpsRedirect  httpsRedirect  = new HttpsRedirect();
-        RedirectBundle redirectBundle = new RedirectBundle(httpsRedirect);
-        bootstrap.addBundle(redirectBundle);
         bootstrap.addBundle(new UUIDBundle());
         bootstrap.addBundle(new ClockBundle());
-        bootstrap.addBundle(new MetricsUIBundle("/dashboard/*"));
     }
 
     protected void initializeDynamicBundles(@Nonnull Bootstrap<T> bootstrap)
