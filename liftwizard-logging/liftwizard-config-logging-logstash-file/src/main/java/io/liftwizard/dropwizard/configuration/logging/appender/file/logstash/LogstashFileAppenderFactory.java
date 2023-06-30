@@ -41,14 +41,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
-import io.dropwizard.logging.AbstractAppenderFactory;
-import io.dropwizard.logging.AppenderFactory;
-import io.dropwizard.logging.async.AsyncAppenderFactory;
-import io.dropwizard.logging.filter.FilterFactory;
-import io.dropwizard.logging.filter.LevelFilterFactory;
-import io.dropwizard.logging.layout.LayoutFactory;
-import io.dropwizard.util.Size;
-import io.dropwizard.validation.MinSize;
+import io.dropwizard.logging.common.AbstractAppenderFactory;
+import io.dropwizard.logging.common.AppenderFactory;
+import io.dropwizard.logging.common.async.AsyncAppenderFactory;
+import io.dropwizard.logging.common.filter.FilterFactory;
+import io.dropwizard.logging.common.filter.LevelFilterFactory;
+import io.dropwizard.logging.common.layout.LayoutFactory;
+import io.dropwizard.util.DataSize;
+import io.dropwizard.validation.MinDataSize;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashEncoderFactory;
 
@@ -73,9 +73,9 @@ public class LogstashFileAppenderFactory
     private @Min(0) int archivedFileCount = 5;
 
     @Nullable
-    private Size maxFileSize;
+    private DataSize maxFileSize;
 
-    private @MinSize(1) Size bufferSize = Size.bytes(FileAppender.DEFAULT_BUFFER_SIZE);
+    private @MinDataSize(1) DataSize bufferSize = DataSize.bytes(FileAppender.DEFAULT_BUFFER_SIZE);
 
     private boolean immediateFlush = true;
 
@@ -134,25 +134,25 @@ public class LogstashFileAppenderFactory
 
     @JsonProperty
     @Nullable
-    public Size getMaxFileSize()
+    public DataSize getMaxFileSize()
     {
         return this.maxFileSize;
     }
 
     @JsonProperty
-    public void setMaxFileSize(Size maxFileSize)
+    public void setMaxFileSize(DataSize maxFileSize)
     {
         this.maxFileSize = maxFileSize;
     }
 
     @JsonProperty
-    public Size getBufferSize()
+    public DataSize getBufferSize()
     {
         return this.bufferSize;
     }
 
     @JsonProperty
-    public void setBufferSize(Size bufferSize)
+    public void setBufferSize(DataSize bufferSize)
     {
         this.bufferSize = bufferSize;
     }

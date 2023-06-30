@@ -27,7 +27,11 @@ public class CloseableLiquibase
 {
     private final ManagedDataSource dataSource;
 
-    public CloseableLiquibase(String changeLogFile, ResourceAccessor resourceAccessor, Database database, ManagedDataSource dataSource)
+    public CloseableLiquibase(
+            String changeLogFile,
+            ResourceAccessor resourceAccessor,
+            Database database,
+            ManagedDataSource dataSource)
     {
         super(changeLogFile, resourceAccessor, database);
         this.dataSource = dataSource;

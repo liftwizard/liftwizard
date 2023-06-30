@@ -16,70 +16,52 @@ import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
-import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
-import io.liftwizard.reladomo.test.rule.ReladomoInitializeTestRule;
-import io.liftwizard.reladomo.test.rule.ReladomoPurgeAllTestRule;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
-import static io.dropwizard.testing.ConfigOverride.config;
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@Testcontainers(disabledWithoutDocker = true)
 @ExtendWith(DropwizardExtensionsSupport.class)
-class IntegrationTest {
-    private static final String CONFIG = "test-example.json5";
+@DisabledForJreRange(min = JRE.JAVA_16)
+public class DockerIntegrationTest {
+    @Container
+    private static final MySQLContainer<?> MY_SQL_CONTAINER = new MySQLContainer<>(DockerImageName.parse("mysql:8.0.28"));
+
+    private static final String CONFIG = "test-docker-example.yml";
 
     @TempDir
     static Path tempDir;
-    static Supplier<String> CURRENT_LOG = wrap(() -> tempDir.resolve("application.log").toString());
+    static Supplier<String> CURRENT_LOG = () -> tempDir.resolve("application.log").toString();
+    static Supplier<String> ARCHIVED_LOG = () -> tempDir.resolve("application-%d-%i.log.gz").toString();
 
-
-    static Supplier<String> ARCHIVED_LOG = wrap(() -> tempDir.resolve("application-%d-%i.log.gz").toString());
-
-    static final DropwizardAppExtension<HelloWorldConfiguration> APP = new DropwizardAppExtension<>(
-            HelloWorldApplication.class, CONFIG,
-            new ResourceConfigurationSourceProvider(),
-            config("database.url", wrap(() -> "jdbc:h2:" + tempDir.resolve("database.h2"))),
-            config("logging.appenders[1].currentLogFilename", CURRENT_LOG),
-            config("logging.appenders[1].archivedLogFilenamePattern", ARCHIVED_LOG)
+    public static final DropwizardAppExtension<HelloWorldConfiguration> APP = new DropwizardAppExtension<>(
+            HelloWorldApplication.class, CONFIG, new ResourceConfigurationSourceProvider(),
+            ConfigOverride.config("database.url", MY_SQL_CONTAINER::getJdbcUrl),
+            ConfigOverride.config("database.user", MY_SQL_CONTAINER::getUsername),
+            ConfigOverride.config("database.password", MY_SQL_CONTAINER::getPassword),
+            ConfigOverride.config("database.properties.enabledTLSProtocols", "TLSv1.1,TLSv1.2,TLSv1.3"),
+            ConfigOverride.config("logging.appenders[1].currentLogFilename", CURRENT_LOG),
+            ConfigOverride.config("logging.appenders[1].archivedLogFilenamePattern", ARCHIVED_LOG)
     );
-
-    private final ReladomoInitializeTestRule initializeTestRule =
-            new ReladomoInitializeTestRule("reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml");
-
-    private final ReladomoPurgeAllTestRule purgeAllTestRule = new ReladomoPurgeAllTestRule();
-
-    private final TestRule logMarkerTestRule = new LogMarkerTestRule();
-
-    @Rule
-    public final RuleChain ruleChain = RuleChain
-            .outerRule(this.initializeTestRule)
-            .around(this.purgeAllTestRule)
-            .around(this.logMarkerTestRule);
 
     @BeforeAll
     public static void migrateDb() throws Exception {
         APP.getApplication().run("db", "migrate", resourceFilePath(CONFIG));
-    }
-
-    private static Supplier<String> wrap(Supplier<String> supplier)
-    {
-        return () -> {
-            String result = supplier.get();
-            System.out.println(result);
-            return result;
-        };
     }
 
     @Test
@@ -97,9 +79,9 @@ class IntegrationTest {
         @Test
         void validDateParameter() {
             final String date = APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world/date")
-                    .queryParam("date", "2022-01-20")
-                    .request()
-                    .get(String.class);
+                .queryParam("date", "2022-01-20")
+                .request()
+                .get(String.class);
             assertThat(date).isEqualTo("2022-01-20");
         }
 
@@ -107,17 +89,17 @@ class IntegrationTest {
         @ValueSource(strings = {"null", "abc", "0"})
         void invalidDateParameter(String value) {
             assertThatExceptionOfType(BadRequestException.class)
-                    .isThrownBy(() -> APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world/date")
-                            .queryParam("date", value)
-                            .request()
-                            .get(String.class));
+                .isThrownBy(() -> APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world/date")
+                    .queryParam("date", value)
+                    .request()
+                    .get(String.class));
         }
 
         @Test
         void noDateParameter() {
             final String date = APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world/date")
-                    .request()
-                    .get(String.class);
+                .request()
+                .get(String.class);
             assertThat(date).isEmpty();
         }
     }
@@ -153,10 +135,14 @@ class IntegrationTest {
         // fail (and not write to a log file). This test ensures not only that the
         // log file exists, but also contains the log line that jetty prints on startup
         assertThat(new File(CURRENT_LOG.get()))
-                .exists()
-                .content()
-                .contains("0.0.0.0:" + APP.getLocalPort(), "Starting hello-world", "Started application", "Started admin")
-                .doesNotContain("Exception", "ERROR", "FATAL");
+            .exists()
+            .content()
+            .contains("Starting hello-world",
+                "Started application@",
+                "0.0.0.0:" + APP.getLocalPort(),
+                "Started admin@",
+                "0.0.0.0:" + APP.getAdminPort())
+            .doesNotContain("ERROR", "FATAL", "Exception");
     }
 
     @Test

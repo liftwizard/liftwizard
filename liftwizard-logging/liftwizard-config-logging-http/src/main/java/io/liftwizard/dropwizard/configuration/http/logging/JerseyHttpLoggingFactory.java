@@ -23,9 +23,9 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.util.Size;
-import io.dropwizard.util.SizeUnit;
-import io.dropwizard.validation.MinSize;
+import io.dropwizard.util.DataSize;
+import io.dropwizard.util.DataSizeUnit;
+import io.dropwizard.validation.MinDataSize;
 import io.dropwizard.validation.ValidationMethod;
 
 public class JerseyHttpLoggingFactory
@@ -54,8 +54,8 @@ public class JerseyHttpLoggingFactory
             "Content-Type");
 
     @NotNull
-    @MinSize(value = 1, unit = SizeUnit.BYTES)
-    private Size maxEntitySize = Size.kilobytes(8);
+    @MinDataSize(value = 1, unit = DataSizeUnit.BYTES)
+    private DataSize maxEntitySize = DataSize.kilobytes(8);
 
     @JsonProperty
     public boolean isEnabled()
@@ -190,13 +190,13 @@ public class JerseyHttpLoggingFactory
     }
 
     @JsonProperty
-    public Size getMaxEntitySize()
+    public DataSize getMaxEntitySize()
     {
         return this.maxEntitySize;
     }
 
     @JsonProperty
-    public void setMaxEntitySize(Size maxEntitySize)
+    public void setMaxEntitySize(DataSize maxEntitySize)
     {
         this.maxEntitySize = maxEntitySize;
     }

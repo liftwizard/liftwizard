@@ -2,6 +2,7 @@ package com.example.helloworld.resources;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.HttpHeaders;
 
 import com.example.helloworld.auth.ExampleAuthenticator;
@@ -10,16 +11,18 @@ import com.example.helloworld.core.User;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
-import io.dropwizard.testing.junit.ResourceTestRule;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import io.dropwizard.testing.junit5.ResourceExtension;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class ProtectedResourceTest {
+@ExtendWith(DropwizardExtensionsSupport.class)
+class ProtectedResourceTest {
     private static final BasicCredentialAuthFilter<User> BASIC_AUTH_HANDLER =
             new BasicCredentialAuthFilter.Builder<User>()
                     .setAuthenticator(new ExampleAuthenticator())
@@ -28,8 +31,7 @@ public class ProtectedResourceTest {
                     .setRealm("SUPER SECRET STUFF")
                     .buildAuthFilter();
 
-    @ClassRule
-    public static final ResourceTestRule RULE = ResourceTestRule.builder()
+    public static final ResourceExtension RULE = ResourceExtension.builder()
             .addProvider(RolesAllowedDynamicFeature.class)
             .addProvider(new AuthDynamicFeature(BASIC_AUTH_HANDLER))
             .addProvider(new AuthValueFactoryProvider.Binder<>(User.class))
@@ -38,7 +40,7 @@ public class ProtectedResourceTest {
             .build();
 
     @Test
-    public void testProtectedEndpoint() {
+    void testProtectedEndpoint() {
         String secret = RULE.target("/protected").request()
                 .header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0")
                 .get(String.class);
@@ -46,36 +48,28 @@ public class ProtectedResourceTest {
     }
 
     @Test
-    public void testProtectedEndpointNoCredentials401() {
-        try {
-            RULE.target("/protected").request()
-                .get(String.class);
-            failBecauseExceptionWasNotThrown(NotAuthorizedException.class);
-        } catch (NotAuthorizedException e) {
-            assertThat(e.getResponse().getStatus()).isEqualTo(401);
-            assertThat(e.getResponse().getHeaders().get(HttpHeaders.WWW_AUTHENTICATE))
-                    .containsOnly("Basic realm=\"SUPER SECRET STUFF\"");
-        }
-
+    void testProtectedEndpointNoCredentials401() {
+        Invocation.Builder request = RULE.target("/protected").request();
+        assertThatExceptionOfType(NotAuthorizedException.class)
+                .isThrownBy(() -> request.get(String.class))
+                .satisfies(e -> assertThat(e.getResponse().getStatus()).isEqualTo(401))
+                .satisfies(e -> assertThat(e.getResponse().getHeaders().get(HttpHeaders.WWW_AUTHENTICATE))
+                        .containsOnly("Basic realm=\"SUPER SECRET STUFF\""));
     }
 
     @Test
-    public void testProtectedEndpointBadCredentials401() {
-        try {
-            RULE.target("/protected").request()
-                .header(HttpHeaders.AUTHORIZATION, "Basic c25lYWt5LWJhc3RhcmQ6YXNkZg==")
-                .get(String.class);
-            failBecauseExceptionWasNotThrown(NotAuthorizedException.class);
-        } catch (NotAuthorizedException e) {
-            assertThat(e.getResponse().getStatus()).isEqualTo(401);
-            assertThat(e.getResponse().getHeaders().get(HttpHeaders.WWW_AUTHENTICATE))
-                .containsOnly("Basic realm=\"SUPER SECRET STUFF\"");
-        }
-
+    void testProtectedEndpointBadCredentials401() {
+        Invocation.Builder request = RULE.target("/protected").request()
+                .header(HttpHeaders.AUTHORIZATION, "Basic c25lYWt5LWJhc3RhcmQ6YXNkZg==");
+        assertThatExceptionOfType(NotAuthorizedException.class)
+                .isThrownBy(() -> request.get(String.class))
+                .satisfies(e -> assertThat(e.getResponse().getStatus()).isEqualTo(401))
+                .satisfies(e -> assertThat(e.getResponse().getHeaders().get(HttpHeaders.WWW_AUTHENTICATE))
+                        .containsOnly("Basic realm=\"SUPER SECRET STUFF\""));
     }
 
     @Test
-    public void testProtectedAdminEndpoint() {
+    void testProtectedAdminEndpoint() {
         String secret = RULE.target("/protected/admin").request()
                 .header(HttpHeaders.AUTHORIZATION, "Basic Y2hpZWYtd2l6YXJkOnNlY3JldA==")
                 .get(String.class);
@@ -83,14 +77,11 @@ public class ProtectedResourceTest {
     }
 
     @Test
-    public void testProtectedAdminEndpointPrincipalIsNotAuthorized403() {
-        try {
-            RULE.target("/protected/admin").request()
-                    .header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0")
-                    .get(String.class);
-            failBecauseExceptionWasNotThrown(ForbiddenException.class);
-        } catch (ForbiddenException e) {
-            assertThat(e.getResponse().getStatus()).isEqualTo(403);
-        }
+    void testProtectedAdminEndpointPrincipalIsNotAuthorized403() {
+        Invocation.Builder request = RULE.target("/protected/admin").request()
+                .header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0");
+        assertThatExceptionOfType(ForbiddenException.class)
+                .isThrownBy(() -> request.get(String.class))
+                .satisfies(e -> assertThat(e.getResponse().getStatus()).isEqualTo(403));
     }
 }

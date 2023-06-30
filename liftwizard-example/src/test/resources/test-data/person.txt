@@ -1,4 +1,3 @@
 class com.example.helloworld.core.Person
-id, fullName   , jobTitle   , systemFrom               , systemTo               
- 1, "Full Name", "Job Title", "1999-12-31 23:59:59.999", "9999-12-01 23:59:00.0"
-
+id, fullName   , jobTitle   , yearBorn, systemFrom               , systemTo
+1 , "Full Name", "Job Title", 1995    , "1999-12-31 23:59:59.999", "9999-12-01 23:59:00.0"

@@ -51,4 +51,10 @@
             nullable="false"
             columnName="job_title"
             trim="false" />
+    <Attribute
+            name="yearBorn"
+            javaType="int"
+            primaryKey="false"
+            nullable="false"
+            columnName="year_born" />
 </MithraObject>

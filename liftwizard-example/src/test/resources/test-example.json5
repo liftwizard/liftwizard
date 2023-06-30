@@ -24,7 +24,7 @@
     ]
   },
   "logging": {
-    "level": "INFO",
+    "level": "DEBUG",
     "appenders": [
       {
         "type": "buffered",

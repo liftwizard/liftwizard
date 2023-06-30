@@ -27,8 +27,8 @@ import ch.qos.logback.core.spi.FilterReply;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
-import io.dropwizard.logging.LoggingUtil;
-import io.dropwizard.logging.filter.FilterFactory;
+import io.dropwizard.logging.common.LoggingUtil;
+import io.dropwizard.logging.common.filter.FilterFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @JsonTypeName("janino")

@@ -2,6 +2,7 @@ package com.example.helloworld.resources;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,12 +27,13 @@ public class PeopleResource {
 
     @POST
     @UnitOfWork
-    public PersonDTO createPerson(PersonDTO personDTO) {
+    public PersonDTO createPerson(@Valid PersonDTO personDTO) {
         Person person = new Person();
         person.setFullName(personDTO.getFullName());
         person.setJobTitle(personDTO.getJobTitle());
+        person.setYearBorn(personDTO.getYearBorn());
         Person result = this.peopleDAO.create(person);
-        return new PersonDTO(result.getId(), result.getFullName(), result.getJobTitle());
+        return new PersonDTO(result.getId(), result.getFullName(), result.getJobTitle(), result.getYearBorn());
     }
 
     @GET
@@ -41,6 +43,7 @@ public class PeopleResource {
                 .collect(each -> new PersonDTO(
                         each.getId(),
                         each.getFullName(),
-                        each.getJobTitle()));
+                        each.getJobTitle(),
+                        each.getYearBorn()));
     }
 }

@@ -3,6 +3,9 @@ package com.example.helloworld.dto;
 import java.time.Instant;
 import java.util.Objects;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class PersonDTO
@@ -10,6 +13,9 @@ public class PersonDTO
     private Long    id;
     private String  fullName;
     private String  jobTitle;
+    @Min(value = 0)
+    @Max(value = 9999)
+    private Integer yearBorn;
     private Instant system;
     private Instant systemFrom;
     private Instant systemTo;
@@ -21,20 +27,22 @@ public class PersonDTO
 
     public PersonDTO(
             String fullName,
-            String jobTitle)
+            String jobTitle,
+            Integer yearBorn)
     {
         this.fullName = Objects.requireNonNull(fullName);
         this.jobTitle = Objects.requireNonNull(jobTitle);
+        this.yearBorn = Objects.requireNonNull(yearBorn);
     }
 
     public PersonDTO(
             long id,
             String fullName,
-            String jobTitle)
+            String jobTitle,
+            Integer yearBorn)
     {
+        this(fullName, jobTitle, yearBorn);
         this.id       = id;
-        this.fullName = fullName;
-        this.jobTitle = jobTitle;
     }
 
     public Long getId()
@@ -65,6 +73,16 @@ public class PersonDTO
     public void setJobTitle(String jobTitle)
     {
         this.jobTitle = jobTitle;
+    }
+
+    public Integer getYearBorn()
+    {
+        return yearBorn;
+    }
+
+    public void setYearBorn(Integer yearBorn)
+    {
+        this.yearBorn = yearBorn;
     }
 
     public Instant getSystem()

@@ -64,6 +64,13 @@ public class FakeAccessEvent implements IAccessEvent
     }
 
     @Override
+    public long getSequenceNumber()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + ".getSequenceNumber() not implemented yet");
+    }
+
+    @Override
     public long getElapsedTime()
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName()

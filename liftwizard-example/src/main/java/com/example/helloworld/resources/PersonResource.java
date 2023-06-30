@@ -28,7 +28,7 @@ public class PersonResource {
     @UnitOfWork
     public PersonDTO getPerson(@PathParam("personId") LongParam personId) {
         Person person = this.findSafely(personId.get());
-        PersonDTO personDTO = new PersonDTO(personId.get(), person.getFullName(), person.getJobTitle());
+        PersonDTO personDTO = new PersonDTO(personId.get(), person.getFullName(), person.getJobTitle(), person.getYearBorn());
         personDTO.setId(person.getId());
         return personDTO;
     }

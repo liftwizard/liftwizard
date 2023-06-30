@@ -26,7 +26,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.migrations.MigrationsBundle;
-import io.dropwizard.views.ViewBundle;
+import io.dropwizard.views.common.ViewBundle;
 import io.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
