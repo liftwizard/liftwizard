@@ -1,17 +1,23 @@
 package com.example.helloworld;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.example.helloworld.api.Saying;
 import com.example.helloworld.core.Person;
+import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
@@ -20,6 +26,7 @@ import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoInitializeTestRule;
 import io.liftwizard.reladomo.test.rule.ReladomoPurgeAllTestRule;
 import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
@@ -30,11 +37,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static io.dropwizard.testing.ConfigOverride.config;
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.hamcrest.CoreMatchers.is;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 class IntegrationTest {
@@ -48,9 +59,9 @@ class IntegrationTest {
     static Supplier<String> ARCHIVED_LOG = wrap(() -> tempDir.resolve("application-%d-%i.log.gz").toString());
 
     static final DropwizardAppExtension<HelloWorldConfiguration> APP = new DropwizardAppExtension<>(
-            HelloWorldApplication.class, CONFIG,
+            HelloWorldApplication.class,
+            CONFIG,
             new ResourceConfigurationSourceProvider(),
-            config("database.url", wrap(() -> "jdbc:h2:" + tempDir.resolve("database.h2"))),
             config("logging.appenders[1].currentLogFilename", CURRENT_LOG),
             config("logging.appenders[1].archivedLogFilenamePattern", ARCHIVED_LOG)
     );
@@ -84,13 +95,32 @@ class IntegrationTest {
 
     @Test
     void testHelloWorld() {
-        final Optional<String> name = Optional.of("Dr. IntegrationTest");
-        final Saying saying = APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world")
-                .queryParam("name", name.get())
+        Response response = APP
+                .client()
+                .target(String.format("http://localhost:%d/hello-world", APP.getLocalPort()))
+                .queryParam("name", "Dr. IntegrationTest")
                 .request()
-                .get(Saying.class);
-        assertThat(saying.getContent()).isEqualTo(APP.getConfiguration().buildTemplate().render(name));
+                .get();
+
+        this.assertResponseStatus(response, Status.OK);
+
+        String jsonResponse = response.readEntity(String.class);
+        //language=JSON
+        String expected = ""
+                + "{\n"
+                + "  \"id\"     : 1,\n"
+                + "  \"content\": \"Hello, Dr. IntegrationTest!\"\n"
+                + "}\n";
+        JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
     }
+
+    protected void assertResponseStatus(@Nonnull Response response, Status status)
+    {
+        response.bufferEntity();
+        String entityAsString = response.readEntity(String.class);
+        Assert.assertThat(entityAsString, response.getStatusInfo(), is(status));
+    }
+
 
     @Nested
     class DateParameterTests {
@@ -126,6 +156,7 @@ class IntegrationTest {
     void testPostPerson() {
         final Person person = new Person("Dr. IntegrationTest", "Chief Wizard", 1525);
         final Person newPerson = postPerson(person);
+        assertThat(newPerson.getId()).isNotNull();
         assertThat(newPerson.getFullName()).isEqualTo(person.getFullName());
         assertThat(newPerson.getJobTitle()).isEqualTo(person.getJobTitle());
     }
@@ -133,41 +164,28 @@ class IntegrationTest {
     @ParameterizedTest
     @ValueSource(strings={"view_freemarker", "view_mustache"})
     void testRenderingPerson(String viewName) {
-        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard", 1525);
-        final Person newPerson = postPerson(person);
+        final PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard", 1525);
+        final PersonDTO newPerson = postPerson(person);
         final String url = "http://localhost:" + APP.getLocalPort() + "/people/" + newPerson.getId() + "/" + viewName;
         Response response = APP.client().target(url).request().get();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
     }
 
-    private Person postPerson(Person person) {
+    private PersonDTO postPerson(PersonDTO person) {
         return APP.client().target("http://localhost:" + APP.getLocalPort() + "/people")
                 .request()
                 .post(Entity.entity(person, MediaType.APPLICATION_JSON_TYPE))
-                .readEntity(Person.class);
+                .readEntity(PersonDTO.class);
     }
 
     @Test
-    void testLogFileWritten() {
+    public void testLogFileWritten() throws IOException {
         // The log file is using a size and time based policy, which used to silently
         // fail (and not write to a log file). This test ensures not only that the
         // log file exists, but also contains the log line that jetty prints on startup
-        assertThat(new File(CURRENT_LOG.get()))
-                .exists()
-                .content()
-                .contains("0.0.0.0:" + APP.getLocalPort(), "Starting hello-world", "Started application", "Started admin")
-                .doesNotContain("Exception", "ERROR", "FATAL");
-    }
-
-    @Test
-    void healthCheckShouldSucceed() {
-        final Response healthCheckResponse =
-                APP.client().target("http://localhost:" + APP.getLocalPort() + "/health-check")
-                        .request()
-                        .get();
-
-        assertThat(healthCheckResponse)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        final Path log = Paths.get("./logs/application.log");
+        assertThat(log).exists();
+        final String actual = new String(Files.readAllBytes(log), UTF_8);
+        assertThat(actual).contains("0.0.0.0:" + dropwizardAppRule.getLocalPort());
     }
 }

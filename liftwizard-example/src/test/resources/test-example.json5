@@ -24,7 +24,7 @@
     ]
   },
   "logging": {
-    "level": "DEBUG",
+    "level": "INFO",
     "appenders": [
       {
         "type": "buffered",
@@ -59,7 +59,7 @@
     ]
   },
   "configLogging": {
-    "enabled": true
+    "enabled": false
   },
   "h2": {
     "enabled": true,
