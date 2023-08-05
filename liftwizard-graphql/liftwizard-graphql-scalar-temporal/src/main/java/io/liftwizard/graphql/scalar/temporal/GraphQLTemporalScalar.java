@@ -48,7 +48,7 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
         super(name, "An RFC-3339 compliant " + name + " Scalar", new InstantCoercing());
     }
 
-    private static class InstantCoercing implements Coercing<Instant, String>
+    private static final class InstantCoercing implements Coercing<Instant, String>
     {
         @Nonnull
         private static String typeName(@Nullable Object input)

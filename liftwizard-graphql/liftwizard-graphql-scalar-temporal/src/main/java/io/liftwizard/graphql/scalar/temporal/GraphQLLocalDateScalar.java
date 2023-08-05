@@ -47,7 +47,7 @@ public class GraphQLLocalDateScalar extends GraphQLScalarType
         super("LocalDate", "An RFC-3339 compliant LocalDate Scalar", new LocalDateCoercing());
     }
 
-    private static class LocalDateCoercing implements Coercing<LocalDate, String>
+    private static final class LocalDateCoercing implements Coercing<LocalDate, String>
     {
         @Nonnull
         private static String typeName(@Nullable Object input)
