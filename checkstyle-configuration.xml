@@ -294,13 +294,6 @@
         <module name="MissingSwitchDefault" />
         <module name="ModifiedControlVariable" />
         <module name="MultipleVariableDeclarations" />
-        <module name="NestedForDepth">
-            <property name="max" value="2" />
-        </module>
-        <module name="NestedIfDepth">
-            <property name="max" value="3" />
-        </module>
-        <module name="NestedTryDepth" />
         <module name="NoClone" />
         <!-- Effective Java: Avoid finalizers and cleaners -->
         <module name="NoFinalizer" />
