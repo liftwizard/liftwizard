@@ -22,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,7 +116,7 @@ public class GenerateReladomoCodeMojo
             URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
             URI uri = resource.toURI();
-            try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Map.of()))
+            try (FileSystem fileSystem = getFileSystem(uri))
             {
                 Path from = fileSystem.getPath("/");
                 Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
@@ -129,6 +130,26 @@ public class GenerateReladomoCodeMojo
         catch (URISyntaxException | IOException e)
         {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static FileSystem getFileSystem(URI uri)
+            throws IOException
+    {
+        try
+        {
+            return FileSystems.getFileSystem(uri);
+        }
+        catch (FileSystemNotFoundException notFoundException)
+        {
+            try
+            {
+                return FileSystems.newFileSystem(uri, Map.of());
+            }
+            catch (java.nio.file.FileSystemAlreadyExistsException alreadyExistsException)
+            {
+                return FileSystems.getFileSystem(uri);
+            }
         }
     }
 
