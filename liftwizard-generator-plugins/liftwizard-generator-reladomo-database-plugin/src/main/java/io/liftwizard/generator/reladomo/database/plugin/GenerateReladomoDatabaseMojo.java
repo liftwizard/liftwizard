@@ -22,18 +22,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystemNotFoundException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
 import com.gs.fw.common.mithra.generator.dbgenerator.CoreMithraDbDefinitionGenerator;
+import io.liftwizard.filesystem.ManagedFileSystem;
 import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -130,40 +128,18 @@ public class GenerateReladomoDatabaseMojo
             URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
             URI uri = resource.toURI();
-            try (FileSystem fileSystem = getFileSystem(uri))
-            {
-                Path from = fileSystem.getPath("/");
-                Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
+            FileSystem fileSystem = ManagedFileSystem.get(uri);
+            Path from = fileSystem.getPath("/");
+            Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
 
-                this.copyDirectory(from, to);
-                return to
-                        .resolve(this.definitionsAndClassListDirectory)
-                        .resolve(this.classListFileName);
-            }
+            this.copyDirectory(from, to);
+            return to
+                    .resolve(this.definitionsAndClassListDirectory)
+                    .resolve(this.classListFileName);
         }
         catch (URISyntaxException | IOException e)
         {
             throw new RuntimeException(e);
-        }
-    }
-
-    private static FileSystem getFileSystem(URI uri)
-            throws IOException
-    {
-        try
-        {
-            return FileSystems.getFileSystem(uri);
-        }
-        catch (FileSystemNotFoundException notFoundException)
-        {
-            try
-            {
-                return FileSystems.newFileSystem(uri, Map.of());
-            }
-            catch (java.nio.file.FileSystemAlreadyExistsException alreadyExistsException)
-            {
-                return FileSystems.getFileSystem(uri);
-            }
         }
     }
 
