@@ -711,6 +711,12 @@
                 <artifactId>liftwizard-junit-rule-match-json</artifactId>
                 <version>2.1.2-SNAPSHOT</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-managed-file-system</artifactId>
+                <version>2.1.2-SNAPSHOT</version>
+            </dependency>
             <!--endregion-->
 
             <!--region liftwizard-uuid-->
