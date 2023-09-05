@@ -33,6 +33,7 @@
         <module>liftwizard-junit-rule-log-marker</module>
         <module>liftwizard-junit-rule-match-file</module>
         <module>liftwizard-junit-rule-match-json</module>
+        <module>liftwizard-managed-file-system</module>
     </modules>
 
     <dependencyManagement>
