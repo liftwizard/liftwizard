@@ -37,6 +37,7 @@
         <module>liftwizard-servlet-logging-log4j-map</module>
         <module>liftwizard-servlet-logging-typesafe</module>
         <module>liftwizard-servlet-logging-logstash-encoder</module>
+        <module>liftwizard-servlet-spa-redirect-filter</module>
     </modules>
 
     <dependencyManagement>
