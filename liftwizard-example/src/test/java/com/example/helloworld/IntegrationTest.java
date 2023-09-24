@@ -28,7 +28,6 @@ import org.junit.rules.TestRule;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.hamcrest.CoreMatchers.is;
@@ -159,7 +158,7 @@ public class IntegrationTest {
         // log file exists, but also contains the log line that jetty prints on startup
         final Path log = Paths.get("./logs/application.log");
         assertThat(log).exists();
-        final String actual = new String(Files.readAllBytes(log), UTF_8);
+        final String actual = Files.readString(log);
         assertThat(actual).contains("0.0.0.0:" + dropwizardAppRule.getLocalPort());
     }
 }
