@@ -293,10 +293,9 @@ public class InstrumentedDataFetcher<T>
         try
         {
             T result = this.dataFetcher.get(environment);
-            if (result instanceof CompletionStage)
+            if (result instanceof CompletionStage<?> completionStage)
             {
                 // If a fetcher never returns CompletionStage, we'll never record async timings
-                CompletionStage<?> completionStage = (CompletionStage<?>) result;
                 completionStage.whenComplete((success, throwable) ->
                 {
                     Optional<Timer> timerFetcherAsync = this.getTimer("async");

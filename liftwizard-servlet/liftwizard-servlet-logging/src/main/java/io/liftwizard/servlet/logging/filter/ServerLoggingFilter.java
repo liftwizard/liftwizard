@@ -85,7 +85,8 @@ public class ServerLoggingFilter
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException
     {
-        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse))
+        if (!(request instanceof HttpServletRequest httpServletRequest)
+                || !(response instanceof HttpServletResponse httpServletResponse))
         {
             chain.doFilter(request, response);
             return;
@@ -95,9 +96,6 @@ public class ServerLoggingFilter
 
         StructuredArguments structuredArguments = new StructuredArguments();
         request.setAttribute("structuredArguments", structuredArguments);
-
-        HttpServletRequest  httpServletRequest  = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         this.addInitialRequestAttributes(structuredArguments, httpServletRequest);
 
@@ -109,7 +107,7 @@ public class ServerLoggingFilter
         }
         finally
         {
-            Instant endTime = this.clock.instant();
+            Instant  endTime  = this.clock.instant();
             Duration duration = Duration.between(startTime, endTime);
             this.addFinalRequestAttributes(structuredArguments, requestWrapper);
             this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse, duration);

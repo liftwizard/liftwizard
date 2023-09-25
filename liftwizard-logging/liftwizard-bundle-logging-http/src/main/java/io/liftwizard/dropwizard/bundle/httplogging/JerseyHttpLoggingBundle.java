@@ -52,7 +52,7 @@ public class JerseyHttpLoggingBundle
     private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
     @Nonnull
-    private final Consumer<StructuredArguments>      structuredLogger;
+    private final Consumer<StructuredArguments>            structuredLogger;
     @Nonnull
     private final Function<Principal, Map<String, Object>> principalBuilder;
 
@@ -127,7 +127,7 @@ public class JerseyHttpLoggingBundle
 
     private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration)
     {
-        if (!(configuration instanceof ClockFactoryProvider))
+        if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider))
         {
             LOGGER.warn(
                     "Configuration {} does not implement {}. Using system clock.",
@@ -136,8 +136,7 @@ public class JerseyHttpLoggingBundle
             return Clock.systemUTC();
         }
 
-        ClockFactoryProvider clockFactoryProvider = (ClockFactoryProvider) configuration;
-        ClockFactory         clockFactory         = clockFactoryProvider.getClockFactory();
+        ClockFactory clockFactory = clockFactoryProvider.getClockFactory();
         return clockFactory.createClock();
     }
 }

@@ -101,14 +101,13 @@ public class ReladomoPurgeAllTestRule
                     .orElseGet(finderInstance::all);
             MithraList<?> mithraList = finderInstance.findMany(operation);
 
-            if (mithraList instanceof TemporalTransactionalDomainList)
+            if (mithraList instanceof TemporalTransactionalDomainList<?> temporalTransactionalDomainList)
             {
-                TemporalTransactionalDomainList<?> temporalTransactionalDomainList = (TemporalTransactionalDomainList<?>) mithraList;
                 temporalTransactionalDomainList.purgeAll();
             }
-            else if (mithraList instanceof TransactionalDomainList)
+            else if (mithraList instanceof TransactionalDomainList<?> transactionalDomainList)
             {
-                ((TransactionalDomainList<?>) mithraList).deleteAll();
+                transactionalDomainList.deleteAll();
             }
             else
             {
