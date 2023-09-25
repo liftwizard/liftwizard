@@ -70,12 +70,12 @@ public class PersonResourceTest
 
         //<editor-fold desc="Expected JSON">
         //language=JSON
-        String expected = ""
-                + "{\n"
-                + "  \"id\"      : 1,\n"
-                + "  \"fullName\": \"Full Name\",\n"
-                + "  \"jobTitle\": \"Job Title\"\n"
-                + "} ";
+        String expected = """
+                {
+                  "id"      : 1,
+                  "fullName": "Full Name",
+                  "jobTitle": "Job Title"
+                }\s""";
         //</editor-fold>
         JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
     }
@@ -90,11 +90,11 @@ public class PersonResourceTest
 
         //<editor-fold desc="Expected JSON">
         //language=JSON
-        String expected = ""
-                + "{\n"
-                + "  \"code\"   : 404,\n"
-                + "  \"message\": \"No such user.\"\n"
-                + "} ";
+        String expected = """
+                {
+                  "code"   : 404,
+                  "message": "No such user."
+                }\s""";
         //</editor-fold>
         JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
     }
