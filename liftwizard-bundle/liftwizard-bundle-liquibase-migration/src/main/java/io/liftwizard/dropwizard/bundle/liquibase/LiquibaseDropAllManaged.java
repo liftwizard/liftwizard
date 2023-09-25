@@ -96,21 +96,12 @@ public class LiquibaseDropAllManaged
     @Nonnull
     private static ResourceAccessor getResourceAccessor(MigrationFileLocation migrationFileLocation)
     {
-        switch (migrationFileLocation)
+        return switch (migrationFileLocation)
         {
-            case CLASSPATH:
-            {
-                return new ClassLoaderResourceAccessor();
-            }
-            case FILESYSTEM:
-            {
-                return new FileSystemResourceAccessor();
-            }
-            default:
-            {
-                throw new IllegalStateException("Unexpected value: " + migrationFileLocation);
-            }
-        }
+            case CLASSPATH -> new ClassLoaderResourceAccessor();
+            case FILESYSTEM -> new FileSystemResourceAccessor();
+            default -> throw new IllegalStateException("Unexpected value: " + migrationFileLocation);
+        };
     }
 
     private Database createDatabase(ManagedDataSource dataSource, String catalogName, String schemaName)

@@ -233,29 +233,13 @@ public class Builder
 
     private AbstractLoggerProxy getLoggerProxy()
     {
-        switch (this.loggingLevel)
+        return switch (this.loggingLevel)
         {
-            case TRACE:
-            {
-                return new TraceLoggerProxy(this.logger);
-            }
-            case INFO:
-            {
-                return new InfoLoggerProxy(this.logger);
-            }
-            case WARN:
-            {
-                return new WarnLoggerProxy(this.logger);
-            }
-            case ERROR:
-            {
-                return new ErrorLoggerProxy(this.logger);
-            }
-            default:
-            case DEBUG:
-            {
-                return new DebugLoggerProxy(this.logger);
-            }
-        }
+            case TRACE -> new TraceLoggerProxy(this.logger);
+            case DEBUG -> new DebugLoggerProxy(this.logger);
+            case INFO  -> new InfoLoggerProxy(this.logger);
+            case WARN  -> new WarnLoggerProxy(this.logger);
+            case ERROR -> new ErrorLoggerProxy(this.logger);
+        };
     }
 }
