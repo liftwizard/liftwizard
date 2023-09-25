@@ -82,12 +82,13 @@ public class PeopleResourceTest {
 
             //<editor-fold desc="Expected JSON">
             //language=JSON
-            String expected = ""
-                    + "{\n"
-                    + "  \"id\"      : 1,\n"
-                    + "  \"fullName\": \"Full Name\",\n"
-                    + "  \"jobTitle\": \"Job Title\"\n"
-                    + "}\n";
+            String expected = """
+                    {
+                      "id"      : 1,
+                      "fullName": "Full Name",
+                      "jobTitle": "Job Title"
+                    }
+                    """;
             //</editor-fold>
             JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
         }
@@ -103,14 +104,15 @@ public class PeopleResourceTest {
 
             //<editor-fold desc="Expected JSON">
             //language=JSON
-            String expected = ""
-                    + "[\n"
-                    + "  {\n"
-                    + "    \"id\"      : 1,\n"
-                    + "    \"fullName\": \"Full Name\",\n"
-                    + "    \"jobTitle\": \"Job Title\"\n"
-                    + "  }\n"
-                    + "]\n";
+            String expected = """
+                    [
+                      {
+                        "id"      : 1,
+                        "fullName": "Full Name",
+                        "jobTitle": "Job Title"
+                      }
+                    ]
+                    """;
             //</editor-fold>
             JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
         }

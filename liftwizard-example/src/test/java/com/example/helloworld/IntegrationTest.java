@@ -76,11 +76,12 @@ public class IntegrationTest {
 
             String jsonResponse = response.readEntity(String.class);
             //language=JSON
-            String expected = ""
-                    + "{\n"
-                    + "  \"id\"     : 1,\n"
-                    + "  \"content\": \"Hello, Dr. IntegrationTest!\"\n"
-                    + "}\n";
+            String expected = """
+                    {
+                      "id"     : 1,
+                      "content": "Hello, Dr. IntegrationTest!"
+                    }
+                    """;
             JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
     }
 
