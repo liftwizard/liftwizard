@@ -80,9 +80,9 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
 
         private static Instant getInstant(Object input)
         {
-            if (input instanceof Instant)
+            if (input instanceof Instant instant)
             {
-                return (Instant) input;
+                return instant;
             }
 
             if (input instanceof OffsetDateTime)
@@ -90,14 +90,13 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
                 return ((OffsetDateTime) input).toInstant();
             }
 
-            if (input instanceof ZonedDateTime)
+            if (input instanceof ZonedDateTime zonedDateTime)
             {
-                return ((ZonedDateTime) input).toInstant();
+                return zonedDateTime.toInstant();
             }
 
-            if (input instanceof Date)
+            if (input instanceof Date date)
             {
-                Date date = (Date) input;
                 return date.toInstant();
             }
 
@@ -119,19 +118,19 @@ public class GraphQLTemporalScalar extends GraphQLScalarType
         @Override
         public Instant parseValue(Object input)
         {
-            if (input instanceof Instant)
+            if (input instanceof Instant instant)
             {
-                return (Instant) input;
+                return instant;
             }
 
-            if (input instanceof OffsetDateTime)
+            if (input instanceof OffsetDateTime offsetDateTime)
             {
-                return ((OffsetDateTime) input).toInstant();
+                return offsetDateTime.toInstant();
             }
 
-            if (input instanceof ZonedDateTime)
+            if (input instanceof ZonedDateTime zonedDateTime)
             {
-                return ((ZonedDateTime) input).toOffsetDateTime().toInstant();
+                return zonedDateTime.toOffsetDateTime().toInstant();
             }
 
             if (input instanceof String)

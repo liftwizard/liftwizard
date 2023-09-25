@@ -72,10 +72,8 @@ public class BufferedAppender<E extends DeferredProcessingAware>
     {
         // preprocess for async
         eventObject.prepareForDeferredProcessing();
-        if (eventObject instanceof ILoggingEvent)
+        if (eventObject instanceof ILoggingEvent loggingEvent)
         {
-            ILoggingEvent loggingEvent = (ILoggingEvent) eventObject;
-
             loggingEvent.getCallerData();
             this.queue.add(eventObject);
             Marker marker = loggingEvent.getMarker();

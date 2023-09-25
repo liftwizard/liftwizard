@@ -72,15 +72,13 @@ public final class ServerLoggingResponseFilter
             return Optional.empty();
         }
 
-        if (entityType instanceof Class)
+        if (entityType instanceof Class<?> aClass)
         {
-            Class<?> aClass = (Class<?>) entityType;
             return Optional.of(aClass.getCanonicalName());
         }
 
-        if (entityType instanceof ParameterizedType)
+        if (entityType instanceof ParameterizedType parameterizedType)
         {
-            ParameterizedType parameterizedType = (ParameterizedType) entityType;
             return Optional.ofNullable(parameterizedType.getTypeName());
         }
 

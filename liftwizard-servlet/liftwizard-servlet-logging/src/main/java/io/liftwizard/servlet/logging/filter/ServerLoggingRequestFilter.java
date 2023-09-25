@@ -150,12 +150,11 @@ public final class ServerLoggingRequestFilter
     @Nullable
     private String getPathTemplate(@Nonnull ContainerRequestContext requestContext)
     {
-        if (!(requestContext instanceof ContainerRequest))
+        if (!(requestContext instanceof ContainerRequest containerRequest))
         {
             return null;
         }
 
-        ContainerRequest  containerRequest = (ContainerRequest) requestContext;
         ExtendedUriInfo   extendedUriInfo  = containerRequest.getUriInfo();
         List<UriTemplate> matchedTemplates = extendedUriInfo.getMatchedTemplates();
         if (matchedTemplates.isEmpty())
