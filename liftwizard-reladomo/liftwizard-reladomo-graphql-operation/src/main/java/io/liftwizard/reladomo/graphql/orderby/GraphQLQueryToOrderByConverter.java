@@ -91,30 +91,27 @@ public class GraphQLQueryToOrderByConverter
     {
         if (graphQlOrderBy.isEmpty())
         {
-            switch (inputDirection)
+            return switch (inputDirection)
             {
-                case "ASCENDING":
-                    return Optional.ofNullable(attribute.ascendingOrderBy());
-                case "DESCENDING":
-                    return Optional.ofNullable(attribute.descendingOrderBy());
-                default:
-                    throw new LiftwizardGraphQLContextException("Invalid direction: " + inputDirection, this.getContext());
-            }
+                case "ASCENDING" -> Optional.ofNullable(attribute.ascendingOrderBy());
+                case "DESCENDING" -> Optional.ofNullable(attribute.descendingOrderBy());
+                default -> throw new LiftwizardGraphQLContextException(
+                        "Invalid direction: " + inputDirection,
+                        this.getContext());
+            };
         }
-        else
-        {
-            return graphQlOrderBy
-                    .entrySet()
-                    .stream()
-                    .map(each -> this.convert(
-                            (AbstractRelatedFinder) finderInstance,
-                            each.getKey(),
-                            each.getValue(),
-                            inputDirection))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .reduce(OrderBy::and);
-        }
+
+        return graphQlOrderBy
+                .entrySet()
+                .stream()
+                .map(each -> this.convert(
+                        (AbstractRelatedFinder) finderInstance,
+                        each.getKey(),
+                        each.getValue(),
+                        inputDirection))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .reduce(OrderBy::and);
     }
 
     private Optional<OrderBy> convertRelationship(
