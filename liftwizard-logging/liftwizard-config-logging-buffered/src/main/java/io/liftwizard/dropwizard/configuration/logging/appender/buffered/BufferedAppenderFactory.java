@@ -74,7 +74,7 @@ public class BufferedAppenderFactory<E extends DeferredProcessingAware>
         this.getFilterFactories().stream().map(FilterFactory::build).forEach(consoleAppender::addFilter);
         consoleAppender.start();
 
-        BufferedAppender<E> bufferedAppender = new BufferedAppender<E>();
+        BufferedAppender<E> bufferedAppender = new BufferedAppender<>();
         bufferedAppender.setContext(consoleAppender.getContext());
         bufferedAppender.setName("buffered-" + this.appenderName);
         bufferedAppender.addAppender(consoleAppender);

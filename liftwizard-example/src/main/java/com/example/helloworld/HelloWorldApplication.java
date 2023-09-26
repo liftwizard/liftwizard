@@ -77,7 +77,7 @@ public class HelloWorldApplication
 
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());
-        bootstrap.addBundle(new MigrationsBundle<HelloWorldConfiguration>()
+        bootstrap.addBundle(new MigrationsBundle<>()
         {
             @Override
             public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration)
@@ -86,7 +86,7 @@ public class HelloWorldApplication
             }
         });
         bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());
-        bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>()
+        bootstrap.addBundle(new ViewBundle<>()
         {
             @Override
             public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration)
