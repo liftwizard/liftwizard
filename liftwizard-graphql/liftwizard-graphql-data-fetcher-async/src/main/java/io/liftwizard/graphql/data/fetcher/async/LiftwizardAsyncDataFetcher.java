@@ -64,7 +64,7 @@ public class LiftwizardAsyncDataFetcher<T>
     public CompletableFuture<T> get(DataFetchingEnvironment environment)
     {
         return CompletableFuture.supplyAsync(
-                new AsyncDataSupplier<T>(this.wrappedDataFetcher, environment),
+                new AsyncDataSupplier<>(this.wrappedDataFetcher, environment),
                 this.executor);
     }
 }
