@@ -39,8 +39,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Mojo(
         name = "generate-reladomo-pojos",
@@ -50,8 +48,6 @@ import org.slf4j.LoggerFactory;
 public class GenerateReladomoCodeMojo
         extends AbstractMojo
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoCodeMojo.class);
-
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject mavenProject;
 
@@ -111,7 +107,7 @@ public class GenerateReladomoCodeMojo
 
         try
         {
-            URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
+            URL resource = this.getClass().getResource('/' + this.definitionsAndClassListDirectory);
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
             URI uri = resource.toURI();
             FileSystem fileSystem = ManagedFileSystem.get(uri);
@@ -134,12 +130,12 @@ public class GenerateReladomoCodeMojo
     {
         try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory)))
         {
-            sources.forEach(src -> GenerateReladomoCodeMojo.handleOneFile(from, src, to));
+            sources.forEach(src -> this.handleOneFile(from, src, to));
         }
     }
 
     // Based on https://stackoverflow.com/a/29659925/
-    private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target)
+    private void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target)
     {
         Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
         try
@@ -148,13 +144,13 @@ public class GenerateReladomoCodeMojo
             {
                 if (Files.notExists(copyDestination))
                 {
-                    LOGGER.info("Creating directory {}", copyDestination);
+                    this.getLog().info("Creating directory " + copyDestination);
                     Files.createDirectories(copyDestination);
                 }
             }
             else
             {
-                LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
+                this.getLog().info("Copying resource " + fileSystemSource + " to " + copyDestination);
                 Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
             }
         }
