@@ -53,6 +53,7 @@
         <module>liftwizard-connection-manager</module>
         <module>liftwizard-ddl-executor</module>
         <module>liftwizard-healthcheck-reladomo</module>
+        <module>liftwizard-liquibase-simulated-sequence</module>
         <module>liftwizard-maven-reladomo-logger</module>
         <module>liftwizard-named-data-source-factory</module>
         <module>liftwizard-reladomo-graphql-data-fetcher</module>
