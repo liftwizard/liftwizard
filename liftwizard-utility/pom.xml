@@ -30,6 +30,7 @@
 
     <modules>
         <module>liftwizard-healthcheck-common-pool</module>
+        <module>liftwizard-junit-rule-liquibase-migrations</module>
         <module>liftwizard-junit-rule-log-marker</module>
         <module>liftwizard-junit-rule-match-file</module>
         <module>liftwizard-junit-rule-match-json</module>
