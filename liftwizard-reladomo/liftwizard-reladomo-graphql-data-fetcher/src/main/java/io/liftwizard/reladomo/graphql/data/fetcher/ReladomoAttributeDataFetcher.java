@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2023 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,28 @@
 
 package io.liftwizard.reladomo.graphql.data.fetcher;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.gs.fw.common.mithra.attribute.AsOfAttribute;
+import com.gs.fw.common.mithra.attribute.Attribute;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoTemporalRangeDataFetcher<Input>
-        implements TrivialDataFetcher<Instant>
+public class ReladomoAttributeDataFetcher<Input, T>
+        implements TrivialDataFetcher<T>
 {
-    private final AsOfAttribute<Input> asOfAttribute;
+    private final Attribute<Input, T> attribute;
 
-    public ReladomoTemporalRangeDataFetcher(AsOfAttribute<Input> asOfAttribute)
+    public ReladomoAttributeDataFetcher(Attribute<Input, T> attribute)
     {
-        this.asOfAttribute = asOfAttribute;
+        this.attribute = Objects.requireNonNull(attribute);
     }
 
     @Nullable
     @Override
-    public Instant get(@Nonnull DataFetchingEnvironment environment)
+    public T get(@Nonnull DataFetchingEnvironment environment)
     {
         Input persistentInstance = environment.getSource();
         if (persistentInstance == null)
@@ -46,20 +45,11 @@ public class ReladomoTemporalRangeDataFetcher<Input>
             return null;
         }
 
-        if (this.asOfAttribute.isAttributeNull(persistentInstance))
+        if (this.attribute.isAttributeNull(persistentInstance))
         {
             return null;
         }
 
-        Timestamp result   = this.asOfAttribute.valueOf(persistentInstance);
-        Timestamp infinity = this.asOfAttribute.getInfinityDate();
-        if (infinity.equals(result))
-        {
-            return null;
-        }
-
-        // TODO: Consider handling here the case where validTo == systemTo + 1 day, but really means infinity
-        // TODO: Alternately, just enable future dated rows to turn off this optimization
-        return result.toInstant();
+        return this.attribute.valueOf(persistentInstance);
     }
 }

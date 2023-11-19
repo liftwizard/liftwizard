@@ -23,10 +23,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
-import graphql.schema.DataFetcher;
+import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoTemporalInstantDataFetcher<Input> implements DataFetcher<Instant>
+public class ReladomoTemporalInstantDataFetcher<Input>
+        implements TrivialDataFetcher<Instant>
 {
     private final TimestampAttribute<Input> timestampAttribute;
 
