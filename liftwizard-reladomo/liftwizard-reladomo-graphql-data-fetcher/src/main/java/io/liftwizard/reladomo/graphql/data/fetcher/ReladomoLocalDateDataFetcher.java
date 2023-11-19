@@ -22,10 +22,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.gs.fw.common.mithra.attribute.DateAttribute;
-import graphql.schema.DataFetcher;
+import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoLocalDateDataFetcher<Input> implements DataFetcher<LocalDate>
+public class ReladomoLocalDateDataFetcher<Input>
+        implements TrivialDataFetcher<LocalDate>
 {
     private final DateAttribute<Input> dateAttribute;
 
