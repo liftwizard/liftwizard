@@ -17,6 +17,7 @@ jobs:
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v4
         with:
+          distribution: corretto
           java-version: 17
 
       - name: Publish maven package
