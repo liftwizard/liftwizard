@@ -1,3 +1,9 @@
+scalar Instant
+scalar TemporalInstant
+scalar TemporalRange
+scalar LocalDate
+scalar Long
+
 input StringAttribute {
     eq: String
     notEq: String
