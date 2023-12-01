@@ -4,7 +4,7 @@ scalar TemporalRange
 scalar LocalDate
 scalar Long
 
-input StringAttribute {
+input _StringAttribute {
     eq: String
     notEq: String
     in: [String]
@@ -21,7 +21,7 @@ input StringAttribute {
     notEndsWith: String
     contains: String
     notContains: String
-    toLowerCase: StringAttribute
+    toLowerCase: _StringAttribute
 
     wildCardEq: String
     wildCardEquals: String
@@ -29,19 +29,19 @@ input StringAttribute {
     wildCardNotEq: String
     wildCardNotEquals: String
 
-    lower: StringAttribute
+    lower: _StringAttribute
     # Parameters not allowed in input types
     # subString(start: Int, end: Int): StringAttribute
 }
 
-input BooleanAttribute {
+input _BooleanAttribute {
     eq: Boolean
     notEq: Boolean
     in: [Boolean]
     notIn: [Boolean]
 }
 
-input IntegerAttribute {
+input _IntegerAttribute {
     eq: Int
     notEq: Int
     in: [Int]
@@ -52,10 +52,10 @@ input IntegerAttribute {
     lessThan: Int
     lessThanEquals: Int
 
-    abs: IntegerAttribute
+    abs: _IntegerAttribute
 }
 
-input LongAttribute {
+input _LongAttribute {
     eq: Long
     notEq: Long
     in: [Long]
@@ -66,10 +66,10 @@ input LongAttribute {
     lessThan: Long
     lessThanEquals: Long
 
-    abs: LongAttribute
+    abs: _LongAttribute
 }
 
-input DoubleAttribute {
+input _DoubleAttribute {
     eq: Float
     notEq: Float
     in: [Float]
@@ -80,10 +80,10 @@ input DoubleAttribute {
     lessThan: Float
     lessThanEquals: Float
 
-    abs: DoubleAttribute
+    abs: _DoubleAttribute
 }
 
-input FloatAttribute {
+input _FloatAttribute {
     eq: Float
     notEq: Float
     in: [Float]
@@ -94,10 +94,10 @@ input FloatAttribute {
     lessThan: Float
     lessThanEquals: Float
 
-    abs: FloatAttribute
+    abs: _FloatAttribute
 }
 
-input DateAttribute {
+input _DateAttribute {
     eq: String
     notEq: String
     in: [String]
@@ -108,12 +108,12 @@ input DateAttribute {
     lessThan: String
     lessThanEquals: String
 
-    year: IntegerAttribute
-    month: IntegerAttribute
-    dayOfMonth: IntegerAttribute
+    year: _IntegerAttribute
+    month: _IntegerAttribute
+    dayOfMonth: _IntegerAttribute
 }
 
-input TimestampAttribute {
+input _TimestampAttribute {
     eq: String
     notEq: String
     in: [String]
@@ -124,22 +124,22 @@ input TimestampAttribute {
     lessThan: String
     lessThanEquals: String
 
-    year: IntegerAttribute
-    month: IntegerAttribute
-    dayOfMonth: IntegerAttribute
+    year: _IntegerAttribute
+    month: _IntegerAttribute
+    dayOfMonth: _IntegerAttribute
 }
 
-input AsOfAttribute {
+input _AsOfAttribute {
     eq: String
     notEq: String
-    equalsEdgePoint: Empty
+    equalsEdgePoint: _Empty
 }
 
-input Empty {
+input _Empty {
     dummyFieldDoNotUse: String
 }
 
-enum OrderByDirection {
+enum _OrderByDirection {
     ASCENDING
     DESCENDING
 }
