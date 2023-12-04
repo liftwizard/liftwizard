@@ -108,10 +108,10 @@ public class FileMatchRule
             throws URISyntaxException, IOException
     {
         Path packagePath = FileMatchRule.getPackagePath(this.callingClass);
-        if (this.rerecordEnabled && !this.CLEANED_PATHS.contains(packagePath))
+        if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath))
         {
             FileMatchRule.deleteDirectoryRecursively(packagePath);
-            this.CLEANED_PATHS.add(packagePath);
+            CLEANED_PATHS.add(packagePath);
         }
         InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
         if (this.rerecordEnabled || inputStream == null)
