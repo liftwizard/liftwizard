@@ -23,12 +23,34 @@ import javax.annotation.Nonnull;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.core.util.Separators;
+import com.fasterxml.jackson.core.util.Separators.Spacing;
 
-public class JsonPrettyPrinter extends DefaultPrettyPrinter
+public class JsonPrettyPrinter
+        extends DefaultPrettyPrinter
 {
+    public static final Separators SEPARATORS = new Separators(
+            Separators.DEFAULT_ROOT_VALUE_SEPARATOR,
+            ':',
+            Spacing.AFTER,
+            ',',
+            Spacing.NONE,
+            ',',
+            Spacing.NONE);
+
     public JsonPrettyPrinter()
     {
-        this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
+        this(
+                SEPARATORS,
+                DefaultIndenter.SYSTEM_LINEFEED_INSTANCE,
+                DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
+    }
+
+    public JsonPrettyPrinter(Separators separators, DefaultIndenter arrayIndenter, DefaultIndenter objectIndenter)
+    {
+        super(separators);
+        this.indentArraysWith(arrayIndenter);
+        this.indentObjectsWith(objectIndenter);
     }
 
     @Nonnull
@@ -39,24 +61,21 @@ public class JsonPrettyPrinter extends DefaultPrettyPrinter
     }
 
     @Override
-    public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException
+    public void writeEndArray(JsonGenerator jsonGenerator, int nrOfValues)
+            throws IOException
     {
-        jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
-    }
-
-    @Override
-    public void writeStartObject(@Nonnull JsonGenerator jsonGenerator) throws IOException
-    {
-        super.writeStartObject(jsonGenerator);
-    }
-
-    @Override
-    public void writeEndObject(@Nonnull JsonGenerator jsonGenerator, int nrOfEntries) throws IOException
-    {
-        super.writeEndObject(jsonGenerator, nrOfEntries);
-        if (this._nesting == 0)
+        if (!this._arrayIndenter.isInline())
         {
-            jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
+            --this._nesting;
         }
+        if (nrOfValues > 0)
+        {
+            this._arrayIndenter.writeIndentation(jsonGenerator, this._nesting);
+        }
+        else
+        {
+            // jsonGenerator.writeRaw(' ');
+        }
+        jsonGenerator.writeRaw(']');
     }
 }
