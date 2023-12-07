@@ -37,6 +37,7 @@
         <module>liftwizard-graphql-instrumentation-metrics</module>
         <module>liftwizard-graphql-instrumentation</module>
         <module>liftwizard-graphql-operation-fetcher</module>
+        <module>liftwizard-graphql-query-schema</module>
         <module>liftwizard-graphql-reladomo-meta</module>
         <module>liftwizard-graphql-scalar-temporal</module>
     </modules>
