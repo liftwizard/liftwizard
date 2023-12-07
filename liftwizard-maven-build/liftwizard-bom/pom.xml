@@ -344,6 +344,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-graphql-query-schema</artifactId>
+                <version>2.1.6-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-reladomo-meta</artifactId>
                 <version>2.1.6-SNAPSHOT</version>
             </dependency>
