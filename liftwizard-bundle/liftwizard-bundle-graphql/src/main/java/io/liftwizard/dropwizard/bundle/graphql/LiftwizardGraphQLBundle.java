@@ -18,7 +18,6 @@ package io.liftwizard.dropwizard.bundle.graphql;
 
 import java.time.Clock;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
@@ -35,6 +34,8 @@ import io.dropwizard.setup.Bootstrap;
 import io.liftwizard.dropwizard.configuration.graphql.GraphQLFactoryProvider;
 import io.liftwizard.graphql.instrumentation.logging.LiftwizardGraphQLLoggingInstrumentation;
 import io.liftwizard.graphql.instrumentation.metrics.LiftwizardGraphQLMetricsInstrumentation;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
@@ -50,13 +51,13 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         extends GraphQLBundle<T>
 {
     @Nonnull
-    private final Consumer<Builder> runtimeWiringBuilder;
+    private final ImmutableList<Consumer<Builder>> runtimeWiringBuilders;
 
     private MetricRegistry metricRegistry;
 
-    public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder> runtimeWiringBuilder)
+    public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder>... runtimeWiringBuilders)
     {
-        this.runtimeWiringBuilder = Objects.requireNonNull(runtimeWiringBuilder);
+        this.runtimeWiringBuilders = Lists.immutable.with(runtimeWiringBuilders);
     }
 
     @Override
@@ -103,7 +104,10 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         factory.setInstrumentations(instrumentations);
 
         Builder builder = RuntimeWiring.newRuntimeWiring();
-        this.runtimeWiringBuilder.accept(builder);
+        for (Consumer<Builder> runtimeWiringBuilder : this.runtimeWiringBuilders)
+        {
+            runtimeWiringBuilder.accept(builder);
+        }
         RuntimeWiring runtimeWiring = builder.build();
         factory.setRuntimeWiring(runtimeWiring);
         return factory;
