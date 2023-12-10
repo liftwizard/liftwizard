@@ -36,6 +36,11 @@ import java.util.Scanner;
 
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.api.set.MutableSet;
@@ -57,11 +62,20 @@ public class JsonMatchRule
     @Nonnull
     private final Class<?> callingClass;
     private final boolean  rerecordEnabled;
+    private final ObjectMapper objectMapper;
 
     public JsonMatchRule(@Nonnull Class<?> callingClass)
     {
         this.callingClass    = Objects.requireNonNull(callingClass);
         this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
+        this.objectMapper    = JsonMatchRule.newObjectMapper();
+    }
+
+    private static ObjectMapper newObjectMapper()
+    {
+        ObjectMapper objectMapper = Jackson.newObjectMapper();
+        ObjectMapperConfig.configure(objectMapper);
+        return objectMapper;
     }
 
     public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass)
@@ -188,7 +202,13 @@ public class JsonMatchRule
 
         try (PrintWriter printWriter = new PrintWriter(file))
         {
-            printWriter.print(string);
+            JsonNode jsonNode            = this.objectMapper.readTree(string);
+            String   prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
+            printWriter.print(prettyPrintedString);
+        }
+        catch (JsonProcessingException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 }
