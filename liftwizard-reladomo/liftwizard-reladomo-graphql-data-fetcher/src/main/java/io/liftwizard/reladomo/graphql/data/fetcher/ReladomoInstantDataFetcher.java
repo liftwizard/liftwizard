@@ -18,8 +18,6 @@ package io.liftwizard.reladomo.graphql.data.fetcher;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,7 +52,7 @@ public class ReladomoInstantDataFetcher<Input>
         }
 
         Timestamp     result        = this.timestampAttribute.valueOf(persistentInstance);
-        LocalDateTime localDateTime = result.toLocalDateTime();
-        return localDateTime.toInstant(ZoneOffset.UTC);
+        Instant       instant       = result.toInstant();
+        return instant;
     }
 }
