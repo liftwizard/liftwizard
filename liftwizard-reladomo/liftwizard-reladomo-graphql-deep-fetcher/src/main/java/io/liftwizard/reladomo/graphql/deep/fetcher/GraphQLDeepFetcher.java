@@ -16,6 +16,8 @@
 
 package io.liftwizard.reladomo.graphql.deep.fetcher;
 
+import java.util.Objects;
+
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.finder.DomainList;
 import com.gs.fw.finder.Navigation;
@@ -59,6 +61,7 @@ public final class GraphQLDeepFetcher
         for (String navigationName : navigationNames)
         {
             currentFinder = currentFinder.getRelationshipFinderByName(navigationName);
+            Objects.requireNonNull(currentFinder);
         }
         Navigation<T> navigation = (Navigation<T>) currentFinder;
         result.deepFetch(navigation);
