@@ -50,6 +50,14 @@ public class ReladomoAttributeDataFetcher<Input, T>
             return null;
         }
 
+        String fullyQualifiedClassName = this.attribute.zGetTopOwnerClassName().replaceAll("/", ".");
+        String canonicalName = persistentInstance.getClass().getCanonicalName();
+        if (!fullyQualifiedClassName.equals(canonicalName))
+        {
+            String message = "Expected " + fullyQualifiedClassName + " but got " + canonicalName;
+            throw new AssertionError(message);
+        }
+
         return this.attribute.valueOf(persistentInstance);
     }
 }
