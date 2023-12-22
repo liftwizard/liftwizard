@@ -21,16 +21,23 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
+import javax.servlet.ServletRegistration.Dynamic;
 
 import com.codahale.metrics.MetricRegistry;
+import com.smoketurner.dropwizard.graphql.CachingPreparsedDocumentProvider;
 import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import graphql.execution.instrumentation.Instrumentation;
+import graphql.execution.preparsed.PreparsedDocumentProvider;
+import graphql.kickstart.execution.GraphQLQueryInvoker;
+import graphql.kickstart.servlet.GraphQLHttpServlet;
+import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.RuntimeWiring.Builder;
 import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.configuration.graphql.GraphQLFactoryProvider;
 import io.liftwizard.graphql.instrumentation.logging.LiftwizardGraphQLLoggingInstrumentation;
 import io.liftwizard.graphql.instrumentation.metrics.LiftwizardGraphQLMetricsInstrumentation;
@@ -84,6 +91,36 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
                 "/graphql-playground",
                 "index.htm",
                 "graphql-playground"));
+    }
+
+    @Override
+    public void run(T configuration, Environment environment)
+            throws Exception
+    {
+        GraphQLFactory factory = this.getGraphQLFactory(configuration);
+
+        PreparsedDocumentProvider provider =
+                new CachingPreparsedDocumentProvider(factory.getQueryCache(), environment.metrics());
+
+        GraphQLSchema schema = factory.build();
+
+        GraphQLQueryInvoker queryInvoker =
+                GraphQLQueryInvoker.newBuilder()
+                        .withPreparsedDocumentProvider(provider)
+                        .withInstrumentation(factory.getInstrumentations())
+                        .build();
+
+        graphql.kickstart.servlet.GraphQLConfiguration config =
+                graphql.kickstart.servlet.GraphQLConfiguration.with(schema).with(queryInvoker).build();
+
+        GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
+
+        Dynamic servletRegistration = environment
+                .servlets()
+                .addServlet("graphql", servlet);
+        servletRegistration.setAsyncSupported(false);
+        servletRegistration
+                .addMapping("/graphql", "/schema.json");
     }
 
     @Nonnull

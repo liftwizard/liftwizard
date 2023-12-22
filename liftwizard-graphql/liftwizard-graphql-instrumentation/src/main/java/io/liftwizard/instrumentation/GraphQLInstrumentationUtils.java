@@ -16,8 +16,8 @@
 
 package io.liftwizard.instrumentation;
 
-import graphql.execution.ExecutionPath;
 import graphql.execution.ExecutionStepInfo;
+import graphql.execution.ResultPath;
 import graphql.schema.GraphQLModifiedType;
 import graphql.schema.GraphQLNamedSchemaElement;
 import graphql.schema.GraphQLType;
@@ -50,15 +50,15 @@ public final class GraphQLInstrumentationUtils
 
     public static void getPath(ExecutionStepInfo executionStepInfo, MutableStack<String> stack, boolean withIndex)
     {
-        ExecutionPath path = executionStepInfo.getPath();
-        if (path.isRootPath())
+        ResultPath    resultPath = executionStepInfo.getPath();
+        if (resultPath.isRootPath())
         {
             return;
         }
 
-        if (path.isListSegment())
+        if (resultPath.isListSegment())
         {
-            String indexSuffix = withIndex ? String.format("[%d]", path.getSegmentIndex()) : "";
+            String indexSuffix = withIndex ? String.format("[%d]", resultPath.getSegmentIndex()) : "";
             String name        = executionStepInfo.getField().getName() + indexSuffix;
             stack.push(name);
 
