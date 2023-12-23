@@ -32,6 +32,8 @@ import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseDataS
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactory;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactoryProvider;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import liquibase.Scope;
+import liquibase.Scope.Attr;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
@@ -40,6 +42,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.FileSystemResourceAccessor;
 import liquibase.resource.ResourceAccessor;
+import liquibase.ui.LoggerUIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,15 +60,11 @@ public class LiftwizardLiquibaseMigrationBundle
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+            throws Exception
     {
         LiquibaseMigrationFactoryProvider liquibaseFactoryProvider = this.safeCastConfiguration(
                 LiquibaseMigrationFactoryProvider.class,
                 configuration);
-
-        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
-                NamedDataSourceProvider.class,
-                configuration);
-
         if (liquibaseFactoryProvider == null)
         {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
@@ -73,24 +72,39 @@ public class LiftwizardLiquibaseMigrationBundle
         }
 
         LiquibaseMigrationFactory liquibaseMigrationFactory = liquibaseFactoryProvider.getLiquibaseMigrationFactory();
-
         if (!liquibaseMigrationFactory.isEnabled())
-
         {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
+        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+                NamedDataSourceProvider.class,
+                configuration);
+
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
+        Scope.child(
+                Attr.ui,
+                new LoggerUIService(),
+                () -> this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider));
+
+        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+    }
+
+    private void runWithLogger(
+            @Nonnull Environment environment,
+            LiquibaseMigrationFactory liquibaseMigrationFactory,
+            NamedDataSourceProvider dataSourceProvider)
+    {
         boolean dryRun = liquibaseMigrationFactory.isDryRun();
 
         boolean dropEntireSchemaOnStartupAndShutdown = liquibaseMigrationFactory.isDropEntireSchemaOnStartupAndShutdown();
 
         for (LiquibaseDataSourceMigrationFactory factory : liquibaseMigrationFactory.getDataSourceMigrations())
         {
-            String                dataSourceName        = factory.getDataSourceName();
-            ManagedDataSource     dataSource            = dataSourceProvider.getNamedDataSourcesFactory().getDataSourceByName(
+            String dataSourceName = factory.getDataSourceName();
+            ManagedDataSource dataSource = dataSourceProvider.getNamedDataSourcesFactory().getDataSourceByName(
                     dataSourceName,
                     environment.metrics(),
                     environment.lifecycle());
@@ -127,8 +141,6 @@ public class LiftwizardLiquibaseMigrationBundle
                 throw new RuntimeException(e);
             }
         }
-
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
     private CloseableLiquibase openLiquibase(
