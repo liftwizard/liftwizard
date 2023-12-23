@@ -17,6 +17,7 @@
 package io.liftwizard.logging.p6spy;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.p6spy.engine.logging.Category;
@@ -72,6 +73,18 @@ public class P6SpySlf4jLogger
         else if (category.equals(Category.INFO))
         {
             LOGGER.info(sql, StructuredArguments.entries(structuredArgumentsMap));
+        }
+        else if (category.equals(Category.DEBUG))
+        {
+            LOGGER.debug(sql, StructuredArguments.entries(structuredArgumentsMap));
+        }
+        else if (List.of(Category.ROLLBACK, Category.COMMIT).contains(category))
+        {
+            if (!sql.isBlank())
+            {
+                throw new AssertionError("Unexpected SQL for category " + category + ": " + sql);
+            }
+            LOGGER.debug(category.toString(), StructuredArguments.entries(structuredArgumentsMap));
         }
         else
         {
