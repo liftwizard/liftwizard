@@ -52,8 +52,9 @@ public class ConfigLoggingBundle
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
             throws JsonProcessingException, ReflectiveOperationException
     {
-        ConfigLoggingFactoryProvider configLoggingFactoryProvider =
-                this.safeCastConfiguration(ConfigLoggingFactoryProvider.class, configuration);
+        ConfigLoggingFactoryProvider configLoggingFactoryProvider = this.safeCastConfiguration(
+                ConfigLoggingFactoryProvider.class,
+                configuration);
 
         EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
         if (!configLoggingFactory.isEnabled())
@@ -71,20 +72,25 @@ public class ConfigLoggingBundle
 
     private static void logConfiguration(
             @Nonnull Object configuration,
-            @Nonnull ObjectMapper objectMapper) throws JsonProcessingException
+            @Nonnull ObjectMapper objectMapper)
+            throws JsonProcessingException
     {
         String configurationString = objectMapper.writeValueAsString(configuration);
         LOGGER.info("Inferred Dropwizard configuration:\n{}", configurationString);
 
-        Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration)
+        Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle
+                .getConstructor(configuration)
                 .flatMap(ConfigLoggingBundle::getDefaultConfiguration);
         if (maybeDefaultConfiguration.isEmpty())
         {
             return;
         }
-        Object defaultConfiguration       = maybeDefaultConfiguration.get();
-        String defaultConfigurationString = objectMapper.writeValueAsString(defaultConfiguration);
-        LOGGER.debug("Default Dropwizard configuration:\n{}", defaultConfigurationString);
+        Object defaultConfiguration = maybeDefaultConfiguration.get();
+        if (LOGGER.isDebugEnabled())
+        {
+            String defaultConfigurationString = objectMapper.writeValueAsString(defaultConfiguration);
+            LOGGER.debug("Default Dropwizard configuration:\n{}", defaultConfigurationString);
+        }
     }
 
     @Nonnull
