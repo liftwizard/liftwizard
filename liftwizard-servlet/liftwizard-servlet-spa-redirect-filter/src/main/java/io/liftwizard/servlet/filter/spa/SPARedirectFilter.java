@@ -65,8 +65,12 @@ public class SPARedirectFilter
 
             // If the requested path is not known (i.e. not reqs for auth, backend, or static files)
             // then redirect to index.html for single-page-app (SPA) routing, and set the response to 200.
-            if (!isKnownPath(requestedPath) && httpServletResponse.getStatus() == 404)
+            if (!this.isKnownPath(requestedPath) && httpServletResponse.getStatus() == 404)
             {
+                if (requestedPath.equals(this.redirectSPAPage))
+                {
+                    throw new ServletException("SPARedirectFilter redirectSPAPage cannot be the same as the path being redirected to. Both are: " + requestedPath);
+                }
                 httpServletResponse.setStatus(200);
                 httpServletResponse.setHeader("Cache-Control", this.cacheControlHeader);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(this.redirectSPAPage);
