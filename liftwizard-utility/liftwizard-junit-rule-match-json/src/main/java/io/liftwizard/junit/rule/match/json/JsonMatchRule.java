@@ -52,6 +52,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class JsonMatchRule
@@ -60,8 +61,8 @@ public class JsonMatchRule
     private static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
 
     @Nonnull
-    private final Class<?> callingClass;
-    private final boolean  rerecordEnabled;
+    private final Class<?>     callingClass;
+    private final boolean      rerecordEnabled;
     private final ObjectMapper objectMapper;
 
     public JsonMatchRule(@Nonnull Class<?> callingClass)
@@ -120,6 +121,15 @@ public class JsonMatchRule
             @Nonnull String actualString)
             throws URISyntaxException, IOException, JSONException
     {
+        assertThat(actualString, not(is("")));
+        try
+        {
+            this.objectMapper.readTree(actualString);
+        }
+        catch (JsonProcessingException e)
+        {
+            throw new AssertionError("Invalid JSON: " + actualString, e);
+        }
         Path packagePath = JsonMatchRule.getPackagePath(this.callingClass);
         if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath))
         {
@@ -130,29 +140,54 @@ public class JsonMatchRule
         InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
         if (this.rerecordEnabled || inputStream == null)
         {
-            File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
-
-            assertThat(resourceFile.getAbsolutePath(), resourceFile.exists(), is(false));
-            this.writeStringToFile(actualString, resourceFile);
-            if (!this.rerecordEnabled)
-            {
-                this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
-            }
+            this.recordFile(resourceClassPathLocation, actualString, packagePath);
         }
         else
         {
-            String expectedStringFromFile = JsonMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
-            URI uri = this.callingClass.getResource(resourceClassPathLocation).toURI();
+            this.compareFile(resourceClassPathLocation, actualString, inputStream);
+        }
+    }
 
-            JSONCompareResult result = JSONCompare.compareJSON(expectedStringFromFile, actualString, JSONCompareMode.STRICT);
+    private void recordFile(@Nonnull String resourceClassPathLocation, @Nonnull String actualString, Path packagePath)
+            throws FileNotFoundException
+    {
+        File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
+
+        // assertThat(resourceFile.getAbsolutePath(), resourceFile.exists(), is(false));
+        this.writeStringToFile(actualString, resourceFile);
+        if (!this.rerecordEnabled)
+        {
+            this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
+        }
+    }
+
+    private void compareFile(
+            @Nonnull String resourceClassPathLocation,
+            @Nonnull String actualString,
+            InputStream inputStream)
+            throws URISyntaxException, FileNotFoundException
+    {
+        String expectedStringFromFile = JsonMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
+        URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
+
+        try
+        {
+            JSONCompareResult result = JSONCompare.compareJSON(
+                    expectedStringFromFile,
+                    actualString,
+                    JSONCompareMode.STRICT);
             if (result.failed())
             {
                 File file = new File(uri);
                 this.writeStringToFile(actualString, file);
 
                 String message = result.getMessage();
-                this.addError(new AssertionError("Writing expected file to: " + uri + "\n" + message));
+                this.addError(new AssertionError("Writing expected file to: " + uri + '\n' + message));
             }
+        }
+        catch (JSONException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 
