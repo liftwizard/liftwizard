@@ -31,6 +31,7 @@ import graphql.execution.instrumentation.Instrumentation;
 import graphql.execution.preparsed.PreparsedDocumentProvider;
 import graphql.kickstart.execution.GraphQLQueryInvoker;
 import graphql.kickstart.servlet.GraphQLHttpServlet;
+import graphql.scalars.java.JavaPrimitives;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.RuntimeWiring.Builder;
@@ -41,6 +42,8 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.configuration.graphql.GraphQLFactoryProvider;
 import io.liftwizard.graphql.instrumentation.logging.LiftwizardGraphQLLoggingInstrumentation;
 import io.liftwizard.graphql.instrumentation.metrics.LiftwizardGraphQLMetricsInstrumentation;
+import io.liftwizard.graphql.scalar.temporal.GraphQLLocalDateScalar;
+import io.liftwizard.graphql.scalar.temporal.GraphQLTemporalScalar;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.MDC;
@@ -141,6 +144,13 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         factory.setInstrumentations(instrumentations);
 
         Builder builder = RuntimeWiring.newRuntimeWiring();
+        builder
+                .scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)
+                .scalar(GraphQLTemporalScalar.TEMPORAL_INSTANT_INSTANCE)
+                .scalar(GraphQLTemporalScalar.TEMPORAL_RANGE_INSTANCE)
+                .scalar(JavaPrimitives.GraphQLLong)
+                .scalar(GraphQLLocalDateScalar.INSTANCE);
+
         for (Consumer<Builder> runtimeWiringBuilder : this.runtimeWiringBuilders)
         {
             runtimeWiringBuilder.accept(builder);
