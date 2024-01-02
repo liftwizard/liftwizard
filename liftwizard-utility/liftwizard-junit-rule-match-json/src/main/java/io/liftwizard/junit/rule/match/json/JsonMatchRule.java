@@ -36,6 +36,7 @@ import java.util.Scanner;
 
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,9 +51,6 @@ import org.junit.rules.ErrorCollector;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class JsonMatchRule
         extends ErrorCollector
@@ -132,7 +130,6 @@ public class JsonMatchRule
         {
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            assertThat(resourceFile.getAbsolutePath(), resourceFile.exists(), is(false));
             this.writeStringToFile(actualString, resourceFile);
             if (!this.rerecordEnabled)
             {
@@ -143,6 +140,15 @@ public class JsonMatchRule
         {
             String expectedStringFromFile = JsonMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
             URI uri = this.callingClass.getResource(resourceClassPathLocation).toURI();
+
+            try
+            {
+                this.objectMapper.readTree(expectedStringFromFile);
+            }
+            catch (JacksonException e)
+            {
+                throw new AssertionError("Invalid JSON in " + uri + ":\n" + expectedStringFromFile, e);
+            }
 
             JSONCompareResult result = JSONCompare.compareJSON(expectedStringFromFile, actualString, JSONCompareMode.STRICT);
             if (result.failed())
