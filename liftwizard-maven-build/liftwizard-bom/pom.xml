@@ -726,6 +726,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-junit-application-testing</artifactId>
+                <version>2.1.6-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-liquibase-migrations</artifactId>
                 <version>2.1.6-SNAPSHOT</version>
             </dependency>
