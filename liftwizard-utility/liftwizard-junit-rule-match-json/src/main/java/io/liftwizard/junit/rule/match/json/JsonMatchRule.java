@@ -55,11 +55,12 @@ import org.skyscreamer.jsonassert.JSONCompareResult;
 public class JsonMatchRule
         extends ErrorCollector
 {
-    private static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
+    private static final MutableSet<Path>   CLEANED_PATHS   = Sets.mutable.empty();
+    private final        MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
     @Nonnull
-    private final Class<?> callingClass;
-    private final boolean  rerecordEnabled;
+    private final Class<?>     callingClass;
+    private final boolean      rerecordEnabled;
     private final ObjectMapper objectMapper;
 
     public JsonMatchRule(@Nonnull Class<?> callingClass)
@@ -126,11 +127,11 @@ public class JsonMatchRule
         }
 
         InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-        if (this.rerecordEnabled || inputStream == null)
+        if ((this.rerecordEnabled || inputStream == null) && !this.rerecordedPaths.contains(resourceClassPathLocation))
         {
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.writeStringToFile(actualString, resourceFile);
+            this.writeStringToFile(resourceClassPathLocation, actualString, resourceFile);
             if (!this.rerecordEnabled)
             {
                 this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
@@ -139,7 +140,7 @@ public class JsonMatchRule
         else
         {
             String expectedStringFromFile = JsonMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
-            URI uri = this.callingClass.getResource(resourceClassPathLocation).toURI();
+            URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
 
             try
             {
@@ -147,17 +148,37 @@ public class JsonMatchRule
             }
             catch (JacksonException e)
             {
-                throw new AssertionError("Invalid JSON in " + uri + ":\n" + expectedStringFromFile, e);
+                String detailMessage = "Invalid JSON in %s:%n%s".formatted(
+                        uri,
+                        expectedStringFromFile);
+                AssertionError assertionError = new AssertionError(detailMessage, e);
+                this.addError(assertionError);
+                return;
             }
 
-            JSONCompareResult result = JSONCompare.compareJSON(expectedStringFromFile, actualString, JSONCompareMode.STRICT);
+            JSONCompareResult result = JSONCompare.compareJSON(
+                    expectedStringFromFile,
+                    actualString,
+                    JSONCompareMode.STRICT);
             if (result.failed())
             {
-                File file = new File(uri);
-                this.writeStringToFile(actualString, file);
+                if (this.rerecordedPaths.contains(resourceClassPathLocation))
+                {
+                    String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
+                            uri,
+                            actualString);
+                    AssertionError assertionError = new AssertionError(detailMessage);
+                    this.addError(assertionError);
+                    return;
+                }
 
-                String message = result.getMessage();
-                this.addError(new AssertionError("Writing expected file to: " + uri + "\n" + message));
+                File file = new File(uri);
+                this.writeStringToFile(resourceClassPathLocation, actualString, file);
+
+                String         message        = result.getMessage();
+                String         detailMessage  = "Writing expected file to: %s%n%s".formatted(uri, message);
+                AssertionError assertionError = new AssertionError(detailMessage);
+                this.addError(assertionError);
             }
         }
     }
@@ -198,9 +219,14 @@ public class JsonMatchRule
         return packageNameParts.injectInto(testResources, Path::resolve);
     }
 
-    private void writeStringToFile(@Nonnull String string, @Nonnull File file)
+    private void writeStringToFile(
+            @Nonnull String resourceClassPathLocation,
+            @Nonnull String string,
+            @Nonnull File file)
             throws FileNotFoundException
     {
+        this.rerecordedPaths.add(resourceClassPathLocation);
+
         if (!file.exists())
         {
             file.getParentFile().mkdirs();
