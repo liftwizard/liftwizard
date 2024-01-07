@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2023 Craig Motlin
+  ~ Copyright 2020 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,27 +18,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.liftwizard</groupId>
-        <artifactId>liftwizard-utility</artifactId>
+        <artifactId>liftwizard-test</artifactId>
         <version>2.1.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>liftwizard-junit-rule-liquibase-migrations</artifactId>
+    <artifactId>liftwizard-junit-rule-log-marker</artifactId>
 
-    <name>Liftwizard JUnit Rule: Liquibase Migrations</name>
+    <name>Liftwizard JUnit Rule: Log SLF4J Markers</name>
 
     <dependencies>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-connection-manager-h2-memory</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -47,8 +36,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
     </dependencies>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2021 Craig Motlin
+  ~ Copyright 2024 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,14 +26,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>liftwizard-utility</artifactId>
+    <artifactId>liftwizard-test</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liftwizard Utility (Module Group)</name>
+    <name>Liftwizard Test (Module Group)</name>
 
     <modules>
-        <module>liftwizard-healthcheck-common-pool</module>
-        <module>liftwizard-managed-file-system</module>
+        <module>liftwizard-junit-application-testing</module>
+        <module>liftwizard-junit-rule-liquibase-migrations</module>
+        <module>liftwizard-junit-rule-log-marker</module>
+        <module>liftwizard-junit-rule-match-file</module>
+        <module>liftwizard-junit-rule-match-json</module>
     </modules>
 
     <dependencyManagement>

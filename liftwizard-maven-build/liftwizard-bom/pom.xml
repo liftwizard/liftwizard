@@ -15,7 +15,10 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-maven-build</artifactId>
@@ -717,13 +720,7 @@
             </dependency>
             <!--endregion-->
 
-            <!--region liftwizard-utility-->
-            <dependency>
-                <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-healthcheck-common-pool</artifactId>
-                <version>2.1.6-SNAPSHOT</version>
-            </dependency>
-
+            <!--region liftwizard-test-->
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-application-testing</artifactId>
@@ -751,6 +748,14 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-match-json</artifactId>
+                <version>2.1.6-SNAPSHOT</version>
+            </dependency>
+            <!--endregion-->
+
+            <!--region liftwizard-utility-->
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-healthcheck-common-pool</artifactId>
                 <version>2.1.6-SNAPSHOT</version>
             </dependency>
 
