@@ -45,6 +45,7 @@
         <module>liftwizard-maven-build</module>
         <module>liftwizard-reladomo</module>
         <module>liftwizard-servlet</module>
+        <module>liftwizard-test</module>
         <module>liftwizard-utility</module>
         <module>liftwizard-uuid</module>
     </modules>
