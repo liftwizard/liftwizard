@@ -21,6 +21,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
@@ -39,6 +40,7 @@ public class LogMarkerTestRule
     @Override
     protected void starting(Description description)
     {
+        MDC.put("liftwizard.junit.test.name", description.getDisplayName());
         LOGGER.info(MARKER_CLEAR, "");
     }
 
@@ -46,5 +48,11 @@ public class LogMarkerTestRule
     protected void failed(Throwable e, Description description)
     {
         LOGGER.info(MARKER_FLUSH, "");
+    }
+
+    @Override
+    protected void finished(Description description)
+    {
+        MDC.remove("liftwizard.junit.test.name");
     }
 }
