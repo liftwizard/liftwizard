@@ -741,6 +741,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-junit-rule-match-abstract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-rule-match-file</artifactId>
                 <version>2.1.6-SNAPSHOT</version>
             </dependency>

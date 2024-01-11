@@ -35,6 +35,7 @@
         <module>liftwizard-junit-application-testing</module>
         <module>liftwizard-junit-rule-liquibase-migrations</module>
         <module>liftwizard-junit-rule-log-marker</module>
+        <module>liftwizard-junit-rule-match-abstract</module>
         <module>liftwizard-junit-rule-match-file</module>
         <module>liftwizard-junit-rule-match-json</module>
     </modules>
