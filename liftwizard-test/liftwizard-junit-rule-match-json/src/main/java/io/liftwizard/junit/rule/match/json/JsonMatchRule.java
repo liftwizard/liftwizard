@@ -17,22 +17,13 @@
 package io.liftwizard.junit.rule.match.json;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -41,32 +32,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
+import io.liftwizard.junit.rule.match.AbstractMatchRule;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
-import org.eclipse.collections.api.factory.Sets;
-import org.eclipse.collections.api.list.ListIterable;
-import org.eclipse.collections.api.set.MutableSet;
-import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.json.JSONException;
-import org.junit.rules.ErrorCollector;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
 
 public class JsonMatchRule
-        extends ErrorCollector
+        extends AbstractMatchRule
 {
-    private static final MutableSet<Path>   CLEANED_PATHS   = Sets.mutable.empty();
-    private final        MutableSet<String> rerecordedPaths = Sets.mutable.empty();
-
-    @Nonnull
-    private final Class<?>     callingClass;
-    private final boolean      rerecordEnabled;
     private final ObjectMapper objectMapper;
 
     public JsonMatchRule(@Nonnull Class<?> callingClass)
     {
-        this.callingClass    = Objects.requireNonNull(callingClass);
-        this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
+        super(callingClass);
         this.objectMapper    = JsonMatchRule.newObjectMapper();
     }
 
@@ -77,52 +57,16 @@ public class JsonMatchRule
         return objectMapper;
     }
 
-    public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass)
-    {
-        return JsonMatchRule.slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
-    }
-
-    public static String slurp(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull Class<?> callingClass,
-            Charset charset)
-    {
-        InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
-        Objects.requireNonNull(inputStream, resourceClassPathLocation);
-        return JsonMatchRule.slurp(inputStream, charset);
-    }
-
-    public static String slurp(@Nonnull InputStream inputStream, Charset charset)
-    {
-        try (Scanner scanner = new Scanner(inputStream, charset))
-        {
-            return scanner.useDelimiter("\\A").next();
-        }
-    }
-
-    public void assertFileContents(
+    @Override
+    protected void assertFileContentsOrThrow(
             @Nonnull String resourceClassPathLocation,
             @Nonnull String actualString)
+            throws URISyntaxException, IOException
     {
-        try
-        {
-            this.assertFileContentsOrThrow(resourceClassPathLocation, actualString);
-        }
-        catch (JSONException | IOException | URISyntaxException e)
-        {
-            throw new RuntimeException(resourceClassPathLocation, e);
-        }
-    }
-
-    private void assertFileContentsOrThrow(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull String actualString)
-            throws URISyntaxException, IOException, JSONException
-    {
-        Path packagePath = JsonMatchRule.getPackagePath(this.callingClass);
+        Path packagePath = AbstractMatchRule.getPackagePath(this.callingClass);
         if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath))
         {
-            JsonMatchRule.deleteDirectoryRecursively(packagePath);
+            AbstractMatchRule.deleteDirectoryRecursively(packagePath);
             CLEANED_PATHS.add(packagePath);
         }
 
@@ -139,28 +83,16 @@ public class JsonMatchRule
         }
         else
         {
-            String expectedStringFromFile = JsonMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
+            String expectedStringFromFile = AbstractMatchRule.slurp(inputStream, StandardCharsets.UTF_8);
             URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
 
-            try
+            if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
             {
-                this.objectMapper.readTree(expectedStringFromFile);
-            }
-            catch (JacksonException e)
-            {
-                String detailMessage = "Invalid JSON in %s:%n%s".formatted(
-                        uri,
-                        expectedStringFromFile);
-                AssertionError assertionError = new AssertionError(detailMessage, e);
-                this.addError(assertionError);
                 return;
             }
 
-            JSONCompareResult result = JSONCompare.compareJSON(
-                    expectedStringFromFile,
-                    actualString,
-                    JSONCompareMode.STRICT);
-            if (result.failed())
+            Optional<String> message = this.compareAndGetDiff(actualString, expectedStringFromFile);
+            if (message.isPresent())
             {
                 if (this.rerecordedPaths.contains(resourceClassPathLocation))
                 {
@@ -175,7 +107,6 @@ public class JsonMatchRule
                 File file = new File(uri);
                 this.writeStringToFile(resourceClassPathLocation, actualString, file);
 
-                String         message        = result.getMessage();
                 String         detailMessage  = "Writing expected file to: %s%n%s".formatted(uri, message);
                 AssertionError assertionError = new AssertionError(detailMessage);
                 this.addError(assertionError);
@@ -183,60 +114,60 @@ public class JsonMatchRule
         }
     }
 
-    @Nonnull
-    private static void deleteDirectoryRecursively(@Nonnull Path directory)
-            throws IOException
+    protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile)
     {
-        if (!directory.toFile().exists())
+        try
         {
-            return;
-        }
-        Files.walkFileTree(directory, new SimpleFileVisitor<>()
-        {
-            @Override
-            public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs)
-                    throws IOException
+            JSONCompareResult result = JSONCompare.compareJSON(
+                    expectedStringFromFile,
+                    actualString,
+                    JSONCompareMode.STRICT);
+            if (result.passed())
             {
-                Files.delete(file);
-                return super.visitFile(file, attrs);
+                return Optional.empty();
             }
 
-            @Override
-            public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc)
-                    throws IOException
+            if (result.failed())
             {
-                Files.delete(dir);
-                return super.postVisitDirectory(dir, exc);
+                String message = result.getMessage();
+                return Optional.of(message);
             }
-        });
-    }
 
-    private static Path getPackagePath(@Nonnull Class<?> callingClass)
-    {
-        String               packageName      = callingClass.getPackage().getName();
-        ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-        Path                 testResources    = Paths.get("", "src", "test", "resources").toAbsolutePath();
-        return packageNameParts.injectInto(testResources, Path::resolve);
-    }
-
-    private void writeStringToFile(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull String string,
-            @Nonnull File file)
-            throws FileNotFoundException
-    {
-        this.rerecordedPaths.add(resourceClassPathLocation);
-
-        if (!file.exists())
-        {
-            file.getParentFile().mkdirs();
+            throw new AssertionError(result);
         }
+        catch (JSONException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
 
-        try (PrintWriter printWriter = new PrintWriter(file))
+    @Override
+    protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri)
+    {
+        try
+        {
+            this.objectMapper.readTree(expectedStringFromFile);
+            return true;
+        }
+        catch (JacksonException e)
+        {
+            String detailMessage = "Invalid JSON in %s:%n%s".formatted(
+                    uri,
+                    expectedStringFromFile);
+            AssertionError assertionError = new AssertionError(detailMessage, e);
+            this.addError(assertionError);
+            return false;
+        }
+    }
+
+    @Override
+    protected String getPrettyPrintedString(@Nonnull String string)
+    {
+        try
         {
             JsonNode jsonNode            = this.objectMapper.readTree(string);
             String   prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
-            printWriter.print(prettyPrintedString);
+            return prettyPrintedString;
         }
         catch (JsonProcessingException e)
         {
