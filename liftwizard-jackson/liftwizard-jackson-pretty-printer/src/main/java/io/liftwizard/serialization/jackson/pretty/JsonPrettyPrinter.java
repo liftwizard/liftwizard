@@ -78,4 +78,23 @@ public class JsonPrettyPrinter
         }
         jsonGenerator.writeRaw(']');
     }
+
+    @Override
+    public void writeEndObject(JsonGenerator g, int nrOfEntries)
+            throws IOException
+    {
+        if (!this._objectIndenter.isInline())
+        {
+            --this._nesting;
+        }
+        if (nrOfEntries > 0)
+        {
+            this._objectIndenter.writeIndentation(g, this._nesting);
+        }
+        else
+        {
+            // g.writeRaw(' ');
+        }
+        g.writeRaw('}');
+    }
 }
