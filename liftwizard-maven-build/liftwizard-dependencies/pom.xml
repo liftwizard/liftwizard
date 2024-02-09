@@ -401,7 +401,7 @@
             <dependency>
                 <groupId>com.graphql-java-kickstart</groupId>
                 <artifactId>graphql-java-kickstart-javax</artifactId>
-                <version>15.1.0</version>
+                <version>15.2.0</version>
             </dependency>
 
             <dependency>
