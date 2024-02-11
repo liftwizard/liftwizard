@@ -69,8 +69,9 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
 
         this.initializeConfiguration(bootstrap);
         this.initializeCommands(bootstrap);
-        this.initializeBundles(bootstrap);
+        this.initializeEarlyBundles(bootstrap);
         this.initializeDynamicBundles(bootstrap);
+        this.initializeBundles(bootstrap);
     }
 
     protected void initializeConfiguration(@Nonnull Bootstrap<T> bootstrap)
@@ -83,7 +84,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     {
     }
 
-    protected void initializeBundles(@Nonnull Bootstrap<T> bootstrap)
+    protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap)
     {
         HttpsRedirect  httpsRedirect  = new HttpsRedirect();
         RedirectBundle redirectBundle = new RedirectBundle(httpsRedirect);
@@ -91,6 +92,10 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
         bootstrap.addBundle(new UUIDBundle());
         bootstrap.addBundle(new ClockBundle());
         bootstrap.addBundle(new MetricsUIBundle("/dashboard/*"));
+    }
+
+    protected void initializeBundles(@Nonnull Bootstrap<T> bootstrap)
+    {
     }
 
     protected void initializeDynamicBundles(@Nonnull Bootstrap<T> bootstrap)
