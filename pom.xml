@@ -159,7 +159,7 @@
                                             <version>1.8.0</version>
                                         </requireJavaVersion>
                                         <requireMavenVersion>
-                                            <version>3.1.0</version>
+                                            <version>3.6.3</version>
                                         </requireMavenVersion>
                                         <requirePluginVersions>
                                             <unCheckedPluginList>
