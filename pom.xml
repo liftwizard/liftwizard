@@ -71,8 +71,8 @@
     </issueManagement>
 
     <ciManagement>
-        <system>CircleCI</system>
-        <url>https://app.circleci.com/pipelines/github/motlin/liftwizard</url>
+        <system>GitHub</system>
+        <url>https://github.com/motlin/liftwizard/actions</url>
     </ciManagement>
 
     <licenses>
@@ -87,7 +87,7 @@
         <url>https://github.com/motlin/liftwizard</url>
         <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
         <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
-    <tag>HEAD</tag>
+        <tag>HEAD</tag>
   </scm>
 
     <inceptionYear>2020</inceptionYear>
@@ -102,7 +102,7 @@
     </developers>
 
     <build>
-        <defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean verify</defaultGoal>
 
         <pluginManagement>
             <plugins>
@@ -170,6 +170,7 @@
                                         </requirePluginVersions>
                                         <bannedDependencies>
                                             <excludes>
+                                                <exclude>log4j:log4j</exclude>
                                                 <exclude>commons-logging-api</exclude>
                                                 <exclude>commons-logging</exclude>
                                                 <exclude>org.apache.logging.log4j:log4j</exclude>
