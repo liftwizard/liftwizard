@@ -22,37 +22,17 @@
         <version>2.1.24-SNAPSHOT</version>
     </parent>
 
-    <artifactId>liftwizard-connection-manager-h2-memory</artifactId>
+    <artifactId>liftwizard-reladomo-databasetype-h2</artifactId>
 
-    <name>Liftwizard H2 In-Memory Connection Manager</name>
+    <name>Liftwizard Reladomo H2 Database Type</name>
 
     <dependencies>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-reladomo-databasetype-h2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.goldmansachs.reladomo</groupId>
             <artifactId>reladomo</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>p6spy</groupId>
-            <artifactId>p6spy</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-        </dependency>
-
     </dependencies>
+
 </project>
