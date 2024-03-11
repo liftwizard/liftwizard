@@ -638,12 +638,6 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-reladomo-simulated-sequence-ddls</artifactId>
-                <version>2.1.7-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-test-resource-writer</artifactId>
                 <version>2.1.7-SNAPSHOT</version>
             </dependency>
