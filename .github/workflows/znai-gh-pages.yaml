@@ -5,7 +5,7 @@ name: Deploy Znai docs to GitHub Pages
 on:
   push:
     branches:
-      - master
+      - main
       - refs/tags/*
     tags:
       - refs/tags/*

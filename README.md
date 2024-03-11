@@ -2,7 +2,7 @@
 
 ![Maven Central](https://img.shields.io/maven-central/v/io.liftwizard/liftwizard)
 ![GitHub](https://img.shields.io/github/license/motlin/liftwizard)
-![CircleCI](https://img.shields.io/circleci/build/gh/motlin/liftwizard/master)
+![CircleCI](https://img.shields.io/circleci/build/gh/motlin/liftwizard/main)
 [![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-green?labelColor=blue)](https://github.com/jvm-repo-rebuild/reproducible-central#io.liftwizard:liftwizard)
 
 ![Lines of code](https://img.shields.io/tokei/lines/github/motlin/liftwizard)
