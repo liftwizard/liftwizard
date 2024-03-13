@@ -74,7 +74,9 @@ public class LiftwizardConnectionManager
     {
         try
         {
-            return this.dataSource.getConnection();
+            Connection connection = this.dataSource.getConnection();
+            this.databaseType.configureConnection(connection);
+            return connection;
         }
         catch (SQLException e)
         {
