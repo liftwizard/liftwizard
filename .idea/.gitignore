@@ -16,3 +16,6 @@
 # Other IntelliJ plugins
 /checkstyle-idea.xml
 /git_toolbox_prj.xml
+
+# GitHub Copilot persisted chat sessions
+/copilot/chatSessions
