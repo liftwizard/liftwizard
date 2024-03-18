@@ -77,7 +77,7 @@
     </developers>
 
     <build>
-        <defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean verify</defaultGoal>
 
         <plugins>
 
@@ -96,6 +96,7 @@
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
             </plugin>
 
             <plugin>
