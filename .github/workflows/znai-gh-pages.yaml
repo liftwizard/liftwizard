@@ -28,12 +28,12 @@ jobs:
       - run: sudo apt-get install graphviz
 
 #      - name: Force non snapshot version
-#        run: mvn versions:set -DnewVersion=$(git describe --abbrev=0)
+#        run: mvn --color=always versions:set -DnewVersion=$(git describe --abbrev=0)
 
       - name: Build docs with xvfb enabled
         uses: GabrielBB/xvfb-action@v1.6
         with:
-          run: mvn --batch-mode package --projects docs --also-make
+          run: mvn --color=always package --projects docs --also-make
 
       - name: Move files
         run: |
