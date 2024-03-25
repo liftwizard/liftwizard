@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.liftwizard.junit.rule.match.json;
+package io.liftwizard.junit.extension.match.json;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
@@ -32,22 +33,28 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
-import io.liftwizard.junit.rule.match.AbstractMatchRule;
+import io.liftwizard.junit.extension.match.AbstractMatchExtension;
+import io.liftwizard.junit.extension.match.FileSlurper;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
 
-public class JsonMatchRule
-        extends AbstractMatchRule
+public class JsonMatchExtension
+        extends AbstractMatchExtension
 {
     private final ObjectMapper objectMapper;
 
-    public JsonMatchRule(@Nonnull Class<?> callingClass)
+    public JsonMatchExtension(@Nonnull Class<?> callingClass)
+    {
+        this(callingClass, JsonMatchExtension.newObjectMapper());
+    }
+
+    public JsonMatchExtension(@Nonnull Class<?> callingClass, ObjectMapper objectMapper)
     {
         super(callingClass);
-        this.objectMapper    = JsonMatchRule.newObjectMapper();
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     private static ObjectMapper newObjectMapper()
@@ -61,29 +68,26 @@ public class JsonMatchRule
     protected void assertFileContentsOrThrow(
             @Nonnull String resourceClassPathLocation,
             @Nonnull String actualString)
-            throws URISyntaxException, IOException
+            throws IOException, URISyntaxException
     {
-        Path packagePath = getPackagePath(this.callingClass);
-        if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath))
+        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation))
         {
-            deleteDirectoryRecursively(packagePath);
-            CLEANED_PATHS.add(packagePath);
-        }
+            String prettyPrintedString = this.getPrettyPrintedString(actualString);
 
-        InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-        if ((this.rerecordEnabled || inputStream == null) && !this.rerecordedPaths.contains(resourceClassPathLocation))
-        {
+            Path packagePath = this.resourceRerecorderExtension.getPackagePath();
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.writeStringToFile(resourceClassPathLocation, actualString, resourceFile);
+            this.resourceRerecorderExtension.writeStringToFile(resourceClassPathLocation, prettyPrintedString, resourceFile);
             if (!this.rerecordEnabled)
             {
-                this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
+                String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
+                this.errorCollectorExtension.addError(new AssertionError(detailMessage));
             }
         }
         else
         {
-            String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
+            InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+            String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
             URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
 
             if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
@@ -91,25 +95,13 @@ public class JsonMatchRule
                 return;
             }
 
-            Optional<String> message = this.compareAndGetDiff(actualString, expectedStringFromFile);
+            String fileContents = this.getPrettyPrintedString(actualString);
+            Optional<String> message = this.compareAndGetDiff(fileContents, expectedStringFromFile);
             if (message.isPresent())
             {
-                if (this.rerecordedPaths.contains(resourceClassPathLocation))
-                {
-                    String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
-                            uri,
-                            actualString);
-                    AssertionError assertionError = new AssertionError(detailMessage);
-                    this.addError(assertionError);
-                    return;
-                }
-
-                File file = new File(uri);
-                this.writeStringToFile(resourceClassPathLocation, actualString, file);
-
-                String         detailMessage  = "Writing expected file to: %s%n%s".formatted(uri, message);
+                String detailMessage = this.resourceRerecorderExtension.handleMismatch(resourceClassPathLocation, fileContents);
                 AssertionError assertionError = new AssertionError(detailMessage);
-                this.addError(assertionError);
+                this.errorCollectorExtension.addError(assertionError);
             }
         }
     }
@@ -141,7 +133,7 @@ public class JsonMatchRule
         }
     }
 
-    private boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri)
+    protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri)
     {
         try
         {
@@ -154,7 +146,7 @@ public class JsonMatchRule
                     uri,
                     expectedStringFromFile);
             AssertionError assertionError = new AssertionError(detailMessage, e);
-            this.addError(assertionError);
+            this.errorCollectorExtension.addError(assertionError);
             return false;
         }
     }

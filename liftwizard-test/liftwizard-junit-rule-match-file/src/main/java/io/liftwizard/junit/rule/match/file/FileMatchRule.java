@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,11 +66,6 @@ public class FileMatchRule
             String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
             URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
 
-            if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
-            {
-                return;
-            }
-
             if (!actualString.equals(expectedStringFromFile))
             {
                 if (this.rerecordedPaths.contains(resourceClassPathLocation))
@@ -91,12 +86,6 @@ public class FileMatchRule
                     actualString,
                     is(expectedStringFromFile));
         }
-    }
-
-    @Override
-    protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri)
-    {
-        return true;
     }
 
     @Override

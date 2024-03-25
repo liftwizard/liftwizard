@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -154,8 +153,6 @@ public abstract class AbstractMatchRule
             printWriter.print(prettyPrintedString);
         }
     }
-
-    protected abstract boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri);
 
     protected abstract String getPrettyPrintedString(@Nonnull String string);
 }
