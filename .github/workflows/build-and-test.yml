@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Build and test
+name: Build, test, and lint
 
 on:
   push:
@@ -17,9 +14,23 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          distribution: corretto
-          java-version: 17
+          java-version-file: .tool-versions
+          distribution: oracle
 
-      - run: ./mvnw verify javadoc:javadoc --threads 2C
-        env:
-          MAVEN_OPTS: "-Xmx1g"
+      - run: ./mvnw verify          --activate-profiles 'dev' --threads 2C -Dcheckstyle.skip
+
+  checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - run: ./mvnw checkstyle:check --activate-profiles 'dev' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: '**/checkstyle-result.xml'
