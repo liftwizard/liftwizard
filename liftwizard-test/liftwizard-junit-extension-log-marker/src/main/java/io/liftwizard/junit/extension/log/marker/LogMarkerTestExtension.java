@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.liftwizard.junit.rule.log.marker;
+package io.liftwizard.junit.extension.log.marker;
 
-import org.junit.Rule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -26,32 +27,32 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
 /**
- * A JUnit {@link Rule} that clears the buffer before all tests and flushes the buffer after failed tests. It does this by logging CLEAR and FLUSH markers.
+ * A JUnit Extension that clears the buffer before all tests and flushes the buffer after failed tests. It does this by logging CLEAR and FLUSH markers.
  *
  * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule</a>
  */
-public class LogMarkerTestRule
-        extends TestWatcher
+public class LogMarkerTestExtension
+        implements BeforeEachCallback, AfterEachCallback, TestWatcher
 {
-    private static final Logger LOGGER       = LoggerFactory.getLogger(LogMarkerTestRule.class);
+    private static final Logger LOGGER       = LoggerFactory.getLogger(LogMarkerTestExtension.class);
     private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
     private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 
     @Override
-    protected void starting(Description description)
+    public void beforeEach(ExtensionContext context)
     {
-        MDC.put("liftwizard.junit.test.name", description.getDisplayName());
+        MDC.put("liftwizard.junit.test.name", context.getDisplayName());
         LOGGER.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
     }
 
     @Override
-    protected void failed(Throwable e, Description description)
+    public void testFailed(ExtensionContext context, Throwable cause)
     {
         LOGGER.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.");
     }
 
     @Override
-    protected void finished(Description description)
+    public void afterEach(ExtensionContext context)
     {
         MDC.remove("liftwizard.junit.test.name");
     }
