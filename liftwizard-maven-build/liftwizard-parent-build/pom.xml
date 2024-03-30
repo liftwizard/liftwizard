@@ -251,6 +251,14 @@
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.4.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>extra-enforcer-rules</artifactId>
+                            <version>1.8.0</version>
+                        </dependency>
+                    </dependencies>
+
                     <executions>
                         <execution>
                             <id>enforce</id>
@@ -276,6 +284,16 @@
                                         </excludes>
                                     </bannedDependencies>
                                     <banDuplicatePomDependencyVersions />
+                                    <banDuplicateClasses>
+                                        <findAllDuplicates>true</findAllDuplicates>
+                                        <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                                        <ignoreClasses>
+                                            <ignoreClass>org.hamcrest.*</ignoreClass>
+                                        </ignoreClasses>
+                                    </banDuplicateClasses>
+                                    <enforceBytecodeVersion>
+                                        <maxJdkVersion>17</maxJdkVersion>
+                                    </enforceBytecodeVersion>
                                 </rules>
                             </configuration>
                             <goals>
@@ -668,6 +686,14 @@
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <version>3.4.1</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.mojo</groupId>
+                                <artifactId>extra-enforcer-rules</artifactId>
+                                <version>1.8.0</version>
+                            </dependency>
+                        </dependencies>
+
                         <executions>
                             <execution>
                                 <id>enforce</id>
@@ -693,6 +719,10 @@
                                             </excludes>
                                         </bannedDependencies>
                                         <banDuplicatePomDependencyVersions />
+                                        <banDuplicateClasses />
+                                        <enforceBytecodeVersion>
+                                            <maxJdkVersion>17</maxJdkVersion>
+                                        </enforceBytecodeVersion>
                                     </rules>
                                 </configuration>
                                 <goals>
