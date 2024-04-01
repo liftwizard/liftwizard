@@ -31,6 +31,6 @@ jobs:
 
       - run: ./mvnw --color=always checkstyle:check --activate-profiles 'dev' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
-      - uses: jwgmeligmeyling/checkstyle-github-action@master
+      - uses: lcollins/checkstyle-github-action@v2.0.0
         with:
           path: '**/checkstyle-result.xml'
