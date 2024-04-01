@@ -20,23 +20,14 @@ You can use  directly in logback configuration. It requires a delegate appender 
 </dependency>
 ```
 
-## LogMarkerTestRule
 
-`LogMarkerTestRule` is a JUnit `Rule` that clears the buffer before all tests and flushes the buffer after failed tests. It does this by logging `CLEAR` and `FLUSH` markers.
+## Log Markers
 
-```java
-@Rule
-public final TestRule logMarkerTestRule = new LogMarkerTestRule();
-```
+We must log `CLEAR` and `FLUSH` markers to instruct `BufferedAppender` to clear or flush its logs. If you are using JUnit 4 or 5, you can use the included Rule or Extension to log these markers automatically.
 
-`LogMarkerTestRule` lives in the `liftwizard-junit-rule-log-marker` module.
-
-```xml
-<dependency>
-    <groupId>io.liftwizard</groupId>
-    <artifactId>liftwizard-junit-rule-log-marker</artifactId>
-    <scope>test</scope>
-</dependency>
+```tabs
+"JUnit 4": :include-markdown: snippets/LogMarkerTestRule.md
+"JUnit 5": :include-markdown: snippets/LogMarkerTestExtension.md
 ```
 
 ## BufferedAppenderFactory
@@ -44,43 +35,42 @@ public final TestRule logMarkerTestRule = new LogMarkerTestRule();
 The `BufferedAppenderFactory` allows you to use an appender with the type `buffered` where you would otherwise use `console` in your Dropwizard configuration.
 
 ```json5
-  logging: {
-    level: "INFO",
-    appenders: [
+  "logging": {
+    "level": "DEBUG",
+    "appenders": [
       {
-        type: "buffered",
-        timeZone: "system",
-        logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
-        includeCallerData: true,
-      }
+        "type": "buffered",
+        "timeZone": "system",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
+        "includeCallerData": true,
+      },
     ]
   }
 ```
 
- This is primarily useful for tests that use `DropwizardAppRule`.
- 
-```java
-private final TestRule logMarkerTestRule=new LogMarkerTestRule();
-
-private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule=new DropwizardAppRule<>(
-        HelloWorldApplication.class,
-        ResourceHelpers.resourceFilePath("test-example.json5"));
-
-@Rule
-public final RuleChain ruleChain=RuleChain
-        .outerRule(this.dropwizardAppRule)
-        .around(this.logMarkerTestRule);
-```
-
-Note that `LogMarkerTestRule` needs to be an inner rule, with any other rules that tear down logging outer to it.
-
 `BufferedAppenderFactory` lives in the `liftwizard-config-logging-buffered` module.
 
 ```xml
-
 <dependency>
     <groupId>io.liftwizard</groupId>
     <artifactId>liftwizard-config-logging-buffered</artifactId>
     <scope>test</scope>
 </dependency>
 ```
+
+Note: `BufferedAppenderFactory` is primarily useful for tests that use [Dropwizard's JUnit 4 Rule](https://www.dropwizard.io/en/release-2.1.x/manual/testing.html#junit-4) `DropwizardAppRule` or [Dropwizard's JUnit 5 Extension](https://www.dropwizard.io/en/release-2.1.x/manual/testing.html#junit-5) `DropwizardAppExtension`.
+ 
+```java
+private final TestRule logMarkerTestRule = new LogMarkerTestRule();
+
+private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
+        HelloWorldApplication.class,
+        ResourceHelpers.resourceFilePath("test-example.json5"));
+
+@Rule
+public final RuleChain ruleChain = RuleChain
+        .outerRule(this.dropwizardAppRule)
+        .around(this.logMarkerTestRule);
+```
+
+Note: `LogMarkerTestRule` needs to be an inner rule, with any other rules that tear down logging outer to it.
