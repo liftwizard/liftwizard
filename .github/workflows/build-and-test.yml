@@ -20,6 +20,7 @@ jobs:
       - run: ./mvnw --color=always verify          --activate-profiles 'dev' --threads 2C -Dcheckstyle.skip
 
   checkstyle:
+    name: Produce Checkstyle XML
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
