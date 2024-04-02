@@ -38,18 +38,6 @@
         <dependency>
             <groupId>com.smoketurner.dropwizard</groupId>
             <artifactId>graphql-core</artifactId>
-
-            <exclusions>
-                <exclusion>
-                    <groupId>com.graphql-java</groupId>
-                    <artifactId>graphql-java-servlet</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>com.graphql-java-kickstart</groupId>
-                    <artifactId>graphql-java-kickstart</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>
