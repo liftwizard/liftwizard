@@ -35,6 +35,7 @@ jobs:
         run: |
           mkdir ./deploy
           mv ./docs/target/docs/ ./deploy/
+          cp ./docs/index.html   ./deploy/
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
