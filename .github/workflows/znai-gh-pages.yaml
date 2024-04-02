@@ -24,14 +24,10 @@ jobs:
           distribution: corretto
           java-version: 17
 
-#      - name: Set up grahpviz
       - run: sudo apt-get install graphviz
 
-#      - name: Force non snapshot version
-#        run: mvn --color=always versions:set -DnewVersion=$(git describe --abbrev=0)
-
       - name: Build docs with xvfb enabled
-        uses: GabrielBB/xvfb-action@v1.6
+        uses: coactions/setup-xvfb@v1
         with:
           run: mvn --color=always package --projects docs --also-make
 
