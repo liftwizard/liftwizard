@@ -11,6 +11,7 @@ on:
       - refs/tags/*
   release:
     types: [created, published]
+  workflow_dispatch:
 
 jobs:
   deploy:
