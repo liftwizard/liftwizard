@@ -337,6 +337,7 @@
             <property name="excludes" value="org.junit.Assert.*" />
             <property name="excludes" value="org.junit.Assume.*" />
             <property name="excludes" value="org.junit.jupiter.api.Assertions.*" />
+            <property name="excludes" value="org.assertj.core.api.Assertions.*" />
         </module>
         <module name="CustomImportOrder">
             <property
