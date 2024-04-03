@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,11 @@ import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
-import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -38,8 +37,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ExecutorServiceFactoryTest
 {
-    @Rule
-    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
+    @RegisterExtension
+    private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private <T> T getConfiguredType(Class<T> klass, String path)
             throws IOException, ConfigurationException

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,11 @@ import java.lang.Thread.State;
 import java.util.regex.Pattern;
 
 import com.codahale.metrics.health.HealthCheck.Result;
-import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,8 +33,8 @@ import static org.junit.Assert.assertTrue;
 
 public class CommonPoolHealthCheckTest
 {
-    @Rule
-    public final TestRule logMarkerTestRule = new LogMarkerTestRule();
+    @RegisterExtension
+    private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     @Test
     public void healthy()
