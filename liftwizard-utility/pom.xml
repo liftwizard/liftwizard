@@ -31,6 +31,7 @@
     <modules>
         <module>liftwizard-healthcheck-common-pool</module>
         <module>liftwizard-managed-file-system</module>
+        <module>liftwizard-rewrite</module>
     </modules>
 
     <dependencyManagement>
