@@ -18,6 +18,9 @@ reladomo
 database
     named-data-source
     liquibase-migrations
+testing
+    testing
+    matching-files
 temporal-data
     temporal-data-overview
     running-example
