@@ -27,8 +27,8 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -88,7 +88,7 @@ public class ExecutorServiceFactoryTest
         try
         {
             getConfiguredType(ExecutorServiceFactory.class, "invalid-executor-service-config-test.json5");
-            Assert.fail();
+            Assertions.fail();
         }
         catch (ConfigurationValidationException e)
         {
