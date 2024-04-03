@@ -32,12 +32,12 @@ import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ImpersonationAuthFilterFactoryTest
 {

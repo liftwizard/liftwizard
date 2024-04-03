@@ -23,13 +23,13 @@ import com.codahale.metrics.health.HealthCheck.Result;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonPoolHealthCheckTest
 {
@@ -40,7 +40,7 @@ public class CommonPoolHealthCheckTest
     public void healthy()
     {
         Result result = new CommonPoolHealthCheck().check();
-        assertTrue(result.toString(), result.isHealthy());
+        assertTrue(result.isHealthy(), result.toString());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class CommonPoolHealthCheckTest
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
                 Lists.immutable.empty());
         Result result = commonPoolHealthCheck.check();
-        assertTrue(result.toString(), result.isHealthy());
+        assertTrue(result.isHealthy(), result.toString());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class CommonPoolHealthCheckTest
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.allow"));
         Result result = commonPoolHealthCheck.check();
-        assertTrue(result.toString(), result.isHealthy());
+        assertTrue(result.isHealthy(), result.toString());
     }
 
     private static ImmutableList<Pattern> pattern(String string)
