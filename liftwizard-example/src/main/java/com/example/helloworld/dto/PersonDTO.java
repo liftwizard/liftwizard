@@ -100,14 +100,14 @@ public class PersonDTO
     @Override
     public String toString()
     {
-        return "PersonDTO{" +
-                "id=" + this.id +
-                ", fullName='" + this.fullName + '\'' +
-                ", jobTitle='" + this.jobTitle + '\'' +
-                ", system=" + this.system +
-                ", systemFrom=" + this.systemFrom +
-                ", systemTo=" + this.systemTo +
-                '}';
+        return "PersonDTO{"
+                + "id=" + this.id
+                + ", fullName='" + this.fullName + '\''
+                + ", jobTitle='" + this.jobTitle + '\''
+                + ", system=" + this.system
+                + ", systemFrom=" + this.systemFrom
+                + ", systemTo=" + this.systemTo
+                + '}';
     }
 
     @Override

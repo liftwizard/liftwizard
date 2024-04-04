@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.util.Map;
@@ -83,7 +84,7 @@ public final class ManagedFileSystem
             {
                 return FileSystems.newFileSystem(uri, Map.of());
             }
-            catch (java.nio.file.FileSystemAlreadyExistsException alreadyExistsException)
+            catch (FileSystemAlreadyExistsException alreadyExistsException)
             {
                 return FileSystems.getFileSystem(uri);
             }
