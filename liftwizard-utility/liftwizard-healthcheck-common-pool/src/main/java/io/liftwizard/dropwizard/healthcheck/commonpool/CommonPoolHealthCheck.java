@@ -137,7 +137,7 @@ public class CommonPoolHealthCheck
                 mdc.put("stackTrace", stackTraceString);
 
                 String message = String.format(
-                        "Found thread '%s' in state '%s'\n%s",
+                        "Found thread '%s' in state '%s'%n%s",
                         threadName,
                         threadState,
                         stackTraceString);
