@@ -16,6 +16,7 @@
 
 package io.liftwizard.reladomo.graphql.data.fetcher;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 import javax.annotation.Nonnull;
@@ -50,7 +51,7 @@ public class ReladomoLocalDateDataFetcher<Input>
             return null;
         }
 
-        java.sql.Date result = (java.sql.Date) this.dateAttribute.valueOf(persistentInstance);
+        Date result = (Date) this.dateAttribute.valueOf(persistentInstance);
         return result.toLocalDate();
     }
 }
