@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,8 +79,7 @@ public class FixedClockFactory implements ClockFactory
         TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
         if (zoneInfo == null)
         {
-            String message = String.format(
-                    "Got timeZoneName '%s' but expected one of: %s",
+            String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
                     this.timeZoneName,
                     Arrays.toString(TimeZone.getAvailableIDs()));
             throw new IllegalStateException(message);

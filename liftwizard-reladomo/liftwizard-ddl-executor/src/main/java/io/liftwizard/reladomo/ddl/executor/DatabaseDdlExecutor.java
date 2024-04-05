@@ -104,7 +104,7 @@ public final class DatabaseDdlExecutor
         InputStream inputStream = DatabaseDdlExecutor.class.getResourceAsStream("/" + ddlLocation);
         if (inputStream == null)
         {
-            String message = String.format("Could not find sql script '%s' on classpath.", ddlLocation);
+            String message = "Could not find sql script '%s' on classpath.".formatted(ddlLocation);
             throw new RuntimeException(message);
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,7 @@ public interface PrioritizedBundle
             return aClass.cast(configuration);
         }
 
-        String message = String.format(
-                "Expected configuration to implement %s but found %s",
+        String message = "Expected configuration to implement %s but found %s".formatted(
                 aClass.getCanonicalName(),
                 configuration.getClass().getCanonicalName());
         throw new IllegalStateException(message);

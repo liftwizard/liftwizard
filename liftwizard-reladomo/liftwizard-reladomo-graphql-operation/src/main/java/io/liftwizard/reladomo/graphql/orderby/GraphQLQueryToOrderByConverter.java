@@ -42,8 +42,7 @@ public class GraphQLQueryToOrderByConverter
         return inputOrderBy
                 .stream()
                 .map(map -> GraphQLQueryToOrderByConverter.convertOrderBy(finder, map))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(Optional::stream)
                 .reduce(OrderBy::and);
     }
 

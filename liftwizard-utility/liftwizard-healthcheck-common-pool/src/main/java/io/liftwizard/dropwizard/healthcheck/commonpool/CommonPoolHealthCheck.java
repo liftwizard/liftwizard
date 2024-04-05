@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,8 +136,7 @@ public class CommonPoolHealthCheck
                 mdc.put("threadName", threadName);
                 mdc.put("stackTrace", stackTraceString);
 
-                String message = String.format(
-                        "Found thread '%s' in state '%s'%n%s",
+                String message = "Found thread '%s' in state '%s'%n%s".formatted(
                         threadName,
                         threadState,
                         stackTraceString);

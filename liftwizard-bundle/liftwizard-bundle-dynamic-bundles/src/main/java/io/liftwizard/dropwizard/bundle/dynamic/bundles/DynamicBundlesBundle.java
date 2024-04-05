@@ -72,7 +72,7 @@ public class DynamicBundlesBundle
 
     private String getBundleString(PrioritizedBundle bundle)
     {
-        return String.format("    %s: %d", bundle.getClass().getSimpleName(), bundle.getPriority());
+        return "    %s: %d".formatted(bundle.getClass().getSimpleName(), bundle.getPriority());
     }
 
     @Override

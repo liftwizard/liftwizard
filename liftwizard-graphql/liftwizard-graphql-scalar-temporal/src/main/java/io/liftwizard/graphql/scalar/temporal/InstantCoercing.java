@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,24 +71,23 @@ public class InstantCoercing
 
     private static Instant getInstant(Object input)
     {
-        if (input instanceof Instant)
+        if (input instanceof Instant instant)
         {
-            return (Instant) input;
+            return instant;
         }
 
-        if (input instanceof OffsetDateTime)
+        if (input instanceof OffsetDateTime offsetDateTime)
         {
-            return ((OffsetDateTime) input).toInstant();
+            return offsetDateTime.toInstant();
         }
 
-        if (input instanceof ZonedDateTime)
+        if (input instanceof ZonedDateTime zonedDateTime)
         {
-            return ((ZonedDateTime) input).toInstant();
+            return zonedDateTime.toInstant();
         }
 
-        if (input instanceof Date)
+        if (input instanceof Date date)
         {
-            Date date = (Date) input;
             return date.toInstant();
         }
 
@@ -101,8 +100,7 @@ public class InstantCoercing
             return parsedOffsetDateTime.toInstant();
         }
 
-        String error = String.format(
-                "Expected something we can convert to 'java.time.OffsetDateTime' but was '%s'.",
+        String error = "Expected something we can convert to 'java.time.OffsetDateTime' but was '%s'.".formatted(
                 InstantCoercing.typeName(input));
         throw new CoercingSerializeException(error);
     }
@@ -110,19 +108,19 @@ public class InstantCoercing
     @Override
     public Instant parseValue(Object input)
     {
-        if (input instanceof Instant)
+        if (input instanceof Instant instant)
         {
-            return (Instant) input;
+            return instant;
         }
 
-        if (input instanceof OffsetDateTime)
+        if (input instanceof OffsetDateTime offsetDateTime)
         {
-            return ((OffsetDateTime) input).toInstant();
+            return offsetDateTime.toInstant();
         }
 
-        if (input instanceof ZonedDateTime)
+        if (input instanceof ZonedDateTime zonedDateTime)
         {
-            return ((ZonedDateTime) input).toOffsetDateTime().toInstant();
+            return zonedDateTime.toOffsetDateTime().toInstant();
         }
 
         if (input instanceof String)
@@ -134,7 +132,7 @@ public class InstantCoercing
             return parsedOffsetDateTime.toInstant();
         }
 
-        String error = String.format("Expected a 'String' but was '%s'.", InstantCoercing.typeName(input));
+        String error = "Expected a 'String' but was '%s'.".formatted(InstantCoercing.typeName(input));
         throw new CoercingParseValueException(error);
     }
 
@@ -143,8 +141,7 @@ public class InstantCoercing
     {
         if (!(input instanceof StringValue))
         {
-            String error = String.format(
-                    "Expected AST type 'StringValue' but was '%s'.",
+            String error = "Expected AST type 'StringValue' but was '%s'.".formatted(
                     InstantCoercing.typeName(input));
             throw new CoercingParseLiteralException(error);
         }
@@ -163,7 +160,7 @@ public class InstantCoercing
         }
         catch (DateTimeParseException e)
         {
-            String message = String.format("Invalid RFC3339 value: '%s'. because of: '%s'", s, e.getMessage());
+            String message = "Invalid RFC3339 value: '%s'. because of: '%s'".formatted(s, e.getMessage());
             throw exceptionMaker.apply(message);
         }
     }

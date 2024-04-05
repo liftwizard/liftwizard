@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,8 +65,7 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
         if (!(attribute instanceof StringAttribute))
         {
-            var error = String.format(
-                    "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s",
+            String error = "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
                     ctx.functionName.getText(),
                     attribute.getAttributeName(),
                     attribute.getClass().getSuperclass().getSimpleName(),
@@ -85,8 +84,7 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
         if (!(attribute instanceof StringAttribute))
         {
-            var error = String.format(
-                    "Function 'substring' applies to StringAttributes but attribute '%s' is a %s in %s",
+            String error = "Function 'substring' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
                     attribute.getAttributeName(),
                     attribute.getClass().getSuperclass().getSimpleName(),
                     this.errorContext);
@@ -108,8 +106,7 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
         if (!(attribute instanceof NumericAttribute))
         {
-            var error = String.format(
-                    "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s",
+            String error = "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s".formatted(
                     ctx.functionName.getText(),
                     attribute.getAttributeName(),
                     attribute.getClass().getSuperclass().getSimpleName(),
@@ -126,17 +123,16 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
     {
         Attribute attribute = ctx.attribute().accept(this);
 
-        if (attribute instanceof TimestampAttribute)
+        if (attribute instanceof TimestampAttribute timestampAttribute)
         {
-            return ((TimestampAttribute) attribute).year();
+            return timestampAttribute.year();
         }
-        if (attribute instanceof DateAttribute)
+        if (attribute instanceof DateAttribute dateAttribute)
         {
-            return ((DateAttribute) attribute).year();
+            return dateAttribute.year();
         }
 
-        var error = String.format(
-                "Function 'year' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s",
+        String error = "Function 'year' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
                 attribute.getAttributeName(),
                 attribute.getClass().getSuperclass().getSimpleName(),
                 this.errorContext);
@@ -149,17 +145,16 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
     {
         Attribute attribute = ctx.attribute().accept(this);
 
-        if (attribute instanceof TimestampAttribute)
+        if (attribute instanceof TimestampAttribute timestampAttribute)
         {
-            return ((TimestampAttribute) attribute).month();
+            return timestampAttribute.month();
         }
-        if (attribute instanceof DateAttribute)
+        if (attribute instanceof DateAttribute dateAttribute)
         {
-            return ((DateAttribute) attribute).month();
+            return dateAttribute.month();
         }
 
-        var error = String.format(
-                "Function 'month' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s",
+        String error = "Function 'month' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
                 attribute.getAttributeName(),
                 attribute.getClass().getSuperclass().getSimpleName(),
                 this.errorContext);
@@ -172,17 +167,16 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
     {
         Attribute attribute = ctx.attribute().accept(this);
 
-        if (attribute instanceof TimestampAttribute)
+        if (attribute instanceof TimestampAttribute timestampAttribute)
         {
-            return ((TimestampAttribute) attribute).dayOfMonth();
+            return timestampAttribute.dayOfMonth();
         }
-        if (attribute instanceof DateAttribute)
+        if (attribute instanceof DateAttribute dateAttribute)
         {
-            return ((DateAttribute) attribute).dayOfMonth();
+            return dateAttribute.dayOfMonth();
         }
 
-        var error = String.format(
-                "Function 'dayOfMonth' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s",
+        String error = "Function 'dayOfMonth' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
                 attribute.getAttributeName(),
                 attribute.getClass().getSuperclass().getSimpleName(),
                 this.errorContext);
@@ -193,8 +187,7 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
     @Override
     public Attribute visitFunctionUnknown(FunctionUnknownContext ctx)
     {
-        var error = String.format(
-                "Unknown function '%s' in %s",
+        String error = "Unknown function '%s' in %s".formatted(
                 ctx.functionName.getText(),
                 this.errorContext);
 
@@ -207,8 +200,8 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         if (ctx.className() != null
                 && !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder)))
         {
-            var error = String.format(
-                    "Expected 'this' or <" + this.getExpectedClassName(this.finder) + "> but found: <%s> in %s",
+            String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
+                    this.getExpectedClassName(this.finder),
                     ctx.className().getText(),
                     this.errorContext);
             throw new IllegalArgumentException(error);
@@ -227,8 +220,7 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
                         .selectInstancesOf(AbstractRelatedFinder.class)
                         .collect(AbstractRelatedFinder::getRelationshipName);
 
-                var error = String.format(
-                        "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s",
+                String error = "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s".formatted(
                         relationshipName,
                         this.getExpectedClassName(currentFinder),
                         this.errorContext,
@@ -245,8 +237,7 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
             Attribute[] persistentAttributes = currentFinder.getMithraObjectPortal().getFinder().getPersistentAttributes();
             MutableList<String> validAttributeNames = ArrayAdapter.adapt(persistentAttributes)
                     .collect(Attribute::getAttributeName);
-            var error = String.format(
-                    "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s",
+            String error = "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s".formatted(
                     attributeName,
                     this.getExpectedClassName(currentFinder),
                     this.errorContext,

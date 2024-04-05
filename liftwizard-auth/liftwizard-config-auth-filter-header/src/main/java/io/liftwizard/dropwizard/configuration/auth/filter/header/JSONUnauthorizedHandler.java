@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,7 @@ public class JSONUnauthorizedHandler
     @Override
     public Response buildResponse(String headerName, String prefixName)
     {
-        String message = String.format(
-                "Single value header '%s' with prefix '%s' is required.",
+        String message = "Single value header '%s' with prefix '%s' is required.".formatted(
                 headerName,
                 prefixName);
         ErrorMessage errorMessage = new ErrorMessage(

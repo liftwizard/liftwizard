@@ -203,13 +203,13 @@ public class ReladomoTestResourceColumn
     // https://stackoverflow.com/a/391978
     private static String padRight(String string, int length)
     {
-        return String.format("%-" + length + "s", string);
+        return ("%-" + length + "s").formatted(string);
     }
 
     // https://stackoverflow.com/a/391978
     private static String padLeft(String string, int length)
     {
-        return String.format("%" + length + "s", string);
+        return ("%" + length + "s").formatted(string);
     }
 
     @Override

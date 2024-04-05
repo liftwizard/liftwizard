@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public final class GraphQLInstrumentationUtils
 
         if (resultPath.isListSegment())
         {
-            String indexSuffix = withIndex ? String.format("[%d]", resultPath.getSegmentIndex()) : "";
+            String indexSuffix = withIndex ? "[%d]".formatted(resultPath.getSegmentIndex()) : "";
             String name        = executionStepInfo.getField().getName() + indexSuffix;
             stack.push(name);
 
@@ -73,14 +73,14 @@ public final class GraphQLInstrumentationUtils
 
     public static String getTypeName(GraphQLType type)
     {
-        if (type instanceof GraphQLNamedSchemaElement)
+        if (type instanceof GraphQLNamedSchemaElement namedSchemaElement)
         {
-            return ((GraphQLNamedSchemaElement) type).getName();
+            return namedSchemaElement.getName();
         }
 
-        if (type instanceof GraphQLModifiedType)
+        if (type instanceof GraphQLModifiedType modifiedType)
         {
-            GraphQLType wrappedType = ((GraphQLModifiedType) type).getWrappedType();
+            GraphQLType wrappedType = modifiedType.getWrappedType();
             return getTypeName(wrappedType);
         }
 

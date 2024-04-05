@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,8 +117,8 @@ public class InstrumentedDataFetcher<T>
 
     private DataFetcher<?> getAnnotatedDataFetcher()
     {
-        return this.dataFetcher instanceof LiftwizardAsyncDataFetcher
-                ? ((LiftwizardAsyncDataFetcher<?>) this.dataFetcher).getWrappedDataFetcher()
+        return this.dataFetcher instanceof LiftwizardAsyncDataFetcher asyncDataFetcher
+                ? asyncDataFetcher.getWrappedDataFetcher()
                 : this.dataFetcher;
     }
 
@@ -318,7 +318,7 @@ public class InstrumentedDataFetcher<T>
                         this.exceptionMeterPath.ifPresent(Meter::mark);
                     }
 
-                    int size = success instanceof Collection ? ((Collection<?>) success).size() : 1;
+                    int size = success instanceof Collection collection ? collection.size() : 1;
                     this.meterFetcher.ifPresent(meter -> meter.mark(size));
                     this.meterField.ifPresent(meter -> meter.mark(size));
                     this.meterPath.ifPresent(meter -> meter.mark(size));
@@ -326,7 +326,7 @@ public class InstrumentedDataFetcher<T>
             }
             else
             {
-                int size = result instanceof Collection ? ((Collection<?>) result).size() : 1;
+                int size = result instanceof Collection collection ? collection.size() : 1;
                 this.meterFetcher.ifPresent(meter -> meter.mark(size));
                 this.meterField.ifPresent(meter -> meter.mark(size));
                 this.meterPath.ifPresent(meter -> meter.mark(size));

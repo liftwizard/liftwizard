@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,7 @@ public final class ConnectionManagerHolder
         SourcelessConnectionManager sourcelessConnectionManager = connectionManagersByName.get(name);
         Objects.requireNonNull(
                 sourcelessConnectionManager,
-                () -> String.format(
-                        "Could not find connection manager with name %s. Valid choices are %s",
+                () -> "Could not find connection manager with name %s. Valid choices are %s".formatted(
                         name,
                         connectionManagersByName.keysView()));
         return sourcelessConnectionManager;
