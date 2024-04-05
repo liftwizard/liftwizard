@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonPrettyPrinterTest
 {
@@ -67,9 +67,7 @@ public class JsonPrettyPrinterTest
                   ]
                 }""";
 
-        assertEquals(
-                expectedJson,
-                actualJson);
+        assertThat(actualJson).isEqualTo(expectedJson);
     }
 
     @Test
@@ -79,6 +77,6 @@ public class JsonPrettyPrinterTest
         List<String> emptyList    = List.of();
         String       actualJson   = this.mapper.writeValueAsString(emptyList);
         String       expectedJson = "[]";
-        assertEquals(expectedJson, actualJson);
+        assertThat(actualJson).isEqualTo(expectedJson);
     }
 }

@@ -35,10 +35,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FixedClockFactoryTest
 {
@@ -57,7 +54,7 @@ public class FixedClockFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(FixedClockFactory.class));
+        assertThat(discoveredSubtypes).contains(FixedClockFactory.class);
     }
 
     @Test
@@ -65,12 +62,12 @@ public class FixedClockFactoryTest
             throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
-        assertThat(clockFactory, instanceOf(FixedClockFactory.class));
+        assertThat(clockFactory).isInstanceOf(FixedClockFactory.class);
         Clock clock = clockFactory.createClock();
-        assertThat(clock.getZone(), is(ZoneId.of("America/New_York")));
+        assertThat(clock.getZone()).isEqualTo(ZoneId.of("America/New_York"));
         Instant actualInstant   = clock.instant();
         Instant expectedInstant = Instant.parse("2000-12-31T23:59:59Z");
-        assertThat(actualInstant, is(expectedInstant));
+        assertThat(actualInstant).isEqualTo(expectedInstant);
     }
 
     private static ObjectMapper newObjectMapper()

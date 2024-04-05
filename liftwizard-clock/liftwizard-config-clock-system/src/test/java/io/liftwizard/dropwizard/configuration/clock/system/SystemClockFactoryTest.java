@@ -32,9 +32,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SystemClockFactoryTest
 {
@@ -53,7 +51,7 @@ public class SystemClockFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(SystemClockFactory.class));
+        assertThat(discoveredSubtypes).contains(SystemClockFactory.class);
     }
 
     @Test
@@ -61,7 +59,7 @@ public class SystemClockFactoryTest
             throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
-        assertThat(clockFactory, instanceOf(SystemClockFactory.class));
+        assertThat(clockFactory).isInstanceOf(SystemClockFactory.class);
     }
 
     private static ObjectMapper newObjectMapper()

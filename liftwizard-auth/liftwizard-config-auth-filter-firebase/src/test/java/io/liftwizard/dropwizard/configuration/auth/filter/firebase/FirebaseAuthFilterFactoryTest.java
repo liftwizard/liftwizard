@@ -32,9 +32,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FirebaseAuthFilterFactoryTest
 {
@@ -53,7 +51,7 @@ public class FirebaseAuthFilterFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(FirebaseAuthFilterFactory.class));
+        assertThat(discoveredSubtypes).contains(FirebaseAuthFilterFactory.class);
     }
 
     @Test
@@ -63,7 +61,7 @@ public class FirebaseAuthFilterFactoryTest
         AuthFilterFactory authFilterFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
-        assertThat(authFilterFactory, instanceOf(FirebaseAuthFilterFactory.class));
+        assertThat(authFilterFactory).isInstanceOf(FirebaseAuthFilterFactory.class);
     }
 
     private static ObjectMapper newObjectMapper()

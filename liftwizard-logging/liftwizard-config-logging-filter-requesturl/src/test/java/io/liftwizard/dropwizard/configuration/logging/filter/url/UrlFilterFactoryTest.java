@@ -34,10 +34,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UrlFilterFactoryTest
 {
@@ -59,7 +56,7 @@ public class UrlFilterFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(RequestUrlFilterFactory.class));
+        assertThat(discoveredSubtypes).contains(RequestUrlFilterFactory.class);
     }
 
     @Test
@@ -73,9 +70,9 @@ public class UrlFilterFactoryTest
         IAccessEvent         bannedEvent  = new FakeAccessEvent("banned");
         IAccessEvent         allowedEvent = new FakeAccessEvent("allowed");
 
-        assertThat(urlFilterFactory, instanceOf(RequestUrlFilterFactory.class));
-        assertThat(filter.decide(bannedEvent), is(FilterReply.DENY));
-        assertThat(filter.decide(allowedEvent), is(FilterReply.NEUTRAL));
+        assertThat(urlFilterFactory).isInstanceOf(RequestUrlFilterFactory.class);
+        assertThat(filter.decide(bannedEvent)).isEqualTo(FilterReply.DENY);
+        assertThat(filter.decide(allowedEvent)).isEqualTo(FilterReply.NEUTRAL);
     }
 
     private static ObjectMapper newObjectMapper()

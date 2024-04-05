@@ -35,9 +35,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ImpersonationAuthFilterFactoryTest
 {
@@ -56,7 +54,7 @@ public class ImpersonationAuthFilterFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(ImpersonationAuthFilterFactory.class));
+        assertThat(discoveredSubtypes).contains(ImpersonationAuthFilterFactory.class);
     }
 
     @Test
@@ -66,9 +64,9 @@ public class ImpersonationAuthFilterFactoryTest
         AuthFilterFactory authFilterFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
-        assertThat(authFilterFactory, instanceOf(ImpersonationAuthFilterFactory.class));
+        assertThat(authFilterFactory).isInstanceOf(ImpersonationAuthFilterFactory.class);
         AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();
-        assertThat(authFilter, instanceOf(OAuthCredentialAuthFilter.class));
+        assertThat(authFilter).isInstanceOf(OAuthCredentialAuthFilter.class);
     }
 
     private static ObjectMapper newObjectMapper()

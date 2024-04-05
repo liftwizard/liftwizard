@@ -36,9 +36,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JaninoFilterFactoryTest
 {
@@ -60,7 +58,7 @@ public class JaninoFilterFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(JaninoFilterFactory.class));
+        assertThat(discoveredSubtypes).contains(JaninoFilterFactory.class);
     }
 
     @Test
@@ -72,11 +70,11 @@ public class JaninoFilterFactoryTest
                 "config-test.json5");
         Filter<ILoggingEvent> filter = janinoFilterFactory.build();
 
-        assertThat(janinoFilterFactory, instanceOf(JaninoFilterFactory.class));
-        assertThat(filter, instanceOf(EvaluatorFilter.class));
+        assertThat(janinoFilterFactory).isInstanceOf(JaninoFilterFactory.class);
+        assertThat(filter).isInstanceOf(EvaluatorFilter.class);
 
         EventEvaluator<?> evaluator = ((EvaluatorFilter<?>) filter).getEvaluator();
-        assertThat(evaluator, instanceOf(JaninoEventEvaluator.class));
+        assertThat(evaluator).isInstanceOf(JaninoEventEvaluator.class);
     }
 
     private static ObjectMapper newObjectMapper()
