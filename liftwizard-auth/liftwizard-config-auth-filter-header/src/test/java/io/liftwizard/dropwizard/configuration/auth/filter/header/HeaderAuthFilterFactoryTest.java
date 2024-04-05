@@ -38,7 +38,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HeaderAuthFilterFactoryTest
+class HeaderAuthFilterFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -50,7 +50,7 @@ public class HeaderAuthFilterFactoryTest
             new JsonConfigurationFactory<>(AuthFilterFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
-    public void isDiscoverable()
+    void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
@@ -59,7 +59,7 @@ public class HeaderAuthFilterFactoryTest
     }
 
     @Test
-    public void headerAuthFilter()
+    void headerAuthFilter()
             throws Exception
     {
         URL               resource          = Resources.getResource("config-test.json5");

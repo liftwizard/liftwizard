@@ -28,20 +28,20 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CommonPoolHealthCheckTest
+class CommonPoolHealthCheckTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     @Test
-    public void healthy()
+    void healthy()
     {
         Result result = new CommonPoolHealthCheck().check();
         assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
     @Test
-    public void unhealthy()
+    void unhealthy()
     {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
                 "main",
@@ -54,7 +54,7 @@ public class CommonPoolHealthCheckTest
     }
 
     @Test
-    public void allow()
+    void allow()
     {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
                 "main",
@@ -66,7 +66,7 @@ public class CommonPoolHealthCheckTest
     }
 
     @Test
-    public void ban()
+    void ban()
     {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
                 "main",
@@ -79,7 +79,7 @@ public class CommonPoolHealthCheckTest
     }
 
     @Test
-    public void both()
+    void both()
     {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
                 "main",
