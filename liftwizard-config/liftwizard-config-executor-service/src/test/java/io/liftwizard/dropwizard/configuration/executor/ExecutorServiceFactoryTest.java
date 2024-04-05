@@ -27,13 +27,11 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class ExecutorServiceFactoryTest
 {
@@ -58,7 +56,7 @@ public class ExecutorServiceFactoryTest
         ExecutorServiceFactory executorServiceFactory = this.getConfiguredType(
                 ExecutorServiceFactory.class,
                 "default-executor-service-config-test.json5");
-        assertThat(executorServiceFactory, instanceOf(ExecutorServiceFactory.class));
+        assertThat(executorServiceFactory).isInstanceOf(ExecutorServiceFactory.class);
     }
 
     @Test
@@ -68,7 +66,7 @@ public class ExecutorServiceFactoryTest
         ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
                 ScheduledExecutorServiceFactory.class,
                 "default-executor-service-config-test.json5");
-        assertThat(scheduledExecutorServiceFactory, instanceOf(DefaultScheduledExecutorServiceFactory.class));
+        assertThat(scheduledExecutorServiceFactory).isInstanceOf(DefaultScheduledExecutorServiceFactory.class);
     }
 
     @Test
@@ -78,7 +76,7 @@ public class ExecutorServiceFactoryTest
         ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
                 ScheduledExecutorServiceFactory.class,
                 "noop-executor-service-config-test.json5");
-        assertThat(scheduledExecutorServiceFactory, instanceOf(NoopScheduledExecutorServiceFactory.class));
+        assertThat(scheduledExecutorServiceFactory).isInstanceOf(NoopScheduledExecutorServiceFactory.class);
     }
 
     @Test
@@ -88,12 +86,12 @@ public class ExecutorServiceFactoryTest
         try
         {
             getConfiguredType(ExecutorServiceFactory.class, "invalid-executor-service-config-test.json5");
-            Assertions.fail();
+            fail("");
         }
         catch (ConfigurationValidationException e)
         {
             String message = e.getMessage();
-            assertThat(message, containsString("maxThreads < minThreads"));
+            assertThat(message).contains("maxThreads < minThreads");
         }
     }
 

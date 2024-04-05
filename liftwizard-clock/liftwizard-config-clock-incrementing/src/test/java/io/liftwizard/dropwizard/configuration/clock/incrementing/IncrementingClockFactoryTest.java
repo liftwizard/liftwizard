@@ -35,10 +35,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class IncrementingClockFactoryTest
 {
@@ -57,7 +54,7 @@ public class IncrementingClockFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(IncrementingClockFactory.class));
+        assertThat(discoveredSubtypes).contains(IncrementingClockFactory.class);
     }
 
     @Test
@@ -65,11 +62,11 @@ public class IncrementingClockFactoryTest
             throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
-        assertThat(clockFactory, instanceOf(IncrementingClockFactory.class));
+        assertThat(clockFactory).isInstanceOf(IncrementingClockFactory.class);
         Clock clock = clockFactory.createClock();
-        assertThat(clock.getZone(), is(ZoneId.of("America/New_York")));
-        assertThat(clock.instant(), is(Instant.parse("2000-12-31T23:59:59Z")));
-        assertThat(clock.instant(), is(Instant.parse("2001-01-01T00:00:00Z")));
+        assertThat(clock.getZone()).isEqualTo(ZoneId.of("America/New_York"));
+        assertThat(clock.instant()).isEqualTo(Instant.parse("2000-12-31T23:59:59Z"));
+        assertThat(clock.instant()).isEqualTo(Instant.parse("2001-01-01T00:00:00Z"));
     }
 
     private static ObjectMapper newObjectMapper()

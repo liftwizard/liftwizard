@@ -26,10 +26,7 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommonPoolHealthCheckTest
 {
@@ -40,7 +37,7 @@ public class CommonPoolHealthCheckTest
     public void healthy()
     {
         Result result = new CommonPoolHealthCheck().check();
-        assertTrue(result.isHealthy(), result.toString());
+        assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
     @Test
@@ -52,8 +49,8 @@ public class CommonPoolHealthCheckTest
                 Lists.immutable.empty(),
                 Lists.immutable.empty());
         Result result = commonPoolHealthCheck.check();
-        assertFalse(result.isHealthy());
-        assertThat(result.getMessage(), containsString("Found thread 'main' in state 'RUNNABLE'"));
+        assertThat(result.isHealthy()).isFalse();
+        assertThat(result.getMessage()).contains("Found thread 'main' in state 'RUNNABLE'");
     }
 
     @Test
@@ -65,7 +62,7 @@ public class CommonPoolHealthCheckTest
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
                 Lists.immutable.empty());
         Result result = commonPoolHealthCheck.check();
-        assertTrue(result.isHealthy(), result.toString());
+        assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
     @Test
@@ -77,8 +74,8 @@ public class CommonPoolHealthCheckTest
                 Lists.immutable.empty(),
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"));
         Result result = commonPoolHealthCheck.check();
-        assertFalse(result.isHealthy());
-        assertThat(result.getMessage(), containsString("Found thread 'main' in state 'RUNNABLE'"));
+        assertThat(result.isHealthy()).isFalse();
+        assertThat(result.getMessage()).contains("Found thread 'main' in state 'RUNNABLE'");
     }
 
     @Test
@@ -90,7 +87,7 @@ public class CommonPoolHealthCheckTest
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
                 pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.allow"));
         Result result = commonPoolHealthCheck.check();
-        assertTrue(result.isHealthy(), result.toString());
+        assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
     private static ImmutableList<Pattern> pattern(String string)

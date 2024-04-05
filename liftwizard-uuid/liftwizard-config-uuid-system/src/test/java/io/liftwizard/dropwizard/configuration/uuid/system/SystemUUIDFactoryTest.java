@@ -34,10 +34,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SystemUUIDFactoryTest
 {
@@ -56,7 +53,7 @@ public class SystemUUIDFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(SystemUUIDSupplierFactory.class));
+        assertThat(discoveredSubtypes).contains(SystemUUIDSupplierFactory.class);
     }
 
     @Test
@@ -66,10 +63,10 @@ public class SystemUUIDFactoryTest
         UUIDSupplierFactory uuidFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
-        assertThat(uuidFactory, instanceOf(SystemUUIDSupplierFactory.class));
+        assertThat(uuidFactory).isInstanceOf(SystemUUIDSupplierFactory.class);
         Supplier<UUID> uuidSupplier = uuidFactory.createUUIDSupplier();
         UUID           uuid         = uuidSupplier.get();
-        assertThat(uuid, notNullValue());
+        assertThat(uuid).isNotNull();
     }
 
     private static ObjectMapper newObjectMapper()

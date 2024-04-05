@@ -34,10 +34,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SeedUUIDFactoryTest
 {
@@ -59,7 +56,7 @@ public class SeedUUIDFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(SeedUUIDSupplierFactory.class));
+        assertThat(discoveredSubtypes).contains(SeedUUIDSupplierFactory.class);
     }
 
     @Test
@@ -69,11 +66,11 @@ public class SeedUUIDFactoryTest
         UUIDSupplierFactory uuidFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
-        assertThat(uuidFactory, instanceOf(SeedUUIDSupplierFactory.class));
+        assertThat(uuidFactory).isInstanceOf(SeedUUIDSupplierFactory.class);
         Supplier<UUID> uuidSupplier     = uuidFactory.createUUIDSupplier();
         UUID           uuid             = uuidSupplier.get();
         String         actualUUIDString = uuid.toString();
-        assertThat(actualUUIDString, is("4bb909d0-4c29-3f81-957f-aab6d7f73c9f"));
+        assertThat(actualUUIDString).isEqualTo("4bb909d0-4c29-3f81-957f-aab6d7f73c9f");
     }
 
     private static ObjectMapper newObjectMapper()

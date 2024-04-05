@@ -35,8 +35,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConnectionManagerFactoryTest
 {
@@ -62,9 +61,9 @@ public class ConnectionManagerFactoryTest
         SourcelessConnectionManager sourcelessConnectionManager =
                 connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);
 
-        assertThat(sourcelessConnectionManager.getDatabaseIdentifier(), is("schemaName"));
-        assertThat(sourcelessConnectionManager.getDatabaseTimeZone(), is(TimeZone.getTimeZone("America/New_York")));
-        assertThat(sourcelessConnectionManager.getDatabaseType(), is(GenericDatabaseType.getInstance()));
+        assertThat(sourcelessConnectionManager.getDatabaseIdentifier()).isEqualTo("schemaName");
+        assertThat(sourcelessConnectionManager.getDatabaseTimeZone()).isEqualTo(TimeZone.getTimeZone("America/New_York"));
+        assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(GenericDatabaseType.getInstance());
     }
 
     private static ObjectMapper newObjectMapper()

@@ -36,9 +36,7 @@ import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HeaderAuthFilterFactoryTest
 {
@@ -57,7 +55,7 @@ public class HeaderAuthFilterFactoryTest
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes, hasItem(HeaderAuthFilterFactory.class));
+        assertThat(discoveredSubtypes).contains(HeaderAuthFilterFactory.class);
     }
 
     @Test
@@ -67,9 +65,9 @@ public class HeaderAuthFilterFactoryTest
         URL               resource          = Resources.getResource("config-test.json5");
         File              json              = new File(resource.toURI());
         AuthFilterFactory authFilterFactory = this.factory.build(json);
-        assertThat(authFilterFactory, instanceOf(HeaderAuthFilterFactory.class));
+        assertThat(authFilterFactory).isInstanceOf(HeaderAuthFilterFactory.class);
         AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();
-        assertThat(authFilter, instanceOf(HeaderAuthFilter.class));
+        assertThat(authFilter).isInstanceOf(HeaderAuthFilter.class);
     }
 
     private static ObjectMapper newObjectMapper()
