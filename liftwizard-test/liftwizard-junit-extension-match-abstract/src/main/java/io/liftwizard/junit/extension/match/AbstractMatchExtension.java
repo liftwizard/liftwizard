@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import io.liftwizard.junit.extension.error.ErrorCollectorExtension;
 import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.junit.jupiter.api.extension.AfterEachCallback;

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package io.liftwizard.junit.extension.match;
+package io.liftwizard.junit.extension.error;
+
+import java.util.Objects;
 
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.MutableList;
@@ -29,10 +31,7 @@ public class ErrorCollectorExtension
 
     public void addError(AssertionError error)
     {
-        if (error == null)
-        {
-            throw new NullPointerException("Error cannot be null");
-        }
+        Objects.requireNonNull(error, "Error cannot be null");
         this.errors.add(error);
     }
 
