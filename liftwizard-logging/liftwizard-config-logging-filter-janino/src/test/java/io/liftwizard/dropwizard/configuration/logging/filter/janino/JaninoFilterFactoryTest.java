@@ -38,7 +38,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JaninoFilterFactoryTest
+class JaninoFilterFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -53,7 +53,7 @@ public class JaninoFilterFactoryTest
             "dw");
 
     @Test
-    public void isDiscoverable()
+    void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
@@ -62,7 +62,7 @@ public class JaninoFilterFactoryTest
     }
 
     @Test
-    public void filterJanino()
+    void filterJanino()
             throws Exception
     {
         JaninoFilterFactory janinoFilterFactory = this.factory.build(

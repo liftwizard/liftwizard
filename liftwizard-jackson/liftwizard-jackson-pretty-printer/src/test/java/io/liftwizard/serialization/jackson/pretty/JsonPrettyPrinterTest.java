@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonPrettyPrinterTest
+class JsonPrettyPrinterTest
 {
     private final ObjectMapper mapper = JsonPrettyPrinterTest.getObjectMapper();
 
@@ -45,7 +45,7 @@ public class JsonPrettyPrinterTest
     }
 
     @Test
-    public void smokeTest()
+    void smokeTest()
             throws JsonProcessingException
     {
         Map<String, List<String>> map = new HashMap<>();
@@ -71,7 +71,7 @@ public class JsonPrettyPrinterTest
     }
 
     @Test
-    public void emptyArray()
+    void emptyArray()
             throws JsonProcessingException
     {
         List<String> emptyList    = List.of();

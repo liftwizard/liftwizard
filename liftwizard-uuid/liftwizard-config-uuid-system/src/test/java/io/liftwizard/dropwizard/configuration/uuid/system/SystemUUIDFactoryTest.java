@@ -36,7 +36,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SystemUUIDFactoryTest
+class SystemUUIDFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -48,7 +48,7 @@ public class SystemUUIDFactoryTest
             new JsonConfigurationFactory<>(UUIDSupplierFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
-    public void isDiscoverable()
+    void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
@@ -57,7 +57,7 @@ public class SystemUUIDFactoryTest
     }
 
     @Test
-    public void systemUUID()
+    void systemUUID()
             throws Exception
     {
         UUIDSupplierFactory uuidFactory = this.factory.build(

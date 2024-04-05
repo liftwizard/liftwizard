@@ -33,7 +33,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class ExecutorServiceFactoryTest
+class ExecutorServiceFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -50,7 +50,7 @@ public class ExecutorServiceFactoryTest
     }
 
     @Test
-    public void executorServiceFactory()
+    void executorServiceFactory()
             throws Exception
     {
         ExecutorServiceFactory executorServiceFactory = this.getConfiguredType(
@@ -60,7 +60,7 @@ public class ExecutorServiceFactoryTest
     }
 
     @Test
-    public void defaultScheduledExecutorServiceFactory()
+    void defaultScheduledExecutorServiceFactory()
             throws Exception
     {
         ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
@@ -70,7 +70,7 @@ public class ExecutorServiceFactoryTest
     }
 
     @Test
-    public void noopScheduledExecutorServiceFactory()
+    void noopScheduledExecutorServiceFactory()
             throws Exception
     {
         ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
@@ -80,7 +80,7 @@ public class ExecutorServiceFactoryTest
     }
 
     @Test
-    public void invalidExecutorServiceFactory()
+    void invalidExecutorServiceFactory()
             throws Exception
     {
         try

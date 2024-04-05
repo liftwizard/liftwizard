@@ -34,7 +34,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SystemClockFactoryTest
+class SystemClockFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -46,7 +46,7 @@ public class SystemClockFactoryTest
             new JsonConfigurationFactory<>(ClockFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
-    public void isDiscoverable()
+    void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
@@ -55,7 +55,7 @@ public class SystemClockFactoryTest
     }
 
     @Test
-    public void systemClock()
+    void systemClock()
             throws Exception
     {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");

@@ -36,7 +36,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UrlFilterFactoryTest
+class UrlFilterFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -51,7 +51,7 @@ public class UrlFilterFactoryTest
             "dw");
 
     @Test
-    public void isDiscoverable()
+    void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
         var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
@@ -60,7 +60,7 @@ public class UrlFilterFactoryTest
     }
 
     @Test
-    public void filterUrl()
+    void filterUrl()
             throws Exception
     {
         RequestUrlFilterFactory urlFilterFactory = this.factory.build(

@@ -37,7 +37,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConnectionManagerFactoryTest
+class ConnectionManagerFactoryTest
 {
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
@@ -49,7 +49,7 @@ public class ConnectionManagerFactoryTest
             new JsonConfigurationFactory<>(ConnectionManagerFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
-    public void createSourcelessConnectionManager() throws Exception
+    void createSourcelessConnectionManager() throws Exception
     {
         ConnectionManagerFactory connectionManagerFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
