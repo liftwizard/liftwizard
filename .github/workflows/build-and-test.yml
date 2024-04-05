@@ -18,7 +18,7 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw --color=always verify          --activate-profiles 'dev' --threads 2C -Dcheckstyle.skip
+      - run: ./mvnw --color=always verify --threads 2C --activate-profiles 'enforcer-strict,maven-dependency-plugin'
 
   checkstyle-semantics:
     name: Checkstyle Semantics

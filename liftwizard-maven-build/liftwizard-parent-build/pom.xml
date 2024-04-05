@@ -185,31 +185,6 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 21: verify-->
-                <plugin>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.6.1</version>
-                    <executions>
-
-                        <execution>
-                            <id>analyze</id>
-                            <goals>
-                                <goal>analyze-only</goal>
-                            </goals>
-                            <configuration>
-                                <failOnWarning>false</failOnWarning>
-                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
-                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.6.1 support Java 17. -->
-                                <ignoredNonTestScopedDependencies>
-                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
-                                </ignoredNonTestScopedDependencies>
-                            </configuration>
-                        </execution>
-
-                    </executions>
-                </plugin>
-                <!--endregion-->
-
                 <!--region Phase 22: install-->
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -534,6 +509,58 @@
                     </plugin>
                 </plugins>
             </build>
+
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase 21: verify-->
+        <profile>
+            <id>maven-dependency-plugin</id>
+
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <version>3.6.1</version>
+                            <configuration>
+                                <failOnWarning>true</failOnWarning>
+                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
+                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.6.1 support Java 17. -->
+                                <ignoredNonTestScopedDependencies>
+                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
+                                </ignoredNonTestScopedDependencies>
+                                <ignoredUnusedDeclaredDependencies>
+                                    <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>org.hamcrest:hamcrest-core</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>junit:junit</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>org.junit.jupiter:junit-jupiter-api</ignoredUnusedDeclaredDependency>
+                                </ignoredUnusedDeclaredDependencies>
+                                <ignoredUsedUndeclaredDependencies>
+                                    <ignoredUsedUndeclaredDependency>org.hamcrest:hamcrest</ignoredUsedUndeclaredDependency>
+                                </ignoredUsedUndeclaredDependencies>
+                            </configuration>
+
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>analyze-only</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <!--endregion-->
 
@@ -641,9 +668,6 @@
         <!--region Phase 1: validate-->
         <profile>
             <id>enforcer-strict</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
 
             <build>
                 <plugins>
