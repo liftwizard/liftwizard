@@ -30,7 +30,7 @@ public class LiftwizardGraphQLException
 {
     public LiftwizardGraphQLException(String message, ImmutableList<String> context, RuntimeException e)
     {
-        super(String.format("%s in %s", message, context.makeString(".")), e);
+        super("%s in %s".formatted(message, context.makeString(".")), e);
     }
 
     @Override

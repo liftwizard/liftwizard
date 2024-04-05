@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,8 +77,8 @@ public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowin
 
     protected T throwTypeError(ParserRuleContext ctx)
     {
-        var error = String.format(
-                "Expected <" + this.getExpectedType() + "> but found: <%s> in %s",
+        String error = "Expected <%s> but found: <%s> in %s".formatted(
+                this.getExpectedType(),
                 ctx.getText(),
                 this.errorContext);
         throw new IllegalArgumentException(error);

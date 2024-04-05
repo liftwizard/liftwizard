@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,7 @@ public class ThrowingErrorListener extends BaseErrorListener
             RecognitionException e)
     {
         String sourceLine = this.getSourceLine(line);
-        String error = String.format(
-                "(%d) %s [%d:%d]%n%s",
+        String error = "(%d) %s [%d:%d]%n%s".formatted(
                 line,
                 msg,
                 line,

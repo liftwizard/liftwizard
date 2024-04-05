@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,8 +126,7 @@ public class ConnectionManagersFactory
 
         if (!this.connectionManagerFactoriesByName.containsKey(connectionManagerName))
         {
-            String message = String.format(
-                    "No connection manager named: '%s'. Known connection managers: %s",
+            String message = "No connection manager named: '%s'. Known connection managers: %s".formatted(
                     connectionManagerName,
                     this.connectionManagerFactoriesByName.keySet());
             throw new IllegalStateException(message);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,9 +65,9 @@ public class LocalDateCoercing
 
     private TemporalAccessor getTemporalAccessorSerialize(Object input)
     {
-        if (input instanceof TemporalAccessor)
+        if (input instanceof TemporalAccessor temporalAccessor)
         {
-            return (TemporalAccessor) input;
+            return temporalAccessor;
         }
 
         if (input instanceof String)
@@ -75,8 +75,7 @@ public class LocalDateCoercing
             return this.parseLocalDate(input.toString(), CoercingSerializeException::new);
         }
 
-        String error = String.format(
-                "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.",
+        String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
                 LocalDateCoercing.typeName(input));
         throw new CoercingSerializeException(error);
     }
@@ -98,9 +97,9 @@ public class LocalDateCoercing
 
     private TemporalAccessor getTemporalAccessorParse(Object input)
     {
-        if (input instanceof TemporalAccessor)
+        if (input instanceof TemporalAccessor temporalAccessor)
         {
-            return (TemporalAccessor) input;
+            return temporalAccessor;
         }
 
         if (input instanceof String)
@@ -108,8 +107,7 @@ public class LocalDateCoercing
             return this.parseLocalDate(input.toString(), CoercingParseValueException::new);
         }
 
-        String error = String.format(
-                "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.",
+        String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
                 LocalDateCoercing.typeName(input));
         throw new CoercingParseValueException(error);
     }
@@ -134,8 +132,7 @@ public class LocalDateCoercing
         }
         catch (DateTimeParseException e)
         {
-            String message = String.format(
-                    "Invalid RFC3339 full date value: '%s'. because of: '%s'",
+            String message = "Invalid RFC3339 full date value: '%s'. because of: '%s'".formatted(
                     s,
                     e.getMessage());
             throw exceptionMaker.apply(message);

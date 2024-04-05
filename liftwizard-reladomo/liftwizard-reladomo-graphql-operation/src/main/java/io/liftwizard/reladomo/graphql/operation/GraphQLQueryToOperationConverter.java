@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,41 +201,41 @@ public class GraphQLQueryToOperationConverter
             Attribute attribute,
             Map<String, ?> graphQlOperation)
     {
-        if (attribute instanceof StringAttribute)
+        if (attribute instanceof StringAttribute stringAttribute)
         {
-            return this.convertStringAttribute(finderInstance, (StringAttribute) attribute, graphQlOperation);
+            return this.convertStringAttribute(finderInstance, stringAttribute, graphQlOperation);
         }
-        if (attribute instanceof BooleanAttribute)
+        if (attribute instanceof BooleanAttribute booleanAttribute)
         {
-            return this.convertBooleanAttribute(finderInstance, (BooleanAttribute) attribute, graphQlOperation);
+            return this.convertBooleanAttribute(finderInstance, booleanAttribute, graphQlOperation);
         }
-        if (attribute instanceof IntegerAttribute)
+        if (attribute instanceof IntegerAttribute integerAttribute)
         {
-            return this.convertIntegerAttribute(finderInstance, (IntegerAttribute) attribute, graphQlOperation);
+            return this.convertIntegerAttribute(finderInstance, integerAttribute, graphQlOperation);
         }
-        if (attribute instanceof LongAttribute)
+        if (attribute instanceof LongAttribute longAttribute)
         {
-            return this.convertLongAttribute(finderInstance, (LongAttribute) attribute, graphQlOperation);
+            return this.convertLongAttribute(finderInstance, longAttribute, graphQlOperation);
         }
-        if (attribute instanceof DoubleAttribute)
+        if (attribute instanceof DoubleAttribute doubleAttribute)
         {
-            return this.convertDoubleAttribute(finderInstance, (DoubleAttribute) attribute, graphQlOperation);
+            return this.convertDoubleAttribute(finderInstance, doubleAttribute, graphQlOperation);
         }
-        if (attribute instanceof FloatAttribute)
+        if (attribute instanceof FloatAttribute floatAttribute)
         {
-            return this.convertFloatAttribute(finderInstance, (FloatAttribute) attribute, graphQlOperation);
+            return this.convertFloatAttribute(finderInstance, floatAttribute, graphQlOperation);
         }
-        if (attribute instanceof DateAttribute)
+        if (attribute instanceof DateAttribute dateAttribute)
         {
-            return this.convertDateAttribute(finderInstance, (DateAttribute) attribute, graphQlOperation);
+            return this.convertDateAttribute(finderInstance, dateAttribute, graphQlOperation);
         }
-        if (attribute instanceof TimestampAttribute)
+        if (attribute instanceof TimestampAttribute timestampAttribute)
         {
-            return this.convertTimestampAttribute(finderInstance, (TimestampAttribute) attribute, graphQlOperation);
+            return this.convertTimestampAttribute(finderInstance, timestampAttribute, graphQlOperation);
         }
-        if (attribute instanceof AsOfAttribute)
+        if (attribute instanceof AsOfAttribute asOfAttribute)
         {
-            return this.convertAsOfAttribute(finderInstance, (AsOfAttribute) attribute, graphQlOperation);
+            return this.convertAsOfAttribute(finderInstance, asOfAttribute, graphQlOperation);
         }
         throw new AssertionError(attribute.getClass().getSuperclass().getCanonicalName());
     }

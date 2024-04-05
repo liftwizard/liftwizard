@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,7 @@ public class SystemPropertiesBundle
             String oldValue = System.setProperty(key, value);
             if (strict && oldValue != null)
             {
-                String error = String.format(
-                        "Overwrote system property {%s:%s} with %s.",
+                String error = "Overwrote system property {%s:%s} with %s.".formatted(
                         key,
                         oldValue,
                         value);

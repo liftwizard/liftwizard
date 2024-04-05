@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,8 +118,7 @@ public class NamedDataSourcesFactory
 
         if (!this.namedDataSourceFactoriesByName.containsKey(name))
         {
-            String message = String.format(
-                    "No data source named: '%s'. Known data sources: %s",
+            String message = "No data source named: '%s'. Known data sources: %s".formatted(
                     name,
                     this.namedDataSourceFactoriesByName.keySet());
             throw new IllegalStateException(message);

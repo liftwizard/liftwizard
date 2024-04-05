@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -198,8 +198,8 @@ public class ReladomoOperationBuilderVisitor<T>
         if (ctx.className() != null
                 && !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder)))
         {
-            var error = String.format(
-                    "Expected 'this' or <" + this.getExpectedClassName(this.finder) + "> but found: <%s> in %s",
+            String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
+                    this.getExpectedClassName(this.finder),
                     ctx.className().getText(),
                     errorContext);
             throw new IllegalArgumentException(error);
@@ -213,8 +213,7 @@ public class ReladomoOperationBuilderVisitor<T>
             RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
             if (nextFinder == null)
             {
-                var error = String.format(
-                        "Could not find relationship '%s' on type '%s' in %s",
+                String error = "Could not find relationship '%s' on type '%s' in %s".formatted(
                         relationshipName,
                         this.getExpectedClassName(currentFinder),
                         errorContext);
@@ -362,11 +361,9 @@ public class ReladomoOperationBuilderVisitor<T>
 
     private ReladomoOperationVisitor<Operation> getUnaryOperatorVisitor(Attribute attribute)
     {
-        if (attribute instanceof AsOfAttribute)
-        {
-            return new AsOfUnaryOperatorVisitor((AsOfAttribute) attribute);
-        }
-        return new UnaryOperatorVisitor(attribute);
+        return attribute instanceof AsOfAttribute asOfAttribute
+                ? new AsOfUnaryOperatorVisitor(asOfAttribute)
+                : new UnaryOperatorVisitor(attribute);
     }
 
     private ReladomoOperationVisitor<Operation> getBinaryOperatorVisitor(
@@ -376,87 +373,87 @@ public class ReladomoOperationBuilderVisitor<T>
     {
         if (parameterCardinality == ParameterCardinality.ONE)
         {
-            if (attribute instanceof StringAttribute)
+            if (attribute instanceof StringAttribute stringAttribute)
             {
-                return new StringBinaryOperatorVisitor((StringAttribute) attribute, (String) parameter);
+                return new StringBinaryOperatorVisitor(stringAttribute, (String) parameter);
             }
-            if (attribute instanceof BooleanAttribute)
+            if (attribute instanceof BooleanAttribute booleanAttribute)
             {
-                return new BooleanBinaryOperatorVisitor((BooleanAttribute) attribute, (Boolean) parameter);
+                return new BooleanBinaryOperatorVisitor(booleanAttribute, (Boolean) parameter);
             }
-            if (attribute instanceof IntegerAttribute)
+            if (attribute instanceof IntegerAttribute integerAttribute)
             {
-                return new IntegerBinaryOperatorVisitor((IntegerAttribute) attribute, (Integer) parameter);
+                return new IntegerBinaryOperatorVisitor(integerAttribute, (Integer) parameter);
             }
-            if (attribute instanceof LongAttribute)
+            if (attribute instanceof LongAttribute longAttribute)
             {
-                return new LongBinaryOperatorVisitor((LongAttribute) attribute, (Long) parameter);
+                return new LongBinaryOperatorVisitor(longAttribute, (Long) parameter);
             }
-            if (attribute instanceof DoubleAttribute)
+            if (attribute instanceof DoubleAttribute doubleAttribute)
             {
-                return new DoubleBinaryOperatorVisitor((DoubleAttribute) attribute, (Double) parameter);
+                return new DoubleBinaryOperatorVisitor(doubleAttribute, (Double) parameter);
             }
-            if (attribute instanceof FloatAttribute)
+            if (attribute instanceof FloatAttribute floatAttribute)
             {
-                return new FloatBinaryOperatorVisitor((FloatAttribute) attribute, (Float) parameter);
+                return new FloatBinaryOperatorVisitor(floatAttribute, (Float) parameter);
             }
-            if (attribute instanceof DateAttribute)
+            if (attribute instanceof DateAttribute dateAttribute)
             {
-                return new LocalDateBinaryOperatorVisitor((DateAttribute) attribute, (LocalDate) parameter);
+                return new LocalDateBinaryOperatorVisitor(dateAttribute, (LocalDate) parameter);
             }
-            if (attribute instanceof TimestampAttribute)
+            if (attribute instanceof TimestampAttribute timestampAttribute)
             {
-                return new InstantBinaryOperatorVisitor((TimestampAttribute) attribute, (Instant) parameter);
+                return new InstantBinaryOperatorVisitor(timestampAttribute, (Instant) parameter);
             }
-            if (attribute instanceof AsOfAttribute)
+            if (attribute instanceof AsOfAttribute asOfAttribute)
             {
-                return new TemporalRangeBinaryOperatorVisitor((AsOfAttribute) attribute, (Instant) parameter);
+                return new TemporalRangeBinaryOperatorVisitor(asOfAttribute, (Instant) parameter);
             }
             throw new AssertionError(attribute.getClass().getSuperclass().getCanonicalName());
         }
 
         if (parameterCardinality == ParameterCardinality.MANY)
         {
-            if (attribute instanceof StringAttribute)
+            if (attribute instanceof StringAttribute stringAttribute)
             {
                 return new StringListBinaryOperatorVisitor(
-                        (StringAttribute) attribute,
+                        stringAttribute,
                         (ImmutableList<String>) parameter);
             }
-            if (attribute instanceof BooleanAttribute)
+            if (attribute instanceof BooleanAttribute booleanAttribute)
             {
                 return new BooleanListBinaryOperatorVisitor(
-                        (BooleanAttribute) attribute,
+                        booleanAttribute,
                         (ImmutableList<Boolean>) parameter);
             }
-            if (attribute instanceof IntegerAttribute)
+            if (attribute instanceof IntegerAttribute integerAttribute)
             {
                 return new IntegerListBinaryOperatorVisitor(
-                        (IntegerAttribute) attribute,
+                        integerAttribute,
                         (ImmutableList<Integer>) parameter);
             }
-            if (attribute instanceof LongAttribute)
+            if (attribute instanceof LongAttribute longAttribute)
             {
                 return new LongListBinaryOperatorVisitor(
-                        (LongAttribute) attribute,
+                        longAttribute,
                         (ImmutableList<Long>) parameter);
             }
-            if (attribute instanceof DoubleAttribute)
+            if (attribute instanceof DoubleAttribute doubleAttribute)
             {
                 return new DoubleListBinaryOperatorVisitor(
-                        (DoubleAttribute) attribute,
+                        doubleAttribute,
                         (ImmutableList<Double>) parameter);
             }
-            if (attribute instanceof FloatAttribute)
+            if (attribute instanceof FloatAttribute floatAttribute)
             {
                 return new FloatListBinaryOperatorVisitor(
-                        (FloatAttribute) attribute,
+                        floatAttribute,
                         (ImmutableList<Float>) parameter);
             }
-            if (attribute instanceof DateAttribute)
+            if (attribute instanceof DateAttribute dateAttribute)
             {
                 return new LocalDateListBinaryOperatorVisitor(
-                        (DateAttribute) attribute,
+                        dateAttribute,
                         (ImmutableList<LocalDate>) parameter);
             }
             if (attribute instanceof TimestampAttribute || attribute instanceof AsOfAttribute)

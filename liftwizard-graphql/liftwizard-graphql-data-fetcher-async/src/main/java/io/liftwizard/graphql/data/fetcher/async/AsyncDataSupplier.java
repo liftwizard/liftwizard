@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,9 +51,9 @@ public class AsyncDataSupplier<T>
         }
         catch (Exception e)
         {
-            if (e instanceof RuntimeException)
+            if (e instanceof RuntimeException runtimeException)
             {
-                throw (RuntimeException) e;
+                throw runtimeException;
             }
             throw new RuntimeException(e);
         }
