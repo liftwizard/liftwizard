@@ -7,7 +7,8 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build-and-test:
+    name: Build and test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,19 +20,52 @@ jobs:
 
       - run: ./mvnw --color=always verify          --activate-profiles 'dev' --threads 2C -Dcheckstyle.skip
 
-  checkstyle:
-    name: Produce Checkstyle XML
+  checkstyle-semantics:
+    name: Checkstyle Semantics
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw --color=always checkstyle:check --activate-profiles 'dev' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+      - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
+        name: 'Install liftwizard-checkstyle module'
+
+      - run: ./mvnw --color=always checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+        name: 'Produce Checkstyle XML: Semantics'
 
       - uses: lcollins/checkstyle-github-action@v2.0.0
+        name: 'Checkstyle GitHub Annotations: Semantics'
         with:
           path: '**/checkstyle-result.xml'
+          name: 'Checkstyle GitHub Annotations: Semantics'
+
+  checkstyle-formatting:
+    name: Checkstyle Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
+        name: 'Install liftwizard-checkstyle module'
+
+      - run: ./mvnw --color=always checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+        name: 'Produce Checkstyle XML: Formatting'
+
+      - uses: lcollins/checkstyle-github-action@v2.0.0
+        name: 'Checkstyle GitHub Annotations: Formatting'
+        with:
+          path: '**/checkstyle-result.xml'
+          name: 'Checkstyle GitHub Annotations: Formatting'
