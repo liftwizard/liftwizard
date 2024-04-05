@@ -28,19 +28,6 @@
 
     <name>Liftwizard H2 In-Memory Connection Manager</name>
 
-    <build>
-        <plugins>
-            <!--region Phase 21: verify-->
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
-                    <ignoreNonCompile>true</ignoreNonCompile>
-                </configuration>
-            </plugin>
-            <!--endregion-->
-        </plugins>
-    </build>
-
     <dependencies>
 
         <dependency>
@@ -64,4 +51,22 @@
         </dependency>
 
     </dependencies>
+
+    <!--region Phase 21: verify-->
+    <profiles>
+        <profile>
+            <id>maven-dependency-plugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <configuration>
+                            <ignoreNonCompile>true</ignoreNonCompile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <!--endregion-->
 </project>

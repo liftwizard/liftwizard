@@ -99,38 +99,6 @@
 
     <build>
         <defaultGoal>clean verify</defaultGoal>
-
-        <pluginManagement>
-            <plugins>
-
-                <!--region Phase 21: verify-->
-                <plugin>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.6.1</version>
-                    <executions>
-
-                        <execution>
-                            <id>analyze</id>
-                            <goals>
-                                <goal>analyze-only</goal>
-                            </goals>
-                            <configuration>
-                                <failOnWarning>true</failOnWarning>
-                                <ignoredUnusedDeclaredDependencies>
-                                    <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
-                                </ignoredUnusedDeclaredDependencies>
-                            </configuration>
-                        </execution>
-
-                    </executions>
-                </plugin>
-                <!--endregion-->
-
-            </plugins>
-        </pluginManagement>
-
     </build>
 
     <profiles>
@@ -138,9 +106,6 @@
         <!--region Phase 1: validate-->
         <profile>
             <id>enforcer-strict</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
 
             <build>
                 <plugins>
