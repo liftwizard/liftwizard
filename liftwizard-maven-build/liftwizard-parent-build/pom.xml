@@ -128,11 +128,6 @@
             </plugin>
             <!--endregion-->
 
-            <plugin>
-                <groupId>org.openrewrite.maven</groupId>
-                <artifactId>rewrite-maven-plugin</artifactId>
-            </plugin>
-
             <!--region No phase-->
             <plugin>
                 <groupId>fr.jcgay.maven.plugins</groupId>
@@ -238,6 +233,58 @@
                 </plugin>
                 <!--endregion-->
 
+                <!--region No phase-->
+                <plugin>
+                    <groupId>org.openrewrite.maven</groupId>
+                    <artifactId>rewrite-maven-plugin</artifactId>
+                    <version>5.27.0</version>
+                    <configuration>
+                        <failOnDryRunResults>true</failOnDryRunResults>
+                        <activeRecipes>
+                            <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
+                            <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
+
+                            <recipe>org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64</recipe>
+                            <recipe>org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes</recipe>
+                            <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
+
+                            <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
+                            <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
+
+                            <recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
+                        </activeRecipes>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.openrewrite.recipe</groupId>
+                            <artifactId>rewrite-static-analysis</artifactId>
+                            <version>1.4.2</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.openrewrite.recipe</groupId>
+                            <artifactId>rewrite-migrate-java</artifactId>
+                            <version>2.11.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.openrewrite.recipe</groupId>
+                            <artifactId>rewrite-testing-frameworks</artifactId>
+                            <version>2.6.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.openrewrite.recipe</groupId>
+                            <artifactId>rewrite-logging-frameworks</artifactId>
+                            <version>2.5.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.openrewrite.recipe</groupId>
+                            <artifactId>rewrite-apache</artifactId>
+                            <version>0.1.2</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <!--endregion-->
+
+                <!--region No phase-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -249,6 +296,7 @@
                         <tagNameFormat>@{project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
+                <!--endregion-->
 
                 <!--region Phase 6: process-resources-->
                 <plugin>
@@ -370,76 +418,6 @@
                     <version>3.2.0</version>
                 </plugin>
                 <!--endregion-->
-
-                <plugin>
-                    <groupId>org.openrewrite.maven</groupId>
-                    <artifactId>rewrite-maven-plugin</artifactId>
-                    <version>5.26.0</version>
-                    <configuration>
-                        <activeRecipes>
-                            <!-- Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/static-analysis.yml-->
-                            <!-- But these recipes are disabled in Liftwizard:-->
-                            <!-- - org.openrewrite.staticanalysis.EqualsAvoidsNull-->
-                            <!-- As well as all formatting recipes, since we can rely on auto-formatters instead.-->
-                            <!-- - org.openrewrite.java.format.MethodParamPad-->
-                            <!-- - org.openrewrite.java.format.NoWhitespaceAfter-->
-                            <!-- - org.openrewrite.java.format.NoWhitespaceBefore-->
-                            <!-- - org.openrewrite.java.format.PadEmptyForLoopComponents-->
-                            <recipe>io.liftwizard.staticanalysis.CodeCleanup</recipe>
-
-                            <!-- Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/common-static-analysis.yml-->
-                            <!-- But these recipes are disabled in Liftwizard:-->
-                            <!-- - org.openrewrite.staticanalysis.EqualsAvoidsNull-->
-                            <!-- - org.openrewrite.staticanalysis.InlineVariable-->
-                            <!-- - org.openrewrite.staticanalysis.StringLiteralEquality-->
-                            <recipe>io.liftwizard.staticanalysis.CommonStaticAnalysis</recipe>
-
-                            <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
-                            <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
-
-                            <recipe>org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64</recipe>
-                            <recipe>org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes</recipe>
-                            <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
-
-                            <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
-                            <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
-
-                            <recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
-                        </activeRecipes>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>io.liftwizard</groupId>
-                            <artifactId>liftwizard-rewrite</artifactId>
-                            <version>2.1.7-SNAPSHOT</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.openrewrite.recipe</groupId>
-                            <artifactId>rewrite-static-analysis</artifactId>
-                            <version>1.4.2</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.openrewrite.recipe</groupId>
-                            <artifactId>rewrite-migrate-java</artifactId>
-                            <version>2.11.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.openrewrite.recipe</groupId>
-                            <artifactId>rewrite-testing-frameworks</artifactId>
-                            <version>2.6.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.openrewrite.recipe</groupId>
-                            <artifactId>rewrite-logging-frameworks</artifactId>
-                            <version>2.5.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.openrewrite.recipe</groupId>
-                            <artifactId>rewrite-apache</artifactId>
-                            <version>0.1.2</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
 
             </plugins>
         </pluginManagement>
@@ -580,6 +558,101 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--endregion-->
+
+        <!--region No phase-->
+        <profile>
+            <id>rewrite-maven-plugin</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.openrewrite.maven</groupId>
+                            <artifactId>rewrite-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>OpenRewrite dry run</id>
+                                    <goals>
+                                        <goal>dryRunNoFork</goal>
+                                    </goals>
+                                    <phase>verify</phase>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <activeRecipes>
+                                    <!-- Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/static-analysis.yml-->
+                                    <!-- But these recipes are disabled in Liftwizard:-->
+                                    <!-- - org.openrewrite.staticanalysis.EqualsAvoidsNull-->
+                                    <!-- As well as all formatting recipes, since we can rely on auto-formatters instead.-->
+                                    <!-- - org.openrewrite.java.format.MethodParamPad-->
+                                    <!-- - org.openrewrite.java.format.NoWhitespaceAfter-->
+                                    <!-- - org.openrewrite.java.format.NoWhitespaceBefore-->
+                                    <!-- - org.openrewrite.java.format.PadEmptyForLoopComponents-->
+                                    <recipe>io.liftwizard.staticanalysis.CodeCleanup</recipe>
+
+                                    <!-- Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/common-static-analysis.yml-->
+                                    <!-- But these recipes are disabled in Liftwizard:-->
+                                    <!-- - org.openrewrite.staticanalysis.EqualsAvoidsNull-->
+                                    <!-- - org.openrewrite.staticanalysis.InlineVariable-->
+                                    <!-- - org.openrewrite.staticanalysis.StringLiteralEquality-->
+                                    <recipe>io.liftwizard.staticanalysis.CommonStaticAnalysis</recipe>
+
+                                    <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
+                                    <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
+
+                                    <recipe>org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64</recipe>
+                                    <recipe>org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes</recipe>
+                                    <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
+
+                                    <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
+                                    <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
+
+                                    <recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
+                                </activeRecipes>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>io.liftwizard</groupId>
+                                    <artifactId>liftwizard-rewrite</artifactId>
+                                    <version>2.1.7-SNAPSHOT</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-static-analysis</artifactId>
+                                    <version>1.4.2</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-migrate-java</artifactId>
+                                    <version>2.11.0</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-testing-frameworks</artifactId>
+                                    <version>2.6.0</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-logging-frameworks</artifactId>
+                                    <version>2.5.0</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-apache</artifactId>
+                                    <version>0.1.2</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openrewrite.maven</groupId>
+                        <artifactId>rewrite-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
