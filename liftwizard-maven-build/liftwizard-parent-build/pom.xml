@@ -83,6 +83,17 @@
 
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>10.15.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
@@ -308,33 +319,6 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.3.1</version>
-                    <configuration>
-                        <logViolationsToConsole>true</logViolationsToConsole>
-                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                        <configLocation>${checkstyle.configuration}</configLocation>
-                        <suppressionsLocation>${checkstyle.suppressions}</suppressionsLocation>
-                        <cacheFile>${checkstyle.cache}</cacheFile>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>10.15.0</version>
-                        </dependency>
-                    </dependencies>
-                    <executions>
-                        <execution>
-                            <id>check</id>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
                     <artifactId>maven-shade-plugin</artifactId>
                     <version>3.5.2</version>
                 </plugin>
@@ -449,6 +433,7 @@
 
     <profiles>
 
+        <!--region Phase: verify-->
         <profile>
             <id>znai-maven-plugin</id>
             <build>
@@ -464,9 +449,72 @@
                     </plugin>
                 </plugins>
             </build>
-
         </profile>
 
+        <profile>
+            <id>checkstyle-semantics</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
+                            <suppressionsLocation>checkstyle-suppressions-liftwizard.xml</suppressionsLocation>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.liftwizard</groupId>
+                                <artifactId>liftwizard-checkstyle</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>Checkstyle: semantics</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>checkstyle-formatting</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
+                            <suppressionsLocation>checkstyle-suppressions-liftwizard.xml</suppressionsLocation>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.liftwizard</groupId>
+                                <artifactId>liftwizard-checkstyle</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>Checkstyle: formatting</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase: deploy-->
         <profile>
             <id>deploy</id>
 
@@ -561,6 +609,7 @@
                 </plugins>
             </build>
         </profile>
+        <!--endregion-->
 
         <profile>
             <id>enforcer-strict</id>
