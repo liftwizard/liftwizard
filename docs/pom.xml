@@ -33,6 +33,7 @@
         <maven.site.deploy.skip>true</maven.site.deploy.skip>
     </properties>
 
+    <!--region Phase 16: prepare-package-->
     <profiles>
         <profile>
             <id>znai-maven-plugin</id>
@@ -96,5 +97,6 @@
 
         </profile>
     </profiles>
+    <!--endregion-->
 
 </project>

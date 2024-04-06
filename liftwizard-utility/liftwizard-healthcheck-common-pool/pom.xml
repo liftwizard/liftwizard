@@ -29,6 +29,7 @@
 
     <build>
         <plugins>
+            <!--region Phase 21: verify-->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
@@ -37,6 +38,7 @@
                     </ignoredDependencies>
                 </configuration>
             </plugin>
+            <!--endregion-->
         </plugins>
     </build>
 

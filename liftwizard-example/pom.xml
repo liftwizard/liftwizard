@@ -538,6 +538,7 @@
     <build>
         <plugins>
 
+            <!--region Phase 3: generate-sources-->
             <plugin>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-generator-reladomo-code-plugin</artifactId>
@@ -558,7 +559,9 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--endregion-->
 
+            <!--region Phase 17: package-->
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
                 <configuration>
@@ -591,11 +594,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--endregion-->
 
         </plugins>
     </build>
 
     <profiles>
+        <!--region Phase 17: package-->
         <profile>
             <id>dev</id>
             <build>
@@ -611,6 +616,9 @@
                 </plugins>
             </build>
         </profile>
+        <!--endregion-->
+
+        <!--region Phase 15: test-->
         <profile>
             <id>jdk9</id>
             <activation>
@@ -633,6 +641,7 @@
                 </plugins>
             </build>
         </profile>
+        <!--endregion-->
     </profiles>
 
 </project>

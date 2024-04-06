@@ -39,10 +39,12 @@
     <build>
         <plugins>
 
+            <!--region Phase 3: generate-sources-->
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
             </plugin>
+            <!--endregion-->
 
         </plugins>
     </build>
