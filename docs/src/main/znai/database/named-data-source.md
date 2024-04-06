@@ -13,7 +13,7 @@ Different named data sources can refer to different databases, or the same datab
 :include-json: test-example.json5 {
 title: "example.json5",
 include: "$['absent', 'dataSources']",
-paths: ["root.dataSources[0].name", "root.dataSources[1].name", "root.dataSources[2].name", "root.dataSources[3].name"],
+highlightValue: ["root.dataSources[0].name", "root.dataSources[1].name", "root.dataSources[2].name", "root.dataSources[3].name"],
 }
 
 To use named data sources, start by changing the Configuration class to implement `NamedDataSourceFactoryProvider`.
@@ -46,5 +46,5 @@ Now we can use the named data sources in the configuration of other bundles. For
 :include-json: test-example.json5 {
 title: "example.json5",
 include: "$['absent', 'liquibase']",
-paths: ["root.liquibase.dataSourceMigrations[0].dataSourceName"],
+highlightValue: ["root.liquibase.dataSourceMigrations[0].dataSourceName"],
 }
