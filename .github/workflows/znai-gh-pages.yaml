@@ -6,39 +6,35 @@ on:
   push:
     branches:
       - main
-      - refs/tags/*
-    tags:
-      - refs/tags/*
-  release:
-    types: [created, published]
-  workflow_dispatch:
+  pull_request:
 
 jobs:
-  deploy:
+  generate-znai-docs:
+    name: Generate Znai docs
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v4
         with:
-          distribution: corretto
-          java-version: 17
+          java-version-file: .tool-versions
+          distribution: oracle
 
-      - run: sudo apt-get install graphviz
+      - name: Set up grahpviz
+        run: sudo apt-get install graphviz
 
-      - name: Build docs with xvfb enabled
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: mvn --color=always package --projects docs --also-make
+      - run: ./mvnw --color=always package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
-      - name: Move files
+      - name: Create deploy directory
+        if: github.event_name == 'push'
         run: |
           mkdir ./deploy
           mv ./docs/target/docs/ ./deploy/
           cp ./docs/index.html   ./deploy/
 
-      - uses: peaceiris/actions-gh-pages@v3
+      - name: Push to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.event_name == 'push'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deploy
