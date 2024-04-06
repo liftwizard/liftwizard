@@ -494,6 +494,7 @@
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
+                                <phase>prepare-package</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -527,6 +528,7 @@
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
+                                <phase>prepare-package</phase>
                             </execution>
                         </executions>
                     </plugin>
