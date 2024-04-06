@@ -118,13 +118,6 @@
             </plugin>
             <!--endregion-->
 
-            <!--region No phase-->
-            <plugin>
-                <groupId>com.github.ferstl</groupId>
-                <artifactId>depgraph-maven-plugin</artifactId>
-            </plugin>
-            <!--endregion-->
-
             <plugin>
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
@@ -396,16 +389,6 @@
                     </configuration>
                 </plugin>
                 <!--endregion-->
-
-                <plugin>
-                    <groupId>com.github.ferstl</groupId>
-                    <artifactId>depgraph-maven-plugin</artifactId>
-                    <version>4.0.3</version>
-                    <configuration>
-                        <createImage>true</createImage>
-                        <includes>${project.groupId}</includes>
-                    </configuration>
-                </plugin>
 
                 <!--region No Phase-->
                 <plugin>
