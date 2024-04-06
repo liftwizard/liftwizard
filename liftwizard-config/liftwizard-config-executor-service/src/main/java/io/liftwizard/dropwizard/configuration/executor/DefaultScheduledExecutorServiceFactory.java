@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
-import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -77,13 +76,6 @@ public class DefaultScheduledExecutorServiceFactory
         return this.nameFormat;
     }
 
-    @JsonIgnore
-    public ScheduledExecutorServiceFactory nameFormat(String nameFormat)
-    {
-        this.nameFormat = Objects.requireNonNull(nameFormat);
-        return this;
-    }
-
     @JsonProperty
     public void setNameFormat(String nameFormat)
     {
@@ -96,13 +88,6 @@ public class DefaultScheduledExecutorServiceFactory
         return this.useDaemonThreads;
     }
 
-    @JsonIgnore
-    public ScheduledExecutorServiceFactory useDaemonThreads(boolean useDaemonThreads)
-    {
-        this.useDaemonThreads = useDaemonThreads;
-        return this;
-    }
-
     @JsonProperty
     public void setUseDaemonThreads(boolean useDaemonThreads)
     {
@@ -113,13 +98,6 @@ public class DefaultScheduledExecutorServiceFactory
     public int getThreads()
     {
         return this.threads;
-    }
-
-    @JsonIgnore
-    public ScheduledExecutorServiceFactory threads(int threads)
-    {
-        this.threads = threads;
-        return this;
     }
 
     @JsonProperty

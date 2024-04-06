@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -85,13 +84,6 @@ public class ExecutorServiceFactory
         return this.nameFormat;
     }
 
-    @JsonIgnore
-    public ExecutorServiceFactory nameFormat(String nameFormat)
-    {
-        this.nameFormat = Objects.requireNonNull(nameFormat);
-        return this;
-    }
-
     @JsonProperty
     public void setNameFormat(String nameFormat)
     {
@@ -104,13 +96,6 @@ public class ExecutorServiceFactory
         return this.minThreads;
     }
 
-    @JsonIgnore
-    public ExecutorServiceFactory minThreads(int minThreads)
-    {
-        this.minThreads = minThreads;
-        return this;
-    }
-
     @JsonProperty
     public void setMinThreads(int minThreads)
     {
@@ -121,13 +106,6 @@ public class ExecutorServiceFactory
     public int getMaxThreads()
     {
         return this.maxThreads;
-    }
-
-    @JsonIgnore
-    public ExecutorServiceFactory maxThreads(int maxThreads)
-    {
-        this.maxThreads = maxThreads;
-        return this;
     }
 
     @JsonProperty

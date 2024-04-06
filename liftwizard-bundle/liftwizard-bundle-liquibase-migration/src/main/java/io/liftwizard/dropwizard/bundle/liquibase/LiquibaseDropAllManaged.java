@@ -62,15 +62,9 @@ public class LiquibaseDropAllManaged
 
     @Override
     public void stop()
-            throws LiquibaseException
     {
         try (
-                CloseableLiquibase liquibase = this.openLiquibase(
-                        this.dataSource,
-                        this.catalogName,
-                        this.schemaName,
-                        this.migrationFile,
-                        this.migrationFileLocation))
+                CloseableLiquibase liquibase = this.openLiquibase())
         {
             liquibase.dropAll();
         }
@@ -80,47 +74,42 @@ public class LiquibaseDropAllManaged
         }
     }
 
-    private CloseableLiquibase openLiquibase(
-            ManagedDataSource dataSource,
-            String catalogName,
-            String schemaName,
-            String migrationsFile,
-            MigrationFileLocation migrationFileLocation)
+    private CloseableLiquibase openLiquibase()
             throws SQLException, LiquibaseException
     {
-        Database         database         = this.createDatabase(dataSource, catalogName, schemaName);
-        ResourceAccessor resourceAccessor = LiquibaseDropAllManaged.getResourceAccessor(migrationFileLocation);
-        return new CloseableLiquibase(migrationsFile, resourceAccessor, database, dataSource);
+        Database         database         = this.createDatabase();
+        ResourceAccessor resourceAccessor = this.getResourceAccessor();
+        return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
     }
 
-    @Nonnull
-    private static ResourceAccessor getResourceAccessor(MigrationFileLocation migrationFileLocation)
-    {
-        return switch (migrationFileLocation)
-        {
-            case CLASSPATH -> new ClassLoaderResourceAccessor();
-            case FILESYSTEM -> new FileSystemResourceAccessor();
-            default -> throw new IllegalStateException("Unexpected value: " + migrationFileLocation);
-        };
-    }
-
-    private Database createDatabase(ManagedDataSource dataSource, String catalogName, String schemaName)
+    private Database createDatabase()
             throws SQLException, LiquibaseException
     {
-        DatabaseConnection conn     = new JdbcConnection(dataSource.getConnection());
-        Database           database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(conn);
+        DatabaseConnection connection = new JdbcConnection(this.dataSource.getConnection());
+        Database           database   = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
-        if (database.supportsCatalogs() && catalogName != null)
+        if (database.supportsCatalogs() && this.catalogName != null)
         {
-            database.setDefaultCatalogName(catalogName);
+            database.setDefaultCatalogName(this.catalogName);
             database.setOutputDefaultCatalog(true);
         }
-        if (database.supportsSchemas() && schemaName != null)
+        if (database.supportsSchemas() && this.schemaName != null)
         {
-            database.setDefaultSchemaName(schemaName);
+            database.setDefaultSchemaName(this.schemaName);
             database.setOutputDefaultSchema(true);
         }
 
         return database;
+    }
+
+    @Nonnull
+    private ResourceAccessor getResourceAccessor()
+    {
+        return switch (this.migrationFileLocation)
+        {
+            case CLASSPATH -> new ClassLoaderResourceAccessor();
+            case FILESYSTEM -> new FileSystemResourceAccessor();
+            default -> throw new IllegalStateException("Unexpected value: " + this.migrationFileLocation);
+        };
     }
 }
