@@ -397,7 +397,7 @@
                         <dependency>
                             <groupId>io.liftwizard</groupId>
                             <artifactId>liftwizard-rewrite</artifactId>
-                            <version>${project.version}</version>
+                            <version>2.1.7-SNAPSHOT</version>
                         </dependency>
                         <dependency>
                             <groupId>org.openrewrite.recipe</groupId>
