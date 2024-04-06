@@ -81,6 +81,7 @@
 
         <plugins>
 
+            <!--region Phase 21: verify-->
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.3.1</version>
@@ -95,31 +96,41 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--endregion-->
 
+            <!--region Phase 1: validate-->
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
+            <!--endregion-->
 
+            <!--region No phase-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
             </plugin>
+            <!--endregion-->
 
+            <!--region Phase 15: test-->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
             </plugin>
+            <!--endregion-->
 
+            <!--region No phase-->
             <plugin>
                 <groupId>com.github.ferstl</groupId>
                 <artifactId>depgraph-maven-plugin</artifactId>
             </plugin>
+            <!--endregion-->
 
             <plugin>
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
             </plugin>
 
+            <!--region No phase-->
             <plugin>
                 <groupId>fr.jcgay.maven.plugins</groupId>
                 <artifactId>buildplan-maven-plugin</artifactId>
@@ -132,33 +143,41 @@
                     <showAllPhases>true</showAllPhases>
                 </configuration>
             </plugin>
+            <!--endregion-->
 
         </plugins>
 
         <pluginManagement>
             <plugins>
 
+                <!--region Phase 4: process-sources-->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>3.5.0</version>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 3: generate-sources-->
                 <plugin>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
+                <!--endregion-->
 
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>3.7.1</version>
                 </plugin>
 
+                <!--region Phase 0: clean-->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.3.2</version>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 7: compile-->
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.13.0</version>
@@ -176,7 +195,9 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 21: verify-->
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.6.1</version>
@@ -199,17 +220,23 @@
 
                     </executions>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 23: deploy-->
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.1.1</version>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 22: install-->
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>3.1.1</version>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 17: package-->
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.3.0</version>
@@ -221,7 +248,9 @@
                         </archive>
                     </configuration>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 3: generate-sources through Phase 17: package-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
@@ -241,6 +270,7 @@
                         </execution>
                     </executions>
                 </plugin>
+                <!--endregion-->
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -254,16 +284,19 @@
                     </configuration>
                 </plugin>
 
+                <!--region Phase 6: process-resources-->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.3.1</version>
                 </plugin>
+                <!--endregion-->
 
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.12.1</version>
                 </plugin>
 
+                <!--region Phase 1: validate-->
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.4.1</version>
@@ -300,7 +333,9 @@
                         </execution>
                     </executions>
                 </plugin>
+                <!--endregion-->
 
+                <!--region No phase-->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
@@ -310,7 +345,9 @@
                         <generateBackupPoms>false</generateBackupPoms>
                     </configuration>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 15: test-->
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.2.5</version>
@@ -325,17 +362,21 @@
                         <argLine>-Dfile.encoding=UTF-8</argLine>
                     </configuration>
                 </plugin>
+                <!--endregion-->
 
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.5.0</version>
                 </plugin>
 
+                <!--region Phase 17: package-->
                 <plugin>
                     <artifactId>maven-shade-plugin</artifactId>
                     <version>3.5.2</version>
                 </plugin>
+                <!--endregion-->
 
+                <!--region Phase 3: generate-sources-->
                 <plugin>
                     <groupId>org.antlr</groupId>
                     <artifactId>antlr4-maven-plugin</artifactId>
@@ -354,6 +395,7 @@
                         <treatWarningsAsErrors>true</treatWarningsAsErrors>
                     </configuration>
                 </plugin>
+                <!--endregion-->
 
                 <plugin>
                     <groupId>com.github.ferstl</groupId>
@@ -365,10 +407,12 @@
                     </configuration>
                 </plugin>
 
+                <!--region No Phase-->
                 <plugin>
                     <artifactId>maven-wrapper-plugin</artifactId>
                     <version>3.2.0</version>
                 </plugin>
+                <!--endregion-->
 
                 <plugin>
                     <groupId>org.openrewrite.maven</groupId>
@@ -446,7 +490,7 @@
 
     <profiles>
 
-        <!--region Phase: verify-->
+        <!--region Phase 16: prepare-package-->
         <profile>
             <id>znai-maven-plugin</id>
             <build>
@@ -464,6 +508,7 @@
             </build>
         </profile>
 
+        <!--region Phase 21: verify-->
         <profile>
             <id>checkstyle-semantics</id>
 
@@ -494,7 +539,9 @@
                 </plugins>
             </build>
         </profile>
+        <!--endregion-->
 
+        <!--region Phase 21: verify-->
         <profile>
             <id>checkstyle-formatting</id>
 
@@ -527,7 +574,6 @@
         </profile>
         <!--endregion-->
 
-        <!--region Phase: deploy-->
         <profile>
             <id>deploy</id>
 
@@ -548,6 +594,7 @@
             <build>
                 <plugins>
 
+                    <!--region Phase 23: deploy-->
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -562,9 +609,10 @@
                             <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
                             <skipLocalStaging>true</skipLocalStaging>
                         </configuration>
-
                     </plugin>
+                    <!--endregion-->
 
+                    <!--region Phase 17: package-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -579,7 +627,9 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!--endregion-->
 
+                    <!--region Phase 17: package-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -589,14 +639,16 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <id>attach-javadocs</id>
+                                <id>create javadoc jar</id>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
+                    <!--endregion-->
 
+                    <!--region Phase 21: verify-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -619,11 +671,12 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!--endregion-->
                 </plugins>
             </build>
         </profile>
-        <!--endregion-->
 
+        <!--region Phase 1: validate-->
         <profile>
             <id>enforcer-strict</id>
             <activation>
@@ -673,7 +726,9 @@
                 </plugins>
             </build>
         </profile>
+        <!--endregion-->
 
+        <!--region Phase 15: test-->
         <profile>
             <id>rerecord</id>
 
@@ -692,6 +747,7 @@
                 </pluginManagement>
             </build>
         </profile>
+        <!--endregion-->
 
     </profiles>
 

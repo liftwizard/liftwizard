@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2020 Craig Motlin
+  ~ Copyright 2024 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@
     <build>
         <plugins>
 
+            <!--region Phase 3: generate-sources-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -69,9 +70,15 @@
                             <target>
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <taskdef name="gen-reladomo" classpath="plugin_classpath" classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
+                                <taskdef name="gen-reladomo"
+                                        classpath="plugin_classpath"
+                                        classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
 
-                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml" generateEcListMethod="true" generatedDir="${project.build.directory}/generated-sources/reladomo" nonGeneratedDir="${project.build.sourceDirectory}" generateConcreteClasses="true" />
+                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml"
+                                        generateEcListMethod="true"
+                                        generatedDir="${project.build.directory}/generated-sources/reladomo"
+                                        nonGeneratedDir="${project.build.sourceDirectory}"
+                                        generateConcreteClasses="true" />
                             </target>
                         </configuration>
                     </execution>
@@ -93,7 +100,9 @@
 
                 </dependencies>
             </plugin>
+            <!--endregion-->
 
+            <!--region Phase 4: process-sources-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -113,6 +122,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--endregion-->
 
         </plugins>
     </build>

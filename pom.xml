@@ -103,6 +103,7 @@
         <pluginManagement>
             <plugins>
 
+                <!--region Phase 21: verify-->
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.6.1</version>
@@ -125,6 +126,7 @@
 
                     </executions>
                 </plugin>
+                <!--endregion-->
 
             </plugins>
         </pluginManagement>
@@ -133,6 +135,7 @@
 
     <profiles>
 
+        <!--region Phase 1: validate-->
         <profile>
             <id>enforcer-strict</id>
             <activation>
@@ -190,6 +193,7 @@
                 </plugins>
             </build>
         </profile>
+        <!--endregion-->
 
     </profiles>
 
