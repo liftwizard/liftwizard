@@ -619,8 +619,7 @@
                         <version>3.3.0</version>
                         <executions>
                             <execution>
-                                <id>attach-sources</id>
-                                <phase>verify</phase>
+                                <id>create source jar</id>
                                 <goals>
                                     <goal>jar-no-fork</goal>
                                 </goals>
