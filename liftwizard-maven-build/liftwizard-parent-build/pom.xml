@@ -120,6 +120,19 @@
                 <artifactId>rewrite-maven-plugin</artifactId>
             </plugin>
 
+            <plugin>
+                <groupId>fr.jcgay.maven.plugins</groupId>
+                <artifactId>buildplan-maven-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <tasks>
+                        <task>clean</task>
+                        <task>deploy</task>
+                    </tasks>
+                    <showAllPhases>true</showAllPhases>
+                </configuration>
+            </plugin>
+
         </plugins>
 
         <pluginManagement>
