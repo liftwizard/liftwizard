@@ -95,20 +95,14 @@ public class ConnectionManagersFactory
             NamedDataSourceProvider dataSourceProvider,
             @Nonnull Environment environment)
     {
-        Map<String, SourcelessConnectionManager> connectionManagersByName = new LinkedHashMap<>();
-
         for (ConnectionManagerFactory connectionManagerFactory : this.connectionManagerFactories)
         {
-            SourcelessConnectionManager sourcelessConnectionManager = this.getConnectionManagerByName(
+            this.getConnectionManagerByName(
                     dataSourceProvider,
                     environment,
                     connectionManagerFactory);
-
-            connectionManagersByName.put(
-                    connectionManagerFactory.getConnectionManagerName(),
-                    sourcelessConnectionManager);
         }
-        return connectionManagersByName;
+        return this.connectionManagersByName;
     }
 
     @JsonIgnore
