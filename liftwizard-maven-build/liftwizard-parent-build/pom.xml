@@ -158,11 +158,6 @@
                 </plugin>
                 <!--endregion-->
 
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.7.1</version>
-                </plugin>
-
                 <!--region Phase 0: clean-->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
