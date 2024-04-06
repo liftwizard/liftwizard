@@ -56,7 +56,7 @@ Add a liquibase section to your [json](configuration/json5-configuration) or yam
 :include-json: test-example.json5 {
 title: "example.json5",
 include: "$['liquibase', 'absent']",
-paths: ["root.liquibase.dataSourceMigrations[0].dataSourceName"],
+highlightValue: ["root.liquibase.dataSourceMigrations[0].dataSourceName"],
 }
 
 `dataSourceMigrations` is an array, to allow multiple migrations to different data sources.
