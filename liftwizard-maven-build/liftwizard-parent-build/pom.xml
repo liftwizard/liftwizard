@@ -210,13 +210,6 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 23: deploy-->
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-                <!--endregion-->
-
                 <!--region Phase 22: install-->
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
