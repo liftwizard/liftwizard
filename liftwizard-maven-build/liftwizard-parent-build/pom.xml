@@ -345,11 +345,6 @@
                 </plugin>
                 <!--endregion-->
 
-                <plugin>
-                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.5.0</version>
-                </plugin>
-
                 <!--region Phase 17: package-->
                 <plugin>
                     <artifactId>maven-shade-plugin</artifactId>
