@@ -162,6 +162,7 @@
                                         </requireMavenVersion>
                                         <requirePluginVersions>
                                             <unCheckedPluginList>
+                                                org.apache.maven.plugins:maven-site-plugin,
                                                 org.apache.maven.plugins:maven-deploy-plugin,
                                                 io.liftwizard:liftwizard-generator-reladomo-code-plugin,
                                                 io.liftwizard:liftwizard-generator-reladomo-database-plugin,

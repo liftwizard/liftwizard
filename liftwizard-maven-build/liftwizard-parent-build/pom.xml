@@ -272,11 +272,6 @@
                 </plugin>
                 <!--endregion-->
 
-                <plugin>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.12.1</version>
-                </plugin>
-
                 <!--region Phase 1: validate-->
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
