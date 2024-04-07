@@ -15,7 +15,9 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-test</artifactId>
@@ -31,28 +33,29 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-junit-rule-log-marker</artifactId>
+            <artifactId>liftwizard-junit-extension-log-marker</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-junit-rule-match-json</artifactId>
+            <artifactId>liftwizard-junit-extension-match-json</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-reladomo-test-rule</artifactId>
+            <artifactId>liftwizard-junit-extension-app</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-testing</artifactId>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-reladomo-test-extension</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -72,8 +75,8 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
