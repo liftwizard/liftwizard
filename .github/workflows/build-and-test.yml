@@ -81,4 +81,4 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw --color=always org.openrewrite.maven:rewrite-maven-plugin:dryRun --activate-profiles rewrite-maven-plugin --projects '!liftwizard-example'
+      - run: ./mvnw --color=always install org.openrewrite.maven:rewrite-maven-plugin:dryRun --activate-profiles rewrite-maven-plugin --projects '!liftwizard-example' -DskipTests
