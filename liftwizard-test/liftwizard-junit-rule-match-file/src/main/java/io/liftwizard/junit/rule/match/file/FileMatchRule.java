@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import io.liftwizard.junit.rule.match.AbstractMatchRule;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 
 public class FileMatchRule
         extends AbstractMatchRule
@@ -81,10 +81,12 @@ public class FileMatchRule
                 File file = new File(uri);
                 this.writeStringToFile(resourceClassPathLocation, actualString, file);
             }
-            this.checkThat(
-                    "Writing expected file to: " + uri,
-                    actualString,
-                    is(expectedStringFromFile));
+
+            this.checkSucceeds(() ->
+            {
+                assertEquals("Writing expected file to: " + uri, expectedStringFromFile, actualString);
+                return null;
+            });
         }
     }
 
