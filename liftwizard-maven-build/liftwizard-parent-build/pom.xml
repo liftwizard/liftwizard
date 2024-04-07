@@ -501,9 +501,6 @@
                                     <ignoredUnusedDeclaredDependency>org.junit.jupiter:junit-jupiter-api</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
                                 </ignoredUnusedDeclaredDependencies>
-                                <ignoredUsedUndeclaredDependencies>
-                                    <ignoredUsedUndeclaredDependency>org.hamcrest:hamcrest</ignoredUsedUndeclaredDependency>
-                                </ignoredUsedUndeclaredDependencies>
                             </configuration>
 
                             <executions>
