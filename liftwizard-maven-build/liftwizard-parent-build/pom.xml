@@ -76,6 +76,16 @@
         </developer>
     </developers>
 
+    <dependencies>
+        <!-- Without a dependency on junit-vintage-engine, some JUnit tests were accidentally not running-->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <defaultGoal>clean verify</defaultGoal>
 
@@ -548,6 +558,7 @@
                                     <ignoredUnusedDeclaredDependency>org.hamcrest:hamcrest-core</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>junit:junit</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>org.junit.jupiter:junit-jupiter-api</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
                                 </ignoredUnusedDeclaredDependencies>
                                 <ignoredUsedUndeclaredDependencies>
                                     <ignoredUsedUndeclaredDependency>org.hamcrest:hamcrest</ignoredUsedUndeclaredDependency>
