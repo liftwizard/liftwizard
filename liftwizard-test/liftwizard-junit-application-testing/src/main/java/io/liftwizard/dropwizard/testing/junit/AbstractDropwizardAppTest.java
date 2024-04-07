@@ -23,34 +23,28 @@ import javax.ws.rs.core.Response.Status;
 
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.util.Duration;
-import io.liftwizard.junit.rule.log.marker.LogMarkerTestRule;
-import io.liftwizard.junit.rule.match.json.JsonMatchRule;
-import io.liftwizard.reladomo.test.rule.ReladomoLoadDataTestRule;
-import org.junit.Rule;
-import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
+import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
+import io.liftwizard.junit.extension.match.json.JsonMatchExtension;
+import io.liftwizard.reladomo.test.extension.ReladomoLoadDataExtension;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractDropwizardAppTest
 {
-    @Rule
-    public final JsonMatchRule jsonMatchRule = new JsonMatchRule(this.getClass());
-
-    protected final DropwizardAppRule<?> appRule                  = this.getDropwizardAppRule();
-    protected final TestRule             reladomoLoadDataTestRule = new ReladomoLoadDataTestRule();
-    protected final TestRule             logMarkerTestRule        = new LogMarkerTestRule();
-
-    @Rule
-    public final TestRule rule = RuleChain
-            .outerRule(this.appRule)
-            .around(this.reladomoLoadDataTestRule)
-            .around(this.logMarkerTestRule);
+    @RegisterExtension
+    protected final JsonMatchExtension        jsonMatchExtension        = new JsonMatchExtension(this.getClass());
+    @RegisterExtension
+    protected final LiftwizardAppExtension<?> appExtension              = this.getDropwizardAppExtension();
+    @RegisterExtension
+    protected final ReladomoLoadDataExtension reladomoLoadDataExtension = new ReladomoLoadDataExtension();
+    @RegisterExtension
+    protected final LogMarkerTestExtension    logMarkerExtension        = new LogMarkerTestExtension();
 
     @Nonnull
-    protected abstract DropwizardAppRule getDropwizardAppRule();
+    protected abstract LiftwizardAppExtension<?> getDropwizardAppExtension();
 
     protected Client getClient(@Nonnull String testName)
     {
@@ -60,7 +54,7 @@ public abstract class AbstractDropwizardAppTest
         String className  = this.getClass().getCanonicalName();
         String clientName = className + "." + testName;
 
-        return new JerseyClientBuilder(this.appRule.getEnvironment())
+        return new JerseyClientBuilder(this.appExtension.getEnvironment())
                 .using(jerseyClientConfiguration)
                 .build(clientName);
     }
@@ -78,7 +72,7 @@ public abstract class AbstractDropwizardAppTest
 
         String expectedResponseClassPathLocation = this.getClass().getSimpleName() + "." + testName + ".json";
 
-        this.jsonMatchRule.assertFileContents(expectedResponseClassPathLocation, actualJsonResponse);
+        this.jsonMatchExtension.assertFileContents(expectedResponseClassPathLocation, actualJsonResponse);
     }
 
     protected void assertResponseStatus(@Nonnull Response response, Status status)
