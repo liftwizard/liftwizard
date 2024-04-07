@@ -105,7 +105,7 @@
 
         <!--region Phase 1: validate-->
         <profile>
-            <id>enforcer-strict</id>
+            <id>maven-enforcer-plugin</id>
 
             <build>
                 <plugins>
