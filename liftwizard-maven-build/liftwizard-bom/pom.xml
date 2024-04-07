@@ -632,6 +632,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-reladomo-test-extension</artifactId>
+                <version>2.1.7-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-test-resource-writer</artifactId>
                 <version>2.1.7-SNAPSHOT</version>
             </dependency>

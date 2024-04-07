@@ -63,6 +63,7 @@
         <module>liftwizard-reladomo-operation-grammar</module>
         <module>liftwizard-reladomo-serialize</module>
         <module>liftwizard-reladomo-simulated-sequence</module>
+        <module>liftwizard-reladomo-test-extension</module>
         <module>liftwizard-reladomo-test-resource-writer</module>
         <module>liftwizard-reladomo-test-rule</module>
         <module>liftwizard-reladomo-timestamp</module>
