@@ -32,10 +32,7 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractDropwizardAppTest
 {
@@ -70,8 +67,8 @@ public abstract class AbstractDropwizardAppTest
 
     protected void assertEmptyResponse(Status expectedStatus, Response actualResponse)
     {
-        assertFalse(actualResponse.hasEntity());
-        assertThat(actualResponse.getStatusInfo(), is(expectedStatus));
+        assertThat(actualResponse.hasEntity()).isFalse();
+        assertThat(actualResponse.getStatusInfo()).isEqualTo(expectedStatus);
     }
 
     protected void assertResponse(String testName, Status expectedStatus, Response actualResponse)
@@ -86,9 +83,9 @@ public abstract class AbstractDropwizardAppTest
 
     protected void assertResponseStatus(@Nonnull Response response, Status status)
     {
-        assertTrue(response.hasEntity());
+        assertThat(response.hasEntity()).isTrue();
         response.bufferEntity();
         String entityAsString = response.readEntity(String.class);
-        assertThat(entityAsString, response.getStatusInfo(), is(status));
+        assertThat(response.getStatusInfo()).as(entityAsString).isEqualTo(status);
     }
 }
