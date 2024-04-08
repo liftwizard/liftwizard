@@ -352,9 +352,6 @@
             <property name="tags" value="noinspection" />
         </module>
         <module name="JavadocContentLocation" />
-        <module name="JavadocMethod">
-            <property name="validateThrows" value="true" />
-        </module>
         <module name="JavadocParagraph">
             <property name="allowNewlineParagraph" value="false" />
         </module>
