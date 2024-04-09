@@ -729,7 +729,6 @@
 
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
-
                         <executions>
                             <execution>
                                 <id>enforce</id>
@@ -737,13 +736,23 @@
                                     <rules>
                                         <DependencyConvergence />
                                         <requireJavaVersion>
-                                            <version>1.8.0</version>
+                                            <version>17</version>
                                         </requireJavaVersion>
                                         <requireMavenVersion>
-                                            <version>3.6.3</version>
+                                            <version>3.8.6</version>
                                         </requireMavenVersion>
+                                        <requirePluginVersions>
+                                            <unCheckedPluginList>
+                                                org.apache.maven.plugins:maven-site-plugin,
+                                                org.apache.maven.plugins:maven-deploy-plugin,
+                                                io.liftwizard:liftwizard-generator-reladomo-code-plugin,
+                                                io.liftwizard:liftwizard-generator-reladomo-database-plugin,
+                                                io.liftwizard:liftwizard-generator-xsd2bean-plugin
+                                            </unCheckedPluginList>
+                                        </requirePluginVersions>
                                         <bannedDependencies>
                                             <excludes>
+                                                <exclude>log4j:log4j</exclude>
                                                 <exclude>commons-logging-api</exclude>
                                                 <exclude>commons-logging</exclude>
                                                 <exclude>org.apache.logging.log4j:log4j</exclude>
