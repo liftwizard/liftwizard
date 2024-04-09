@@ -19,6 +19,7 @@ jobs:
         with:
           java-version-file: .tool-versions
           distribution: oracle
+          cache: 'maven'
 
       - name: Set up grahpviz
         run: sudo apt-get install graphviz
