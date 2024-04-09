@@ -17,6 +17,7 @@ jobs:
         with:
           java-version-file: .tool-versions
           distribution: oracle
+          cache: 'maven'
 
       - run: ./mvnw --color=always verify --threads 2C --activate-profiles 'maven-enforcer-plugin,maven-dependency-plugin'
 
@@ -32,6 +33,7 @@ jobs:
         with:
           java-version-file: .tool-versions
           distribution: oracle
+          cache: 'maven'
 
       - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
         name: 'Install liftwizard-checkstyle module'
@@ -57,6 +59,7 @@ jobs:
         with:
           java-version-file: .tool-versions
           distribution: oracle
+          cache: 'maven'
 
       - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
         name: 'Install liftwizard-checkstyle module'
@@ -80,5 +83,6 @@ jobs:
         with:
           java-version-file: .tool-versions
           distribution: oracle
+          cache: 'maven'
 
       - run: ./mvnw --color=always org.openrewrite.maven:rewrite-maven-plugin:dryRun --activate-profiles rewrite-maven-plugin --projects '!liftwizard-example'
