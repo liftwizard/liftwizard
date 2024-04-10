@@ -396,7 +396,7 @@
                     <plugin>
                         <groupId>org.testingisdocumenting.znai</groupId>
                         <artifactId>znai-maven-plugin</artifactId>
-                        <version>1.67</version>
+                        <version>1.68</version>
                         <configuration>
                             <docId>docs</docId>
                             <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
