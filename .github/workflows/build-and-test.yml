@@ -72,17 +72,3 @@ jobs:
         with:
           path: '**/checkstyle-result.xml'
           name: 'Checkstyle GitHub Annotations: Formatting'
-
-  rewrite:
-    name: Rewrite Dry Run
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
-          cache: 'maven'
-
-      - run: ./mvnw --color=always install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles 'rewrite-maven-plugin' -DskipTests
