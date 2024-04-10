@@ -149,6 +149,13 @@
             </plugin>
             <!--endregion-->
 
+            <!--region No phase-->
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+            </plugin>
+            <!--endregion-->
+
         </plugins>
 
         <pluginManagement>
