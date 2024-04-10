@@ -13,13 +13,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/cache@v4
+        with:
+          key: build-and-test-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
           distribution: oracle
-          cache: 'maven'
 
       - run: ./mvnw --color=always verify --threads 2C --activate-profiles 'maven-enforcer-plugin,maven-dependency-plugin'
+
+      - run: rm -rf ~/.m2/repository/io/liftwizard
+        name: 'Clean Maven cache'
 
   checkstyle-semantics:
     name: Checkstyle Semantics
@@ -29,11 +38,17 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - uses: actions/cache@v4
+        with:
+          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
           distribution: oracle
-          cache: 'maven'
 
       - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
         name: 'Install liftwizard-checkstyle module'
@@ -47,6 +62,9 @@ jobs:
           path: '**/checkstyle-result.xml'
           name: 'Checkstyle GitHub Annotations: Semantics'
 
+      - run: rm -rf ~/.m2/repository/io/liftwizard
+        name: 'Clean Maven cache'
+
   checkstyle-formatting:
     name: Checkstyle Formatting
     runs-on: ubuntu-latest
@@ -55,11 +73,17 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - uses: actions/cache@v4
+        with:
+          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
           distribution: oracle
-          cache: 'maven'
 
       - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
         name: 'Install liftwizard-checkstyle module'
@@ -72,3 +96,6 @@ jobs:
         with:
           path: '**/checkstyle-result.xml'
           name: 'Checkstyle GitHub Annotations: Formatting'
+
+      - run: rm -rf ~/.m2/repository/io/liftwizard
+        name: 'Clean Maven cache'

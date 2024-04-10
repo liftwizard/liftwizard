@@ -15,11 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/cache@v4
+        with:
+          key: znai-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
           distribution: oracle
-          cache: 'maven'
 
       - name: Set up grahpviz
         run: sudo apt-get install graphviz
@@ -42,3 +48,6 @@ jobs:
           cname: liftwizard.io
           force_orphan: true
           commit_message: "[skip ci] deploy to gh-pages"
+
+      - run: rm -rf ~/.m2/repository/io/liftwizard
+        name: 'Clean Maven cache'
