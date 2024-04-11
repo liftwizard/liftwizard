@@ -23,15 +23,18 @@ import javax.ws.rs.core.Response.Status;
 
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.util.Duration;
 import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.junit.extension.match.json.JsonMatchExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoLoadDataExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public abstract class AbstractDropwizardAppTest
 {
     @RegisterExtension
