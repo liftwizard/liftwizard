@@ -25,7 +25,7 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw verify --threads 2C --activate-profiles 'maven-enforcer-plugin,maven-dependency-plugin'
+      - run: ./mvnw verify --activate-profiles 'maven-enforcer-plugin,maven-dependency-plugin'
 
       - run: rm -rf ~/.m2/repository/io/liftwizard
         name: 'Clean Maven cache'
