@@ -30,7 +30,7 @@ jobs:
       - name: Set up grahpviz
         run: sudo apt-get install graphviz
 
-      - run: ./mvnw --color=always package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
+      - run: ./mvnw package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
       - name: Create deploy directory
         if: github.event_name == 'push'
