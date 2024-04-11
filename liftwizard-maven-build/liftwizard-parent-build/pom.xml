@@ -421,6 +421,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.3.1</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
                             <suppressionsLocation>checkstyle-suppressions-liftwizard.xml</suppressionsLocation>
@@ -434,7 +435,7 @@
                         </dependencies>
                         <executions>
                             <execution>
-                                <id>Checkstyle: semantics</id>
+                                <id>checkstyle:check semantics</id>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
@@ -455,6 +456,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.3.1</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
                             <suppressionsLocation>checkstyle-suppressions-liftwizard.xml</suppressionsLocation>
@@ -468,7 +470,7 @@
                         </dependencies>
                         <executions>
                             <execution>
-                                <id>Checkstyle: formatting</id>
+                                <id>checkstyle:check formatting</id>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
@@ -512,6 +514,7 @@
 
                             <executions>
                                 <execution>
+                                    <id>dependency:analyze-only</id>
                                     <goals>
                                         <goal>analyze-only</goal>
                                     </goals>
