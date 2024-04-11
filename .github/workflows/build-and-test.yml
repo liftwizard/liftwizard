@@ -25,7 +25,7 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw --color=always verify --threads 2C --activate-profiles 'maven-enforcer-plugin,maven-dependency-plugin'
+      - run: ./mvnw verify --threads 2C --activate-profiles 'maven-enforcer-plugin,maven-dependency-plugin'
 
       - run: rm -rf ~/.m2/repository/io/liftwizard
         name: 'Clean Maven cache'
@@ -50,10 +50,10 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
+      - run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
         name: 'Install liftwizard-checkstyle module'
 
-      - run: ./mvnw --color=always checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+      - run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
         name: 'Produce Checkstyle XML: Semantics'
 
       - uses: lcollins/checkstyle-github-action@v2.0.0
@@ -85,10 +85,10 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw --color=always install --projects liftwizard-utility/liftwizard-checkstyle
+      - run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
         name: 'Install liftwizard-checkstyle module'
 
-      - run: ./mvnw --color=always checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+      - run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
         name: 'Produce Checkstyle XML: Formatting'
 
       - uses: lcollins/checkstyle-github-action@v2.0.0
