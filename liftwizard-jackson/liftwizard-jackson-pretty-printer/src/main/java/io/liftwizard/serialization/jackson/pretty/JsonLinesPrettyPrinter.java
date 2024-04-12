@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,13 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
 public class JsonLinesPrettyPrinter extends DefaultPrettyPrinter
 {
     public JsonLinesPrettyPrinter()
     {
-        this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
+        this._arrayIndenter = JsonPrettyPrinter.INDENTER;
     }
 
     @Nonnull

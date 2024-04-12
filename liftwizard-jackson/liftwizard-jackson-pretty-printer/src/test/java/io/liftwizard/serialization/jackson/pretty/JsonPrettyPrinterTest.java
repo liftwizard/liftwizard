@@ -67,13 +67,7 @@ class JsonPrettyPrinterTest
                   ]
                 }""";
 
-        assertThat(replaceWindowsNewlines(actualJson)).isEqualTo(expectedJson);
-    }
-
-    @Nonnull
-    private static String replaceWindowsNewlines(String actualJson)
-    {
-        return actualJson.replaceAll("\r\n", "\n");
+        assertThat(actualJson).isEqualTo(expectedJson);
     }
 
     @Test

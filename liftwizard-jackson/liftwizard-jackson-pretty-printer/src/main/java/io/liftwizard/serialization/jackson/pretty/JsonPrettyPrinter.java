@@ -29,7 +29,7 @@ import com.fasterxml.jackson.core.util.Separators.Spacing;
 public class JsonPrettyPrinter
         extends DefaultPrettyPrinter
 {
-    public static final Separators SEPARATORS = new Separators(
+    public static final Separators      SEPARATORS = new Separators(
             Separators.DEFAULT_ROOT_VALUE_SEPARATOR,
             ':',
             Spacing.AFTER,
@@ -38,12 +38,11 @@ public class JsonPrettyPrinter
             ',',
             Spacing.NONE);
 
+    public static final DefaultIndenter INDENTER   = new DefaultIndenter("  ", "\n");
+
     public JsonPrettyPrinter()
     {
-        this(
-                SEPARATORS,
-                DefaultIndenter.SYSTEM_LINEFEED_INSTANCE,
-                DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
+        this(SEPARATORS, INDENTER, INDENTER);
     }
 
     public JsonPrettyPrinter(Separators separators, DefaultIndenter arrayIndenter, DefaultIndenter objectIndenter)
