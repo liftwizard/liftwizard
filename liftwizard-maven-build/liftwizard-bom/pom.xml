@@ -726,6 +726,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-junit-extension-liquibase-migrations</artifactId>
+                <version>2.1.7-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-junit-extension-log-marker</artifactId>
                 <version>2.1.7-SNAPSHOT</version>
             </dependency>
