@@ -32,6 +32,7 @@
         <module>liftwizard-junit-application-testing</module>
         <module>liftwizard-junit-extension-app</module>
         <module>liftwizard-junit-extension-error-collector</module>
+        <module>liftwizard-junit-extension-liquibase-migrations</module>
         <module>liftwizard-junit-extension-log-marker</module>
         <module>liftwizard-junit-extension-match-abstract</module>
         <module>liftwizard-junit-extension-match-file</module>
