@@ -1,7 +1,5 @@
 # Based on https://github.com/testingisdocumenting/znai/blob/master/.github/workflows/documentation-deploy.yaml
 
-name: Deploy Znai docs to GitHub Pages
-
 on:
   push:
     branches:
@@ -9,8 +7,7 @@ on:
   pull_request:
 
 jobs:
-  generate-znai-docs:
-    name: Generate Znai docs
+  deploy-github-pages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +27,8 @@ jobs:
       - name: Set up grahpviz
         run: sudo apt-get install graphviz
 
-      - run: ./mvnw package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
+      - name: Generate Znai docs
+        run: ./mvnw package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
       - name: Create deploy directory
         if: github.event_name == 'push'
@@ -49,5 +47,5 @@ jobs:
           force_orphan: true
           commit_message: "[skip ci] deploy to gh-pages"
 
-      - run: rm -rf ~/.m2/repository/io/liftwizard
-        name: 'Clean Maven cache'
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard

@@ -1,0 +1,169 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: build-and-test-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run tests
+        run: ./mvnw verify
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  enforcer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-enforcer-plugin-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run maven-enforcer-plugin
+        run: ./mvnw verify --activate-profiles maven-enforcer-plugin -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  dependency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-dependency-plugin`-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run maven-dependency-plugin
+        run: ./mvnw verify --activate-profiles maven-dependency-plugin -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  javadoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-javadoc-plugin`-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run maven-javadoc-plugin
+        run: ./mvnw verify --activate-profiles maven-javadoc-plugin -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  checkstyle-semantics:
+    name: checkstyle xml (semantics)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: 'Install liftwizard-checkstyle module'
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+
+      - name: 'Produce Checkstyle XML: Semantics'
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+
+      - name: 'Checkstyle GitHub Annotations: Semantics'
+        uses: lcollins/checkstyle-github-action@v2.0.0
+        with:
+          name: 'checkstyle annotations (semantics)'
+          path: '**/checkstyle-result.xml'
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  checkstyle-formatting:
+    name: checkstyle xml (formatting)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: 'Install liftwizard-checkstyle module'
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: 'Produce Checkstyle XML: Formatting'
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
+
+      - name: 'Checkstyle GitHub Annotations: Formatting'
+        uses: lcollins/checkstyle-github-action@v2.0.0
+        with:
+          name: 'checkstyle annotations (formatting)'
+          path: '**/checkstyle-result.xml'
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
