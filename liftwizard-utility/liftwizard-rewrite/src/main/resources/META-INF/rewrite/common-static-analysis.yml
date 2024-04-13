@@ -33,7 +33,8 @@ recipeList:
   - org.openrewrite.staticanalysis.BooleanChecksNotInverted
   - org.openrewrite.staticanalysis.CaseInsensitiveComparisonsDoNotChangeCase
   - org.openrewrite.staticanalysis.CatchClauseOnlyRethrows
-  - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
+# Disabled in Liftwizard
+#  - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
   - org.openrewrite.staticanalysis.CovariantEquals
   - org.openrewrite.staticanalysis.DefaultComesLast
   - org.openrewrite.staticanalysis.EmptyBlock
@@ -44,7 +45,8 @@ recipeList:
   - org.openrewrite.staticanalysis.FinalizePrivateFields
   - org.openrewrite.staticanalysis.FallThrough
   - org.openrewrite.staticanalysis.FinalClass
-  - org.openrewrite.staticanalysis.FixStringFormatExpressions
+# Disabled in Liftwizard
+#  - org.openrewrite.staticanalysis.FixStringFormatExpressions
   - org.openrewrite.staticanalysis.ForLoopIncrementInUpdate
 #  - org.openrewrite.staticanalysis.HideUtilityClassConstructor
   - org.openrewrite.staticanalysis.IndexOfChecksShouldUseAStartPosition
@@ -85,7 +87,8 @@ recipeList:
 #  - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
   - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
   - org.openrewrite.staticanalysis.SimplifyBooleanExpression
-  - org.openrewrite.staticanalysis.SimplifyBooleanReturn
+# Disabled in Liftwizard
+#  - org.openrewrite.staticanalysis.SimplifyBooleanReturn
 #  - org.openrewrite.staticanalysis.SimplifyTernaryRecipes
   - org.openrewrite.staticanalysis.StaticMethodNotFinal
 # Disabled in Liftwizard

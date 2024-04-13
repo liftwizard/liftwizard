@@ -577,7 +577,7 @@
                                     <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
                                     <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
 
-                                    <recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
+                                    <recipe>io.liftwizard.java.migrate.UpgradeToJava17</recipe>
                                 </activeRecipes>
                             </configuration>
                         </plugin>
