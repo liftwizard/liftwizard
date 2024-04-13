@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,23 @@
 package io.liftwizard.junit.rule.liquibase.migrations;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
 import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import liquibase.Liquibase;
+import liquibase.Scope;
+import liquibase.Scope.Attr;
+import liquibase.UpdateSummaryOutputEnum;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.ui.LoggerUIService;
 import org.junit.runners.model.Statement;
 
 public class LiquibaseStatement
@@ -54,6 +59,14 @@ public class LiquibaseStatement
     public void evaluate()
             throws Throwable
     {
+        Scope.child(Attr.ui, new LoggerUIService(), this::runWithLogger);
+
+        this.baseStatement.evaluate();
+    }
+
+    private void runWithLogger()
+            throws SQLException, LiquibaseException
+    {
         try (
                 Connection connection = this.connectionSupplier.get();
                 Liquibase liquibase = this.openLiquibase(connection))
@@ -64,18 +77,15 @@ public class LiquibaseStatement
             }
             liquibase.update("");
         }
-        catch (LiquibaseException e)
-        {
-            throw new RuntimeException(e);
-        }
-        this.baseStatement.evaluate();
     }
 
     private Liquibase openLiquibase(Connection connection)
             throws LiquibaseException
     {
         Database database = this.createDatabase(connection);
-        return new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
+        Liquibase liquibase = new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
+        liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
+        return liquibase;
     }
 
     private Database createDatabase(Connection connection)
