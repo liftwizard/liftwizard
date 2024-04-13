@@ -167,3 +167,26 @@ jobs:
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
+
+  rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: rewrite-maven-plugin-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run rewrite-maven-plugin
+        run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
