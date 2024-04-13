@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,16 @@ import javax.annotation.Nonnull;
 
 import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import liquibase.Liquibase;
+import liquibase.Scope;
+import liquibase.Scope.Attr;
+import liquibase.UpdateSummaryOutputEnum;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.ui.LoggerUIService;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -58,6 +62,12 @@ public class LiquibaseTestExtension
 
     @Override
     public void beforeEach(ExtensionContext context)
+            throws Exception
+    {
+        Scope.child(Attr.ui, new LoggerUIService(), this::runWithLogger);
+    }
+
+    private void runWithLogger()
             throws SQLException, LiquibaseException
     {
         try (
@@ -76,7 +86,9 @@ public class LiquibaseTestExtension
             throws LiquibaseException
     {
         Database database = this.createDatabase(connection);
-        return new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
+        Liquibase liquibase = new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
+        liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
+        return liquibase;
     }
 
     private Database createDatabase(Connection connection)
