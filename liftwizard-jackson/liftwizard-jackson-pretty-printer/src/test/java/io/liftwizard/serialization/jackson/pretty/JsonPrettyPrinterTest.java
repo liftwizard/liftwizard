@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class JsonPrettyPrinterTest
 
         String actualJson = this.mapper.writeValueAsString(map);
 
-        //language=JSON
+        // language=JSON
         String expectedJson = """
                 {
                   "a": [

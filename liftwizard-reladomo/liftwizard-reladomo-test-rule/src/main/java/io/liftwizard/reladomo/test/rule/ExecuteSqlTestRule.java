@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,11 @@ public class ExecuteSqlTestRule
     /**
      *  The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
      */
-    //language=RegExp
+    // language=RegExp
     private String ddlLocationPattern = "^(?!META-INF\\.).*\\.ddl$";
-    //language=RegExp
+    // language=RegExp
     private String idxLocationPattern = "^(?!META-INF\\.).*\\.idx$";
-    //language=RegExp
+    // language=RegExp
     private String fkLocationPattern  = "^(?!META-INF\\.).*\\.fk$";
 
     @Nonnull

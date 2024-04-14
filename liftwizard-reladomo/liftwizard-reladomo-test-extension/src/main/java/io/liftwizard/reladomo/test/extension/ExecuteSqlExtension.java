@@ -37,11 +37,11 @@ public class ExecuteSqlExtension
     /**
      *  The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
      */
-    //language=RegExp
+    // language=RegExp
     private String ddlLocationPattern = "^(?!META-INF\\.).*\\.ddl$";
-    //language=RegExp
+    // language=RegExp
     private String idxLocationPattern = "^(?!META-INF\\.).*\\.idx$";
-    //language=RegExp
+    // language=RegExp
     private String fkLocationPattern  = "^(?!META-INF\\.).*\\.fk$";
 
     @Nonnull
