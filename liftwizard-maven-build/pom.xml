@@ -31,6 +31,7 @@
     <modules>
         <module>liftwizard-bom</module>
         <module>liftwizard-dependencies</module>
+        <module>liftwizard-grandparent-build</module>
         <module>liftwizard-parent-build</module>
     </modules>
 
