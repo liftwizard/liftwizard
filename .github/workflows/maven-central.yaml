@@ -1,4 +1,4 @@
-# Based on https://help.github.com/en/actions/language-and-framework-guides/publishing-java-packages-with-maven
+# Based on https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-maven#publishing-packages-to-the-maven-central-repository
 
 on:
   push:
@@ -17,13 +17,14 @@ jobs:
         with:
           java-version-file: .tool-versions
           distribution: oracle
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
-      - uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.gpg_private_key }}
-          gpg_passphrase: ${{ secrets.gpg_passphrase }}
-          nexus_username: ${{ secrets.nexus_username }}
-          nexus_password: ${{ secrets.nexus_password }}
-          maven_profiles: deploy,maven-javadoc-plugin
-          maven_goals_phases: deploy
-          server_id: ossrh
+      - name: Publish package
+        run: mvn --activate-profiles deploy,maven-javadoc-plugin deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
