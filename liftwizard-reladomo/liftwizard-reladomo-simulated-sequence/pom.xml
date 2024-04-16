@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-reladomo</artifactId>
-        <version>2.1.7-SNAPSHOT</version>
+        <version>2.1.7</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -70,15 +70,9 @@
                             <target>
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <taskdef name="gen-reladomo"
-                                        classpath="plugin_classpath"
-                                        classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
+                                <taskdef name="gen-reladomo" classpath="plugin_classpath" classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
 
-                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml"
-                                        generateEcListMethod="true"
-                                        generatedDir="${project.build.directory}/generated-sources/reladomo"
-                                        nonGeneratedDir="${project.build.sourceDirectory}"
-                                        generateConcreteClasses="true" />
+                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml" generateEcListMethod="true" generatedDir="${project.build.directory}/generated-sources/reladomo" nonGeneratedDir="${project.build.sourceDirectory}" generateConcreteClasses="true" />
                             </target>
                         </configuration>
                     </execution>
