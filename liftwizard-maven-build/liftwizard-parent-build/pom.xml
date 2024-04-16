@@ -97,41 +97,10 @@
 
         <plugins>
 
-            <!--region Phase 21: verify-->
-            <plugin>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <suppressionsLocation>${maven.multiModuleProjectDirectory}/checkstyle-suppressions.xml</suppressionsLocation>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>10.15.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <!--endregion-->
-
-            <!--region Phase 1: validate-->
-            <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <!--endregion-->
-
             <!--region No phase-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-            </plugin>
-            <!--endregion-->
-
-            <!--region Phase 15: test-->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
             </plugin>
             <!--endregion-->
 
@@ -185,23 +154,72 @@
             </plugin>
             <!--endregion-->
 
+            <!--region Phase 1: validate-->
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <!--endregion-->
+
+            <!--region Phase 15: test-->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <!--endregion-->
+
+            <!--region Phase 21: verify-->
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <suppressionsLocation>${maven.multiModuleProjectDirectory}/checkstyle-suppressions.xml</suppressionsLocation>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>10.15.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!--endregion-->
+
         </plugins>
 
         <pluginManagement>
             <plugins>
 
-                <!--region Phase 4: process-sources-->
+                <!--region No phase-->
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <mavenExecutorId>forked-path</mavenExecutorId>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <pushChanges>false</pushChanges>
+                        <tagNameFormat>@{project.version}</tagNameFormat>
+                    </configuration>
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 3: generate-sources-->
+                <!--region No phase-->
                 <plugin>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.16.2</version>
+                    <configuration>
+                        <processAllModules>true</processAllModules>
+                        <generateBackupPoms>false</generateBackupPoms>
+                    </configuration>
+                </plugin>
+                <!--endregion-->
+
+                <!--region No Phase-->
+                <plugin>
+                    <artifactId>maven-wrapper-plugin</artifactId>
+                    <version>3.2.0</version>
                 </plugin>
                 <!--endregion-->
 
@@ -212,43 +230,44 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 7: compile-->
+                <!--region Phase 1: validate-->
                 <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.13.0</version>
-                    <configuration>
-                        <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
-                        <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
-                        <parameters>true</parameters>
-                        <useIncrementalCompilation>false</useIncrementalCompilation>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>com.google.auto.service</groupId>
-                                <artifactId>auto-service</artifactId>
-                                <version>1.0.1</version>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.4.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>extra-enforcer-rules</artifactId>
+                            <version>1.8.0</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 22: install-->
+                <!--region Phase 3: generate-sources-->
                 <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 17: package-->
+                <!--region Phase 3: generate-sources-->
                 <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
+                    <version>4.9.3</version>
+                    <executions>
+                        <execution>
+                            <id>antlr</id>
+                            <goals>
+                                <goal>antlr4</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                     <configuration>
-                        <archive>
-                            <manifest>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            </manifest>
-                        </archive>
+                        <listener>true</listener>
+                        <visitor>true</visitor>
+                        <treatWarningsAsErrors>true</treatWarningsAsErrors>
                     </configuration>
                 </plugin>
                 <!--endregion-->
@@ -275,17 +294,11 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region No phase-->
+                <!--region Phase 4: process-sources-->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <configuration>
-                        <mavenExecutorId>forked-path</mavenExecutorId>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <pushChanges>false</pushChanges>
-                        <tagNameFormat>@{project.version}</tagNameFormat>
-                    </configuration>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.5.0</version>
                 </plugin>
                 <!--endregion-->
 
@@ -296,28 +309,22 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 1: validate-->
+                <!--region Phase 7: compile-->
                 <plugin>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.4.1</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>extra-enforcer-rules</artifactId>
-                            <version>1.8.0</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-                <!--endregion-->
-
-                <!--region No phase-->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.16.2</version>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
                     <configuration>
-                        <processAllModules>true</processAllModules>
-                        <generateBackupPoms>false</generateBackupPoms>
+                        <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
+                        <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
+                        <parameters>true</parameters>
+                        <useIncrementalCompilation>false</useIncrementalCompilation>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>com.google.auto.service</groupId>
+                                <artifactId>auto-service</artifactId>
+                                <version>1.0.1</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
                 <!--endregion-->
@@ -339,31 +346,24 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 3: generate-sources-->
+                <!--region Phase 17: package-->
                 <plugin>
-                    <groupId>org.antlr</groupId>
-                    <artifactId>antlr4-maven-plugin</artifactId>
-                    <version>4.9.3</version>
-                    <executions>
-                        <execution>
-                            <id>antlr</id>
-                            <goals>
-                                <goal>antlr4</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
                     <configuration>
-                        <listener>true</listener>
-                        <visitor>true</visitor>
-                        <treatWarningsAsErrors>true</treatWarningsAsErrors>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
                     </configuration>
                 </plugin>
                 <!--endregion-->
 
-                <!--region No Phase-->
+                <!--region Phase 22: install-->
                 <plugin>
-                    <artifactId>maven-wrapper-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.1.1</version>
                 </plugin>
                 <!--endregion-->
 
@@ -372,207 +372,6 @@
     </build>
 
     <profiles>
-
-        <!--region Phase 16: prepare-package-->
-        <profile>
-            <id>znai-maven-plugin</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.testingisdocumenting.znai</groupId>
-                        <artifactId>znai-maven-plugin</artifactId>
-                        <version>1.68</version>
-                        <configuration>
-                            <docId>docs</docId>
-                            <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!--region Phase 21: verify-->
-        <profile>
-            <id>checkstyle-semantics</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>io.liftwizard</groupId>
-                                <artifactId>liftwizard-checkstyle</artifactId>
-                                <version>2.1.7-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>checkstyle:check semantics</id>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <phase>prepare-package</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>checkstyle-semantics-strict</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>io.liftwizard</groupId>
-                                <artifactId>liftwizard-checkstyle</artifactId>
-                                <version>2.1.7-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>checkstyle:check strict semantics</id>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <phase>prepare-package</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>checkstyle-formatting</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>io.liftwizard</groupId>
-                                <artifactId>liftwizard-checkstyle</artifactId>
-                                <version>2.1.7-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>checkstyle:check formatting</id>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <phase>prepare-package</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-
-        <profile>
-            <id>checkstyle-formatting-strict</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>io.liftwizard</groupId>
-                                <artifactId>liftwizard-checkstyle</artifactId>
-                                <version>2.1.7-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>checkstyle:check strict formatting</id>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <phase>prepare-package</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-        <!--endregion-->
-
-        <!--region Phase 21: verify-->
-        <profile>
-            <id>maven-dependency-plugin</id>
-
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-dependency-plugin</artifactId>
-                            <version>3.6.1</version>
-                            <configuration>
-                                <failOnWarning>true</failOnWarning>
-                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
-                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.6.1 support Java 17. -->
-                                <ignoredNonTestScopedDependencies>
-                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
-                                </ignoredNonTestScopedDependencies>
-                                <ignoredUnusedDeclaredDependencies>
-                                    <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
-                                </ignoredUnusedDeclaredDependencies>
-                            </configuration>
-
-                            <executions>
-                                <execution>
-                                    <id>dependency:analyze-only</id>
-                                    <goals>
-                                        <goal>analyze-only</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-
-                    </plugins>
-                </pluginManagement>
-
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!--endregion-->
 
         <!--region No phase-->
         <profile>
@@ -623,9 +422,7 @@
                 </pluginManagement>
             </build>
         </profile>
-        <!--endregion-->
 
-        <!--region No phase-->
         <profile>
             <!--Rules that don't reliably pass. They can't run in CI with dryRun, only one-off for rewrites.-->
             <id>rewrite-maven-plugin-one-off</id>
@@ -648,9 +445,7 @@
                 </pluginManagement>
             </build>
         </profile>
-        <!--endregion-->
 
-        <!--region No phase-->
         <profile>
             <id>rewrite-maven-plugin-dryRun</id>
             <build>
@@ -878,6 +673,57 @@
         </profile>
         <!--endregion-->
 
+        <!--region Phase 16: prepare-package-->
+        <profile>
+            <id>znai-maven-plugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.testingisdocumenting.znai</groupId>
+                        <artifactId>znai-maven-plugin</artifactId>
+                        <version>1.68</version>
+                        <configuration>
+                            <docId>docs</docId>
+                            <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase 17: package-->
+        <profile>
+            <id>maven-javadoc-plugin</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <configuration>
+                            <notimestamp>true</notimestamp>
+                            <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
+                            <additionalJOptions>
+                                <additionalJOption>-Xdoclint:all</additionalJOption>
+                                <additionalJOption>-Xdoclint:-missing</additionalJOption>
+                            </additionalJOptions>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>create javadoc jar</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--endregion-->
+
         <!--region Phase 17: package-->
         <profile>
             <id>maven-shade-plugin</id>
@@ -922,6 +768,189 @@
                         </plugin>
                     </plugins>
                 </pluginManagement>
+            </build>
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase 21: verify-->
+        <profile>
+            <id>checkstyle-semantics</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.liftwizard</groupId>
+                                <artifactId>liftwizard-checkstyle</artifactId>
+                                <version>2.1.7-SNAPSHOT</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>checkstyle:check semantics</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>checkstyle-semantics-strict</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.liftwizard</groupId>
+                                <artifactId>liftwizard-checkstyle</artifactId>
+                                <version>2.1.7-SNAPSHOT</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>checkstyle:check strict semantics</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>checkstyle-formatting</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.liftwizard</groupId>
+                                <artifactId>liftwizard-checkstyle</artifactId>
+                                <version>2.1.7-SNAPSHOT</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>checkstyle:check formatting</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
+        <profile>
+            <id>checkstyle-formatting-strict</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.liftwizard</groupId>
+                                <artifactId>liftwizard-checkstyle</artifactId>
+                                <version>2.1.7-SNAPSHOT</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>checkstyle:check strict formatting</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase 21: verify-->
+        <profile>
+            <id>maven-dependency-plugin</id>
+
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <version>3.6.1</version>
+                            <configuration>
+                                <failOnWarning>true</failOnWarning>
+                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
+                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.6.1 support Java 17. -->
+                                <ignoredNonTestScopedDependencies>
+                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
+                                </ignoredNonTestScopedDependencies>
+                                <ignoredUnusedDeclaredDependencies>
+                                    <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
+                                </ignoredUnusedDeclaredDependencies>
+                            </configuration>
+
+                            <executions>
+                                <execution>
+                                    <id>dependency:analyze-only</id>
+                                    <goals>
+                                        <goal>analyze-only</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
         <!--endregion-->
