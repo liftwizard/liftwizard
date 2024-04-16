@@ -130,9 +130,6 @@
 
         <!--region Blocks-->
         <!--https://checkstyle.sourceforge.io/checks/blocks/index.html-->
-        <module name="AvoidNestedBlocks">
-            <property name="allowInSwitchCase" value="true" />
-        </module>
         <module name="EmptyBlock">
             <property name="tokens" value="ARRAY_INIT" />
             <property name="tokens" value="INSTANCE_INIT" />
@@ -172,12 +169,6 @@
         <module name="InterfaceIsType" />
         <module name="MutableException" />
         <module name="OneTopLevelClass" />
-        <module name="VisibilityModifier">
-            <property
-                    name="ignoreAnnotationCanonicalNames"
-                    value="org.junit.Rule, org.junit.jupiter.api.io.TempDir" />
-            <property name="protectedAllowed" value="true" />
-        </module>
         <!--endregion-->
 
         <!--region Coding-->
@@ -186,7 +177,6 @@
         <module name="AvoidDoubleBraceInitialization" />
         <module name="AvoidNoArgumentSuperConstructorCall" />
         <module name="CovariantEquals" />
-        <module name="DeclarationOrder" />
         <module name="DefaultComesLast" />
         <module name="EmptyStatement" />
         <!-- Effective Java Item 8 - Always override hashCode when you override equals -->
@@ -321,7 +311,6 @@
         <module name="UnnecessarySemicolonAfterTypeMemberDeclaration" />
         <module name="UnnecessarySemicolonInEnumeration" />
         <module name="UnnecessarySemicolonInTryWithResources" />
-        <module name="UnusedLocalVariable" />
         <!--endregion-->
 
         <!--region Imports-->
