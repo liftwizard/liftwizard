@@ -54,10 +54,19 @@
 
         <!--region Blocks-->
         <!--https://checkstyle.sourceforge.io/checks/blocks/index.html-->
+        <module name="AvoidNestedBlocks">
+            <property name="allowInSwitchCase" value="true" />
+        </module>
         <!--endregion-->
 
         <!--region Class Design-->
         <!--https://checkstyle.sourceforge.io/checks/design/index.html-->
+        <module name="VisibilityModifier">
+            <property name="ignoreAnnotationCanonicalNames" value="org.junit.Rule" />
+            <property name="ignoreAnnotationCanonicalNames" value="org.junit.jupiter.api.io.TempDir" />
+            <property name="ignoreAnnotationCanonicalNames" value="org.junit.jupiter.api.extension.RegisterExtension" />
+            <property name="protectedAllowed" value="true" />
+        </module>
         <!--endregion-->
 
         <!--region Coding-->
@@ -68,6 +77,8 @@
             <property name="ignoreSetter" value="true" />
             <property name="setterCanReturnItsClass" value="true" />
         </module>
+        <module name="UnusedLocalVariable" />
+        <module name="DeclarationOrder" />
         <!--endregion-->
 
         <!--region Imports-->
