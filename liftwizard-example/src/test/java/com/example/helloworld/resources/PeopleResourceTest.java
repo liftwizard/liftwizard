@@ -76,8 +76,8 @@ public class PeopleResourceTest {
             this.assertResponseStatus(response, Status.OK);
             String jsonResponse = response.readEntity(String.class);
 
-            //<editor-fold desc="Expected JSON">
-            //language=JSON
+            // <editor-fold desc="Expected JSON">
+            // language=JSON
             String expected = """
                     {
                       "id"      : 1,
@@ -85,7 +85,7 @@ public class PeopleResourceTest {
                       "jobTitle": "Job Title"
                     }
                     """;
-            //</editor-fold>
+            // </editor-fold>
             JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
         }
 
@@ -98,8 +98,8 @@ public class PeopleResourceTest {
             this.assertResponseStatus(response, Status.OK);
             String jsonResponse = response.readEntity(String.class);
 
-            //<editor-fold desc="Expected JSON">
-            //language=JSON
+            // <editor-fold desc="Expected JSON">
+            // language=JSON
             String expected = """
                     [
                       {
@@ -109,7 +109,7 @@ public class PeopleResourceTest {
                       }
                     ]
                     """;
-            //</editor-fold>
+            // </editor-fold>
             JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
         }
     }

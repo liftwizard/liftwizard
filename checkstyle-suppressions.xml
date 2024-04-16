@@ -21,8 +21,20 @@
 
 <suppressions>
 
-    <suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*" />
+    <!--
+    This suppression exists for bundles like SPARedirectFilterBundle that are abstract because they expect an anonymous inner subclass like:
+    SPARedirectFilterBundle<T> spaRedirectFilterBundle = new SPARedirectFilterBundle<T>()
+    {
+        @Override
+        public SPARedirectFilterFactory getSPARedirectFilterFactory(T configuration)
+        {
+            configuration.getSPARedirectFilterFactory();
+        }
+    };
+    -->
     <suppress files="Bundle.java$" checks="AbstractClassName" />
-    <suppress files=".*" id="singleLineCommentStartWithSpace" />
+
+    <!-- An example of a common suppression, though it's not necessary within Liftwizard -->
+    <!--<suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*" />-->
 
 </suppressions>

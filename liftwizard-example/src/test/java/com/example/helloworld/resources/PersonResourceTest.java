@@ -64,15 +64,15 @@ public class PersonResourceTest
         this.assertResponseStatus(response, Status.OK);
         String jsonResponse = response.readEntity(String.class);
 
-        //<editor-fold desc="Expected JSON">
-        //language=JSON
+        // <editor-fold desc="Expected JSON">
+        // language=JSON
         String expected = """
                 {
                   "id"      : 1,
                   "fullName": "Full Name",
                   "jobTitle": "Job Title"
                 }\s""";
-        //</editor-fold>
+        // </editor-fold>
         JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
     }
 
@@ -84,14 +84,14 @@ public class PersonResourceTest
         this.assertResponseStatus(response, Status.NOT_FOUND);
         String jsonResponse = response.readEntity(String.class);
 
-        //<editor-fold desc="Expected JSON">
-        //language=JSON
+        // <editor-fold desc="Expected JSON">
+        // language=JSON
         String expected = """
                 {
                   "code"   : 404,
                   "message": "No such user."
                 }\s""";
-        //</editor-fold>
+        // </editor-fold>
         JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
     }
 
