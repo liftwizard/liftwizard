@@ -70,7 +70,7 @@ public class IntegrationTest {
             this.assertResponseStatus(response, Status.OK);
 
             String jsonResponse = response.readEntity(String.class);
-            //language=JSON
+            // language=JSON
             String expected = """
                     {
                       "id"     : 1,
