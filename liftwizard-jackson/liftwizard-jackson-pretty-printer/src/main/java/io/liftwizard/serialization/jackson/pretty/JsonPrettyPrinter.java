@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,8 @@
 
 package io.liftwizard.serialization.jackson.pretty;
 
-import java.io.IOException;
-
 import javax.annotation.Nonnull;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.Separators;
@@ -35,8 +32,10 @@ public class JsonPrettyPrinter
             Spacing.AFTER,
             ',',
             Spacing.NONE,
+            "",
             ',',
-            Spacing.NONE);
+            Spacing.NONE,
+            "");
 
     public static final DefaultIndenter INDENTER   = new DefaultIndenter("  ", "\n");
 
@@ -57,43 +56,5 @@ public class JsonPrettyPrinter
     public DefaultPrettyPrinter createInstance()
     {
         return this;
-    }
-
-    @Override
-    public void writeEndArray(JsonGenerator jsonGenerator, int nrOfValues)
-            throws IOException
-    {
-        if (!this._arrayIndenter.isInline())
-        {
-            --this._nesting;
-        }
-        if (nrOfValues > 0)
-        {
-            this._arrayIndenter.writeIndentation(jsonGenerator, this._nesting);
-        }
-        else
-        {
-            // jsonGenerator.writeRaw(' ');
-        }
-        jsonGenerator.writeRaw(']');
-    }
-
-    @Override
-    public void writeEndObject(JsonGenerator g, int nrOfEntries)
-            throws IOException
-    {
-        if (!this._objectIndenter.isInline())
-        {
-            --this._nesting;
-        }
-        if (nrOfEntries > 0)
-        {
-            this._objectIndenter.writeIndentation(g, this._nesting);
-        }
-        else
-        {
-            // g.writeRaw(' ');
-        }
-        g.writeRaw('}');
     }
 }
