@@ -16,13 +16,13 @@ There are very few dependencies between the bundles, so you can pick and choose 
 ## Module groups
 
 The bundles can be loosely grouped into categories.
-* Dropwizard configuration
-* JSON serialization/deserialization
-* Servlet client/server logging
-* [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
-* Other Dropwizard utility
+
+- Dropwizard configuration and bundles
+- Jackson JSON serialization/deserialization
+- Servlet client/server logging
+- [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
+- JUnit 4 and JUnit 5 test utilities
 
 ## Documentation
 
 See the full docs at https://liftwizard.io/docs/
-
