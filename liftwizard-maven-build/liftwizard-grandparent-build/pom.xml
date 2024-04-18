@@ -164,6 +164,22 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <!-- In maven 3.9.6 and 4.x, maven is able to auto-detect JUnit and these dependencies are not required -->
+                <!-- In maven 3.9.5, there is an internal exception inside surefire without these declared -->
+                <!-- Even with newer versions of maven, it is advantageous to keep these declarations -->
+                <!-- Without them, maven may only run JUnit 5 tests, in a project with both JUnit 4 and 5 -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.10.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.vintage</groupId>
+                        <artifactId>junit-vintage-engine</artifactId>
+                        <version>5.10.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <!--endregion-->
 
