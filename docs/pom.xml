@@ -29,8 +29,7 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <maven.site.skip>true</maven.site.skip>
-        <maven.site.deploy.skip>true</maven.site.deploy.skip>
+        <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
     </properties>
 
     <!--region Phase 16: prepare-package-->
