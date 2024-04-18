@@ -120,7 +120,6 @@ jobs:
       - name: 'Install liftwizard-checkstyle module'
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
-
       - name: 'Produce Checkstyle XML: Semantics'
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
@@ -155,7 +154,6 @@ jobs:
 
       - name: 'Install liftwizard-checkstyle module'
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
-
 
       - name: 'Produce Checkstyle XML: Strict Semantics'
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
