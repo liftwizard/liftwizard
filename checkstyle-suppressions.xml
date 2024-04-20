@@ -34,7 +34,6 @@
     -->
     <suppress files="Bundle.java$" checks="AbstractClassName" />
 
-    <!-- An example of a common suppression, though it's not necessary within Liftwizard -->
-    <!--<suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*" />-->
+    <suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*" />
 
 </suppressions>
