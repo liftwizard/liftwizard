@@ -566,6 +566,7 @@
                         <goals>
                             <goal>generate-reladomo-pojos</goal>
                         </goals>
+                        <phase>generate-sources</phase>
                     </execution>
                 </executions>
                 <dependencies>
