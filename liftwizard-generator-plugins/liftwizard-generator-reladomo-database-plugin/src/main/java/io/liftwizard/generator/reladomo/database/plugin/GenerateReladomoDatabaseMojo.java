@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -127,9 +126,8 @@ public class GenerateReladomoDatabaseMojo
         {
             URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
-            URI uri = resource.toURI();
-            FileSystem fileSystem = ManagedFileSystem.get(uri);
-            Path from = fileSystem.getPath("/");
+            URI  uri  = resource.toURI();
+            Path from = ManagedFileSystem.get(uri);
             Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
 
             this.copyDirectory(from, to);
