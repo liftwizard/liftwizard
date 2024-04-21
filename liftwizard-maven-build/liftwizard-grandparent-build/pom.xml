@@ -472,54 +472,54 @@
 
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
+                        <configuration>
+                            <rules>
+                                <DependencyConvergence />
+                                <requireJavaVersion>
+                                    <version>17</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>3.8.6</version>
+                                </requireMavenVersion>
+                                <requirePluginVersions>
+                                    <banLatest>true</banLatest>
+                                    <banRelease>true</banRelease>
+                                    <!--Ban snapshots later, for now it's too common to depend on klass snapshots-->
+                                    <banSnapshots>false</banSnapshots>
+                                    <unCheckedPluginList>
+                                        org.apache.maven.plugins:maven-site-plugin,
+                                        org.apache.maven.plugins:maven-deploy-plugin,
+                                        io.liftwizard:liftwizard-generator-reladomo-code-plugin,
+                                        io.liftwizard:liftwizard-generator-reladomo-database-plugin,
+                                        io.liftwizard:liftwizard-generator-xsd2bean-plugin
+                                    </unCheckedPluginList>
+                                </requirePluginVersions>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>log4j:log4j</exclude>
+                                        <exclude>commons-logging-api</exclude>
+                                        <exclude>commons-logging</exclude>
+                                        <exclude>org.apache.logging.log4j:log4j</exclude>
+                                        <exclude>org.slf4j:slf4j-simple</exclude>
+                                        <exclude>org.slf4j:slf4j-log4j12</exclude>
+                                        <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                        <exclude>org.slf4j:nop</exclude>
+                                        <exclude>org.slf4j:jcl</exclude>
+                                    </excludes>
+                                </bannedDependencies>
+                                <banDuplicatePomDependencyVersions />
+                                <banDuplicateClasses>
+                                    <findAllDuplicates>true</findAllDuplicates>
+                                    <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                                </banDuplicateClasses>
+                                <enforceBytecodeVersion>
+                                    <maxJdkVersion>17</maxJdkVersion>
+                                </enforceBytecodeVersion>
+                            </rules>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>enforce</id>
-                                <configuration>
-                                    <rules>
-                                        <DependencyConvergence />
-                                        <requireJavaVersion>
-                                            <version>17</version>
-                                        </requireJavaVersion>
-                                        <requireMavenVersion>
-                                            <version>3.8.6</version>
-                                        </requireMavenVersion>
-                                        <requirePluginVersions>
-                                            <banLatest>true</banLatest>
-                                            <banRelease>true</banRelease>
-                                            <!--Ban snapshots later, for now it's too common to depend on klass snapshots-->
-                                            <banSnapshots>false</banSnapshots>
-                                            <unCheckedPluginList>
-                                                org.apache.maven.plugins:maven-site-plugin,
-                                                org.apache.maven.plugins:maven-deploy-plugin,
-                                                io.liftwizard:liftwizard-generator-reladomo-code-plugin,
-                                                io.liftwizard:liftwizard-generator-reladomo-database-plugin,
-                                                io.liftwizard:liftwizard-generator-xsd2bean-plugin
-                                            </unCheckedPluginList>
-                                        </requirePluginVersions>
-                                        <bannedDependencies>
-                                            <excludes>
-                                                <exclude>log4j:log4j</exclude>
-                                                <exclude>commons-logging-api</exclude>
-                                                <exclude>commons-logging</exclude>
-                                                <exclude>org.apache.logging.log4j:log4j</exclude>
-                                                <exclude>org.slf4j:slf4j-simple</exclude>
-                                                <exclude>org.slf4j:slf4j-log4j12</exclude>
-                                                <exclude>org.slf4j:slf4j-jdk14</exclude>
-                                                <exclude>org.slf4j:nop</exclude>
-                                                <exclude>org.slf4j:jcl</exclude>
-                                            </excludes>
-                                        </bannedDependencies>
-                                        <banDuplicatePomDependencyVersions />
-                                        <banDuplicateClasses>
-                                            <findAllDuplicates>true</findAllDuplicates>
-                                            <ignoreWhenIdentical>true</ignoreWhenIdentical>
-                                        </banDuplicateClasses>
-                                        <enforceBytecodeVersion>
-                                            <maxJdkVersion>17</maxJdkVersion>
-                                        </enforceBytecodeVersion>
-                                    </rules>
-                                </configuration>
                                 <goals>
                                     <goal>enforce</goal>
                                 </goals>
