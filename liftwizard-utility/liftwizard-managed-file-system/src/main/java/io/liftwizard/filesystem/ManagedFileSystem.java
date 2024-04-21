@@ -16,10 +16,10 @@
 
 package io.liftwizard.filesystem;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystemNotFoundException;
@@ -64,25 +64,36 @@ public final class ManagedFileSystem
     public static Path get(URI uri)
     {
         String scheme = uri.getScheme();
-        if (!scheme.equals("file"))
+        switch (scheme)
         {
-            FileSystem fileSystem = getWithNormalizedUri(uri);
-            return fileSystem.getPath("/");
-        }
-
-        try
-        {
-            FileSystem fileSystem = getWithNormalizedUri(new URI("file:///"));
-            String     path       = uri.getPath();
-            return fileSystem.getPath(path);
-        }
-        catch (URISyntaxException e)
-        {
-            throw new RuntimeException(e);
+            case "file":
+                return getFile(uri);
+            case "jar":
+                return getJar(uri);
+            default:
+                throw new IllegalArgumentException("Unsupported scheme: " + scheme);
         }
     }
 
-    private static FileSystem getWithNormalizedUri(URI uri)
+    private static Path getFile(URI uri)
+    {
+        File file = new File(uri);
+        return file.toPath();
+    }
+
+    private static Path getJar(URI uri)
+    {
+        String     schemeSpecificPart = uri.getSchemeSpecificPart();
+        int        separatorIndex     = schemeSpecificPart.indexOf("!/");
+        String     jarPath            = schemeSpecificPart.substring(0, separatorIndex);
+        String     pathWithinJar      = schemeSpecificPart.substring(separatorIndex + 1);
+        URI        jarUri             = URI.create("jar:" + jarPath);
+        FileSystem fileSystem         = getOrCreate(jarUri);
+        Path       result             = fileSystem.getPath(pathWithinJar);
+        return result;
+    }
+
+    private static FileSystem getOrCreate(URI uri)
     {
         FileSystem fileSystem = MANAGED_FILE_SYSTEMS.get(uri);
         if (fileSystem.isOpen())
