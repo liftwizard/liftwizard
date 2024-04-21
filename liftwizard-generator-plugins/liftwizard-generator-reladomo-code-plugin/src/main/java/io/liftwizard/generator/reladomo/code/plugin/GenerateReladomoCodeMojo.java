@@ -110,12 +110,10 @@ public class GenerateReladomoCodeMojo
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
             URI  uri  = resource.toURI();
             Path from = ManagedFileSystem.get(uri);
-            Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
+            Path to   = Files.createTempDirectory(this.getClass().getSimpleName()).resolve(this.definitionsAndClassListDirectory);
 
             this.copyDirectory(from, to);
-            return to
-                    .resolve(this.definitionsAndClassListDirectory)
-                    .resolve(this.classListFileName);
+            return to.resolve(this.classListFileName);
         }
         catch (URISyntaxException | IOException e)
         {
@@ -126,7 +124,7 @@ public class GenerateReladomoCodeMojo
     private void copyDirectory(Path from, Path to)
             throws IOException
     {
-        try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory)))
+        try (Stream<Path> sources = Files.walk(from))
         {
             sources.forEach(src -> this.handleOneFile(from, src, to));
         }
