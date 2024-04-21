@@ -19,10 +19,12 @@ package io.liftwizard.filesystem;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Map;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -59,7 +61,28 @@ public final class ManagedFileSystem
         }
     }
 
-    public static FileSystem get(URI uri)
+    public static Path get(URI uri)
+    {
+        String scheme = uri.getScheme();
+        if (!scheme.equals("file"))
+        {
+            FileSystem fileSystem = getWithNormalizedUri(uri);
+            return fileSystem.getPath("/");
+        }
+
+        try
+        {
+            FileSystem fileSystem = getWithNormalizedUri(new URI("file:///"));
+            String     path       = uri.getPath();
+            return fileSystem.getPath(path);
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static FileSystem getWithNormalizedUri(URI uri)
     {
         FileSystem fileSystem = MANAGED_FILE_SYSTEMS.get(uri);
         if (fileSystem.isOpen())
