@@ -98,13 +98,24 @@
         <plugins>
 
             <!--region No phase-->
+
+            <!--mvn versions:display-dependency-updates-->
+            <!--mvn versions:display-plugin-updates-->
+            <!--mvn versions:display-property-updates-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
             </plugin>
-            <!--endregion-->
 
-            <!--region No phase-->
+            <!--mvn dependency:tree-->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
+            </plugin>
+
+            <!--mvn buildplan:list-->
+            <!--mvn buildplan:list-phase-->
+            <!--mvn buildplan:list-plugin-->
             <plugin>
                 <groupId>fr.jcgay.maven.plugins</groupId>
                 <artifactId>buildplan-maven-plugin</artifactId>
@@ -117,9 +128,9 @@
                     <showAllPhases>true</showAllPhases>
                 </configuration>
             </plugin>
-            <!--endregion-->
 
-            <!--region No phase-->
+            <!--mvn rewrite:run-->
+            <!--mvn rewrite:dryRun-->
             <plugin>
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
