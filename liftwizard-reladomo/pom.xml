@@ -28,20 +28,6 @@
 
     <name>Liftwizard Reladomo (Module Group)</name>
 
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <modules>
         <module>liftwizard-bundle-connection-manager-holder</module>
         <module>liftwizard-bundle-reladomo</module>

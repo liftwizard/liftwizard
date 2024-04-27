@@ -28,20 +28,6 @@
 
     <name>Liftwizard Logging (Module Group)</name>
 
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <modules>
         <module>liftwizard-ansi-color-strip</module>
         <module>liftwizard-bundle-logging-config</module>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2020 Craig Motlin
+  ~ Copyright 2024 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -32,7 +32,9 @@
         <module>liftwizard-bom</module>
         <module>liftwizard-dependencies</module>
         <module>liftwizard-grandparent-build</module>
+        <module>liftwizard-minimal-parent</module>
         <module>liftwizard-parent-build</module>
+        <module>liftwizard-profile-parent</module>
     </modules>
 
     <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web

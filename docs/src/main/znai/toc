@@ -23,6 +23,11 @@ database
 testing
     testing
     matching-files
+maven
+    maven-best-practices
+    minimal-parent
+    profile-parent
+    bill-of-materials
 temporal-data
     temporal-data-overview
     running-example

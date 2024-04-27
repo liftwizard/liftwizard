@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2024 Craig Motlin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-minimal-parent</artifactId>
+    <version>2.1.8-SNAPSHOT</version>
+    <name>Liftwizard Maven Parent (minimal)</name>
+
+    <properties>
+
+        <!-- https://maven.apache.org/plugins/maven-resources-plugin/examples/encoding.html#specifying-a-character-encoding-scheme -->
+        <!-- Configure a sourceEncoding for maven-resources-plugin -->
+        <!-- Avoids errors of the form:  [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent! -->
+        <!-- Unnecessary starting with maven 4 -->
+        <!--region sourceEncoding-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--endregion sourceEncoding-->
+
+        <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html#how-do-i-configure-my-maven-build -->
+        <!-- Enable Reproducible Builds mode for plugins -->
+        <!--region outputTimestamp-->
+        <project.build.outputTimestamp>2000-01-01T00:00:00Z</project.build.outputTimestamp>
+        <!--endregion outputTimestamp-->
+    </properties>
+
+    <description>Liftwizard minimal parent is a published parent pom with uncontroversial defaults that should be safe to use as a parent pom for any project.</description>
+
+    <build>
+        <!-- The default goal or phase to execute when none is specified for the project. -->
+        <!-- verify is a better choice than install in the presence of concurrent builds that may write to .m2/repository simultaneously -->
+        <!--region defaultGoal-->
+        <defaultGoal>verify</defaultGoal>
+        <!--endregion defaultGoal-->
+
+        <plugins>
+            <!--region Plugins which are bound and enabled by default-->
+
+            <!-- These plugins are bound and enabled by default -->
+            <!-- But the default version of these plugins changes with the version of maven running -->
+
+            <!--region Phase 0: clean-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+            <!--endregion Phase 0: clean-->
+
+            <!--region Phase 6: process-resources-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+            <!--endregion Phase 6: process-resources-->
+
+            <!--region Phase 7: compile-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <!-- https://maven.apache.org/plugins-archives/maven-compiler-plugin-3.8.1/compile-mojo.html#parameters -->
+                    <!-- https://stackoverflow.com/a/44075684/ -->
+                    <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
+                    <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+            <!--endregion Phase 7: compile-->
+
+            <!--region Phase 15: test-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <!-- In maven 3.9.6 and 4.x, maven is able to auto-detect JUnit and these dependencies are not required -->
+                <!-- In maven 3.9.5, there is an internal exception inside surefire without these declared -->
+                <!-- Even with newer versions of maven, it is advantageous to keep these declarations -->
+                <!-- Without them, maven may only run JUnit 5 tests, in a project with both JUnit 4 and 5 -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.10.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-engine</artifactId>
+                        <version>1.10.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.vintage</groupId>
+                        <artifactId>junit-vintage-engine</artifactId>
+                        <version>5.10.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!--endregion Phase 15: test-->
+
+            <!--region Phase 17: package-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+            </plugin>
+            <!--endregion Phase 17: package-->
+
+            <!--region Phase 22: install-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <!--endregion Phase 22: install-->
+
+            <!--region Phase 23: deploy-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <!--endregion Phase 23: deploy-->
+            <!--endregion Plugins which are bound and enabled by default-->
+
+            <!--region No phase-->
+
+            <!--mvn versions:display-dependency-updates-->
+            <!--mvn versions:display-plugin-updates-->
+            <!--mvn versions:display-property-updates-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.16.2</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                    <processAllModules>true</processAllModules>
+                </configuration>
+            </plugin>
+
+            <!--mvn dependency:tree-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
+            </plugin>
+
+            <!--mvn buildplan:list-->
+            <!--mvn buildplan:list-phase-->
+            <!--mvn buildplan:list-plugin-->
+            <plugin>
+                <groupId>fr.jcgay.maven.plugins</groupId>
+                <artifactId>buildplan-maven-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <tasks>
+                        <task>clean</task>
+                        <task>deploy</task>
+                    </tasks>
+                    <showAllPhases>true</showAllPhases>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-wrapper-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <pushChanges>false</pushChanges>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+            <!--endregion No phase-->
+
+            <!--region Phase 1: validate-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>extra-enforcer-rules</artifactId>
+                        <version>1.8.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!--endregion Phase 1: validate-->
+
+        </plugins>
+
+    </build>
+
+</project>
