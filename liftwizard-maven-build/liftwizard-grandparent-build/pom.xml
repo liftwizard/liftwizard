@@ -16,118 +16,42 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>io.liftwizard</groupId>
-    <artifactId>liftwizard-grandparent-build</artifactId>
-    <version>2.1.8-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
-
     <packaging>pom</packaging>
+    <parent>
+        <groupId>io.liftwizard</groupId>
+        <artifactId>liftwizard-profile-parent</artifactId>
+        <version>2.1.8-SNAPSHOT</version>
+        <relativePath>../liftwizard-profile-parent</relativePath>
+    </parent>
+
+    <artifactId>liftwizard-grandparent-build</artifactId>
     <name>Liftwizard Grandparent Build</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <project.build.outputTimestamp>2024-04-16T03:50:58Z</project.build.outputTimestamp>
-
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
-        <maven.compiler.parameters>true</maven.compiler.parameters>
     </properties>
 
-    <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web services.</description>
+    <dependencyManagement>
+        <dependencies>
 
-    <url>https://github.com/motlin/liftwizard</url>
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/motlin/liftwizard/issues</url>
-    </issueManagement>
-
-    <ciManagement>
-        <system>CircleCI</system>
-        <url>https://app.circleci.com/pipelines/github/motlin/liftwizard</url>
-    </ciManagement>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <url>https://github.com/motlin/liftwizard</url>
-        <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
-        <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
-
-    <inceptionYear>2020</inceptionYear>
-
-    <developers>
-        <developer>
-            <name>Craig Motlin</name>
-            <email>cmotlin@gmail.com</email>
-            <url>https://github.com/motlin</url>
-            <id>motlin</id>
-        </developer>
-    </developers>
-
-    <dependencies>
-        <!-- Without a dependency on junit-vintage-engine, some JUnit tests were accidentally not running-->
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
-        <defaultGoal>verify</defaultGoal>
-
         <plugins>
 
             <!--region No phase-->
-
-            <!--mvn versions:display-dependency-updates-->
-            <!--mvn versions:display-plugin-updates-->
-            <!--mvn versions:display-property-updates-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-            </plugin>
-
-            <!--mvn dependency:tree-->
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.6.1</version>
-            </plugin>
-
-            <!--mvn buildplan:list-->
-            <!--mvn buildplan:list-phase-->
-            <!--mvn buildplan:list-plugin-->
-            <plugin>
-                <groupId>fr.jcgay.maven.plugins</groupId>
-                <artifactId>buildplan-maven-plugin</artifactId>
-                <version>1.5</version>
-                <configuration>
-                    <tasks>
-                        <task>clean</task>
-                        <task>deploy</task>
-                    </tasks>
-                    <showAllPhases>true</showAllPhases>
-                </configuration>
-            </plugin>
 
             <!--mvn rewrite:run-->
             <!--mvn rewrite:dryRun-->
@@ -171,29 +95,6 @@
             </plugin>
             <!--endregion-->
 
-            <!--region Phase 15: test-->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <!-- In maven 3.9.6 and 4.x, maven is able to auto-detect JUnit and these dependencies are not required -->
-                <!-- In maven 3.9.5, there is an internal exception inside surefire without these declared -->
-                <!-- Even with newer versions of maven, it is advantageous to keep these declarations -->
-                <!-- Without them, maven may only run JUnit 5 tests, in a project with both JUnit 4 and 5 -->
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.10.2</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.vintage</groupId>
-                        <artifactId>junit-vintage-engine</artifactId>
-                        <version>5.10.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <!--endregion-->
-
             <!--region Phase 21: verify-->
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -216,60 +117,6 @@
 
         <pluginManagement>
             <plugins>
-
-                <!--region No phase-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <configuration>
-                        <mavenExecutorId>forked-path</mavenExecutorId>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <pushChanges>false</pushChanges>
-                        <tagNameFormat>@{project.version}</tagNameFormat>
-                    </configuration>
-                </plugin>
-                <!--endregion-->
-
-                <!--region No phase-->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.16.2</version>
-                    <configuration>
-                        <processAllModules>true</processAllModules>
-                        <generateBackupPoms>false</generateBackupPoms>
-                    </configuration>
-                </plugin>
-                <!--endregion-->
-
-                <!--region No Phase-->
-                <plugin>
-                    <artifactId>maven-wrapper-plugin</artifactId>
-                    <version>3.3.1</version>
-                </plugin>
-                <!--endregion-->
-
-                <!--region Phase 0: clean-->
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.3.2</version>
-                </plugin>
-                <!--endregion-->
-
-                <!--region Phase 1: validate-->
-                <plugin>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.4.1</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>extra-enforcer-rules</artifactId>
-                            <version>1.8.0</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-                <!--endregion-->
 
                 <!--region Phase 3: generate-sources-->
                 <plugin>
@@ -329,22 +176,11 @@
                 </plugin>
                 <!--endregion-->
 
-                <!--region Phase 6: process-resources-->
-                <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.1</version>
-                </plugin>
-                <!--endregion-->
 
                 <!--region Phase 7: compile-->
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.13.0</version>
                     <configuration>
-                        <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
-                        <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
-                        <parameters>true</parameters>
-                        <useIncrementalCompilation>false</useIncrementalCompilation>
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>com.google.auto.service</groupId>
@@ -361,36 +197,14 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.2.5</version>
                     <configuration>
-                        <includes>
-                            <include>**/*Test.java</include>
-                        </includes>
-                        <argLine>-XX:-OmitStackTraceInFastThrow -Xms1024m -Xmx2048m --illegal-access=permit</argLine>
+                        <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
+                        <!-- https://stackoverflow.com/a/4659279/ -->
+                        <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
+                        <!-- https://stackoverflow.com/a/4659279/ -->
+                        <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                         <runOrder>random</runOrder>
                         <trimStackTrace>false</trimStackTrace>
-                        <encoding>UTF-8</encoding>
-                        <argLine>-Dfile.encoding=UTF-8</argLine>
                     </configuration>
-                </plugin>
-                <!--endregion-->
-
-                <!--region Phase 17: package-->
-                <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.1</version>
-                    <configuration>
-                        <archive>
-                            <manifest>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            </manifest>
-                        </archive>
-                    </configuration>
-                </plugin>
-                <!--endregion-->
-
-                <!--region Phase 22: install-->
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>3.1.2</version>
                 </plugin>
                 <!--endregion-->
 
@@ -485,16 +299,16 @@
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
                             <rules>
-                                <DependencyConvergence />
                                 <requireJavaVersion>
                                     <version>17</version>
                                 </requireJavaVersion>
+                                <enforceBytecodeVersion>
+                                    <maxJdkVersion>17</maxJdkVersion>
+                                </enforceBytecodeVersion>
                                 <requireMavenVersion>
                                     <version>3.8.6</version>
                                 </requireMavenVersion>
                                 <requirePluginVersions>
-                                    <banLatest>true</banLatest>
-                                    <banRelease>true</banRelease>
                                     <!--Ban snapshots later, for now it's too common to depend on klass snapshots-->
                                     <banSnapshots>false</banSnapshots>
                                     <unCheckedPluginList>
@@ -518,24 +332,8 @@
                                         <exclude>org.slf4j:jcl</exclude>
                                     </excludes>
                                 </bannedDependencies>
-                                <banDuplicatePomDependencyVersions />
-                                <banDuplicateClasses>
-                                    <findAllDuplicates>true</findAllDuplicates>
-                                    <ignoreWhenIdentical>true</ignoreWhenIdentical>
-                                </banDuplicateClasses>
-                                <enforceBytecodeVersion>
-                                    <maxJdkVersion>17</maxJdkVersion>
-                                </enforceBytecodeVersion>
                             </rules>
                         </configuration>
-                        <executions>
-                            <execution>
-                                <id>enforce</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
 
                 </plugins>
@@ -583,86 +381,6 @@
         </profile>
         <!--endregion-->
 
-        <!--region Phase 17: package-->
-        <profile>
-            <id>maven-shade-plugin</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-shade-plugin</artifactId>
-                            <version>3.5.3</version>
-                            <configuration>
-                                <createDependencyReducedPom>true</createDependencyReducedPom>
-                                <transformers>
-                                    <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                        <resource>reference.conf</resource>
-                                    </transformer>
-                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                        <mainClass>${mainClass}</mainClass>
-                                    </transformer>
-                                </transformers>
-                                <!-- exclude signed Manifests -->
-                                <filters>
-                                    <filter>
-                                        <artifact>*:*</artifact>
-                                        <excludes>
-                                            <exclude>module-info.class</exclude>
-                                            <exclude>META-INF/*.SF</exclude>
-                                            <exclude>META-INF/*.DSA</exclude>
-                                            <exclude>META-INF/*.RSA</exclude>
-                                        </excludes>
-                                    </filter>
-                                </filters>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>shade</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <!--endregion-->
-
-        <!--region Phase 17: package-->
-        <profile>
-            <id>maven-javadoc-plugin</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.6.3</version>
-                        <configuration>
-                            <notimestamp>true</notimestamp>
-                            <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
-                            <additionalJOptions>
-                                <additionalJOption>-Xdoclint:all</additionalJOption>
-                                <additionalJOption>-Xdoclint:-missing</additionalJOption>
-                            </additionalJOptions>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>create javadoc jar</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!--endregion-->
-
         <!--region Phase 21: verify-->
         <profile>
             <id>maven-dependency-plugin</id>
@@ -672,14 +390,7 @@
                     <plugins>
                         <plugin>
                             <artifactId>maven-dependency-plugin</artifactId>
-                            <version>3.6.1</version>
                             <configuration>
-                                <failOnWarning>true</failOnWarning>
-                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
-                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.6.1 support Java 17. -->
-                                <ignoredNonTestScopedDependencies>
-                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
-                                </ignoredNonTestScopedDependencies>
                                 <ignoredUnusedDeclaredDependencies>
                                     <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
@@ -691,25 +402,10 @@
                                     <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
                                 </ignoredUnusedDeclaredDependencies>
                             </configuration>
-
-                            <executions>
-                                <execution>
-                                    <id>dependency:analyze-only</id>
-                                    <goals>
-                                        <goal>analyze-only</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
                         </plugin>
 
                     </plugins>
                 </pluginManagement>
-
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                    </plugin>
-                </plugins>
             </build>
         </profile>
         <!--endregion-->
@@ -733,22 +429,6 @@
 
             <build>
                 <plugins>
-                    <!--region Phase 17: package-->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <executions>
-                            <execution>
-                                <id>create source jar</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!--endregion-->
-
                     <!--region Phase 21: verify-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

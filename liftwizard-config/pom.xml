@@ -28,20 +28,6 @@
 
     <name>Liftwizard Config (Module Group)</name>
 
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <modules>
         <module>liftwizard-config-cors</module>
         <module>liftwizard-config-data-source</module>
