@@ -12,10 +12,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: build-and-test-${{ hashFiles('**/pom.xml') }}
+          key: maven-test-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-test-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -35,10 +36,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: maven-enforcer-plugin-${{ hashFiles('**/pom.xml') }}
+          key: maven-enforcer-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-enforcer-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -58,10 +60,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: maven-dependency-plugin`-${{ hashFiles('**/pom.xml') }}
+          key: maven-dependency-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-dependency-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -81,10 +84,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: maven-javadoc-plugin`-${{ hashFiles('**/pom.xml') }}
+          key: maven-javadoc-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-javadoc-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -107,10 +111,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-checkstyle-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -142,10 +147,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-checkstyle-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -177,10 +183,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-checkstyle-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -212,10 +219,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-checkstyle-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
@@ -244,10 +252,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: rewrite-maven-plugin-${{ hashFiles('**/pom.xml') }}
+          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-rewrite-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
