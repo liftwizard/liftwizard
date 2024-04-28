@@ -268,3 +268,28 @@ jobs:
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
+
+  # Check for reproducible builds with artifact:check-buildplan
+  reproducible:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-reproducible-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-reproducible-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run artifact:check-buildplan
+        run: ./mvnw verify artifact:check-buildplan -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
