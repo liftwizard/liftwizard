@@ -14,10 +14,11 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: znai-${{ hashFiles('**/pom.xml') }}
+          key: maven-znai-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            ${{ runner.os }}-maven-
+            maven-znai-
+            maven-
 
       - uses: actions/setup-java@v4
         with:
