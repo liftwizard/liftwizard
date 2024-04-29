@@ -50,6 +50,7 @@
                                 <requirePluginVersions>
                                     <banLatest>true</banLatest>
                                     <banRelease>true</banRelease>
+                                    <banSnapshots>false</banSnapshots>
                                     <unCheckedPluginList>
                                         org.apache.maven.plugins:maven-site-plugin,
                                         org.apache.maven.plugins:maven-deploy-plugin
@@ -83,6 +84,46 @@
                         </executions>
                     </plugin>
 
+                </plugins>
+            </build>
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase 15: test-->
+        <profile>
+            <id>rerecord</id>
+
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <configuration>
+                                <environmentVariables>
+                                    <LIFTWIZARD_FILE_MATCH_RULE_RERECORD>true</LIFTWIZARD_FILE_MATCH_RULE_RERECORD>
+                                </environmentVariables>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <!--endregion-->
+
+        <!--region Phase 16: prepare-package-->
+        <profile>
+            <id>znai-maven-plugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.testingisdocumenting.znai</groupId>
+                        <artifactId>znai-maven-plugin</artifactId>
+                        <version>1.68</version>
+                        <configuration>
+                            <docId>docs</docId>
+                            <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -189,6 +230,9 @@
                                     <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
                                 </ignoredUnusedDeclaredDependencies>
@@ -219,6 +263,20 @@
         <profile>
             <id>deploy</id>
 
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <name>Sonatype Nexus Snapshots</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+
+                <repository>
+                    <id>ossrh</id>
+                    <name>Nexus Release Repository</name>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+
             <build>
                 <plugins>
                     <!--region Phase 17: package-->
@@ -234,6 +292,49 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <!--endregion-->
+
+                    <!--region Phase 21: verify-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Prevent `gpg` from using pinentry programs -->
+                                    <!-- https://github.com/samuelmeuli/action-maven-publish/issues/1 -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--endregion-->
+
+                    <!--region Phase 23: deploy-->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <autoDropAfterRelease>true</autoDropAfterRelease>
+                            <keepStagingRepositoryOnCloseRuleFailure>true</keepStagingRepositoryOnCloseRuleFailure>
+                            <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
+                            <skipLocalStaging>true</skipLocalStaging>
+                        </configuration>
                     </plugin>
                     <!--endregion-->
                 </plugins>
