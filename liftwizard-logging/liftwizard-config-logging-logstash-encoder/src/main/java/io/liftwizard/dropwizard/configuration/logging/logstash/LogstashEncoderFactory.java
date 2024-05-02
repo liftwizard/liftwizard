@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public class LogstashEncoderFactory
     private          boolean includeStructuredArguments = true;
     private          boolean includedNonStructuredArguments;
     private          boolean includeTags                = true;
+    private          String  customFields;
     private          boolean prettyPrint;
     private @NotNull Include serializationInclusion     = Include.NON_ABSENT;
 
@@ -96,6 +97,18 @@ public class LogstashEncoderFactory
     }
 
     @JsonProperty
+    public String getCustomFields()
+    {
+        return this.customFields;
+    }
+
+    @JsonProperty
+    public void setCustomFields(String customFields)
+    {
+        this.customFields = customFields;
+    }
+
+    @JsonProperty
     public boolean isPrettyPrint()
     {
         return this.prettyPrint;
@@ -128,6 +141,7 @@ public class LogstashEncoderFactory
         encoder.setIncludeStructuredArguments(this.includeStructuredArguments);
         encoder.setIncludeNonStructuredArguments(this.includedNonStructuredArguments);
         encoder.setIncludeTags(this.includeTags);
+        encoder.setCustomFields(this.customFields);
         if (this.prettyPrint)
         {
             encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
