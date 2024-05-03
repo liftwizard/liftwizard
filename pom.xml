@@ -49,45 +49,4 @@
         <module>liftwizard-utility</module>
         <module>liftwizard-uuid</module>
     </modules>
-
-    <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web services.</description>
-
-    <url>https://github.com/motlin/liftwizard</url>
-
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/motlin/liftwizard/issues</url>
-    </issueManagement>
-
-    <ciManagement>
-        <system>GitHub</system>
-        <url>https://github.com/motlin/liftwizard/actions</url>
-    </ciManagement>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <url>https://github.com/motlin/liftwizard</url>
-        <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
-        <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
-        <tag>HEAD</tag>
-  </scm>
-
-    <inceptionYear>2020</inceptionYear>
-
-    <developers>
-        <developer>
-            <name>Craig Motlin</name>
-            <email>cmotlin@gmail.com</email>
-            <url>https://github.com/motlin</url>
-            <id>motlin</id>
-        </developer>
-    </developers>
-
 </project>
