@@ -567,11 +567,11 @@
                         <groupId>io.liftwizard</groupId>
                         <artifactId>liftwizard-example-resources</artifactId>
                         <version>${project.version}</version>
+                        <scope>runtime</scope>
                     </dependency>
                 </dependencies>
             </plugin>
             <!--endregion-->
-
 
         </plugins>
     </build>
