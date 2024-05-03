@@ -1,6 +1,6 @@
 The `EnvironmentConfigBundle` supports environment variable substitution inside Dropwizard configuration files.
  
-## Environment variable substitution in example applications
+# in example applications
  
 In the example applications, environment variable substitution is used for `defaultName`.
  
@@ -18,8 +18,7 @@ $ DW_DEFAULT_NAME=EnvSubstitution java -jar target/liftwizard-example-0.1.0.jar 
 INFO  [2020-05-02 03:08:05,685] com.example.helloworld.cli.RenderCommand: DEFAULT => Hello, EnvSubstitution!
 ```
  
-## Environment variable substitution in dropwizard-example
- 
+# in dropwizard-example
  
 ```java
 @Override
@@ -36,7 +35,7 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
 }
 ```
  
-## Environment variable substitution in liftwizard-example
+# in liftwizard-example
  
 ```java
 @Override

@@ -1,7 +1,7 @@
 introduction
     liftwizard
 configuration
-    environment-variables
+    environment-variable-substitution
     json5-configuration
     ConfigLoggingBundle
 jackson

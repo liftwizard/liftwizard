@@ -190,7 +190,10 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.16.2</version>
                 <configuration>
+                    <!-- Don't create pom.xml.versionsBackup files -->
                     <generateBackupPoms>false</generateBackupPoms>
+                    <!-- Process all modules in a multi-module build, even aggregator modules without a parent-child relationship -->
+                    <!-- https://stackoverflow.com/a/49246337/23572 -->
                     <processAllModules>true</processAllModules>
                 </configuration>
             </plugin>
@@ -210,27 +213,36 @@
                 <artifactId>buildplan-maven-plugin</artifactId>
                 <version>2.2.2</version>
                 <configuration>
+                    <!-- Default value is: deploy -->
                     <tasks>
                         <task>clean</task>
                         <task>deploy</task>
                     </tasks>
+                    <!-- print all phases, even if no mapping to an execution is available -->
                     <showAllPhases>true</showAllPhases>
                 </configuration>
             </plugin>
 
+            <!--mvnw wrapper:wrapper -Dmaven=4.0.0-alpha-7-->
             <plugin>
                 <artifactId>maven-wrapper-plugin</artifactId>
                 <version>3.3.1</version>
             </plugin>
 
+            <!--mvn clean release:clean release:prepare -DdevelopmentVersion=1.2.3-SNAPSHOT-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
+                    <!-- Default value is: invoker -->
                     <mavenExecutorId>forked-path</mavenExecutorId>
+                    <!-- Automatically assign submodules the parent version -->
                     <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!-- Do not `git push` changes to the upstream repository -->
                     <pushChanges>false</pushChanges>
+                    <!-- Format to use when generating the tag name -->
+                    <!-- Default value is: @{project.artifactId}-@{project.version} -->
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
