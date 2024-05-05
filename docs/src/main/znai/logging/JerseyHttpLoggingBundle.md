@@ -59,7 +59,7 @@ In order to see the logging in action, we'll need to configure a log format that
 ```json5
 {
   "type": "console",
-  "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %green(%logger): %message <%blue(%marker)> <%magenta(%mdc)>%n%red(%rootException)",
+  "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
   "timeZone": "system",
   "includeCallerData": true,
 }
@@ -104,7 +104,6 @@ response.http.status.status=OK,
 response.http.status.family=SUCCESSFUL>
 ```
 
-
 ## Logstash encoder
 
 `liftwizard-config-logging-logstash-file` is a Dropwizard `AppenderFactory`. It sets up a file appender that logs one json object per log statement. The json is formatted by [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) and is ready to be parsed by logstash.
@@ -121,7 +120,7 @@ Let's add the logstash-file appender to the list of configured appenders.
     "appenders": [
       {
         "type": "console",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %green(%logger): %message <%blue(%marker)> <%magenta(%mdc)>%n%red(%rootException)",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
         "timeZone": "system",
         "includeCallerData": true,
       },

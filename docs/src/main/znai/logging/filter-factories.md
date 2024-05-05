@@ -42,7 +42,7 @@ To use it, add a dependency on `liftwizard-config-logging-filter-requesturl`. Th
 
 To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then add a filter factory to your config with type `janino` and a `javaExpression` that evaluates to a boolean. The default value of `onMatch` is `ch.qos.logback.core.spi.FilterReply.DENY`.
 
-```json
+```json5
 {
   "logging": {
     "level": "DEBUG",
@@ -50,7 +50,7 @@ To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then a
       {
         "type": "console",
         "threshold": "ALL",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) [%white(%thread)] %green(%logger): %message <%blue(%marker)> <%magenta(%mdc)>%n%red(%rootException)",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%red(%rootException)",
         "timeZone": "system",
         "filterFactories": [
           {
