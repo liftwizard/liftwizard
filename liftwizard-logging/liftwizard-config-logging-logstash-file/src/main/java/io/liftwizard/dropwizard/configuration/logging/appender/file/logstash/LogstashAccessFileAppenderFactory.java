@@ -220,7 +220,7 @@ public class LogstashAccessFileAppenderFactory
             LevelFilterFactory<IAccessEvent> levelFilterFactory,
             AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory)
     {
-        Encoder<IAccessEvent>              encoder  = this.encoderFactory.build();
+        Encoder<IAccessEvent>              encoder  = this.encoderFactory.build(this.getTimeZone());
         OutputStreamAppender<IAccessEvent> appender = this.appender(context);
         appender.setEncoder(encoder);
         encoder.start();
