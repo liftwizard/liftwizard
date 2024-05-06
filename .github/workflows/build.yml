@@ -129,7 +129,7 @@ jobs:
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
       - name: 'Checkstyle GitHub Annotations: Semantics'
-        uses: lcollins/checkstyle-github-action@v2.0.0
+        uses: lcollins/checkstyle-github-action@v3.0.0
         with:
           name: 'checkstyle annotations (semantics)'
           path: '**/checkstyle-result.xml'
@@ -165,7 +165,7 @@ jobs:
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
       - name: 'Checkstyle GitHub Annotations: Strict Semantics'
-        uses: lcollins/checkstyle-github-action@v2.0.0
+        uses: lcollins/checkstyle-github-action@v3.0.0
         with:
           name: 'checkstyle annotations (semantics strict)'
           path: '**/checkstyle-result.xml'
@@ -201,7 +201,7 @@ jobs:
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
       - name: 'Checkstyle GitHub Annotations: Formatting'
-        uses: lcollins/checkstyle-github-action@v2.0.0
+        uses: lcollins/checkstyle-github-action@v3.0.0
         with:
           name: 'checkstyle annotations (formatting)'
           path: '**/checkstyle-result.xml'
