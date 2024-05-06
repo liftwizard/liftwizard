@@ -57,7 +57,6 @@
         <!--https://checkstyle.sourceforge.io/checks/whitespace/index.html-->
         <module name="SingleSpaceSeparator">
             <property name="validateComments" value="false" />
-            <property name="severity" value="warning" />
         </module>
 
         <module name="MatchXpath">
