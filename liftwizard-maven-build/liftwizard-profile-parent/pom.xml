@@ -22,7 +22,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-minimal-parent</artifactId>
-        <version>2.1.9-SNAPSHOT</version>
+        <version>2.1.9</version>
         <relativePath>../liftwizard-minimal-parent</relativePath>
     </parent>
 
