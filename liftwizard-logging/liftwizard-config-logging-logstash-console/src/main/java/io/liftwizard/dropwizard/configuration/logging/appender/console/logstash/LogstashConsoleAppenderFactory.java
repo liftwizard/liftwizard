@@ -78,7 +78,7 @@ public class LogstashConsoleAppenderFactory
             LevelFilterFactory<ILoggingEvent> levelFilterFactory,
             AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory)
     {
-        Encoder<ILoggingEvent>              encoder  = this.encoderFactory.build(this.isIncludeCallerData());
+        Encoder<ILoggingEvent>              encoder  = this.encoderFactory.build(this.isIncludeCallerData(), this.getTimeZone());
         OutputStreamAppender<ILoggingEvent> appender = this.appender(context);
         appender.setEncoder(encoder);
         encoder.start();
