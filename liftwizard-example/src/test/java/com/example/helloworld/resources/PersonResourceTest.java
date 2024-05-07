@@ -1,7 +1,6 @@
 package com.example.helloworld.resources;
 
 import javax.annotation.Nonnull;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -97,10 +96,10 @@ public class PersonResourceTest
 
     private Response getPersonResponse(int personId)
     {
-        Client client = this.dropwizardAppExtension.client();
-
-        return client.target(
-                String.format("http://localhost:%d/people/{personId}", this.dropwizardAppExtension.getLocalPort()))
+        return this
+                .dropwizardAppExtension.client()
+                .target("http://localhost:{port}/people/{personId}")
+                .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
                 .resolveTemplate("personId", personId)
                 .request()
                 .get();
