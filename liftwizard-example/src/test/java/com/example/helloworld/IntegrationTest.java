@@ -17,7 +17,6 @@ import io.dropwizard.testing.ResourceHelpers;
 import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
-import io.liftwizard.reladomo.test.extension.ReladomoLoadDataExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoPurgeAllExtension;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.junit.jupiter.api.Order;
@@ -62,7 +61,8 @@ public class IntegrationTest {
     public void testHelloWorld() throws Exception {
         Response response = this.dropwizardAppExtension
                 .client()
-                .target(String.format("http://localhost:%d/hello-world", this.dropwizardAppExtension.getLocalPort()))
+                .target("http://localhost:{port}/hello-world")
+                .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
                 .queryParam("name", "Dr. IntegrationTest")
                 .request()
                 .get();

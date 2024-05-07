@@ -68,8 +68,9 @@ public class PeopleResourceTest {
         Client client = this.dropwizardAppExtension.client();
 
         {
-            Response response = client.target(
-                    String.format("http://localhost:%d/people/", this.dropwizardAppExtension.getLocalPort()))
+            Response response = client
+                    .target("http://localhost:{port}/people/")
+                    .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
                     .request()
                     .post(Entity.entity(this.personDTO, MediaType.APPLICATION_JSON_TYPE));
 
@@ -90,8 +91,9 @@ public class PeopleResourceTest {
         }
 
         {
-            Response response = client.target(
-                    String.format("http://localhost:%d/people/", this.dropwizardAppExtension.getLocalPort()))
+            Response response = client
+                    .target("http://localhost:{port}/people/")
+                    .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
                     .request()
                     .get();
 
