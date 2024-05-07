@@ -99,55 +99,46 @@
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-environment-config</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-configuration-factory-json</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-enabled</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-logging-config</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-logging-config</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-object-mapper</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-uuid</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-uuid-system</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-clock</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -163,125 +154,120 @@
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-connection-manager-holder</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-reladomo</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-clock-system</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-data-source</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-connection-manager</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-bundle-logging-http</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-servlet-logging-mdc</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-clock</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-graphql</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-h2</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-logging-http</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-object-mapper</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-reladomo</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-uuid</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-named-data-source-factory</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-graphql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-config-liquibase-migration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-logging-uncaught-exception-handler</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-logging-logstash-file</artifactId>
-            <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-logging-buffered</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-clock-incrementing</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-clock-incrementing</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-uuid-seed</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -374,7 +360,6 @@
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-reladomo-simulated-sequence</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -432,7 +417,6 @@
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-reladomo-test-extension</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -495,39 +479,25 @@
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-reladomo-test-resource-writer</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-logging-buffered-appender</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-junit-extension-log-marker</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-junit-extension-app</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-bundle-graphql</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.liftwizard</groupId>
-            <artifactId>liftwizard-config-liquibase-migration</artifactId>
         </dependency>
 
         <dependency>

@@ -33,6 +33,7 @@ import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundl
 import io.liftwizard.dropwizard.bundle.h2.H2Bundle;
 import io.liftwizard.dropwizard.bundle.httplogging.JerseyHttpLoggingBundle;
 import io.liftwizard.dropwizard.bundle.liquibase.LiftwizardLiquibaseMigrationBundle;
+import io.liftwizard.dropwizard.bundle.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerBundle;
 import io.liftwizard.dropwizard.bundle.objectmapper.ObjectMapperBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.ReladomoBundle;
 import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.ConnectionManagerHolderBundle;
@@ -94,6 +95,7 @@ public class HelloWorldApplication
                 return configuration.getViewRendererConfiguration();
             }
         });
+        bootstrap.addBundle(new Slf4jUncaughtExceptionHandlerBundle());
     }
 
     @Override
