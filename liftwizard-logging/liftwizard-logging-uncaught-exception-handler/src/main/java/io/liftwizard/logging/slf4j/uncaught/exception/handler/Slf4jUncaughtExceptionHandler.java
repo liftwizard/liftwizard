@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package io.liftwizard.logging.slf4j.uncaught.exception.handler;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
@@ -43,9 +45,11 @@ public class Slf4jUncaughtExceptionHandler
             String message = "Exception in thread \"" + thread.getName() + "\"";
             LOGGER.warn(message, throwable);
 
-            System.err.print(message);
-            System.err.print(" ");
-            throwable.printStackTrace(System.err);
+            StringWriter stringWriter         = new StringWriter();
+            PrintWriter  printWriter = new PrintWriter(stringWriter, true);
+            throwable.printStackTrace(printWriter);
+
+            System.err.print(message + " " + stringWriter);
         }
     }
 }
