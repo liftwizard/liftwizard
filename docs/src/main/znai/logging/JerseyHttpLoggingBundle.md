@@ -125,19 +125,17 @@ Let's add the logstash-file appender to the list of configured appenders.
         "includeCallerData": true,
       },
       {
-        "type": "file-logstash",
-        "timeZone": "UTC",
-        "includeCallerData": true,
-        "currentLogFilename": "./logs/logstash.json",
-        "archivedLogFilenamePattern": "./logs/logstash-%d.json",
+        "type"                      : "file-logstash",
+        "currentLogFilename"        : "./logs/logstash.jsonl",
+        "archivedLogFilenamePattern": "./logs/logstash-%d.jsonl",
+        "includeCallerData"         : true,
         "encoder": {
           "includeContext": true,
           "includeMdc": true,
           "includeStructuredArguments": true,
-          "includedNonStructuredArguments": false,
+          "includedNonStructuredArguments": true,
           "includeTags": true,
-          "prettyPrint": true,
-          "serializationInclusion": "NON_ABSENT"
+          "prettyPrint": false,
         }
       }
     ]
@@ -146,8 +144,8 @@ Let's add the logstash-file appender to the list of configured appenders.
 }
 ```
 
-### logstash.json
-`logs/logstash.json` snippet
+### logstash.jsonl
+`logs/logstash.jsonl` snippet
 ```json
 {
   "@timestamp": "1999-12-31T23:59:59.000-00:00",
