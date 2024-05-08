@@ -50,7 +50,7 @@ To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then a
       {
         "type": "console",
         "threshold": "ALL",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
         "timeZone": "system",
         "filterFactories": [
           {

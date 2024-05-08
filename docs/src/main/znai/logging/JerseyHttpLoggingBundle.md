@@ -59,7 +59,7 @@ In order to see the logging in action, we'll need to configure a log format that
 ```json5
 {
   "type": "console",
-  "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+  "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
   "timeZone": "system",
   "includeCallerData": true,
 }
@@ -120,7 +120,7 @@ Let's add the logstash-file appender to the list of configured appenders.
     "appenders": [
       {
         "type": "console",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
         "timeZone": "system",
         "includeCallerData": true,
       },
