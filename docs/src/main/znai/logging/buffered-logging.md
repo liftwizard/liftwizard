@@ -41,7 +41,7 @@ The `BufferedAppenderFactory` allows you to use an appender with the type `buffe
       {
         "type": "buffered",
         "timeZone": "system",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.S}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
         "includeCallerData": true,
       },
     ]
