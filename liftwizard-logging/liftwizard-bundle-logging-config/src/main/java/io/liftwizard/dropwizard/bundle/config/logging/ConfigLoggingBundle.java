@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public class ConfigLoggingBundle
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-            throws JsonProcessingException, ReflectiveOperationException
+            throws JsonProcessingException
     {
         ConfigLoggingFactoryProvider configLoggingFactoryProvider = this.safeCastConfiguration(
                 ConfigLoggingFactoryProvider.class,
