@@ -75,8 +75,14 @@ public class ConfigLoggingBundle
             @Nonnull ObjectMapper objectMapper)
             throws JsonProcessingException
     {
-        String configurationString = objectMapper.writeValueAsString(configuration);
-        LOGGER.info("Inferred Dropwizard configuration:\n{}", configurationString);
+        ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
+        nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
+
+        String configurationString = nonDefaultObjectMapper.writeValueAsString(configuration);
+        LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
+
+        String fullConfigurationString = objectMapper.writeValueAsString(configuration);
+        LOGGER.debug("Dropwizard configuration (full):\n{}", fullConfigurationString);
 
         Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle
                 .getConstructor(configuration)
@@ -89,7 +95,7 @@ public class ConfigLoggingBundle
         if (LOGGER.isDebugEnabled())
         {
             String defaultConfigurationString = objectMapper.writeValueAsString(defaultConfiguration);
-            LOGGER.debug("Default Dropwizard configuration:\n{}", defaultConfigurationString);
+            LOGGER.debug("Dropwizard configuration default values:\n{}", defaultConfigurationString);
         }
     }
 
