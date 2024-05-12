@@ -1,0 +1,10 @@
+set shell := ["zsh", "--no-unset", "-c"]
+
+# docs generate
+generate:
+    mvnd ./mvnw package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
+
+# docs preview
+preview:
+    open http://localhost:3333/preview/
+    mvn --threads 1 znai:preview --activate-profiles 'znai-maven-plugin'
