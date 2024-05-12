@@ -1,3 +1,9 @@
+.envrc
+
+# Project-specific
+spy.log
+/logs/
+
 # Java
 hs_err_pid*
 
@@ -15,6 +21,3 @@ pom.xml.releaseBackup
 # since they will be recreated, and may cause churn.
 **/*.iml
 
-.vertx
-/spy.log
-/logs/
