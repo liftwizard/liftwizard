@@ -17,12 +17,17 @@
 package io.liftwizard.dropwizard.bundle.config.logging;
 
 import java.lang.reflect.Constructor;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
@@ -75,14 +80,8 @@ public class ConfigLoggingBundle
             @Nonnull ObjectMapper objectMapper)
             throws JsonProcessingException
     {
-        ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
-        nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
-
-        String configurationString = nonDefaultObjectMapper.writeValueAsString(configuration);
-        LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
-
         String fullConfigurationString = objectMapper.writeValueAsString(configuration);
-        LOGGER.debug("Dropwizard configuration (full):\n{}", fullConfigurationString);
+        LOGGER.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
 
         Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle
                 .getConstructor(configuration)
@@ -92,10 +91,101 @@ public class ConfigLoggingBundle
             return;
         }
         Object defaultConfiguration = maybeDefaultConfiguration.get();
-        if (LOGGER.isDebugEnabled())
+
+        ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
+        nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
+
+        ObjectNode configurationJsonNode = nonDefaultObjectMapper.valueToTree(configuration);
+        ObjectNode defaultConfigurationJsonNode = nonDefaultObjectMapper.valueToTree(defaultConfiguration);
+
+        subtractObjectNode(configurationJsonNode, defaultConfigurationJsonNode);
+        removeEmptyNodes(configurationJsonNode);
+
+        String configurationString = objectMapper.writeValueAsString(configurationJsonNode);
+        LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
+    }
+
+    private static void removeEmptyNodes(@Nonnull ObjectNode node)
+    {
+        node.forEach(property ->
         {
-            String defaultConfigurationString = objectMapper.writeValueAsString(defaultConfiguration);
-            LOGGER.debug("Dropwizard configuration default values:\n{}", defaultConfigurationString);
+            if (property.isObject())
+            {
+                removeEmptyNodes((ObjectNode) property);
+            }
+            else if (property.isArray())
+            {
+                property.elements().forEachRemaining(element ->
+                {
+                    if (element.isObject())
+                    {
+                        removeEmptyNodes((ObjectNode) element);
+                    }
+                });
+            }
+        });
+
+        Set<Entry<String, JsonNode>> properties = node.properties();
+        properties
+                .stream()
+                .filter(property -> property.getValue().isArray())
+                .map(property -> property.getValue().elements())
+                .forEach(ConfigLoggingBundle::removeEmptyJsonNodes);
+        properties.removeIf(property -> property.getValue().isObject() && property.getValue().isEmpty());
+        properties.removeIf(property -> property.getValue().isArray() && property.getValue().isEmpty());
+    }
+
+    private static void removeEmptyJsonNodes(Iterator<JsonNode> elements)
+    {
+        while (elements.hasNext())
+        {
+            JsonNode element = elements.next();
+            if (element.isObject() && element.isEmpty())
+            {
+                elements.remove();
+            }
+        }
+    }
+
+    private static void subtractObjectNode(ObjectNode mutableObjectNode, ObjectNode substractObjectNode)
+    {
+        substractObjectNode.properties().forEach(subtractProperty ->
+        {
+            String key = subtractProperty.getKey();
+            JsonNode value = subtractProperty.getValue();
+            if (!mutableObjectNode.has(key))
+            {
+                return;
+            }
+
+            subtractObjectNode(mutableObjectNode, key, value);
+        });
+    }
+
+    private static void subtractObjectNode(ObjectNode mutableObjectNode, String key, JsonNode value)
+    {
+        JsonNode mutableValue = mutableObjectNode.get(key);
+        if (mutableValue.isObject() && value.isObject())
+        {
+            subtractObjectNode((ObjectNode) mutableValue, (ObjectNode) value);
+        }
+        else if (mutableValue.isArray() && value.isArray())
+        {
+            Iterator<JsonNode> mutableElements = mutableValue.elements();
+            Iterator<JsonNode> elements = value.elements();
+            while (mutableElements.hasNext() && elements.hasNext())
+            {
+                JsonNode mutableElement = mutableElements.next();
+                JsonNode element = elements.next();
+                if (mutableElement.isObject() && element.isObject())
+                {
+                    subtractObjectNode((ObjectNode) mutableElement, (ObjectNode) element);
+                }
+            }
+        }
+        else if (mutableValue.equals(value))
+        {
+            mutableObjectNode.remove(key);
         }
     }
 
