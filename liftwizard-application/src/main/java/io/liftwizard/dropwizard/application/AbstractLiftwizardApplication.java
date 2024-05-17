@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,15 +31,17 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import io.liftwizard.dropwizard.bundle.dynamic.bundles.DynamicBundlesBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
+import io.liftwizard.dropwizard.bundle.timezone.TimeZoneBundle;
 import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
+import io.liftwizard.dropwizard.configuration.timezone.TimeZoneFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
 import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
-public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider>
+public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider & TimeZoneFactoryProvider>
         extends Application<T>
 {
     protected final String name;
@@ -86,11 +88,12 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
 
     protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap)
     {
+        bootstrap.addBundle(new TimeZoneBundle());
+        bootstrap.addBundle(new ClockBundle());
         HttpsRedirect  httpsRedirect  = new HttpsRedirect();
         RedirectBundle redirectBundle = new RedirectBundle(httpsRedirect);
         bootstrap.addBundle(redirectBundle);
         bootstrap.addBundle(new UUIDBundle());
-        bootstrap.addBundle(new ClockBundle());
         bootstrap.addBundle(new MetricsUIBundle("/dashboard/*"));
     }
 

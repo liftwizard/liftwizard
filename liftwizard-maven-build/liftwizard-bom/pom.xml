@@ -165,6 +165,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-bundle-timezone</artifactId>
+                <version>2.1.10-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-clock-incrementing</artifactId>
                 <version>2.1.10-SNAPSHOT</version>
             </dependency>
@@ -192,7 +198,13 @@
                 <artifactId>liftwizard-config-clock-system</artifactId>
                 <version>2.1.10-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-timezone</artifactId>
+                <version>2.1.10-SNAPSHOT</version>
+            </dependency>
+            <!--endregion liftwizard-clock-->
 
             <!--region liftwizard-config-->
             <dependency>
