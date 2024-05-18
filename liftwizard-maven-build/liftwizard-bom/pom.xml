@@ -209,6 +209,12 @@
             <!--region liftwizard-config-->
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-abstract</artifactId>
+                <version>2.1.10-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-cors</artifactId>
                 <version>2.1.10-SNAPSHOT</version>
             </dependency>
