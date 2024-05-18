@@ -176,9 +176,6 @@
                                 <version>2.1.10-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check semantics</id>
@@ -186,6 +183,9 @@
                                     <goal>check</goal>
                                 </goals>
                                 <phase>prepare-package</phase>
+                                <configuration>
+                                    <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -208,9 +208,6 @@
                                 <version>2.1.10-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check strict semantics</id>
@@ -218,6 +215,9 @@
                                     <goal>check</goal>
                                 </goals>
                                 <phase>prepare-package</phase>
+                                <configuration>
+                                    <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -240,9 +240,6 @@
                                 <version>2.1.10-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check formatting</id>
@@ -250,6 +247,9 @@
                                     <goal>check</goal>
                                 </goals>
                                 <phase>prepare-package</phase>
+                                <configuration>
+                                    <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -273,9 +273,6 @@
                                 <version>2.1.10-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check strict formatting</id>
@@ -283,6 +280,9 @@
                                     <goal>check</goal>
                                 </goals>
                                 <phase>prepare-package</phase>
+                                <configuration>
+                                    <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
