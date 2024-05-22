@@ -20,39 +20,32 @@ import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
+import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
+import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.timezone.TimeZoneFactoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.slf4j.MDC.MDCCloseable;
 
+@AutoService(PrioritizedBundle.class)
 public class TimeZoneBundle
-        implements ConfiguredBundle<TimeZoneFactoryProvider>
+        implements PrioritizedBundle
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeZoneBundle.class);
 
     @Override
-    public void run(TimeZoneFactoryProvider configuration, @Nonnull Environment environment)
+    public int getPriority()
     {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
-        {
-            this.runWithMdc(configuration, environment);
-        }
+        return -11;
     }
 
     @Override
-    public void initialize(Bootstrap<?> bootstrap)
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
-    }
-
-    private void runWithMdc(
-            TimeZoneFactoryProvider configuration,
-            @Nonnull Environment environment)
-    {
-        TimeZone timeZone = configuration.getTimeZone();
+        TimeZoneFactoryProvider timeZoneFactoryProvider = this.safeCastConfiguration(
+                TimeZoneFactoryProvider.class,
+                configuration);
+        TimeZone timeZone = timeZoneFactoryProvider.getTimeZone();
         LOGGER.info("Setting default TimeZone to: {}", timeZone);
         TimeZone.setDefault(timeZone);
         TimezoneBinder timezoneBinder = new TimezoneBinder(timeZone);
