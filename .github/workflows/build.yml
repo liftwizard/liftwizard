@@ -23,8 +23,7 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: Run tests
-        run: ./mvnw verify
+      - run: ./mvnw verify
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
