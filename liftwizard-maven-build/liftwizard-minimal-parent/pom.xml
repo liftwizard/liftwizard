@@ -226,7 +226,7 @@
             <!--mvnw wrapper:wrapper -Dmaven=4.0.0-alpha-7-->
             <plugin>
                 <artifactId>maven-wrapper-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.3.2</version>
             </plugin>
 
             <!--mvn clean release:clean release:prepare -DdevelopmentVersion=1.2.3-SNAPSHOT-->
