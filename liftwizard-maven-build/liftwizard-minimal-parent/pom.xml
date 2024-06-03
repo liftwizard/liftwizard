@@ -21,7 +21,7 @@
 
     <groupId>io.liftwizard</groupId>
     <artifactId>liftwizard-minimal-parent</artifactId>
-    <version>2.1.10-SNAPSHOT</version>
+    <version>2.1.10</version>
     <name>Liftwizard Maven Parent (minimal)</name>
 
     <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web services.</description>
@@ -50,7 +50,7 @@
         <url>https://github.com/motlin/liftwizard</url>
         <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
         <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>2.1.10</tag>
     </scm>
 
     <inceptionYear>2020</inceptionYear>
@@ -78,7 +78,7 @@
         <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html#how-do-i-configure-my-maven-build -->
         <!-- Enable Reproducible Builds mode for plugins -->
         <!--region outputTimestamp-->
-        <project.build.outputTimestamp>2024-05-06T17:13:12Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-06-03T01:08:03Z</project.build.outputTimestamp>
         <!--endregion outputTimestamp-->
     </properties>
 
