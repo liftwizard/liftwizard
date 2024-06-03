@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package io.liftwizard.dropwizard.bundle.reladomo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
@@ -27,6 +28,9 @@ import com.google.auto.service.AutoService;
 import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManager;
 import com.gs.fw.common.mithra.MithraManagerProvider;
+import com.gs.fw.common.mithra.attribute.TimestampAttribute;
+import com.gs.fw.common.mithra.util.MithraTimestamp;
+import com.gs.fw.common.mithra.util.Time;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
@@ -57,6 +61,30 @@ public class ReladomoBundle
                 configuration);
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
+
+        TimeZone defaultTimeZone = TimeZone.getDefault();
+
+        try
+        {
+            TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+            int defaultOffsetForTime = MithraTimestamp.getDefaultOffsetForTime(0);
+            TimeZone noConversionTimezone = TimestampAttribute.NO_CONVERSION_TIMEZONE;
+            assert noConversionTimezone != null;
+            Time time = Time.withMillis(0, 0, 0, 0);
+
+            if (defaultOffsetForTime != 0)
+            {
+                String detailMessage = "Expected defaultOffsetForTime to be 0, but was: "
+                        + defaultOffsetForTime
+                        + " with previous default TimeZone: "
+                        + defaultTimeZone;
+                throw new IllegalStateException(detailMessage);
+            }
+        }
+        finally
+        {
+            TimeZone.setDefault(defaultTimeZone);
+        }
 
         ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
