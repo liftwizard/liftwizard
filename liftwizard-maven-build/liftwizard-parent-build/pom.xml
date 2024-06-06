@@ -168,7 +168,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -200,7 +200,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -232,7 +232,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -265,7 +265,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
