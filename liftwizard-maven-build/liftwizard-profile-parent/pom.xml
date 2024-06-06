@@ -862,6 +862,7 @@
                         <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
+                            <outputFileFormat>sarif</outputFileFormat>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -894,6 +895,7 @@
                         <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
+                            <outputFileFormat>sarif</outputFileFormat>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -926,6 +928,7 @@
                         <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
+                            <outputFileFormat>sarif</outputFileFormat>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -959,6 +962,7 @@
                         <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
+                            <outputFileFormat>sarif</outputFileFormat>
                         </configuration>
                         <dependencies>
                             <dependency>
