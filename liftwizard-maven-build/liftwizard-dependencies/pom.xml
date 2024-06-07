@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-minimal-parent</artifactId>
-        <version>2.1.12-SNAPSHOT</version>
+        <version>2.1.12</version>
         <relativePath>../liftwizard-minimal-parent/pom.xml</relativePath>
     </parent>
 
