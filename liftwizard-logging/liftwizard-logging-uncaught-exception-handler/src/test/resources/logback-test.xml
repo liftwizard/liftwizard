@@ -23,7 +23,11 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <appender name="Buffered" class="io.liftwizard.logging.logback.appender.buffered.BufferedAppender">
         <appender-ref ref="Console" />
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="Buffered" />
     </root>
 </configuration>
