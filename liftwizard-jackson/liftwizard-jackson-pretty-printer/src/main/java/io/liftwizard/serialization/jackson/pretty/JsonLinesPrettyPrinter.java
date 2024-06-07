@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
-package io.liftwizard.dropwizard.configuration.logging.logstash;
+package io.liftwizard.serialization.jackson.pretty;
+
+import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import io.liftwizard.serialization.jackson.pretty.JsonLinesPrettyPrinter;
-import net.logstash.logback.decorate.JsonGeneratorDecorator;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
-public class PrettyPrintingJsonGeneratorDecorator
-        implements JsonGeneratorDecorator
+public class JsonLinesPrettyPrinter extends DefaultPrettyPrinter
 {
-    @Override
-    public JsonGenerator decorate(@Nonnull JsonGenerator generator)
+    public JsonLinesPrettyPrinter()
     {
-        generator.setPrettyPrinter(new JsonLinesPrettyPrinter());
-        generator.useDefaultPrettyPrinter();
-        return generator;
+        this._arrayIndenter = JsonPrettyPrinter.INDENTER;
+    }
+
+    @Nonnull
+    @Override
+    public DefaultPrettyPrinter createInstance()
+    {
+        return this;
+    }
+
+    @Override
+    public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException
+    {
+        jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
     }
 }
