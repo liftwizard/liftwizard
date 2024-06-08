@@ -18,15 +18,12 @@ package io.liftwizard.dropwizard.configuration.parent;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.dropwizard.Configuration;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
@@ -43,8 +40,6 @@ import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import io.liftwizard.dropwizard.configuration.system.properties.SystemPropertiesFactory;
 import io.liftwizard.dropwizard.configuration.system.properties.SystemPropertiesFactoryProvider;
-import io.liftwizard.dropwizard.configuration.timezone.TimeZoneFactory;
-import io.liftwizard.dropwizard.configuration.timezone.TimeZoneFactoryProvider;
 
 @JsonPropertyOrder({
         "server",
@@ -65,14 +60,9 @@ public abstract class AbstractLiftwizardConfiguration
         ObjectMapperFactoryProvider,
         JerseyHttpLoggingFactoryProvider,
         ClockFactoryProvider,
-        SystemPropertiesFactoryProvider,
-        TimeZoneFactoryProvider
+        SystemPropertiesFactoryProvider
 {
     // region General
-    @JsonUnwrapped
-    @Valid
-    @NotNull
-    private TimeZoneFactory         timezoneFactory         = new TimeZoneFactory();
     @Valid
     @NotNull
     private ClockFactory            clockFactory            = new SystemClockFactory();
@@ -100,27 +90,6 @@ public abstract class AbstractLiftwizardConfiguration
     //endregion Services
 
     //region General
-    @Override
-    public TimeZone getTimeZone()
-    {
-        return this.timezoneFactory.build();
-    }
-
-    @JsonUnwrapped
-    @JsonProperty("timezone")
-    @Nonnull
-    public @Valid TimeZoneFactory getTimezoneFactory()
-    {
-        return this.timezoneFactory;
-    }
-
-    @JsonUnwrapped
-    @JsonProperty("timezone")
-    public void setTimezoneFactory(@Nonnull @Valid TimeZoneFactory timezoneFactory)
-    {
-        this.timezoneFactory = timezoneFactory;
-    }
-
     @JsonProperty("clock")
     public ClockFactory getClockFactory()
     {
