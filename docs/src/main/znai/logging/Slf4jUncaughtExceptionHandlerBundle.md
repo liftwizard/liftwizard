@@ -13,7 +13,7 @@ With logback configuration like this:
 ```xml
 <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-        <pattern>%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException</pattern>
+        <pattern>%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, ${LOGGING_TIMEZONE}}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException</pattern>
     </encoder>
 </appender>
 ```
