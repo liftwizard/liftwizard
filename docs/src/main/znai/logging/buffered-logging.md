@@ -40,7 +40,7 @@ The `BufferedAppenderFactory` allows you to use an appender with the type `buffe
     "appenders": [
       {
         "type": "buffered",
-        "timeZone": "system",
+        "timeZone": "${LOGGING_TIMEZONE:-system}",
         "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
         "includeCallerData": true,
       },

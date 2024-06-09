@@ -49,8 +49,8 @@ To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then a
     "appenders": [
       {
         "type": "console",
+        "timeZone": "${LOGGING_TIMEZONE:-system}",
         "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-        "timeZone": "system",
         "filterFactories": [
           {
             "type": "janino",
