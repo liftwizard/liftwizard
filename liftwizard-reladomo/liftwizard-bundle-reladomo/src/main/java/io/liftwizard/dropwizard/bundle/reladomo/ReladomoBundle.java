@@ -18,6 +18,8 @@ package io.liftwizard.dropwizard.bundle.reladomo;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -28,9 +30,7 @@ import com.google.auto.service.AutoService;
 import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManager;
 import com.gs.fw.common.mithra.MithraManagerProvider;
-import com.gs.fw.common.mithra.attribute.TimestampAttribute;
-import com.gs.fw.common.mithra.util.MithraTimestamp;
-import com.gs.fw.common.mithra.util.Time;
+import com.gs.fw.common.mithra.util.DefaultInfinityTimestamp;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
@@ -62,29 +62,7 @@ public class ReladomoBundle
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        TimeZone defaultTimeZone = TimeZone.getDefault();
-
-        try
-        {
-            TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-            int defaultOffsetForTime = MithraTimestamp.getDefaultOffsetForTime(0);
-            TimeZone noConversionTimezone = TimestampAttribute.NO_CONVERSION_TIMEZONE;
-            assert noConversionTimezone != null;
-            Time time = Time.withMillis(0, 0, 0, 0);
-
-            if (defaultOffsetForTime != 0)
-            {
-                String detailMessage = "Expected defaultOffsetForTime to be 0, but was: "
-                        + defaultOffsetForTime
-                        + " with previous default TimeZone: "
-                        + defaultTimeZone;
-                throw new IllegalStateException(detailMessage);
-            }
-        }
-        finally
-        {
-            TimeZone.setDefault(defaultTimeZone);
-        }
+        ReladomoBundle.assertTimezoneUTC();
 
         ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
@@ -115,6 +93,34 @@ public class ReladomoBundle
         environment.lifecycle().manage(new ManagedReladomoCleanup());
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+    }
+
+    private static void assertTimezoneUTC()
+    {
+        TimeZone defaultTimeZone = TimeZone.getDefault();
+        if (!defaultTimeZone.equals(TimeZone.getTimeZone("UTC")))
+        {
+            LOGGER.warn(
+                    "Expected default TimeZone to be UTC, but was: {}.",
+                    defaultTimeZone);
+        }
+
+        long expectedInfinityMilli = LocalDateTime.of(9999, 12, 1, 23, 59, 0)
+                .toInstant(ZoneOffset.UTC)
+                .toEpochMilli();
+        long actualInfinityMilli = DefaultInfinityTimestamp.getDefaultInfinity().getTime();
+
+        if (actualInfinityMilli != expectedInfinityMilli)
+        {
+            long difference = actualInfinityMilli - expectedInfinityMilli;
+            long offset     = difference / (1000 * 60 * 60);
+
+            LOGGER.warn(
+                    "Expected default Infinity to be {}, but was: {}. Offset: {} hours.",
+                    expectedInfinityMilli,
+                    actualInfinityMilli,
+                    offset);
+        }
     }
 
     private void registerRetrieveCountMetrics(MetricRegistry metricRegistry)
