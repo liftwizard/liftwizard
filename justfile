@@ -20,7 +20,7 @@ _git-clean:
 
 # rm -rf ~/.m2/repository/...
 _clean-m2:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -uo pipefail
     rm -rf ~/.m2/repository/{{group_id_with_slashes}}/**/*-SNAPSHOT
     exit 0
@@ -98,7 +98,7 @@ echo_command := env('ECHO_COMMAND', "echo")
 
 # Fail if there are local modifications or untracked files
 _check-local-modifications:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -uo pipefail
 
     git diff --quiet
@@ -121,7 +121,7 @@ default_flags    := env('MVN_FLAGS',    "--threads 2C")
 
 # mvn
 mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -uo pipefail
 
     COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
@@ -154,7 +154,7 @@ fail_fast := env('FAIL_FAST', "false")
 
 # `just test` all commits with configurable upstream/main as ancestor
 test-all *FLAGS="--retest":
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -uo pipefail
 
     if [ "{{fail_fast}}" ]; then
@@ -171,7 +171,7 @@ test-all *FLAGS="--retest":
 
 # `just test results` all branches with configurable upstream/main as ancestor
 test-results:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -uo pipefail
 
     branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --contains {{upstream_remote}}/{{upstream_branch}}))
@@ -184,7 +184,7 @@ test-results:
 
 # Rebase all branches onto configurable upstream/main
 rebase-all:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -Eeuo pipefail
 
     git fetch {{upstream_remote}}
