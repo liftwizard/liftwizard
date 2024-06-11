@@ -21,13 +21,14 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
 public class JsonLinesPrettyPrinter extends DefaultPrettyPrinter
 {
     public JsonLinesPrettyPrinter()
     {
-        this._arrayIndenter = JsonPrettyPrinter.INDENTER;
+        this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
     }
 
     @Nonnull
