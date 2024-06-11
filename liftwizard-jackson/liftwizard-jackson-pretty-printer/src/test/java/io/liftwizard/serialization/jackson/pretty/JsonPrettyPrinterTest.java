@@ -65,7 +65,8 @@ class JsonPrettyPrinterTest
                     "e",
                     "f"
                   ]
-                }""";
+                }
+                """;
 
         assertThat(actualJson).isEqualTo(expectedJson);
     }
@@ -76,7 +77,7 @@ class JsonPrettyPrinterTest
     {
         List<String> emptyList    = List.of();
         String       actualJson   = this.mapper.writeValueAsString(emptyList);
-        String       expectedJson = "[]";
+        String       expectedJson = "[ ]";
         assertThat(actualJson).isEqualTo(expectedJson);
     }
 }

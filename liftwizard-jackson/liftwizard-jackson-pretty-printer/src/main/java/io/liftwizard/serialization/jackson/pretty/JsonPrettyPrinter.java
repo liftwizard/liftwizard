@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,33 +23,12 @@ import javax.annotation.Nonnull;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.core.util.Separators;
-import com.fasterxml.jackson.core.util.Separators.Spacing;
 
-public class JsonPrettyPrinter
-        extends DefaultPrettyPrinter
+public class JsonPrettyPrinter extends DefaultPrettyPrinter
 {
-    public static final Separators      SEPARATORS = new Separators(
-            Separators.DEFAULT_ROOT_VALUE_SEPARATOR,
-            ':',
-            Spacing.AFTER,
-            ',',
-            Spacing.NONE,
-            ',',
-            Spacing.NONE);
-
-    public static final DefaultIndenter INDENTER   = new DefaultIndenter("  ", "\n");
-
     public JsonPrettyPrinter()
     {
-        this(SEPARATORS, INDENTER, INDENTER);
-    }
-
-    public JsonPrettyPrinter(Separators separators, DefaultIndenter arrayIndenter, DefaultIndenter objectIndenter)
-    {
-        super(separators);
-        this.indentArraysWith(arrayIndenter);
-        this.indentObjectsWith(objectIndenter);
+        this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
     }
 
     @Nonnull
@@ -60,40 +39,24 @@ public class JsonPrettyPrinter
     }
 
     @Override
-    public void writeEndArray(JsonGenerator jsonGenerator, int nrOfValues)
-            throws IOException
+    public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException
     {
-        if (!this._arrayIndenter.isInline())
-        {
-            --this._nesting;
-        }
-        if (nrOfValues > 0)
-        {
-            this._arrayIndenter.writeIndentation(jsonGenerator, this._nesting);
-        }
-        else
-        {
-            // jsonGenerator.writeRaw(' ');
-        }
-        jsonGenerator.writeRaw(']');
+        jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
     }
 
     @Override
-    public void writeEndObject(JsonGenerator g, int nrOfEntries)
-            throws IOException
+    public void writeStartObject(@Nonnull JsonGenerator jsonGenerator) throws IOException
     {
-        if (!this._objectIndenter.isInline())
+        super.writeStartObject(jsonGenerator);
+    }
+
+    @Override
+    public void writeEndObject(@Nonnull JsonGenerator jsonGenerator, int nrOfEntries) throws IOException
+    {
+        super.writeEndObject(jsonGenerator, nrOfEntries);
+        if (this._nesting == 0)
         {
-            --this._nesting;
+            jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
         }
-        if (nrOfEntries > 0)
-        {
-            this._objectIndenter.writeIndentation(g, this._nesting);
-        }
-        else
-        {
-            // g.writeRaw(' ');
-        }
-        g.writeRaw('}');
     }
 }
