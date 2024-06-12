@@ -20,7 +20,6 @@ import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -125,14 +124,26 @@ public class ConfigLoggingBundle
             }
         });
 
-        Set<Entry<String, JsonNode>> properties = node.properties();
-        properties
-                .stream()
-                .filter(property -> property.getValue().isArray())
-                .map(property -> property.getValue().elements())
-                .forEach(ConfigLoggingBundle::removeEmptyJsonNodes);
-        properties.removeIf(property -> property.getValue().isObject() && property.getValue().isEmpty());
-        properties.removeIf(property -> property.getValue().isArray() && property.getValue().isEmpty());
+        Iterator<Entry<String, JsonNode>> properties = node.fields();
+        properties.forEachRemaining(
+                property ->
+                {
+                    if (property.getValue().isArray())
+                    {
+                        Iterator<JsonNode> elements = property.getValue().elements();
+                        removeEmptyJsonNodes(elements);
+                    }
+                });
+
+        Iterator<Entry<String, JsonNode>> fieldIterator = node.fields();
+        while (fieldIterator.hasNext())
+        {
+            Entry<String, JsonNode> property = fieldIterator.next();
+            if ((property.getValue().isObject() || property.getValue().isArray()) && property.getValue().isEmpty())
+            {
+                fieldIterator.remove();
+            }
+        }
     }
 
     private static void removeEmptyJsonNodes(Iterator<JsonNode> elements)
@@ -149,7 +160,7 @@ public class ConfigLoggingBundle
 
     private static void subtractObjectNode(ObjectNode mutableObjectNode, ObjectNode substractObjectNode)
     {
-        substractObjectNode.properties().forEach(subtractProperty ->
+        substractObjectNode.fields().forEachRemaining(subtractProperty ->
         {
             String key = subtractProperty.getKey();
             JsonNode value = subtractProperty.getValue();
