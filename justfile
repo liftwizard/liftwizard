@@ -194,7 +194,7 @@ rebase-all:
     do
         echo "Rebasing branch: $branch"
         git checkout "$branch"
-        git pull {{upstream_remote}} {{upstream_branch}} --rebase
+        git pull {{upstream_remote}} {{upstream_branch}} --rebase=merges
     done
 
 # git absorb into configurable upstream/main
