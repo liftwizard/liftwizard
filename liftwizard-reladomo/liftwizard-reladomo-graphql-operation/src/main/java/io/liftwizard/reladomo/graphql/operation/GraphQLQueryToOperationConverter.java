@@ -24,7 +24,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
 
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.attribute.Attribute;
@@ -73,7 +72,7 @@ public class GraphQLQueryToOperationConverter
                         finder,
                         (String) each.getKey(),
                         each.getValue()))
-                .collect(Collectors.toList());
+                .toList();
 
         return nestedOperations.stream().reduce(finder.all(), Operation::and);
     }
@@ -253,7 +252,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -371,7 +370,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -428,7 +427,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -509,7 +508,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -589,7 +588,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -669,7 +668,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -749,7 +748,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -843,7 +842,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
@@ -937,7 +936,7 @@ public class GraphQLQueryToOperationConverter
                         attribute,
                         entry.getKey(),
                         entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         return nestedOperations.stream().reduce(finderInstance.all(), Operation::and);
     }
 
