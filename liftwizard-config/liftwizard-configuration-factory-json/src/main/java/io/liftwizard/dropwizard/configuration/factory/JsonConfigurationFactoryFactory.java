@@ -18,7 +18,6 @@ package io.liftwizard.dropwizard.configuration.factory;
 
 import javax.validation.Validator;
 
-import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,7 +56,7 @@ public class JsonConfigurationFactoryFactory<T>
     {
         ObjectMapper strictObjectMapper = objectMapper.copy();
         strictObjectMapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        strictObjectMapper.enable(Feature.STRICT_DUPLICATE_DETECTION);
+        // strictObjectMapper.enable(Feature.STRICT_DUPLICATE_DETECTION);
 
         strictObjectMapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
 
