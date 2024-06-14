@@ -17,6 +17,7 @@
 package io.liftwizard.dropwizard.configuration.logging.filter.janino;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
@@ -29,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.logging.LoggingUtil;
 import io.dropwizard.logging.filter.FilterFactory;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @JsonTypeName("janino")
 @AutoService(FilterFactory.class)

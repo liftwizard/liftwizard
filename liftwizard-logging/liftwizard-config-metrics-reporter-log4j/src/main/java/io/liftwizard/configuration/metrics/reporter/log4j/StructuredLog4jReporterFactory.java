@@ -16,6 +16,8 @@
 
 package io.liftwizard.configuration.metrics.reporter.log4j;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +27,6 @@ import io.dropwizard.metrics.BaseReporterFactory;
 import io.dropwizard.metrics.ReporterFactory;
 import io.liftwizard.logging.metrics.structured.log4j.StructuredLog4jReporter;
 import org.apache.log4j.Logger;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * A {@link ReporterFactory} for {@link StructuredLog4jReporter} instances.

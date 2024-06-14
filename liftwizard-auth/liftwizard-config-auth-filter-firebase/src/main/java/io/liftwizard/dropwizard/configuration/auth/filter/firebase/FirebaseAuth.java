@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.FirebaseOptions.Builder;
 
 public class FirebaseAuth
 {
@@ -65,7 +64,7 @@ public class FirebaseAuth
     {
         Objects.requireNonNull(firebaseCredentials);
         GoogleCredentials credentials = GoogleCredentials.fromStream(firebaseCredentials);
-        FirebaseOptions options = new Builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .setDatabaseUrl(this.databaseUrl)
                 .build();
