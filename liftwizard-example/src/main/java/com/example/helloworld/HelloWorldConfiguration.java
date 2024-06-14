@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.example.helloworld.core.Template;
@@ -41,7 +42,6 @@ import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFactory;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @JsonPropertyOrder({"template", "defaultName", "viewRendererConfiguration"})
 public class HelloWorldConfiguration

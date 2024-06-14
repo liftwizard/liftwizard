@@ -19,6 +19,7 @@ package io.liftwizard.dropwizard.configuration.factory;
 import javax.validation.Validator;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -60,16 +61,15 @@ public class JsonConfigurationFactoryFactory<T>
 
         strictObjectMapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
 
-        strictObjectMapper.enable(Feature.ALLOW_COMMENTS);
-        strictObjectMapper.enable(Feature.ALLOW_YAML_COMMENTS);
-        strictObjectMapper.enable(Feature.ALLOW_UNQUOTED_CONTROL_CHARS);
-        strictObjectMapper.enable(Feature.ALLOW_TRAILING_COMMA);
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS.mappedFeature());
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_YAML_COMMENTS.mappedFeature());
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature());
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_TRAILING_COMMA.mappedFeature());
 
-        strictObjectMapper.enable(Feature.ALLOW_UNQUOTED_FIELD_NAMES);
-        strictObjectMapper.enable(Feature.ALLOW_SINGLE_QUOTES);
-        strictObjectMapper.enable(Feature.ALLOW_UNQUOTED_CONTROL_CHARS);
-        strictObjectMapper.enable(Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER);
-        strictObjectMapper.enable(Feature.ALLOW_NON_NUMERIC_NUMBERS);
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_UNQUOTED_FIELD_NAMES.mappedFeature());
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_SINGLE_QUOTES.mappedFeature());
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature());
+        strictObjectMapper.enable(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS.mappedFeature());
 
         strictObjectMapper.setDateFormat(new StdDateFormat());
 

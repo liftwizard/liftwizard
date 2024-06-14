@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotEmpty;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
@@ -31,7 +32,6 @@ import io.dropwizard.metrics.BaseReporterFactory;
 import io.dropwizard.metrics.ReporterFactory;
 import io.liftwizard.logging.metrics.structured.Builder;
 import io.liftwizard.logging.metrics.structured.StructuredSlf4jReporter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
