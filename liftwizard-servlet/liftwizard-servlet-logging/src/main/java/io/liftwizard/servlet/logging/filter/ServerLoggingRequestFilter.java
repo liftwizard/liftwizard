@@ -163,6 +163,7 @@ public final class ServerLoggingRequestFilter
         }
 
         return ListAdapter.adapt(matchedTemplates)
+                .asReversed()
                 .collect(UriTemplate::getTemplate)
                 .makeString("");
     }
