@@ -286,6 +286,17 @@
                                     <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-janino</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-requesturl</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-console</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-file</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-seed</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-system</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-query-schema</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-reladomo-meta</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
