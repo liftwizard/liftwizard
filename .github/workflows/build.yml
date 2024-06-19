@@ -23,7 +23,16 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - run: ./mvnw verify
+      - run: ./mvnw verify --activate-profiles jacoco-maven-plugin
+
+      - uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          update-comment: true
+          min-coverage-overall: 0
+          min-coverage-changed-files: 0
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
