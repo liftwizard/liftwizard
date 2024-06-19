@@ -176,7 +176,6 @@
                 </plugin>
                 <!--endregion-->
 
-
                 <!--region Phase 7: compile-->
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -188,22 +187,6 @@
                                 <version>1.0.1</version>
                             </path>
                         </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
-                <!--endregion-->
-
-                <!--region Phase 15: test-->
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.5</version>
-                    <configuration>
-                        <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
-                        <!-- https://stackoverflow.com/a/4659279/ -->
-                        <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
-                        <!-- https://stackoverflow.com/a/4659279/ -->
-                        <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
-                        <runOrder>random</runOrder>
-                        <trimStackTrace>false</trimStackTrace>
                     </configuration>
                 </plugin>
                 <!--endregion-->
