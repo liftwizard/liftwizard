@@ -269,7 +269,7 @@
 
     <profiles>
         <profile>
-            <id>deploy</id>
+            <id>liftwizard-deploy</id>
 
             <distributionManagement>
                 <snapshotRepository>
