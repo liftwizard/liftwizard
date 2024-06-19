@@ -80,6 +80,9 @@
         <!--region outputTimestamp-->
         <project.build.outputTimestamp>2024-06-13T19:15:12Z</project.build.outputTimestamp>
         <!--endregion outputTimestamp-->
+
+        <!-- This is necessary when using @argLine in maven-surefire-plugin, and maven profiles that may or may not initialize argLine -->
+        <argLine></argLine>
     </properties>
 
     <build>
@@ -152,6 +155,17 @@
                         <version>5.10.2</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
+                    <!-- https://stackoverflow.com/a/4659279/ -->
+                    <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
+                    <!-- https://stackoverflow.com/a/4659279/ -->
+                    <!-- Add argLine to allow the Jacoco plugin to append without overriding the setting -->
+                    <!-- https://stackoverflow.com/a/39818768/ -->
+                    <argLine>-XX:-OmitStackTraceInFastThrow @{argLine}</argLine>
+                    <runOrder>random</runOrder>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
             </plugin>
             <!--endregion Phase 15: test-->
 
