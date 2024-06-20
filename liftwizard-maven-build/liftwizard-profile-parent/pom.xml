@@ -361,7 +361,7 @@
         <!--endregion Phase 21: verify-->
 
         <profile>
-            <id>liftwizard-deploy</id>
+            <id>deploy</id>
 
             <build>
                 <plugins>
