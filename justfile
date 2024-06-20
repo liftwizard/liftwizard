@@ -192,6 +192,12 @@ rebase-all:
     branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --no-contains {{upstream_remote}}/{{upstream_branch}}))
     for branch in "${branches[@]}"
     do
+        included_count=$(git branch --contains "$branch" | wc -l)
+        if [ "$included_count" -gt 1 ]; then
+            echo "Skipping branch $branch as it is included in other branches"
+            continue
+        fi
+
         echo "Rebasing branch: $branch"
         git checkout "$branch"
         git pull {{upstream_remote}} {{upstream_branch}} --rebase=merges
