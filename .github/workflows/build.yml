@@ -265,3 +265,25 @@ jobs:
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
+
+  # Check if the new commits in a Pull Request contain a merge commit. If so, fail and print them out.
+  forbid-merge-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for merge commits
+        run: |
+          set -Eexuo pipefail
+
+          git fetch origin ${{github.base_ref}}:${{github.base_ref}} ${{github.head_ref}}:${{github.head_ref}}
+
+          if [ -n "$(git log --merges ${{github.base_ref}}..${{github.head_ref}} --)" ]; then
+            echo "Failure: Found merge commits"
+            git log --merges ${{github.base_ref}}..${{github.head_ref}} --
+            exit 1
+          else
+            echo "Success: No merge commits found"
+          fi
