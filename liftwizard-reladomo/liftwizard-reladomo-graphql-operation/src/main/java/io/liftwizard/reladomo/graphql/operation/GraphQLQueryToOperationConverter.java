@@ -162,7 +162,7 @@ public class GraphQLQueryToOperationConverter
         return nestedOperations.reduce(conjunctionFunction).get();
     }
 
-    private Operation convertField(RelatedFinder finder, String key, Object graphQlOperation)
+    private Operation convertField(RelatedFinder<?> finder, String key, Object graphQlOperation)
     {
         this.context.push(key);
 
@@ -196,43 +196,43 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertAttribute(
-            RelatedFinder finderInstance,
+            RelatedFinder<?> finderInstance,
             Attribute attribute,
             Map<String, ?> graphQlOperation)
     {
-        if (attribute instanceof StringAttribute stringAttribute)
+        if (attribute instanceof StringAttribute<?> stringAttribute)
         {
             return this.convertStringAttribute(finderInstance, stringAttribute, graphQlOperation);
         }
-        if (attribute instanceof BooleanAttribute booleanAttribute)
+        if (attribute instanceof BooleanAttribute<?> booleanAttribute)
         {
             return this.convertBooleanAttribute(finderInstance, booleanAttribute, graphQlOperation);
         }
-        if (attribute instanceof IntegerAttribute integerAttribute)
+        if (attribute instanceof IntegerAttribute<?> integerAttribute)
         {
             return this.convertIntegerAttribute(finderInstance, integerAttribute, graphQlOperation);
         }
-        if (attribute instanceof LongAttribute longAttribute)
+        if (attribute instanceof LongAttribute<?> longAttribute)
         {
             return this.convertLongAttribute(finderInstance, longAttribute, graphQlOperation);
         }
-        if (attribute instanceof DoubleAttribute doubleAttribute)
+        if (attribute instanceof DoubleAttribute<?> doubleAttribute)
         {
             return this.convertDoubleAttribute(finderInstance, doubleAttribute, graphQlOperation);
         }
-        if (attribute instanceof FloatAttribute floatAttribute)
+        if (attribute instanceof FloatAttribute<?> floatAttribute)
         {
             return this.convertFloatAttribute(finderInstance, floatAttribute, graphQlOperation);
         }
-        if (attribute instanceof DateAttribute dateAttribute)
+        if (attribute instanceof DateAttribute<?> dateAttribute)
         {
             return this.convertDateAttribute(finderInstance, dateAttribute, graphQlOperation);
         }
-        if (attribute instanceof TimestampAttribute timestampAttribute)
+        if (attribute instanceof TimestampAttribute<?> timestampAttribute)
         {
             return this.convertTimestampAttribute(finderInstance, timestampAttribute, graphQlOperation);
         }
-        if (attribute instanceof AsOfAttribute asOfAttribute)
+        if (attribute instanceof AsOfAttribute<?> asOfAttribute)
         {
             return this.convertAsOfAttribute(finderInstance, asOfAttribute, graphQlOperation);
         }
@@ -240,8 +240,8 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertStringAttribute(
-            RelatedFinder finderInstance,
-            StringAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            StringAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -257,109 +257,49 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertStringAttribute(
-            RelatedFinder finderInstance,
-            StringAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            StringAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                return attribute.eq((String) operationParameter);
-            }
-            case "notEq":
-            {
-                return attribute.notEq((String) operationParameter);
-            }
-            case "in":
-            {
-                return attribute.in(new LinkedHashSet<String>((Collection<? extends String>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(new LinkedHashSet<String>((Collection<? extends String>) operationParameter));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan((String) operationParameter);
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals((String) operationParameter);
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan((String) operationParameter);
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals((String) operationParameter);
-            }
-            case "startsWith":
-            {
-                return attribute.startsWith((String) operationParameter);
-            }
-            case "notStartsWith":
-            {
-                return attribute.notStartsWith((String) operationParameter);
-            }
-            case "endsWith":
-            {
-                return attribute.endsWith((String) operationParameter);
-            }
-            case "notEndsWith":
-            {
-                return attribute.notEndsWith((String) operationParameter);
-            }
-            case "contains":
-            {
-                return attribute.contains((String) operationParameter);
-            }
-            case "notContains":
-            {
-                return attribute.notContains((String) operationParameter);
-            }
-            case "lower":
-            case "toLowerCase":
-            {
-                return this.convertStringAttribute(
-                        finderInstance,
-                        attribute.toLowerCase(),
-                        (Map<String, ?>) operationParameter);
-            }
-            case "wildCardEq":
-            case "wildCardEquals":
-            {
-                return attribute.wildCardEq((String) operationParameter);
-            }
-            case "wildCardIn":
-            {
-                return attribute.wildCardIn(new LinkedHashSet<>((Collection<? extends String>) operationParameter));
-            }
-            case "wildCardNotEq":
-            case "wildCardNotEquals":
-            {
-                return attribute.wildCardNotEq((String) operationParameter);
-            }
-            case "subString":
-            {
-                return this.convertStringAttribute(
-                        finderInstance,
-                        attribute.substring(0, 0),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
+            case "eq" -> attribute.eq((String) operationParameter);
+            case "notEq" -> attribute.notEq((String) operationParameter);
+            case "in" -> attribute.in(new LinkedHashSet<String>((Collection<? extends String>) operationParameter));
+            case "notIn" -> attribute.notIn(new LinkedHashSet<String>((Collection<? extends String>) operationParameter));
+            case "greaterThan" -> attribute.greaterThan((String) operationParameter);
+            case "greaterThanEquals" -> attribute.greaterThanEquals((String) operationParameter);
+            case "lessThan" -> attribute.lessThan((String) operationParameter);
+            case "lessThanEquals" -> attribute.lessThanEquals((String) operationParameter);
+            case "startsWith" -> attribute.startsWith((String) operationParameter);
+            case "notStartsWith" -> attribute.notStartsWith((String) operationParameter);
+            case "endsWith" -> attribute.endsWith((String) operationParameter);
+            case "notEndsWith" -> attribute.notEndsWith((String) operationParameter);
+            case "contains" -> attribute.contains((String) operationParameter);
+            case "notContains" -> attribute.notContains((String) operationParameter);
+            case "lower", "toLowerCase" -> this.convertStringAttribute(
+                    finderInstance,
+                    attribute.toLowerCase(),
+                    (Map<String, ?>) operationParameter);
+            case "wildCardEq", "wildCardEquals" -> attribute.wildCardEq((String) operationParameter);
+            case "wildCardIn" -> attribute.wildCardIn(new LinkedHashSet<>((Collection<? extends String>) operationParameter));
+            case "wildCardNotEq", "wildCardNotEquals" -> attribute.wildCardNotEq((String) operationParameter);
+            case "subString" -> this.convertStringAttribute(
+                    finderInstance,
+                    attribute.substring(0, 0),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
                 var message = "Unknown operation on StringAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertBooleanAttribute(
-            RelatedFinder finderInstance,
-            BooleanAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            BooleanAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -375,48 +315,30 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertBooleanAttribute(
-            RelatedFinder finderInstance,
-            BooleanAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            BooleanAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq((Boolean) operationParameter);
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq((Boolean) operationParameter);
-            }
-            case "in":
-            {
-                return attribute.in(BooleanSets.immutable.withAll((Collection<Boolean>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(BooleanSets.immutable.withAll((Collection<Boolean>) operationParameter));
-            }
-            default:
+            case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Boolean) operationParameter);
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq((Boolean) operationParameter);
+            case "in" -> attribute.in(BooleanSets.immutable.withAll((Collection<Boolean>) operationParameter));
+            case "notIn" -> attribute.notIn(BooleanSets.immutable.withAll((Collection<Boolean>) operationParameter));
+            default ->
             {
                 var message = "Unknown operation on StringAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertIntegerAttribute(
-            RelatedFinder finderInstance,
-            IntegerAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            IntegerAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -432,72 +354,38 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertIntegerAttribute(
-            RelatedFinder finderInstance,
-            IntegerAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            IntegerAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq((Integer) operationParameter);
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq((Integer) operationParameter);
-            }
-            case "in":
-            {
-                return attribute.in(IntSets.immutable.withAll((Collection<Integer>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(IntSets.immutable.withAll((Collection<Integer>) operationParameter));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan((Integer) operationParameter);
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals((Integer) operationParameter);
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan((Integer) operationParameter);
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals((Integer) operationParameter);
-            }
-            case "abs":
-            case "absoluteValue":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.absoluteValue(),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
+            case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Integer) operationParameter);
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq((Integer) operationParameter);
+            case "in" -> attribute.in(IntSets.immutable.withAll((Collection<Integer>) operationParameter));
+            case "notIn" -> attribute.notIn(IntSets.immutable.withAll((Collection<Integer>) operationParameter));
+            case "greaterThan" -> attribute.greaterThan((Integer) operationParameter);
+            case "greaterThanEquals" -> attribute.greaterThanEquals((Integer) operationParameter);
+            case "lessThan" -> attribute.lessThan((Integer) operationParameter);
+            case "lessThanEquals" -> attribute.lessThanEquals((Integer) operationParameter);
+            case "abs", "absoluteValue" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.absoluteValue(),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
                 var message = "Unknown operation on IntegerAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertLongAttribute(
-            RelatedFinder finderInstance,
-            LongAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            LongAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -513,71 +401,38 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertLongAttribute(
-            RelatedFinder finderInstance,
-            LongAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            LongAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq((Long) operationParameter);
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq((Long) operationParameter);
-            }
-            case "in":
-            {
-                return attribute.in(LongSets.immutable.withAll((Collection<Long>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(LongSets.immutable.withAll((Collection<Long>) operationParameter));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan((Long) operationParameter);
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals((Long) operationParameter);
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan((Long) operationParameter);
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals((Long) operationParameter);
-            }
-            case "absoluteValue":
-            {
-                return this.convertLongAttribute(
-                        finderInstance,
-                        attribute.absoluteValue(),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
+            case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Long) operationParameter);
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq((Long) operationParameter);
+            case "in" -> attribute.in(LongSets.immutable.withAll((Collection<Long>) operationParameter));
+            case "notIn" -> attribute.notIn(LongSets.immutable.withAll((Collection<Long>) operationParameter));
+            case "greaterThan" -> attribute.greaterThan((Long) operationParameter);
+            case "greaterThanEquals" -> attribute.greaterThanEquals((Long) operationParameter);
+            case "lessThan" -> attribute.lessThan((Long) operationParameter);
+            case "lessThanEquals" -> attribute.lessThanEquals((Long) operationParameter);
+            case "absoluteValue" -> this.convertLongAttribute(
+                    finderInstance,
+                    attribute.absoluteValue(),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
                 var message = "Unknown operation on LongAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertDoubleAttribute(
-            RelatedFinder finderInstance,
-            DoubleAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            DoubleAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -593,71 +448,38 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertDoubleAttribute(
-            RelatedFinder finderInstance,
-            DoubleAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            DoubleAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq((Double) operationParameter);
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq((Double) operationParameter);
-            }
-            case "in":
-            {
-                return attribute.in(DoubleSets.immutable.withAll((Collection<Double>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(DoubleSets.immutable.withAll((Collection<Double>) operationParameter));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan((Double) operationParameter);
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals((Double) operationParameter);
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan((Double) operationParameter);
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals((Double) operationParameter);
-            }
-            case "absoluteValue":
-            {
-                return this.convertDoubleAttribute(
-                        finderInstance,
-                        attribute.absoluteValue(),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
+            case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Double) operationParameter);
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq((Double) operationParameter);
+            case "in" -> attribute.in(DoubleSets.immutable.withAll((Collection<Double>) operationParameter));
+            case "notIn" -> attribute.notIn(DoubleSets.immutable.withAll((Collection<Double>) operationParameter));
+            case "greaterThan" -> attribute.greaterThan((Double) operationParameter);
+            case "greaterThanEquals" -> attribute.greaterThanEquals((Double) operationParameter);
+            case "lessThan" -> attribute.lessThan((Double) operationParameter);
+            case "lessThanEquals" -> attribute.lessThanEquals((Double) operationParameter);
+            case "absoluteValue" -> this.convertDoubleAttribute(
+                    finderInstance,
+                    attribute.absoluteValue(),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
                 var message = "Unknown operation on DoubleAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertFloatAttribute(
-            RelatedFinder finderInstance,
-            FloatAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            FloatAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -673,71 +495,44 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertFloatAttribute(
-            RelatedFinder finderInstance,
-            FloatAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            FloatAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq(((Double) operationParameter).floatValue());
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq(((Double) operationParameter).floatValue());
-            }
-            case "in":
-            {
-                return attribute.in(FloatSets.immutable.withAll(Iterate.collectFloat((Collection<Double>) operationParameter, Double::floatValue)));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(FloatSets.immutable.withAll(Iterate.collectFloat((Collection<Double>) operationParameter, Double::floatValue)));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan(((Double) operationParameter).floatValue());
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals(((Double) operationParameter).floatValue());
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan(((Double) operationParameter).floatValue());
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals(((Double) operationParameter).floatValue());
-            }
-            case "absoluteValue":
-            {
-                return this.convertFloatAttribute(
-                        finderInstance,
-                        attribute.absoluteValue(),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
+            case "eq" -> operationParameter == null
+                    ? attribute.isNull()
+                    : attribute.eq(((Double) operationParameter).floatValue());
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq(((Double) operationParameter).floatValue());
+            case "in" -> attribute.in(FloatSets.immutable.withAll(Iterate.collectFloat(
+                    (Collection<Double>) operationParameter,
+                    Double::floatValue)));
+            case "notIn" -> attribute.notIn(FloatSets.immutable.withAll(Iterate.collectFloat(
+                    (Collection<Double>) operationParameter,
+                    Double::floatValue)));
+            case "greaterThan" -> attribute.greaterThan(((Double) operationParameter).floatValue());
+            case "greaterThanEquals" -> attribute.greaterThanEquals(((Double) operationParameter).floatValue());
+            case "lessThan" -> attribute.lessThan(((Double) operationParameter).floatValue());
+            case "lessThanEquals" -> attribute.lessThanEquals(((Double) operationParameter).floatValue());
+            case "absoluteValue" -> this.convertFloatAttribute(
+                    finderInstance,
+                    attribute.absoluteValue(),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
                 var message = "Unknown operation on FloatAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertDateAttribute(
-            RelatedFinder finderInstance,
-            DateAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            DateAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -753,85 +548,48 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertDateAttribute(
-            RelatedFinder finderInstance,
-            DateAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            DateAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
+            case "eq" -> operationParameter == null
+                    ? attribute.isNull()
+                    : attribute.eq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+            case "in" -> attribute.in(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
+            case "notIn" -> attribute.notIn(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
+            case "greaterThan" -> attribute.greaterThan(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+            case "greaterThanEquals" -> attribute.greaterThanEquals(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+            case "lessThan" -> attribute.lessThan(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+            case "lessThanEquals" -> attribute.lessThanEquals(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+            case "year" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.year(),
+                    (Map<String, ?>) operationParameter);
+            case "month" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.month(),
+                    (Map<String, ?>) operationParameter);
+            case "dayOfMonth" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.dayOfMonth(),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-            }
-            case "in":
-            {
-                return attribute.in(new LinkedHashSet<Timestamp>((Collection<? extends Timestamp>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(new LinkedHashSet<Timestamp>((Collection<? extends Timestamp>) operationParameter));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-            }
-            case "year":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.year(),
-                        (Map<String, ?>) operationParameter);
-            }
-            case "month":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.month(),
-                        (Map<String, ?>) operationParameter);
-            }
-            case "dayOfMonth":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.dayOfMonth(),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
-            {
-                var message = "Unknown operation on IntegerAttribute: " + operationName;
+                String message = "Unknown operation on IntegerAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertTimestampAttribute(
-            RelatedFinder finderInstance,
-            TimestampAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            TimestampAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -847,85 +605,48 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertTimestampAttribute(
-            RelatedFinder finderInstance,
-            TimestampAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            TimestampAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
-        switch (operationName)
+        return switch (operationName)
         {
-            case "eq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNull();
-                }
-                return attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-            }
-            case "notEq":
-            {
-                if (operationParameter == null)
-                {
-                    return attribute.isNotNull();
-                }
-                return attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-            }
-            case "in":
-            {
-                return attribute.in(new LinkedHashSet<Timestamp>((Collection<? extends Timestamp>) operationParameter));
-            }
-            case "notIn":
-            {
-                return attribute.notIn(new LinkedHashSet<Timestamp>((Collection<? extends Timestamp>) operationParameter));
-            }
-            case "greaterThan":
-            {
-                return attribute.greaterThan(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-            }
-            case "greaterThanEquals":
-            {
-                return attribute.greaterThanEquals(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-            }
-            case "lessThan":
-            {
-                return attribute.lessThan(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-            }
-            case "lessThanEquals":
-            {
-                return attribute.lessThanEquals(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-            }
-            case "year":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.year(),
-                        (Map<String, ?>) operationParameter);
-            }
-            case "month":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.month(),
-                        (Map<String, ?>) operationParameter);
-            }
-            case "dayOfMonth":
-            {
-                return this.convertIntegerAttribute(
-                        finderInstance,
-                        attribute.dayOfMonth(),
-                        (Map<String, ?>) operationParameter);
-            }
-            default:
+            case "eq" -> operationParameter == null
+                    ? attribute.isNull()
+                    : attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+            case "notEq" -> operationParameter == null
+                    ? attribute.isNotNull()
+                    : attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+            case "in" -> attribute.in(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
+            case "notIn" -> attribute.notIn(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
+            case "greaterThan" -> attribute.greaterThan(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+            case "greaterThanEquals" -> attribute.greaterThanEquals(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+            case "lessThan" -> attribute.lessThan(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+            case "lessThanEquals" -> attribute.lessThanEquals(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+            case "year" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.year(),
+                    (Map<String, ?>) operationParameter);
+            case "month" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.month(),
+                    (Map<String, ?>) operationParameter);
+            case "dayOfMonth" -> this.convertIntegerAttribute(
+                    finderInstance,
+                    attribute.dayOfMonth(),
+                    (Map<String, ?>) operationParameter);
+            default ->
             {
                 var message = "Unknown operation on IntegerAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
-        }
+        };
     }
 
     private Operation convertAsOfAttribute(
-            RelatedFinder finderInstance,
-            AsOfAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            AsOfAttribute<?> attribute,
             Map<String, ?> graphQlOperation)
     {
         List<Operation> nestedOperations = graphQlOperation
@@ -941,8 +662,8 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertAsOfAttribute(
-            RelatedFinder finderInstance,
-            AsOfAttribute attribute,
+            RelatedFinder<?> finderInstance,
+            AsOfAttribute<?> attribute,
             String operationName,
             Object operationParameter)
     {
