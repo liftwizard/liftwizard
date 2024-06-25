@@ -3,16 +3,15 @@ set dotenv-filename := ".envrc"
 
 group_id_with_slashes := "io/liftwizard"
 
-# Setup the project (asdf) and run the default build (mvn)
-default: asdf mvn
+# Setup the project (mise) and run the default build (mvn)
+default: mise mvn
 
-# asdf install
-asdf:
-    asdf plugin-add java
-    asdf plugin-add maven
-    asdf plugin-add mvnd https://github.com/joschi/asdf-mvnd
-    asdf install
-    asdf current
+# mise install
+mise:
+    mise plugin install maven
+    mise plugin install mvnd https://github.com/joschi/asdf-mvnd
+    mise install
+    mise current
 
 # git clean
 _git-clean:
@@ -141,7 +140,9 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
         exit 0
     fi
 
-    MESSAGE="Failed on commit: '$COMMIT_MESSAGE' with exit code $EXIT_CODE"
+    DIRECTORY=$(basename $(pwd))
+
+    MESSAGE="Failed in directory ${DIRECTORY} on commit: '${COMMIT_MESSAGE}' with exit code ${EXIT_CODE}"
     {{echo_command}} "$MESSAGE" &
     exit $EXIT_CODE
 
