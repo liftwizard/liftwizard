@@ -79,6 +79,11 @@
                                         <exclude>org.slf4j:slf4j-jdk14</exclude>
                                         <exclude>org.slf4j:nop</exclude>
                                         <exclude>org.slf4j:jcl</exclude>
+                                        <exclude>javax.ws.rs:javax.ws.rs-api</exclude>
+                                        <exclude>javax.servlet:javax.servlet-api</exclude>
+                                        <exclude>javax.validation:validation-api</exclude>
+                                        <exclude>javax.xml.bind:jaxb-api</exclude>
+                                        <exclude>javax.xml.ws:jaxws-api</exclude>
                                     </excludes>
                                 </bannedDependencies>
                                 <banDuplicatePomDependencyVersions />
