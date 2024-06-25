@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.fusesource.jansi.AnsiType;
 import org.fusesource.jansi.io.AnsiOutputStream;
 
 /**
- * Based on the Jansi test https://github.com/fusesource/jansi/blob/master/src/test/java/org/fusesource/jansi/io/AnsiOutputStreamTest.java
+ * Based on the Jansi test <a href="https://github.com/fusesource/jansi/blob/master/src/test/java/org/fusesource/jansi/io/AnsiOutputStreamTest.java">AnsiOutputStreamTest</a>
  */
 public final class AnsiColorStrip
 {

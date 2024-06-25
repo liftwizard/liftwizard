@@ -87,6 +87,7 @@ public class JsonMatchExtension
         else
         {
             InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+            Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
             String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
             URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
 

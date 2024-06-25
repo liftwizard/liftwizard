@@ -52,6 +52,7 @@ import org.eclipse.collections.impl.factory.primitive.LongSets;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 import org.eclipse.collections.impl.utility.Iterate;
 
+@SuppressWarnings("unchecked")
 public class GraphQLQueryToOperationConverter
 {
     private final MutableStack<String> context = Stacks.mutable.empty();
@@ -326,8 +327,8 @@ public class GraphQLQueryToOperationConverter
             case "notEq" -> operationParameter == null
                     ? attribute.isNotNull()
                     : attribute.notEq((Boolean) operationParameter);
-            case "in" -> attribute.in(BooleanSets.immutable.withAll((Collection<Boolean>) operationParameter));
-            case "notIn" -> attribute.notIn(BooleanSets.immutable.withAll((Collection<Boolean>) operationParameter));
+            case "in" -> attribute.in(BooleanSets.immutable.withAll((Iterable<Boolean>) operationParameter));
+            case "notIn" -> attribute.notIn(BooleanSets.immutable.withAll((Iterable<Boolean>) operationParameter));
             default ->
             {
                 var message = "Unknown operation on StringAttribute: " + operationName;
@@ -365,8 +366,8 @@ public class GraphQLQueryToOperationConverter
             case "notEq" -> operationParameter == null
                     ? attribute.isNotNull()
                     : attribute.notEq((Integer) operationParameter);
-            case "in" -> attribute.in(IntSets.immutable.withAll((Collection<Integer>) operationParameter));
-            case "notIn" -> attribute.notIn(IntSets.immutable.withAll((Collection<Integer>) operationParameter));
+            case "in" -> attribute.in(IntSets.immutable.withAll((Iterable<Integer>) operationParameter));
+            case "notIn" -> attribute.notIn(IntSets.immutable.withAll((Iterable<Integer>) operationParameter));
             case "greaterThan" -> attribute.greaterThan((Integer) operationParameter);
             case "greaterThanEquals" -> attribute.greaterThanEquals((Integer) operationParameter);
             case "lessThan" -> attribute.lessThan((Integer) operationParameter);
@@ -412,8 +413,8 @@ public class GraphQLQueryToOperationConverter
             case "notEq" -> operationParameter == null
                     ? attribute.isNotNull()
                     : attribute.notEq((Long) operationParameter);
-            case "in" -> attribute.in(LongSets.immutable.withAll((Collection<Long>) operationParameter));
-            case "notIn" -> attribute.notIn(LongSets.immutable.withAll((Collection<Long>) operationParameter));
+            case "in" -> attribute.in(LongSets.immutable.withAll((Iterable<Long>) operationParameter));
+            case "notIn" -> attribute.notIn(LongSets.immutable.withAll((Iterable<Long>) operationParameter));
             case "greaterThan" -> attribute.greaterThan((Long) operationParameter);
             case "greaterThanEquals" -> attribute.greaterThanEquals((Long) operationParameter);
             case "lessThan" -> attribute.lessThan((Long) operationParameter);
@@ -459,8 +460,8 @@ public class GraphQLQueryToOperationConverter
             case "notEq" -> operationParameter == null
                     ? attribute.isNotNull()
                     : attribute.notEq((Double) operationParameter);
-            case "in" -> attribute.in(DoubleSets.immutable.withAll((Collection<Double>) operationParameter));
-            case "notIn" -> attribute.notIn(DoubleSets.immutable.withAll((Collection<Double>) operationParameter));
+            case "in" -> attribute.in(DoubleSets.immutable.withAll((Iterable<Double>) operationParameter));
+            case "notIn" -> attribute.notIn(DoubleSets.immutable.withAll((Iterable<Double>) operationParameter));
             case "greaterThan" -> attribute.greaterThan((Double) operationParameter);
             case "greaterThanEquals" -> attribute.greaterThanEquals((Double) operationParameter);
             case "lessThan" -> attribute.lessThan((Double) operationParameter);
@@ -509,10 +510,10 @@ public class GraphQLQueryToOperationConverter
                     ? attribute.isNotNull()
                     : attribute.notEq(((Double) operationParameter).floatValue());
             case "in" -> attribute.in(FloatSets.immutable.withAll(Iterate.collectFloat(
-                    (Collection<Double>) operationParameter,
+                    (Iterable<Double>) operationParameter,
                     Double::floatValue)));
             case "notIn" -> attribute.notIn(FloatSets.immutable.withAll(Iterate.collectFloat(
-                    (Collection<Double>) operationParameter,
+                    (Iterable<Double>) operationParameter,
                     Double::floatValue)));
             case "greaterThan" -> attribute.greaterThan(((Double) operationParameter).floatValue());
             case "greaterThanEquals" -> attribute.greaterThanEquals(((Double) operationParameter).floatValue());

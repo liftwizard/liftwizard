@@ -26,6 +26,7 @@ import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Objects;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -96,6 +97,7 @@ public final class ManagedFileSystem
     private static FileSystem getOrCreate(URI uri)
     {
         FileSystem fileSystem = MANAGED_FILE_SYSTEMS.get(uri);
+        Objects.requireNonNull(fileSystem, () -> "Failed to get file system for " + uri);
         if (fileSystem.isOpen())
         {
             return fileSystem;

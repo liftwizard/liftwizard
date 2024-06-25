@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -61,15 +62,16 @@ public class FileMatchExtension
         }
         else
         {
-            InputStream inputStream            = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-            String      expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
+            InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+            Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+            String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
 
             if (!actualString.equals(expectedStringFromFile))
             {
-                String         detailMessage  = this.resourceRerecorderExtension.handleMismatch(
+                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
                         resourceClassPathLocation,
                         actualString);
-                AssertionError assertionError = new AssertionError(detailMessage);
+                var assertionError = new AssertionError(detailMessage);
                 this.errorCollectorExtension.addError(assertionError);
             }
         }

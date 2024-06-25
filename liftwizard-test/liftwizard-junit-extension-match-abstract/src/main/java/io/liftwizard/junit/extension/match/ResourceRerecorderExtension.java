@@ -73,7 +73,6 @@ public class ResourceRerecorderExtension
         return packageNameParts.injectInto(testResources, Path::resolve);
     }
 
-    @Nonnull
     public static void deleteDirectoryRecursively(@Nonnull Path directory)
             throws IOException
     {
