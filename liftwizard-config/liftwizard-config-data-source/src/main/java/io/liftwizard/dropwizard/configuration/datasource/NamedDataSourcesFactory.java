@@ -70,7 +70,7 @@ public class NamedDataSourcesFactory
         List<String> orderedDataSourceNames = this.namedDataSourceFactories
                 .stream()
                 .map(NamedDataSourceFactory::getName)
-                .collect(Collectors.toList());
+                .toList();
         Map<String, Long> frequencies = orderedDataSourceNames
                 .stream()
                 .collect(Collectors.groupingBy(
@@ -83,7 +83,7 @@ public class NamedDataSourcesFactory
                 .stream()
                 .filter(m -> m.getValue() > 1)
                 .map(Entry::getKey)
-                .collect(Collectors.toList());
+                .toList();
 
         if (duplicateDataSourceNames.isEmpty())
         {

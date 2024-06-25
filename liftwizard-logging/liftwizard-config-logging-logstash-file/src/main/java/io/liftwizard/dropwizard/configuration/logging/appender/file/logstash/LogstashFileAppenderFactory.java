@@ -34,7 +34,6 @@ import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
-import ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicy;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -251,12 +250,12 @@ public class LogstashFileAppenderFactory
     {
         if (!this.archive)
         {
-            FileAppender<ILoggingEvent> appender = new FileAppender<>();
+            var appender = new FileAppender<ILoggingEvent>();
             this.configureAppender(appender, context);
             return appender;
         }
 
-        RollingFileAppender<ILoggingEvent> appender = new RollingFileAppender<>();
+        var appender = new RollingFileAppender<ILoggingEvent>();
         this.configureAppender(appender, context);
 
         return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d")
@@ -286,11 +285,12 @@ public class LogstashFileAppenderFactory
     {
         // Creating a size and time policy does not need a separate triggering policy set on the appender
         // because this policy registers the trigger policy
-
-        SizeAndTimeBasedRollingPolicy<ILoggingEvent> sizeAndTimeBasedRollingPolicy =
-                new SizeAndTimeBasedRollingPolicy<>();
-
-        FileSize fileSize = new FileSize(this.maxFileSize.toBytes());
+        if (this.maxFileSize == null)
+        {
+            throw new AssertionError();
+        }
+        var fileSize                      = new FileSize(this.maxFileSize.toBytes());
+        var sizeAndTimeBasedRollingPolicy = new SizeAndTimeBasedRollingPolicy<ILoggingEvent>();
         sizeAndTimeBasedRollingPolicy.setMaxFileSize(fileSize);
         return sizeAndTimeBasedRollingPolicy;
     }
@@ -300,11 +300,10 @@ public class LogstashFileAppenderFactory
             RollingFileAppender<ILoggingEvent> appender,
             LoggerContext context)
     {
-        TimeBasedFileNamingAndTriggeringPolicy<ILoggingEvent> triggeringPolicy =
-                new DefaultTimeBasedFileNamingAndTriggeringPolicy<>();
+        var triggeringPolicy = new DefaultTimeBasedFileNamingAndTriggeringPolicy<ILoggingEvent>();
         triggeringPolicy.setContext(context);
 
-        TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<>();
+        var rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
         triggeringPolicy.setTimeBasedRollingPolicy(rollingPolicy);
         appender.setTriggeringPolicy(triggeringPolicy);
         return rollingPolicy;
@@ -314,7 +313,7 @@ public class LogstashFileAppenderFactory
             RollingFileAppender<ILoggingEvent> appender,
             LoggerContext context)
     {
-        FixedWindowRollingPolicy rollingPolicy = new FixedWindowRollingPolicy();
+        var rollingPolicy = new FixedWindowRollingPolicy();
         rollingPolicy.setContext(context);
         rollingPolicy.setMaxIndex(this.archivedFileCount);
         rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
@@ -322,9 +321,12 @@ public class LogstashFileAppenderFactory
         rollingPolicy.start();
         appender.setRollingPolicy(rollingPolicy);
 
-        SizeBasedTriggeringPolicy<ILoggingEvent> triggeringPolicy = new SizeBasedTriggeringPolicy<>();
-
-        FileSize fileSize = new FileSize(this.maxFileSize.toBytes());
+        if (this.maxFileSize == null)
+        {
+            throw new AssertionError();
+        }
+        var fileSize         = new FileSize(this.maxFileSize.toBytes());
+        var triggeringPolicy = new SizeBasedTriggeringPolicy<ILoggingEvent>();
         triggeringPolicy.setMaxFileSize(fileSize);
         triggeringPolicy.setContext(context);
         triggeringPolicy.start();
@@ -334,7 +336,7 @@ public class LogstashFileAppenderFactory
 
     private void configureAppender(FileAppender<ILoggingEvent> appender, LoggerContext context)
     {
-        FileSize fileSize = new FileSize(this.bufferSize.toBytes());
+        var fileSize = new FileSize(this.bufferSize.toBytes());
 
         appender.setContext(context);
         appender.setFile(this.currentLogFilename);

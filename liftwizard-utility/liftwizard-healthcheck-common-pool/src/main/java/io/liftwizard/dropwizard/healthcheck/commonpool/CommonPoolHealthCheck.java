@@ -115,7 +115,7 @@ public class CommonPoolHealthCheck
                 .filter(threadInfo -> this.alwaysAllowedPatterns.noneSatisfy(alwaysAllowedPattern -> ArrayAdapter
                         .adapt(threadInfo.getStackTrace())
                         .anySatisfyWith(this::traceMatchesPattern, alwaysAllowedPattern)))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
         if (badThreadInfos.isEmpty())
         {

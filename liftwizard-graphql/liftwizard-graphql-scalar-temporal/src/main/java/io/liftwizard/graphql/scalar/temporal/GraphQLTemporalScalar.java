@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import graphql.Internal;
 import graphql.schema.GraphQLScalarType;
 
 /**
- * Derived from https://github.com/graphql-java/graphql-java-extended-scalars but for Instant instead of OffsetDateTime.
+ * Derived from <a href="https://github.com/graphql-java/graphql-java-extended-scalars">graphql-java-extended-scalars</a> but for Instant instead of OffsetDateTime.
  */
 @Internal
 public final class GraphQLTemporalScalar

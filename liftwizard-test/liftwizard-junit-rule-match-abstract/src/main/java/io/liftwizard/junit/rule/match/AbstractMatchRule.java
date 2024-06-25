@@ -98,7 +98,6 @@ public abstract class AbstractMatchRule
             @Nonnull String actualString)
             throws Exception;
 
-    @Nonnull
     protected static void deleteDirectoryRecursively(@Nonnull Path directory)
             throws IOException
     {

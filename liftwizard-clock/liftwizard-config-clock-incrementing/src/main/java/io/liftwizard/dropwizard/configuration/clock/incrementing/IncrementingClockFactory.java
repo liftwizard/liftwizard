@@ -110,13 +110,14 @@ public class IncrementingClockFactory implements ClockFactory
     public boolean isValidTimezone()
     {
         TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-        if (zoneInfo == null)
+        if (zoneInfo != null)
         {
-            String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-                    this.timeZoneName,
-                    Arrays.toString(TimeZone.getAvailableIDs()));
-            throw new IllegalStateException(message);
+            return true;
         }
-        return zoneInfo != null;
+
+        String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
+                this.timeZoneName,
+                Arrays.toString(TimeZone.getAvailableIDs()));
+        throw new IllegalStateException(message);
     }
 }

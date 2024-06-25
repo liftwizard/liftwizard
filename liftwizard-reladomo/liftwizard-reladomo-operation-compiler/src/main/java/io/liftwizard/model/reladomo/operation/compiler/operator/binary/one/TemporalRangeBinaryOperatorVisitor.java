@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,11 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractB
 public class TemporalRangeBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
     private final AsOfAttribute attribute;
-    private final Instant       parameter;
     private final Timestamp     timestamp;
 
     public TemporalRangeBinaryOperatorVisitor(AsOfAttribute attribute, Instant parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
         this.timestamp = Timestamp.from(parameter);
     }
 

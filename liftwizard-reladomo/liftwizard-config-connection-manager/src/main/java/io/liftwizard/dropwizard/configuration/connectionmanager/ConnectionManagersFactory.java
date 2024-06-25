@@ -71,7 +71,7 @@ public class ConnectionManagersFactory
         List<String> orderedConnectionManagerNames = this.connectionManagerFactories
                 .stream()
                 .map(ConnectionManagerFactory::getConnectionManagerName)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
         List<String> duplicateConnectionManagerNames = orderedConnectionManagerNames
                 .stream()
                 .collect(Collectors.groupingBy(key -> key, LinkedHashMap::new, Collectors.counting()))
@@ -79,7 +79,7 @@ public class ConnectionManagersFactory
                 .stream()
                 .filter(p -> p.getValue() > 1)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .toList();
         if (duplicateConnectionManagerNames.isEmpty())
         {
             return true;

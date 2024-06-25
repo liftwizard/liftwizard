@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,13 +33,11 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractB
 public class LocalDateBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
 {
     private final DateAttribute attribute;
-    private final LocalDate     parameter;
     private final Timestamp     timestamp;
 
     public LocalDateBinaryOperatorVisitor(DateAttribute attribute, LocalDate parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
         this.timestamp = Timestamp.valueOf(parameter.atStartOfDay());
     }
 

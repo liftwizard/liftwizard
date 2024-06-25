@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ public class Builder
     private ScheduledExecutorService         executor;
     private boolean                          shutdownExecutorOnStop        = true;
     private Set<MetricAttribute>             disabledMetricAttributes      = Collections.emptySet();
-    private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = Function.identity();
 
     public Builder(MetricRegistry registry)
     {
@@ -178,7 +177,6 @@ public class Builder
      */
     public Builder mapToStructuredObjectFunction(Function<Map<String, Object>, ?> newToStructuredObjectFunction)
     {
-        this.mapToStructuredObjectFunction = newToStructuredObjectFunction;
         return this;
     }
 

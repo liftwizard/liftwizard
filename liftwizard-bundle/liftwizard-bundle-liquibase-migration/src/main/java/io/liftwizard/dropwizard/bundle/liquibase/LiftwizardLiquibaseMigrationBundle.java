@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,7 +163,6 @@ public class LiftwizardLiquibaseMigrationBundle
         {
             case CLASSPATH -> new ClassLoaderResourceAccessor();
             case FILESYSTEM -> new FileSystemResourceAccessor();
-            default -> throw new IllegalStateException("Unexpected value: " + migrationFileLocation);
         };
     }
 
