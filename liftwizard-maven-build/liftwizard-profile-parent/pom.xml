@@ -31,6 +31,10 @@
 
     <description>Liftwizard profiles parent is a published parent pom with profiles that are off by default that enable several linters and validators.</description>
 
+    <properties>
+        <spotless.check.skip>true</spotless.check.skip>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -42,6 +46,17 @@
                     <printWidth>120</printWidth>
                     <tabWidth>4</tabWidth>
                     <useTabs>false</useTabs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <upToDateChecking>
+                        <enabled>true</enabled>
+                    </upToDateChecking>
                 </configuration>
             </plugin>
         </plugins>
@@ -144,6 +159,352 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-check</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>validate</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-write</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>apply</goal>
+                                </goals>
+                                <phase>validate</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-formats</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <formats>
+                                <format>
+                                    <includes>
+                                        <include>.gitattributes</include>
+                                        <include>.gitignore</include>
+                                    </includes>
+                                    <trimTrailingWhitespace />
+                                    <endWithNewline />
+                                    <indent>
+                                        <tabs>true</tabs>
+                                        <spacesPerTab>4</spacesPerTab>
+                                    </indent>
+                                </format>
+                            </formats>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-prettier-java</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <java>
+                                <prettier>
+                                    <devDependencies>
+                                        <prettier>2.8.8</prettier>
+                                        <prettier-plugin-java>2.2.0</prettier-plugin-java>
+                                    </devDependencies>
+                                    <config>
+                                        <tabWidth>4</tabWidth>
+                                        <parser>java</parser>
+                                        <plugins>prettier-plugin-java</plugins><!-- this is only for prettier 3.0.0 and above: an additional 'plugins' config element is required -->
+                                    </config>
+                                </prettier>
+                            </java>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-google-java-format</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <java>
+                                <googleJavaFormat>
+                                    <version>1.22.0</version>
+                                    <style>AOSP</style>
+                                    <reflowLongStrings>false</reflowLongStrings>
+                                </googleJavaFormat>
+                            </java>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-java</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <java>
+                                <trimTrailingWhitespace />
+                                <endWithNewline />
+
+                                <!-- Cleanthat will refactor code, but it may break style: apply it before formatter -->
+                                <cleanthat />
+
+                                <importOrder />
+                                <importOrder>
+                                    <!-- use an empty string for all the imports not specified explicitly, '|' to join group without blank line, and '\#` prefix for static imports. -->
+                                    <order>java,javax,,\#com.diffplug,\#java|\#javax,\#</order>
+
+                                </importOrder>
+
+                                <removeUnusedImports />
+                            </java>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-antlr</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <antlr4>
+                                <trimTrailingWhitespace />
+                                <endWithNewline />
+                                <antlr4Formatter />
+                            </antlr4>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-sql</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <sql>
+                                <trimTrailingWhitespace />
+                                <endWithNewline />
+                                <includes>
+                                    <include>**/*.sql</include>
+                                </includes>
+
+                                <dbeaver />
+                                <prettier>
+                                </prettier>
+                            </sql>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-pom</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <pom>
+                                <trimTrailingWhitespace />
+                                <endWithNewline />
+                                <sortPom>
+                                    <expandEmptyElements>false</expandEmptyElements>
+                                    <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
+                                    <keepBlankLines>true</keepBlankLines>
+                                    <nrOfIndentSpace>4</nrOfIndentSpace>
+
+                                    <!-- Sort order of elements: https://github.com/Ekryd/sortpom/wiki/PredefinedSortOrderProfiles-->
+                                    <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
+
+                                    <!-- Custom sort order of elements: https://raw.githubusercontent.com/Ekryd/sortpom/master/sorter/src/main/resources/custom_1.xml -->
+                                    <sortOrderFile />
+                                </sortPom>
+                            </pom>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-markdown</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <markdown>
+                                <includes>
+                                    <include>**/*.md</include>
+                                </includes>
+
+                                <flexmark />
+                            </markdown>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-json</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <json>
+                                <trimTrailingWhitespace />
+                                <endWithNewline />
+                                <includes>
+                                    <include>**/*.json</include>
+                                    <include>**/*.json5</include>
+                                </includes>
+
+                                <simple />
+                                <jackson>
+                                    <version>2.14.2</version>
+                                    <features>
+                                        <INDENT_OUTPUT>true</INDENT_OUTPUT>
+                                        <ORDER_MAP_ENTRIES_BY_KEYS>false</ORDER_MAP_ENTRIES_BY_KEYS>
+                                        <STRICT_DUPLICATE_DETECTION>true</STRICT_DUPLICATE_DETECTION>
+                                        <WRITE_DATES_AS_TIMESTAMPS>false</WRITE_DATES_AS_TIMESTAMPS>
+                                        <WRITE_DURATIONS_AS_TIMESTAMPS>false</WRITE_DURATIONS_AS_TIMESTAMPS>
+                                        <WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS>false</WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS>
+                                        <READ_DATE_TIMESTAMPS_AS_NANOSECONDS>false</READ_DATE_TIMESTAMPS_AS_NANOSECONDS>
+                                    </features>
+                                    <jsonFeatures>
+                                        <QUOTE_FIELD_NAMES>false</QUOTE_FIELD_NAMES>
+                                        <ALLOW_YAML_COMMENTS>true</ALLOW_YAML_COMMENTS>
+                                        <ALLOW_UNQUOTED_CONTROL_CHARS>true</ALLOW_UNQUOTED_CONTROL_CHARS>
+                                        <ALLOW_UNQUOTED_FIELD_NAMES>true</ALLOW_UNQUOTED_FIELD_NAMES>
+                                    </jsonFeatures>
+                                </jackson>
+                            </json>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-yaml</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <yaml>
+                                <endWithNewline />
+                                <includes>
+                                    <include>**/*.yaml</include>
+                                    <include>**/*.yml</include>
+                                </includes>
+
+                                <jackson>
+                                    <version>2.14.2</version>
+                                </jackson>
+                            </yaml>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>spotless-shell</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <shell>
+                                <includes>
+                                    <include>**/*.sh</include>
+                                </includes>
+
+                                <trimTrailingWhitespace />
+                                <endWithNewline />
+                                <shfmt>
+                                    <version>3.8.0</version>
+                                </shfmt>
+                            </shell>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
