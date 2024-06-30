@@ -46,6 +46,8 @@
                     <printWidth>120</printWidth>
                     <tabWidth>4</tabWidth>
                     <useTabs>false</useTabs>
+                    <nodePath>node</nodePath>
+                    <npmPath>npm</npmPath>
                 </configuration>
             </plugin>
 
