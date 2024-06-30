@@ -231,13 +231,13 @@ delete-local-merged:
 # Delete branches from origin merged into configurable upstream/main
 delete-remote-merged:
     #!/usr/bin/env bash
-    set -Eeuo pipefail
+    set -Eeu
     if [ "{{offline}}" != "true" ]; then
         git branch --remote --list 'origin/*' --merged remotes/{{upstream_remote}}/{{upstream_branch}} \
             | grep --invert-match {{upstream_branch}} \
             | grep --invert-match HEAD \
-            | grep "remotes/origin/" \
-            | grep --invert-match "remotes/origin/pr/" \
+            | grep "origin/" \
+            | grep --invert-match "origin/pr/" \
             | cut -d "/" -f 3- \
             | xargs git push --delete origin
     else
