@@ -1,0 +1,17 @@
+version: "1.0"
+linter: jetbrains/qodana-jvm:2024.1
+bootstrap: ./mvnw install -DskipTests
+fixesStrategy: apply
+include:
+  - name: Deprecation
+  - name: JavadocLinkAsPlainText
+  - name: NotNullFieldNotInitialized
+  - name: NullableProblems
+  - name: SimplifyStreamApiCallChains
+  - name: UnnecessaryDefault
+  - name: FieldCanBeLocal
+  - name: ExtractMethodRecommender
+  - name: UNCHECKED_WARNING
+  - name: UnnecessaryLocalVariable
+  - name: ArraysAsListWithZeroOrOneArgument
+  - name: RedundantCast
