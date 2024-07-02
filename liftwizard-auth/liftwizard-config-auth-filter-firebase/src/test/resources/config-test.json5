@@ -1,5 +1,5 @@
 {
-  type          : "firebase",
-  databaseUrl   : "databaseUrl",
+  type: "firebase",
+  databaseUrl: "databaseUrl",
   firebaseConfig: "firebaseConfig",
 }

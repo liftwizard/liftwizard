@@ -1,123 +1,123 @@
 {
-  "template": "Hello, %s!",
-  "defaultName": "Stranger",
-  "clock": {
-    "type": "incrementing"
+  template: "Hello, %s!",
+  defaultName: "Stranger",
+  clock: {
+    type: "incrementing",
   },
-  "uuid": {
-    "type": "seed",
-    "seed": "example seed",
+  uuid: {
+    type: "seed",
+    seed: "example seed",
   },
-  "server": {
-    "detailedJsonProcessingExceptionMapper": true,
-    "applicationConnectors": [
+  server: {
+    detailedJsonProcessingExceptionMapper: true,
+    applicationConnectors: [
       {
-        "type": "http",
-        "port": 0,
-      }
+        type: "http",
+        port: 0,
+      },
     ],
-    "adminConnectors": [
+    adminConnectors: [
       {
-        "type": "http",
-        "port": 0,
-      }
-    ]
+        type: "http",
+        port: 0,
+      },
+    ],
   },
-  "logging": {
-    "level": "INFO",
-    "appenders": [
+  logging: {
+    level: "INFO",
+    appenders: [
       {
-        "type": "buffered",
-        "timeZone": "${LOGGING_TIMEZONE:-system}",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-        "includeCallerData": true,
+        type: "buffered",
+        timeZone: "${LOGGING_TIMEZONE:-system}",
+        logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+        includeCallerData: true,
       },
       {
-        "type": "file",
-        "currentLogFilename": "./logs/application.log",
-        "archive": true,
-        "archivedLogFilenamePattern": "./logs/application-%d-%i.log.gz",
-        "archivedFileCount": 7,
-        "maxFileSize": "1 megabyte",
+        type: "file",
+        currentLogFilename: "./logs/application.log",
+        archive: true,
+        archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
+        archivedFileCount: 7,
+        maxFileSize: "1 megabyte",
       },
       {
-        "type"                      : "file-logstash",
-        "currentLogFilename"        : "./logs/logstash.jsonl",
-        "archivedLogFilenamePattern": "./logs/logstash-%d.jsonl",
-        "includeCallerData"         : true,
-        "encoder": {
-          "includeContext": true,
-          "includeMdc": true,
-          "includeStructuredArguments": true,
-          "includedNonStructuredArguments": true,
-          "includeTags": true,
-          "prettyPrint": false,
-        }
-      }
-    ]
-  },
-  "configLogging": {
-    "enabled": true
-  },
-  "h2": {
-    "enabled": true,
-    "webPort": 8082,
-    "tcpPort": 9092,
-  },
-  "dataSources": [
-    {
-      "name": "h2-mem",
-      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
-      "user": "sa",
-      "password": "",
-      "url": "jdbc:p6spy:h2:mem:",
-    },
-    {
-      "name": "h2-tcp",
-      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
-      "user": "sa",
-      "password": "",
-      "url": "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2",
-    },
-    {
-      "name": "h2-file",
-      "driverClass": "com.p6spy.engine.spy.P6SpyDriver",
-      "user": "sa",
-      "password": "",
-      "url": "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2",
-    },
-    {
-      "name"                : "postgres",
-      "driverClass"         : "org.postgresql.Driver",
-      "readOnlyByDefault"   : false,
-      "user"                : "${JDBC_DATABASE_USERNAME}",
-      "password"            : "${JDBC_DATABASE_PASSWORD}",
-      "url"                 : "${JDBC_DATABASE_URL}",
-    }
-  ],
-  "connectionManagers": [
-    {
-      "connectionManagerName": "h2-tcp",
-      "dataSourceName": "h2-tcp",
-      "databaseType": "H2",
-      "schemaName": "liftwizard-app-h2",
-    },
-  ],
-  "reladomo": {
-    "runtimeConfigurationPaths": [
-      "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
-    ]
-  },
-  "liquibase": {
-    "enabled": true,
-    "dataSourceMigrations": [
-      {
-        "dataSourceName": "h2-tcp",
-        "migrationFileName": "migrations.xml",
-        "migrationFileLocation": "classpath",
-        "contexts": [],
-      }
+        type: "file-logstash",
+        currentLogFilename: "./logs/logstash.jsonl",
+        archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+        includeCallerData: true,
+        encoder: {
+          includeContext: true,
+          includeMdc: true,
+          includeStructuredArguments: true,
+          includedNonStructuredArguments: true,
+          includeTags: true,
+          prettyPrint: false,
+        },
+      },
     ],
-    "dryRun": false
-  }
+  },
+  configLogging: {
+    enabled: true,
+  },
+  h2: {
+    enabled: true,
+    webPort: 8082,
+    tcpPort: 9092,
+  },
+  dataSources: [
+    {
+      name: "h2-mem",
+      driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+      user: "sa",
+      password: "",
+      url: "jdbc:p6spy:h2:mem:",
+    },
+    {
+      name: "h2-tcp",
+      driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+      user: "sa",
+      password: "",
+      url: "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2",
+    },
+    {
+      name: "h2-file",
+      driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+      user: "sa",
+      password: "",
+      url: "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2",
+    },
+    {
+      name: "postgres",
+      driverClass: "org.postgresql.Driver",
+      readOnlyByDefault: false,
+      user: "${JDBC_DATABASE_USERNAME}",
+      password: "${JDBC_DATABASE_PASSWORD}",
+      url: "${JDBC_DATABASE_URL}",
+    },
+  ],
+  connectionManagers: [
+    {
+      connectionManagerName: "h2-tcp",
+      dataSourceName: "h2-tcp",
+      databaseType: "H2",
+      schemaName: "liftwizard-app-h2",
+    },
+  ],
+  reladomo: {
+    runtimeConfigurationPaths: [
+      "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml",
+    ],
+  },
+  liquibase: {
+    enabled: true,
+    dataSourceMigrations: [
+      {
+        dataSourceName: "h2-tcp",
+        migrationFileName: "migrations.xml",
+        migrationFileLocation: "classpath",
+        contexts: [],
+      },
+    ],
+    dryRun: false,
+  },
 }

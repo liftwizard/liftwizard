@@ -1,7 +1,5 @@
 {
-  type      : "url",
+  type: "url",
   onMatch: "DENY",
-  urls: [
-    "banned",
-  ],
+  urls: ["banned"],
 }
