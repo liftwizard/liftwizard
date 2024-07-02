@@ -14,19 +14,41 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard</artifactId>
         <version>2.1.14-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
 
     <artifactId>liftwizard-maven-build</artifactId>
+    <packaging>pom</packaging>
 
     <name>Liftwizard Maven Build (Module Group)</name>
+
+    <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web services.</description>
+
+    <url>https://github.com/motlin/liftwizard</url>
+
+    <inceptionYear>2020</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>motlin</id>
+            <name>Craig Motlin</name>
+            <email>cmotlin@gmail.com</email>
+            <url>https://github.com/motlin</url>
+        </developer>
+    </developers>
 
     <modules>
         <module>liftwizard-bom</module>
@@ -37,11 +59,12 @@
         <module>liftwizard-profile-parent</module>
     </modules>
 
-    <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web
-        services.
-    </description>
-
-    <url>https://github.com/motlin/liftwizard</url>
+    <scm>
+        <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
+        <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/motlin/liftwizard</url>
+    </scm>
 
     <issueManagement>
         <system>GitHub Issues</system>
@@ -52,30 +75,4 @@
         <system>CircleCI</system>
         <url>https://app.circleci.com/pipelines/github/motlin/liftwizard</url>
     </ciManagement>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <url>https://github.com/motlin/liftwizard</url>
-        <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
-        <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
-
-    <inceptionYear>2020</inceptionYear>
-
-    <developers>
-        <developer>
-            <name>Craig Motlin</name>
-            <email>cmotlin@gmail.com</email>
-            <url>https://github.com/motlin</url>
-            <id>motlin</id>
-        </developer>
-    </developers>
 </project>

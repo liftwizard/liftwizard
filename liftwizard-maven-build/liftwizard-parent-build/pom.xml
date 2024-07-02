@@ -14,15 +14,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-grandparent-build</artifactId>
         <version>2.1.14-SNAPSHOT</version>
         <relativePath>../liftwizard-grandparent-build</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>liftwizard-parent-build</artifactId>
 
@@ -147,10 +146,10 @@
                             </configuration>
                             <executions>
                                 <execution>
-                                    <phase>package</phase>
                                     <goals>
                                         <goal>shade</goal>
                                     </goals>
+                                    <phase>package</phase>
                                 </execution>
                             </executions>
                         </plugin>
@@ -169,6 +168,9 @@
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <version>3.4.0</version>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
+                        </configuration>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -176,9 +178,6 @@
                                 <version>2.1.14-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check semantics</id>
@@ -201,6 +200,9 @@
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <version>3.4.0</version>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
+                        </configuration>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -208,9 +210,6 @@
                                 <version>2.1.14-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check strict semantics</id>
@@ -233,6 +232,9 @@
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <version>3.4.0</version>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
+                        </configuration>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -240,9 +242,6 @@
                                 <version>2.1.14-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check formatting</id>
@@ -266,6 +265,9 @@
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <version>3.4.0</version>
+                        <configuration>
+                            <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
+                        </configuration>
                         <dependencies>
                             <dependency>
                                 <groupId>io.liftwizard</groupId>
@@ -273,9 +275,6 @@
                                 <version>2.1.14-SNAPSHOT</version>
                             </dependency>
                         </dependencies>
-                        <configuration>
-                            <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>checkstyle:check strict formatting</id>

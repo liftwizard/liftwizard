@@ -14,10 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
 
     <parent>
         <groupId>io.liftwizard</groupId>
@@ -27,6 +25,7 @@
     </parent>
 
     <artifactId>liftwizard-profile-parent</artifactId>
+    <packaging>pom</packaging>
     <name>Liftwizard Maven Parent (profiles)</name>
 
     <description>Liftwizard profiles parent is a published parent pom with profiles that are off by default that enable several linters and validators.</description>
@@ -81,10 +80,12 @@
                                     <banLatest>true</banLatest>
                                     <banRelease>true</banRelease>
                                     <banSnapshots>false</banSnapshots>
+                                    <!--region spotless:off -->
                                     <unCheckedPluginList>
                                         org.apache.maven.plugins:maven-site-plugin,
                                         org.apache.maven.plugins:maven-deploy-plugin
                                     </unCheckedPluginList>
+                                    <!--endregion spotless:on -->
                                 </requirePluginVersions>
                                 <bannedDependencies>
                                     <excludes>
@@ -133,10 +134,10 @@
                         <artifactId>prettier-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <phase>validate</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
+                                <phase>validate</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -154,10 +155,10 @@
                         <artifactId>prettier-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <phase>validate</phase>
                                 <goals>
                                     <goal>write</goal>
                                 </goals>
+                                <phase>validate</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -624,10 +625,10 @@
                             </configuration>
                             <executions>
                                 <execution>
-                                    <phase>package</phase>
                                     <goals>
                                         <goal>shade</goal>
                                     </goals>
+                                    <phase>package</phase>
                                 </execution>
                             </executions>
                         </plugin>
