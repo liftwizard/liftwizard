@@ -7,6 +7,10 @@ on:
 
 jobs:
   publish:
+    permissions:
+      id-token: write
+      attestations: write
+
     name: publish to Maven Central
     runs-on: ubuntu-latest
 
@@ -30,3 +34,7 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: '**/target/*.jar'
