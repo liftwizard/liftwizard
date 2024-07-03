@@ -14,14 +14,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-reladomo</artifactId>
         <version>2.1.14-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>liftwizard-reladomo-simulated-sequence</artifactId>
 
@@ -59,25 +58,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
 
-                <executions>
-                    <execution>
-                        <id>generateMithra</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
-
-                                <taskdef name="gen-reladomo" classpath="plugin_classpath" classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
-
-                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml" generateEcListMethod="true" generatedDir="${project.build.directory}/generated-sources/reladomo" nonGeneratedDir="${project.build.sourceDirectory}" generateConcreteClasses="true" />
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-
                 <dependencies>
 
                     <dependency>
@@ -93,6 +73,35 @@
                     </dependency>
 
                 </dependencies>
+
+                <executions>
+                    <execution>
+                        <id>generateMithra</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+
+                                <!--region spotless:off -->
+                                <taskdef
+                                        name="gen-reladomo"
+                                        classpath="plugin_classpath"
+                                        classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
+
+                                <gen-reladomo
+                                        xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml"
+                                        generateEcListMethod="true"
+                                        generatedDir="${project.build.directory}/generated-sources/reladomo"
+                                        nonGeneratedDir="${project.build.sourceDirectory}"
+                                        generateConcreteClasses="true" />
+                                <!--endregion spotless:on -->
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <!--endregion-->
 
@@ -104,10 +113,10 @@
                 <executions>
                     <execution>
                         <id>add-source</id>
-                        <phase>process-sources</phase>
                         <goals>
                             <goal>add-source</goal>
                         </goals>
+                        <phase>process-sources</phase>
                         <configuration>
                             <sources>
                                 <source>${project.build.directory}/generated-sources/reladomo/</source>

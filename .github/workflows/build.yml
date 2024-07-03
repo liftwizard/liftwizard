@@ -271,33 +271,6 @@ jobs:
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
 
-  spotless-antlr:
-    name: spotless (antlr)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v4
-        with:
-          key: maven-spotless-antlr-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
-
-      - name: 'Spotless Check: Antlr'
-        run: ./mvnw verify --activate-profiles 'spotless-check,spotless-antlr'
-
-      - name: 'Clean Maven cache'
-        run: rm -rf ~/.m2/repository/io/liftwizard
-
   spotless-sql:
     name: spotless (sql)
     runs-on: ubuntu-latest

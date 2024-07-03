@@ -46,7 +46,7 @@ jobs:
           publish_dir: ./deploy
           cname: liftwizard.io
           force_orphan: true
-          commit_message: "[skip ci] deploy to gh-pages"
+          commit_message: '[skip ci] deploy to gh-pages'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard

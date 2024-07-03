@@ -1,5 +1,5 @@
 {
   nameFormat: "thread-pool-name-%d",
   maxThreads: 1,
-  minThreads: 2
+  minThreads: 2,
 }

@@ -1,5 +1,5 @@
 {
-  "type": "header",
-  "header": "Authorization",
-  "prefix": "Impersonation"
+  type: "header",
+  header: "Authorization",
+  prefix: "Impersonation",
 }

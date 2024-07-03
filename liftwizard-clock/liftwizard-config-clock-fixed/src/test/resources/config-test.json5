@@ -1,5 +1,5 @@
 {
-  type    : "fixed",
-  instant : "2000-12-31T23:59:59Z",
+  type: "fixed",
+  instant: "2000-12-31T23:59:59Z",
   timeZone: "America/New_York",
 }
