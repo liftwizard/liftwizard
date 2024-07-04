@@ -27,6 +27,7 @@ jobs:
           paths: |
             ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Jacoco Code Coverage'
           update-comment: true
           min-coverage-overall: 0
           min-coverage-changed-files: 0
