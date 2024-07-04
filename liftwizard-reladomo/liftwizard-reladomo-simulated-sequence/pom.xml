@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-reladomo</artifactId>
-        <version>2.1.14-SNAPSHOT</version>
+        <version>2.1.14</version>
     </parent>
 
     <artifactId>liftwizard-reladomo-simulated-sequence</artifactId>
@@ -86,17 +86,9 @@
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
                                 <!--region spotless:off -->
-                                <taskdef
-                                        name="gen-reladomo"
-                                        classpath="plugin_classpath"
-                                        classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
+                                <taskdef name="gen-reladomo" classpath="plugin_classpath" classname="com.gs.fw.common.mithra.generator.MithraGenerator" />
 
-                                <gen-reladomo
-                                        xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml"
-                                        generateEcListMethod="true"
-                                        generatedDir="${project.build.directory}/generated-sources/reladomo"
-                                        nonGeneratedDir="${project.build.sourceDirectory}"
-                                        generateConcreteClasses="true" />
+                                <gen-reladomo xml="${project.basedir}/src/main/resources/reladomo/ObjectSequenceClassList.xml" generateEcListMethod="true" generatedDir="${project.build.directory}/generated-sources/reladomo" nonGeneratedDir="${project.build.sourceDirectory}" generateConcreteClasses="true" />
                                 <!--endregion spotless:on -->
                             </target>
                         </configuration>
