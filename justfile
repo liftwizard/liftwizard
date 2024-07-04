@@ -238,7 +238,7 @@ delete-remote-merged:
             | grep --invert-match HEAD \
             | grep "origin/" \
             | grep --invert-match "origin/pr/" \
-            | cut -d "/" -f 3- \
+            | cut -d "/" -f 2- \
             | xargs git push --delete origin
     else
         echo "Skipping delete-remote-merged in offline mode"
