@@ -135,7 +135,7 @@
             <dependency>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-annotations</artifactId>
-                <version>1.23</version>
+                <version>1.24</version>
             </dependency>
 
             <dependency>
