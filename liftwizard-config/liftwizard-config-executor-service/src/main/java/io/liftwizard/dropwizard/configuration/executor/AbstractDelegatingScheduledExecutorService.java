@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public abstract class AbstractDelegatingScheduledExecutorService
 {
     protected final ScheduledExecutorService delegate;
 
-    public AbstractDelegatingScheduledExecutorService(ScheduledExecutorService delegate)
+    protected AbstractDelegatingScheduledExecutorService(ScheduledExecutorService delegate)
     {
         this.delegate = Objects.requireNonNull(delegate);
     }

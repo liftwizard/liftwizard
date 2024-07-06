@@ -50,7 +50,7 @@ public abstract class AbstractMatchRule
     protected final Class<?> callingClass;
     protected final boolean  rerecordEnabled;
 
-    public AbstractMatchRule(@Nonnull Class<?> callingClass)
+    protected AbstractMatchRule(@Nonnull Class<?> callingClass)
     {
         this.callingClass    = Objects.requireNonNull(callingClass);
         this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));

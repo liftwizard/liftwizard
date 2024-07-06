@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.ConsoleAppender;
+import ch.qos.logback.core.Context;
 import ch.qos.logback.core.OutputStreamAppender;
 import ch.qos.logback.core.encoder.Encoder;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -89,7 +90,7 @@ public class LogstashConsoleAppenderFactory
         return this.wrapAsync(appender, asyncAppenderFactory);
     }
 
-    private OutputStreamAppender<ILoggingEvent> appender(LoggerContext context)
+    private OutputStreamAppender<ILoggingEvent> appender(Context context)
     {
         ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
         appender.setName("console-logstash-appender");

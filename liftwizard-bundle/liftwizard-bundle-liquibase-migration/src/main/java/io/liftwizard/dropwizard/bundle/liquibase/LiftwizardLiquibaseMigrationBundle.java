@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 
 import com.google.auto.service.AutoService;
 import io.dropwizard.db.ManagedDataSource;
@@ -166,11 +167,11 @@ public class LiftwizardLiquibaseMigrationBundle
         };
     }
 
-    private Database createDatabase(ManagedDataSource dataSource, String catalogName, String schemaName)
+    private Database createDatabase(DataSource dataSource, String catalogName, String schemaName)
             throws SQLException, LiquibaseException
     {
-        DatabaseConnection conn     = new JdbcConnection(dataSource.getConnection());
-        Database           database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(conn);
+        DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
+        Database           database   = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
         if (database.supportsCatalogs() && catalogName != null)
         {

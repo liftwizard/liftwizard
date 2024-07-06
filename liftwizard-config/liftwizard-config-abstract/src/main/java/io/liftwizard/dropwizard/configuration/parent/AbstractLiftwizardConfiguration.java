@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.parent;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -86,7 +85,7 @@ public abstract class AbstractLiftwizardConfiguration
     private CorsFactory              corsFactory              = new CorsFactory();
     @Valid
     @NotNull
-    private List<AuthFilterFactory>  authFilterFactories      = Arrays.asList();
+    private List<AuthFilterFactory>  authFilterFactories      = List.of();
     //endregion Services
 
     //region General

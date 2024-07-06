@@ -26,14 +26,14 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLit
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ParameterContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLiteralContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowingVisitor<T>
 {
     protected final RelatedFinder finder;
     protected final String        errorContext;
 
-    public AbstractLiteralVisitor(RelatedFinder finder, String errorContext)
+    protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext)
     {
         this.finder       = Objects.requireNonNull(finder);
         this.errorContext = Objects.requireNonNull(errorContext);
@@ -75,7 +75,7 @@ public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowin
         return this.throwTypeError(ctx);
     }
 
-    protected T throwTypeError(ParserRuleContext ctx)
+    protected T throwTypeError(ParseTree ctx)
     {
         String error = "Expected <%s> but found: <%s> in %s".formatted(
                 this.getExpectedType(),

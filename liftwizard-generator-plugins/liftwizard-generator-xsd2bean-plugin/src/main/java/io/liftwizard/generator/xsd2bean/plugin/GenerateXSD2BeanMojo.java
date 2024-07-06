@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package io.liftwizard.generator.xsd2bean.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -147,19 +148,7 @@ public class GenerateXSD2BeanMojo
 
         for (File schemaFile : schemaFiles)
         {
-            FreyaXmlGenerator generator = new FreyaXmlGenerator();
-            generator.setLogger(new FreyaMavenLogger(this.getLog()));
-
-            generator.setDestinationPackage(this.destinationPackage);
-            generator.setParserName(this.parserName);
-            generator.setGeneratedDir(this.outputDirectory.getAbsolutePath());
-            generator.setNonGeneratedDir(this.nonGeneratedSourcesDir.getAbsolutePath());
-            generator.setXsd(schemaFile.getAbsolutePath());
-
-            generator.setValidateAttributes(this.validateAttributes);
-            generator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
-            generator.setIgnorePackageNamingConvention(this.ignorePackageNamingConvention);
-            generator.setGenerateTopLevelSubstitutionElements(this.generateTopLevelSubstitutionElements);
+            FreyaXmlGenerator generator = this.getFreyaXmlGenerator(schemaFile);
 
             try
             {
@@ -174,7 +163,26 @@ public class GenerateXSD2BeanMojo
         this.addSourceRoot(this.outputDirectory);
     }
 
-    protected Set<File> getSchemaFiles() throws MojoExecutionException
+    @Nonnull
+    private FreyaXmlGenerator getFreyaXmlGenerator(File schemaFile)
+    {
+        FreyaXmlGenerator generator = new FreyaXmlGenerator();
+        generator.setLogger(new FreyaMavenLogger(this.getLog()));
+
+        generator.setDestinationPackage(this.destinationPackage);
+        generator.setParserName(this.parserName);
+        generator.setGeneratedDir(this.outputDirectory.getAbsolutePath());
+        generator.setNonGeneratedDir(this.nonGeneratedSourcesDir.getAbsolutePath());
+        generator.setXsd(schemaFile.getAbsolutePath());
+
+        generator.setValidateAttributes(this.validateAttributes);
+        generator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
+        generator.setIgnorePackageNamingConvention(this.ignorePackageNamingConvention);
+        generator.setGenerateTopLevelSubstitutionElements(this.generateTopLevelSubstitutionElements);
+        return generator;
+    }
+
+    private Set<File> getSchemaFiles() throws MojoExecutionException
     {
         try
         {
@@ -200,7 +208,7 @@ public class GenerateXSD2BeanMojo
         return scan.getIncludedSources(this.sourceDirectory, null);
     }
 
-    public Set<String> getIncludesPatterns()
+    private Set<String> getIncludesPatterns()
     {
         if (Iterate.isEmpty(this.includes))
         {
@@ -209,7 +217,7 @@ public class GenerateXSD2BeanMojo
         return this.includes;
     }
 
-    private void processSchemaFiles(@Nonnull Set<File> schemaFiles) throws MojoExecutionException
+    private void processSchemaFiles(@Nonnull Collection<File> schemaFiles) throws MojoExecutionException
     {
         if (schemaFiles.isEmpty())
         {

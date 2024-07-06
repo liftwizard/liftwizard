@@ -14,6 +14,6 @@ public class Template {
     }
 
     public String render(Optional<String> name) {
-        return format(content, name.orElse(defaultName));
+        return format(this.content, name.orElse(this.defaultName));
     }
 }

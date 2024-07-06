@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -86,7 +87,9 @@ public class JsonMatchRule
         {
             Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
             String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
-            URI    uri                    = this.callingClass.getResource(resourceClassPathLocation).toURI();
+
+            URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+            URI uri      = resource.toURI();
 
             if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
             {

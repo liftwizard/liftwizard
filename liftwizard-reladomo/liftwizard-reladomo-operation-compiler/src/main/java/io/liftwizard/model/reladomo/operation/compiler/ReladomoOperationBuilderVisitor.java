@@ -90,6 +90,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
@@ -236,7 +237,7 @@ public class ReladomoOperationBuilderVisitor<T>
 
     private ParameterCardinality getParameterCardinality(OperationBinaryOperatorContext ctx)
     {
-        ReladomoOperationVisitor<ParameterCardinality> operatorVisitor = new ParameterCardinalityVisitor();
+        ParseTreeVisitor<ParameterCardinality> operatorVisitor = new ParameterCardinalityVisitor();
         return ctx.binaryOperator().accept(operatorVisitor);
     }
 

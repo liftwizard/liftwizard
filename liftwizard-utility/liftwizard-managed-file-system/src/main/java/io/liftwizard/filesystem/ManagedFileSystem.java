@@ -65,15 +65,12 @@ public final class ManagedFileSystem
     public static Path get(URI uri)
     {
         String scheme = uri.getScheme();
-        switch (scheme)
+        return switch (scheme)
         {
-            case "file":
-                return getFile(uri);
-            case "jar":
-                return getJar(uri);
-            default:
-                throw new IllegalArgumentException("Unsupported scheme: " + scheme);
-        }
+            case "file" -> getFile(uri);
+            case "jar" -> getJar(uri);
+            default -> throw new IllegalArgumentException("Unsupported scheme: " + scheme);
+        };
     }
 
     private static Path getFile(URI uri)

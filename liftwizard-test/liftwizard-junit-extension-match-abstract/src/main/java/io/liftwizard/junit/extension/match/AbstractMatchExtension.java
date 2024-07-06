@@ -39,12 +39,12 @@ public abstract class AbstractMatchExtension
     protected final ResourceRerecorderExtension resourceRerecorderExtension;
     protected final ErrorCollectorExtension     errorCollectorExtension = new ErrorCollectorExtension();
 
-    public AbstractMatchExtension(@Nonnull Class<?> callingClass)
+    protected AbstractMatchExtension(@Nonnull Class<?> callingClass)
     {
         this(callingClass, Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD")));
     }
 
-    public AbstractMatchExtension(@Nonnull Class<?> callingClass, boolean rerecordEnabled)
+    protected AbstractMatchExtension(@Nonnull Class<?> callingClass, boolean rerecordEnabled)
     {
         this.callingClass                = Objects.requireNonNull(callingClass);
         this.rerecordEnabled             = rerecordEnabled;
