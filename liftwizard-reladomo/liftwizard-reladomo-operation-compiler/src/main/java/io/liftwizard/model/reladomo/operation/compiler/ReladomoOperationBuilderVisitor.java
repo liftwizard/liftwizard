@@ -456,11 +456,15 @@ public class ReladomoOperationBuilderVisitor<T>
                         dateAttribute,
                         (ImmutableList<LocalDate>) parameter);
             }
-            if (attribute instanceof TimestampAttribute || attribute instanceof AsOfAttribute)
+            if (attribute instanceof TimestampAttribute)
             {
                 return new InstantListBinaryOperatorVisitor(
                         (TimestampAttribute) attribute,
                         (ImmutableList<Instant>) parameter);
+            }
+            if (attribute instanceof AsOfAttribute)
+            {
+                throw new AssertionError("AsOfAttribute should not be used with a list of parameters");
             }
             throw new AssertionError(attribute.getClass().getSuperclass().getCanonicalName());
         }
