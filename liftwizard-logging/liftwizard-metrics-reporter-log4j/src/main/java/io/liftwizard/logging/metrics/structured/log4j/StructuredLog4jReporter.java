@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,7 @@ public class StructuredLog4jReporter
         this.log(map);
     }
 
-    private void logMeter(String name, Meter meter)
+    private void logMeter(String name, Metered meter)
     {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("metric_type", "METER");

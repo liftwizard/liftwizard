@@ -50,6 +50,6 @@ public class PersonResource {
     }
 
     private Person findSafely(long personId) {
-        return peopleDAO.findById(personId).orElseThrow(() -> new NotFoundException("No such user."));
+        return this.peopleDAO.findById(personId).orElseThrow(() -> new NotFoundException("No such user."));
     }
 }

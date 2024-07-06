@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -93,7 +94,8 @@ public class ResourceRerecorderExtension
     public String handleMismatch(String resourceClassPathLocation, String fileContents)
             throws URISyntaxException, FileNotFoundException
     {
-        URI uri = this.callingClass.getResource(resourceClassPathLocation).toURI();
+        URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+        URI uri      = resource.toURI();
 
         if (this.rerecordedPaths.contains(resourceClassPathLocation))
         {

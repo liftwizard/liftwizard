@@ -37,7 +37,7 @@ public class HelloWorldResource {
     @Timed(name = "get-requests")
     @CacheControl(maxAge = 1, maxAgeUnit = TimeUnit.DAYS)
     public Saying sayHello(@QueryParam("name") Optional<String> name) {
-        return new Saying(counter.incrementAndGet(), template.render(name));
+        return new Saying(this.counter.incrementAndGet(), this.template.render(name));
     }
 
     @POST
@@ -50,7 +50,7 @@ public class HelloWorldResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String receiveDate(@QueryParam("date") Optional<DateTimeParam> dateTimeParam) {
         if (dateTimeParam.isPresent()) {
-            final DateTimeParam actualDateTimeParam = dateTimeParam.get();
+            DateTimeParam actualDateTimeParam = dateTimeParam.get();
             LOGGER.info("Received a date: {}", actualDateTimeParam);
             return actualDateTimeParam.get().toString();
         } else {

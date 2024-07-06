@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.cors;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -34,7 +33,7 @@ public class CorsFactory
     private @Valid @NotNull String       allowedHeaders   = "X-Requested-With,Content-Type,Accept,Origin,Authorization";
     private @Valid @NotNull String       allowedMethods   = "OPTIONS,GET,PUT,POST,PATCH,DELETE,HEAD";
     private @Valid @NotNull String       allowCredentials = "true";
-    private @Valid @NotNull List<String> urlPatterns      = Arrays.asList("/*");
+    private @Valid @NotNull List<String> urlPatterns      = List.of("/*");
 
     public boolean isEnabled()
     {

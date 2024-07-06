@@ -87,8 +87,8 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap)
     {
         bootstrap.addBundle(new ClockBundle());
-        HttpsRedirect  httpsRedirect  = new HttpsRedirect();
-        RedirectBundle redirectBundle = new RedirectBundle(httpsRedirect);
+        var httpsRedirect  = new HttpsRedirect();
+        var redirectBundle = new RedirectBundle(httpsRedirect);
         bootstrap.addBundle(redirectBundle);
         bootstrap.addBundle(new UUIDBundle());
         bootstrap.addBundle(new MetricsUIBundle("/dashboard/*"));

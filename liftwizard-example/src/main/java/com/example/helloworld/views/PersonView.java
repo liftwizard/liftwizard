@@ -10,14 +10,14 @@ public class PersonView extends View {
         FREEMARKER("freemarker/person.ftl"),
         MUSTACHE("mustache/person.mustache");
 
-        private String templateName;
+        private final String templateName;
 
         Template(String templateName) {
             this.templateName = templateName;
         }
 
         public String getTemplateName() {
-            return templateName;
+            return this.templateName;
         }
     }
 
@@ -27,6 +27,6 @@ public class PersonView extends View {
     }
 
     public Person getPerson() {
-        return person;
+        return this.person;
     }
 }

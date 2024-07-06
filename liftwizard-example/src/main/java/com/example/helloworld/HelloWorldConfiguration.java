@@ -1,6 +1,5 @@
 package com.example.helloworld;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +73,7 @@ public class HelloWorldConfiguration
     private @NotNull @Valid UUIDSupplierFactory      uuidFactory              = new SystemUUIDSupplierFactory();
     private @Valid @NotNull JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
     private @Valid @NotNull H2Factory                h2Factory                = new H2Factory();
-    private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories     = Arrays.asList();
+    private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories     = List.of();
     private @Valid @NotNull ReladomoFactory          reladomoFactory          = new ReladomoFactory();
     private @Valid @NotNull GraphQLFactory           graphQLFactory           = new GraphQLFactory();
 
@@ -97,7 +96,7 @@ public class HelloWorldConfiguration
 
     @JsonProperty
     public String getTemplate() {
-        return template;
+        return this.template;
     }
 
     @JsonProperty
@@ -107,7 +106,7 @@ public class HelloWorldConfiguration
 
     @JsonProperty
     public String getDefaultName() {
-        return defaultName;
+        return this.defaultName;
     }
 
     @JsonProperty
@@ -116,17 +115,17 @@ public class HelloWorldConfiguration
     }
 
     public Template buildTemplate() {
-        return new Template(template, defaultName);
+        return new Template(this.template, this.defaultName);
     }
 
     @JsonProperty("viewRendererConfiguration")
     public Map<String, Map<String, String>> getViewRendererConfiguration() {
-        return viewRendererConfiguration;
+        return this.viewRendererConfiguration;
     }
 
     @JsonProperty("viewRendererConfiguration")
     public void setViewRendererConfiguration(Map<String, Map<String, String>> viewRendererConfiguration) {
-        final ImmutableMap.Builder<String, Map<String, String>> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Map<String, String>> builder = ImmutableMap.builder();
         for (Map.Entry<String, Map<String, String>> entry : viewRendererConfiguration.entrySet()) {
             builder.put(entry.getKey(), ImmutableMap.copyOf(entry.getValue()));
         }

@@ -26,6 +26,7 @@ import javax.validation.constraints.NotNull;
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.Context;
 import ch.qos.logback.core.FileAppender;
 import ch.qos.logback.core.OutputStreamAppender;
 import ch.qos.logback.core.encoder.Encoder;
@@ -294,7 +295,7 @@ public class LogstashAccessFileAppenderFactory
     @Nonnull
     private TimeBasedRollingPolicy<IAccessEvent> getTimeBasedRollingPolicy(
             RollingFileAppender<IAccessEvent> appender,
-            LoggerContext context)
+            Context context)
     {
         TimeBasedFileNamingAndTriggeringPolicy<IAccessEvent> triggeringPolicy =
                 new DefaultTimeBasedFileNamingAndTriggeringPolicy<>();
@@ -308,7 +309,7 @@ public class LogstashAccessFileAppenderFactory
 
     private RollingFileAppender<IAccessEvent> dateAndSizeSpecifiedPolicy(
             RollingFileAppender<IAccessEvent> appender,
-            LoggerContext context)
+            Context context)
     {
         var rollingPolicy = new FixedWindowRollingPolicy();
         rollingPolicy.setContext(context);
@@ -331,7 +332,7 @@ public class LogstashAccessFileAppenderFactory
         return appender;
     }
 
-    private void configureAppender(FileAppender<IAccessEvent> appender, LoggerContext context)
+    private void configureAppender(FileAppender<IAccessEvent> appender, Context context)
     {
         var fileSize = new FileSize(this.bufferSize.toBytes());
 

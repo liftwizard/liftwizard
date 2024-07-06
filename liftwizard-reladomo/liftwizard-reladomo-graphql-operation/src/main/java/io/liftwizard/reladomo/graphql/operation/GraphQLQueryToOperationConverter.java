@@ -267,8 +267,8 @@ public class GraphQLQueryToOperationConverter
         {
             case "eq" -> attribute.eq((String) operationParameter);
             case "notEq" -> attribute.notEq((String) operationParameter);
-            case "in" -> attribute.in(new LinkedHashSet<String>((Collection<? extends String>) operationParameter));
-            case "notIn" -> attribute.notIn(new LinkedHashSet<String>((Collection<? extends String>) operationParameter));
+            case "in" -> attribute.in(new LinkedHashSet<>((Collection<String>) operationParameter));
+            case "notIn" -> attribute.notIn(new LinkedHashSet<>((Collection<String>) operationParameter));
             case "greaterThan" -> attribute.greaterThan((String) operationParameter);
             case "greaterThanEquals" -> attribute.greaterThanEquals((String) operationParameter);
             case "lessThan" -> attribute.lessThan((String) operationParameter);
@@ -284,7 +284,7 @@ public class GraphQLQueryToOperationConverter
                     attribute.toLowerCase(),
                     (Map<String, ?>) operationParameter);
             case "wildCardEq", "wildCardEquals" -> attribute.wildCardEq((String) operationParameter);
-            case "wildCardIn" -> attribute.wildCardIn(new LinkedHashSet<>((Collection<? extends String>) operationParameter));
+            case "wildCardIn" -> attribute.wildCardIn(new LinkedHashSet<>((Collection<String>) operationParameter));
             case "wildCardNotEq", "wildCardNotEquals" -> attribute.wildCardNotEq((String) operationParameter);
             case "subString" -> this.convertStringAttribute(
                     finderInstance,
