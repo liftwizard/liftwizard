@@ -211,7 +211,9 @@ rebase-all:
 
 # git absorb into configurable upstream/main
 absorb:
-    git absorb --base {{upstream_remote}}/{{upstream_branch}} --force
+    git absorb \
+        --base {{upstream_remote}}/{{upstream_branch}} \
+        --force
 
 # git rebase onto configurable upstream/main
 rebase:
@@ -246,3 +248,9 @@ delete-remote-merged:
 
 # Delete local and remote branches that are merged into configurable upstream/main
 delete-merged: delete-local-merged delete-remote-merged
+
+qodana:
+    op run -- qodana scan \
+        --disable-update-checks \
+        --apply-fixes \
+        --linter jetbrains/qodana-jvm:2024.1
