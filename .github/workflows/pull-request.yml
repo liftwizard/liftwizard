@@ -2,7 +2,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  maven-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,6 +13,29 @@ jobs:
           path: ~/.m2/repository
           restore-keys: |
             maven-test-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - run: ./mvnw verify
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/cool/klass
+
+  maven-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-coverage-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-coverage-
             maven-
 
       - uses: actions/setup-java@v4
@@ -35,7 +58,7 @@ jobs:
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
 
-  enforcer:
+  maven-enforcer:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +82,7 @@ jobs:
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
 
-  dependency:
+  maven-dependency:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -83,7 +106,7 @@ jobs:
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
 
-  javadoc:
+  maven-javadoc:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -214,6 +237,61 @@ jobs:
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
+
+  maven-rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-rewrite-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run rewrite-maven-plugin
+        run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  # Check for reproducible builds with artifact:check-buildplan
+  maven-reproducible:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-reproducible-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-reproducible-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run artifact:check-buildplan
+        run: ./mvnw verify artifact:check-buildplan -DskipTests
+
+      - name: 'Clean Maven cache'
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  # Check if the new commits in a Pull Request contain a merge commit. If so, fail and print them out.
+  forbid-merge-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: motlin/forbid-merge-commits-action@main
 
   spotless-formats:
     name: spotless (formats)
@@ -430,58 +508,3 @@ jobs:
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
-
-  rewrite:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-rewrite-
-            maven-
-
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
-
-      - name: Run rewrite-maven-plugin
-        run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
-
-      - name: 'Clean Maven cache'
-        run: rm -rf ~/.m2/repository/io/liftwizard
-
-  # Check for reproducible builds with artifact:check-buildplan
-  reproducible:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          key: maven-reproducible-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-reproducible-
-            maven-
-
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
-
-      - name: Run artifact:check-buildplan
-        run: ./mvnw verify artifact:check-buildplan -DskipTests
-
-      - name: 'Clean Maven cache'
-        run: rm -rf ~/.m2/repository/io/liftwizard
-
-  # Check if the new commits in a Pull Request contain a merge commit. If so, fail and print them out.
-  forbid-merge-commits:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: motlin/forbid-merge-commits-action@main
