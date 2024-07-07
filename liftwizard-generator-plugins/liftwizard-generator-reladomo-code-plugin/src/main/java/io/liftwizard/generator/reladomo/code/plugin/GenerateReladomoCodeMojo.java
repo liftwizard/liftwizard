@@ -83,7 +83,16 @@ public class GenerateReladomoCodeMojo
             throw new IllegalStateException("Could not find " + tempFile);
         }
 
-        CoreMithraGenerator coreGenerator = new CoreMithraGenerator();
+        CoreMithraGenerator coreGenerator = this.getGenerator(tempFile);
+        coreGenerator.execute();
+
+        this.mavenProject.addCompileSourceRoot(this.generatedDir.getAbsolutePath());
+    }
+
+    @Nonnull
+    private CoreMithraGenerator getGenerator(Path tempFile)
+    {
+        var coreGenerator = new CoreMithraGenerator();
         coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
         coreGenerator.setXml(tempFile.toString());
         coreGenerator.setGeneratedDir(this.generatedDir.getAbsolutePath());
@@ -91,9 +100,7 @@ public class GenerateReladomoCodeMojo
         coreGenerator.setGenerateConcreteClasses(this.generateConcreteClasses);
         coreGenerator.setWarnAboutConcreteClasses(this.warnAboutConcreteClasses);
         coreGenerator.setGenerateEcListMethod(this.generateEcListMethod);
-        coreGenerator.execute();
-
-        this.mavenProject.addCompileSourceRoot(this.generatedDir.getAbsolutePath());
+        return coreGenerator;
     }
 
     @Nonnull

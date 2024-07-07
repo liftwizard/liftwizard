@@ -94,7 +94,20 @@ public class GenerateReladomoDatabaseMojo
             throw new IllegalStateException("Could not find " + tempFile);
         }
 
-        CoreMithraDbDefinitionGenerator coreGenerator = new CoreMithraDbDefinitionGenerator();
+        CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(tempFile);
+        coreGenerator.execute();
+
+        Resource resource = new Resource();
+        resource.setDirectory(this.outputDirectory.getAbsolutePath());
+        // TODO: Should be based on the output path
+        resource.setTargetPath("sql");
+        this.mavenProject.addResource(resource);
+    }
+
+    @Nonnull
+    private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile)
+    {
+        var coreGenerator = new CoreMithraDbDefinitionGenerator();
         coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
         coreGenerator.setXml(tempFile.toString());
         coreGenerator.setGeneratedDir(this.outputDirectory.getAbsolutePath());
@@ -105,13 +118,7 @@ public class GenerateReladomoDatabaseMojo
         coreGenerator.setDefaultFinalGetters(this.defaultFinalGetters);
         coreGenerator.setForceOffHeap(this.forceOffHeap);
         coreGenerator.setGenerateFileHeaders(this.generateFileHeaders);
-        coreGenerator.execute();
-
-        Resource resource = new Resource();
-        resource.setDirectory(this.outputDirectory.getAbsolutePath());
-        // TODO: Should be based on the output path
-        resource.setTargetPath("sql");
-        this.mavenProject.addResource(resource);
+        return coreGenerator;
     }
 
     @Nonnull

@@ -18,6 +18,7 @@ package io.liftwizard.dropwizard.bundle.prioritized;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -36,6 +37,8 @@ public interface PrioritizedBundle
 
     String MDC_BUNDLE   = "liftwizard.bundle";
     String MDC_PRIORITY = "liftwizard.priority";
+
+    Pattern DURATION_PATTERN = Pattern.compile("(\\d[HMS])(?!$)");
 
     default int getPriority()
     {
@@ -67,8 +70,9 @@ public interface PrioritizedBundle
         }
         Instant end = Instant.now();
         Duration duration = Duration.between(start, end);
-        String durationPrettyString = duration.toString().substring(2)
-                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+        String durationPrettyString = DURATION_PATTERN
+                .matcher(duration.toString().substring(2))
+                .replaceAll("$1 ")
                 .toLowerCase();
         LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
     }
@@ -89,8 +93,9 @@ public interface PrioritizedBundle
         }
         Instant end = Instant.now();
         Duration duration = Duration.between(start, end);
-        String durationPrettyString = duration.toString().substring(2)
-                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+        String durationPrettyString = DURATION_PATTERN
+                .matcher(duration.toString().substring(2))
+                .replaceAll("$1 ")
                 .toLowerCase();
         LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
     }

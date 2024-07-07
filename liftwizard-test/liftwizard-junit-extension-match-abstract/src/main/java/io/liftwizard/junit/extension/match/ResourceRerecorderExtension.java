@@ -86,9 +86,24 @@ public class ResourceRerecorderExtension
 
     public boolean mustRerecord(String resourceClassPathLocation)
     {
-        InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-        return (this.rerecordEnabled || inputStream == null)
-                && !this.rerecordedPaths.contains(resourceClassPathLocation);
+        if (this.rerecordEnabled && !this.rerecordedPaths.contains(resourceClassPathLocation))
+        {
+            return true;
+        }
+
+        if (this.rerecordedPaths.contains(resourceClassPathLocation))
+        {
+            return false;
+        }
+
+        try (InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation))
+        {
+            return inputStream == null;
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public String handleMismatch(String resourceClassPathLocation, String fileContents)

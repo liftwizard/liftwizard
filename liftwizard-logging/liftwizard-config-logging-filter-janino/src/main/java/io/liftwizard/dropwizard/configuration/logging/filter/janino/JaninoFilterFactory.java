@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.janino;
 
+import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -45,11 +46,7 @@ public class JaninoFilterFactory
     @Override
     public Filter<ILoggingEvent> build()
     {
-        var evaluator = new JaninoEventEvaluator();
-        evaluator.setExpression(this.javaExpression);
-        evaluator.setContext(LoggingUtil.getLoggerContext());
-        evaluator.setName(JaninoFilterFactory.class.getSimpleName() + ": '" + this.javaExpression + "'");
-        evaluator.start();
+        JaninoEventEvaluator evaluator = this.getJaninoEventEvaluator();
 
         var filter = new EvaluatorFilter<ILoggingEvent>();
         filter.setEvaluator(evaluator);
@@ -58,6 +55,17 @@ public class JaninoFilterFactory
         filter.start();
 
         return filter;
+    }
+
+    @Nonnull
+    private JaninoEventEvaluator getJaninoEventEvaluator()
+    {
+        var evaluator = new JaninoEventEvaluator();
+        evaluator.setExpression(this.javaExpression);
+        evaluator.setContext(LoggingUtil.getLoggerContext());
+        evaluator.setName(JaninoFilterFactory.class.getSimpleName() + ": '" + this.javaExpression + "'");
+        evaluator.start();
+        return evaluator;
     }
 
     @JsonProperty

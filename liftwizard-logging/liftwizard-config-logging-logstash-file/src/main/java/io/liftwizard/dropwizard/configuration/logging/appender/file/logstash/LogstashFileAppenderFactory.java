@@ -115,7 +115,7 @@ public class LogstashFileAppenderFactory
     }
 
     @JsonProperty
-    public void setArchivedLogFilenamePattern(String archivedLogFilenamePattern)
+    public void setArchivedLogFilenamePattern(@Nullable String archivedLogFilenamePattern)
     {
         this.archivedLogFilenamePattern = archivedLogFilenamePattern;
     }
@@ -266,7 +266,7 @@ public class LogstashFileAppenderFactory
 
     private RollingFileAppender<ILoggingEvent> configurePolicyWithDefaults(
             RollingFileAppender<ILoggingEvent> appender,
-            LoggerContext context)
+            Context context)
     {
         TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = this.maxFileSize == null
                 ? this.getTimeBasedRollingPolicy(appender, context)
@@ -314,12 +314,7 @@ public class LogstashFileAppenderFactory
             RollingFileAppender<ILoggingEvent> appender,
             Context context)
     {
-        var rollingPolicy = new FixedWindowRollingPolicy();
-        rollingPolicy.setContext(context);
-        rollingPolicy.setMaxIndex(this.archivedFileCount);
-        rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
-        rollingPolicy.setParent(appender);
-        rollingPolicy.start();
+        FixedWindowRollingPolicy rollingPolicy = this.getRollingPolicy(appender, context);
         appender.setRollingPolicy(rollingPolicy);
 
         if (this.maxFileSize == null)
@@ -333,6 +328,20 @@ public class LogstashFileAppenderFactory
         triggeringPolicy.start();
         appender.setTriggeringPolicy(triggeringPolicy);
         return appender;
+    }
+
+    @Nonnull
+    private FixedWindowRollingPolicy getRollingPolicy(
+            RollingFileAppender<ILoggingEvent> appender,
+            Context context)
+    {
+        var rollingPolicy = new FixedWindowRollingPolicy();
+        rollingPolicy.setContext(context);
+        rollingPolicy.setMaxIndex(this.archivedFileCount);
+        rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
+        rollingPolicy.setParent(appender);
+        rollingPolicy.start();
+        return rollingPolicy;
     }
 
     private void configureAppender(FileAppender<ILoggingEvent> appender, Context context)

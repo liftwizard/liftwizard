@@ -29,7 +29,7 @@ class Slf4jUncaughtExceptionHandlerTest
         new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
     }
 
-    private class CauseException
+    private static class CauseException
             extends RuntimeException
     {
         CauseException(String message)
@@ -38,7 +38,7 @@ class Slf4jUncaughtExceptionHandlerTest
         }
     }
 
-    private class RootException extends RuntimeException
+    private static class RootException extends RuntimeException
     {
         RootException(String message, Throwable cause)
         {

@@ -52,10 +52,7 @@ public class MDCDataFetcher<T>
     @Override
     public T get(DataFetchingEnvironment environment) throws Exception
     {
-        DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
-                ? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
-                : this.dataFetcher;
-        String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
+        String dataFetcherName = this.getDataFetcherName();
 
         try (MultiMDCCloseable mdc = new MultiMDCCloseable())
         {
@@ -67,5 +64,14 @@ public class MDCDataFetcher<T>
             mdc.put("liftwizard.graphql.fetcher.type", dataFetcherName);
             return this.dataFetcher.get(environment);
         }
+    }
+
+    private String getDataFetcherName()
+    {
+        DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
+                ? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
+                : this.dataFetcher;
+        String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
+        return dataFetcherName;
     }
 }

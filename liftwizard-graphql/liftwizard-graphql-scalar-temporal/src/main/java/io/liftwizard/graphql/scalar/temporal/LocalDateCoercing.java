@@ -49,7 +49,7 @@ public class LocalDateCoercing
 
     @Nonnull
     @Override
-    public String serialize(Object input)
+    public String serialize(@Nonnull Object input)
     {
         TemporalAccessor temporalAccessor = this.getTemporalAccessorSerialize(input);
         try
@@ -81,7 +81,7 @@ public class LocalDateCoercing
     }
 
     @Override
-    public LocalDate parseValue(Object input)
+    public LocalDate parseValue(@Nonnull Object input)
     {
         TemporalAccessor temporalAccessor = this.getTemporalAccessorParse(input);
         try
@@ -113,7 +113,7 @@ public class LocalDateCoercing
     }
 
     @Override
-    public LocalDate parseLiteral(Object input)
+    public LocalDate parseLiteral(@Nonnull Object input)
     {
         if (!(input instanceof StringValue))
         {

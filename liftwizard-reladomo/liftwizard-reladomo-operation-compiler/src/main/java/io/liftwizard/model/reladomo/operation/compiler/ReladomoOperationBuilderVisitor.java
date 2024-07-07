@@ -182,7 +182,7 @@ public class ReladomoOperationBuilderVisitor<T>
         return existsOperatorContext.accept(new ReladomoExistsOperatorVisitor(navigation, notExistsOperation));
     }
 
-    private <T> Operation getNotExistsOperation(OperationExistenceContext ctx, RelatedFinder<T> relatedFinder)
+    private <T2> Operation getNotExistsOperation(OperationExistenceContext ctx, RelatedFinder<T2> relatedFinder)
     {
         if (ctx.notExistsOperation == null)
         {

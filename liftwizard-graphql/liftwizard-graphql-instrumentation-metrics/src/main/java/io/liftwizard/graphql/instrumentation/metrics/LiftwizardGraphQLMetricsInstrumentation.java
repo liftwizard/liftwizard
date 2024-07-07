@@ -75,25 +75,29 @@ public class LiftwizardGraphQLMetricsInstrumentation
     }
 
     @Override
+    @Nonnull
     public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters)
     {
         return new GlobalInstrumentationContext<>(this.executionTimer, this.executionExceptionsMeter);
     }
 
     @Override
+    @Nonnull
     public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters)
     {
         return new GlobalInstrumentationContext<>(this.parseTimer, this.parseExceptionsMeter);
     }
 
     @Override
+    @Nonnull
     public InstrumentationContext<List<ValidationError>> beginValidation(InstrumentationValidationParameters parameters)
     {
         return new GlobalInstrumentationContext<>(this.validationTimer, this.validationExceptionsMeter);
     }
 
     @Override
-    public InstrumentationContext<Object> beginFieldFetch(InstrumentationFieldFetchParameters parameters)
+    @Nonnull
+    public InstrumentationContext<Object> beginFieldFetch(@Nonnull InstrumentationFieldFetchParameters parameters)
     {
         if (parameters.isTrivialDataFetcher())
         {
@@ -107,6 +111,7 @@ public class LiftwizardGraphQLMetricsInstrumentation
     }
 
     @Override
+    @Nonnull
     public DataFetcher<?> instrumentDataFetcher(
             @Nonnull DataFetcher<?> dataFetcher,
             @Nonnull InstrumentationFieldFetchParameters parameters)

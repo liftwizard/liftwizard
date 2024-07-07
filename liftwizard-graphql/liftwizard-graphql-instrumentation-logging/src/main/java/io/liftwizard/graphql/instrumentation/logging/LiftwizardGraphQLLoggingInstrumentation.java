@@ -16,6 +16,8 @@
 
 package io.liftwizard.graphql.instrumentation.logging;
 
+import javax.annotation.Nonnull;
+
 import graphql.execution.instrumentation.SimpleInstrumentation;
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters;
 import graphql.schema.DataFetcher;
@@ -32,9 +34,10 @@ public class LiftwizardGraphQLLoggingInstrumentation
         extends SimpleInstrumentation
 {
     @Override
+    @Nonnull
     public DataFetcher<?> instrumentDataFetcher(
             DataFetcher<?> dataFetcher,
-            InstrumentationFieldFetchParameters parameters)
+            @Nonnull InstrumentationFieldFetchParameters parameters)
     {
         if (parameters.isTrivialDataFetcher())
         {

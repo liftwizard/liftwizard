@@ -136,12 +136,7 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         GraphQLFactory factory = configuration.getGraphQLFactory();
 
         // TODO: Move the Clock to Configuration
-        Clock clock = Clock.systemUTC();
-
-        var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
-        var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
-
-        List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
+        List<Instrumentation> instrumentations = this.getInstrumentations();
         factory.setInstrumentations(instrumentations);
 
         Builder builder = RuntimeWiring.newRuntimeWiring();
@@ -159,5 +154,18 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         RuntimeWiring runtimeWiring = builder.build();
         factory.setRuntimeWiring(runtimeWiring);
         return factory;
+    }
+
+    @Nonnull
+    private List<Instrumentation> getInstrumentations()
+    {
+        // TODO 2024-07-07: Move the Clock to Configuration
+        Clock clock = Clock.systemUTC();
+
+        var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
+        var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
+
+        List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
+        return instrumentations;
     }
 }
