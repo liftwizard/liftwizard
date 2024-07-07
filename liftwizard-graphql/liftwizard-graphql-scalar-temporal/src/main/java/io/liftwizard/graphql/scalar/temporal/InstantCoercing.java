@@ -52,7 +52,7 @@ public class InstantCoercing
 
     @Nonnull
     @Override
-    public String serialize(Object input)
+    public String serialize(@Nonnull Object input)
     {
         Instant instant = InstantCoercing.getInstant(input);
         try
@@ -106,7 +106,7 @@ public class InstantCoercing
     }
 
     @Override
-    public Instant parseValue(Object input)
+    public Instant parseValue(@Nonnull Object input)
     {
         if (input instanceof Instant instant)
         {
@@ -137,7 +137,7 @@ public class InstantCoercing
     }
 
     @Override
-    public Instant parseLiteral(Object input)
+    public Instant parseLiteral(@Nonnull Object input)
     {
         if (!(input instanceof StringValue))
         {

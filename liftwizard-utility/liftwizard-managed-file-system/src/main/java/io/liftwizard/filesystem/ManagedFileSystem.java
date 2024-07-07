@@ -51,6 +51,11 @@ public final class ManagedFileSystem
 
     private static void close(URI uri, FileSystem fileSystem, RemovalCause cause)
     {
+        if (fileSystem == null)
+        {
+            return;
+        }
+
         LOGGER.debug("Closing file system for {} due to {}", uri, cause);
         try
         {

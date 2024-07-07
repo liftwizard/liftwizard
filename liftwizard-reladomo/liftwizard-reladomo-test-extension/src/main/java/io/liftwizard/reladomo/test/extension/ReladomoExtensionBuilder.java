@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,14 +44,8 @@ public class ReladomoExtensionBuilder
         {
             this.executeSqlExtension.get().beforeEach(context);
         }
-        if (this.initializeExtension.isPresent())
-        {
-            this.initializeExtension.get().beforeEach(context);
-        }
-        if (this.purgeAllExtension.isPresent())
-        {
-            this.purgeAllExtension.get().beforeEach(context);
-        }
+        this.initializeExtension.ifPresent(extension -> extension.beforeEach(context));
+        this.purgeAllExtension.ifPresent(extension -> extension.beforeEach(context));
         this.loadDataExtension.beforeEach(context);
     }
 
@@ -60,14 +54,8 @@ public class ReladomoExtensionBuilder
             throws SQLException
     {
         this.loadDataExtension.afterEach(context);
-        if (this.purgeAllExtension.isPresent())
-        {
-            this.purgeAllExtension.get().afterEach(context);
-        }
-        if (this.initializeExtension.isPresent())
-        {
-            this.initializeExtension.get().afterEach(context);
-        }
+        this.purgeAllExtension.ifPresent(extension -> extension.afterEach(context));
+        this.initializeExtension.ifPresent(extension -> extension.afterEach(context));
         if (this.executeSqlExtension.isPresent())
         {
             this.executeSqlExtension.get().afterEach(context);

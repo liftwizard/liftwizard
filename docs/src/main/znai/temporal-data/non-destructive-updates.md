@@ -10,7 +10,7 @@ In this documentation, we'll focus on the third step.
 
 We create a blueprint post by `POST`ing to `/api/blueprint/`.
 
-:include-file: non-destructive-updates1.json {title: "POST /api/blueprint/", commentsType: "inline"}
+:include-file: non-destructive-updates1.json5 {title: "POST /api/blueprint/", commentsType: "inline"}
 
 # POST Response Body
 
@@ -22,7 +22,7 @@ The response includes all the properties we sent, along with server-generated in
 
 Here's the same response, with some temporal features labeled. These will be covered in upcoming sections.
 
-:include-file: non-destructive-updates3.json {title: "POST /api/blueprint/ response", commentsType: "inline"}
+:include-file: non-destructive-updates3.json5 {title: "POST /api/blueprint/ response", commentsType: "inline"}
 
 # Non-destructive updates
 

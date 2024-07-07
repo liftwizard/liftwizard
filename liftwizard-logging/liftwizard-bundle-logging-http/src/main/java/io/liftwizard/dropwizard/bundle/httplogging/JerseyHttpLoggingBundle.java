@@ -116,7 +116,7 @@ public class JerseyHttpLoggingBundle
             environment.jersey().register(loggingResponseFilter);
         }
 
-        ServerLoggingFilter loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger, clock);
+        var loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger, clock);
         environment
                 .servlets()
                 .addFilter("ServerLoggingFilter", loggingFilter)

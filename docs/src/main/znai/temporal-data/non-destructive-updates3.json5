@@ -1,0 +1,64 @@
+{
+  // The key is generated-server side.
+  key: "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+  // The systemFrom is the time we created the blueprint post time 3: 2001-01-03.
+  systemFrom: "2001-01-03T23:59:59Z",
+  // The systemTo is null, or infinity, indicating this data is current.
+  systemTo: null,
+  // The version object is covered in the section on Versioning.
+  version: {
+    number: 1,
+    systemFrom: "2001-01-03T23:59:59Z",
+    systemTo: null,
+    // The createdOn, createdBy, and lastUpdatedBy properties are covered in the section on Auditing.
+    createdOn: "2001-01-03T23:59:59Z",
+    createdBy: {
+      userId: "User ID",
+    },
+    lastUpdatedBy: {
+      userId: "User ID",
+    },
+  },
+  title: "Blueprint title",
+  voteSummary: {
+    numberOfUpvotes: 0,
+    systemFrom: "2001-01-03T23:59:59Z",
+    systemTo: null,
+  },
+  blueprintString: {
+    // The request only included blueprintString.sha, a foreign key. The response includes the whole object.
+    sha: "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+    // We created the blueprint data at time 2: 2001-01-02.
+    createdOn: "2001-01-02T23:59:59Z",
+    createdBy: {
+      userId: "User ID",
+    },
+  },
+  imgurImage: {
+    // The request only included the imgurImage.id, a foreign key. The response includes the whole object.
+    imgurId: "Imgur ID 1",
+    imgurType: "image/png",
+    height: 300,
+    width: 300,
+    // We created the Imugr image at time 1: 2001-01-01.
+    systemFrom: "2001-01-01T23:59:59Z",
+    systemTo: null,
+  },
+  descriptionMarkdown: "Blueprint description markdown",
+  tags: [
+    {
+      // The BlueprintTag mapping was created along with the blueprint post at time 3: 2001-01-03.
+      systemFrom: "2001-01-03T23:59:59Z",
+      systemTo: null,
+      tag: {
+        // The request only included tag.category and tag.name, the composite foreign key. The response includes the whole object.
+        category: "belt",
+        name: "balancer",
+        ordinal: 1,
+        // It was created a year earlier than the Blueprint.
+        systemFrom: "2000-01-01T00:00:00Z",
+        systemTo: null,
+      },
+    },
+  ],
+}

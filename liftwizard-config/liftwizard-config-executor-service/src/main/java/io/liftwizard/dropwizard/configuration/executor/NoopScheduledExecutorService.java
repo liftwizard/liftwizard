@@ -33,9 +33,9 @@ public class NoopScheduledExecutorService
     }
 
     @Override
-    protected Runnable wrapTask(Runnable command)
+    protected Runnable wrapTask(Runnable runnable)
     {
-        return () -> LOGGER.debug("Skip scheduled task: {}", command);
+        return () -> LOGGER.debug("Skip scheduled runnable: {}", runnable);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class NoopScheduledExecutorService
     {
         return () ->
         {
-            LOGGER.debug("Skip scheduled task: {}", callable);
+            LOGGER.debug("Skip scheduled callable: {}", callable);
             return null;
         };
     }

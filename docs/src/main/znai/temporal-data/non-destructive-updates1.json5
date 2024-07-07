@@ -1,23 +1,23 @@
 {
-  "title": "Blueprint title",
-  "blueprintString": {
+  title: "Blueprint title",
+  blueprintString: {
     // The blueprintString.sha is a foreign key, pointing to the blueprint data we created at time 2.
-    "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595"
+    sha: "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
   },
-  "imgurImage": {
+  imgurImage: {
     // The imgurImage.imgurId is a foreign key, pointing to the Imgur Image data we created at time 1.
-    "imgurId": "Imgur ID 1"
+    imgurId: "Imgur ID 1",
   },
-  "descriptionMarkdown": "Blueprint description markdown",
+  descriptionMarkdown: "Blueprint description markdown",
   // Blueprints can be tagged with multiple tags. Here we have a single tag, "belt balancer".
-  "tags": [
+  tags: [
     {
       // This double nesting is how many-to-many relationships are represented. This object is the BlueprintTag mapping.
-      "tag": {
+      tag: {
         // This object is the tag. It's part of reference data that was created earlier. The (category, name) pair is the foreign key.
-        "category": "belt",
-        "name": "balancer"
-      }
-    }
-  ]
+        category: "belt",
+        name: "balancer",
+      },
+    },
+  ],
 }

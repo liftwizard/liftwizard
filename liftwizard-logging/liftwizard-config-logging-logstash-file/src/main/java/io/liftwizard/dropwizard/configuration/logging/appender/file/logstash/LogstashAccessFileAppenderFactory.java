@@ -111,7 +111,7 @@ public class LogstashAccessFileAppenderFactory
     }
 
     @JsonProperty
-    public void setArchivedLogFilenamePattern(String archivedLogFilenamePattern)
+    public void setArchivedLogFilenamePattern(@Nullable String archivedLogFilenamePattern)
     {
         this.archivedLogFilenamePattern = archivedLogFilenamePattern;
     }
@@ -136,7 +136,7 @@ public class LogstashAccessFileAppenderFactory
     }
 
     @JsonProperty
-    public void setMaxFileSize(DataSize maxFileSize)
+    public void setMaxFileSize(@Nullable DataSize maxFileSize)
     {
         this.maxFileSize = maxFileSize;
     }
@@ -262,7 +262,7 @@ public class LogstashAccessFileAppenderFactory
 
     private RollingFileAppender<IAccessEvent> configurePolicyWithDefaults(
             RollingFileAppender<IAccessEvent> appender,
-            LoggerContext context)
+            Context context)
     {
         TimeBasedRollingPolicy<IAccessEvent> rollingPolicy = this.maxFileSize == null
                 ? this.getTimeBasedRollingPolicy(appender, context)

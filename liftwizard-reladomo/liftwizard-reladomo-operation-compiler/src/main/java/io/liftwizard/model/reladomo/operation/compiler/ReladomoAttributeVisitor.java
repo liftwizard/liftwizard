@@ -92,10 +92,10 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
             throw new IllegalArgumentException(error);
         }
 
-        String  startString = ctx.IntegerLiteral(0).getText();
-        String  endString   = ctx.IntegerLiteral(1).getText();
-        Integer start       = Integer.valueOf(startString);
-        Integer end         = Integer.valueOf(endString);
+        String startString = ctx.IntegerLiteral(0).getText();
+        String endString   = ctx.IntegerLiteral(1).getText();
+        int    start       = Integer.parseInt(startString);
+        int    end         = Integer.parseInt(endString);
         return ((StringAttribute) attribute).substring(start, end);
     }
 

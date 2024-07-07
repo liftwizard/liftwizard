@@ -21,6 +21,8 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -46,27 +48,8 @@ public class FirebaseOAuthAuthenticator
     {
         try
         {
-            FirebaseToken       firebaseToken = this.firebaseAuth.verifyIdToken(credentials);
-            Map<String, Object> claims        = firebaseToken.getClaims();
-
-            Map<String, Object> firebase       = (Map<String, Object>) claims.get("firebase");
-            String              signInProvider = (String) firebase.get("sign_in_provider");
-
-            String  uid           = firebaseToken.getUid();
-            String  name          = firebaseToken.getName();
-            String  email         = firebaseToken.getEmail();
-            boolean emailVerified = firebaseToken.isEmailVerified();
-            String  issuer        = firebaseToken.getIssuer();
-            String  picture       = firebaseToken.getPicture();
-
-            FirebasePrincipal firebasePrincipal = new FirebasePrincipal(
-                    uid,
-                    name,
-                    email,
-                    emailVerified,
-                    issuer,
-                    picture,
-                    signInProvider);
+            FirebaseToken     firebaseToken     = this.firebaseAuth.verifyIdToken(credentials);
+            FirebasePrincipal firebasePrincipal = getFirebasePrincipal(firebaseToken);
 
             return Optional.of(firebasePrincipal);
         }
@@ -84,5 +67,30 @@ public class FirebaseOAuthAuthenticator
             LOGGER.warn(credentials, e.getMessage());
             return Optional.empty();
         }
+    }
+
+    @Nonnull
+    private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken)
+    {
+        Map<String, Object> claims        = firebaseToken.getClaims();
+
+        Map<String, Object> firebase       = (Map<String, Object>) claims.get("firebase");
+        String              signInProvider = (String) firebase.get("sign_in_provider");
+
+        String  uid           = firebaseToken.getUid();
+        String  name          = firebaseToken.getName();
+        String  email         = firebaseToken.getEmail();
+        boolean emailVerified = firebaseToken.isEmailVerified();
+        String  issuer        = firebaseToken.getIssuer();
+        String  picture       = firebaseToken.getPicture();
+
+        return new FirebasePrincipal(
+                uid,
+                name,
+                email,
+                emailVerified,
+                issuer,
+                picture,
+                signInProvider);
     }
 }

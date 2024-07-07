@@ -78,6 +78,7 @@ public class GraphQLQueryToOperationConverter
         return nestedOperations.stream().reduce(finder.all(), Operation::and);
     }
 
+    @SuppressWarnings("IfCanBeSwitch")
     private Operation convert(AbstractRelatedFinder finder, String key, Object graphQlOperation)
     {
         if (key.equals("AND"))
@@ -160,7 +161,7 @@ public class GraphQLQueryToOperationConverter
                         this.context.pop();
                     }
                 });
-        return nestedOperations.reduce(conjunctionFunction).get();
+        return nestedOperations.reduce(conjunctionFunction).orElseGet(finder::all);
     }
 
     private Operation convertField(RelatedFinder<?> finder, String key, Object graphQlOperation)
