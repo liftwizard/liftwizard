@@ -542,36 +542,6 @@
                 </plugins>
             </build>
         </profile>
-
-        <profile>
-            <id>spotless-shell</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.diffplug.spotless</groupId>
-                        <artifactId>spotless-maven-plugin</artifactId>
-                        <configuration>
-                            <shell>
-                                <toggleOffOn />
-
-                                <includes>
-                                    <include>**/*.sh</include>
-                                </includes>
-
-                                <excludes>
-                                    <exclude>**/target/**/*.sh</exclude>
-                                </excludes>
-
-                                <shfmt>
-                                    <version>3.8.0</version>
-                                </shfmt>
-                            </shell>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <!--endregion Phase 1: validate-->
 
         <!--region Phase 15: test-->
