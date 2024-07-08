@@ -315,7 +315,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Formats'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-formats'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-formats'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
@@ -342,7 +345,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Java'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-java'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-java'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
@@ -369,7 +375,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Sql'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-sql'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-sql'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
@@ -396,7 +405,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Pom'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-pom'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-pom'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
@@ -423,7 +435,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Markdown'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-markdown'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-markdown'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
@@ -450,7 +465,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Json'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-json'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-json'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
@@ -477,7 +495,10 @@ jobs:
           distribution: oracle
 
       - name: 'Spotless Check: Yaml'
-        run: ./mvnw com.diffplug.spotless:spotless-maven-plugin:check --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' --activate-profiles 'spotless-check,spotless-yaml'
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --activate-profiles 'spotless-check,spotless-yaml'
 
       - name: 'Clean Maven cache'
         run: rm -rf ~/.m2/repository/io/liftwizard
