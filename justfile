@@ -53,6 +53,12 @@ javadoc MVN=default_mvn:
 checkstyle MVN=default_mvn:
     {{MVN}} verify -DskipTests --activate-profiles checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict
 
+# spotless
+spotless NAME MVN=default_mvn:
+    {{MVN}} spotless:apply \
+      --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+      --activate-profiles 'spotless-check,spotless-{{NAME}}'
+
 # mvn reproducible
 reproducible MVN=default_mvn:
     {{MVN}} verify -DskipTests artifact:check-buildplan
@@ -254,3 +260,4 @@ qodana:
         --disable-update-checks \
         --apply-fixes \
         --linter jetbrains/qodana-jvm:2024.1
+
