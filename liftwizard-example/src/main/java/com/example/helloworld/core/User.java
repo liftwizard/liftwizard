@@ -18,15 +18,16 @@ public class User implements Principal {
         this.roles = roles;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getId() {
-        return (int) (Math.random() * 100);
+        return (int) (Math.random() * 100.0);
     }
 
     public Set<String> getRoles() {
-        return roles;
+        return this.roles;
     }
 }

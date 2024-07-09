@@ -85,7 +85,7 @@ class ExecutorServiceFactoryTest
     {
         try
         {
-            getConfiguredType(ExecutorServiceFactory.class, "invalid-executor-service-config-test.json5");
+            this.getConfiguredType(ExecutorServiceFactory.class, "invalid-executor-service-config-test.json5");
             fail("");
         }
         catch (ConfigurationValidationException e)

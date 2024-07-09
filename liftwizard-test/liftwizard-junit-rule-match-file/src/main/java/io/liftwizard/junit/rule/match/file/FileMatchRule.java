@@ -40,6 +40,7 @@ public class FileMatchRule
         super(callingClass);
     }
 
+    @Override
     protected void assertFileContentsOrThrow(
             @Nonnull String resourceClassPathLocation,
             @Nonnull String actualString)

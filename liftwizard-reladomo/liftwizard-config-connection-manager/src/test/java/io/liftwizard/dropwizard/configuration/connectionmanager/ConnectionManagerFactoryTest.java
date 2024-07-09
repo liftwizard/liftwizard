@@ -28,6 +28,7 @@ import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
+import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
@@ -55,8 +56,8 @@ class ConnectionManagerFactoryTest
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
 
-        DataSourceFactory dataSourceFactory = new DataSourceFactory();
-        ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
+        PooledDataSourceFactory dataSourceFactory = new DataSourceFactory();
+        ManagedDataSource       managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
 
         SourcelessConnectionManager sourcelessConnectionManager =
                 connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);
