@@ -67,11 +67,11 @@ class UrlFilterFactoryTest
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
         Filter<IAccessEvent> filter       = urlFilterFactory.build();
-        IAccessEvent         bannedEvent  = new FakeAccessEvent("banned");
-        IAccessEvent         allowedEvent = new FakeAccessEvent("allowed");
 
         assertThat(urlFilterFactory).isInstanceOf(RequestUrlFilterFactory.class);
+        IAccessEvent bannedEvent = new FakeAccessEvent("banned");
         assertThat(filter.decide(bannedEvent)).isEqualTo(FilterReply.DENY);
+        IAccessEvent allowedEvent = new FakeAccessEvent("allowed");
         assertThat(filter.decide(allowedEvent)).isEqualTo(FilterReply.NEUTRAL);
     }
 

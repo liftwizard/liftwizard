@@ -33,7 +33,7 @@ public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
     protected void run(Bootstrap<HelloWorldConfiguration> bootstrap,
                        Namespace namespace,
                        HelloWorldConfiguration configuration) throws Exception {
-        final Template template = configuration.buildTemplate();
+        Template template = configuration.buildTemplate();
 
         if (namespace.getBoolean("include-default")) {
             LOGGER.info("DEFAULT => {}", template.render(Optional.empty()));
@@ -42,7 +42,7 @@ public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
         for (String name : namespace.<String>getList("names")) {
             for (int i = 0; i < 1000; i++) {
                 LOGGER.info("{} => {}", name, template.render(Optional.of(name)));
-                Thread.sleep(1000);
+                Thread.sleep(1000L);
             }
         }
     }

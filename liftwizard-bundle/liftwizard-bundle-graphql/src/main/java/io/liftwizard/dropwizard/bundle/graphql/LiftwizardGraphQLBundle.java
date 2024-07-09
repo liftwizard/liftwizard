@@ -66,6 +66,7 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 
     private MetricRegistry metricRegistry;
 
+    @SafeVarargs
     public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder>... runtimeWiringBuilders)
     {
         this.runtimeWiringBuilders = Lists.immutable.with(runtimeWiringBuilders);

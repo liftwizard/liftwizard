@@ -89,6 +89,7 @@ public abstract class AbstractLiftwizardConfiguration
     //endregion Services
 
     //region General
+    @Override
     @JsonProperty("clock")
     public ClockFactory getClockFactory()
     {

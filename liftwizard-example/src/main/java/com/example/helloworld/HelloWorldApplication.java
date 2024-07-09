@@ -45,7 +45,7 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 public class HelloWorldApplication
         extends Application<HelloWorldConfiguration>
 {
-    public static void main(String[] args)
+    public static void main(String... args)
             throws Exception
     {
         new HelloWorldApplication().run(args);
@@ -101,8 +101,7 @@ public class HelloWorldApplication
     @Override
     public void run(HelloWorldConfiguration configuration, Environment environment)
     {
-        final PersonDAO dao      = new PersonDAO();
-        final Template  template = configuration.buildTemplate();
+        Template  template = configuration.buildTemplate();
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
@@ -118,6 +117,7 @@ public class HelloWorldApplication
         environment.jersey().register(new HelloWorldResource(template));
         environment.jersey().register(new ViewResource());
         environment.jersey().register(new ProtectedResource());
+        PersonDAO dao = new PersonDAO();
         environment.jersey().register(new PeopleResource(dao));
         environment.jersey().register(new PersonResource(dao));
         environment.jersey().register(new FilteredResource());

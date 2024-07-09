@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class JsonPrettyPrinterTest
     @Nonnull
     private static ObjectMapper getObjectMapper()
     {
-        JsonPrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
+        PrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setDefaultPrettyPrinter(jsonPrettyPrinter);
