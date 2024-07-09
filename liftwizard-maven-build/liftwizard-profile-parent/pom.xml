@@ -96,12 +96,10 @@
                                     <banLatest>true</banLatest>
                                     <banRelease>true</banRelease>
                                     <banSnapshots>false</banSnapshots>
-                                    <!--region spotless:off -->
-                                    <unCheckedPluginList>
+                                    <unCheckedPluginList xml:space="preserve">
                                         org.apache.maven.plugins:maven-site-plugin,
                                         org.apache.maven.plugins:maven-deploy-plugin
                                     </unCheckedPluginList>
-                                    <!--endregion spotless:on -->
                                 </requirePluginVersions>
                                 <bannedDependencies>
                                     <excludes>
