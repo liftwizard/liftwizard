@@ -276,15 +276,13 @@
                                 <requirePluginVersions>
                                     <!--Ban snapshots later, for now it's too common to depend on klass snapshots-->
                                     <banSnapshots>false</banSnapshots>
-                                    <!--region spotless:off -->
-                                    <unCheckedPluginList>
+                                    <unCheckedPluginList xml:space="preserve">
                                         org.apache.maven.plugins:maven-site-plugin,
                                         org.apache.maven.plugins:maven-deploy-plugin,
                                         io.liftwizard:liftwizard-generator-reladomo-code-plugin,
                                         io.liftwizard:liftwizard-generator-reladomo-database-plugin,
                                         io.liftwizard:liftwizard-generator-xsd2bean-plugin
                                     </unCheckedPluginList>
-                                    <!--endregion spotless:on -->
                                 </requirePluginVersions>
                                 <bannedDependencies>
                                     <excludes>
