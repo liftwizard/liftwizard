@@ -257,7 +257,5 @@ delete-merged: delete-local-merged delete-remote-merged
 
 qodana:
     op run -- qodana scan \
-        --disable-update-checks \
         --apply-fixes \
         --linter jetbrains/qodana-jvm:2024.1
-
