@@ -240,7 +240,7 @@ rebase:
 delete-local-merged:
     git branch --merged remotes/{{upstream_remote}}/{{upstream_branch}} \
         | grep -v "^\*\\|main" \
-        | xargs git branch --delete
+        | xargs git branch -D
 
 # Delete branches from origin merged into configurable upstream/main
 delete-remote-merged:
