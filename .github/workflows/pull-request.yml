@@ -22,7 +22,7 @@ jobs:
 
       - run: ./mvnw verify
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/cool/klass
 
   maven-coverage:
@@ -50,12 +50,12 @@ jobs:
           paths: |
             ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Jacoco Code Coverage'
+          title: "Jacoco Code Coverage"
           update-comment: true
           min-coverage-overall: 0
           min-coverage-changed-files: 0
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   maven-enforcer:
@@ -79,7 +79,7 @@ jobs:
       - name: Run maven-enforcer-plugin
         run: ./mvnw verify --activate-profiles maven-enforcer-plugin -DskipTests
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   maven-dependency:
@@ -103,7 +103,7 @@ jobs:
       - name: Run maven-dependency-plugin
         run: ./mvnw verify --activate-profiles maven-dependency-plugin -DskipTests
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   maven-javadoc:
@@ -127,7 +127,7 @@ jobs:
       - name: Run maven-javadoc-plugin
         run: ./mvnw verify --activate-profiles maven-javadoc-plugin -DskipTests
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   checkstyle-semantics:
@@ -151,19 +151,19 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Install liftwizard-checkstyle module'
+      - name: "Install liftwizard-checkstyle module"
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
-      - name: 'Produce Checkstyle XML: Semantics'
+      - name: "Produce Checkstyle XML: Semantics"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
-      - name: 'Checkstyle GitHub Annotations: Semantics'
+      - name: "Checkstyle GitHub Annotations: Semantics"
         uses: lcollins/checkstyle-github-action@v3.0.0
         with:
-          name: 'checkstyle annotations (semantics)'
-          path: '**/checkstyle-result.xml'
+          name: "checkstyle annotations (semantics)"
+          path: "**/checkstyle-result.xml"
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   checkstyle-semantics-strict:
@@ -187,19 +187,19 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Install liftwizard-checkstyle module'
+      - name: "Install liftwizard-checkstyle module"
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
-      - name: 'Produce Checkstyle XML: Strict Semantics'
+      - name: "Produce Checkstyle XML: Strict Semantics"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
-      - name: 'Checkstyle GitHub Annotations: Strict Semantics'
+      - name: "Checkstyle GitHub Annotations: Strict Semantics"
         uses: lcollins/checkstyle-github-action@v3.0.0
         with:
-          name: 'checkstyle annotations (semantics strict)'
-          path: '**/checkstyle-result.xml'
+          name: "checkstyle annotations (semantics strict)"
+          path: "**/checkstyle-result.xml"
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   checkstyle-formatting:
@@ -223,19 +223,19 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Install liftwizard-checkstyle module'
+      - name: "Install liftwizard-checkstyle module"
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
-      - name: 'Produce Checkstyle XML: Formatting'
+      - name: "Produce Checkstyle XML: Formatting"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=xml
 
-      - name: 'Checkstyle GitHub Annotations: Formatting'
+      - name: "Checkstyle GitHub Annotations: Formatting"
         uses: lcollins/checkstyle-github-action@v3.0.0
         with:
-          name: 'checkstyle annotations (formatting)'
-          path: '**/checkstyle-result.xml'
+          name: "checkstyle annotations (formatting)"
+          path: "**/checkstyle-result.xml"
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   maven-rewrite:
@@ -259,7 +259,7 @@ jobs:
       - name: Run rewrite-maven-plugin
         run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   # Check for reproducible builds with artifact:check-buildplan
@@ -284,7 +284,7 @@ jobs:
       - name: Run artifact:check-buildplan
         run: ./mvnw verify artifact:check-buildplan -DskipTests
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   # Check if the new commits in a Pull Request contain a merge commit. If so, fail and print them out.
@@ -314,13 +314,13 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Spotless Check: Formats'
+      - name: "Spotless Check: Formats"
         run: |
           ./mvnw spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-formats'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-java:
@@ -350,7 +350,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-java'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-sql:
@@ -374,13 +374,13 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Spotless Check: Sql'
+      - name: "Spotless Check: Sql"
         run: |
           ./mvnw spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-sql'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-pom:
@@ -404,13 +404,13 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Spotless Check: Pom'
+      - name: "Spotless Check: Pom"
         run: |
           ./mvnw spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-pom'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-markdown:
@@ -434,13 +434,13 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Spotless Check: Markdown'
+      - name: "Spotless Check: Markdown"
         run: |
           ./mvnw spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-markdown'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-json:
@@ -464,13 +464,13 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Spotless Check: Json'
+      - name: "Spotless Check: Json"
         run: |
           ./mvnw spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-json'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-yaml:
@@ -494,11 +494,11 @@ jobs:
           java-version-file: .tool-versions
           distribution: oracle
 
-      - name: 'Spotless Check: Yaml'
+      - name: "Spotless Check: Yaml"
         run: |
           ./mvnw spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
             --activate-profiles 'spotless-check,spotless-yaml'
 
-      - name: 'Clean Maven cache'
+      - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard

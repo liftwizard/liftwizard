@@ -3,7 +3,7 @@
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   publish:
@@ -37,4 +37,4 @@ jobs:
 
       - uses: actions/attest-build-provenance@v1
         with:
-          subject-path: '**/target/*.jar'
+          subject-path: "**/target/*.jar"
