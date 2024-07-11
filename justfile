@@ -63,7 +63,7 @@ spotless NAME MVN=default_mvn:
 spotless-all MVN=default_mvn:
     {{MVN}} spotless:apply \
       --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
-      --activate-profiles 'spotless-write,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml'
+      --activate-profiles 'spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml'
 
 # mvn reproducible
 reproducible MVN=default_mvn:

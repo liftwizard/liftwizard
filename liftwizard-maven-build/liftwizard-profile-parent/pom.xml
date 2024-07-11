@@ -160,7 +160,7 @@
         </profile>
 
         <profile>
-            <id>prettier-write</id>
+            <id>prettier-apply</id>
 
             <build>
                 <plugins>
@@ -206,7 +206,7 @@
         </profile>
 
         <profile>
-            <id>spotless-write</id>
+            <id>spotless-apply</id>
 
             <properties>
                 <spotless.check.skip>false</spotless.check.skip>
