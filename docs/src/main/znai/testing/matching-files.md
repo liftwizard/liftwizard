@@ -5,7 +5,7 @@ If your code has changed enough, it can be more convenient to re-record the test
 The setup is different for the JUnit 4 Rule and JUnit 5 Extension. After setup, both have the same API.
 
 ```java
-assertFileContents(resourceClassPathLocation, actualString);
+this.fileMatchExtension.assertFileContents(expectedStringClassPathLocation, actualString);
 ```
 
 If the file does not exist, or the contents do not match, an assertion error is added to an [ErrorCollector](https://junit.org/junit4/javadoc/4.12/org/junit/rules/ErrorCollector.html). If the ErrorCollector contains any errors, the test fails at the end with all expected/actual pairs reported together.
