@@ -24,6 +24,7 @@ database
 testing
     testing
     matching-files
+    matching-json
 maven
     maven-best-practices
     minimal-parent
