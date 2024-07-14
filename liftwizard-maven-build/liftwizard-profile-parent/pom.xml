@@ -408,8 +408,6 @@
                             <antlr4>
                                 <toggleOffOn />
 
-                                <trimTrailingWhitespace />
-                                <endWithNewline />
                                 <antlr4Formatter />
                             </antlr4>
                         </configuration>
@@ -525,6 +523,8 @@
                                 <excludes>
                                     <exclude>**/target/**/*.json</exclude>
                                     <exclude>**/target/**/*.json5</exclude>
+                                    <exclude>**/archetype-resources/**/*.json</exclude>
+                                    <exclude>**/archetype-resources/**/*.json5</exclude>
                                 </excludes>
 
                                 <prettier>
