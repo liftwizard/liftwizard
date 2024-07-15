@@ -90,9 +90,9 @@
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
-                            <rules>
+                            <rules combine.children="append">
                                 <dependencyConvergence />
-                                <requirePluginVersions>
+                                <requirePluginVersions combine.children="append">
                                     <banLatest>true</banLatest>
                                     <banRelease>true</banRelease>
                                     <banSnapshots>false</banSnapshots>
@@ -101,8 +101,8 @@
                                         org.apache.maven.plugins:maven-deploy-plugin
                                     </unCheckedPluginList>
                                 </requirePluginVersions>
-                                <bannedDependencies>
-                                    <excludes>
+                                <bannedDependencies combine.children="append">
+                                    <excludes combine.children="append">
                                         <exclude>commons-logging-api</exclude>
                                         <exclude>commons-logging</exclude>
                                         <exclude>org.apache.logging.log4j:log4j</exclude>
@@ -709,7 +709,7 @@
                                 <ignoredNonTestScopedDependencies>
                                     <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
                                 </ignoredNonTestScopedDependencies>
-                                <ignoredUnusedDeclaredDependencies>
+                                <ignoredUnusedDeclaredDependencies combine.children="append">
                                     <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
                                     <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
