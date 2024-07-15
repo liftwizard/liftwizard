@@ -29,9 +29,20 @@
     <dependencies>
 
         <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-security</artifactId>
             <version>9.4.35.v20201120</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -45,4 +56,24 @@
         </dependency>
 
     </dependencies>
+
+    <!--region Phase 21: verify-->
+    <profiles>
+        <profile>
+            <id>maven-dependency-plugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <configuration>
+                            <ignoredDependencies>
+                                <ignoredDependency>jakarta.servlet:jakarta.servlet-api</ignoredDependency>
+                            </ignoredDependencies>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <!--endregion-->
 </project>
