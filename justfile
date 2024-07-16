@@ -97,8 +97,12 @@ buildplan-list-phase:
 wrapper VERSION:
     mvn --threads 1 wrapper:wrapper -Dmaven=VERSION
 
+upstream_remote := env('UPSTREAM_REMOTE', "upstream")
+upstream_branch := env('UPSTREAM_BRANCH', "main")
+
 # mvn release:prepare
 release NEXT_VERSION: && _git-clean
+    git checkout {{upstream_remote}}/{{upstream_branch}}
     mvn --batch-mode clean release:clean release:prepare -DdevelopmentVersion={{NEXT_VERSION}}
 
 # Count lines of code
@@ -164,8 +168,6 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
 # end-to-end test for git-test
 test: _check-local-modifications clean mvn && _check-local-modifications
 
-upstream_remote := env('UPSTREAM_REMOTE', "upstream")
-upstream_branch := env('UPSTREAM_BRANCH', "main")
 fail_fast := env('FAIL_FAST', "false")
 
 # `just test` all commits with configurable upstream/main as ancestor
