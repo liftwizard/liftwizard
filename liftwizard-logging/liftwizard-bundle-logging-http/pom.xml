@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-logging</artifactId>
-        <version>2.1.16-SNAPSHOT</version>
+        <version>2.1.16</version>
     </parent>
 
     <artifactId>liftwizard-bundle-logging-http</artifactId>
