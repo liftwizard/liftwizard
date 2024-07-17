@@ -90,9 +90,9 @@
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
-                            <rules combine.children="append">
+                            <rules>
                                 <dependencyConvergence />
-                                <requirePluginVersions combine.children="append">
+                                <requirePluginVersions>
                                     <banLatest>true</banLatest>
                                     <banRelease>true</banRelease>
                                     <banSnapshots>false</banSnapshots>
@@ -101,7 +101,7 @@
                                         org.apache.maven.plugins:maven-deploy-plugin
                                     </unCheckedPluginList>
                                 </requirePluginVersions>
-                                <bannedDependencies combine.children="append">
+                                <bannedDependencies>
                                     <excludes combine.children="append">
                                         <exclude>commons-logging-api</exclude>
                                         <exclude>commons-logging</exclude>
