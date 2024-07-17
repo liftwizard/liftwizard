@@ -56,13 +56,13 @@ checkstyle MVN=default_mvn:
 # spotless
 spotless NAME MVN=default_mvn:
     {{MVN}} spotless:apply \
-      --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+      --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' \
       --activate-profiles 'spotless-apply,spotless-{{NAME}}'
 
 # spotless-all
 spotless-all MVN=default_mvn:
     {{MVN}} spotless:apply \
-      --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+      --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' \
       --activate-profiles 'spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml'
 
 # mvn reproducible
@@ -147,6 +147,7 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
         fi
     done
 
+    {{MVN}} {{FLAGS}} install --projects liftwizard-utility/liftwizard-checkstyle
     {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}
 
     EXIT_CODE=$?
