@@ -117,14 +117,14 @@ _check-local-modifications:
     git diff --quiet
     EXIT_CODE=$?
     if [ $EXIT_CODE -ne 0 ]; then
-        {{echo_command}} "Locally modified files" &
+        {{echo_command}} "Locally modified files"
         exit $EXIT_CODE
     fi
 
     git status --porcelain | (! grep -q '^??')
     EXIT_CODE=$?
     if [ $EXIT_CODE -ne 0 ]; then
-        {{echo_command}} "Untracked files" &
+        {{echo_command}} "Untracked files"
         exit $EXIT_CODE
     fi
 
@@ -157,7 +157,7 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     DIRECTORY=$(basename $(pwd))
 
     MESSAGE="Failed in directory ${DIRECTORY} on commit: '${COMMIT_MESSAGE}' with exit code ${EXIT_CODE}"
-    {{echo_command}} "$MESSAGE" &
+    {{echo_command}} "$MESSAGE"
     exit $EXIT_CODE
 
 # end-to-end test for git-test
