@@ -70,6 +70,26 @@
         </module>
         <!--endregion-->
 
+        <!--region Imports-->
+        <!--https://checkstyle.sourceforge.io/checks/imports/index.html-->
+        <module name="CustomImportOrder">
+            <property
+                    name="customImportOrderRules"
+                    value="STANDARD_JAVA_PACKAGE###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE###STATIC" />
+            <property name="standardPackageRegExp" value="^java\." />
+            <property name="specialImportsRegExp" value="^javax\." />
+            <property name="sortImportsInGroupAlphabetically" value="true" />
+            <property name="separateLineBetweenGroups" value="true" />
+        </module>
+        <module name="ImportOrder">
+            <property name="groups" value="/^java\./,javax" />
+            <property name="ordered" value="true" />
+            <property name="separated" value="true" />
+            <property name="option" value="bottom" />
+            <property name="sortStaticImportsAlphabetically" value="true" />
+        </module>
+        <!--endregion-->
+
         <!--region Indentation-->
         <!--endregion-->
 
