@@ -316,7 +316,7 @@ jobs:
       - name: "Spotless Check: Formats"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-formats'
 
       - name: "Clean Maven cache"
@@ -345,7 +345,7 @@ jobs:
       - name: "Spotless Check: Java Import Order"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-sort-imports'
 
       - name: "Clean Maven cache"
@@ -374,7 +374,7 @@ jobs:
       - name: "Spotless Check: Java Unused Imports"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-unused-imports'
 
       - name: "Clean Maven cache"
@@ -403,7 +403,7 @@ jobs:
       - name: "Spotless Check: Java cleanthat"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-cleanthat'
 
       - name: "Clean Maven cache"
@@ -432,7 +432,7 @@ jobs:
       - name: "Spotless Check: Sql"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-sql'
 
       - name: "Clean Maven cache"
@@ -461,7 +461,7 @@ jobs:
       - name: "Spotless Check: Pom"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-pom'
 
       - name: "Clean Maven cache"
@@ -490,7 +490,7 @@ jobs:
       - name: "Spotless Check: Markdown"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-markdown'
 
       - name: "Clean Maven cache"
@@ -519,7 +519,7 @@ jobs:
       - name: "Spotless Check: Json"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-json'
 
       - name: "Clean Maven cache"
@@ -548,7 +548,7 @@ jobs:
       - name: "Spotless Check: Yaml"
         run: |
           ./mvnw spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-maven-build/liftwizard-dependencies,!liftwizard-maven-build/liftwizard-bom' \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-yaml'
 
       - name: "Clean Maven cache"
