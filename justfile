@@ -57,7 +57,7 @@ checkstyle MVN=default_mvn:
 spotless NAME MVN=default_mvn:
     {{MVN}} spotless:apply \
       --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-      --activate-profiles 'spotless-check,spotless-{{NAME}}'
+      --activate-profiles 'spotless-apply,spotless-{{NAME}}'
 
 # spotless-all
 spotless-all MVN=default_mvn:
@@ -129,7 +129,7 @@ _check-local-modifications:
     fi
 
 default_target   := env('MVN_TARGET',   "verify")
-default_profiles := env('MVN_PROFILES', "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict")
+default_profiles := env('MVN_PROFILES', "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 
 # mvn
@@ -161,7 +161,7 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     exit $EXIT_CODE
 
 # end-to-end test for git-test
-test: _check-local-modifications clean mvn
+test: _check-local-modifications clean mvn && _check-local-modifications
 
 upstream_remote := env('UPSTREAM_REMOTE', "upstream")
 upstream_branch := env('UPSTREAM_BRANCH', "main")
