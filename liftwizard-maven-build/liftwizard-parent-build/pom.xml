@@ -289,13 +289,14 @@
                 <plugins>
 
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
-                            <rules combine.children="append">
+                            <rules>
                                 <enforceBytecodeVersion>
                                     <maxJdkVersion>17</maxJdkVersion>
                                 </enforceBytecodeVersion>
-                                <requirePluginVersions combine.children="append">
+                                <requirePluginVersions>
                                     <unCheckedPluginList xml:space="preserve">
                                         org.apache.maven.plugins:maven-site-plugin,
                                         org.apache.maven.plugins:maven-deploy-plugin,
@@ -304,7 +305,7 @@
                                         io.liftwizard:liftwizard-generator-xsd2bean-plugin
                                     </unCheckedPluginList>
                                 </requirePluginVersions>
-                                <bannedDependencies combine.children="append">
+                                <bannedDependencies>
                                     <excludes>
                                         <exclude>log4j:log4j</exclude>
                                         <exclude>org.slf4j:slf4j-log4j12</exclude>
