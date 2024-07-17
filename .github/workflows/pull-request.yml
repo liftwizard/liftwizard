@@ -294,7 +294,6 @@ jobs:
       - uses: motlin/forbid-merge-commits-action@main
 
   spotless-formats:
-    name: spotless (formats)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -324,7 +323,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-java-sort-imports:
-    name: spotless (java)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -354,7 +352,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-java-unused-imports:
-    name: spotless (java)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -384,7 +381,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-java-cleanthat:
-    name: spotless (java)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -414,7 +410,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-sql:
-    name: spotless (sql)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -444,7 +439,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-pom:
-    name: spotless (pom)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -474,7 +468,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-markdown:
-    name: spotless (markdown)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -504,7 +497,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-json:
-    name: spotless (json)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -534,7 +526,6 @@ jobs:
         run: rm -rf ~/.m2/repository/io/liftwizard
 
   spotless-yaml:
-    name: spotless (yaml)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
