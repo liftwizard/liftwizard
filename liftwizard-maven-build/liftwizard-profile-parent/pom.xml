@@ -697,57 +697,48 @@
             <id>maven-dependency-plugin</id>
 
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-dependency-plugin</artifactId>
-                            <version>3.7.1</version>
-                            <configuration>
-                                <failOnWarning>true</failOnWarning>
-                                <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
-                                <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.7.1 support Java 17. -->
-                                <ignoredNonTestScopedDependencies>
-                                    <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
-                                </ignoredNonTestScopedDependencies>
-                                <ignoredUnusedDeclaredDependencies combine.children="append">
-                                    <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-janino</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-requesturl</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-console</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-file</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-seed</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-system</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-query-schema</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-reladomo-meta</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
-                                    <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
-                                </ignoredUnusedDeclaredDependencies>
-                            </configuration>
-
-                            <executions>
-                                <execution>
-                                    <id>dependency:analyze-only</id>
-                                    <goals>
-                                        <goal>analyze-only</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-
-                    </plugins>
-                </pluginManagement>
-
                 <plugins>
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
+                        <version>3.7.1</version>
+                        <configuration>
+                            <failOnWarning>true</failOnWarning>
+                            <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
+                            <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.7.1 support Java 17. -->
+                            <ignoredNonTestScopedDependencies>
+                                <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
+                            </ignoredNonTestScopedDependencies>
+                            <ignoredUnusedDeclaredDependencies combine.children="append">
+                                <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-janino</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-requesturl</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-console</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-file</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-seed</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-system</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-query-schema</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-reladomo-meta</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
+                            </ignoredUnusedDeclaredDependencies>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>dependency:analyze-only</id>
+                                <goals>
+                                    <goal>analyze-only</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
