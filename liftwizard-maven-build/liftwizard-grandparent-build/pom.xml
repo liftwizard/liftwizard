@@ -181,52 +181,6 @@
 
         <!--region No phase-->
         <profile>
-            <!--Rules that are meant to always pass. They can run in CI with dryRun, or one-off for rewrites.-->
-            <id>rewrite-maven-plugin</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.openrewrite.maven</groupId>
-                            <artifactId>rewrite-maven-plugin</artifactId>
-                            <configuration>
-                                <activeRecipes>
-                                    <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
-                                    <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
-
-                                    <recipe>org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64</recipe>
-                                    <recipe>org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes</recipe>
-                                    <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
-                                </activeRecipes>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-
-        <profile>
-            <!--Rules that don't reliably pass. They can't run in CI with dryRun, only one-off for rewrites.-->
-            <id>rewrite-maven-plugin-one-off</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.openrewrite.maven</groupId>
-                            <artifactId>rewrite-maven-plugin</artifactId>
-                            <configuration>
-                                <activeRecipes>
-                                    <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
-                                    <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
-                                </activeRecipes>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-
-        <profile>
             <id>rewrite-maven-plugin-dryRun</id>
             <build>
                 <pluginManagement>
@@ -287,27 +241,6 @@
                     </plugin>
 
                 </plugins>
-            </build>
-        </profile>
-        <!--endregion-->
-
-        <!--region Phase 15: test-->
-        <profile>
-            <id>rerecord</id>
-
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <configuration>
-                                <environmentVariables>
-                                    <LIFTWIZARD_FILE_MATCH_RULE_RERECORD>true</LIFTWIZARD_FILE_MATCH_RULE_RERECORD>
-                                </environmentVariables>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
             </build>
         </profile>
         <!--endregion-->
