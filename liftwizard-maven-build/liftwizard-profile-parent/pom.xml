@@ -732,6 +732,7 @@
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-buffered</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-janino</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-requesturl</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-console</ignoredUnusedDeclaredDependency>
