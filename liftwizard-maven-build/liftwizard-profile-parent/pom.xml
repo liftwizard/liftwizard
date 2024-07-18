@@ -105,16 +105,17 @@
                                     <excludes combine.children="append">
                                         <exclude>commons-logging-api</exclude>
                                         <exclude>commons-logging</exclude>
-                                        <exclude>org.apache.logging.log4j:log4j</exclude>
-                                        <exclude>org.slf4j:slf4j-simple</exclude>
-                                        <exclude>org.slf4j:slf4j-jdk14</exclude>
-                                        <exclude>org.slf4j:nop</exclude>
-                                        <exclude>org.slf4j:jcl</exclude>
-                                        <exclude>javax.ws.rs:javax.ws.rs-api</exclude>
+                                        <exclude>javax.activation:javax.activation-api</exclude>
                                         <exclude>javax.servlet:javax.servlet-api</exclude>
                                         <exclude>javax.validation:validation-api</exclude>
+                                        <exclude>javax.ws.rs:javax.ws.rs-api</exclude>
                                         <exclude>javax.xml.bind:jaxb-api</exclude>
                                         <exclude>javax.xml.ws:jaxws-api</exclude>
+                                        <exclude>org.apache.logging.log4j:log4j</exclude>
+                                        <exclude>org.slf4j:jcl</exclude>
+                                        <exclude>org.slf4j:nop</exclude>
+                                        <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                        <exclude>org.slf4j:slf4j-simple</exclude>
                                     </excludes>
                                 </bannedDependencies>
                                 <banDuplicatePomDependencyVersions />
