@@ -9,7 +9,7 @@ MyTypeList mithraList = MyTypeFinder.findMany(operation);
 
 In some situations, it can be useful to have a more dynamic way of expressing queries.
 
-That's where `ReladomoOperationCompiler` comes in.  It can take a String and compile it into a Reladomo [Operation](https://www.mvndoc.com/c/com.goldmansachs.reladomo/reladomo/com/gs/fw/finder/Operation.html).
+That's where `ReladomoOperationCompiler` comes in. It can take a String and compile it into a Reladomo [Operation](https://www.mvndoc.com/c/com.goldmansachs.reladomo/reladomo/com/gs/fw/finder/Operation.html).
 
 In this example, `this.stringProperty = "value" & this.integerProperty = 4` is the equivalent query.
 

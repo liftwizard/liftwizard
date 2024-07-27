@@ -21,6 +21,7 @@ Next, annotate the DataFetchers that you want to monitor with `@Timed`, `@Metere
 ## Timers
 
 `@Timed` adds three timers:
+
 * {DataFetcher's fully-qualified class name}.get.sync
 * liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.sync
 * liftwizard.graphql.path.{path}.sync
@@ -40,6 +41,7 @@ If you annotate your DataFetcher with `@Metered`, the Intrumentation will add me
 ## ExceptionMeters
 
 `@ExceptionMetered` adds meters that track the number of times the DataFetcher throws uncaught exceptions, plus the number of CompleteableFutures they return that complete exceptionally. The meters have the same names as the timers, but with the suffix "exceptions":
+
 * {DataFetcher's fully-qualified class name}.get.exceptions
 * liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.exceptions
 * liftwizard.graphql.path.{path}.exceptions
