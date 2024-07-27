@@ -52,13 +52,6 @@
         <!--https://checkstyle.sourceforge.io/checks/annotation/index.html-->
         <!--endregion-->
 
-        <!--region Blocks-->
-        <!--https://checkstyle.sourceforge.io/checks/blocks/index.html-->
-        <module name="AvoidNestedBlocks">
-            <property name="allowInSwitchCase" value="true" />
-        </module>
-        <!--endregion-->
-
         <!--region Class Design-->
         <!--https://checkstyle.sourceforge.io/checks/design/index.html-->
         <module name="VisibilityModifier">
