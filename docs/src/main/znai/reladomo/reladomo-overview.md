@@ -7,6 +7,7 @@ A comparison between Reladomo and Hibernate is out of scope for this guide. Howe
 After achieving feature parity, we'll see some of the power of Reladomo by adding support for as-of queries over REST.
 
 To replace Hibernate with Reladomo in `liftwizard-example`, we'll need to:
+
 * Create separate DTOs and POJOs
 * Change the rest resources to return DTOs
 * Create a Reladomo definition of the Person class

@@ -6,7 +6,7 @@ In order to accomplish this, we need to buffer all logging before we know the re
 
 `BufferedAppender` is the logback appender that buffers all logging until it receives a `CLEAR` or `FLUSH` marker.
 
-You can use  directly in logback configuration. It requires a delegate appender for flushing, declared using an `appender-ref`.
+You can use directly in logback configuration. It requires a delegate appender for flushing, declared using an `appender-ref`.
 
 :include-xml: logback-test.xml {title: "logback-test.xml"}
 
