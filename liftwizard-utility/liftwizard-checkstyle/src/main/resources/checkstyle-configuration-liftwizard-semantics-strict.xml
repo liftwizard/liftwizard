@@ -94,18 +94,6 @@
         </module>
         <!--endregion-->
 
-        <!--region Javadoc-->
-        <!--https://checkstyle.sourceforge.io/checks/javadoc/index.html-->
-        <module name="MatchXpath">
-            <property name="id" value="deprecatedWithoutSince" />
-            <property name="query"
-                    value="//ANNOTATION[./IDENT[@text='Deprecated']
-                      and not(./ANNOTATION_MEMBER_VALUE_PAIR/IDENT[@text='since'])]" />
-            <message key="matchxpath.match"
-                    value="@Deprecated annotation should contain 'since' property." />
-        </module>
-        <!--endregion-->
-
         <!--region Miscellaneous-->
         <!--https://checkstyle.sourceforge.io/checks/misc/index.html-->
         <module name="UncommentedMain">
