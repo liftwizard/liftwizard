@@ -18,24 +18,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.liftwizard</groupId>
-        <artifactId>liftwizard</artifactId>
+        <artifactId>liftwizard-config</artifactId>
         <version>2.1.18-SNAPSHOT</version>
     </parent>
 
-    <artifactId>liftwizard-servlet</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>liftwizard-config-single-page-redirect-filter</artifactId>
 
-    <name>Liftwizard Servlet (Module Group)</name>
+    <name>Liftwizard Servlet Config: SPA Redirect Filter</name>
 
-    <modules>
-        <module>liftwizard-jetty-admin-login-service</module>
-        <module>liftwizard-servlet-logging-mdc</module>
-        <module>liftwizard-servlet-logging-opentracing</module>
-        <module>liftwizard-servlet-logging</module>
-        <module>liftwizard-servlet-logging-log4j-map</module>
-        <module>liftwizard-servlet-logging-typesafe</module>
-        <module>liftwizard-servlet-logging-logstash-encoder</module>
-        <module>liftwizard-servlet-single-page-redirect-filter</module>
-    </modules>
+    <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>
