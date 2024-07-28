@@ -453,7 +453,14 @@
                                     <exclude>**/target/**/*.sql</exclude>
                                 </excludes>
 
-                                <prettier />
+                                <prettier>
+                                    <devDependencies>
+                                        <prettier-plugin-sql>0.18.1</prettier-plugin-sql>
+                                    </devDependencies>
+                                    <config>
+                                        <plugins>prettier-plugin-sql</plugins>
+                                    </config>
+                                </prettier>
                             </sql>
                         </configuration>
                     </plugin>
