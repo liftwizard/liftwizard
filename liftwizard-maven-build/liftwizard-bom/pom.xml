@@ -144,7 +144,7 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-bundle-spa-redirect-filter</artifactId>
+                <artifactId>liftwizard-bundle-single-page-redirect-filter</artifactId>
                 <version>2.1.18-SNAPSHOT</version>
             </dependency>
 
@@ -256,7 +256,7 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-config-spa-redirect-filter</artifactId>
+                <artifactId>liftwizard-config-single-page-redirect-filter</artifactId>
                 <version>2.1.18-SNAPSHOT</version>
             </dependency>
 
@@ -712,7 +712,7 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
-                <artifactId>liftwizard-servlet-spa-redirect-filter</artifactId>
+                <artifactId>liftwizard-servlet-single-page-redirect-filter</artifactId>
                 <version>2.1.18-SNAPSHOT</version>
             </dependency>
             <!--endregion-->

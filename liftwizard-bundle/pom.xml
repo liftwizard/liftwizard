@@ -37,7 +37,7 @@
         <module>liftwizard-bundle-healthcheck-common-pool</module>
         <module>liftwizard-bundle-liquibase-migration</module>
         <module>liftwizard-bundle-prioritized-api</module>
-        <module>liftwizard-bundle-spa-redirect-filter</module>
+        <module>liftwizard-bundle-single-page-redirect-filter</module>
         <module>liftwizard-bundle-system-properties</module>
     </modules>
 </project>

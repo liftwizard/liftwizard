@@ -38,7 +38,7 @@
         <module>liftwizard-config-h2</module>
         <module>liftwizard-config-healthcheck-common-pool</module>
         <module>liftwizard-config-liquibase-migration</module>
-        <module>liftwizard-config-spa-redirect-filter</module>
+        <module>liftwizard-config-single-page-redirect-filter</module>
         <module>liftwizard-config-system-properties</module>
         <module>liftwizard-configuration-factory-json</module>
     </modules>
