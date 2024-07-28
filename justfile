@@ -50,8 +50,11 @@ javadoc MVN=default_mvn:
     {{MVN}} verify -DskipTests --activate-profiles maven-javadoc-plugin
 
 # mvn checkstyle
-checkstyle MVN=default_mvn:
-    {{MVN}} verify -DskipTests --activate-profiles checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict
+checkstyle MVN="mvn":
+    {{MVN}} checkstyle:check --activate-profiles checkstyle-semantics
+    {{MVN}} checkstyle:check --activate-profiles checkstyle-formatting
+    {{MVN}} checkstyle:check --activate-profiles checkstyle-semantics-strict
+    {{MVN}} checkstyle:check --activate-profiles checkstyle-formatting-strict
 
 # spotless
 spotless NAME MVN=default_mvn:
@@ -203,14 +206,19 @@ test-results:
     done
 
 offline := env_var_or_default('OFFLINE', 'false')
-# Rebase all branches onto configurable upstream/main
-rebase-all:
+
+# git fetch configurable upstream
+fetch:
     #!/usr/bin/env bash
     set -Eeuo pipefail
-
     if [ "{{offline}}" != "true" ]; then
-        git fetch {{upstream_remote}}
+        git fetch --all --prune --jobs=16
     fi
+
+# Rebase all branches onto configurable upstream/main
+rebase-all: fetch
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
 
     branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --no-contains {{upstream_remote}}/{{upstream_branch}}))
     for branch in "${branches[@]}"
@@ -235,22 +243,17 @@ absorb:
         --force
 
 # git rebase onto configurable upstream/main
-rebase:
-    #!/usr/bin/env bash
-    set -Eeuo pipefail
-    if [ "{{offline}}" != "true" ]; then
-        git fetch {{upstream_remote}} {{upstream_branch}}
-    fi
+rebase: fetch
     git rebase --interactive --autosquash {{upstream_remote}}/{{upstream_branch}}
 
 # Delete local branches merged into configurable upstream/main
-delete-local-merged:
+delete-local-merged: fetch
     git branch --merged remotes/{{upstream_remote}}/{{upstream_branch}} \
-        | grep -v "^\*\\|main" \
+        | grep -v "^\*" \
         | xargs git branch -D
 
 # Delete branches from origin merged into configurable upstream/main
-delete-remote-merged:
+delete-remote-merged: fetch
     #!/usr/bin/env bash
     set -Eeu
     if [ "{{offline}}" != "true" ]; then
@@ -267,6 +270,8 @@ delete-remote-merged:
 
 # Delete local and remote branches that are merged into configurable upstream/main
 delete-merged: delete-local-merged delete-remote-merged
+
+git: rebase-all delete-merged
 
 qodana:
     op run -- qodana scan \
