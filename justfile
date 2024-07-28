@@ -187,6 +187,8 @@ test-all *FLAGS="--retest":
         git test run {{FLAGS}} {{upstream_remote}}/{{upstream_branch}}..${branch}
     done
 
+alias ta := test-all
+
 # `just test results` all branches with configurable upstream/main as ancestor
 test-results:
     #!/usr/bin/env bash
@@ -223,6 +225,8 @@ rebase-all:
         git checkout "$branch"
         git rebase {{upstream_remote}}/{{upstream_branch}}
     done
+
+alias ra := rebase-all
 
 # git absorb into configurable upstream/main
 absorb:
