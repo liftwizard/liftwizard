@@ -123,7 +123,7 @@
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-api</artifactId>
-                <version>1.65.1</version>
+                <version>1.66.0</version>
             </dependency>
 
             <dependency>
