@@ -20,7 +20,6 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -48,38 +47,37 @@ public class SinglePageRedirectFilter
     }
 
     @Override
-    public void init(FilterConfig filterConfig)
-            throws ServletException
-    {
-    }
-
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException
     {
         // Let all handlers and filters process before we do anything. That way we can capture if this is a 404.
         chain.doFilter(request, response);
-        if (request instanceof HttpServletRequest httpServletRequest
-                && response instanceof HttpServletResponse httpServletResponse)
+        if (!(request instanceof HttpServletRequest httpServletRequest)
+                || !(response instanceof HttpServletResponse httpServletResponse))
         {
-            String requestedPath = httpServletRequest.getRequestURI();
-
-            // If the requested path is not known (i.e. not reqs for auth, backend, or static files)
-            // then redirect to index.html for single-page-app (SPA) routing, and set the response to 200.
-            if (!this.isKnownPath(requestedPath) && httpServletResponse.getStatus() == 404)
-            {
-                if (requestedPath.equals(this.redirectPage))
-                {
-                    throw new ServletException(
-                            "SinglePageRedirectFilter redirectPage cannot be the same as the path being redirected to. Both are: "
-                                    + requestedPath);
-                }
-                httpServletResponse.setStatus(200);
-                httpServletResponse.setHeader("Cache-Control", this.cacheControlHeader);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher(this.redirectPage);
-                requestDispatcher.forward(httpServletRequest, httpServletResponse);
-            }
+            return;
         }
+
+        String requestedPath = httpServletRequest.getRequestURI();
+
+        // If the requested path is not known (i.e. not reqs for auth, backend, or static files)
+        // then redirect to index.html for single-page-app (SPA) routing, and set the response to 200.
+        if (this.isKnownPath(requestedPath) || httpServletResponse.getStatus() != 404)
+        {
+            return;
+        }
+
+        if (requestedPath.equals(this.redirectPage))
+        {
+            throw new ServletException(
+                    "SinglePageRedirectFilter redirectPage cannot be the same as the path being redirected to. Both are: "
+                            + requestedPath);
+        }
+
+        httpServletResponse.setStatus(200);
+        httpServletResponse.setHeader("Cache-Control", this.cacheControlHeader);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(this.redirectPage);
+        requestDispatcher.forward(httpServletRequest, httpServletResponse);
     }
 
     private boolean isKnownPath(String requestedPath)

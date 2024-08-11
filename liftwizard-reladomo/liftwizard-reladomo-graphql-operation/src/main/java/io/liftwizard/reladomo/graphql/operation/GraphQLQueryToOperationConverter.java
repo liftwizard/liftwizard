@@ -182,7 +182,7 @@ public class GraphQLQueryToOperationConverter
                 return this.convertAttribute(finder, attributeByName, (Map<String, ?>) graphQlOperation);
             }
 
-            AbstractRelatedFinder relationshipFinderByName = (AbstractRelatedFinder) finder.getRelationshipFinderByName(key);
+            var relationshipFinderByName = (AbstractRelatedFinder) finder.getRelationshipFinderByName(key);
             if (relationshipFinderByName != null)
             {
                 return this.convertRelationship(
