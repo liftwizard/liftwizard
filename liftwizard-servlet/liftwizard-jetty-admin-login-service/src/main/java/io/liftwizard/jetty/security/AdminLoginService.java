@@ -21,10 +21,11 @@ import java.util.Objects;
 import org.eclipse.jetty.security.AbstractLoginService;
 import org.eclipse.jetty.util.security.Password;
 
-public class AdminLoginService extends AbstractLoginService
+public class AdminLoginService
+        extends AbstractLoginService
 {
     private final UserPrincipal adminPrincipal;
-    private final String        adminUserName;
+    private final String adminUserName;
 
     public AdminLoginService(String userName, String password)
     {

@@ -52,11 +52,11 @@ public class ReladomoFinderDataFetcher<T>
     @Override
     public List<T> get(DataFetchingEnvironment environment)
     {
-        Map<String, Object> arguments      = environment.getArguments();
-        Object              inputOperation = arguments.get("operation");
-        Operation           operation      = this.getOperation((Map<?, ?>) inputOperation);
-        Object              inputOrderBy   = arguments.get("orderBy");
-        Optional<OrderBy>   orderBys       = this.getOrderBys((List<Map<String, ?>>) inputOrderBy);
+        Map<String, Object> arguments = environment.getArguments();
+        Object inputOperation = arguments.get("operation");
+        Operation operation = this.getOperation((Map<?, ?>) inputOperation);
+        Object inputOrderBy = arguments.get("orderBy");
+        Optional<OrderBy> orderBys = this.getOrderBys((List<Map<String, ?>>) inputOrderBy);
         DomainList<T> result = (DomainList<T>) this.finder.findMany(operation);
         GraphQLDeepFetcher.deepFetch(result, this.finder, environment.getSelectionSet());
         orderBys.ifPresent(result::setOrderBy);

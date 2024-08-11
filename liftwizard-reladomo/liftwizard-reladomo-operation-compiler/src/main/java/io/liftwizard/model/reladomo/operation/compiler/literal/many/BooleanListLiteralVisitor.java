@@ -23,7 +23,8 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.BooleanLitera
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class BooleanListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Boolean>>
+public class BooleanListLiteralVisitor
+        extends AbstractLiteralVisitor<ImmutableList<Boolean>>
 {
     private final BooleanLiteralVisitor booleanLiteralVisitor;
 

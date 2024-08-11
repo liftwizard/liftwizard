@@ -56,7 +56,7 @@ public final class ReladomoTestResourceWriter
                 .toSortedListBy(controller ->
                 {
                     String businessClassName = controller.getMithraObjectPortal().getBusinessClassName();
-                    int    result            = classNamesInOrder.indexOf(businessClassName);
+                    int result = classNamesInOrder.indexOf(businessClassName);
                     return result == -1 ? Integer.MAX_VALUE : result;
                 });
 
@@ -70,9 +70,9 @@ public final class ReladomoTestResourceWriter
 
     private static ReladomoTestResourceGrid getReladomoTestResourceGrid(MithraRuntimeCacheController eachController)
     {
-        RelatedFinder   finderInstance = eachController.getFinderInstance();
+        RelatedFinder finderInstance = eachController.getFinderInstance();
         AsOfAttribute[] asOfAttributes = finderInstance.getAsOfAttributes();
-        Operation       operation      = finderInstance.all();
+        Operation operation = finderInstance.all();
         if (asOfAttributes != null)
         {
             for (AsOfAttribute asOfAttribute : asOfAttributes)
@@ -81,8 +81,8 @@ public final class ReladomoTestResourceWriter
                 operation = operation.and(equalsEdgePoint);
             }
         }
-        MithraList<?>         mithraList = finderInstance.findMany(operation);
-        ReladomoClassMetaData metaData   = eachController.getMetaData();
+        MithraList<?> mithraList = finderInstance.findMany(operation);
+        ReladomoClassMetaData metaData = eachController.getMetaData();
         return new ReladomoTestResourceGrid(metaData, mithraList);
     }
 }

@@ -41,15 +41,15 @@ public class Builder
 {
     private final MetricRegistry registry;
 
-    private Logger                           logger                        = Logger.getLogger("metrics");
-    private LoggingLevel                     loggingLevel                  = LoggingLevel.INFO;
-    private String                           prefix                        = "";
-    private TimeUnit                         rateUnit                      = TimeUnit.SECONDS;
-    private TimeUnit                         durationUnit                  = TimeUnit.MILLISECONDS;
-    private MetricFilter                     filter                        = MetricFilter.ALL;
-    private ScheduledExecutorService         executor;
-    private boolean                          shutdownExecutorOnStop        = true;
-    private Set<MetricAttribute>             disabledMetricAttributes      = Collections.emptySet();
+    private Logger logger = Logger.getLogger("metrics");
+    private LoggingLevel loggingLevel = LoggingLevel.INFO;
+    private String prefix = "";
+    private TimeUnit rateUnit = TimeUnit.SECONDS;
+    private TimeUnit durationUnit = TimeUnit.MILLISECONDS;
+    private MetricFilter filter = MetricFilter.ALL;
+    private ScheduledExecutorService executor;
+    private boolean shutdownExecutorOnStop = true;
+    private Set<MetricAttribute> disabledMetricAttributes = Collections.emptySet();
 
     public Builder(MetricRegistry registry)
     {
@@ -206,8 +206,8 @@ public class Builder
         {
             case TRACE -> new TraceLoggerProxy(this.logger);
             case DEBUG -> new DebugLoggerProxy(this.logger);
-            case INFO  -> new InfoLoggerProxy(this.logger);
-            case WARN  -> new WarnLoggerProxy(this.logger);
+            case INFO -> new InfoLoggerProxy(this.logger);
+            case WARN -> new WarnLoggerProxy(this.logger);
             case ERROR -> new ErrorLoggerProxy(this.logger);
         };
     }

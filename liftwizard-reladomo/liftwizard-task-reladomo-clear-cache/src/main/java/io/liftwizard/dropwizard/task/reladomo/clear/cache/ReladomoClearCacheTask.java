@@ -24,7 +24,8 @@ import com.gs.fw.common.mithra.MithraManager;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import io.dropwizard.servlets.tasks.Task;
 
-public class ReladomoClearCacheTask extends Task
+public class ReladomoClearCacheTask
+        extends Task
 {
     public ReladomoClearCacheTask()
     {

@@ -61,7 +61,7 @@ public class ObjectMapperBundle
         ObjectMapperFactoryProvider objectMapperFactoryProvider =
                 this.safeCastConfiguration(ObjectMapperFactoryProvider.class, configuration);
         ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
-        ObjectMapper        objectMapper        = environment.getObjectMapper();
+        ObjectMapper objectMapper = environment.getObjectMapper();
 
         this.configureObjectMapper(objectMapperFactory, objectMapper);
     }

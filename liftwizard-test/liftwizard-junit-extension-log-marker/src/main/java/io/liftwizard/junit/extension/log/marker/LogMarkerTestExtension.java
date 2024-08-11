@@ -35,7 +35,7 @@ import org.slf4j.MarkerFactory;
 public class LogMarkerTestExtension
         implements BeforeEachCallback, AfterEachCallback
 {
-    private static final Logger LOGGER       = LoggerFactory.getLogger(LogMarkerTestExtension.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogMarkerTestExtension.class);
     private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
     private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 

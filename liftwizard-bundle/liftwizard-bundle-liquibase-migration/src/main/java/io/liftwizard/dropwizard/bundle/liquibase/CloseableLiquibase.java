@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,11 @@ public class CloseableLiquibase
 {
     private final ManagedDataSource dataSource;
 
-    public CloseableLiquibase(String changeLogFile, ResourceAccessor resourceAccessor, Database database, ManagedDataSource dataSource)
+    public CloseableLiquibase(
+            String changeLogFile,
+            ResourceAccessor resourceAccessor,
+            Database database,
+            ManagedDataSource dataSource)
     {
         super(changeLogFile, resourceAccessor, database);
         this.dataSource = dataSource;

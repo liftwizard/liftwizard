@@ -29,10 +29,10 @@ public class StructuredArgumentsStatus
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
 
-    private Status  status;
+    private Status status;
     private Integer code;
-    private Family  family;
-    private String  phrase;
+    private Family family;
+    private String phrase;
 
     @JsonProperty
     public Status getStatus()

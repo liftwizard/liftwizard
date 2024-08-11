@@ -24,7 +24,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
-public class JsonLinesPrettyPrinter extends DefaultPrettyPrinter
+public class JsonLinesPrettyPrinter
+        extends DefaultPrettyPrinter
 {
     public JsonLinesPrettyPrinter()
     {
@@ -39,7 +40,8 @@ public class JsonLinesPrettyPrinter extends DefaultPrettyPrinter
     }
 
     @Override
-    public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException
+    public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator)
+            throws IOException
     {
         jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
     }

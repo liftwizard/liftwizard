@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SinglePageRedirectFilterFactory
 {
-    private boolean enabled            = true;
-    private String  redirectPage       = "/index.html";
-    private String  cacheControlHeader = "no-cache, max-age=0";
+    private boolean enabled = true;
+    private String redirectPage = "/index.html";
+    private String cacheControlHeader = "no-cache, max-age=0";
 
     // Well known prefixes include /api/ for REST endpoints and /.well-known/ for OIDC callbacks.
     private List<String> wellKnownPathPrefixes = List.of("/api/", "/.well-known/");

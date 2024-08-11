@@ -45,8 +45,8 @@ public class Slf4jUncaughtExceptionHandler
             String message = "Exception in thread \"" + thread.getName() + "\"";
             LOGGER.warn(message, throwable);
 
-            StringWriter stringWriter         = new StringWriter();
-            PrintWriter  printWriter = new PrintWriter(stringWriter, true);
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter, true);
             throwable.printStackTrace(printWriter);
 
             System.err.print(message + " " + stringWriter);

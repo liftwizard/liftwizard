@@ -46,7 +46,7 @@ public class LiquibaseTestExtension
             .getInstance()
             .getConnection();
 
-    private final String  migrationsFile;
+    private final String migrationsFile;
     private final boolean dropAll;
 
     public LiquibaseTestExtension(String migrationsFile)
@@ -57,7 +57,7 @@ public class LiquibaseTestExtension
     public LiquibaseTestExtension(String migrationsFile, boolean dropAll)
     {
         this.migrationsFile = Objects.requireNonNull(migrationsFile);
-        this.dropAll        = dropAll;
+        this.dropAll = dropAll;
     }
 
     @Override

@@ -27,7 +27,8 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableFloatSet;
 import org.eclipse.collections.impl.factory.primitive.FloatSets;
 
-public class FloatListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class FloatListBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final FloatAttribute<?> attribute;
     private final ImmutableFloatSet floatSet;
@@ -35,7 +36,7 @@ public class FloatListBinaryOperatorVisitor extends AbstractBinaryOperatorVisito
     public FloatListBinaryOperatorVisitor(FloatAttribute<?> attribute, ImmutableList<Float> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.floatSet  = FloatSets.immutable.withAll(parameter);
+        this.floatSet = FloatSets.immutable.withAll(parameter);
     }
 
     @Override

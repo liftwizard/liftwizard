@@ -28,10 +28,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLe
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
 
-public class FloatBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class FloatBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final FloatAttribute attribute;
-    private final Float          parameter;
+    private final Float parameter;
 
     public FloatBinaryOperatorVisitor(FloatAttribute attribute, Float parameter)
     {

@@ -43,7 +43,7 @@ class ImpersonationAuthFilterFactoryTest
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator    validator    = Validators.newValidator();
+    private final Validator validator = Validators.newValidator();
 
     private final JsonConfigurationFactory<AuthFilterFactory> factory =
             new JsonConfigurationFactory<>(AuthFilterFactory.class, this.validator, this.objectMapper, "dw");
@@ -52,8 +52,8 @@ class ImpersonationAuthFilterFactoryTest
     void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes).contains(ImpersonationAuthFilterFactory.class);
     }
 

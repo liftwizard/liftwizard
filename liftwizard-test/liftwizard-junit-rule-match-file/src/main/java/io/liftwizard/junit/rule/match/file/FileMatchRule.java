@@ -70,7 +70,7 @@ public class FileMatchRule
             String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
 
             URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-            URI uri      = resource.toURI();
+            URI uri = resource.toURI();
 
             if (!actualString.equals(expectedStringFromFile))
             {

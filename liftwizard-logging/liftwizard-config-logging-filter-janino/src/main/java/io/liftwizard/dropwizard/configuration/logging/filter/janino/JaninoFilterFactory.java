@@ -40,7 +40,7 @@ public class JaninoFilterFactory
     @NotEmpty
     private @Valid @NotNull String javaExpression;
 
-    private @Valid @NotNull FilterReply onMatch    = FilterReply.DENY;
+    private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
     private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
     @Override

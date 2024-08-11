@@ -48,7 +48,7 @@ public class FirebaseOAuthAuthenticator
     {
         try
         {
-            FirebaseToken     firebaseToken     = this.firebaseAuth.verifyIdToken(credentials);
+            FirebaseToken firebaseToken = this.firebaseAuth.verifyIdToken(credentials);
             FirebasePrincipal firebasePrincipal = getFirebasePrincipal(firebaseToken);
 
             return Optional.of(firebasePrincipal);
@@ -72,17 +72,17 @@ public class FirebaseOAuthAuthenticator
     @Nonnull
     private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken)
     {
-        Map<String, Object> claims        = firebaseToken.getClaims();
+        Map<String, Object> claims = firebaseToken.getClaims();
 
-        Map<String, Object> firebase       = (Map<String, Object>) claims.get("firebase");
-        String              signInProvider = (String) firebase.get("sign_in_provider");
+        Map<String, Object> firebase = (Map<String, Object>) claims.get("firebase");
+        String signInProvider = (String) firebase.get("sign_in_provider");
 
-        String  uid           = firebaseToken.getUid();
-        String  name          = firebaseToken.getName();
-        String  email         = firebaseToken.getEmail();
+        String uid = firebaseToken.getUid();
+        String name = firebaseToken.getName();
+        String email = firebaseToken.getEmail();
         boolean emailVerified = firebaseToken.isEmailVerified();
-        String  issuer        = firebaseToken.getIssuer();
-        String  picture       = firebaseToken.getPicture();
+        String issuer = firebaseToken.getIssuer();
+        String picture = firebaseToken.getPicture();
 
         return new FirebasePrincipal(
                 uid,

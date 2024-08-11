@@ -52,7 +52,8 @@ public class ReladomoPurgeAllTestRule
         }
 
         @Override
-        public void evaluate() throws Throwable
+        public void evaluate()
+                throws Throwable
         {
             this.before();
             try
@@ -90,8 +91,8 @@ public class ReladomoPurgeAllTestRule
 
         private void purgeType(MithraRuntimeCacheController mithraRuntimeCacheController)
         {
-            ReladomoClassMetaData       metaData       = mithraRuntimeCacheController.getMetaData();
-            RelatedFinder               finderInstance = metaData.getFinderInstance();
+            ReladomoClassMetaData metaData = mithraRuntimeCacheController.getMetaData();
+            RelatedFinder finderInstance = metaData.getFinderInstance();
             ListIterable<AsOfAttribute> asOfAttributes = metaData.getAsOfAttributes() == null
                     ? Lists.immutable.empty()
                     : ArrayAdapter.adapt(metaData.getAsOfAttributes());

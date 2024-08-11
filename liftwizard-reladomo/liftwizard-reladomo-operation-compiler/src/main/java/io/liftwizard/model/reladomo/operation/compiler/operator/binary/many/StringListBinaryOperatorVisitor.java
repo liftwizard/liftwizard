@@ -28,10 +28,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorWi
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
 
-public class StringListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class StringListBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final StringAttribute<?> attribute;
-    private final Set<String>        stringSet;
+    private final Set<String> stringSet;
 
     public StringListBinaryOperatorVisitor(StringAttribute<?> attribute, ImmutableList<String> parameter)
     {

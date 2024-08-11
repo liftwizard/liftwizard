@@ -44,7 +44,7 @@ class JaninoFilterFactoryTest
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator    validator    = Validators.newValidator();
+    private final Validator validator = Validators.newValidator();
 
     private final JsonConfigurationFactory<JaninoFilterFactory> factory = new JsonConfigurationFactory<>(
             JaninoFilterFactory.class,
@@ -56,8 +56,8 @@ class JaninoFilterFactoryTest
     void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes).contains(JaninoFilterFactory.class);
     }
 

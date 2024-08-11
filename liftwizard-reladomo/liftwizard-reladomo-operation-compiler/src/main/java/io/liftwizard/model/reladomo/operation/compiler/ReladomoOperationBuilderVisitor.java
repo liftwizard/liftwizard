@@ -98,12 +98,12 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 public class ReladomoOperationBuilderVisitor<T>
         extends ReladomoOperationThrowingVisitor<Operation>
 {
-    private final RelatedFinder<T>     finder;
+    private final RelatedFinder<T> finder;
     private final CommonTokenStream tokenStream;
 
     public ReladomoOperationBuilderVisitor(RelatedFinder<T> finder, CommonTokenStream tokenStream)
     {
-        this.finder      = Objects.requireNonNull(finder);
+        this.finder = Objects.requireNonNull(finder);
         this.tokenStream = Objects.requireNonNull(tokenStream);
     }
 
@@ -152,16 +152,16 @@ public class ReladomoOperationBuilderVisitor<T>
     @Override
     public Operation visitOperationUnaryOperator(OperationUnaryOperatorContext ctx)
     {
-        String    contextString = this.getContextString(ctx);
-        Attribute attribute     = this.getAttribute(ctx.attribute(), contextString);
+        String contextString = this.getContextString(ctx);
+        Attribute attribute = this.getAttribute(ctx.attribute(), contextString);
         return this.getUnaryOperation(ctx.unaryOperator(), attribute);
     }
 
     @Override
     public Operation visitOperationBinaryOperator(OperationBinaryOperatorContext ctx)
     {
-        String               contextString        = this.getContextString(ctx);
-        Attribute            attribute            = this.getAttribute(ctx.attribute(), contextString);
+        String contextString = this.getContextString(ctx);
+        Attribute attribute = this.getAttribute(ctx.attribute(), contextString);
         ParameterCardinality parameterCardinality = this.getParameterCardinality(ctx);
         Object parameter = this.getParameter(
                 ctx,
@@ -174,10 +174,10 @@ public class ReladomoOperationBuilderVisitor<T>
     @Override
     public Operation visitOperationExistence(OperationExistenceContext ctx)
     {
-        String                contextString         = this.getContextString(ctx);
-        AbstractRelatedFinder navigation            = this.getNavigation(ctx.navigation(), contextString);
-        RelatedFinder         relatedFinder         = navigation.getMithraObjectPortal().getFinder();
-        Operation             notExistsOperation    = this.getNotExistsOperation(ctx, relatedFinder);
+        String contextString = this.getContextString(ctx);
+        AbstractRelatedFinder navigation = this.getNavigation(ctx.navigation(), contextString);
+        RelatedFinder relatedFinder = navigation.getMithraObjectPortal().getFinder();
+        Operation notExistsOperation = this.getNotExistsOperation(ctx, relatedFinder);
         ExistsOperatorContext existsOperatorContext = ctx.existsOperator();
         return existsOperatorContext.accept(new ReladomoExistsOperatorVisitor(navigation, notExistsOperation));
     }
@@ -190,7 +190,7 @@ public class ReladomoOperationBuilderVisitor<T>
         }
 
         String notExistsOperationText = ctx.notExistsOperation.getText();
-        var    compiler               = new ReladomoOperationCompiler();
+        var compiler = new ReladomoOperationCompiler();
         return compiler.compile(relatedFinder, notExistsOperationText);
     }
 

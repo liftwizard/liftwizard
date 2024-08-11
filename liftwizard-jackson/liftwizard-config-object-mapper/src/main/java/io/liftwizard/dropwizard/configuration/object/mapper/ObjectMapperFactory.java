@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.Nulls;
 
 public class ObjectMapperFactory
 {
-    private          boolean enabled                 = true;
+    private boolean enabled = true;
     // Should usually be false in production
-    private          boolean prettyPrint             = true;
-    private          boolean failOnUnknownProperties = true;
-    private @NotNull Include serializationInclusion  = Include.NON_ABSENT;
-    private @NotNull Nulls   defaultNullSetterInfo   = Nulls.AS_EMPTY;
+    private boolean prettyPrint = true;
+    private boolean failOnUnknownProperties = true;
+    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
+    private @NotNull Nulls defaultNullSetterInfo = Nulls.AS_EMPTY;
 
     public boolean isEnabled()
     {

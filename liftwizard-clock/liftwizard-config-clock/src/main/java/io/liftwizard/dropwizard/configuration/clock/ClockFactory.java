@@ -25,7 +25,8 @@ import io.dropwizard.jackson.Discoverable;
 
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @AutoService(Discoverable.class)
-public interface ClockFactory extends Discoverable
+public interface ClockFactory
+        extends Discoverable
 {
     Clock createClock();
 }

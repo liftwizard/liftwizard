@@ -31,7 +31,8 @@ import graphql.schema.DataFetchingEnvironment;
  *
  * @see graphql.schema.PropertyDataFetcher
  */
-public class FunctionDataFetcher<Input, Output> implements DataFetcher<Output>
+public class FunctionDataFetcher<Input, Output>
+        implements DataFetcher<Output>
 {
     @Nonnull
     private final Function<Input, Output> function;

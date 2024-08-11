@@ -29,8 +29,8 @@ public class StructuredArgumentsClient
     public StructuredArgumentsClient(String address, String host, int port)
     {
         this.address = Objects.requireNonNull(address);
-        this.host    = Objects.requireNonNull(host);
-        this.port    = port;
+        this.host = Objects.requireNonNull(host);
+        this.port = port;
     }
 
     @JsonProperty

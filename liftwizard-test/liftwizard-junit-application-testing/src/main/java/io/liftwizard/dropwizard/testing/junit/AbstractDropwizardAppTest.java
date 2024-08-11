@@ -38,13 +38,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public abstract class AbstractDropwizardAppTest
 {
     @RegisterExtension
-    protected final JsonMatchExtension        jsonMatchExtension        = new JsonMatchExtension(this.getClass());
+    protected final JsonMatchExtension jsonMatchExtension = new JsonMatchExtension(this.getClass());
     @RegisterExtension
-    protected final LiftwizardAppExtension<?> appExtension              = this.getDropwizardAppExtension();
+    protected final LiftwizardAppExtension<?> appExtension = this.getDropwizardAppExtension();
     @RegisterExtension
     protected final ReladomoLoadDataExtension reladomoLoadDataExtension = new ReladomoLoadDataExtension();
     @RegisterExtension
-    protected final LogMarkerTestExtension    logMarkerExtension        = new LogMarkerTestExtension();
+    protected final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
     @Nonnull
     protected abstract LiftwizardAppExtension<?> getDropwizardAppExtension();
@@ -54,7 +54,7 @@ public abstract class AbstractDropwizardAppTest
         var jerseyClientConfiguration = new JerseyClientConfiguration();
         jerseyClientConfiguration.setTimeout(Duration.minutes(5));
 
-        String className  = this.getClass().getCanonicalName();
+        String className = this.getClass().getCanonicalName();
         String clientName = className + "." + testName;
 
         return new JerseyClientBuilder(this.appExtension.getEnvironment())

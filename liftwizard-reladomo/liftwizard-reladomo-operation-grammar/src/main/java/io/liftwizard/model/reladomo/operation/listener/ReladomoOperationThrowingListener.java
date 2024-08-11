@@ -81,7 +81,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 // Deliberately not abstract
 // Implements every method of ReladomoOperationListener by throwing
-public class ReladomoOperationThrowingListener implements ReladomoOperationListener
+public class ReladomoOperationThrowingListener
+        implements ReladomoOperationListener
 {
     @Override
     public void enterCompilationUnit(CompilationUnitContext ctx)

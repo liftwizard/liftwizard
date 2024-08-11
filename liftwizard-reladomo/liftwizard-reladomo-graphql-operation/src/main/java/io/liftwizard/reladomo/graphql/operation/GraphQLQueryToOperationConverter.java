@@ -95,7 +95,8 @@ public class GraphQLQueryToOperationConverter
         {
             if (!graphQlOperation.equals(Maps.immutable.empty()))
             {
-                throw new LiftwizardGraphQLContextException("Expected empty criteria node for exists but found " + graphQlOperation, this.getContext());
+                String message = "Expected empty criteria node for exists but found " + graphQlOperation;
+                throw new LiftwizardGraphQLContextException(message, this.getContext());
             }
 
             return finder.exists();

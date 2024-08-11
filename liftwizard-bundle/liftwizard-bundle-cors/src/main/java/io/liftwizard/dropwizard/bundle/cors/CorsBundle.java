@@ -41,7 +41,7 @@ public class CorsBundle
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         CorsFactoryProvider corsFactoryProvider = this.safeCastConfiguration(CorsFactoryProvider.class, configuration);
-        CorsFactory         corsFactory         = corsFactoryProvider.getCorsFactory();
+        CorsFactory corsFactory = corsFactoryProvider.getCorsFactory();
         if (!corsFactory.isEnabled())
         {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());

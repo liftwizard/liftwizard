@@ -43,18 +43,18 @@ public class Builder
 {
     private final MetricRegistry registry;
 
-    private Logger                           logger                        = LoggerFactory.getLogger("metrics");
-    private LoggingLevel                     loggingLevel                  = LoggingLevel.INFO;
-    private Marker                           marker;
-    private String                           prefix                        = "";
-    private TimeUnit                         rateUnit                      = TimeUnit.SECONDS;
-    private TimeUnit                         durationUnit                  = TimeUnit.MILLISECONDS;
-    private MetricFilter                     filter                        = MetricFilter.ALL;
-    private ScheduledExecutorService         executor;
-    private boolean                          shutdownExecutorOnStop        = true;
-    private Set<MetricAttribute>             disabledMetricAttributes      = Collections.emptySet();
+    private Logger logger = LoggerFactory.getLogger("metrics");
+    private LoggingLevel loggingLevel = LoggingLevel.INFO;
+    private Marker marker;
+    private String prefix = "";
+    private TimeUnit rateUnit = TimeUnit.SECONDS;
+    private TimeUnit durationUnit = TimeUnit.MILLISECONDS;
+    private MetricFilter filter = MetricFilter.ALL;
+    private ScheduledExecutorService executor;
+    private boolean shutdownExecutorOnStop = true;
+    private Set<MetricAttribute> disabledMetricAttributes = Collections.emptySet();
     private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = Function.identity();
-    private String                           message                       = "metrics";
+    private String message = "metrics";
 
     public Builder(MetricRegistry registry)
     {
@@ -188,6 +188,7 @@ public class Builder
 
     /**
      * A function to convert the structured argument Map to another type, such as net.logstash.logback.marker.LogstashMarker or net.logstash.logback.argument.StructuredArgument
+     *
      * @param newToStructuredObjectFunction A function such as {@code Markers::appendEntries} or {@code StructuredArguments::entries}
      * @return {@code this}
      */
@@ -199,6 +200,7 @@ public class Builder
 
     /**
      * A message to log along with the structured argument object. It may optionally have one placeholder if you want the structured object to appear in the message.
+     *
      * @param newMessage A String such as {@code "metrics"} or {@code "metrics: {}"}
      * @return {@code this}
      */
@@ -237,8 +239,8 @@ public class Builder
         {
             case TRACE -> new TraceLoggerProxy(this.logger);
             case DEBUG -> new DebugLoggerProxy(this.logger);
-            case INFO  -> new InfoLoggerProxy(this.logger);
-            case WARN  -> new WarnLoggerProxy(this.logger);
+            case INFO -> new InfoLoggerProxy(this.logger);
+            case WARN -> new WarnLoggerProxy(this.logger);
             case ERROR -> new ErrorLoggerProxy(this.logger);
         };
     }

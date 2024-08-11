@@ -44,7 +44,7 @@ class HeaderAuthFilterFactoryTest
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator    validator    = Validators.newValidator();
+    private final Validator validator = Validators.newValidator();
 
     private final JsonConfigurationFactory<AuthFilterFactory> factory =
             new JsonConfigurationFactory<>(AuthFilterFactory.class, this.validator, this.objectMapper, "dw");
@@ -53,8 +53,8 @@ class HeaderAuthFilterFactoryTest
     void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes).contains(HeaderAuthFilterFactory.class);
     }
 
@@ -62,8 +62,8 @@ class HeaderAuthFilterFactoryTest
     void headerAuthFilter()
             throws Exception
     {
-        URL               resource          = Resources.getResource("config-test.json5");
-        File              json              = new File(resource.toURI());
+        URL resource = Resources.getResource("config-test.json5");
+        File json = new File(resource.toURI());
         AuthFilterFactory authFilterFactory = this.factory.build(json);
         assertThat(authFilterFactory).isInstanceOf(HeaderAuthFilterFactory.class);
         AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();

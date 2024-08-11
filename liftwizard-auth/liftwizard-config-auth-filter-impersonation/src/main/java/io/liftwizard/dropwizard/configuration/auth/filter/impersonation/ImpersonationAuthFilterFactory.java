@@ -26,7 +26,8 @@ import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 
 @JsonTypeName("impersonation")
 @AutoService(AuthFilterFactory.class)
-public class ImpersonationAuthFilterFactory implements AuthFilterFactory
+public class ImpersonationAuthFilterFactory
+        implements AuthFilterFactory
 {
     @Nonnull
     @Override

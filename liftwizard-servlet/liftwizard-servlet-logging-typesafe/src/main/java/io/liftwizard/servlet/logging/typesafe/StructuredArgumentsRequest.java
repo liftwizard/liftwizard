@@ -28,7 +28,7 @@ public class StructuredArgumentsRequest
     private final StructuredArgumentsRequestHttp http = new StructuredArgumentsRequestHttp();
 
     private Class<?> resourceClass;
-    private String   resourceMethod;
+    private String resourceMethod;
 
     public StructuredArgumentsRequestHttp getHttp()
     {

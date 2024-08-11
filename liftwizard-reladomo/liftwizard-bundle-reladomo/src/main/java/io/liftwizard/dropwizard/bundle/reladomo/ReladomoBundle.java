@@ -71,8 +71,8 @@ public class ReladomoBundle
         int defaultRelationshipCacheSize = reladomoFactory.getDefaultRelationshipCacheSize();
         ReladomoBundle.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
 
-        Duration transactionTimeout        = reladomoFactory.getTransactionTimeout();
-        int      transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
+        Duration transactionTimeout = reladomoFactory.getTransactionTimeout();
+        int transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
         ReladomoBundle.setTransactionTimeout(transactionTimeoutSeconds);
         // Notification should be configured here. Refer to notification/Notification.html under reladomo-javadoc.jar.
 
@@ -113,7 +113,7 @@ public class ReladomoBundle
         if (actualInfinityMilli != expectedInfinityMilli)
         {
             long difference = actualInfinityMilli - expectedInfinityMilli;
-            long offset     = difference / (1000 * 60 * 60);
+            long offset = difference / (1000 * 60 * 60);
 
             LOGGER.warn(
                     "Expected default Infinity to be {}, but was: {}. Offset: {} hours.",

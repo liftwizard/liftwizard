@@ -24,15 +24,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StructuredArgumentsRequestHttp
         extends StructuredArgumentsHttp
 {
-    private String                        method;
-    private String                        contextPath;
-    private String                        remoteUser;
-    private String                        authenticationScheme;
-    private Map<String, Object>           principal;
-    private StructuredArgumentsPath       path;
+    private String method;
+    private String contextPath;
+    private String remoteUser;
+    private String authenticationScheme;
+    private Map<String, Object> principal;
+    private StructuredArgumentsPath path;
     private StructuredArgumentsParameters parameters;
-    private StructuredArgumentsClient     client;
-    private StructuredArgumentsServer     server;
+    private StructuredArgumentsClient client;
+    private StructuredArgumentsServer server;
 
     private String body;
 

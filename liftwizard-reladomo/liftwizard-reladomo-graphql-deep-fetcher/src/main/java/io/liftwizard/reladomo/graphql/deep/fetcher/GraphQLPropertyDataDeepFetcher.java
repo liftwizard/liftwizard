@@ -28,13 +28,13 @@ public class GraphQLPropertyDataDeepFetcher<Output>
         implements DataFetcher<DomainList<Output>>
 {
     private final Function<Object, DomainList<Output>> function;
-    private final RelatedFinder<Output>                finderInstance;
+    private final RelatedFinder<Output> finderInstance;
 
     public <Input> GraphQLPropertyDataDeepFetcher(
             Function<Input, DomainList<Output>> function,
             RelatedFinder<Output> finderInstance)
     {
-        this.function       = (Function<Object, DomainList<Output>>) Objects.requireNonNull(function);
+        this.function = (Function<Object, DomainList<Output>>) Objects.requireNonNull(function);
         this.finderInstance = Objects.requireNonNull(finderInstance);
     }
 

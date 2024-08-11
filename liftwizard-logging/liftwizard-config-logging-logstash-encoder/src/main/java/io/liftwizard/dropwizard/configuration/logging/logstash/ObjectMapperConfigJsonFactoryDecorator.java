@@ -30,7 +30,7 @@ public class ObjectMapperConfigJsonFactoryDecorator
 
     public ObjectMapperConfigJsonFactoryDecorator(boolean prettyPrint, Include serializationInclusion)
     {
-        this.prettyPrint            = prettyPrint;
+        this.prettyPrint = prettyPrint;
         this.serializationInclusion = serializationInclusion;
     }
 

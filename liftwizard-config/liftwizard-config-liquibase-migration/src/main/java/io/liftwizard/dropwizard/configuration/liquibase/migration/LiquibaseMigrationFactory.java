@@ -27,7 +27,7 @@ public class LiquibaseMigrationFactory
 {
     private List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = new ArrayList<>();
 
-    private          boolean dropEntireSchemaOnStartupAndShutdown;
+    private boolean dropEntireSchemaOnStartupAndShutdown;
 
     private boolean dryRun;
 

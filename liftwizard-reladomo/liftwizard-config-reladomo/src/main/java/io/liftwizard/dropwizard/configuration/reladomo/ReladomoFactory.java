@@ -26,15 +26,15 @@ import io.dropwizard.util.Duration;
 
 public class ReladomoFactory
 {
-    private          int          defaultRelationshipCacheSize           = 10_000;
-    private          int          defaultMinQueriesToKeep                = 32;
+    private int defaultRelationshipCacheSize = 10_000;
+    private int defaultMinQueriesToKeep = 32;
     // Something like 30 seconds to 2 minutes makes sense in production
-    private          Duration     transactionTimeout                     = Duration.minutes(5);
+    private Duration transactionTimeout = Duration.minutes(5);
     // reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml in production
-    private @NotNull List<String> runtimeConfigurationPaths              = List.of(
+    private @NotNull List<String> runtimeConfigurationPaths = List.of(
             "reladomo-runtime-configuration/TestReladomoRuntimeConfiguration.xml");
-    private          boolean      enableRetrieveCountMetrics             = true;
-    private          boolean      captureTransactionLevelPerformanceData = true;
+    private boolean enableRetrieveCountMetrics = true;
+    private boolean captureTransactionLevelPerformanceData = true;
 
     @JsonProperty
     public int getDefaultMinQueriesToKeep()

@@ -31,7 +31,7 @@ public class DdlExecutorFactory
     private @Valid @NotNull String dataSourceName;
     private @Valid @NotNull String ddlLocationPattern = ".*\\.ddl";
     private @Valid @NotNull String idxLocationPattern = ".*\\.idx";
-    private @Valid @NotNull String fkLocationPattern  = ".*\\.fk";
+    private @Valid @NotNull String fkLocationPattern = ".*\\.fk";
 
     @JsonProperty
     public String getDataSourceName()

@@ -33,7 +33,7 @@ import org.slf4j.MarkerFactory;
 public class LogMarkerTestRule
         extends TestWatcher
 {
-    private static final Logger LOGGER       = LoggerFactory.getLogger(LogMarkerTestRule.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogMarkerTestRule.class);
     private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
     private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 

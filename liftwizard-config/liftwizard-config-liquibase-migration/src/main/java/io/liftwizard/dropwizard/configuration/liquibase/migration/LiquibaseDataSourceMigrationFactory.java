@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LiquibaseDataSourceMigrationFactory
 {
-    private @NotNull String                dataSourceName;
-    private          String                catalogName;
-    private          String                schemaName;
-    private          String                migrationFileName     = "migrations.xml";
+    private @NotNull String dataSourceName;
+    private String catalogName;
+    private String schemaName;
+    private String migrationFileName = "migrations.xml";
     private @NotNull MigrationFileLocation migrationFileLocation = MigrationFileLocation.CLASSPATH;
-    private @NotNull List<String>          contexts              = List.of();
+    private @NotNull List<String> contexts = List.of();
 
     @JsonProperty
     public String getDataSourceName()

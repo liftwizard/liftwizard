@@ -44,20 +44,21 @@ class ConnectionManagerFactoryTest
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator    validator    = Validators.newValidator();
+    private final Validator validator = Validators.newValidator();
 
     private final JsonConfigurationFactory<ConnectionManagerFactory> factory =
             new JsonConfigurationFactory<>(ConnectionManagerFactory.class, this.validator, this.objectMapper, "dw");
 
     @Test
-    void createSourcelessConnectionManager() throws Exception
+    void createSourcelessConnectionManager()
+            throws Exception
     {
         ConnectionManagerFactory connectionManagerFactory = this.factory.build(
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
 
         PooledDataSourceFactory dataSourceFactory = new DataSourceFactory();
-        ManagedDataSource       managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
+        ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
 
         SourcelessConnectionManager sourcelessConnectionManager =
                 connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);

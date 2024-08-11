@@ -79,16 +79,16 @@ public class ReladomoLoadDataTestRule
             extends Statement
     {
         private static final Class<?>[] NO_PARAMS = {};
-        private static final Object[]   NO_ARGS   = {};
+        private static final Object[] NO_ARGS = {};
 
-        private final Statement             base;
+        private final Statement base;
         private final ImmutableList<String> configuredTestDataFileNames;
 
         public LoadDataStatement(
                 @Nonnull Statement base,
                 @Nonnull ImmutableList<String> configuredTestDataFileNames)
         {
-            this.base                        = Objects.requireNonNull(base);
+            this.base = Objects.requireNonNull(base);
             this.configuredTestDataFileNames = Objects.requireNonNull(configuredTestDataFileNames);
         }
 
@@ -111,7 +111,7 @@ public class ReladomoLoadDataTestRule
                 throws ReflectiveOperationException
         {
             LOGGER.debug("Loading test data from file: {}", testDataFileName);
-            MithraTestDataParser   parser         = new MithraTestDataParser(testDataFileName);
+            MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
             List<MithraParsedData> parsedDataList = parser.getResults();
 
             for (MithraParsedData mithraParsedData : parsedDataList)
@@ -123,25 +123,31 @@ public class ReladomoLoadDataTestRule
         private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
                 throws ReflectiveOperationException
         {
-            List<Attribute<?, ?>>  attributes      = mithraParsedData.getAttributes();
-            List<MithraDataObject> dataObjects     = mithraParsedData.getDataObjects();
-            String                 parsedClassName = mithraParsedData.getParsedClassName();
+            List<Attribute<?, ?>> attributes = mithraParsedData.getAttributes();
+            List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
+            String parsedClassName = mithraParsedData.getParsedClassName();
 
             if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName))
             {
-                throw new RuntimeException("Class " + parsedClassName + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?");
+                String message = "Class "
+                        + parsedClassName
+                        + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?";
+                throw new RuntimeException(message);
             }
 
-            String             finderClassName    = parsedClassName + "Finder";
-            Class<?>           finderClass        = Class.forName(finderClassName);
-            Method             method             = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
+            String finderClassName = parsedClassName + "Finder";
+            Class<?> finderClass = Class.forName(finderClassName);
+            Method method = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
             MithraObjectPortal mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
 
             MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
             SourcelessConnectionManager databaseObjectConnectionManager =
                     (SourcelessConnectionManager) databaseObject.getConnectionManager();
 
-            LOGGER.debug("Loading test data for class {} using connection manager: {}", parsedClassName, databaseObjectConnectionManager);
+            LOGGER.debug(
+                    "Loading test data for class {} using connection manager: {}",
+                    parsedClassName,
+                    databaseObjectConnectionManager);
 
             Class<? extends MithraDatabaseObject> databaseObjectClass = databaseObject.getClass();
 
@@ -158,7 +164,8 @@ public class ReladomoLoadDataTestRule
         }
 
         @Override
-        public void evaluate() throws Throwable
+        public void evaluate()
+                throws Throwable
         {
             this.before();
             try

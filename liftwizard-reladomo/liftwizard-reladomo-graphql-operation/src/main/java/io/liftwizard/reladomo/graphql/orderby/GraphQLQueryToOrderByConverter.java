@@ -50,11 +50,13 @@ public class GraphQLQueryToOrderByConverter
     {
         GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
         Map<String, ?> attribute = (Map<String, ?>) map.get("attribute");
-        String         direction = (String) map.get("direction");
+        String direction = (String) map.get("direction");
 
         if (attribute == null)
         {
-            throw new LiftwizardGraphQLContextException("Missing attribute in orderBy", converter.context.toImmutableList());
+            throw new LiftwizardGraphQLContextException(
+                    "Missing attribute in orderBy",
+                    converter.context.toImmutableList());
         }
 
         converter.convertAttribute(finder, attribute, direction);
@@ -100,8 +102,8 @@ public class GraphQLQueryToOrderByConverter
             return;
         }
 
-        RelatedFinder                  relatedFinder = finder.getRelationshipFinderByName(key);
-        GraphQLQueryToOrderByConverter converter     = new GraphQLQueryToOrderByConverter();
+        RelatedFinder relatedFinder = finder.getRelationshipFinderByName(key);
+        GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
         converter.convertAttribute(relatedFinder, (Map<String, ?>) value, direction);
         Optional<OrderBy> nestedResult = converter.getResult().stream().reduce(OrderBy::and);
         nestedResult.ifPresent(this.result::add);

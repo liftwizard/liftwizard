@@ -47,7 +47,9 @@ public final class ConnectionManagerHolder
         }
 
         String name = (String) properties.get(KEY_NAME);
-        Objects.requireNonNull(connectionManagersByName, "connectionManagersByName is null. Did you remember to run ConnectionManagerHolderBundle?");
+        Objects.requireNonNull(
+                connectionManagersByName,
+                "connectionManagersByName is null. Did you remember to run ConnectionManagerHolderBundle?");
         SourcelessConnectionManager sourcelessConnectionManager = connectionManagersByName.get(name);
         Objects.requireNonNull(
                 sourcelessConnectionManager,

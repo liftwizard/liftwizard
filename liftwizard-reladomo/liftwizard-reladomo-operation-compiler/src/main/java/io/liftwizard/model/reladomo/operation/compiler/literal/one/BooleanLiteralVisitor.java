@@ -20,7 +20,8 @@ import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.BooleanLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 
-public class BooleanLiteralVisitor extends AbstractLiteralVisitor<Boolean>
+public class BooleanLiteralVisitor
+        extends AbstractLiteralVisitor<Boolean>
 {
     public BooleanLiteralVisitor(RelatedFinder finder, String errorContext)
     {

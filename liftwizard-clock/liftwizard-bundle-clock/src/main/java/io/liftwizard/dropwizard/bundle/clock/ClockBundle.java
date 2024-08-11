@@ -50,8 +50,8 @@ public class ClockBundle
             @Nonnull Environment environment)
     {
         ClockFactory clockFactory = configuration.getClockFactory();
-        Clock        clock        = clockFactory.createClock();
-        ClockBinder  clockBinder  = new ClockBinder(clock);
+        Clock clock = clockFactory.createClock();
+        ClockBinder clockBinder = new ClockBinder(clock);
         environment.jersey().register(clockBinder);
     }
 }

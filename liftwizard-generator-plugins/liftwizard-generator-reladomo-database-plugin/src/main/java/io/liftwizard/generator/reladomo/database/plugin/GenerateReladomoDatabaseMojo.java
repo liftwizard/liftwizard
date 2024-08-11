@@ -133,9 +133,9 @@ public class GenerateReladomoDatabaseMojo
         {
             URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
-            URI  uri  = resource.toURI();
+            URI uri = resource.toURI();
             Path from = ManagedFileSystem.get(uri);
-            Path to   = Files.createTempDirectory(this.getClass().getSimpleName());
+            Path to = Files.createTempDirectory(this.getClass().getSimpleName());
 
             this.copyDirectory(from, to);
             return to

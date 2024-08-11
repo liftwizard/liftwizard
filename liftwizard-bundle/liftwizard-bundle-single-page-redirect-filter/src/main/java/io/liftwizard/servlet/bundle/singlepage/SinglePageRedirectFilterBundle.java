@@ -56,8 +56,8 @@ public abstract class SinglePageRedirectFilterBundle<T>
 
         LOGGER.info("Running {}.", bundle.getClass().getSimpleName());
 
-        String                redirectPage          = factory.getRedirectPage();
-        String                cacheControlHeader    = factory.getCacheControlHeader();
+        String redirectPage = factory.getRedirectPage();
+        String cacheControlHeader = factory.getCacheControlHeader();
         ImmutableList<String> wellKnownPathPrefixes = Lists.immutable.withAll(factory.getWellKnownPathPrefixes());
 
         var singlePageRedirectFilter = new SinglePageRedirectFilter(

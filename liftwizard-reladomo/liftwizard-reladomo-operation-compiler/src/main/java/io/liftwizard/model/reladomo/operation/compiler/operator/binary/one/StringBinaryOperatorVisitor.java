@@ -36,10 +36,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorWi
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorWildCardNotEqualsContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
 
-public class StringBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class StringBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final StringAttribute attribute;
-    private final String          parameter;
+    private final String parameter;
 
     public StringBinaryOperatorVisitor(StringAttribute attribute, String parameter)
     {

@@ -58,17 +58,17 @@ public class ServerLoggingFilter
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerLoggingFilter.class);
 
-    private final LoggingConfig                 loggingConfig;
+    private final LoggingConfig loggingConfig;
     private final Consumer<StructuredArguments> structuredLogger;
-    private final Clock                         clock;
+    private final Clock clock;
 
     public ServerLoggingFilter(
             LoggingConfig loggingConfig,
             Consumer<StructuredArguments> structuredLogger, Clock clock)
     {
-        this.loggingConfig    = Objects.requireNonNull(loggingConfig);
+        this.loggingConfig = Objects.requireNonNull(loggingConfig);
         this.structuredLogger = Objects.requireNonNull(structuredLogger);
-        this.clock            = Objects.requireNonNull(clock);
+        this.clock = Objects.requireNonNull(clock);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ServerLoggingFilter
 
         this.addInitialRequestAttributes(structuredArguments, httpServletRequest);
 
-        var requestWrapper  = new ContentCachingRequestWrapper(httpServletRequest);
+        var requestWrapper = new ContentCachingRequestWrapper(httpServletRequest);
         var responseWrapper = new ContentCachingResponseWrapper(httpServletResponse);
         try
         {
@@ -107,7 +107,7 @@ public class ServerLoggingFilter
         }
         finally
         {
-            Instant  endTime  = this.clock.instant();
+            Instant endTime = this.clock.instant();
             Duration duration = Duration.between(startTime, endTime);
             this.addFinalRequestAttributes(structuredArguments, requestWrapper);
             this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse, duration);
@@ -126,8 +126,8 @@ public class ServerLoggingFilter
             LOGGER.trace("authType: {}", authType);
         }
 
-        StructuredArgumentsRequestHttp http   = structuredArguments.getRequest().getHttp();
-        String                         method = httpServletRequest.getMethod();
+        StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
+        String method = httpServletRequest.getMethod();
         http.setMethod(method);
 
         http.setContextPath(httpServletRequest.getContextPath());

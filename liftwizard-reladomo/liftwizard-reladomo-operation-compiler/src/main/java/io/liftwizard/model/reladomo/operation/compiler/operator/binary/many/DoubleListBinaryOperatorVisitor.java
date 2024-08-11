@@ -27,7 +27,8 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableDoubleSet;
 import org.eclipse.collections.impl.factory.primitive.DoubleSets;
 
-public class DoubleListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class DoubleListBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final DoubleAttribute<?> attribute;
     private final ImmutableDoubleSet doubleSet;

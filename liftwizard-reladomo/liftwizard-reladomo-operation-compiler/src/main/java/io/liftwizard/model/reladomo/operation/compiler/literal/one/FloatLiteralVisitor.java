@@ -21,7 +21,8 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPo
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 
-public class FloatLiteralVisitor extends AbstractLiteralVisitor<Float>
+public class FloatLiteralVisitor
+        extends AbstractLiteralVisitor<Float>
 {
     public FloatLiteralVisitor(RelatedFinder finder, String errorContext)
     {

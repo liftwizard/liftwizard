@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArguments
 {
-    private final StructuredArgumentsRequest  request  = new StructuredArgumentsRequest();
+    private final StructuredArgumentsRequest request = new StructuredArgumentsRequest();
     private final StructuredArgumentsResponse response = new StructuredArgumentsResponse();
 
     @JsonProperty

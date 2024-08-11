@@ -38,7 +38,8 @@ class Slf4jUncaughtExceptionHandlerTest
         }
     }
 
-    private static class RootException extends RuntimeException
+    private static class RootException
+            extends RuntimeException
     {
         RootException(String message, Throwable cause)
         {

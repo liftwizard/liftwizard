@@ -19,7 +19,8 @@ package io.liftwizard.dropwizard.configuration.auth.filter.impersonation;
 import java.security.Principal;
 import java.util.Objects;
 
-public class ImpersonatedPrincipal implements Principal
+public class ImpersonatedPrincipal
+        implements Principal
 {
     private final String name;
 

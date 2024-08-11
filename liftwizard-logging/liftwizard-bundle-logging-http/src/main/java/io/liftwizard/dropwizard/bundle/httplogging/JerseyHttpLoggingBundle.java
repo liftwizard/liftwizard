@@ -52,7 +52,7 @@ public class JerseyHttpLoggingBundle
     private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
     @Nonnull
-    private final Consumer<StructuredArguments>            structuredLogger;
+    private final Consumer<StructuredArguments> structuredLogger;
     @Nonnull
     private final Function<Principal, Map<String, Object>> principalBuilder;
 

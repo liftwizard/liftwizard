@@ -39,10 +39,11 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 
 @JsonTypeName("incrementing")
 @AutoService(ClockFactory.class)
-public class IncrementingClockFactory implements ClockFactory
+public class IncrementingClockFactory
+        implements ClockFactory
 {
-    private @Valid @NotNull Instant instant      = Instant.parse("2000-12-31T23:59:59Z");
-    private @Valid @NotNull String  timeZoneName = "UTC";
+    private @Valid @NotNull Instant instant = Instant.parse("2000-12-31T23:59:59Z");
+    private @Valid @NotNull String timeZoneName = "UTC";
 
     @NotNull
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
@@ -63,9 +64,9 @@ public class IncrementingClockFactory implements ClockFactory
 
     private IncrementingClock createIncrementingClock()
     {
-        ZoneId   zoneId      = ZoneId.of(this.timeZoneName);
-        long     nanoseconds = this.incrementAmount.toNanoseconds();
-        Duration duration    = Duration.ofNanos(nanoseconds);
+        ZoneId zoneId = ZoneId.of(this.timeZoneName);
+        long nanoseconds = this.incrementAmount.toNanoseconds();
+        Duration duration = Duration.ofNanos(nanoseconds);
         return new IncrementingClock(this.instant, zoneId, duration);
     }
 

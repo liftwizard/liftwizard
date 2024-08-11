@@ -51,7 +51,7 @@ public class ReladomoTemporalInstantDataFetcher<Input>
             return null;
         }
 
-        Timestamp result   = this.timestampAttribute.valueOf(persistentInstance);
+        Timestamp result = this.timestampAttribute.valueOf(persistentInstance);
         Timestamp infinity = this.timestampAttribute.getAsOfAttributeInfinity();
         if (infinity.equals(result))
         {

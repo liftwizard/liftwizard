@@ -31,8 +31,8 @@ import org.eclipse.collections.impl.factory.Lists;
 
 public class ReladomoTestResourceColumn
 {
-    private final Attribute                attribute;
-    private final MutableList<Object>      values = Lists.mutable.empty();
+    private final Attribute attribute;
+    private final MutableList<Object> values = Lists.mutable.empty();
 
     private FrozenReladomoTestResourceColumn frozen;
 
@@ -47,7 +47,7 @@ public class ReladomoTestResourceColumn
 
         if (this.attribute.valueType() == Timestamp.class)
         {
-            Timestamp timestamp         = (Timestamp) value;
+            Timestamp timestamp = (Timestamp) value;
             Timestamp adjustedTimestamp = this.adjustTimestamp(timestamp);
             this.values.add(adjustedTimestamp);
         }
@@ -65,14 +65,14 @@ public class ReladomoTestResourceColumn
         }
 
         TimestampAttribute timestampAttribute = (TimestampAttribute) this.attribute;
-        Timestamp          infinityTimestamp  = timestampAttribute.getAsOfAttributeInfinity();
+        Timestamp infinityTimestamp = timestampAttribute.getAsOfAttributeInfinity();
 
         if (timestamp.equals(infinityTimestamp))
         {
             return infinityTimestamp;
         }
 
-        Instant       instant       = timestamp.toInstant();
+        Instant instant = timestamp.toInstant();
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
         return Timestamp.valueOf(localDateTime);
     }
@@ -84,8 +84,8 @@ public class ReladomoTestResourceColumn
             throw new AssertionError();
         }
 
-        String   attributeName = this.attribute.getAttributeName();
-        Class<?> valueType     = this.attribute.valueType();
+        String attributeName = this.attribute.getAttributeName();
+        Class<?> valueType = this.attribute.valueType();
 
         if (valueType == String.class)
         {

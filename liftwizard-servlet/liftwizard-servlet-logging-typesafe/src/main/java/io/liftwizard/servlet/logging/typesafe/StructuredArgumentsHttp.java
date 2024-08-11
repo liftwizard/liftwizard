@@ -26,9 +26,9 @@ import org.eclipse.collections.api.map.MutableMap;
 public class StructuredArgumentsHttp
 {
     private MapIterable<String, String> headers;
-    private ImmutableList<String>       excludedHeaders;
-    private String                      body;
-    private Long                        contentLength;
+    private ImmutableList<String> excludedHeaders;
+    private String body;
+    private Long contentLength;
 
     @JsonProperty
     public MapIterable<String, String> getHeaders()

@@ -29,7 +29,7 @@ public class StructuredArgumentsParameters
     public StructuredArgumentsParameters(MapIterable<String, String> query, MapIterable<String, String> path)
     {
         this.query = Objects.requireNonNull(query);
-        this.path  = Objects.requireNonNull(path);
+        this.path = Objects.requireNonNull(path);
     }
 
     @JsonProperty

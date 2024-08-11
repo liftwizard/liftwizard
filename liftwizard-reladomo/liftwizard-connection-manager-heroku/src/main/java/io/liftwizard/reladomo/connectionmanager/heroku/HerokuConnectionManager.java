@@ -27,19 +27,20 @@ import com.gs.fw.common.mithra.connectionmanager.XAConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import com.gs.fw.common.mithra.databasetype.PostgresDatabaseType;
 
-public final class HerokuConnectionManager implements SourcelessConnectionManager
+public final class HerokuConnectionManager
+        implements SourcelessConnectionManager
 {
     private static final HerokuConnectionManager INSTANCE = new HerokuConnectionManager();
 
     @Nonnull
     private final XAConnectionManager xaConnectionManager;
-    private final TimeZone            databaseTimeZone;
-    private final String              schemaName;
+    private final TimeZone databaseTimeZone;
+    private final String schemaName;
 
     private HerokuConnectionManager()
     {
-        this.schemaName          = "liftwizard-app";
-        this.databaseTimeZone    = TimeZone.getTimeZone("UTC");
+        this.schemaName = "liftwizard-app";
+        this.databaseTimeZone = TimeZone.getTimeZone("UTC");
         this.xaConnectionManager = this.createXaConnectionManager();
     }
 

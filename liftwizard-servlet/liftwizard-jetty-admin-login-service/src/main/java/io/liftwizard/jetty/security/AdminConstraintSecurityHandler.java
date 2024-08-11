@@ -23,7 +23,8 @@ import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.util.security.Constraint;
 
-public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler
+public class AdminConstraintSecurityHandler
+        extends ConstraintSecurityHandler
 {
     public static final String ADMIN_ROLE = "admin";
 
@@ -31,7 +32,7 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler
     {
         this.setAuthenticator(new BasicAuthenticator());
 
-        Constraint        constraint        = this.getConstraint();
+        Constraint constraint = this.getConstraint();
         ConstraintMapping constraintMapping = this.getConstraintMapping(constraint);
         this.addConstraintMapping(constraintMapping);
 

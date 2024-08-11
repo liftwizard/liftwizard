@@ -47,11 +47,11 @@ public class CommonPoolHealthCheck
     private static final int MAX_STACK_TRACE_DEPTH = 100;
 
     @Nonnull
-    private final ThreadMXBean           threads;
+    private final ThreadMXBean threads;
     @Nonnull
-    private final String                 threadNamePrefix;
+    private final String threadNamePrefix;
     @Nonnull
-    private final Set<State>             threadStates;
+    private final Set<State> threadStates;
     @Nonnull
     private final ImmutableList<Pattern> alwaysAllowedPatterns;
     @Nonnull
@@ -93,11 +93,11 @@ public class CommonPoolHealthCheck
             @Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
             @Nonnull ImmutableList<Pattern> bannedPatterns)
     {
-        this.threads               = Objects.requireNonNull(threads);
-        this.threadNamePrefix      = Objects.requireNonNull(threadNamePrefix);
-        this.threadStates          = new LinkedHashSet<>(threadStates.castToList());
+        this.threads = Objects.requireNonNull(threads);
+        this.threadNamePrefix = Objects.requireNonNull(threadNamePrefix);
+        this.threadStates = new LinkedHashSet<>(threadStates.castToList());
         this.alwaysAllowedPatterns = Objects.requireNonNull(alwaysAllowedPatterns);
-        this.bannedPatterns        = Objects.requireNonNull(bannedPatterns);
+        this.bannedPatterns = Objects.requireNonNull(bannedPatterns);
     }
 
     @Nonnull
@@ -126,8 +126,8 @@ public class CommonPoolHealthCheck
 
         for (ThreadInfo badThreadInfo : badThreadInfos)
         {
-            State  threadState      = badThreadInfo.getThreadState();
-            String threadName       = badThreadInfo.getThreadName();
+            State threadState = badThreadInfo.getThreadState();
+            String threadName = badThreadInfo.getThreadName();
             String stackTraceString = this.getStackTraceString(badThreadInfo.getStackTrace());
 
             try (MultiMDCCloseable mdc = new MultiMDCCloseable())

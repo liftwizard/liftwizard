@@ -80,13 +80,13 @@ public class StructuredArgumentsOpenTracingLogger
             @Nonnull ImmutableStack<String> stack,
             @Nonnull Entry<String, JsonNode> entry)
     {
-        String   key   = entry.getKey();
+        String key = entry.getKey();
         JsonNode value = entry.getValue();
 
         if (value.isObject())
         {
-            ImmutableStack<String> nextStack      = stack.push(key);
-            ObjectNode             nextObjectNode = (ObjectNode) value;
+            ImmutableStack<String> nextStack = stack.push(key);
+            ObjectNode nextObjectNode = (ObjectNode) value;
             this.structuredArgumentsToSpans(span, nextStack, nextObjectNode);
             return;
         }

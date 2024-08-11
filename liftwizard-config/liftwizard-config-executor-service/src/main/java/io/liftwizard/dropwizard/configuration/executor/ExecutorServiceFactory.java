@@ -37,18 +37,18 @@ public class ExecutorServiceFactory
 {
     @Valid
     @NotNull
-    private String   nameFormat;
+    private String nameFormat;
     @Min(0)
-    private int      minThreads;
+    private int minThreads;
     @Min(1)
-    private int      maxThreads    = 1;
-    private boolean  allowCoreThreadTimeOut;
+    private int maxThreads = 1;
+    private boolean allowCoreThreadTimeOut;
     @NotNull
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private Duration keepAliveTime = Duration.seconds(60);
     @NotNull
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private Duration shutdownTime  = Duration.seconds(5);
+    private Duration shutdownTime = Duration.seconds(5);
 
     // Method that must return true for the object to be valid
     @ValidationMethod(message = "maxThreads < minThreads")

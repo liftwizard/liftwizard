@@ -55,7 +55,7 @@ public class H2Bundle
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
     {
         H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
-        H2Factory         h2Factory         = h2FactoryProvider.getH2Factory();
+        H2Factory h2Factory = h2FactoryProvider.getH2Factory();
         if (h2Factory == null || !h2Factory.isEnabled())
         {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
@@ -71,8 +71,8 @@ public class H2Bundle
         Server tcpServer = this.createTcpServer(args.castToList());
         environment.lifecycle().manage(new TcpServerShutdownHook(tcpServer));
 
-        String servletName        = h2Factory.getServletName();
-        String servletUrlMapping  = h2Factory.getServletUrlMapping();
+        String servletName = h2Factory.getServletName();
+        String servletUrlMapping = h2Factory.getServletUrlMapping();
         String propertiesLocation = h2Factory.getPropertiesLocation();
 
         Dynamic h2ConsoleServlet = environment.servlets().addServlet(servletName, new WebServlet());

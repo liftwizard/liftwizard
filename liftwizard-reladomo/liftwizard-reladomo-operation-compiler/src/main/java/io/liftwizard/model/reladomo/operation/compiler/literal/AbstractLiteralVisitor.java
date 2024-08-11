@@ -28,14 +28,15 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLite
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowingVisitor<T>
+public abstract class AbstractLiteralVisitor<T>
+        extends ReladomoOperationThrowingVisitor<T>
 {
     protected final RelatedFinder finder;
-    protected final String        errorContext;
+    protected final String errorContext;
 
     protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext)
     {
-        this.finder       = Objects.requireNonNull(finder);
+        this.finder = Objects.requireNonNull(finder);
         this.errorContext = Objects.requireNonNull(errorContext);
     }
 

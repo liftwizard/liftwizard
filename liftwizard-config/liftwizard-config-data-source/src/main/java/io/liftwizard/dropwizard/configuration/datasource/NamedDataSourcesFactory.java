@@ -53,7 +53,7 @@ public class NamedDataSourcesFactory
     @JsonProperty("dataSources")
     public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories)
     {
-        this.namedDataSourceFactories       = namedDataSourceFactories;
+        this.namedDataSourceFactories = namedDataSourceFactories;
         this.namedDataSourceFactoriesByName = new LinkedHashMap<>();
         for (NamedDataSourceFactory namedDataSourceFactory : namedDataSourceFactories)
         {
@@ -125,7 +125,7 @@ public class NamedDataSourcesFactory
         }
 
         NamedDataSourceFactory namedDataSourceFactory = this.namedDataSourceFactoriesByName.get(name);
-        ManagedDataSource      managedDataSource      = namedDataSourceFactory.build(metricRegistry);
+        ManagedDataSource managedDataSource = namedDataSourceFactory.build(metricRegistry);
         lifecycle.manage(managedDataSource);
         this.dataSourcesByName.put(name, managedDataSource);
         return managedDataSource;

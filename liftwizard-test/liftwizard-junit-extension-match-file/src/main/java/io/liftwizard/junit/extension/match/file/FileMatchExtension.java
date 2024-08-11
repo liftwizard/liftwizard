@@ -47,7 +47,7 @@ public class FileMatchExtension
         {
             String prettyPrintedString = this.getPrettyPrintedString(actualString);
 
-            Path packagePath  = this.resourceRerecorderExtension.getPackagePath();
+            Path packagePath = this.resourceRerecorderExtension.getPackagePath();
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
             this.resourceRerecorderExtension.writeStringToFile(

@@ -24,10 +24,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEq
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
 
-public class BooleanBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class BooleanBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final BooleanAttribute attribute;
-    private final Boolean          parameter;
+    private final Boolean parameter;
 
     public BooleanBinaryOperatorVisitor(BooleanAttribute attribute, Boolean parameter)
     {

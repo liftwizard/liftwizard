@@ -29,13 +29,13 @@ public class ReladomoExistsOperatorVisitor
         extends ReladomoOperationThrowingVisitor<Operation>
 {
     private final AbstractRelatedFinder navigation;
-    private final Operation             notExistsOperation;
+    private final Operation notExistsOperation;
 
     public ReladomoExistsOperatorVisitor(
             AbstractRelatedFinder navigation,
             Operation notExistsOperation)
     {
-        this.navigation         = Objects.requireNonNull(navigation);
+        this.navigation = Objects.requireNonNull(navigation);
         this.notExistsOperation = notExistsOperation;
     }
 

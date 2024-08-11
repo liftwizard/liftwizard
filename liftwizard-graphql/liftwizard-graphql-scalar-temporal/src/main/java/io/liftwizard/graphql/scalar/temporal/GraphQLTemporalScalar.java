@@ -25,9 +25,9 @@ import graphql.schema.GraphQLScalarType;
 @Internal
 public final class GraphQLTemporalScalar
 {
-    public static final GraphQLScalarType INSTANT_INSTANCE          = getGraphQLScalarType("Instant");
+    public static final GraphQLScalarType INSTANT_INSTANCE = getGraphQLScalarType("Instant");
     public static final GraphQLScalarType TEMPORAL_INSTANT_INSTANCE = getGraphQLScalarType("TemporalInstant");
-    public static final GraphQLScalarType TEMPORAL_RANGE_INSTANCE   = getGraphQLScalarType("TemporalRange");
+    public static final GraphQLScalarType TEMPORAL_RANGE_INSTANCE = getGraphQLScalarType("TemporalRange");
 
     private GraphQLTemporalScalar()
     {

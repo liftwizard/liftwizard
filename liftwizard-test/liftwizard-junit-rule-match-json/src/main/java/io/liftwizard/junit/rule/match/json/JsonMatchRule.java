@@ -49,7 +49,7 @@ public class JsonMatchRule
     public JsonMatchRule(@Nonnull Class<?> callingClass)
     {
         super(callingClass);
-        this.objectMapper    = JsonMatchRule.newObjectMapper();
+        this.objectMapper = JsonMatchRule.newObjectMapper();
     }
 
     private static ObjectMapper newObjectMapper()
@@ -89,7 +89,7 @@ public class JsonMatchRule
             String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
 
             URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-            URI uri      = resource.toURI();
+            URI uri = resource.toURI();
 
             if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
             {
@@ -112,7 +112,7 @@ public class JsonMatchRule
                 File file = new File(uri);
                 this.writeStringToFile(resourceClassPathLocation, actualString, file);
 
-                String         detailMessage  = "Writing expected file to: %s%n%s".formatted(uri, message);
+                String detailMessage = "Writing expected file to: %s%n%s".formatted(uri, message);
                 AssertionError assertionError = new AssertionError(detailMessage);
                 this.addError(assertionError);
             }
@@ -169,8 +169,8 @@ public class JsonMatchRule
     {
         try
         {
-            JsonNode jsonNode            = this.objectMapper.readTree(string);
-            String   prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
+            JsonNode jsonNode = this.objectMapper.readTree(string);
+            String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
             return prettyPrintedString;
         }
         catch (JsonProcessingException e)

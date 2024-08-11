@@ -38,7 +38,7 @@ class ManagedFileSystemTest
         assertTrue(path1.toFile().exists());
 
         String tmpdir = System.getProperty("java.io.tmpdir");
-        Path   path2  = ManagedFileSystem.get(new URI("file://" + tmpdir));
+        Path path2 = ManagedFileSystem.get(new URI("file://" + tmpdir));
         assertTrue(path2.isAbsolute());
         assertTrue(path2.toFile().exists());
     }

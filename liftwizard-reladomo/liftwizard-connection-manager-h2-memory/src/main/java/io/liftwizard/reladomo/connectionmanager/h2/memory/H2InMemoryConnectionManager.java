@@ -32,8 +32,8 @@ public final class H2InMemoryConnectionManager
 {
     private static final H2InMemoryConnectionManager INSTANCE = new H2InMemoryConnectionManager();
 
-    private static final TimeZone            TIME_ZONE             = TimeZone.getTimeZone("UTC");
-    private static final String              SCHEMA_NAME           = "liftwizard-app-h2";
+    private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("UTC");
+    private static final String SCHEMA_NAME = "liftwizard-app-h2";
     private static final XAConnectionManager XA_CONNECTION_MANAGER =
             H2InMemoryConnectionManager.createXaConnectionManager();
 

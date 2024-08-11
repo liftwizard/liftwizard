@@ -25,7 +25,7 @@ import org.junit.runners.model.Statement;
 public class LiquibaseTestRule
         implements TestRule
 {
-    private final String  migrationsFile;
+    private final String migrationsFile;
     private final boolean dropAll;
 
     public LiquibaseTestRule(String migrationsFile)
@@ -36,7 +36,7 @@ public class LiquibaseTestRule
     public LiquibaseTestRule(String migrationsFile, boolean dropAll)
     {
         this.migrationsFile = Objects.requireNonNull(migrationsFile);
-        this.dropAll        = dropAll;
+        this.dropAll = dropAll;
     }
 
     @Override

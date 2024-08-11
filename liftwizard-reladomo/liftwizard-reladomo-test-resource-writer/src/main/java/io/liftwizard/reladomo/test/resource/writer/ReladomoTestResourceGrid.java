@@ -32,15 +32,15 @@ import org.eclipse.collections.impl.set.mutable.SetAdapter;
 
 public class ReladomoTestResourceGrid
 {
-    private final ReladomoClassMetaData                     metaData;
+    private final ReladomoClassMetaData metaData;
     private final ImmutableList<ReladomoTestResourceColumn> columns;
-    private final MithraList<?>                             mithraList;
+    private final MithraList<?> mithraList;
 
     private boolean frozen;
 
     public ReladomoTestResourceGrid(ReladomoClassMetaData metaData, MithraList<?> mithraList)
     {
-        this.metaData   = Objects.requireNonNull(metaData);
+        this.metaData = Objects.requireNonNull(metaData);
         this.mithraList = Objects.requireNonNull(mithraList);
 
         MutableSet<Attribute> attributes = SetAdapter.adapt(new LinkedHashSet<>());
@@ -95,7 +95,7 @@ public class ReladomoTestResourceGrid
             return "";
         }
 
-        String classString     = "class " + this.metaData.getBusinessOrInterfaceClassName() + "\n";
+        String classString = "class " + this.metaData.getBusinessOrInterfaceClassName() + "\n";
         String headerRowString = this.columns.collect(ReladomoTestResourceColumn::getPaddedHeader).makeString() + "\n";
         LazyIterable<String> rowStrings = Interval.zeroTo(this.mithraList.size() - 1)
                 .collect(this::getRowString);

@@ -29,14 +29,15 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNo
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
 
-public class LocalDateListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class LocalDateListBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
-    private final DateAttribute  attribute;
+    private final DateAttribute attribute;
     private final Set<Timestamp> timestamps;
 
     public LocalDateListBinaryOperatorVisitor(DateAttribute attribute, ImmutableList<LocalDate> parameter)
     {
-        this.attribute  = Objects.requireNonNull(attribute);
+        this.attribute = Objects.requireNonNull(attribute);
         this.timestamps = new LinkedHashSet<>(parameter.collect(this::getTimestamp).castToList());
     }
 

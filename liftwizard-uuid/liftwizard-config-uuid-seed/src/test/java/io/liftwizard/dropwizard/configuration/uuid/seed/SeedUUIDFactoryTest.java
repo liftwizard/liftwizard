@@ -42,7 +42,7 @@ class SeedUUIDFactoryTest
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator    validator    = Validators.newValidator();
+    private final Validator validator = Validators.newValidator();
 
     private final JsonConfigurationFactory<UUIDSupplierFactory> factory = new JsonConfigurationFactory<>(
             UUIDSupplierFactory.class,
@@ -54,8 +54,8 @@ class SeedUUIDFactoryTest
     void isDiscoverable()
     {
         // Make sure the types we specified in META-INF gets picked up
-        var            discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        List<Class<?>> discoveredSubtypes          = discoverableSubtypeResolver.getDiscoveredSubtypes();
+        var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+        List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
         assertThat(discoveredSubtypes).contains(SeedUUIDSupplierFactory.class);
     }
 
@@ -67,9 +67,9 @@ class SeedUUIDFactoryTest
                 new ResourceConfigurationSourceProvider(),
                 "config-test.json5");
         assertThat(uuidFactory).isInstanceOf(SeedUUIDSupplierFactory.class);
-        Supplier<UUID> uuidSupplier     = uuidFactory.createUUIDSupplier();
-        UUID           uuid             = uuidSupplier.get();
-        String         actualUUIDString = uuid.toString();
+        Supplier<UUID> uuidSupplier = uuidFactory.createUUIDSupplier();
+        UUID uuid = uuidSupplier.get();
+        String actualUUIDString = uuid.toString();
         assertThat(actualUUIDString).isEqualTo("4bb909d0-4c29-3f81-957f-aab6d7f73c9f");
     }
 

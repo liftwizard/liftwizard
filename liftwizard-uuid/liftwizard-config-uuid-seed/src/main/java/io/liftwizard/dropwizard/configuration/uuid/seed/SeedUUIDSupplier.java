@@ -22,10 +22,11 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
-public class SeedUUIDSupplier implements Supplier<UUID>
+public class SeedUUIDSupplier
+        implements Supplier<UUID>
 {
     private final String seed;
-    private       int    counter;
+    private int counter;
 
     public SeedUUIDSupplier(@Nonnull String seed)
     {
@@ -37,7 +38,7 @@ public class SeedUUIDSupplier implements Supplier<UUID>
     public UUID get()
     {
         this.counter++;
-        String name  = this.seed + this.counter;
+        String name = this.seed + this.counter;
         byte[] bytes = name.getBytes();
         return UUID.nameUUIDFromBytes(bytes);
     }

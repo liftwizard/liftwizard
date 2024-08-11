@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class ReladomoLoadDataExtension
     private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataExtension.class);
 
     private static final Class<?>[] NO_PARAMS = {};
-    private static final Object[]   NO_ARGS   = {};
+    private static final Object[] NO_ARGS = {};
 
     @Nonnull
     private final ImmutableList<String> testDataFileNames;
@@ -98,7 +98,7 @@ public class ReladomoLoadDataExtension
             throws ReflectiveOperationException
     {
         LOGGER.debug("Loading test data from file: {}", testDataFileName);
-        MithraTestDataParser   parser         = new MithraTestDataParser(testDataFileName);
+        MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
         List<MithraParsedData> parsedDataList = parser.getResults();
 
         for (MithraParsedData mithraParsedData : parsedDataList)
@@ -110,9 +110,9 @@ public class ReladomoLoadDataExtension
     private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
             throws ReflectiveOperationException
     {
-        List<Attribute<?, ?>>  attributes      = mithraParsedData.getAttributes();
-        List<MithraDataObject> dataObjects     = mithraParsedData.getDataObjects();
-        String                 parsedClassName = mithraParsedData.getParsedClassName();
+        List<Attribute<?, ?>> attributes = mithraParsedData.getAttributes();
+        List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
+        String parsedClassName = mithraParsedData.getParsedClassName();
 
         if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName))
         {
@@ -121,9 +121,9 @@ public class ReladomoLoadDataExtension
                     + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?");
         }
 
-        String             finderClassName    = parsedClassName + "Finder";
-        Class<?>           finderClass        = Class.forName(finderClassName);
-        Method             method             = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
+        String finderClassName = parsedClassName + "Finder";
+        Class<?> finderClass = Class.forName(finderClassName);
+        Method method = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
         MithraObjectPortal mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
 
         MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
