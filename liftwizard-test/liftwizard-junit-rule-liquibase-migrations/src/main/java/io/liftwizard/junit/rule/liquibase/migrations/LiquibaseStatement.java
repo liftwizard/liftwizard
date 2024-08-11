@@ -18,6 +18,7 @@ package io.liftwizard.junit.rule.liquibase.migrations;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -50,8 +51,8 @@ public class LiquibaseStatement
 
     public LiquibaseStatement(Statement baseStatement, String migrationsFile, boolean dropAll)
     {
-        this.baseStatement = baseStatement;
-        this.migrationsFile = migrationsFile;
+        this.baseStatement = Objects.requireNonNull(baseStatement);
+        this.migrationsFile = Objects.requireNonNull(migrationsFile);
         this.dropAll = dropAll;
     }
 

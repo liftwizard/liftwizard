@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package io.liftwizard.logging.metrics.structured;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +59,7 @@ public class Builder
 
     public Builder(MetricRegistry registry)
     {
-        this.registry = registry;
+        this.registry = Objects.requireNonNull(registry);
     }
 
     /**
