@@ -21,7 +21,8 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLite
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 import org.apache.commons.text.StringEscapeUtils;
 
-public class StringLiteralVisitor extends AbstractLiteralVisitor<String>
+public class StringLiteralVisitor
+        extends AbstractLiteralVisitor<String>
 {
     public StringLiteralVisitor(RelatedFinder finder, String errorContext)
     {
@@ -41,8 +42,8 @@ public class StringLiteralVisitor extends AbstractLiteralVisitor<String>
         {
             return null;
         }
-        String quotedText      = ctx.StringLiteral().getText();
-        String unquotedText    = quotedText.substring(1, quotedText.length() - 1);
+        String quotedText = ctx.StringLiteral().getText();
+        String unquotedText = quotedText.substring(1, quotedText.length() - 1);
         String unescapedString = StringEscapeUtils.unescapeJava(unquotedText);
         return unescapedString;
     }

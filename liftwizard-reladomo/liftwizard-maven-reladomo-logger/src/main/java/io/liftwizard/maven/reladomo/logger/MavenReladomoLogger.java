@@ -19,7 +19,8 @@ package io.liftwizard.maven.reladomo.logger;
 import com.gs.fw.common.mithra.generator.Logger;
 import org.apache.maven.plugin.logging.Log;
 
-public class MavenReladomoLogger implements Logger
+public class MavenReladomoLogger
+        implements Logger
 {
     private final Log log;
 

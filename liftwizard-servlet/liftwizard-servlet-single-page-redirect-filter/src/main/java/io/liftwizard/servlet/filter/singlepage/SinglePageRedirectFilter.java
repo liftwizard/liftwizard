@@ -33,8 +33,8 @@ import org.eclipse.collections.api.list.ImmutableList;
 public class SinglePageRedirectFilter
         implements Filter
 {
-    private final String                redirectPage;
-    private final String                cacheControlHeader;
+    private final String redirectPage;
+    private final String cacheControlHeader;
     private final ImmutableList<String> wellKnownPathPrefixes;
 
     public SinglePageRedirectFilter(
@@ -42,8 +42,8 @@ public class SinglePageRedirectFilter
             String cacheControlHeader,
             ImmutableList<String> wellKnownPathPrefixes)
     {
-        this.redirectPage          = redirectPage;
-        this.cacheControlHeader    = cacheControlHeader;
+        this.redirectPage = redirectPage;
+        this.cacheControlHeader = cacheControlHeader;
         this.wellKnownPathPrefixes = wellKnownPathPrefixes;
     }
 

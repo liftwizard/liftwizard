@@ -35,14 +35,14 @@ public class ExecuteSqlExtension
         implements BeforeEachCallback, AfterEachCallback
 {
     /**
-     *  The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
+     * The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
      */
     // language=RegExp
     private String ddlLocationPattern = "^(?!META-INF\\.).*\\.ddl$";
     // language=RegExp
     private String idxLocationPattern = "^(?!META-INF\\.).*\\.idx$";
     // language=RegExp
-    private String fkLocationPattern  = "^(?!META-INF\\.).*\\.fk$";
+    private String fkLocationPattern = "^(?!META-INF\\.).*\\.fk$";
 
     @Nonnull
     private Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager

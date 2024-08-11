@@ -54,18 +54,18 @@ import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 
 public class LogstashEncoderFactory
 {
-    private          boolean      includeContext                   = true;
-    private          boolean      includeMdc                       = true;
-    private          boolean      includeStructuredArguments       = true;
-    private          boolean      includedNonStructuredArguments;
-    private          boolean      includeTags                      = true;
-    private          boolean      rootCauseFirst                   = true;
-    private          List<String> truncateStackTracesAfterPrefixes = List.of(
+    private boolean includeContext = true;
+    private boolean includeMdc = true;
+    private boolean includeStructuredArguments = true;
+    private boolean includedNonStructuredArguments;
+    private boolean includeTags = true;
+    private boolean rootCauseFirst = true;
+    private List<String> truncateStackTracesAfterPrefixes = List.of(
             "^org\\.junit\\.platform\\.engine",
             "^org\\.junit\\.jupiter\\.engine");
-    private          ObjectNode   customFields;
-    private          boolean      prettyPrint;
-    private @NotNull Include      serializationInclusion           = Include.NON_ABSENT;
+    private ObjectNode customFields;
+    private boolean prettyPrint;
+    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
 
     @JsonProperty
     public boolean isIncludeContext()

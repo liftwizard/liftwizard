@@ -29,8 +29,8 @@ public class StructuredArgumentsServer
     public StructuredArgumentsServer(String scheme, String name, int port)
     {
         this.scheme = Objects.requireNonNull(scheme);
-        this.name   = Objects.requireNonNull(name);
-        this.port   = port;
+        this.name = Objects.requireNonNull(name);
+        this.port = port;
     }
 
     @JsonProperty

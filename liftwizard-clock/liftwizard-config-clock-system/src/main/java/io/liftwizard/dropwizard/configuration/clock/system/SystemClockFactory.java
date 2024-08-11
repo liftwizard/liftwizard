@@ -26,7 +26,8 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 
 @JsonTypeName("system")
 @AutoService(ClockFactory.class)
-public class SystemClockFactory implements ClockFactory
+public class SystemClockFactory
+        implements ClockFactory
 {
     @Nonnull
     @Override

@@ -109,12 +109,12 @@ public class LiftwizardLiquibaseMigrationBundle
                     dataSourceName,
                     environment.metrics(),
                     environment.lifecycle());
-            String                catalogName           = factory.getCatalogName();
-            String                schemaName            = factory.getSchemaName();
-            String                migrationFile         = factory.getMigrationFileName();
+            String catalogName = factory.getCatalogName();
+            String schemaName = factory.getSchemaName();
+            String migrationFile = factory.getMigrationFileName();
             MigrationFileLocation migrationFileLocation = factory.getMigrationFileLocation();
-            List<String>          contexts              = factory.getContexts();
-            String                context               = String.join(",", contexts);
+            List<String> contexts = factory.getContexts();
+            String context = String.join(",", contexts);
 
             try (
                     CloseableLiquibase liquibase = this.openLiquibase(
@@ -152,7 +152,7 @@ public class LiftwizardLiquibaseMigrationBundle
             MigrationFileLocation migrationFileLocation)
             throws SQLException, LiquibaseException
     {
-        Database         database         = this.createDatabase(dataSource, catalogName, schemaName);
+        Database database = this.createDatabase(dataSource, catalogName, schemaName);
         ResourceAccessor resourceAccessor = getResourceAccessor(migrationFileLocation);
         return new CloseableLiquibase(migrationsFile, resourceAccessor, database, dataSource);
     }
@@ -171,7 +171,7 @@ public class LiftwizardLiquibaseMigrationBundle
             throws SQLException, LiquibaseException
     {
         DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
-        Database           database   = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
+        Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
         if (database.supportsCatalogs() && catalogName != null)
         {

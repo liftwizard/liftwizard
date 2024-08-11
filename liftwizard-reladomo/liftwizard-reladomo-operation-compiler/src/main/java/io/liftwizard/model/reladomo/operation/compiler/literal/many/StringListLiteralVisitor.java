@@ -23,7 +23,8 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.StringLiteral
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class StringListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<String>>
+public class StringListLiteralVisitor
+        extends AbstractLiteralVisitor<ImmutableList<String>>
 {
     private final StringLiteralVisitor stringLiteralVisitor;
 

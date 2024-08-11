@@ -44,14 +44,14 @@ public class LiftwizardGraphQLLoggingInstrumentation
             return super.instrumentDataFetcher(dataFetcher, parameters);
         }
 
-        var         executionId    = parameters.getExecutionContext().getExecutionId().toString();
-        var         stepInfo       = parameters.getExecutionStepInfo();
-        String      path           = GraphQLInstrumentationUtils.getPathWithIndex(stepInfo);
-        GraphQLType parentType     = stepInfo.getParent().getType();
-        String      parentTypeName = GraphQLInstrumentationUtils.getTypeName(parentType);
-        String      fieldName      = parameters.getField().getName();
-        GraphQLType fieldType      = parameters.getField().getType();
-        String      fieldTypeName  = GraphQLInstrumentationUtils.getTypeName(fieldType);
+        var executionId = parameters.getExecutionContext().getExecutionId().toString();
+        var stepInfo = parameters.getExecutionStepInfo();
+        String path = GraphQLInstrumentationUtils.getPathWithIndex(stepInfo);
+        GraphQLType parentType = stepInfo.getParent().getType();
+        String parentTypeName = GraphQLInstrumentationUtils.getTypeName(parentType);
+        String fieldName = parameters.getField().getName();
+        GraphQLType fieldType = parameters.getField().getType();
+        String fieldTypeName = GraphQLInstrumentationUtils.getTypeName(fieldType);
 
         return new MDCDataFetcher<>(dataFetcher, executionId, path, parentTypeName, fieldName, fieldTypeName);
     }

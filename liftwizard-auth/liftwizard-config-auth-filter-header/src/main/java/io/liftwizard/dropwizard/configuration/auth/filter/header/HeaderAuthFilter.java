@@ -23,6 +23,7 @@ import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Response;
 
 import io.dropwizard.auth.AuthFilter;
 
@@ -35,7 +36,7 @@ public class HeaderAuthFilter
 
     public HeaderAuthFilter(String headerName, String headerPrefix)
     {
-        this.headerName   = Objects.requireNonNull(headerName);
+        this.headerName = Objects.requireNonNull(headerName);
         this.headerPrefix = headerPrefix;
     }
 
@@ -51,7 +52,8 @@ public class HeaderAuthFilter
         String credentials = headerValues.get(0);
         if (!this.authenticate(requestContext, credentials, "Header"))
         {
-            throw new WebApplicationException(this.unauthorizedHandler.buildResponse(this.headerName, this.headerPrefix));
+            Response response = this.unauthorizedHandler.buildResponse(this.headerName, this.headerPrefix);
+            throw new WebApplicationException(response);
         }
     }
 
@@ -63,7 +65,7 @@ public class HeaderAuthFilter
 
         public Builder(String headerName, String headerPrefix)
         {
-            this.headerName   = Objects.requireNonNull(headerName);
+            this.headerName = Objects.requireNonNull(headerName);
             this.headerPrefix = headerPrefix;
             this.setAuthenticator(new HeaderAuthenticator(headerPrefix));
             this.setUnauthorizedHandler(new JSONUnauthorizedHandler());

@@ -64,31 +64,31 @@ public abstract class AbstractLiftwizardConfiguration
     // region General
     @Valid
     @NotNull
-    private ClockFactory            clockFactory            = new SystemClockFactory();
+    private ClockFactory clockFactory = new SystemClockFactory();
     @Valid
     @NotNull
     private SystemPropertiesFactory systemPropertiesFactory = new SystemPropertiesFactory();
     // endregion General
 
-    //region Services
+    // region Services
     @Valid
     @NotNull
-    private EnabledFactory           configLoggingFactory     = new EnabledFactory();
+    private EnabledFactory configLoggingFactory = new EnabledFactory();
     @Valid
     @NotNull
-    private ObjectMapperFactory      objectMapperFactory      = new ObjectMapperFactory();
+    private ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
     @Valid
     @NotNull
     private JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
     @Valid
     @NotNull
-    private CorsFactory              corsFactory              = new CorsFactory();
+    private CorsFactory corsFactory = new CorsFactory();
     @Valid
     @NotNull
-    private List<AuthFilterFactory>  authFilterFactories      = List.of();
-    //endregion Services
+    private List<AuthFilterFactory> authFilterFactories = List.of();
+    // endregion Services
 
-    //region General
+    // region General
     @Override
     @JsonProperty("clock")
     public ClockFactory getClockFactory()
@@ -114,9 +114,9 @@ public abstract class AbstractLiftwizardConfiguration
     {
         this.systemPropertiesFactory = systemPropertiesFactory;
     }
-    //endregion
+    // endregion
 
-    //region Services
+    // region Services
     @Override
     @JsonProperty("configLogging")
     public EnabledFactory getConfigLoggingFactory()
@@ -181,5 +181,5 @@ public abstract class AbstractLiftwizardConfiguration
     {
         this.authFilterFactories = authFilterFactories;
     }
-    //endregion Services
+    // endregion Services
 }

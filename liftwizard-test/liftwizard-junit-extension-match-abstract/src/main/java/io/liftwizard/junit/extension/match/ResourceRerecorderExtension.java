@@ -44,13 +44,13 @@ public class ResourceRerecorderExtension
     protected static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
 
     private final Class<?> callingClass;
-    private final boolean  rerecordEnabled;
+    private final boolean rerecordEnabled;
 
     private final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
     public ResourceRerecorderExtension(Class<?> callingClass, boolean rerecordEnabled)
     {
-        this.callingClass    = Objects.requireNonNull(callingClass);
+        this.callingClass = Objects.requireNonNull(callingClass);
         this.rerecordEnabled = rerecordEnabled;
     }
 
@@ -68,9 +68,9 @@ public class ResourceRerecorderExtension
 
     public Path getPackagePath()
     {
-        String               packageName      = this.callingClass.getPackage().getName();
+        String packageName = this.callingClass.getPackage().getName();
         ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-        Path                 testResources    = Paths.get("", "src", "test", "resources").toAbsolutePath();
+        Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
         return packageNameParts.injectInto(testResources, Path::resolve);
     }
 
@@ -110,7 +110,7 @@ public class ResourceRerecorderExtension
             throws URISyntaxException, FileNotFoundException
     {
         URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-        URI uri      = resource.toURI();
+        URI uri = resource.toURI();
 
         if (this.rerecordedPaths.contains(resourceClassPathLocation))
         {

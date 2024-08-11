@@ -25,7 +25,8 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.LocalDateLite
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class LocalDateListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<LocalDate>>
+public class LocalDateListLiteralVisitor
+        extends AbstractLiteralVisitor<ImmutableList<LocalDate>>
 {
     private final LocalDateLiteralVisitor localDateLiteralVisitor;
 

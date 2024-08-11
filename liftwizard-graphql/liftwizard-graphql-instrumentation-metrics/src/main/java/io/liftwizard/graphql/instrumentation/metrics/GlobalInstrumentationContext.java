@@ -28,12 +28,12 @@ public class GlobalInstrumentationContext<T>
         implements InstrumentationContext<T>
 {
     private final Context clock;
-    private final Meter   exceptionsMeter;
+    private final Meter exceptionsMeter;
 
     public GlobalInstrumentationContext(Timer timer, Meter exceptionsMeter)
     {
         Objects.requireNonNull(timer);
-        this.clock           = timer.time();
+        this.clock = timer.time();
         this.exceptionsMeter = Objects.requireNonNull(exceptionsMeter);
     }
 

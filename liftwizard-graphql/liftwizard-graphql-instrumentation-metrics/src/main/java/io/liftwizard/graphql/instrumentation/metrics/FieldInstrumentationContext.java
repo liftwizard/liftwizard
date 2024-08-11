@@ -41,7 +41,7 @@ public class FieldInstrumentationContext
     {
         this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
 
-        this.allFieldsSyncClock  = allFieldsSyncTimer.time();
+        this.allFieldsSyncClock = allFieldsSyncTimer.time();
         this.allFieldsAsyncClock = allFieldsAsyncTimer.time();
     }
 

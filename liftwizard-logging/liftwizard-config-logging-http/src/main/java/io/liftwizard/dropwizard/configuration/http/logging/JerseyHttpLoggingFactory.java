@@ -31,12 +31,12 @@ import io.dropwizard.validation.ValidationMethod;
 public class JerseyHttpLoggingFactory
 {
     // Should usually be disabled in production
-    private boolean enabled                = true;
-    private boolean logRequests            = true;
-    private boolean logRequestBodies       = true;
-    private boolean logResponses           = true;
-    private boolean logResponseBodies      = true;
-    private boolean logRequestHeaderNames  = true;
+    private boolean enabled = true;
+    private boolean logRequests = true;
+    private boolean logRequestBodies = true;
+    private boolean logResponses = true;
+    private boolean logResponseBodies = true;
+    private boolean logRequestHeaderNames = true;
     private boolean logExcludedRequestHeaderNames;
     private boolean logResponseHeaderNames = true;
     private boolean logExcludedResponseHeaderNames;

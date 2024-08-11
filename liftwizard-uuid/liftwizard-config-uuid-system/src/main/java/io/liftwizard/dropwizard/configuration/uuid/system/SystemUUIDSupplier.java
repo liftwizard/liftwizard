@@ -21,7 +21,8 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
-public class SystemUUIDSupplier implements Supplier<UUID>
+public class SystemUUIDSupplier
+        implements Supplier<UUID>
 {
     @Nonnull
     @Override

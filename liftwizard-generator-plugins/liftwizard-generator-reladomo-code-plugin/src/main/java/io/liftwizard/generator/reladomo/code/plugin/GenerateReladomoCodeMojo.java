@@ -63,11 +63,11 @@ public class GenerateReladomoCodeMojo
     private File nonGeneratedDir;
 
     @Parameter(property = "generateConcreteClasses", defaultValue = "true")
-    private final boolean generateConcreteClasses  = true;
+    private final boolean generateConcreteClasses = true;
     @Parameter(property = "warnAboutConcreteClasses", defaultValue = "true")
     private final boolean warnAboutConcreteClasses = true;
     @Parameter(property = "generateEcListMethod", defaultValue = "true")
-    private final boolean generateEcListMethod     = true;
+    private final boolean generateEcListMethod = true;
 
     @Override
     public void execute()
@@ -115,9 +115,11 @@ public class GenerateReladomoCodeMojo
         {
             URL resource = this.getClass().getResource('/' + this.definitionsAndClassListDirectory);
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
-            URI  uri  = resource.toURI();
+            URI uri = resource.toURI();
             Path from = ManagedFileSystem.get(uri);
-            Path to   = Files.createTempDirectory(this.getClass().getSimpleName()).resolve(this.definitionsAndClassListDirectory);
+            Path to = Files
+                    .createTempDirectory(this.getClass().getSimpleName())
+                    .resolve(this.definitionsAndClassListDirectory);
 
             this.copyDirectory(from, to);
             return to.resolve(this.classListFileName);

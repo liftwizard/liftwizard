@@ -67,7 +67,7 @@ public final class GraphQLDeepFetcher
 
     private static MutableList<String> getNavigationNames(SelectedField selectedField)
     {
-        String              qualifiedName   = selectedField.getQualifiedName();
+        String qualifiedName = selectedField.getQualifiedName();
         MutableList<String> fieldNamesNames = ArrayAdapter.adapt(qualifiedName.split("/"));
         MutableList<String> navigationNames = fieldNamesNames.take(fieldNamesNames.size() - 1);
         return navigationNames;

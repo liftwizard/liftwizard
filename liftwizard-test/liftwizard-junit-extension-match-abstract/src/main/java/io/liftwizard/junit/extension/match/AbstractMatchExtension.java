@@ -37,7 +37,7 @@ public abstract class AbstractMatchExtension
     protected final boolean rerecordEnabled;
 
     protected final ResourceRerecorderExtension resourceRerecorderExtension;
-    protected final ErrorCollectorExtension     errorCollectorExtension = new ErrorCollectorExtension();
+    protected final ErrorCollectorExtension errorCollectorExtension = new ErrorCollectorExtension();
 
     protected AbstractMatchExtension(@Nonnull Class<?> callingClass)
     {
@@ -46,16 +46,16 @@ public abstract class AbstractMatchExtension
 
     protected AbstractMatchExtension(@Nonnull Class<?> callingClass, boolean rerecordEnabled)
     {
-        this.callingClass                = Objects.requireNonNull(callingClass);
-        this.rerecordEnabled             = rerecordEnabled;
+        this.callingClass = Objects.requireNonNull(callingClass);
+        this.rerecordEnabled = rerecordEnabled;
         this.resourceRerecorderExtension = new ResourceRerecorderExtension(callingClass, rerecordEnabled);
     }
 
     protected Path getPackagePath()
     {
-        String               packageName      = this.callingClass.getPackage().getName();
+        String packageName = this.callingClass.getPackage().getName();
         ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-        Path                 testResources    = Paths.get("", "src", "test", "resources").toAbsolutePath();
+        Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
         return packageNameParts.injectInto(testResources, Path::resolve);
     }
 

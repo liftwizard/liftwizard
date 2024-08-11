@@ -34,13 +34,13 @@ public class ReladomoOperationCompiler
 
     public Operation compile(RelatedFinder<?> finder, String sourceCodeText)
     {
-        String[]            lines      = NEWLINE_PATTERN.split(sourceCodeText);
+        String[] lines = NEWLINE_PATTERN.split(sourceCodeText);
         CodePointCharStream charStream = CharStreams.fromString(sourceCodeText);
 
-        var lexer         = new ReladomoOperationLexer(charStream);
+        var lexer = new ReladomoOperationLexer(charStream);
         var errorListener = new ThrowingErrorListener(lines);
-        var tokenStream   = new CommonTokenStream(lexer);
-        var parser        = new ReladomoOperationParser(tokenStream);
+        var tokenStream = new CommonTokenStream(lexer);
+        var parser = new ReladomoOperationParser(tokenStream);
 
         lexer.addErrorListener(errorListener);
         parser.removeErrorListeners();

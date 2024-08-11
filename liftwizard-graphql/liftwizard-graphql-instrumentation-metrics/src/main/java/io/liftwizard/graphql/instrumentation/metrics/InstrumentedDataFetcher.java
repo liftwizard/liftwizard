@@ -47,20 +47,20 @@ public class InstrumentedDataFetcher<T>
     @Nonnull
     private final MetricRegistry metricRegistry;
     @Nonnull
-    private final Clock          clock;
+    private final Clock clock;
     @Nonnull
     private final DataFetcher<T> dataFetcher;
     @Nonnull
-    private final String         typeName;
+    private final String typeName;
     @Nonnull
-    private final String         fieldName;
+    private final String fieldName;
     @Nonnull
-    private final String         path;
+    private final String path;
 
     @Nullable
-    private final Timed            timedAnnotation;
+    private final Timed timedAnnotation;
     @Nullable
-    private final Metered          meteredAnnotation;
+    private final Metered meteredAnnotation;
     @Nullable
     private final ExceptionMetered exceptionMeteredAnnotation;
 
@@ -92,27 +92,27 @@ public class InstrumentedDataFetcher<T>
             @Nonnull String path)
     {
         this.metricRegistry = Objects.requireNonNull(metricRegistry);
-        this.clock          = Objects.requireNonNull(clock);
-        this.dataFetcher    = Objects.requireNonNull(dataFetcher);
-        this.typeName       = Objects.requireNonNull(typeName);
-        this.fieldName      = Objects.requireNonNull(fieldName);
-        this.path           = Objects.requireNonNull(path);
+        this.clock = Objects.requireNonNull(clock);
+        this.dataFetcher = Objects.requireNonNull(dataFetcher);
+        this.typeName = Objects.requireNonNull(typeName);
+        this.fieldName = Objects.requireNonNull(fieldName);
+        this.path = Objects.requireNonNull(path);
 
-        this.timedAnnotation            = this.getAnnotation(Timed.class);
-        this.meteredAnnotation          = this.getAnnotation(Metered.class);
+        this.timedAnnotation = this.getAnnotation(Timed.class);
+        this.meteredAnnotation = this.getAnnotation(Metered.class);
         this.exceptionMeteredAnnotation = this.getAnnotation(ExceptionMetered.class);
 
         this.timerFetcherSync = this.getTimer("sync");
-        this.timerFieldSync   = this.getFieldTimer("sync");
-        this.timerPathSync    = this.getPathTimer("sync");
+        this.timerFieldSync = this.getFieldTimer("sync");
+        this.timerPathSync = this.getPathTimer("sync");
 
         this.meterFetcher = this.getMeter();
-        this.meterField   = this.getFieldMeter();
-        this.meterPath    = this.getPathMeter();
+        this.meterField = this.getFieldMeter();
+        this.meterPath = this.getPathMeter();
 
         this.exceptionMeterFetcher = this.getExceptionsMeter();
-        this.exceptionMeterField   = this.getFieldExceptionsMeter();
-        this.exceptionMeterPath    = this.getPathExceptionsMeter();
+        this.exceptionMeterField = this.getFieldExceptionsMeter();
+        this.exceptionMeterPath = this.getPathExceptionsMeter();
     }
 
     private DataFetcher<?> getAnnotatedDataFetcher()
@@ -128,8 +128,8 @@ public class InstrumentedDataFetcher<T>
         DataFetcher<?> annotatedDataFetcher = this.getAnnotatedDataFetcher();
         try
         {
-            Method getMethod        = annotatedDataFetcher.getClass().getMethod("get", DataFetchingEnvironment.class);
-            A      methodAnnotation = getMethod.getAnnotation(annotationClass);
+            Method getMethod = annotatedDataFetcher.getClass().getMethod("get", DataFetchingEnvironment.class);
+            A methodAnnotation = getMethod.getAnnotation(annotationClass);
             if (methodAnnotation != null)
             {
                 return methodAnnotation;
@@ -168,8 +168,8 @@ public class InstrumentedDataFetcher<T>
             return Optional.empty();
         }
 
-        String name  = MetricRegistry.name("liftwizard", "graphql", "field", this.typeName, this.fieldName, suffix);
-        Timer  timer = this.metricRegistry.timer(name);
+        String name = MetricRegistry.name("liftwizard", "graphql", "field", this.typeName, this.fieldName, suffix);
+        Timer timer = this.metricRegistry.timer(name);
         return Optional.of(timer);
     }
 
@@ -181,8 +181,8 @@ public class InstrumentedDataFetcher<T>
             return Optional.empty();
         }
 
-        String name  = MetricRegistry.name("liftwizard", "graphql", "path", this.path, suffix);
-        Timer  timer = this.metricRegistry.timer(name);
+        String name = MetricRegistry.name("liftwizard", "graphql", "path", this.path, suffix);
+        Timer timer = this.metricRegistry.timer(name);
         return Optional.of(timer);
     }
 
@@ -210,8 +210,8 @@ public class InstrumentedDataFetcher<T>
             return Optional.empty();
         }
 
-        String name  = MetricRegistry.name("liftwizard", "graphql", "field", this.typeName, this.fieldName);
-        Meter  meter = this.metricRegistry.meter(name);
+        String name = MetricRegistry.name("liftwizard", "graphql", "field", this.typeName, this.fieldName);
+        Meter meter = this.metricRegistry.meter(name);
         return Optional.of(meter);
     }
 
@@ -223,8 +223,8 @@ public class InstrumentedDataFetcher<T>
             return Optional.empty();
         }
 
-        String name  = MetricRegistry.name("liftwizard", "graphql", "path", this.path);
-        Meter  meter = this.metricRegistry.meter(name);
+        String name = MetricRegistry.name("liftwizard", "graphql", "path", this.path);
+        Meter meter = this.metricRegistry.meter(name);
         return Optional.of(meter);
     }
 
@@ -283,12 +283,13 @@ public class InstrumentedDataFetcher<T>
     }
 
     @Override
-    public T get(DataFetchingEnvironment environment) throws Exception
+    public T get(DataFetchingEnvironment environment)
+            throws Exception
     {
-        Instant           startTime        = Instant.now();
+        Instant startTime = Instant.now();
         Optional<Context> fetcherSyncClock = this.timerFetcherSync.map(Timer::time);
-        Optional<Context> fieldSyncClock   = this.timerFieldSync.map(Timer::time);
-        Optional<Context> pathSyncClock    = this.timerPathSync.map(Timer::time);
+        Optional<Context> fieldSyncClock = this.timerFieldSync.map(Timer::time);
+        Optional<Context> pathSyncClock = this.timerPathSync.map(Timer::time);
 
         try
         {
@@ -299,12 +300,12 @@ public class InstrumentedDataFetcher<T>
                 completionStage.whenComplete((success, throwable) ->
                 {
                     Optional<Timer> timerFetcherAsync = this.getTimer("async");
-                    Optional<Timer> timerFieldAsync   = this.getFieldTimer("async");
-                    Optional<Timer> timerPathAsync    = this.getPathTimer("async");
+                    Optional<Timer> timerFieldAsync = this.getFieldTimer("async");
+                    Optional<Timer> timerPathAsync = this.getPathTimer("async");
 
                     if (this.timedAnnotation != null)
                     {
-                        Instant  stopTime = this.clock.instant();
+                        Instant stopTime = this.clock.instant();
                         Duration duration = Duration.between(startTime, stopTime);
                         timerFetcherAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);
                         timerFieldAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);

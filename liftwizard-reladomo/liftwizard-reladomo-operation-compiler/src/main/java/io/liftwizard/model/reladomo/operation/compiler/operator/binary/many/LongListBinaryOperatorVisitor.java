@@ -27,7 +27,8 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableLongSet;
 import org.eclipse.collections.impl.factory.primitive.LongSets;
 
-public class LongListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class LongListBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final LongAttribute<?> attribute;
     private final ImmutableLongSet longSet;
@@ -35,7 +36,7 @@ public class LongListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
     public LongListBinaryOperatorVisitor(LongAttribute<?> attribute, ImmutableList<Long> parameter)
     {
         this.attribute = Objects.requireNonNull(attribute);
-        this.longSet   = LongSets.immutable.withAll(parameter);
+        this.longSet = LongSets.immutable.withAll(parameter);
     }
 
     @Override

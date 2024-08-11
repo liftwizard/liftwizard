@@ -27,11 +27,11 @@ public class MDCDataFetcher<T>
         implements DataFetcher<T>
 {
     private final DataFetcher<T> dataFetcher;
-    private final String         executionId;
-    private final String         path;
-    private final String         parentTypeName;
-    private final String         fieldName;
-    private final String         fieldTypeName;
+    private final String executionId;
+    private final String path;
+    private final String parentTypeName;
+    private final String fieldName;
+    private final String fieldTypeName;
 
     public MDCDataFetcher(
             DataFetcher<T> dataFetcher,
@@ -41,16 +41,17 @@ public class MDCDataFetcher<T>
             String fieldName,
             String fieldTypeName)
     {
-        this.dataFetcher    = Objects.requireNonNull(dataFetcher);
-        this.executionId    = executionId;
-        this.path           = path;
+        this.dataFetcher = Objects.requireNonNull(dataFetcher);
+        this.executionId = executionId;
+        this.path = path;
         this.parentTypeName = parentTypeName;
-        this.fieldName      = fieldName;
-        this.fieldTypeName  = fieldTypeName;
+        this.fieldName = fieldName;
+        this.fieldTypeName = fieldTypeName;
     }
 
     @Override
-    public T get(DataFetchingEnvironment environment) throws Exception
+    public T get(DataFetchingEnvironment environment)
+            throws Exception
     {
         String dataFetcherName = this.getDataFetcherName();
 

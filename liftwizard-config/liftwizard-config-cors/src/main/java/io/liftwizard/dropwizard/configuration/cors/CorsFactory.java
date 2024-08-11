@@ -26,14 +26,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CorsFactory
 {
     // Default to disabled since default settings are dangerous
-    private                 boolean      enabled;
-    private @Valid @NotNull String       filterName       = "CORS";
+    private boolean enabled;
+    private @Valid @NotNull String filterName = "CORS";
     // allowedOrigins = "*" is convenient during development but must be changed in production
-    private @Valid @NotNull String       allowedOrigins   = "*";
-    private @Valid @NotNull String       allowedHeaders   = "X-Requested-With,Content-Type,Accept,Origin,Authorization";
-    private @Valid @NotNull String       allowedMethods   = "OPTIONS,GET,PUT,POST,PATCH,DELETE,HEAD";
-    private @Valid @NotNull String       allowCredentials = "true";
-    private @Valid @NotNull List<String> urlPatterns      = List.of("/*");
+    private @Valid @NotNull String allowedOrigins = "*";
+    private @Valid @NotNull String allowedHeaders = "X-Requested-With,Content-Type,Accept,Origin,Authorization";
+    private @Valid @NotNull String allowedMethods = "OPTIONS,GET,PUT,POST,PATCH,DELETE,HEAD";
+    private @Valid @NotNull String allowCredentials = "true";
+    private @Valid @NotNull List<String> urlPatterns = List.of("/*");
 
     public boolean isEnabled()
     {

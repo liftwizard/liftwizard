@@ -41,14 +41,15 @@ import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<Attribute>
+public class ReladomoAttributeVisitor
+        extends ReladomoOperationThrowingVisitor<Attribute>
 {
     private final RelatedFinder finder;
-    private final String        errorContext;
+    private final String errorContext;
 
     public ReladomoAttributeVisitor(RelatedFinder finder, String errorContext)
     {
-        this.finder       = Objects.requireNonNull(finder);
+        this.finder = Objects.requireNonNull(finder);
         this.errorContext = Objects.requireNonNull(errorContext);
     }
 
@@ -93,9 +94,9 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         }
 
         String startString = ctx.IntegerLiteral(0).getText();
-        String endString   = ctx.IntegerLiteral(1).getText();
-        int    start       = Integer.parseInt(startString);
-        int    end         = Integer.parseInt(endString);
+        String endString = ctx.IntegerLiteral(1).getText();
+        int start = Integer.parseInt(startString);
+        int end = Integer.parseInt(endString);
         return ((StringAttribute) attribute).substring(start, end);
     }
 
@@ -230,11 +231,14 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
             currentFinder = nextFinder;
         }
 
-        String    attributeName = ctx.attributeName().getText();
-        Attribute attribute     = currentFinder.getAttributeByName(attributeName);
+        String attributeName = ctx.attributeName().getText();
+        Attribute attribute = currentFinder.getAttributeByName(attributeName);
         if (attribute == null)
         {
-            Attribute[] persistentAttributes = currentFinder.getMithraObjectPortal().getFinder().getPersistentAttributes();
+            Attribute[] persistentAttributes = currentFinder
+                    .getMithraObjectPortal()
+                    .getFinder()
+                    .getPersistentAttributes();
             MutableList<String> validAttributeNames = ArrayAdapter.adapt(persistentAttributes)
                     .collect(Attribute::getAttributeName);
             String error = "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s".formatted(

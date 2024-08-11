@@ -19,7 +19,8 @@ package io.liftwizard.generator.xsd2bean.plugin;
 import com.gs.fw.common.freyaxml.generator.Logger;
 import org.apache.maven.plugin.logging.Log;
 
-public class FreyaMavenLogger implements Logger
+public class FreyaMavenLogger
+        implements Logger
 {
     private final Log log;
 

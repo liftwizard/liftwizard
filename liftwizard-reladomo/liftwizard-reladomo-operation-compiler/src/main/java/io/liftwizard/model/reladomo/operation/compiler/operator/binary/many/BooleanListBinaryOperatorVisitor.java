@@ -27,14 +27,15 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableBooleanSet;
 import org.eclipse.collections.impl.factory.primitive.BooleanSets;
 
-public class BooleanListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class BooleanListBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final BooleanAttribute<?> attribute;
     private final ImmutableBooleanSet booleanSet;
 
     public BooleanListBinaryOperatorVisitor(BooleanAttribute<?> attribute, ImmutableList<Boolean> parameter)
     {
-        this.attribute  = Objects.requireNonNull(attribute);
+        this.attribute = Objects.requireNonNull(attribute);
         this.booleanSet = BooleanSets.immutable.withAll(parameter);
     }
 

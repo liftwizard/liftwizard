@@ -117,7 +117,8 @@ public class GenerateXSD2BeanMojo
     }
 
     @Override
-    public void execute() throws MojoExecutionException
+    public void execute()
+            throws MojoExecutionException
     {
         if (!this.outputDirectory.exists())
         {
@@ -182,7 +183,8 @@ public class GenerateXSD2BeanMojo
         return generator;
     }
 
-    private Set<File> getSchemaFiles() throws MojoExecutionException
+    private Set<File> getSchemaFiles()
+            throws MojoExecutionException
     {
         try
         {
@@ -199,11 +201,12 @@ public class GenerateXSD2BeanMojo
         }
     }
 
-    private Set<File> scanSchemaFiles() throws InclusionScanException
+    private Set<File> scanSchemaFiles()
+            throws InclusionScanException
     {
-        Set<String>            includesPatterns = this.getIncludesPatterns();
-        SourceInclusionScanner scan             = new SimpleSourceInclusionScanner(includesPatterns, this.excludes);
-        SourceMapping          suffixMapping    = new SuffixMapping("xsd", Collections.emptySet());
+        Set<String> includesPatterns = this.getIncludesPatterns();
+        SourceInclusionScanner scan = new SimpleSourceInclusionScanner(includesPatterns, this.excludes);
+        SourceMapping suffixMapping = new SuffixMapping("xsd", Collections.emptySet());
         scan.addSourceMapping(suffixMapping);
         return scan.getIncludedSources(this.sourceDirectory, null);
     }
@@ -217,7 +220,8 @@ public class GenerateXSD2BeanMojo
         return this.includes;
     }
 
-    private void processSchemaFiles(@Nonnull Collection<File> schemaFiles) throws MojoExecutionException
+    private void processSchemaFiles(@Nonnull Collection<File> schemaFiles)
+            throws MojoExecutionException
     {
         if (schemaFiles.isEmpty())
         {

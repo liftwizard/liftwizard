@@ -22,18 +22,19 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
-public final class IncrementingClock extends Clock
+public final class IncrementingClock
+        extends Clock
 {
     private Instant instant;
 
-    private final ZoneId         zoneId;
+    private final ZoneId zoneId;
     private final TemporalAmount incrementAmount;
 
     public IncrementingClock(Instant startInstant, ZoneId zoneId, TemporalAmount incrementAmount)
     {
-        this.instant         = Objects.requireNonNull(startInstant);
+        this.instant = Objects.requireNonNull(startInstant);
         this.incrementAmount = Objects.requireNonNull(incrementAmount);
-        this.zoneId          = Objects.requireNonNull(zoneId);
+        this.zoneId = Objects.requireNonNull(zoneId);
     }
 
     @Override

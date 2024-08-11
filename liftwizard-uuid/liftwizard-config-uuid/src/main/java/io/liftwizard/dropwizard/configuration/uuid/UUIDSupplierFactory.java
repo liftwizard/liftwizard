@@ -26,7 +26,8 @@ import io.dropwizard.jackson.Discoverable;
 
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @AutoService(Discoverable.class)
-public interface UUIDSupplierFactory extends Discoverable
+public interface UUIDSupplierFactory
+        extends Discoverable
 {
     Supplier<UUID> createUUIDSupplier();
 }

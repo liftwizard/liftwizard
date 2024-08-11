@@ -39,7 +39,7 @@ public class BufferedAppender<E extends DeferredProcessingAware>
         implements AppenderAttachable<E>
 {
     private final AppenderAttachableImpl<E> appenderAttachable = new AppenderAttachableImpl<>();
-    private final Queue<E>                  queue              = new ArrayDeque<>();
+    private final Queue<E> queue = new ArrayDeque<>();
 
     private int appenderCount;
 

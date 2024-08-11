@@ -47,10 +47,10 @@ import org.slf4j.Marker;
 public class StructuredSlf4jReporter
         extends ScheduledReporter
 {
-    private final AbstractLoggerProxy              loggerProxy;
-    private final Marker                           marker;
-    private final String                           prefix;
-    private final String                           message;
+    private final AbstractLoggerProxy loggerProxy;
+    private final Marker marker;
+    private final String prefix;
+    private final String message;
     private final Function<Map<String, Object>, ?> mapToStructuredObjectFunction;
 
     public StructuredSlf4jReporter(
@@ -76,11 +76,11 @@ public class StructuredSlf4jReporter
                 executor,
                 shutdownExecutorOnStop,
                 disabledMetricAttributes);
-        this.loggerProxy                   = loggerProxy;
-        this.marker                        = marker;
-        this.prefix                        = prefix;
+        this.loggerProxy = loggerProxy;
+        this.marker = marker;
+        this.prefix = prefix;
         this.mapToStructuredObjectFunction = mapToStructuredObjectFunction;
-        this.message                       = message;
+        this.message = message;
     }
 
     /**

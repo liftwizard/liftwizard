@@ -28,10 +28,10 @@ import org.junit.rules.TestRule;
 
 public class ReladomoTestRuleBuilder
 {
-    private Optional<ExecuteSqlTestRule>         executeSqlTestRule = Optional.empty();
+    private Optional<ExecuteSqlTestRule> executeSqlTestRule = Optional.empty();
     private Optional<ReladomoInitializeTestRule> initializeTestRule = Optional.empty();
-    private Optional<ReladomoPurgeAllTestRule>   purgeAllTestRule   = Optional.empty();
-    private ReladomoLoadDataTestRule             loadDataTestRule   = new ReladomoLoadDataTestRule();
+    private Optional<ReladomoPurgeAllTestRule> purgeAllTestRule = Optional.empty();
+    private ReladomoLoadDataTestRule loadDataTestRule = new ReladomoLoadDataTestRule();
 
     public ReladomoTestRuleBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath)
     {

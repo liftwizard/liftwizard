@@ -35,13 +35,13 @@ public class FirebaseAuth
 
     public FirebaseAuth(String databaseUrl, String firebaseConfig)
     {
-        this.databaseUrl    = Objects.requireNonNull(databaseUrl);
+        this.databaseUrl = Objects.requireNonNull(databaseUrl);
         this.firebaseConfig = Objects.requireNonNull(firebaseConfig);
     }
 
     public com.google.firebase.auth.FirebaseAuth getFirebaseAuth()
     {
-        byte[]      bytes               = this.firebaseConfig.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = this.firebaseConfig.getBytes(StandardCharsets.UTF_8);
         InputStream firebaseCredentials = new ByteArrayInputStream(bytes);
 
         return this.getFirebaseAuth(firebaseCredentials);

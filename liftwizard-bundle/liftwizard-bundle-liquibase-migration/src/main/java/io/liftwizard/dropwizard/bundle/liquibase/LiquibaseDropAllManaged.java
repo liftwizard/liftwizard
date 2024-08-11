@@ -35,10 +35,10 @@ import liquibase.resource.ResourceAccessor;
 public class LiquibaseDropAllManaged
         implements Managed
 {
-    private final ManagedDataSource     dataSource;
-    private final String                catalogName;
-    private final String                schemaName;
-    private final String                migrationFile;
+    private final ManagedDataSource dataSource;
+    private final String catalogName;
+    private final String schemaName;
+    private final String migrationFile;
     private final MigrationFileLocation migrationFileLocation;
 
     public LiquibaseDropAllManaged(
@@ -48,10 +48,10 @@ public class LiquibaseDropAllManaged
             String migrationFile,
             MigrationFileLocation migrationFileLocation)
     {
-        this.dataSource            = dataSource;
-        this.catalogName           = catalogName;
-        this.schemaName            = schemaName;
-        this.migrationFile         = migrationFile;
+        this.dataSource = dataSource;
+        this.catalogName = catalogName;
+        this.schemaName = schemaName;
+        this.migrationFile = migrationFile;
         this.migrationFileLocation = migrationFileLocation;
     }
 
@@ -77,7 +77,7 @@ public class LiquibaseDropAllManaged
     private CloseableLiquibase openLiquibase()
             throws SQLException, LiquibaseException
     {
-        Database         database         = this.createDatabase();
+        Database database = this.createDatabase();
         ResourceAccessor resourceAccessor = this.getResourceAccessor();
         return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
     }
@@ -86,7 +86,7 @@ public class LiquibaseDropAllManaged
             throws SQLException, LiquibaseException
     {
         DatabaseConnection connection = new JdbcConnection(this.dataSource.getConnection());
-        Database           database   = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
+        Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
         if (database.supportsCatalogs() && this.catalogName != null)
         {

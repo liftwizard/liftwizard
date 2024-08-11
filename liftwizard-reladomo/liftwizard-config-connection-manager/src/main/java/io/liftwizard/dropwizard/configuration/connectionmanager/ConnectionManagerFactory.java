@@ -34,18 +34,18 @@ import io.liftwizard.reladomo.connectionmanager.LiftwizardConnectionManager;
 
 public class ConnectionManagerFactory
 {
-    private @Valid @NotNull String           connectionManagerName;
-    private @Valid @NotNull String           dataSourceName;
+    private @Valid @NotNull String connectionManagerName;
+    private @Valid @NotNull String dataSourceName;
     private @Valid @NotNull DatabaseTypeEnum databaseType = DatabaseTypeEnum.GENERIC;
-    private @Valid @NotNull String           timeZoneName = "UTC";
-    private @Valid @NotNull String           schemaName;
+    private @Valid @NotNull String timeZoneName = "UTC";
+    private @Valid @NotNull String schemaName;
 
     public SourcelessConnectionManager createSourcelessConnectionManager(@Nonnull DataSource dataSource)
     {
         Objects.requireNonNull(dataSource);
 
         DatabaseType reladomoDatabaseType = this.databaseType.getDatabaseType();
-        TimeZone     timeZone             = TimeZone.getTimeZone(this.timeZoneName);
+        TimeZone timeZone = TimeZone.getTimeZone(this.timeZoneName);
         return new LiftwizardConnectionManager(
                 this.connectionManagerName,
                 this.dataSourceName,

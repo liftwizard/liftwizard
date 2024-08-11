@@ -78,7 +78,10 @@ public class JsonMatchExtension
             Path packagePath = this.resourceRerecorderExtension.getPackagePath();
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.resourceRerecorderExtension.writeStringToFile(resourceClassPathLocation, prettyPrintedString, resourceFile);
+            this.resourceRerecorderExtension.writeStringToFile(
+                    resourceClassPathLocation,
+                    prettyPrintedString,
+                    resourceFile);
             if (!this.rerecordEnabled)
             {
                 String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
@@ -92,7 +95,7 @@ public class JsonMatchExtension
             String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
 
             URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-            URI uri      = resource.toURI();
+            URI uri = resource.toURI();
 
             if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
             {
@@ -103,7 +106,9 @@ public class JsonMatchExtension
             Optional<String> message = this.compareAndGetDiff(fileContents, expectedStringFromFile);
             if (message.isPresent())
             {
-                String detailMessage = this.resourceRerecorderExtension.handleMismatch(resourceClassPathLocation, fileContents);
+                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
+                        resourceClassPathLocation,
+                        fileContents);
                 AssertionError assertionError = new AssertionError(detailMessage);
                 this.errorCollectorExtension.addError(assertionError);
             }
@@ -160,8 +165,8 @@ public class JsonMatchExtension
     {
         try
         {
-            JsonNode jsonNode            = this.objectMapper.readTree(string);
-            String   prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
+            JsonNode jsonNode = this.objectMapper.readTree(string);
+            String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
             return prettyPrintedString;
         }
         catch (JsonProcessingException e)

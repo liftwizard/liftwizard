@@ -42,7 +42,7 @@ public class RequestUrlFilterFactory
     @NotEmpty
     private @Valid @NotNull List<String> urls = new ArrayList<>();
 
-    private @Valid @NotNull FilterReply onMatch    = FilterReply.DENY;
+    private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
     private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
     @Override

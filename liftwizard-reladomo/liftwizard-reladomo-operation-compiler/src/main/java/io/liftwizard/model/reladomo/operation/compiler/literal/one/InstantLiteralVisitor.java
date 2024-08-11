@@ -23,7 +23,8 @@ import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 
-public class InstantLiteralVisitor extends AbstractLiteralVisitor<Instant>
+public class InstantLiteralVisitor
+        extends AbstractLiteralVisitor<Instant>
 {
     public InstantLiteralVisitor(RelatedFinder finder, String errorContext)
     {
@@ -44,7 +45,7 @@ public class InstantLiteralVisitor extends AbstractLiteralVisitor<Instant>
             return null;
         }
 
-        String quotedText   = ctx.StringLiteral().getText();
+        String quotedText = ctx.StringLiteral().getText();
         String unquotedText = quotedText.substring(1, quotedText.length() - 1);
         try
         {

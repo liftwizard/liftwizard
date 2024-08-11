@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.access.spi.ServerAdapter;
 
-public class FakeAccessEvent implements IAccessEvent
+public class FakeAccessEvent
+        implements IAccessEvent
 {
     private final String requestURL;
 

@@ -35,7 +35,7 @@ public interface PrioritizedBundle
 {
     Logger LOGGER = LoggerFactory.getLogger(PrioritizedBundle.class);
 
-    String MDC_BUNDLE   = "liftwizard.bundle";
+    String MDC_BUNDLE = "liftwizard.bundle";
     String MDC_PRIORITY = "liftwizard.priority";
 
     Pattern DURATION_PATTERN = Pattern.compile("(\\d[HMS])(?!$)");
@@ -82,7 +82,8 @@ public interface PrioritizedBundle
     }
 
     @Override
-    default void run(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception
+    default void run(@Nonnull Object configuration, @Nonnull Environment environment)
+            throws Exception
     {
         Instant start = Instant.now();
         try (
@@ -100,5 +101,6 @@ public interface PrioritizedBundle
         LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
     }
 
-    void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception;
+    void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+            throws Exception;
 }

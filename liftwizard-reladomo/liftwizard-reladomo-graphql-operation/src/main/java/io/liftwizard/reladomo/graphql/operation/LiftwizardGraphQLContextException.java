@@ -18,7 +18,8 @@ package io.liftwizard.reladomo.graphql.operation;
 
 import org.eclipse.collections.api.list.ImmutableList;
 
-public class LiftwizardGraphQLContextException extends RuntimeException
+public class LiftwizardGraphQLContextException
+        extends RuntimeException
 {
     private final ImmutableList<String> context;
 

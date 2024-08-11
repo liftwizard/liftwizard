@@ -51,8 +51,8 @@ public class UUIDBundle
             @Nonnull Environment environment)
     {
         UUIDSupplierFactory uuidSupplierFactory = configuration.getUuidSupplierFactory();
-        Supplier<UUID>      uuidSupplier        = uuidSupplierFactory.createUUIDSupplier();
-        UUIDBinder          uuidBinder          = new UUIDBinder(uuidSupplier);
+        Supplier<UUID> uuidSupplier = uuidSupplierFactory.createUUIDSupplier();
+        UUIDBinder uuidBinder = new UUIDBinder(uuidSupplier);
         environment.jersey().register(uuidBinder);
     }
 }

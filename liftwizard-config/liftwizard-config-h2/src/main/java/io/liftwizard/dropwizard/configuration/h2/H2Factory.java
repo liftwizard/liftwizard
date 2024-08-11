@@ -27,11 +27,11 @@ import io.dropwizard.validation.ValidationMethod;
 public class H2Factory
 {
     // Should usually be disabled in production
-    private          boolean      enabled;
-    private @NotNull String       servletName        = "H2Console";
-    private @NotNull String       servletUrlMapping  = "/h2-console/*";
-    private @NotNull String       propertiesLocation = "src/main/resources/";
-    private @NotNull List<String> tcpServerArgs      = Arrays.asList(
+    private boolean enabled;
+    private @NotNull String servletName = "H2Console";
+    private @NotNull String servletUrlMapping = "/h2-console/*";
+    private @NotNull String propertiesLocation = "src/main/resources/";
+    private @NotNull List<String> tcpServerArgs = Arrays.asList(
             "-tcp",
             "-tcpAllowOthers",
             "-tcpDaemon",
@@ -43,9 +43,9 @@ public class H2Factory
             "-baseDir",
             "./target/h2db");
     // 8082
-    private Integer      webPort;
+    private Integer webPort;
     // 9092
-    private Integer      tcpPort;
+    private Integer tcpPort;
 
     public boolean isEnabled()
     {

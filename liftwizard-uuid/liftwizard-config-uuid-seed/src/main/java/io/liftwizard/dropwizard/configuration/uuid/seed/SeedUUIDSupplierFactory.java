@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 
 @JsonTypeName("seed")
 @AutoService(UUIDSupplierFactory.class)
-public class SeedUUIDSupplierFactory implements UUIDSupplierFactory
+public class SeedUUIDSupplierFactory
+        implements UUIDSupplierFactory
 {
     private @Valid @NotNull String seed = "example seed";
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,8 +62,8 @@ public class ReladomoPurgeAllExtension
 
     private void purgeType(MithraRuntimeCacheController mithraRuntimeCacheController)
     {
-        ReladomoClassMetaData metaData       = mithraRuntimeCacheController.getMetaData();
-        RelatedFinder         finderInstance = metaData.getFinderInstance();
+        ReladomoClassMetaData metaData = mithraRuntimeCacheController.getMetaData();
+        RelatedFinder finderInstance = metaData.getFinderInstance();
         ListIterable<AsOfAttribute> asOfAttributes = metaData.getAsOfAttributes() == null
                 ? Lists.immutable.empty()
                 : ArrayAdapter.adapt(metaData.getAsOfAttributes());

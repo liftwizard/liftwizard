@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SystemPropertiesFactory
 {
     private final Map<String, String> systemProperties = new LinkedHashMap<>();
-    private       boolean             strict;
+    private boolean strict;
 
     @JsonAnyGetter
     public Map<String, String> getSystemProperties()

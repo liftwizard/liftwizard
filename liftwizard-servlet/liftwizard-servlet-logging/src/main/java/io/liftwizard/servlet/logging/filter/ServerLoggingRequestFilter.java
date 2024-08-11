@@ -84,8 +84,8 @@ public final class ServerLoggingRequestFilter
     {
         Objects.requireNonNull(this.resourceInfo);
 
-        Class<?> resourceClass  = this.resourceInfo.getResourceClass();
-        Method   resourceMethod = this.resourceInfo.getResourceMethod();
+        Class<?> resourceClass = this.resourceInfo.getResourceClass();
+        Method resourceMethod = this.resourceInfo.getResourceMethod();
 
         // Could be null during error responses like 404 and 405
         if (resourceClass != null)
@@ -108,7 +108,7 @@ public final class ServerLoggingRequestFilter
     private StructuredArgumentsParameters buildParameters(@Nonnull UriInfo uriInfo)
     {
         MapIterable<String, String> queryParameters = this.buildParameters(uriInfo.getQueryParameters());
-        MapIterable<String, String> pathParameters  = this.buildParameters(uriInfo.getPathParameters());
+        MapIterable<String, String> pathParameters = this.buildParameters(uriInfo.getPathParameters());
         return new StructuredArgumentsParameters(
                 queryParameters,
                 pathParameters);
@@ -120,7 +120,7 @@ public final class ServerLoggingRequestFilter
 
         inputParameters.forEach((parameterName, parameterValues) ->
         {
-            String value     = ListAdapter.adapt(parameterValues).makeString();
+            String value = ListAdapter.adapt(parameterValues).makeString();
             String duplicate = outputParameters.put(parameterName, value);
             if (duplicate != null)
             {
@@ -136,7 +136,7 @@ public final class ServerLoggingRequestFilter
             @Nonnull UriInfo uriInfo,
             @Nonnull StructuredArgumentsRequestHttp http)
     {
-        String baseUriPath  = uriInfo.getBaseUri().getPath();
+        String baseUriPath = uriInfo.getBaseUri().getPath();
         String pathTemplate = this.getPathTemplate(requestContext);
         http.getPath().setBaseUriPath(baseUriPath);
         http.getPath().setTemplate(pathTemplate);
@@ -155,7 +155,7 @@ public final class ServerLoggingRequestFilter
             return null;
         }
 
-        ExtendedUriInfo   extendedUriInfo  = containerRequest.getUriInfo();
+        ExtendedUriInfo extendedUriInfo = containerRequest.getUriInfo();
         List<UriTemplate> matchedTemplates = extendedUriInfo.getMatchedTemplates();
         if (matchedTemplates.isEmpty())
         {
@@ -172,9 +172,9 @@ public final class ServerLoggingRequestFilter
             @Nonnull ContainerRequestContext requestContext,
             StructuredArgumentsRequestHttp http)
     {
-        SecurityContext securityContext      = requestContext.getSecurityContext();
-        String          authenticationScheme = securityContext.getAuthenticationScheme();
-        Principal       userPrincipal        = securityContext.getUserPrincipal();
+        SecurityContext securityContext = requestContext.getSecurityContext();
+        String authenticationScheme = securityContext.getAuthenticationScheme();
+        Principal userPrincipal = securityContext.getUserPrincipal();
 
         http.setAuthenticationScheme(authenticationScheme);
         if (userPrincipal != null)

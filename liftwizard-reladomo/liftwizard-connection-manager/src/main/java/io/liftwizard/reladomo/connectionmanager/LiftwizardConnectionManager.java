@@ -27,14 +27,15 @@ import com.gs.fw.common.mithra.bulkloader.BulkLoader;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 
-public class LiftwizardConnectionManager implements SourcelessConnectionManager
+public class LiftwizardConnectionManager
+        implements SourcelessConnectionManager
 {
-    private final String       connectionManagerName;
-    private final String       dataSourceName;
-    private final DataSource   dataSource;
+    private final String connectionManagerName;
+    private final String dataSourceName;
+    private final DataSource dataSource;
     private final DatabaseType databaseType;
-    private final TimeZone     databaseTimeZone;
-    private final String       schemaName;
+    private final TimeZone databaseTimeZone;
+    private final String schemaName;
 
     public LiftwizardConnectionManager(
             String connectionManagerName,
@@ -45,11 +46,11 @@ public class LiftwizardConnectionManager implements SourcelessConnectionManager
             String schemaName)
     {
         this.connectionManagerName = Objects.requireNonNull(connectionManagerName);
-        this.dataSourceName        = Objects.requireNonNull(dataSourceName);
-        this.dataSource            = Objects.requireNonNull(dataSource);
-        this.databaseType          = Objects.requireNonNull(databaseType);
-        this.databaseTimeZone      = Objects.requireNonNull(databaseTimeZone);
-        this.schemaName            = Objects.requireNonNull(schemaName);
+        this.dataSourceName = Objects.requireNonNull(dataSourceName);
+        this.dataSource = Objects.requireNonNull(dataSource);
+        this.databaseType = Objects.requireNonNull(databaseType);
+        this.databaseTimeZone = Objects.requireNonNull(databaseTimeZone);
+        this.schemaName = Objects.requireNonNull(schemaName);
     }
 
     public String getConnectionManagerName()

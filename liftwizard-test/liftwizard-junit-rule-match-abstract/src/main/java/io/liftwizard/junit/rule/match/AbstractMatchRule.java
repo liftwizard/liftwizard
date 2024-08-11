@@ -43,16 +43,16 @@ import org.junit.rules.ErrorCollector;
 public abstract class AbstractMatchRule
         extends ErrorCollector
 {
-    protected static final MutableSet<Path>   CLEANED_PATHS   = Sets.mutable.empty();
-    protected final        MutableSet<String> rerecordedPaths = Sets.mutable.empty();
+    protected static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
+    protected final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
     @Nonnull
     protected final Class<?> callingClass;
-    protected final boolean  rerecordEnabled;
+    protected final boolean rerecordEnabled;
 
     protected AbstractMatchRule(@Nonnull Class<?> callingClass)
     {
-        this.callingClass    = Objects.requireNonNull(callingClass);
+        this.callingClass = Objects.requireNonNull(callingClass);
         this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
     }
 
@@ -127,9 +127,9 @@ public abstract class AbstractMatchRule
 
     protected static Path getPackagePath(@Nonnull Class<?> callingClass)
     {
-        String               packageName      = callingClass.getPackage().getName();
+        String packageName = callingClass.getPackage().getName();
         ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-        Path                 testResources    = Paths.get("", "src", "test", "resources").toAbsolutePath();
+        Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
         return packageNameParts.injectInto(testResources, Path::resolve);
     }
 

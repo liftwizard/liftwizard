@@ -41,14 +41,14 @@ public class DefaultScheduledExecutorServiceFactory
 {
     @Valid
     @NotNull
-    private String   nameFormat;
-    private boolean  useDaemonThreads = true;
+    private String nameFormat;
+    private boolean useDaemonThreads = true;
     @Min(0)
-    private int      threads          = 1;
+    private int threads = 1;
     @NotNull
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private Duration shutdownTime     = Duration.seconds(5);
-    private boolean  removeOnCancelPolicy;
+    private Duration shutdownTime = Duration.seconds(5);
+    private boolean removeOnCancelPolicy;
 
     @Override
     @JsonIgnore

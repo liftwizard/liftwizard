@@ -45,14 +45,14 @@ public class LiquibaseStatement
             .getConnection();
 
     private final Statement baseStatement;
-    private final String    migrationsFile;
-    private final boolean   dropAll;
+    private final String migrationsFile;
+    private final boolean dropAll;
 
     public LiquibaseStatement(Statement baseStatement, String migrationsFile, boolean dropAll)
     {
-        this.baseStatement  = baseStatement;
+        this.baseStatement = baseStatement;
         this.migrationsFile = migrationsFile;
-        this.dropAll        = dropAll;
+        this.dropAll = dropAll;
     }
 
     @Override

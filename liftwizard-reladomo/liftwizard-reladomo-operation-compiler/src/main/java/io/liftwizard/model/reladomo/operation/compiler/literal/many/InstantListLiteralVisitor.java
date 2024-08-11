@@ -25,7 +25,8 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.InstantLitera
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class InstantListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Instant>>
+public class InstantListLiteralVisitor
+        extends AbstractLiteralVisitor<ImmutableList<Instant>>
 {
     private final InstantLiteralVisitor instantLiteralVisitor;
 

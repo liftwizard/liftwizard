@@ -20,7 +20,8 @@ import java.util.Collection;
 
 import com.gs.fw.finder.Operation;
 
-public class ObjectSequenceList extends ObjectSequenceListAbstract
+public class ObjectSequenceList
+        extends ObjectSequenceListAbstract
 {
     public ObjectSequenceList()
     {

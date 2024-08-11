@@ -61,17 +61,33 @@ public class LiftwizardGraphQLMetricsInstrumentation
     public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock)
     {
         this.metricRegistry = Objects.requireNonNull(metricRegistry);
-        this.clock          = Objects.requireNonNull(clock);
+        this.clock = Objects.requireNonNull(clock);
 
-        this.allFieldsSyncTimer        = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
-        this.allFieldsAsyncTimer       = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
-        this.allFieldsExceptionsMeter  = metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "field", "exceptions"));
-        this.executionTimer            = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "execution"));
-        this.executionExceptionsMeter  = this.metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "execution", "exceptions"));
-        this.parseTimer                = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "parse"));
-        this.parseExceptionsMeter      = this.metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "parse", "exceptions"));
-        this.validationTimer           = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "validation"));
-        this.validationExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name("liftwizard", "graphql", "validation", "exceptions"));
+        this.allFieldsSyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
+        this.allFieldsAsyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
+        this.allFieldsExceptionsMeter = metricRegistry.meter(MetricRegistry.name(
+                "liftwizard",
+                "graphql",
+                "field",
+                "exceptions"));
+        this.executionTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "execution"));
+        this.executionExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name(
+                "liftwizard",
+                "graphql",
+                "execution",
+                "exceptions"));
+        this.parseTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "parse"));
+        this.parseExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name(
+                "liftwizard",
+                "graphql",
+                "parse",
+                "exceptions"));
+        this.validationTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "validation"));
+        this.validationExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name(
+                "liftwizard",
+                "graphql",
+                "validation",
+                "exceptions"));
     }
 
     @Override
@@ -121,10 +137,10 @@ public class LiftwizardGraphQLMetricsInstrumentation
             return dataFetcher;
         }
 
-        String      fieldName = parameters.getField().getName();
-        GraphQLType type      = parameters.getExecutionStepInfo().getParent().getType();
-        String      typeName  = GraphQLInstrumentationUtils.getTypeName(type);
-        String      path      = GraphQLInstrumentationUtils.getPathWithoutIndex(parameters.getExecutionStepInfo());
+        String fieldName = parameters.getField().getName();
+        GraphQLType type = parameters.getExecutionStepInfo().getParent().getType();
+        String typeName = GraphQLInstrumentationUtils.getTypeName(type);
+        String path = GraphQLInstrumentationUtils.getPathWithoutIndex(parameters.getExecutionStepInfo());
 
         return new InstrumentedDataFetcher<>(this.metricRegistry, this.clock, dataFetcher, fieldName, typeName, path);
     }

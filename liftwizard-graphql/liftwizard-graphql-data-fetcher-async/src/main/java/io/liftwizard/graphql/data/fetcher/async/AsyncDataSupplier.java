@@ -27,16 +27,16 @@ import org.slf4j.MDC;
 public class AsyncDataSupplier<T>
         implements Supplier<T>
 {
-    private final DataFetcher<T>          dataFetcher;
+    private final DataFetcher<T> dataFetcher;
     private final DataFetchingEnvironment environment;
-    private final Map<String, String>     copyOfContextMap;
+    private final Map<String, String> copyOfContextMap;
 
     AsyncDataSupplier(
             DataFetcher<T> dataFetcher,
             DataFetchingEnvironment environment)
     {
-        this.dataFetcher      = Objects.requireNonNull(dataFetcher);
-        this.environment      = Objects.requireNonNull(environment);
+        this.dataFetcher = Objects.requireNonNull(dataFetcher);
+        this.environment = Objects.requireNonNull(environment);
         this.copyOfContextMap = AsyncDataSupplier.getCopyOfContextMap();
     }
 

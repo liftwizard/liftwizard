@@ -54,13 +54,13 @@ public class ReladomoInitializeTestRule
             extends Statement
     {
         private final Statement base;
-        private final String    runtimeConfigurationPath;
+        private final String runtimeConfigurationPath;
 
         public ReadRuntimeConfigurationStatement(
                 @Nonnull Statement base,
                 @Nonnull String runtimeConfigurationPath)
         {
-            this.base                     = Objects.requireNonNull(base);
+            this.base = Objects.requireNonNull(base);
             this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
         }
 
@@ -95,7 +95,8 @@ public class ReladomoInitializeTestRule
         }
 
         @Override
-        public void evaluate() throws Throwable
+        public void evaluate()
+                throws Throwable
         {
             this.before();
             try

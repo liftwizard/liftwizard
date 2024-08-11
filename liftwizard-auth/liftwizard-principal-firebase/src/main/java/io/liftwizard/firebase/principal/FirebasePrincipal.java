@@ -21,15 +21,16 @@ import java.util.Map;
 
 import org.eclipse.collections.api.factory.Maps;
 
-public class FirebasePrincipal implements Principal
+public class FirebasePrincipal
+        implements Principal
 {
-    private final String  name;
-    private final String  displayName;
-    private final String  email;
+    private final String name;
+    private final String displayName;
+    private final String email;
     private final Boolean emailVerified;
-    private final String  issuer;
-    private final String  picture;
-    private final String  signInProvider;
+    private final String issuer;
+    private final String picture;
+    private final String signInProvider;
 
     public FirebasePrincipal(
             String name,
@@ -40,12 +41,12 @@ public class FirebasePrincipal implements Principal
             String picture,
             String signInProvider)
     {
-        this.name           = name;
-        this.displayName    = displayName;
-        this.email          = email;
-        this.emailVerified  = emailVerified;
-        this.issuer         = issuer;
-        this.picture        = picture;
+        this.name = name;
+        this.displayName = displayName;
+        this.email = email;
+        this.emailVerified = emailVerified;
+        this.issuer = issuer;
+        this.picture = picture;
         this.signInProvider = signInProvider;
     }
 

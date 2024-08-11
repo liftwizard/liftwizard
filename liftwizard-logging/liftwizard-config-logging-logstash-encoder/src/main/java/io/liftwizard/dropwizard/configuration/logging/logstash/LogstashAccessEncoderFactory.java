@@ -31,10 +31,10 @@ import net.logstash.logback.encoder.LogstashAccessEncoder;
 
 public class LogstashAccessEncoderFactory
 {
-    private          boolean    includeContext         = true;
-    private          ObjectNode customFields;
-    private          boolean    prettyPrint;
-    private @NotNull Include    serializationInclusion = Include.NON_ABSENT;
+    private boolean includeContext = true;
+    private ObjectNode customFields;
+    private boolean prettyPrint;
+    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
 
     @JsonProperty
     public boolean isIncludeContext()

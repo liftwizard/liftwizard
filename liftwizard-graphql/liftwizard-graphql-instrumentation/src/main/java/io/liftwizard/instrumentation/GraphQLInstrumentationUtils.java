@@ -50,7 +50,7 @@ public final class GraphQLInstrumentationUtils
 
     public static void getPath(ExecutionStepInfo executionStepInfo, MutableStack<String> stack, boolean withIndex)
     {
-        ResultPath    resultPath = executionStepInfo.getPath();
+        ResultPath resultPath = executionStepInfo.getPath();
         if (resultPath.isRootPath())
         {
             return;
@@ -59,7 +59,7 @@ public final class GraphQLInstrumentationUtils
         if (resultPath.isListSegment())
         {
             String indexSuffix = withIndex ? "[%d]".formatted(resultPath.getSegmentIndex()) : "";
-            String name        = executionStepInfo.getField().getName() + indexSuffix;
+            String name = executionStepInfo.getField().getName() + indexSuffix;
             stack.push(name);
 
             getPath(executionStepInfo.getParent().getParent(), stack, withIndex);

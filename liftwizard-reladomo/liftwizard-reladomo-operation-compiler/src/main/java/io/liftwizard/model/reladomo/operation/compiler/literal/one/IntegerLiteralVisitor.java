@@ -20,7 +20,8 @@ import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 
-public class IntegerLiteralVisitor extends AbstractLiteralVisitor<Integer>
+public class IntegerLiteralVisitor
+        extends AbstractLiteralVisitor<Integer>
 {
     public IntegerLiteralVisitor(RelatedFinder finder, String errorContext)
     {

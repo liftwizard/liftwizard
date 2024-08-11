@@ -31,10 +31,10 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public class ReladomoExtensionBuilder
         implements BeforeEachCallback, AfterEachCallback
 {
-    private Optional<ExecuteSqlExtension>         executeSqlExtension = Optional.empty();
+    private Optional<ExecuteSqlExtension> executeSqlExtension = Optional.empty();
     private Optional<ReladomoInitializeExtension> initializeExtension = Optional.empty();
-    private Optional<ReladomoPurgeAllExtension>   purgeAllExtension   = Optional.empty();
-    private ReladomoLoadDataExtension             loadDataExtension   = new ReladomoLoadDataExtension();
+    private Optional<ReladomoPurgeAllExtension> purgeAllExtension = Optional.empty();
+    private ReladomoLoadDataExtension loadDataExtension = new ReladomoLoadDataExtension();
 
     @Override
     public void beforeEach(ExtensionContext context)

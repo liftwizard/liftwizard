@@ -225,7 +225,7 @@ public class LogstashFileAppenderFactory
             LevelFilterFactory<ILoggingEvent> levelFilterFactory,
             AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory)
     {
-        Encoder<ILoggingEvent>              encoder  = this.encoderFactory.build(this.isIncludeCallerData(), this.getTimeZone());
+        Encoder<ILoggingEvent> encoder = this.encoderFactory.build(this.isIncludeCallerData(), this.getTimeZone());
         OutputStreamAppender<ILoggingEvent> appender = this.appender(context);
         appender.setEncoder(encoder);
         encoder.start();
@@ -290,7 +290,7 @@ public class LogstashFileAppenderFactory
         {
             throw new AssertionError();
         }
-        var fileSize                      = new FileSize(this.maxFileSize.toBytes());
+        var fileSize = new FileSize(this.maxFileSize.toBytes());
         var sizeAndTimeBasedRollingPolicy = new SizeAndTimeBasedRollingPolicy<ILoggingEvent>();
         sizeAndTimeBasedRollingPolicy.setMaxFileSize(fileSize);
         return sizeAndTimeBasedRollingPolicy;
@@ -321,7 +321,7 @@ public class LogstashFileAppenderFactory
         {
             throw new AssertionError();
         }
-        var fileSize         = new FileSize(this.maxFileSize.toBytes());
+        var fileSize = new FileSize(this.maxFileSize.toBytes());
         var triggeringPolicy = new SizeBasedTriggeringPolicy<ILoggingEvent>();
         triggeringPolicy.setMaxFileSize(fileSize);
         triggeringPolicy.setContext(context);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ import io.dropwizard.db.ManagedDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NamedDataSourceFactory extends DataSourceFactory
+public class NamedDataSourceFactory
+        extends DataSourceFactory
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(NamedDataSourceFactory.class);
 

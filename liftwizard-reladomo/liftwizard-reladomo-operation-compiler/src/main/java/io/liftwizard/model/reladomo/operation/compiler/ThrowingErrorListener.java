@@ -21,7 +21,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-public class ThrowingErrorListener extends BaseErrorListener
+public class ThrowingErrorListener
+        extends BaseErrorListener
 {
     private final String[] lines;
 

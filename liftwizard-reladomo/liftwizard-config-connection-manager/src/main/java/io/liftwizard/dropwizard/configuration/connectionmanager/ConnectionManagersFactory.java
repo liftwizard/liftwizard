@@ -50,7 +50,7 @@ public class ConnectionManagersFactory
     @JsonProperty("connectionManagers")
     public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories)
     {
-        this.connectionManagerFactories       = connectionManagerFactories;
+        this.connectionManagerFactories = connectionManagerFactories;
         this.connectionManagerFactoriesByName = new LinkedHashMap<>();
         for (ConnectionManagerFactory connectionManagerFactory : connectionManagerFactories)
         {

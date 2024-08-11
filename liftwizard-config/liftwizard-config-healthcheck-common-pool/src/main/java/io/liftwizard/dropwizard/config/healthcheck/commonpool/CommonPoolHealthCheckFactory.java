@@ -29,10 +29,10 @@ public class CommonPoolHealthCheckFactory
 {
     private boolean enabled = true;
 
-    private @NotNull String        threadNamePrefix      = "ForkJoinPool.commonPool-worker-";
-    private @NotNull List<State>   threadStates          = List.of(State.RUNNABLE);
+    private @NotNull String threadNamePrefix = "ForkJoinPool.commonPool-worker-";
+    private @NotNull List<State> threadStates = List.of(State.RUNNABLE);
     private @NotNull List<Pattern> alwaysAllowedPatterns = List.of();
-    private @NotNull List<Pattern> bannedPatterns        = List.of();
+    private @NotNull List<Pattern> bannedPatterns = List.of();
 
     @JsonProperty
     public boolean isEnabled()

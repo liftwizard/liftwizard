@@ -87,7 +87,7 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap)
     {
         bootstrap.addBundle(new ClockBundle());
-        var httpsRedirect  = new HttpsRedirect();
+        var httpsRedirect = new HttpsRedirect();
         var redirectBundle = new RedirectBundle(httpsRedirect);
         bootstrap.addBundle(redirectBundle);
         bootstrap.addBundle(new UUIDBundle());
@@ -104,7 +104,8 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
     }
 
     @Override
-    public void run(@Nonnull T configuration, @Nonnull Environment environment) throws Exception
+    public void run(@Nonnull T configuration, @Nonnull Environment environment)
+            throws Exception
     {
         this.registerJacksonModules(environment);
         this.registerHealthChecks(environment);

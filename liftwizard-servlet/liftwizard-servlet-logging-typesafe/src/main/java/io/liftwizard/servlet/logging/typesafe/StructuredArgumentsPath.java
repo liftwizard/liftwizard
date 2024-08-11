@@ -24,13 +24,13 @@ public class StructuredArgumentsPath
 {
     private final String absolute;
     private final String full;
-    private       String template;
-    private       String baseUriPath;
+    private String template;
+    private String baseUriPath;
 
     public StructuredArgumentsPath(String absolute, String full)
     {
         this.absolute = Objects.requireNonNull(absolute);
-        this.full     = Objects.requireNonNull(full);
+        this.full = Objects.requireNonNull(full);
     }
 
     @JsonProperty

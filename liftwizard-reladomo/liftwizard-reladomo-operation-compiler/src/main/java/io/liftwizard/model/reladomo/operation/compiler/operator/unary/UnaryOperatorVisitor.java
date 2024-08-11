@@ -25,7 +25,8 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorIs
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.UnaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
 
-public class UnaryOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation>
+public class UnaryOperatorVisitor
+        extends ReladomoOperationThrowingVisitor<Operation>
 {
     private final Attribute attribute;
 

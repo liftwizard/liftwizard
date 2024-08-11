@@ -30,10 +30,11 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLe
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
 
-public class InstantBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor
+public class InstantBinaryOperatorVisitor
+        extends AbstractBinaryOperatorVisitor
 {
     private final TimestampAttribute attribute;
-    private final Timestamp          timestamp;
+    private final Timestamp timestamp;
 
     public InstantBinaryOperatorVisitor(TimestampAttribute attribute, Instant parameter)
     {

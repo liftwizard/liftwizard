@@ -31,7 +31,8 @@ import io.liftwizard.firebase.principal.FirebasePrincipal;
 
 @JsonTypeName("firebase")
 @AutoService(AuthFilterFactory.class)
-public class FirebaseAuthFilterFactory implements AuthFilterFactory
+public class FirebaseAuthFilterFactory
+        implements AuthFilterFactory
 {
     private @Valid @NotNull String databaseUrl;
     private @Valid @NotNull String firebaseConfig;

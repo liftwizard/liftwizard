@@ -45,7 +45,7 @@ public class StructuredLog4jReporter
         extends ScheduledReporter
 {
     private final AbstractLoggerProxy loggerProxy;
-    private final String              prefix;
+    private final String prefix;
 
     public StructuredLog4jReporter(
             MetricRegistry registry,
@@ -68,7 +68,7 @@ public class StructuredLog4jReporter
                 shutdownExecutorOnStop,
                 disabledMetricAttributes);
         this.loggerProxy = loggerProxy;
-        this.prefix      = prefix;
+        this.prefix = prefix;
     }
 
     /**

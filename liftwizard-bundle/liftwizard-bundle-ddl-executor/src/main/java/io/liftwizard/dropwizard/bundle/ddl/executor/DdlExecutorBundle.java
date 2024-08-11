@@ -72,10 +72,10 @@ public class DdlExecutorBundle
 
         for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories)
         {
-            String dataSourceName     = ddlExecutorFactory.getDataSourceName();
+            String dataSourceName = ddlExecutorFactory.getDataSourceName();
             String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
             String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
-            String fkLocationPattern  = ddlExecutorFactory.getFkLocationPattern();
+            String fkLocationPattern = ddlExecutorFactory.getFkLocationPattern();
 
             LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 

@@ -69,10 +69,10 @@ public final class DatabaseDdlExecutor
                 .setScanners(new ResourcesScanner())
                 .filterInputsBy(filterBuilder)
                 .setUrls(urls);
-        Reflections        reflections  = new Reflections(configurationBuilder);
+        Reflections reflections = new Reflections(configurationBuilder);
         MutableSet<String> ddlLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(ddlLocationPattern)));
         MutableSet<String> idxLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(idxLocationPattern)));
-        MutableSet<String> fkLocations  = SetAdapter.adapt(reflections.getResources(Pattern.compile(fkLocationPattern)));
+        MutableSet<String> fkLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(fkLocationPattern)));
         LOGGER.info("Scanning urls: {}", urls.collect(URL::toString).toSortedList());
         LOGGER.info("Found {} SQL ddl scripts.", ddlLocations.size());
         LOGGER.info("Found {} SQL idx scripts.", idxLocations.size());

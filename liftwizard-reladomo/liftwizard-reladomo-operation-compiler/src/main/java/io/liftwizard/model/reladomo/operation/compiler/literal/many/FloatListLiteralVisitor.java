@@ -23,7 +23,8 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.FloatLiteralV
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class FloatListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Float>>
+public class FloatListLiteralVisitor
+        extends AbstractLiteralVisitor<ImmutableList<Float>>
 {
     private final FloatLiteralVisitor floatLiteralVisitor;
 
