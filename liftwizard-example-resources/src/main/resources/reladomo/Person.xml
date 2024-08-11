@@ -30,12 +30,12 @@
             finalGetter="true"
             columnName="id">
         <SimulatedSequence
-            sequenceName="Person"
-            sequenceObjectFactoryName="io.liftwizard.reladomo.simseq.ObjectSequenceObjectFactory"
-            hasSourceAttribute="false"
-            batchSize="10"
-            initialValue="1"
-            incrementSize="1" />
+                sequenceName="Person"
+                sequenceObjectFactoryName="io.liftwizard.reladomo.simseq.ObjectSequenceObjectFactory"
+                hasSourceAttribute="false"
+                batchSize="10"
+                initialValue="1"
+                incrementSize="1" />
     </Attribute>
     <Attribute
             name="fullName"
