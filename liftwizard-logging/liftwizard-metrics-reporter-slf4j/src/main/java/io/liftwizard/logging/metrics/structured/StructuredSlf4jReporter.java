@@ -18,6 +18,7 @@ package io.liftwizard.logging.metrics.structured;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ScheduledExecutorService;
@@ -76,11 +77,11 @@ public class StructuredSlf4jReporter
                 executor,
                 shutdownExecutorOnStop,
                 disabledMetricAttributes);
-        this.loggerProxy = loggerProxy;
-        this.marker = marker;
-        this.prefix = prefix;
-        this.mapToStructuredObjectFunction = mapToStructuredObjectFunction;
-        this.message = message;
+        this.loggerProxy = Objects.requireNonNull(loggerProxy);
+        this.marker = Objects.requireNonNull(marker);
+        this.prefix = Objects.requireNonNull(prefix);
+        this.mapToStructuredObjectFunction = Objects.requireNonNull(mapToStructuredObjectFunction);
+        this.message = Objects.requireNonNull(message);
     }
 
     /**

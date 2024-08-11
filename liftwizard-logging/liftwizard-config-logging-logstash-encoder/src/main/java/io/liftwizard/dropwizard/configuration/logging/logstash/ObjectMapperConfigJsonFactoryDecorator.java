@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package io.liftwizard.dropwizard.configuration.logging.logstash;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +33,7 @@ public class ObjectMapperConfigJsonFactoryDecorator
     public ObjectMapperConfigJsonFactoryDecorator(boolean prettyPrint, Include serializationInclusion)
     {
         this.prettyPrint = prettyPrint;
-        this.serializationInclusion = serializationInclusion;
+        this.serializationInclusion = Objects.requireNonNull(serializationInclusion);
     }
 
     @Override

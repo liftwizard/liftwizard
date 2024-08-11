@@ -17,6 +17,7 @@
 package io.liftwizard.servlet.filter.singlepage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -41,9 +42,9 @@ public class SinglePageRedirectFilter
             String cacheControlHeader,
             ImmutableList<String> wellKnownPathPrefixes)
     {
-        this.redirectPage = redirectPage;
-        this.cacheControlHeader = cacheControlHeader;
-        this.wellKnownPathPrefixes = wellKnownPathPrefixes;
+        this.redirectPage = Objects.requireNonNull(redirectPage);
+        this.cacheControlHeader = Objects.requireNonNull(cacheControlHeader);
+        this.wellKnownPathPrefixes = Objects.requireNonNull(wellKnownPathPrefixes);
     }
 
     @Override
