@@ -396,6 +396,35 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
+  spotless-prettier-java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-prettier-java-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Java cleanthat"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-prettier-java'
+
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
   spotless-sql:
     runs-on: ubuntu-latest
     steps:
