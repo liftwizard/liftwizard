@@ -74,7 +74,7 @@ reproducible MVN=default_mvn:
 
 # mvn rewrite
 rewrite-dry-run MVN=default_mvn:
-    {{MVN}} install -DskipTests org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun
+    mvn --threads 1 install -DskipTests org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun
 
 # mvn rewrite
 rewrite RECIPE:
