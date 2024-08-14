@@ -440,7 +440,7 @@
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-commons</artifactId>
-                <version>1.10.3</version>
+                <version>1.11.0</version>
             </dependency>
 
             <dependency>
