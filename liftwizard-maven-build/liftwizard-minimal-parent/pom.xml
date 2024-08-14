@@ -85,6 +85,20 @@
         <argLine />
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.11.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+         </dependencies>
+    </dependencyManagement>
+
     <build>
         <!-- The default goal or phase to execute when none is specified for the project. -->
         <!-- verify is a better choice than install in the presence of concurrent builds that may write to .m2/repository simultaneously -->
@@ -142,7 +156,7 @@
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
                         <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.10.3</version>
+                        <version>5.11.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
