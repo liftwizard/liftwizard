@@ -21,6 +21,8 @@ reladomo
 database
     named-data-source
     liquibase-migrations
+auth
+    auth-and-impersonation
 testing
     testing
     matching-files
