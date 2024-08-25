@@ -263,12 +263,6 @@
                                         io.liftwizard:liftwizard-generator-xsd2bean-plugin
                                     </unCheckedPluginList>
                                 </requirePluginVersions>
-                                <bannedDependencies>
-                                    <excludes combine.children="append">
-                                        <exclude>log4j:log4j</exclude>
-                                        <exclude>org.slf4j:slf4j-log4j12</exclude>
-                                    </excludes>
-                                </bannedDependencies>
                             </rules>
                         </configuration>
                     </plugin>
