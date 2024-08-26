@@ -220,7 +220,7 @@ fetch:
     fi
 
 # Rebase all branches onto configurable upstream/main
-rebase-all: fetch
+rebase-all: _check-local-modifications fetch
     #!/usr/bin/env bash
     set -Eeuo pipefail
 
