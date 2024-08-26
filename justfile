@@ -173,6 +173,11 @@ test: _check-local-modifications clean mvn && _check-local-modifications
 
 fail_fast := env('FAIL_FAST', "false")
 
+# git-test on the range of commits between a configurable upstream/main and {{BRANCH}}
+test-branch BRANCH="HEAD" *FLAGS="--retest":
+    echo "Testing branch: {{BRANCH}}"
+    git test run {{FLAGS}} {{upstream_remote}}/{{upstream_branch}}..{{BRANCH}}
+
 # `just test` all commits with configurable upstream/main as ancestor
 test-all *FLAGS="--retest":
     #!/usr/bin/env bash
@@ -186,8 +191,7 @@ test-all *FLAGS="--retest":
 
     for branch in "${branches[@]}"
     do
-        echo "Testing branch: $branch"
-        git test run {{FLAGS}} {{upstream_remote}}/{{upstream_branch}}..${branch}
+        just test-branch "${branch}" {{FLAGS}}
     done
 
 alias ta := test-all
