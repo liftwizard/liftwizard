@@ -22,13 +22,13 @@
 <suppressions>
 
     <!--
-    This suppression exists for bundles like SPARedirectFilterBundle that are abstract because they expect an anonymous inner subclass like:
-    SPARedirectFilterBundle<T> spaRedirectFilterBundle = new SPARedirectFilterBundle<T>()
+    This suppression exists for bundles like SinglePageRedirectFilterBundle that are abstract because they expect an anonymous inner subclass like:
+    SinglePageRedirectFilterBundle<T> singlePageRedirectFilterBundle = new SinglePageRedirectFilterBundle<T>()
     {
         @Override
-        public SPARedirectFilterFactory getSPARedirectFilterFactory(T configuration)
+        public SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory(T configuration)
         {
-            configuration.getSPARedirectFilterFactory();
+            configuration.getSinglePageRedirectFilterFactory();
         }
     };
     -->
