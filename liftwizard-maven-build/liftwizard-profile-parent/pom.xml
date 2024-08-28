@@ -696,7 +696,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.8.0</version>
+                        <version>3.10.0</version>
                         <configuration>
                             <notimestamp>true</notimestamp>
                             <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
