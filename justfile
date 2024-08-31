@@ -14,7 +14,7 @@ mise:
     mise current
 
 # git clean
-_git-clean:
+_clean-git:
     git clean -fdx release.properties **/pom.xml.releaseBackup **/target
 
 # rm -rf ~/.m2/repository/...
@@ -26,7 +26,7 @@ _clean-m2:
 
 default_mvn      := env('MVN_BINARY',   "mvnd")
 # clean (maven and git)
-clean MVN=default_mvn: && _git-clean _clean-m2
+clean MVN=default_mvn: && _clean-git _clean-m2
     {{MVN}} clean
 
 # mvn verify
@@ -104,7 +104,7 @@ upstream_remote := env('UPSTREAM_REMOTE', "upstream")
 upstream_branch := env('UPSTREAM_BRANCH', "main")
 
 # mvn release:prepare
-release NEXT_VERSION: && _git-clean
+release NEXT_VERSION: && _clean-git
     git checkout {{upstream_remote}}/{{upstream_branch}}
     mvn --batch-mode clean release:clean release:prepare -DdevelopmentVersion={{NEXT_VERSION}}
 
