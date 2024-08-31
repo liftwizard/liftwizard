@@ -6,6 +6,16 @@ group_id_with_slashes := "io/liftwizard"
 # Setup the project (mise) and run the default build (mvn)
 default: mise mvn
 
+# set up git-test
+setup-git-test:
+    git test add --forget --test default               'just default'
+    git test add --forget --test spotless-formats      'just spotless formats'
+    git test add --forget --test spotless-sort-imports 'just spotless sort-imports'
+    git test add --forget --test spotless-cleanthat    'just spotless unused-cleanthat'
+    git test add --forget --test spotless-pom          'just spotless unused-pom'
+    git test add --forget --test spotless-markdown     'just spotless unused-markdown'
+    git test add --forget --test spotless-yaml         'just spotless unused-yaml'
+
 # mise install
 mise:
     mise plugin install maven
