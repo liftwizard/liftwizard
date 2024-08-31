@@ -297,7 +297,7 @@
 
                                 <importOrder>
                                     <!-- use an empty string for all the imports not specified explicitly, '|' to join group without blank line, and '\#` prefix for static imports. -->
-                                    <order>java,javax,,\#com.diffplug,\#java|\#javax,\#</order>
+                                    <order>java,javax,,\#java|\#javax,\#</order>
                                 </importOrder>
 
                                 <removeUnusedImports />
