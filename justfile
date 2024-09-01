@@ -8,13 +8,13 @@ default: mise mvn
 
 # set up git-test
 setup-git-test:
-    git test add --forget --test default               'just default'
-    git test add --forget --test spotless-formats      'just spotless formats'
-    git test add --forget --test spotless-sort-imports 'just spotless sort-imports'
-    git test add --forget --test spotless-cleanthat    'just spotless unused-cleanthat'
-    git test add --forget --test spotless-pom          'just spotless unused-pom'
-    git test add --forget --test spotless-markdown     'just spotless unused-markdown'
-    git test add --forget --test spotless-yaml         'just spotless unused-yaml'
+    git test add --forget --test default                    'just default'
+    git test add --forget --test spotless-formats           'just spotless formats'
+    git test add --forget --test spotless-java-sort-imports 'just spotless java-sort-imports'
+    git test add --forget --test spotless-cleanthat         'just spotless unused-cleanthat'
+    git test add --forget --test spotless-pom               'just spotless unused-pom'
+    git test add --forget --test spotless-markdown          'just spotless unused-markdown'
+    git test add --forget --test spotless-yaml              'just spotless unused-yaml'
 
 # mise install
 mise:
@@ -184,12 +184,12 @@ test: _check-local-modifications clean mvn && _check-local-modifications
 fail_fast := env('FAIL_FAST', "false")
 
 # git-test on the range of commits between a configurable upstream/main and {{BRANCH}}
-test-branch BRANCH="HEAD" *FLAGS="--retest":
+test-branch BRANCH="HEAD" TEST="default" *FLAGS="--retest":
     echo "Testing branch: {{BRANCH}}"
-    git test run {{FLAGS}} {{upstream_remote}}/{{upstream_branch}}..{{BRANCH}}
+    git test run --test {{TEST}} {{FLAGS}} {{upstream_remote}}/{{upstream_branch}}..{{BRANCH}}
 
 # `just test` all commits with configurable upstream/main as ancestor
-test-all *FLAGS="--retest":
+test-all TEST="default" *FLAGS="--retest":
     #!/usr/bin/env bash
     set -uo pipefail
 
@@ -201,7 +201,7 @@ test-all *FLAGS="--retest":
 
     for branch in "${branches[@]}"
     do
-        just test-branch "${branch}" {{FLAGS}}
+        just test-branch "${branch}" "{{TEST}}" {{FLAGS}}
     done
 
 alias ta := test-all
@@ -216,7 +216,7 @@ test-results:
     for branch in "${branches[@]}"
     do
         echo "Branch: $branch"
-        git test results {{upstream_remote}}/{{upstream_branch}}..${branch}
+        git test results --color {{upstream_remote}}/{{upstream_branch}}..${branch}
     done
 
 offline := env_var_or_default('OFFLINE', 'false')
@@ -257,7 +257,7 @@ absorb:
         --force
 
 # git rebase onto configurable upstream/main
-rebase: fetch
+rebase: _check-local-modifications fetch
     git rebase --interactive --autosquash {{upstream_remote}}/{{upstream_branch}}
 
 # Delete local branches merged into configurable upstream/main
