@@ -12,7 +12,7 @@ If the file does not exist, or the contents do not match, an assertion error is 
 
 If `LIFTWIZARD_FILE_MATCH_RULE_RERECORD` is set to `true`, `assertJsonContents` will not emit any `AssertionErrors`.
 
-```tabs
+```tabs {default: "JUnit 5"}
 "JUnit 4": :include-markdown: snippets/JsonMatchRule.md
 "JUnit 5": :include-markdown: snippets/JsonMatchExtension.md
 ```

@@ -24,7 +24,7 @@ You can use directly in logback configuration. It requires a delegate appender f
 
 We must log `CLEAR` and `FLUSH` markers to instruct `BufferedAppender` to clear or flush its logs. If you are using JUnit 4 or 5, you can use the included Rule or Extension to log these markers automatically.
 
-```tabs
+```tabs {default: "JUnit 5"}
 "JUnit 4": :include-markdown: snippets/LogMarkerTestRule.md
 "JUnit 5": :include-markdown: snippets/LogMarkerTestExtension.md
 ```
