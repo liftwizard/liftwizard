@@ -28,7 +28,7 @@ jobs:
       - run: ./mvnw verify
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/cool/klass
+        run: rm -rf ~/.m2/repository/io/liftwizard
 
   maven-coverage:
     runs-on: ubuntu-latest
