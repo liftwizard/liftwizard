@@ -291,3 +291,6 @@ qodana:
     op run -- qodana scan \
         --apply-fixes \
         --linter jetbrains/qodana-jvm:2024.1
+
+pull-request-description:
+    git log {{upstream_remote}}/{{upstream_branch}}..HEAD --reverse --format='- %s'
