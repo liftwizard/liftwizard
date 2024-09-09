@@ -65,6 +65,7 @@ public class IntegrationTest {
                 .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
                 .queryParam("name", "Dr. IntegrationTest")
                 .request()
+                .header("Authorization", "example user")
                 .get();
 
             this.assertResponseStatus(response, Status.OK);

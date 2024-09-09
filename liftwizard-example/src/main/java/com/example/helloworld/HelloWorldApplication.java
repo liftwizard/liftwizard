@@ -27,6 +27,7 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import io.liftwizard.dropwizard.bundle.auth.filter.AuthFilterBundle;
 import io.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
@@ -96,6 +97,7 @@ public class HelloWorldApplication
             }
         });
         bootstrap.addBundle(new Slf4jUncaughtExceptionHandlerBundle());
+        bootstrap.addBundle(new AuthFilterBundle());
     }
 
     @Override

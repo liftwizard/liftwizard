@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.ImmutableMap;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.Configuration;
+import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
+import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.system.SystemClockFactory;
@@ -56,7 +58,8 @@ public class HelloWorldConfiguration
         NamedDataSourceProvider,
         ConnectionManagerProvider,
         GraphQLFactoryProvider,
-        LiquibaseMigrationFactoryProvider
+        LiquibaseMigrationFactoryProvider,
+        AuthFilterFactoryProvider
 {
     @NotEmpty
     private String template;
@@ -93,6 +96,10 @@ public class HelloWorldConfiguration
     private @Valid @NotNull LiquibaseMigrationFactory liquibaseMigrationFactory =
             new LiquibaseMigrationFactory();
     // include-liquibaseMigrationFactory
+
+    // include-authFilterFactory
+    private @Valid @NotNull List<AuthFilterFactory> authFilterFactories = List.of();
+    // include-authFilterFactory
 
     @JsonProperty
     public String getTemplate() {
@@ -291,5 +298,18 @@ public class HelloWorldConfiguration
     public void setLiquibaseMigrationFactory(LiquibaseMigrationFactory liquibaseMigrationFactory)
     {
         this.liquibaseMigrationFactory = liquibaseMigrationFactory;
+    }
+
+    @JsonProperty("authFilters")
+    @Override
+    public List<AuthFilterFactory> getAuthFilterFactories()
+    {
+        return this.authFilterFactories;
+    }
+
+    @JsonProperty("authFilters")
+    public void setAuthFilterFactories(List<AuthFilterFactory> authFilterFactories)
+    {
+        this.authFilterFactories = authFilterFactories;
     }
 }

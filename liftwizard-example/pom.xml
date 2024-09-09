@@ -226,6 +226,16 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-bundle-auth-filter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-config-auth-filter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-logging-logstash-file</artifactId>
             <scope>runtime</scope>
         </dependency>
@@ -251,6 +261,12 @@
         <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-config-uuid-seed</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-config-auth-filter-header</artifactId>
             <scope>test</scope>
         </dependency>
 
