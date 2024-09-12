@@ -18,12 +18,10 @@ package io.liftwizard.firebase.principal;
 
 import java.security.Principal;
 import java.util.Map;
-
 import org.eclipse.collections.api.factory.Maps;
 
-public class FirebasePrincipal
-        implements Principal
-{
+public class FirebasePrincipal implements Principal {
+
     private final String name;
     private final String displayName;
     private final String email;
@@ -33,14 +31,14 @@ public class FirebasePrincipal
     private final String signInProvider;
 
     public FirebasePrincipal(
-            String name,
-            String displayName,
-            String email,
-            Boolean emailVerified,
-            String issuer,
-            String picture,
-            String signInProvider)
-    {
+        String name,
+        String displayName,
+        String email,
+        Boolean emailVerified,
+        String issuer,
+        String picture,
+        String signInProvider
+    ) {
         this.name = name;
         this.displayName = displayName;
         this.email = email;
@@ -50,57 +48,49 @@ public class FirebasePrincipal
         this.signInProvider = signInProvider;
     }
 
-    public Map<String, Object> toMap()
-    {
-        return Maps.mutable.<String, Object>empty()
-                .withKeyValue("name", this.name)
-                .withKeyValue("displayName", this.displayName)
-                .withKeyValue("email", this.email)
-                .withKeyValue("emailVerified", this.emailVerified)
-                .withKeyValue("issuer", this.issuer)
-                .withKeyValue("picture", this.picture)
-                .withKeyValue("signInProvider", this.signInProvider);
+    public Map<String, Object> toMap() {
+        return Maps.mutable
+            .<String, Object>empty()
+            .withKeyValue("name", this.name)
+            .withKeyValue("displayName", this.displayName)
+            .withKeyValue("email", this.email)
+            .withKeyValue("emailVerified", this.emailVerified)
+            .withKeyValue("issuer", this.issuer)
+            .withKeyValue("picture", this.picture)
+            .withKeyValue("signInProvider", this.signInProvider);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
-    public String getDisplayName()
-    {
+    public String getDisplayName() {
         return this.displayName;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return this.email;
     }
 
-    public Boolean getEmailVerified()
-    {
+    public Boolean getEmailVerified() {
         return this.emailVerified;
     }
 
-    public String getIssuer()
-    {
+    public String getIssuer() {
         return this.issuer;
     }
 
-    public String getPicture()
-    {
+    public String getPicture() {
         return this.picture;
     }
 
-    public String getSignInProvider()
-    {
+    public String getSignInProvider() {
         return this.signInProvider;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "{name=" + this.name + ", displayName=" + this.displayName + "}";
     }
 }

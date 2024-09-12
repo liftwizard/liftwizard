@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.liquibase.migration;
 
-public interface LiquibaseMigrationFactoryProvider
-{
+public interface LiquibaseMigrationFactoryProvider {
     LiquibaseMigrationFactory getLiquibaseMigrationFactory();
 }

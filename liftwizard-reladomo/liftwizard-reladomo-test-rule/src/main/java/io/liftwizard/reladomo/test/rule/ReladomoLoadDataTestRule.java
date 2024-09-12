@@ -16,12 +16,6 @@
 
 package io.liftwizard.reladomo.test.rule;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
 import com.gs.fw.common.mithra.MithraDataObject;
 import com.gs.fw.common.mithra.MithraDatabaseObject;
 import com.gs.fw.common.mithra.MithraManagerProvider;
@@ -30,6 +24,10 @@ import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.test.MithraTestDataParser;
 import com.gs.fw.common.mithra.util.fileparser.MithraParsedData;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.factory.Lists;
 import org.junit.rules.TestRule;
@@ -38,100 +36,81 @@ import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReladomoLoadDataTestRule
-        implements TestRule
-{
+public class ReladomoLoadDataTestRule implements TestRule {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataTestRule.class);
 
     @Nonnull
     private final ImmutableList<String> testDataFileNames;
 
-    public ReladomoLoadDataTestRule(@Nonnull ImmutableList<String> testDataFileNames)
-    {
+    public ReladomoLoadDataTestRule(@Nonnull ImmutableList<String> testDataFileNames) {
         this.testDataFileNames = testDataFileNames;
     }
 
-    public ReladomoLoadDataTestRule(@Nonnull String... testDataFileNames)
-    {
+    public ReladomoLoadDataTestRule(@Nonnull String... testDataFileNames) {
         this(Lists.immutable.with(testDataFileNames));
     }
 
     @Nonnull
     @Override
-    public Statement apply(@Nonnull Statement base, @Nonnull Description description)
-    {
+    public Statement apply(@Nonnull Statement base, @Nonnull Description description) {
         ImmutableList<String> configuredTestDataFileNames = this.getConfiguredTestDataFileNames(description);
 
         return new LoadDataStatement(base, configuredTestDataFileNames);
     }
 
-    private ImmutableList<String> getConfiguredTestDataFileNames(@Nonnull Description description)
-    {
+    private ImmutableList<String> getConfiguredTestDataFileNames(@Nonnull Description description) {
         ReladomoTestFile reladomoTestFileAnnotation = description.getAnnotation(ReladomoTestFile.class);
-        if (reladomoTestFileAnnotation == null)
-        {
+        if (reladomoTestFileAnnotation == null) {
             return this.testDataFileNames;
         }
         return Lists.immutable.with(reladomoTestFileAnnotation.value());
     }
 
-    public static class LoadDataStatement
-            extends Statement
-    {
+    public static class LoadDataStatement extends Statement {
+
         private static final Class<?>[] NO_PARAMS = {};
         private static final Object[] NO_ARGS = {};
 
         private final Statement base;
         private final ImmutableList<String> configuredTestDataFileNames;
 
-        public LoadDataStatement(
-                @Nonnull Statement base,
-                @Nonnull ImmutableList<String> configuredTestDataFileNames)
-        {
+        public LoadDataStatement(@Nonnull Statement base, @Nonnull ImmutableList<String> configuredTestDataFileNames) {
             this.base = Objects.requireNonNull(base);
             this.configuredTestDataFileNames = Objects.requireNonNull(configuredTestDataFileNames);
         }
 
-        private void before()
-        {
-            for (String testDataFileName : this.configuredTestDataFileNames)
-            {
-                try
-                {
+        private void before() {
+            for (String testDataFileName : this.configuredTestDataFileNames) {
+                try {
                     this.loadTestData(testDataFileName);
-                }
-                catch (ReflectiveOperationException e)
-                {
+                } catch (ReflectiveOperationException e) {
                     throw new RuntimeException("Error while loading test data file: " + testDataFileName, e);
                 }
             }
         }
 
-        private void loadTestData(String testDataFileName)
-                throws ReflectiveOperationException
-        {
+        private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
             LOGGER.debug("Loading test data from file: {}", testDataFileName);
             MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
             List<MithraParsedData> parsedDataList = parser.getResults();
 
-            for (MithraParsedData mithraParsedData : parsedDataList)
-            {
+            for (MithraParsedData mithraParsedData : parsedDataList) {
                 this.handleMithraParsedData(mithraParsedData);
             }
         }
 
         private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
-                throws ReflectiveOperationException
-        {
+            throws ReflectiveOperationException {
             List<Attribute<?, ?>> attributes = mithraParsedData.getAttributes();
             List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
             String parsedClassName = mithraParsedData.getParsedClassName();
 
-            if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName))
-            {
-                String message = "Class "
-                        + parsedClassName
-                        + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?";
+            if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName)) {
+                String message =
+                    "Class " +
+                    parsedClassName +
+                    " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?";
                 throw new RuntimeException(message);
             }
 
@@ -142,12 +121,13 @@ public class ReladomoLoadDataTestRule
 
             MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
             SourcelessConnectionManager databaseObjectConnectionManager =
-                    (SourcelessConnectionManager) databaseObject.getConnectionManager();
+                (SourcelessConnectionManager) databaseObject.getConnectionManager();
 
             LOGGER.debug(
-                    "Loading test data for class {} using connection manager: {}",
-                    parsedClassName,
-                    databaseObjectConnectionManager);
+                "Loading test data for class {} using connection manager: {}",
+                parsedClassName,
+                databaseObjectConnectionManager
+            );
 
             Class<? extends MithraDatabaseObject> databaseObjectClass = databaseObject.getClass();
 
@@ -155,8 +135,7 @@ public class ReladomoLoadDataTestRule
             insertDataMethod.invoke(databaseObject, attributes, dataObjects, null);
         }
 
-        private void after()
-        {
+        private void after() {
             MithraManagerProvider.getMithraManager().clearAllQueryCaches();
             MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
             MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
@@ -164,16 +143,11 @@ public class ReladomoLoadDataTestRule
         }
 
         @Override
-        public void evaluate()
-                throws Throwable
-        {
+        public void evaluate() throws Throwable {
             this.before();
-            try
-            {
+            try {
                 this.base.evaluate();
-            }
-            finally
-            {
+            } finally {
                 this.after();
             }
         }

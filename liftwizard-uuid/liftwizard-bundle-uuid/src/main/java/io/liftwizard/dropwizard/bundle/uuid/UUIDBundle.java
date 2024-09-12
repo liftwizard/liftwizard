@@ -16,40 +16,30 @@
 
 package io.liftwizard.dropwizard.bundle.uuid;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
+import java.util.UUID;
+import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
-public class UUIDBundle
-        implements ConfiguredBundle<UUIDSupplierFactoryProvider>
-{
-    @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
+public class UUIDBundle implements ConfiguredBundle<UUIDSupplierFactoryProvider> {
 
     @Override
-    public void run(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment)
-    {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
-        {
+    public void initialize(Bootstrap<?> bootstrap) {}
+
+    @Override
+    public void run(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment) {
+        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
             this.runWithMdc(configuration, environment);
         }
     }
 
-    private void runWithMdc(
-            UUIDSupplierFactoryProvider configuration,
-            @Nonnull Environment environment)
-    {
+    private void runWithMdc(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment) {
         UUIDSupplierFactory uuidSupplierFactory = configuration.getUuidSupplierFactory();
         Supplier<UUID> uuidSupplier = uuidSupplierFactory.createUUIDSupplier();
         UUIDBinder uuidBinder = new UUIDBinder(uuidSupplier);

@@ -32,57 +32,44 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class ReladomoPurgeAllExtension
-        implements BeforeEachCallback, AfterEachCallback
-{
+public class ReladomoPurgeAllExtension implements BeforeEachCallback, AfterEachCallback {
+
     @Override
-    public void beforeEach(ExtensionContext context)
-    {
+    public void beforeEach(ExtensionContext context) {
         this.purgeTypes();
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
+    public void afterEach(ExtensionContext context) {
         this.purgeTypes();
     }
 
-    private void purgeTypes()
-    {
-        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx ->
-        {
-            MithraManagerProvider
-                    .getMithraManager()
-                    .getRuntimeCacheControllerSet()
-                    .forEach(this::purgeType);
+    private void purgeTypes() {
+        MithraManagerProvider.getMithraManager()
+            .executeTransactionalCommand(tx -> {
+                MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet().forEach(this::purgeType);
 
-            return null;
-        });
+                return null;
+            });
     }
 
-    private void purgeType(MithraRuntimeCacheController mithraRuntimeCacheController)
-    {
+    private void purgeType(MithraRuntimeCacheController mithraRuntimeCacheController) {
         ReladomoClassMetaData metaData = mithraRuntimeCacheController.getMetaData();
         RelatedFinder finderInstance = metaData.getFinderInstance();
         ListIterable<AsOfAttribute> asOfAttributes = metaData.getAsOfAttributes() == null
-                ? Lists.immutable.empty()
-                : ArrayAdapter.adapt(metaData.getAsOfAttributes());
+            ? Lists.immutable.empty()
+            : ArrayAdapter.adapt(metaData.getAsOfAttributes());
         Operation operation = asOfAttributes
-                .collect(AsOfAttribute::equalsEdgePoint)
-                .reduce(Operation::and)
-                .orElseGet(finderInstance::all);
+            .collect(AsOfAttribute::equalsEdgePoint)
+            .reduce(Operation::and)
+            .orElseGet(finderInstance::all);
         MithraList<?> mithraList = finderInstance.findMany(operation);
 
-        if (mithraList instanceof TemporalTransactionalDomainList<?> temporalTransactionalDomainList)
-        {
+        if (mithraList instanceof TemporalTransactionalDomainList<?> temporalTransactionalDomainList) {
             temporalTransactionalDomainList.purgeAll();
-        }
-        else if (mithraList instanceof TransactionalDomainList<?> transactionalDomainList)
-        {
+        } else if (mithraList instanceof TransactionalDomainList<?> transactionalDomainList) {
             transactionalDomainList.deleteAll();
-        }
-        else
-        {
+        } else {
             throw new AssertionError(mithraList.getClass().getCanonicalName());
         }
     }

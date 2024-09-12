@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.Set;
 
 public class User implements Principal {
+
     private final String name;
 
     private final Set<String> roles;

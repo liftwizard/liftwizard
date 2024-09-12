@@ -22,24 +22,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-
 import javax.annotation.Nonnull;
 
-public final class DeleteAllFilesVisitor
-        extends SimpleFileVisitor<Path>
-{
+public final class DeleteAllFilesVisitor extends SimpleFileVisitor<Path> {
+
     @Override
-    public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs)
-            throws IOException
-    {
+    public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs) throws IOException {
         Files.delete(file);
         return super.visitFile(file, attrs);
     }
 
     @Override
-    public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc)
-            throws IOException
-    {
+    public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc) throws IOException {
         Files.delete(dir);
         return super.postVisitDirectory(dir, exc);
     }

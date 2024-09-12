@@ -16,11 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.janino;
 
-import javax.annotation.Nonnull;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.EvaluatorFilter;
@@ -31,12 +26,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.logging.LoggingUtil;
 import io.dropwizard.logging.filter.FilterFactory;
+import javax.annotation.Nonnull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @JsonTypeName("janino")
 @AutoService(FilterFactory.class)
-public class JaninoFilterFactory
-        implements FilterFactory<ILoggingEvent>
-{
+public class JaninoFilterFactory implements FilterFactory<ILoggingEvent> {
+
     @NotEmpty
     private @Valid @NotNull String javaExpression;
 
@@ -44,8 +42,7 @@ public class JaninoFilterFactory
     private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
     @Override
-    public Filter<ILoggingEvent> build()
-    {
+    public Filter<ILoggingEvent> build() {
         JaninoEventEvaluator evaluator = this.getJaninoEventEvaluator();
 
         var filter = new EvaluatorFilter<ILoggingEvent>();
@@ -58,8 +55,7 @@ public class JaninoFilterFactory
     }
 
     @Nonnull
-    private JaninoEventEvaluator getJaninoEventEvaluator()
-    {
+    private JaninoEventEvaluator getJaninoEventEvaluator() {
         var evaluator = new JaninoEventEvaluator();
         evaluator.setExpression(this.javaExpression);
         evaluator.setContext(LoggingUtil.getLoggerContext());
@@ -69,38 +65,32 @@ public class JaninoFilterFactory
     }
 
     @JsonProperty
-    public String getJavaExpression()
-    {
+    public String getJavaExpression() {
         return this.javaExpression;
     }
 
     @JsonProperty
-    public void setJavaExpression(String javaExpression)
-    {
+    public void setJavaExpression(String javaExpression) {
         this.javaExpression = javaExpression;
     }
 
     @JsonProperty
-    public FilterReply getOnMatch()
-    {
+    public FilterReply getOnMatch() {
         return this.onMatch;
     }
 
     @JsonProperty
-    public void setOnMatch(FilterReply onMatch)
-    {
+    public void setOnMatch(FilterReply onMatch) {
         this.onMatch = onMatch;
     }
 
     @JsonProperty
-    public FilterReply getOnMismatch()
-    {
+    public FilterReply getOnMismatch() {
         return this.onMismatch;
     }
 
     @JsonProperty
-    public void setOnMismatch(FilterReply onMismatch)
-    {
+    public void setOnMismatch(FilterReply onMismatch) {
         this.onMismatch = onMismatch;
     }
 }

@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.system.properties;
 
-public interface SystemPropertiesFactoryProvider
-{
+public interface SystemPropertiesFactoryProvider {
     SystemPropertiesFactory getSystemPropertiesFactory();
 }

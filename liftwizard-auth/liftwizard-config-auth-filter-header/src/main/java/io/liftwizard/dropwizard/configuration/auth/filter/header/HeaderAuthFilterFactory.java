@@ -17,53 +17,46 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.header;
 
-import javax.annotation.Nonnull;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthFilter;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
+import javax.annotation.Nonnull;
+import javax.validation.constraints.NotNull;
 
 @JsonTypeName("header")
 @AutoService(AuthFilterFactory.class)
-public class HeaderAuthFilterFactory
-        implements AuthFilterFactory
-{
+public class HeaderAuthFilterFactory implements AuthFilterFactory {
+
     @NotNull
     private final String header;
+
     private final String prefix;
 
     @JsonCreator
-    public HeaderAuthFilterFactory(
-            @JsonProperty("header") String header,
-            @JsonProperty("prefix") String prefix)
-    {
+    public HeaderAuthFilterFactory(@JsonProperty("header") String header, @JsonProperty("prefix") String prefix) {
         this.header = header;
         this.prefix = prefix;
     }
 
     @NotNull
-    public String getHeader()
-    {
+    public String getHeader() {
         return this.header;
     }
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return this.prefix;
     }
 
     @Nonnull
     @Override
-    public AuthFilter<?, HeaderPrincipal> createAuthFilter()
-    {
+    public AuthFilter<?, HeaderPrincipal> createAuthFilter() {
         return new HeaderAuthFilter.Builder(this.header, this.prefix)
-                .setAuthenticator(new HeaderAuthenticator(this.prefix))
-                .setUnauthorizedHandler(new JSONUnauthorizedHandler())
-                .setPrefix("Header")
-                .buildAuthFilter();
+            .setAuthenticator(new HeaderAuthenticator(this.prefix))
+            .setUnauthorizedHandler(new JSONUnauthorizedHandler())
+            .setPrefix("Header")
+            .buildAuthFilter();
     }
 }

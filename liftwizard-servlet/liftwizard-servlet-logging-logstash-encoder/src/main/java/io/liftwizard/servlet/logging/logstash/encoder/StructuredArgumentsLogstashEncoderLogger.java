@@ -16,25 +16,19 @@
 
 package io.liftwizard.servlet.logging.logstash.encoder;
 
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.logstash.logback.marker.Markers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StructuredArgumentsLogstashEncoderLogger
-        implements Consumer<StructuredArguments>
-{
+public class StructuredArgumentsLogstashEncoderLogger implements Consumer<StructuredArguments> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsLogstashEncoderLogger.class);
 
     @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments)
-    {
-        LOGGER.debug(
-                Markers.appendFields(structuredArguments),
-                "Response sent");
+    public void accept(@Nonnull StructuredArguments structuredArguments) {
+        LOGGER.debug(Markers.appendFields(structuredArguments), "Response sent");
     }
 }

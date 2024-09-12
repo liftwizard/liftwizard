@@ -16,25 +16,21 @@
 
 package io.liftwizard.dropwizard.task.reladomo.clear.cache;
 
+import com.gs.fw.common.mithra.MithraManager;
+import com.gs.fw.common.mithra.MithraManagerProvider;
+import io.dropwizard.servlets.tasks.Task;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-import com.gs.fw.common.mithra.MithraManager;
-import com.gs.fw.common.mithra.MithraManagerProvider;
-import io.dropwizard.servlets.tasks.Task;
+public class ReladomoClearCacheTask extends Task {
 
-public class ReladomoClearCacheTask
-        extends Task
-{
-    public ReladomoClearCacheTask()
-    {
+    public ReladomoClearCacheTask() {
         super("reladomo-clear-cache");
     }
 
     @Override
-    public void execute(Map<String, List<String>> parameters, PrintWriter output)
-    {
+    public void execute(Map<String, List<String>> parameters, PrintWriter output) {
         MithraManager mithraManager = MithraManagerProvider.getMithraManager();
         mithraManager.clearAllQueryCaches();
     }

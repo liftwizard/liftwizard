@@ -16,8 +16,6 @@
 
 package io.liftwizard.configuration.metrics.reporter.log4j;
 
-import javax.validation.constraints.NotEmpty;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +24,7 @@ import com.google.auto.service.AutoService;
 import io.dropwizard.metrics.BaseReporterFactory;
 import io.dropwizard.metrics.ReporterFactory;
 import io.liftwizard.logging.metrics.structured.log4j.StructuredLog4jReporter;
+import javax.validation.constraints.NotEmpty;
 import org.apache.log4j.Logger;
 
 /**
@@ -33,37 +32,32 @@ import org.apache.log4j.Logger;
  */
 @JsonTypeName("structured-log4j")
 @AutoService(ReporterFactory.class)
-public class StructuredLog4jReporterFactory
-        extends BaseReporterFactory
-{
+public class StructuredLog4jReporterFactory extends BaseReporterFactory {
+
     @NotEmpty
     private String loggerName = "metrics";
 
     @JsonProperty("logger")
-    public String getLoggerName()
-    {
+    public String getLoggerName() {
         return this.loggerName;
     }
 
     @JsonProperty("logger")
-    public void setLoggerName(String loggerName)
-    {
+    public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
     }
 
-    public Logger getLogger()
-    {
+    public Logger getLogger() {
         return Logger.getLogger(this.getLoggerName());
     }
 
     @Override
-    public ScheduledReporter build(MetricRegistry registry)
-    {
-        return StructuredLog4jReporter
-                .forRegistry(registry)
-                .convertDurationsTo(this.getDurationUnit())
-                .convertRatesTo(this.getRateUnit())
-                .filter(this.getFilter())
-                .outputTo(this.getLogger()).build();
+    public ScheduledReporter build(MetricRegistry registry) {
+        return StructuredLog4jReporter.forRegistry(registry)
+            .convertDurationsTo(this.getDurationUnit())
+            .convertRatesTo(this.getRateUnit())
+            .filter(this.getFilter())
+            .outputTo(this.getLogger())
+            .build();
     }
 }

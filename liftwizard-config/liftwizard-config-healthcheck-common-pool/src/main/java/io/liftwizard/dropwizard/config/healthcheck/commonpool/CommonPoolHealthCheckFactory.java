@@ -16,17 +16,15 @@
 
 package io.liftwizard.dropwizard.config.healthcheck.commonpool;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.lang.Thread.State;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class CommonPoolHealthCheckFactory {
 
-public class CommonPoolHealthCheckFactory
-{
     private boolean enabled = true;
 
     private @NotNull String threadNamePrefix = "ForkJoinPool.commonPool-worker-";
@@ -35,62 +33,52 @@ public class CommonPoolHealthCheckFactory
     private @NotNull List<Pattern> bannedPatterns = List.of();
 
     @JsonProperty
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
     @JsonProperty
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
     @JsonProperty
-    public String getThreadNamePrefix()
-    {
+    public String getThreadNamePrefix() {
         return this.threadNamePrefix;
     }
 
     @JsonProperty
-    public void setThreadNamePrefix(String threadNamePrefix)
-    {
+    public void setThreadNamePrefix(String threadNamePrefix) {
         this.threadNamePrefix = threadNamePrefix;
     }
 
     @JsonProperty
-    public List<State> getThreadStates()
-    {
+    public List<State> getThreadStates() {
         return this.threadStates;
     }
 
     @JsonProperty
-    public void setThreadStates(List<State> threadStates)
-    {
+    public void setThreadStates(List<State> threadStates) {
         this.threadStates = Collections.unmodifiableList(threadStates);
     }
 
     @JsonProperty
-    public List<Pattern> getAlwaysAllowedPatterns()
-    {
+    public List<Pattern> getAlwaysAllowedPatterns() {
         return this.alwaysAllowedPatterns;
     }
 
     @JsonProperty
-    public void setAlwaysAllowedPatterns(List<Pattern> alwaysAllowedPatterns)
-    {
+    public void setAlwaysAllowedPatterns(List<Pattern> alwaysAllowedPatterns) {
         this.alwaysAllowedPatterns = Collections.unmodifiableList(alwaysAllowedPatterns);
     }
 
     @JsonProperty
-    public List<Pattern> getBannedPatterns()
-    {
+    public List<Pattern> getBannedPatterns() {
         return this.bannedPatterns;
     }
 
     @JsonProperty
-    public void setBannedPatterns(List<Pattern> bannedPatterns)
-    {
+    public void setBannedPatterns(List<Pattern> bannedPatterns) {
         this.bannedPatterns = Collections.unmodifiableList(bannedPatterns);
     }
 }

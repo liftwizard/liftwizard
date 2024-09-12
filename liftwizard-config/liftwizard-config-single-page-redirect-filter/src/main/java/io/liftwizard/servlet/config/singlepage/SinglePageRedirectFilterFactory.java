@@ -16,12 +16,11 @@
 
 package io.liftwizard.servlet.config.singlepage;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class SinglePageRedirectFilterFactory {
 
-public class SinglePageRedirectFilterFactory
-{
     private boolean enabled = true;
     private String redirectPage = "/index.html";
     private String cacheControlHeader = "no-cache, max-age=0";
@@ -29,47 +28,39 @@ public class SinglePageRedirectFilterFactory
     // Well known prefixes include /api/ for REST endpoints and /.well-known/ for OIDC callbacks.
     private List<String> wellKnownPathPrefixes = List.of("/api/", "/.well-known/");
 
-    public String getRedirectPage()
-    {
+    public String getRedirectPage() {
         return this.redirectPage;
     }
 
     @JsonProperty
-    public void setRedirectPage(String redirectPage)
-    {
+    public void setRedirectPage(String redirectPage) {
         this.redirectPage = redirectPage;
     }
 
-    public String getCacheControlHeader()
-    {
+    public String getCacheControlHeader() {
         return this.cacheControlHeader;
     }
 
     @JsonProperty
-    public void setCacheControlHeader(String cacheControlHeader)
-    {
+    public void setCacheControlHeader(String cacheControlHeader) {
         this.cacheControlHeader = cacheControlHeader;
     }
 
-    public List<String> getWellKnownPathPrefixes()
-    {
+    public List<String> getWellKnownPathPrefixes() {
         return this.wellKnownPathPrefixes;
     }
 
     @JsonProperty
-    public void setWellKnownPathPrefixes(List<String> wellKnownPathPrefixes)
-    {
+    public void setWellKnownPathPrefixes(List<String> wellKnownPathPrefixes) {
         this.wellKnownPathPrefixes = wellKnownPathPrefixes;
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
     @JsonProperty
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 }

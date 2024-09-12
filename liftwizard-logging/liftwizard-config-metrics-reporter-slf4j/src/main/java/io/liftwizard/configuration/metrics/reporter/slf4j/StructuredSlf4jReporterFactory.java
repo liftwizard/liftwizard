@@ -16,12 +16,6 @@
 
 package io.liftwizard.configuration.metrics.reporter.slf4j;
 
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotEmpty;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +26,10 @@ import io.dropwizard.metrics.BaseReporterFactory;
 import io.dropwizard.metrics.ReporterFactory;
 import io.liftwizard.logging.metrics.structured.Builder;
 import io.liftwizard.logging.metrics.structured.StructuredSlf4jReporter;
+import java.util.Map;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -41,9 +39,8 @@ import org.slf4j.MarkerFactory;
  */
 @JsonTypeName("structured-log")
 @AutoService(ReporterFactory.class)
-public class StructuredSlf4jReporterFactory
-        extends BaseReporterFactory
-{
+public class StructuredSlf4jReporterFactory extends BaseReporterFactory {
+
     @NotEmpty
     private String loggerName = "metrics";
 
@@ -54,65 +51,55 @@ public class StructuredSlf4jReporterFactory
     private String message = "metrics";
 
     @JsonProperty("logger")
-    public String getLoggerName()
-    {
+    public String getLoggerName() {
         return this.loggerName;
     }
 
     @JsonProperty("logger")
-    public void setLoggerName(String loggerName)
-    {
+    public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
     }
 
-    public Logger getLogger()
-    {
+    public Logger getLogger() {
         return LoggerFactory.getLogger(this.getLoggerName());
     }
 
     @JsonProperty
     @Nullable
-    public String getMarkerName()
-    {
+    public String getMarkerName() {
         return this.markerName;
     }
 
     @JsonProperty
-    public void setMarkerName(@Nullable String markerName)
-    {
+    public void setMarkerName(@Nullable String markerName) {
         this.markerName = markerName;
     }
 
     @JsonProperty
-    public String getMessage()
-    {
+    public String getMessage() {
         return this.message;
     }
 
     @JsonProperty
-    public void setMessage(String message)
-    {
+    public void setMessage(String message) {
         this.message = message;
     }
 
     @JsonIgnore
-    protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction()
-    {
+    protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
         return Function.identity();
     }
 
     @Override
-    public ScheduledReporter build(MetricRegistry registry)
-    {
+    public ScheduledReporter build(MetricRegistry registry) {
         Builder builder = StructuredSlf4jReporter.forRegistry(registry)
-                .convertDurationsTo(this.getDurationUnit())
-                .convertRatesTo(this.getRateUnit())
-                .filter(this.getFilter())
-                .outputTo(this.getLogger())
-                .message(this.getMessage())
-                .mapToStructuredObjectFunction(this.getMapToStructuredObjectFunction());
-        if (this.markerName != null)
-        {
+            .convertDurationsTo(this.getDurationUnit())
+            .convertRatesTo(this.getRateUnit())
+            .filter(this.getFilter())
+            .outputTo(this.getLogger())
+            .message(this.getMessage())
+            .mapToStructuredObjectFunction(this.getMapToStructuredObjectFunction());
+        if (this.markerName != null) {
             builder.markWith(MarkerFactory.getMarker(this.markerName));
         }
 

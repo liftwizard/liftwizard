@@ -1,9 +1,8 @@
 package com.example.helloworld.resources;
 
+import com.example.helloworld.filter.DateRequired;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-
-import com.example.helloworld.filter.DateRequired;
 
 @Path("/filtered")
 public class FilteredResource {

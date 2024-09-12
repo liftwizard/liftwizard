@@ -16,18 +16,15 @@
 
 package io.liftwizard.dropwizard.configuration.logging.logstash;
 
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import io.liftwizard.serialization.jackson.pretty.JsonLinesPrettyPrinter;
+import javax.annotation.Nonnull;
 import net.logstash.logback.decorate.JsonGeneratorDecorator;
 
-public class PrettyPrintingJsonGeneratorDecorator
-        implements JsonGeneratorDecorator
-{
+public class PrettyPrintingJsonGeneratorDecorator implements JsonGeneratorDecorator {
+
     @Override
-    public JsonGenerator decorate(@Nonnull JsonGenerator generator)
-    {
+    public JsonGenerator decorate(@Nonnull JsonGenerator generator) {
         generator.setPrettyPrinter(new JsonLinesPrettyPrinter());
         generator.useDefaultPrettyPrinter();
         return generator;

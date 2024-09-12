@@ -16,18 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.datasource;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,9 +23,19 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-public class NamedDataSourcesFactory
-{
+public class NamedDataSourcesFactory {
+
     private @Valid @NotNull List<NamedDataSourceFactory> namedDataSourceFactories = new ArrayList<>();
 
     private Map<String, NamedDataSourceFactory> namedDataSourceFactoriesByName = new LinkedHashMap<>();
@@ -45,48 +43,36 @@ public class NamedDataSourcesFactory
     private final Map<String, ManagedDataSource> dataSourcesByName = new LinkedHashMap<>();
 
     @JsonProperty("dataSources")
-    public List<NamedDataSourceFactory> getNamedDataSourceFactories()
-    {
+    public List<NamedDataSourceFactory> getNamedDataSourceFactories() {
         return this.namedDataSourceFactories;
     }
 
     @JsonProperty("dataSources")
-    public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories)
-    {
+    public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories) {
         this.namedDataSourceFactories = namedDataSourceFactories;
         this.namedDataSourceFactoriesByName = new LinkedHashMap<>();
-        for (NamedDataSourceFactory namedDataSourceFactory : namedDataSourceFactories)
-        {
-            this.namedDataSourceFactoriesByName.put(
-                    namedDataSourceFactory.getName(),
-                    namedDataSourceFactory);
+        for (NamedDataSourceFactory namedDataSourceFactory : namedDataSourceFactories) {
+            this.namedDataSourceFactoriesByName.put(namedDataSourceFactory.getName(), namedDataSourceFactory);
         }
     }
 
     @ValidationMethod
     @JsonIgnore
-    public boolean isValidDataSourceNames()
-    {
-        List<String> orderedDataSourceNames = this.namedDataSourceFactories
-                .stream()
-                .map(NamedDataSourceFactory::getName)
-                .toList();
+    public boolean isValidDataSourceNames() {
+        List<String> orderedDataSourceNames =
+            this.namedDataSourceFactories.stream().map(NamedDataSourceFactory::getName).toList();
         Map<String, Long> frequencies = orderedDataSourceNames
-                .stream()
-                .collect(Collectors.groupingBy(
-                        Function.identity(),
-                        LinkedHashMap::new,
-                        Collectors.counting()));
+            .stream()
+            .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
 
         List<String> duplicateDataSourceNames = frequencies
-                .entrySet()
-                .stream()
-                .filter(m -> m.getValue() > 1)
-                .map(Entry::getKey)
-                .toList();
+            .entrySet()
+            .stream()
+            .filter(m -> m.getValue() > 1)
+            .map(Entry::getKey)
+            .toList();
 
-        if (duplicateDataSourceNames.isEmpty())
-        {
+        if (duplicateDataSourceNames.isEmpty()) {
             return true;
         }
 
@@ -96,31 +82,29 @@ public class NamedDataSourcesFactory
 
     @Nonnull
     @JsonIgnore
-    public NamedDataSourceFactory getNamedDataSourceFactoryByName(String name)
-    {
-        return this.namedDataSourceFactories
-                .stream()
-                .filter(namedDataSourceFactory -> namedDataSourceFactory.getName().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Unknown data source name: " + name));
+    public NamedDataSourceFactory getNamedDataSourceFactoryByName(String name) {
+        return this.namedDataSourceFactories.stream()
+            .filter(namedDataSourceFactory -> namedDataSourceFactory.getName().equals(name))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Unknown data source name: " + name));
     }
 
     @JsonIgnore
     public ManagedDataSource getDataSourceByName(
-            @Nonnull String name,
-            @Nonnull MetricRegistry metricRegistry,
-            @Nonnull LifecycleEnvironment lifecycle)
-    {
-        if (this.dataSourcesByName.containsKey(name))
-        {
+        @Nonnull String name,
+        @Nonnull MetricRegistry metricRegistry,
+        @Nonnull LifecycleEnvironment lifecycle
+    ) {
+        if (this.dataSourcesByName.containsKey(name)) {
             return this.dataSourcesByName.get(name);
         }
 
-        if (!this.namedDataSourceFactoriesByName.containsKey(name))
-        {
-            String message = "No data source named: '%s'. Known data sources: %s".formatted(
-                    name,
-                    this.namedDataSourceFactoriesByName.keySet());
+        if (!this.namedDataSourceFactoriesByName.containsKey(name)) {
+            String message =
+                "No data source named: '%s'. Known data sources: %s".formatted(
+                        name,
+                        this.namedDataSourceFactoriesByName.keySet()
+                    );
             throw new IllegalStateException(message);
         }
 

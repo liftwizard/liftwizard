@@ -16,15 +16,13 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.sql.SQLException;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.Managed;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import java.sql.SQLException;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
@@ -34,24 +32,26 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.FileSystemResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 
-public class LiquibaseDropAllManaged
-        implements Managed
-{
+public class LiquibaseDropAllManaged implements Managed {
+
     private final ManagedDataSource dataSource;
+
     @Nullable
     private final String catalogName;
+
     @Nullable
     private final String schemaName;
+
     private final String migrationFile;
     private final MigrationFileLocation migrationFileLocation;
 
     public LiquibaseDropAllManaged(
-            ManagedDataSource dataSource,
-            String catalogName,
-            String schemaName,
-            String migrationFile,
-            MigrationFileLocation migrationFileLocation)
-    {
+        ManagedDataSource dataSource,
+        String catalogName,
+        String schemaName,
+        String migrationFile,
+        MigrationFileLocation migrationFileLocation
+    ) {
         this.dataSource = Objects.requireNonNull(dataSource);
         this.catalogName = catalogName;
         this.schemaName = schemaName;
@@ -60,45 +60,32 @@ public class LiquibaseDropAllManaged
     }
 
     @Override
-    public void start()
-    {
-    }
+    public void start() {}
 
     @Override
-    public void stop()
-    {
-        try (
-                CloseableLiquibase liquibase = this.openLiquibase())
-        {
+    public void stop() {
+        try (CloseableLiquibase liquibase = this.openLiquibase()) {
             liquibase.dropAll();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private CloseableLiquibase openLiquibase()
-            throws SQLException, LiquibaseException
-    {
+    private CloseableLiquibase openLiquibase() throws SQLException, LiquibaseException {
         Database database = this.createDatabase();
         ResourceAccessor resourceAccessor = this.getResourceAccessor();
         return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
     }
 
-    private Database createDatabase()
-            throws SQLException, LiquibaseException
-    {
+    private Database createDatabase() throws SQLException, LiquibaseException {
         DatabaseConnection connection = new JdbcConnection(this.dataSource.getConnection());
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
-        if (database.supportsCatalogs() && this.catalogName != null)
-        {
+        if (database.supportsCatalogs() && this.catalogName != null) {
             database.setDefaultCatalogName(this.catalogName);
             database.setOutputDefaultCatalog(true);
         }
-        if (database.supportsSchemas() && this.schemaName != null)
-        {
+        if (database.supportsSchemas() && this.schemaName != null) {
             database.setDefaultSchemaName(this.schemaName);
             database.setOutputDefaultSchema(true);
         }
@@ -107,10 +94,8 @@ public class LiquibaseDropAllManaged
     }
 
     @Nonnull
-    private ResourceAccessor getResourceAccessor()
-    {
-        return switch (this.migrationFileLocation)
-        {
+    private ResourceAccessor getResourceAccessor() {
+        return switch (this.migrationFileLocation) {
             case CLASSPATH -> new ClassLoaderResourceAccessor();
             case FILESYSTEM -> new FileSystemResourceAccessor();
         };

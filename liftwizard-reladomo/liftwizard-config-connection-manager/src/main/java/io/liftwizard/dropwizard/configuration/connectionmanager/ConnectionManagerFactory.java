@@ -16,115 +16,103 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.TimeZone;
-
-import javax.annotation.Nonnull;
-import javax.sql.DataSource;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.reladomo.connectionmanager.LiftwizardConnectionManager;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.TimeZone;
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-public class ConnectionManagerFactory
-{
+public class ConnectionManagerFactory {
+
     private @Valid @NotNull String connectionManagerName;
     private @Valid @NotNull String dataSourceName;
     private @Valid @NotNull DatabaseTypeEnum databaseType = DatabaseTypeEnum.GENERIC;
     private @Valid @NotNull String timeZoneName = "UTC";
     private @Valid @NotNull String schemaName;
 
-    public SourcelessConnectionManager createSourcelessConnectionManager(@Nonnull DataSource dataSource)
-    {
+    public SourcelessConnectionManager createSourcelessConnectionManager(@Nonnull DataSource dataSource) {
         Objects.requireNonNull(dataSource);
 
         DatabaseType reladomoDatabaseType = this.databaseType.getDatabaseType();
         TimeZone timeZone = TimeZone.getTimeZone(this.timeZoneName);
         return new LiftwizardConnectionManager(
-                this.connectionManagerName,
-                this.dataSourceName,
-                dataSource,
-                reladomoDatabaseType,
-                timeZone,
-                this.schemaName);
+            this.connectionManagerName,
+            this.dataSourceName,
+            dataSource,
+            reladomoDatabaseType,
+            timeZone,
+            this.schemaName
+        );
     }
 
     @JsonProperty
-    public String getConnectionManagerName()
-    {
+    public String getConnectionManagerName() {
         return this.connectionManagerName;
     }
 
     @JsonProperty
-    public void setConnectionManagerName(String connectionManagerName)
-    {
+    public void setConnectionManagerName(String connectionManagerName) {
         this.connectionManagerName = connectionManagerName;
     }
 
     @JsonProperty
-    public String getDataSourceName()
-    {
+    public String getDataSourceName() {
         return this.dataSourceName;
     }
 
     @JsonProperty
-    public void setDataSourceName(String dataSourceName)
-    {
+    public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
 
     @JsonProperty
-    public DatabaseTypeEnum getDatabaseType()
-    {
+    public DatabaseTypeEnum getDatabaseType() {
         return this.databaseType;
     }
 
     @JsonProperty
-    public void setDatabaseType(DatabaseTypeEnum databaseType)
-    {
+    public void setDatabaseType(DatabaseTypeEnum databaseType) {
         this.databaseType = databaseType;
     }
 
     @JsonProperty("timeZone")
-    public String getTimeZoneName()
-    {
+    public String getTimeZoneName() {
         return this.timeZoneName;
     }
 
     @JsonProperty("timeZone")
-    public void setTimeZoneName(String timeZoneName)
-    {
+    public void setTimeZoneName(String timeZoneName) {
         this.timeZoneName = timeZoneName;
     }
 
     @JsonProperty
-    public String getSchemaName()
-    {
+    public String getSchemaName() {
         return this.schemaName;
     }
 
     @JsonProperty
-    public void setSchemaName(String schemaName)
-    {
+    public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
 
     @ValidationMethod(message = "Invalid timeZoneName")
     @JsonIgnore
-    public boolean isValidTimezone()
-    {
+    public boolean isValidTimezone() {
         TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-        if (zoneInfo == null)
-        {
-            String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-                    this.timeZoneName,
-                    Arrays.toString(TimeZone.getAvailableIDs()));
+        if (zoneInfo == null) {
+            String message =
+                "Got timeZoneName '%s' but expected one of: %s".formatted(
+                        this.timeZoneName,
+                        Arrays.toString(TimeZone.getAvailableIDs())
+                    );
             throw new IllegalStateException(message);
         }
         return true;

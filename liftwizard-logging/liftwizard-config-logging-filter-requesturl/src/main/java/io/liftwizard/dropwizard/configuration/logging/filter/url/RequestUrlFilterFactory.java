@@ -16,14 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.url;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import ch.qos.logback.access.net.URLEvaluator;
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.core.filter.EvaluatorFilter;
@@ -33,12 +25,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.logging.filter.FilterFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @JsonTypeName("url")
 @AutoService(FilterFactory.class)
-public class RequestUrlFilterFactory
-        implements FilterFactory<IAccessEvent>
-{
+public class RequestUrlFilterFactory implements FilterFactory<IAccessEvent> {
+
     @NotEmpty
     private @Valid @NotNull List<String> urls = new ArrayList<>();
 
@@ -46,8 +43,7 @@ public class RequestUrlFilterFactory
     private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
     @Override
-    public Filter<IAccessEvent> build()
-    {
+    public Filter<IAccessEvent> build() {
         var evaluator = new URLEvaluator();
         this.urls.forEach(evaluator::addURL);
         evaluator.start();
@@ -62,38 +58,32 @@ public class RequestUrlFilterFactory
     }
 
     @JsonProperty
-    public List<String> getUrls()
-    {
+    public List<String> getUrls() {
         return this.urls;
     }
 
     @JsonProperty
-    public void setUrls(List<String> urls)
-    {
+    public void setUrls(List<String> urls) {
         this.urls = Objects.requireNonNull(urls);
     }
 
     @JsonProperty
-    public FilterReply getOnMatch()
-    {
+    public FilterReply getOnMatch() {
         return this.onMatch;
     }
 
     @JsonProperty
-    public void setOnMatch(FilterReply onMatch)
-    {
+    public void setOnMatch(FilterReply onMatch) {
         this.onMatch = onMatch;
     }
 
     @JsonProperty
-    public FilterReply getOnMismatch()
-    {
+    public FilterReply getOnMismatch() {
         return this.onMismatch;
     }
 
     @JsonProperty
-    public void setOnMismatch(FilterReply onMismatch)
-    {
+    public void setOnMismatch(FilterReply onMismatch) {
         this.onMismatch = onMismatch;
     }
 }

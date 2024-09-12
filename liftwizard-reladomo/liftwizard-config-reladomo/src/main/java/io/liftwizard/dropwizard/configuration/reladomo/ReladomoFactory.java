@@ -16,95 +16,82 @@
 
 package io.liftwizard.dropwizard.configuration.reladomo;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.util.Duration;
+import java.util.Collections;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 
-public class ReladomoFactory
-{
+public class ReladomoFactory {
+
     private int defaultRelationshipCacheSize = 10_000;
     private int defaultMinQueriesToKeep = 32;
     // Something like 30 seconds to 2 minutes makes sense in production
     private Duration transactionTimeout = Duration.minutes(5);
     // reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml in production
     private @NotNull List<String> runtimeConfigurationPaths = List.of(
-            "reladomo-runtime-configuration/TestReladomoRuntimeConfiguration.xml");
+        "reladomo-runtime-configuration/TestReladomoRuntimeConfiguration.xml"
+    );
     private boolean enableRetrieveCountMetrics = true;
     private boolean captureTransactionLevelPerformanceData = true;
 
     @JsonProperty
-    public int getDefaultMinQueriesToKeep()
-    {
+    public int getDefaultMinQueriesToKeep() {
         return this.defaultMinQueriesToKeep;
     }
 
     @JsonProperty
-    public void setDefaultMinQueriesToKeep(int defaultMinQueriesToKeep)
-    {
+    public void setDefaultMinQueriesToKeep(int defaultMinQueriesToKeep) {
         this.defaultMinQueriesToKeep = defaultMinQueriesToKeep;
     }
 
     @JsonProperty
-    public int getDefaultRelationshipCacheSize()
-    {
+    public int getDefaultRelationshipCacheSize() {
         return this.defaultRelationshipCacheSize;
     }
 
     @JsonProperty
-    public void setDefaultRelationshipCacheSize(int defaultRelationshipCacheSize)
-    {
+    public void setDefaultRelationshipCacheSize(int defaultRelationshipCacheSize) {
         this.defaultRelationshipCacheSize = defaultRelationshipCacheSize;
     }
 
     @JsonProperty
-    public Duration getTransactionTimeout()
-    {
+    public Duration getTransactionTimeout() {
         return this.transactionTimeout;
     }
 
     @JsonProperty
-    public void setTransactionTimeout(Duration transactionTimeout)
-    {
+    public void setTransactionTimeout(Duration transactionTimeout) {
         this.transactionTimeout = transactionTimeout;
     }
 
     @JsonProperty
-    public List<String> getRuntimeConfigurationPaths()
-    {
+    public List<String> getRuntimeConfigurationPaths() {
         return this.runtimeConfigurationPaths;
     }
 
     @JsonProperty
-    public void setRuntimeConfigurationPaths(List<String> runtimeConfigurationPaths)
-    {
+    public void setRuntimeConfigurationPaths(List<String> runtimeConfigurationPaths) {
         this.runtimeConfigurationPaths = Collections.unmodifiableList(runtimeConfigurationPaths);
     }
 
     @JsonProperty
-    public boolean isEnableRetrieveCountMetrics()
-    {
+    public boolean isEnableRetrieveCountMetrics() {
         return this.enableRetrieveCountMetrics;
     }
 
     @JsonProperty
-    public void setEnableRetrieveCountMetrics(boolean enableRetrieveCountMetrics)
-    {
+    public void setEnableRetrieveCountMetrics(boolean enableRetrieveCountMetrics) {
         this.enableRetrieveCountMetrics = enableRetrieveCountMetrics;
     }
 
     @JsonProperty
-    public boolean isCaptureTransactionLevelPerformanceData()
-    {
+    public boolean isCaptureTransactionLevelPerformanceData() {
         return this.captureTransactionLevelPerformanceData;
     }
 
     @JsonProperty
-    public void setCaptureTransactionLevelPerformanceData(boolean captureTransactionLevelPerformanceData)
-    {
+    public void setCaptureTransactionLevelPerformanceData(boolean captureTransactionLevelPerformanceData) {
         this.captureTransactionLevelPerformanceData = captureTransactionLevelPerformanceData;
     }
 }

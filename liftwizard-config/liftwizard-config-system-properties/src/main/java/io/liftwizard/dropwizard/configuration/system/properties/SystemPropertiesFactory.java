@@ -16,39 +16,34 @@
 
 package io.liftwizard.dropwizard.configuration.system.properties;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class SystemPropertiesFactory
-{
+public class SystemPropertiesFactory {
+
     private final Map<String, String> systemProperties = new LinkedHashMap<>();
     private boolean strict;
 
     @JsonAnyGetter
-    public Map<String, String> getSystemProperties()
-    {
+    public Map<String, String> getSystemProperties() {
         return this.systemProperties;
     }
 
     @JsonAnySetter
-    public void setSystemProperties(String name, String value)
-    {
+    public void setSystemProperties(String name, String value) {
         this.systemProperties.put(name, value);
     }
 
     @JsonProperty
-    public boolean isStrict()
-    {
+    public boolean isStrict() {
         return this.strict;
     }
 
     @JsonProperty
-    public void setStrict(boolean strict)
-    {
+    public void setStrict(boolean strict) {
         this.strict = strict;
     }
 }

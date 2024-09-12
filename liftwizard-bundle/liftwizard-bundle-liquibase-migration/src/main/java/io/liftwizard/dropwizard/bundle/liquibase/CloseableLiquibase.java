@@ -16,45 +16,35 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.util.Objects;
-
 import io.dropwizard.db.ManagedDataSource;
+import java.util.Objects;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ResourceAccessor;
 
-public class CloseableLiquibase
-        extends Liquibase
-{
+public class CloseableLiquibase extends Liquibase {
+
     private final ManagedDataSource dataSource;
 
     public CloseableLiquibase(
-            String changeLogFile,
-            ResourceAccessor resourceAccessor,
-            Database database,
-            ManagedDataSource dataSource)
-    {
+        String changeLogFile,
+        ResourceAccessor resourceAccessor,
+        Database database,
+        ManagedDataSource dataSource
+    ) {
         super(changeLogFile, resourceAccessor, database);
         this.dataSource = Objects.requireNonNull(dataSource);
     }
 
     @Override
-    public void close()
-            throws LiquibaseException
-    {
-        try
-        {
+    public void close() throws LiquibaseException {
+        try {
             this.database.close();
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 this.dataSource.stop();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

@@ -17,7 +17,6 @@
 package io.liftwizard.junit.extension.log.marker;
 
 import java.util.Optional;
-
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -32,27 +31,28 @@ import org.slf4j.MarkerFactory;
  *
  * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule</a>
  */
-public class LogMarkerTestExtension
-        implements BeforeEachCallback, AfterEachCallback
-{
+public class LogMarkerTestExtension implements BeforeEachCallback, AfterEachCallback {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LogMarkerTestExtension.class);
     private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
     private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 
     @Override
-    public void beforeEach(ExtensionContext context)
-    {
+    public void beforeEach(ExtensionContext context) {
         MDC.put("liftwizard.junit.test.name", context.getDisplayName());
         LOGGER.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
+    public void afterEach(ExtensionContext context) {
         Optional<Throwable> execution = context.getExecutionException();
-        execution.ifPresent(throwable -> LOGGER.info(
-                MARKER_FLUSH,
-                "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender."));
+        execution.ifPresent(
+            throwable ->
+                LOGGER.info(
+                    MARKER_FLUSH,
+                    "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender."
+                )
+        );
 
         MDC.remove("liftwizard.junit.test.name");
     }

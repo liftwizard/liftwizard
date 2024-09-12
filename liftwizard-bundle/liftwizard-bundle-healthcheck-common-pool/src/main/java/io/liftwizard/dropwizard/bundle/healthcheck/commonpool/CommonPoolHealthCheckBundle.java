@@ -16,34 +16,28 @@
 
 package io.liftwizard.dropwizard.bundle.healthcheck.commonpool;
 
-import javax.annotation.Nonnull;
-
 import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.config.healthcheck.commonpool.CommonPoolHealthCheckFactory;
 import io.liftwizard.dropwizard.config.healthcheck.commonpool.CommonPoolHealthCheckFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class CommonPoolHealthCheckBundle
-        implements PrioritizedBundle
-{
+public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheckBundle.class);
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-    {
-        CommonPoolHealthCheckFactoryProvider factoryProvider = this.safeCastConfiguration(
-                CommonPoolHealthCheckFactoryProvider.class,
-                configuration);
-        CommonPoolHealthCheckFactory factory =
-                factoryProvider.getCommonPoolHealthCheckFactory();
-        if (!factory.isEnabled())
-        {
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+        CommonPoolHealthCheckFactoryProvider factoryProvider =
+            this.safeCastConfiguration(CommonPoolHealthCheckFactoryProvider.class, configuration);
+        CommonPoolHealthCheckFactory factory = factoryProvider.getCommonPoolHealthCheckFactory();
+        if (!factory.isEnabled()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
@@ -51,10 +45,11 @@ public class CommonPoolHealthCheckBundle
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         CommonPoolHealthCheck healthCheck = new CommonPoolHealthCheck(
-                factory.getThreadNamePrefix(),
-                Lists.immutable.withAll(factory.getThreadStates()),
-                Lists.immutable.withAll(factory.getAlwaysAllowedPatterns()),
-                Lists.immutable.withAll(factory.getBannedPatterns()));
+            factory.getThreadNamePrefix(),
+            Lists.immutable.withAll(factory.getThreadStates()),
+            Lists.immutable.withAll(factory.getAlwaysAllowedPatterns()),
+            Lists.immutable.withAll(factory.getBannedPatterns())
+        );
         environment.healthChecks().register("common-pool", healthCheck);
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());

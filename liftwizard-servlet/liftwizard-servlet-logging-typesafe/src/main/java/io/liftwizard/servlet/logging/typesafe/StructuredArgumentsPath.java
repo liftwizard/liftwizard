@@ -16,54 +16,45 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class StructuredArgumentsPath {
 
-public class StructuredArgumentsPath
-{
     private final String absolute;
     private final String full;
     private String template;
     private String baseUriPath;
 
-    public StructuredArgumentsPath(String absolute, String full)
-    {
+    public StructuredArgumentsPath(String absolute, String full) {
         this.absolute = Objects.requireNonNull(absolute);
         this.full = Objects.requireNonNull(full);
     }
 
     @JsonProperty
-    public String getAbsolute()
-    {
+    public String getAbsolute() {
         return this.absolute;
     }
 
     @JsonProperty
-    public String getFull()
-    {
+    public String getFull() {
         return this.full;
     }
 
-    public void setTemplate(String template)
-    {
-        if (this.template != null)
-        {
+    public void setTemplate(String template) {
+        if (this.template != null) {
             throw new IllegalStateException(this.template);
         }
         this.template = Objects.requireNonNull(template);
     }
 
     @JsonProperty
-    public String getTemplate()
-    {
+    public String getTemplate() {
         return this.template;
     }
 
-    public void setBaseUriPath(String baseUriPath)
-    {
-        if (this.baseUriPath != null)
-        {
+    public void setBaseUriPath(String baseUriPath) {
+        if (this.baseUriPath != null) {
             throw new IllegalStateException(this.baseUriPath);
         }
         this.baseUriPath = Objects.requireNonNull(baseUriPath);

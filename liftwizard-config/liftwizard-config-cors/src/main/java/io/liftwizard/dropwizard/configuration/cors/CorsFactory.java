@@ -16,15 +16,13 @@
 
 package io.liftwizard.dropwizard.configuration.cors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class CorsFactory {
 
-public class CorsFactory
-{
     // Default to disabled since default settings are dangerous
     private boolean enabled;
     private @Valid @NotNull String filterName = "CORS";
@@ -35,80 +33,66 @@ public class CorsFactory
     private @Valid @NotNull String allowCredentials = "true";
     private @Valid @NotNull List<String> urlPatterns = List.of("/*");
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
     @JsonProperty
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public String getFilterName()
-    {
+    public String getFilterName() {
         return this.filterName;
     }
 
     @JsonProperty
-    public void setFilterName(String filterName)
-    {
+    public void setFilterName(String filterName) {
         this.filterName = filterName;
     }
 
-    public String getAllowedOrigins()
-    {
+    public String getAllowedOrigins() {
         return this.allowedOrigins;
     }
 
     @JsonProperty
-    public void setAllowedOrigins(String allowedOrigins)
-    {
+    public void setAllowedOrigins(String allowedOrigins) {
         this.allowedOrigins = allowedOrigins;
     }
 
-    public String getAllowedHeaders()
-    {
+    public String getAllowedHeaders() {
         return this.allowedHeaders;
     }
 
     @JsonProperty
-    public void setAllowedHeaders(String allowedHeaders)
-    {
+    public void setAllowedHeaders(String allowedHeaders) {
         this.allowedHeaders = allowedHeaders;
     }
 
-    public String getAllowedMethods()
-    {
+    public String getAllowedMethods() {
         return this.allowedMethods;
     }
 
     @JsonProperty
-    public void setAllowedMethods(String allowedMethods)
-    {
+    public void setAllowedMethods(String allowedMethods) {
         this.allowedMethods = allowedMethods;
     }
 
-    public String getAllowCredentials()
-    {
+    public String getAllowCredentials() {
         return this.allowCredentials;
     }
 
     @JsonProperty
-    public void setAllowCredentials(String allowCredentials)
-    {
+    public void setAllowCredentials(String allowCredentials) {
         this.allowCredentials = allowCredentials;
     }
 
-    public List<String> getUrlPatterns()
-    {
+    public List<String> getUrlPatterns() {
         return this.urlPatterns;
     }
 
     @JsonProperty
-    public void setUrlPatterns(List<String> urlPatterns)
-    {
+    public void setUrlPatterns(List<String> urlPatterns) {
         this.urlPatterns = urlPatterns;
     }
 }

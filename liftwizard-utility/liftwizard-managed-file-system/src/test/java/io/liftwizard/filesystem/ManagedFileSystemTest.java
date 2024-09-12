@@ -16,23 +16,20 @@
 
 package io.liftwizard.filesystem;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-
-import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @ExtendWith(LogMarkerTestExtension.class)
-class ManagedFileSystemTest
-{
+class ManagedFileSystemTest {
+
     @Test
-    public void smokeTest()
-            throws URISyntaxException
-    {
+    public void smokeTest() throws URISyntaxException {
         Path path1 = ManagedFileSystem.get(new URI("file:///"));
         assertTrue(path1.isAbsolute());
         assertTrue(path1.toFile().exists());

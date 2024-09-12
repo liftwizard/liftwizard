@@ -16,12 +16,6 @@
 
 package io.liftwizard.serialization.jackson.config;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter.Value;
 import com.fasterxml.jackson.annotation.Nulls;
@@ -34,6 +28,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
@@ -41,53 +39,47 @@ import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.eclipse.collections.api.set.MutableSet;
 
-public final class ObjectMapperConfig
-{
+public final class ObjectMapperConfig {
+
     private static final PrettyPrinter DEFAULT_PRETTY_PRINTER = new JsonPrettyPrinter();
 
-    private ObjectMapperConfig()
-    {
+    private ObjectMapperConfig() {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static ObjectMapper configure(@Nonnull ObjectMapper objectMapper)
-    {
+    public static ObjectMapper configure(@Nonnull ObjectMapper objectMapper) {
         return configure(objectMapper, true);
     }
 
-    public static ObjectMapper configure(
-            @Nonnull ObjectMapper objectMapper,
-            boolean prettyPrint)
-    {
+    public static ObjectMapper configure(@Nonnull ObjectMapper objectMapper, boolean prettyPrint) {
         return configure(objectMapper, prettyPrint, true);
     }
 
     public static ObjectMapper configure(
-            @Nonnull ObjectMapper objectMapper,
-            boolean prettyPrint,
-            boolean failOnUnknownProperties)
-    {
+        @Nonnull ObjectMapper objectMapper,
+        boolean prettyPrint,
+        boolean failOnUnknownProperties
+    ) {
         return configure(objectMapper, prettyPrint, failOnUnknownProperties, Include.NON_ABSENT);
     }
 
     public static ObjectMapper configure(
-            @Nonnull ObjectMapper objectMapper,
-            boolean prettyPrint,
-            boolean failOnUnknownProperties,
-            @Nonnull Include serializationInclusion)
-    {
+        @Nonnull ObjectMapper objectMapper,
+        boolean prettyPrint,
+        boolean failOnUnknownProperties,
+        @Nonnull Include serializationInclusion
+    ) {
         return configure(objectMapper, prettyPrint, failOnUnknownProperties, serializationInclusion, Nulls.AS_EMPTY);
     }
 
     public static ObjectMapper configure(
-            @Nonnull ObjectMapper objectMapper,
-            boolean prettyPrint,
-            boolean failOnUnknownProperties,
-            @Nonnull Include serializationInclusion,
-            @Nonnull Nulls defaultNullSetterInfo)
-    {
-        if (prettyPrint)
-        {
+        @Nonnull ObjectMapper objectMapper,
+        boolean prettyPrint,
+        boolean failOnUnknownProperties,
+        @Nonnull Include serializationInclusion,
+        @Nonnull Nulls defaultNullSetterInfo
+    ) {
+        if (prettyPrint) {
             objectMapper.setDefaultPrettyPrinter(DEFAULT_PRETTY_PRINTER);
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         }

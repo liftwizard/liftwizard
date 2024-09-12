@@ -16,45 +16,37 @@
 
 package io.liftwizard.reladomo.graphql.data.fetcher;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.sql.Timestamp;
+import java.time.Instant;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class ReladomoTemporalInstantDataFetcher<Input>
-        implements TrivialDataFetcher<Instant>
-{
+public class ReladomoTemporalInstantDataFetcher<Input> implements TrivialDataFetcher<Instant> {
+
     private final TimestampAttribute<Input> timestampAttribute;
 
-    public ReladomoTemporalInstantDataFetcher(TimestampAttribute<Input> timestampAttribute)
-    {
+    public ReladomoTemporalInstantDataFetcher(TimestampAttribute<Input> timestampAttribute) {
         this.timestampAttribute = timestampAttribute;
     }
 
     @Nullable
     @Override
-    public Instant get(@Nonnull DataFetchingEnvironment environment)
-    {
+    public Instant get(@Nonnull DataFetchingEnvironment environment) {
         Input persistentInstance = environment.getSource();
-        if (persistentInstance == null)
-        {
+        if (persistentInstance == null) {
             return null;
         }
 
-        if (this.timestampAttribute.isAttributeNull(persistentInstance))
-        {
+        if (this.timestampAttribute.isAttributeNull(persistentInstance)) {
             return null;
         }
 
         Timestamp result = this.timestampAttribute.valueOf(persistentInstance);
         Timestamp infinity = this.timestampAttribute.getAsOfAttributeInfinity();
-        if (infinity.equals(result))
-        {
+        if (infinity.equals(result)) {
             return null;
         }
 

@@ -16,8 +16,6 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.literal;
 
-import java.util.Objects;
-
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.BooleanLiteralContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CharacterLiteralContext;
@@ -26,62 +24,52 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLit
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ParameterContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLiteralContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
+import java.util.Objects;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public abstract class AbstractLiteralVisitor<T>
-        extends ReladomoOperationThrowingVisitor<T>
-{
+public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowingVisitor<T> {
+
     protected final RelatedFinder finder;
     protected final String errorContext;
 
-    protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext)
-    {
+    protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext) {
         this.finder = Objects.requireNonNull(finder);
         this.errorContext = Objects.requireNonNull(errorContext);
     }
 
     @Override
-    public T visitParameter(ParameterContext ctx)
-    {
+    public T visitParameter(ParameterContext ctx) {
         return this.visitChildren(ctx);
     }
 
     @Override
-    public T visitStringLiteral(StringLiteralContext ctx)
-    {
+    public T visitStringLiteral(StringLiteralContext ctx) {
         return this.throwTypeError(ctx);
     }
 
     @Override
-    public T visitBooleanLiteral(BooleanLiteralContext ctx)
-    {
+    public T visitBooleanLiteral(BooleanLiteralContext ctx) {
         return this.throwTypeError(ctx);
     }
 
     @Override
-    public T visitCharacterLiteral(CharacterLiteralContext ctx)
-    {
+    public T visitCharacterLiteral(CharacterLiteralContext ctx) {
         return this.throwTypeError(ctx);
     }
 
     @Override
-    public T visitIntegerLiteral(IntegerLiteralContext ctx)
-    {
+    public T visitIntegerLiteral(IntegerLiteralContext ctx) {
         return this.throwTypeError(ctx);
     }
 
     @Override
-    public T visitFloatingPointLiteral(FloatingPointLiteralContext ctx)
-    {
+    public T visitFloatingPointLiteral(FloatingPointLiteralContext ctx) {
         return this.throwTypeError(ctx);
     }
 
-    protected T throwTypeError(ParseTree ctx)
-    {
-        String error = "Expected <%s> but found: <%s> in %s".formatted(
-                this.getExpectedType(),
-                ctx.getText(),
-                this.errorContext);
+    protected T throwTypeError(ParseTree ctx) {
+        String error =
+            "Expected <%s> but found: <%s> in %s".formatted(this.getExpectedType(), ctx.getText(), this.errorContext);
         throw new IllegalArgumentException(error);
     }
 

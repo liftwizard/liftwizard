@@ -1,7 +1,5 @@
 package com.example.helloworld;
 
-import java.util.Map;
-
 import com.example.helloworld.auth.ExampleAuthenticator;
 import com.example.helloworld.auth.ExampleAuthorizer;
 import com.example.helloworld.cli.RenderCommand;
@@ -41,26 +39,22 @@ import io.liftwizard.dropwizard.bundle.reladomo.connection.manager.holder.Connec
 import io.liftwizard.dropwizard.bundle.uuid.UUIDBundle;
 import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFactory;
 import io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger;
+import java.util.Map;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-public class HelloWorldApplication
-        extends Application<HelloWorldConfiguration>
-{
-    public static void main(String... args)
-            throws Exception
-    {
+public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
+
+    public static void main(String... args) throws Exception {
         new HelloWorldApplication().run(args);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "hello-world";
     }
 
     @Override
-    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
-    {
+    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
         bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
         bootstrap.addBundle(new EnvironmentConfigBundle());
 
@@ -79,41 +73,46 @@ public class HelloWorldApplication
 
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());
-        bootstrap.addBundle(new MigrationsBundle<>()
-        {
-            @Override
-            public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration)
-            {
-                return configuration.getNamedDataSourcesFactory().getNamedDataSourceFactoryByName("h2-tcp");
+        bootstrap.addBundle(
+            new MigrationsBundle<>() {
+                @Override
+                public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+                    return configuration.getNamedDataSourcesFactory().getNamedDataSourceFactoryByName("h2-tcp");
+                }
             }
-        });
+        );
         bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());
-        bootstrap.addBundle(new ViewBundle<>()
-        {
-            @Override
-            public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration)
-            {
-                return configuration.getViewRendererConfiguration();
+        bootstrap.addBundle(
+            new ViewBundle<>() {
+                @Override
+                public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
+                    return configuration.getViewRendererConfiguration();
+                }
             }
-        });
+        );
         bootstrap.addBundle(new Slf4jUncaughtExceptionHandlerBundle());
         bootstrap.addBundle(new AuthFilterBundle());
     }
 
     @Override
-    public void run(HelloWorldConfiguration configuration, Environment environment)
-    {
-        Template  template = configuration.buildTemplate();
+    public void run(HelloWorldConfiguration configuration, Environment environment) {
+        Template template = configuration.buildTemplate();
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
 
         environment.jersey().register(DateRequiredFeature.class);
-        environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
-                .setAuthenticator(new ExampleAuthenticator())
-                .setAuthorizer(new ExampleAuthorizer())
-                .setRealm("SUPER SECRET STUFF")
-                .buildAuthFilter()));
+        environment
+            .jersey()
+            .register(
+                new AuthDynamicFeature(
+                    new BasicCredentialAuthFilter.Builder<User>()
+                        .setAuthenticator(new ExampleAuthenticator())
+                        .setAuthorizer(new ExampleAuthorizer())
+                        .setRealm("SUPER SECRET STUFF")
+                        .buildAuthFilter()
+                )
+            );
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new HelloWorldResource(template));

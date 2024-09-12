@@ -16,14 +16,12 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class StructuredArgumentsResponseHttp extends StructuredArgumentsHttp {
 
-public class StructuredArgumentsResponseHttp
-        extends StructuredArgumentsHttp
-{
     private final StructuredArgumentsStatus status = new StructuredArgumentsStatus();
 
     private String entityType;
@@ -31,47 +29,38 @@ public class StructuredArgumentsResponseHttp
     private Long elapsedNanos;
 
     @JsonProperty
-    public StructuredArgumentsStatus getStatus()
-    {
+    public StructuredArgumentsStatus getStatus() {
         return this.status;
     }
 
     @JsonProperty
-    public String getEntityType()
-    {
+    public String getEntityType() {
         return this.entityType;
     }
 
-    public void setEntityType(String entityType)
-    {
+    public void setEntityType(String entityType) {
         this.entityType = Objects.requireNonNull(entityType);
     }
 
     @JsonProperty
-    public String getContentType()
-    {
+    public String getContentType() {
         return this.contentType;
     }
 
-    public void setContentType(String contentType)
-    {
-        if (this.contentType != null)
-        {
+    public void setContentType(String contentType) {
+        if (this.contentType != null) {
             throw new AssertionError(this.contentType);
         }
         this.contentType = Objects.requireNonNull(contentType);
     }
 
     @JsonProperty
-    public Long getElapsedNanos()
-    {
+    public Long getElapsedNanos() {
         return this.elapsedNanos;
     }
 
-    public void setElapsed(Duration elapsed)
-    {
-        if (this.elapsedNanos != null)
-        {
+    public void setElapsed(Duration elapsed) {
+        if (this.elapsedNanos != null) {
             throw new AssertionError(this.elapsedNanos);
         }
         this.elapsedNanos = elapsed.toNanos();

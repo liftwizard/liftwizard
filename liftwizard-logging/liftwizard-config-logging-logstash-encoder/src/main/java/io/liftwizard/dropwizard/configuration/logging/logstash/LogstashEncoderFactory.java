@@ -16,15 +16,13 @@
 
 package io.liftwizard.dropwizard.configuration.logging.logstash;
 
-import java.util.TimeZone;
-
-import javax.validation.constraints.NotNull;
-
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.Encoder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.TimeZone;
+import javax.validation.constraints.NotNull;
 import net.logstash.logback.composite.ContextJsonProvider;
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider;
 import net.logstash.logback.composite.JsonProvider;
@@ -51,8 +49,8 @@ import net.logstash.logback.decorate.JsonFactoryDecorator;
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 
-public class LogstashEncoderFactory
-{
+public class LogstashEncoderFactory {
+
     private boolean includeContext = true;
     private boolean includeMdc = true;
     private boolean includeStructuredArguments = true;
@@ -70,86 +68,72 @@ public class LogstashEncoderFactory
     private @NotNull Include serializationInclusion = Include.NON_ABSENT;
 
     @JsonProperty
-    public boolean isIncludeContext()
-    {
+    public boolean isIncludeContext() {
         return this.includeContext;
     }
 
     @JsonProperty
-    public void setIncludeContext(boolean includeContext)
-    {
+    public void setIncludeContext(boolean includeContext) {
         this.includeContext = includeContext;
     }
 
     @JsonProperty
-    public boolean isIncludeMdc()
-    {
+    public boolean isIncludeMdc() {
         return this.includeMdc;
     }
 
     @JsonProperty
-    public void setIncludeMdc(boolean includeMdc)
-    {
+    public void setIncludeMdc(boolean includeMdc) {
         this.includeMdc = includeMdc;
     }
 
     @JsonProperty
-    public boolean isIncludeStructuredArguments()
-    {
+    public boolean isIncludeStructuredArguments() {
         return this.includeStructuredArguments;
     }
 
     @JsonProperty
-    public void setIncludeStructuredArguments(boolean includeStructuredArguments)
-    {
+    public void setIncludeStructuredArguments(boolean includeStructuredArguments) {
         this.includeStructuredArguments = includeStructuredArguments;
     }
 
     @JsonProperty
-    public boolean isIncludedNonStructuredArguments()
-    {
+    public boolean isIncludedNonStructuredArguments() {
         return this.includedNonStructuredArguments;
     }
 
     @JsonProperty
-    public void setIncludedNonStructuredArguments(boolean includedNonStructuredArguments)
-    {
+    public void setIncludedNonStructuredArguments(boolean includedNonStructuredArguments) {
         this.includedNonStructuredArguments = includedNonStructuredArguments;
     }
 
     @JsonProperty
-    public boolean isIncludeTags()
-    {
+    public boolean isIncludeTags() {
         return this.includeTags;
     }
 
     @JsonProperty
-    public void setIncludeTags(boolean includeTags)
-    {
+    public void setIncludeTags(boolean includeTags) {
         this.includeTags = includeTags;
     }
 
     @JsonProperty
-    public ObjectNode getCustomFields()
-    {
+    public ObjectNode getCustomFields() {
         return this.customFields;
     }
 
     @JsonProperty
-    public void setCustomFields(ObjectNode customFields)
-    {
+    public void setCustomFields(ObjectNode customFields) {
         this.customFields = customFields;
     }
 
     @JsonProperty
-    public boolean isRootCauseFirst()
-    {
+    public boolean isRootCauseFirst() {
         return this.rootCauseFirst;
     }
 
     @JsonProperty
-    public void setRootCauseFirst(boolean rootCauseFirst)
-    {
+    public void setRootCauseFirst(boolean rootCauseFirst) {
         this.rootCauseFirst = rootCauseFirst;
     }
 
@@ -169,53 +153,45 @@ public class LogstashEncoderFactory
     */
 
     @JsonProperty
-    public boolean isPrettyPrint()
-    {
+    public boolean isPrettyPrint() {
         return this.prettyPrint;
     }
 
     @JsonProperty
-    public void setPrettyPrint(boolean prettyPrint)
-    {
+    public void setPrettyPrint(boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
     }
 
     @JsonProperty
-    public Include getSerializationInclusion()
-    {
+    public Include getSerializationInclusion() {
         return this.serializationInclusion;
     }
 
     @JsonProperty
-    public void setSerializationInclusion(Include serializationInclusion)
-    {
+    public void setSerializationInclusion(Include serializationInclusion) {
         this.serializationInclusion = serializationInclusion;
     }
 
-    public Encoder<ILoggingEvent> build(boolean includeCallerData, TimeZone timeZone)
-    {
+    public Encoder<ILoggingEvent> build(boolean includeCallerData, TimeZone timeZone) {
         var encoder = new LoggingEventCompositeJsonEncoder();
 
         JsonProviders<ILoggingEvent> providers = this.getProviders(includeCallerData, timeZone);
         encoder.setProviders(providers);
 
-        if (this.prettyPrint)
-        {
+        if (this.prettyPrint) {
             encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
         }
 
         JsonFactoryDecorator decorator = new ObjectMapperConfigJsonFactoryDecorator(
-                this.prettyPrint,
-                this.serializationInclusion);
+            this.prettyPrint,
+            this.serializationInclusion
+        );
         encoder.setJsonFactoryDecorator(decorator);
 
         return encoder;
     }
 
-    private JsonProviders<ILoggingEvent> getProviders(
-            boolean includeCallerData,
-            TimeZone timeZone)
-    {
+    private JsonProviders<ILoggingEvent> getProviders(boolean includeCallerData, TimeZone timeZone) {
         JsonProviders<ILoggingEvent> providers = new JsonProviders<>();
 
         providers.addProvider(getTimestampProvider(timeZone));
@@ -224,32 +200,27 @@ public class LogstashEncoderFactory
         providers.addProvider(new LoggingEventThreadNameJsonProvider());
         providers.addProvider(new LogLevelJsonProvider());
 
-        if (includeCallerData)
-        {
+        if (includeCallerData) {
             providers.addProvider(nest("caller", getCallerDataProvider()));
         }
 
-        if (this.includeContext)
-        {
+        if (this.includeContext) {
             providers.addProvider(new ContextJsonProvider<>());
         }
 
-        if (this.includeMdc)
-        {
+        if (this.includeMdc) {
             providers.addProvider(nest("mdc", new MdcJsonProvider()));
         }
 
         providers.addProvider(nest("arguments", this.getArgumentsJsonProvider()));
 
-        if (this.includeTags)
-        {
+        if (this.includeTags) {
             providers.addProvider(new TagsJsonProvider());
         }
 
         providers.addProvider(new LogstashMarkersJsonProvider());
 
-        if (this.customFields != null && !this.customFields.isEmpty())
-        {
+        if (this.customFields != null && !this.customFields.isEmpty()) {
             providers.addProvider(this.getGlobalCustomFieldsProvider());
         }
 
@@ -257,15 +228,13 @@ public class LogstashEncoderFactory
         return providers;
     }
 
-    private static LoggingEventFormattedTimestampJsonProvider getTimestampProvider(TimeZone timeZone)
-    {
+    private static LoggingEventFormattedTimestampJsonProvider getTimestampProvider(TimeZone timeZone) {
         var provider = new LoggingEventFormattedTimestampJsonProvider();
         provider.setTimeZone(timeZone.getID());
         return provider;
     }
 
-    private static CallerDataJsonProvider getCallerDataProvider()
-    {
+    private static CallerDataJsonProvider getCallerDataProvider() {
         var provider = new CallerDataJsonProvider();
         provider.setClassFieldName("class_name");
         provider.setMethodFieldName("method_name");
@@ -274,15 +243,13 @@ public class LogstashEncoderFactory
         return provider;
     }
 
-    private GlobalCustomFieldsJsonProvider<ILoggingEvent> getGlobalCustomFieldsProvider()
-    {
+    private GlobalCustomFieldsJsonProvider<ILoggingEvent> getGlobalCustomFieldsProvider() {
         var provider = new GlobalCustomFieldsJsonProvider<ILoggingEvent>();
         provider.setCustomFieldsNode(this.customFields);
         return provider;
     }
 
-    private JsonProviders<ILoggingEvent> getErrorProvider()
-    {
+    private JsonProviders<ILoggingEvent> getErrorProvider() {
         JsonProviders<ILoggingEvent> providers = new JsonProviders<>();
         providers.addProvider(this.getStackTraceProvider());
         providers.addProvider(getThrowableClassNameProvider());
@@ -295,32 +262,27 @@ public class LogstashEncoderFactory
         return providers;
     }
 
-    private StackTraceJsonProvider getStackTraceProvider()
-    {
+    private StackTraceJsonProvider getStackTraceProvider() {
         var provider = new StackTraceJsonProvider();
         provider.setThrowableConverter(this.getThrowableConverter());
         return provider;
     }
 
-    private static ThrowableClassNameJsonProvider getThrowableClassNameProvider()
-    {
+    private static ThrowableClassNameJsonProvider getThrowableClassNameProvider() {
         var provider = new ThrowableClassNameJsonProvider();
         provider.setUseSimpleClassName(false);
         return provider;
     }
 
-    private static ThrowableRootCauseClassNameJsonProvider getThrowableRootCauseClassNameJson()
-    {
+    private static ThrowableRootCauseClassNameJsonProvider getThrowableRootCauseClassNameJson() {
         var provider = new ThrowableRootCauseClassNameJsonProvider();
         provider.setUseSimpleClassName(false);
         return provider;
     }
 
-    private ShortenedThrowableConverter getThrowableConverter()
-    {
+    private ShortenedThrowableConverter getThrowableConverter() {
         var throwableConverter = new ShortenedThrowableConverter();
-        if (this.rootCauseFirst)
-        {
+        if (this.rootCauseFirst) {
             throwableConverter.setRootCauseFirst(true);
         }
         /*
@@ -330,36 +292,28 @@ public class LogstashEncoderFactory
         return throwableConverter;
     }
 
-    private ArgumentsJsonProvider getArgumentsJsonProvider()
-    {
+    private ArgumentsJsonProvider getArgumentsJsonProvider() {
         var provider = new ArgumentsJsonProvider();
         provider.setIncludeStructuredArguments(this.includeStructuredArguments);
         provider.setIncludeNonStructuredArguments(this.includedNonStructuredArguments);
         return provider;
     }
 
-    private static LoggingEventNestedJsonProvider nest(
-            String fieldName,
-            JsonProvider<ILoggingEvent> delegateProvider)
-    {
+    private static LoggingEventNestedJsonProvider nest(String fieldName, JsonProvider<ILoggingEvent> delegateProvider) {
         var provider = new LoggingEventNestedJsonProvider();
         provider.setFieldName(fieldName);
         provider.setProviders(wrap(delegateProvider));
         return provider;
     }
 
-    private static LoggingEventNestedJsonProvider nest(
-            String fieldName,
-            JsonProviders<ILoggingEvent> jsonProviders)
-    {
+    private static LoggingEventNestedJsonProvider nest(String fieldName, JsonProviders<ILoggingEvent> jsonProviders) {
         var provider = new LoggingEventNestedJsonProvider();
         provider.setFieldName(fieldName);
         provider.setProviders(jsonProviders);
         return provider;
     }
 
-    private static JsonProviders<ILoggingEvent> wrap(JsonProvider<ILoggingEvent> delegateProvider)
-    {
+    private static JsonProviders<ILoggingEvent> wrap(JsonProvider<ILoggingEvent> delegateProvider) {
         JsonProviders<ILoggingEvent> providers = new JsonProviders<>();
         providers.addProvider(delegateProvider);
         return providers;

@@ -16,11 +16,6 @@
 
 package io.liftwizard.graphql.reladomo.finder.fetcher;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
@@ -35,14 +30,16 @@ import io.liftwizard.reladomo.graphql.deep.fetcher.GraphQLDeepFetcher;
 import io.liftwizard.reladomo.graphql.operation.GraphQLQueryToOperationConverter;
 import io.liftwizard.reladomo.graphql.operation.LiftwizardGraphQLContextException;
 import io.liftwizard.reladomo.graphql.orderby.GraphQLQueryToOrderByConverter;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
-public class ReladomoFinderDataFetcher<T>
-        implements DataFetcher<List<T>>
-{
+public class ReladomoFinderDataFetcher<T> implements DataFetcher<List<T>> {
+
     private final AbstractRelatedFinder<T, ?, ?, ?, ?> finder;
 
-    public ReladomoFinderDataFetcher(AbstractRelatedFinder<T, ?, ?, ?, ?> finder)
-    {
+    public ReladomoFinderDataFetcher(AbstractRelatedFinder<T, ?, ?, ?, ?> finder) {
         this.finder = Objects.requireNonNull(finder);
     }
 
@@ -50,8 +47,7 @@ public class ReladomoFinderDataFetcher<T>
     @Metered
     @ExceptionMetered
     @Override
-    public List<T> get(DataFetchingEnvironment environment)
-    {
+    public List<T> get(DataFetchingEnvironment environment) {
         Map<String, Object> arguments = environment.getArguments();
         Object inputOperation = arguments.get("operation");
         Operation operation = this.getOperation((Map<?, ?>) inputOperation);
@@ -63,27 +59,19 @@ public class ReladomoFinderDataFetcher<T>
         return result;
     }
 
-    public Operation getOperation(Map<?, ?> inputOperation)
-    {
-        try
-        {
+    public Operation getOperation(Map<?, ?> inputOperation) {
+        try {
             var converter = new GraphQLQueryToOperationConverter();
             return converter.convert(this.finder, inputOperation);
-        }
-        catch (LiftwizardGraphQLContextException e)
-        {
+        } catch (LiftwizardGraphQLContextException e) {
             throw new LiftwizardGraphQLException(e.getMessage(), e.getContext(), e);
         }
     }
 
-    public Optional<OrderBy> getOrderBys(List<Map<String, ?>> inputOrderBy)
-    {
-        try
-        {
+    public Optional<OrderBy> getOrderBys(List<Map<String, ?>> inputOrderBy) {
+        try {
             return GraphQLQueryToOrderByConverter.convertOrderByList(this.finder, inputOrderBy);
-        }
-        catch (LiftwizardGraphQLContextException e)
-        {
+        } catch (LiftwizardGraphQLContextException e) {
             throw new LiftwizardGraphQLException(e.getMessage(), e.getContext(), e);
         }
     }

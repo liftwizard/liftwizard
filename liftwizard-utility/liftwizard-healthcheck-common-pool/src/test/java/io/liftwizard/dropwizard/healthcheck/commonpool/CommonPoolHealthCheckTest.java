@@ -16,82 +16,79 @@
 
 package io.liftwizard.dropwizard.healthcheck.commonpool;
 
-import java.lang.Thread.State;
-import java.util.regex.Pattern;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codahale.metrics.health.HealthCheck.Result;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
+import java.lang.Thread.State;
+import java.util.regex.Pattern;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class CommonPoolHealthCheckTest {
 
-class CommonPoolHealthCheckTest
-{
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     @Test
-    void healthy()
-    {
+    void healthy() {
         Result result = new CommonPoolHealthCheck().check();
         assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
     @Test
-    void unhealthy()
-    {
+    void unhealthy() {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
-                "main",
-                Lists.immutable.with(State.RUNNABLE),
-                Lists.immutable.empty(),
-                Lists.immutable.empty());
+            "main",
+            Lists.immutable.with(State.RUNNABLE),
+            Lists.immutable.empty(),
+            Lists.immutable.empty()
+        );
         Result result = commonPoolHealthCheck.check();
         assertThat(result.isHealthy()).isFalse();
         assertThat(result.getMessage()).contains("Found thread 'main' in state 'RUNNABLE'");
     }
 
     @Test
-    void allow()
-    {
+    void allow() {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
-                "main",
-                Lists.immutable.with(State.RUNNABLE),
-                pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
-                Lists.immutable.empty());
+            "main",
+            Lists.immutable.with(State.RUNNABLE),
+            pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
+            Lists.immutable.empty()
+        );
         Result result = commonPoolHealthCheck.check();
         assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
     @Test
-    void ban()
-    {
+    void ban() {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
-                "main",
-                Lists.immutable.with(State.RUNNABLE),
-                Lists.immutable.empty(),
-                pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"));
+            "main",
+            Lists.immutable.with(State.RUNNABLE),
+            Lists.immutable.empty(),
+            pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check")
+        );
         Result result = commonPoolHealthCheck.check();
         assertThat(result.isHealthy()).isFalse();
         assertThat(result.getMessage()).contains("Found thread 'main' in state 'RUNNABLE'");
     }
 
     @Test
-    void both()
-    {
+    void both() {
         CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
-                "main",
-                Lists.immutable.with(State.RUNNABLE),
-                pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
-                pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.allow"));
+            "main",
+            Lists.immutable.with(State.RUNNABLE),
+            pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
+            pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.allow")
+        );
         Result result = commonPoolHealthCheck.check();
         assertThat(result.isHealthy()).as(result.toString()).isTrue();
     }
 
-    private static ImmutableList<Pattern> pattern(String string)
-    {
+    private static ImmutableList<Pattern> pattern(String string) {
         return Lists.immutable.with(Pattern.compile(string));
     }
 }

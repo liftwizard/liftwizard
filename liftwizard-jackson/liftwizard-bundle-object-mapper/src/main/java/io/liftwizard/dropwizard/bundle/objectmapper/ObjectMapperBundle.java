@@ -16,8 +16,6 @@
 
 package io.liftwizard.dropwizard.bundle.objectmapper;
 
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -29,6 +27,7 @@ import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,37 +43,31 @@ import org.slf4j.LoggerFactory;
  * @see <a href="https://liftwizard.io/docs/jackson/ObjectMapperBundle#objectmapperbundle">https://liftwizard.io/docs/jackson/ObjectMapperBundle#objectmapperbundle</a>
  */
 @AutoService(PrioritizedBundle.class)
-public class ObjectMapperBundle
-        implements PrioritizedBundle
-{
+public class ObjectMapperBundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectMapperBundle.class);
 
     @Override
-    public int getPriority()
-    {
+    public int getPriority() {
         return -10;
     }
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-    {
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
         ObjectMapperFactoryProvider objectMapperFactoryProvider =
-                this.safeCastConfiguration(ObjectMapperFactoryProvider.class, configuration);
+            this.safeCastConfiguration(ObjectMapperFactoryProvider.class, configuration);
         ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
         ObjectMapper objectMapper = environment.getObjectMapper();
 
         this.configureObjectMapper(objectMapperFactory, objectMapper);
     }
 
-    public ObjectMapper configureObjectMapper()
-    {
+    public ObjectMapper configureObjectMapper() {
         return this.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
     }
 
-    public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper)
-    {
-        if (!objectMapperFactory.isEnabled())
-        {
+    public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper) {
+        if (!objectMapperFactory.isEnabled()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return objectMapper;
         }
@@ -82,11 +75,12 @@ public class ObjectMapperBundle
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ObjectMapperConfig.configure(
-                objectMapper,
-                objectMapperFactory.isPrettyPrint(),
-                objectMapperFactory.getFailOnUnknownProperties(),
-                objectMapperFactory.getSerializationInclusion(),
-                objectMapperFactory.getDefaultNullSetterInfo());
+            objectMapper,
+            objectMapperFactory.isPrettyPrint(),
+            objectMapperFactory.getFailOnUnknownProperties(),
+            objectMapperFactory.getSerializationInclusion(),
+            objectMapperFactory.getDefaultNullSetterInfo()
+        );
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 

@@ -16,12 +16,6 @@
 
 package io.liftwizard.junit.extension.app;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-import javax.ws.rs.client.Client;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
@@ -34,6 +28,10 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.testing.junit5.DropwizardExtension;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+import javax.ws.rs.client.Client;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -48,8 +46,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  */
 @SuppressWarnings("unused")
 public class LiftwizardAppExtension<C extends Configuration>
-        implements DropwizardExtension, BeforeEachCallback, AfterEachCallback
-{
+    implements DropwizardExtension, BeforeEachCallback, AfterEachCallback {
+
     private static final int DEFAULT_CONNECT_TIMEOUT_MS = 1000;
     private static final int DEFAULT_READ_TIMEOUT_MS = 5000;
 
@@ -60,88 +58,93 @@ public class LiftwizardAppExtension<C extends Configuration>
     @Nullable
     private Client client;
 
-    public LiftwizardAppExtension(Class<? extends Application<C>> applicationClass)
-    {
+    public LiftwizardAppExtension(Class<? extends Application<C>> applicationClass) {
         this(applicationClass, (String) null);
     }
 
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            @Nullable String configPath,
-            ConfigOverride... configOverrides)
-    {
+        Class<? extends Application<C>> applicationClass,
+        @Nullable String configPath,
+        ConfigOverride... configOverrides
+    ) {
         this(applicationClass, configPath, (String) null, configOverrides);
     }
 
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            @Nullable String configPath,
-            @Nullable String customPropertyPrefix,
-            ConfigOverride... configOverrides)
-    {
+        Class<? extends Application<C>> applicationClass,
+        @Nullable String configPath,
+        @Nullable String customPropertyPrefix,
+        ConfigOverride... configOverrides
+    ) {
         this(applicationClass, configPath, customPropertyPrefix, ServerCommand::new, configOverrides);
     }
 
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            @Nullable String configPath,
-            @Nullable String customPropertyPrefix,
-            Function<Application<C>, Command> commandInstantiator,
-            ConfigOverride... configOverrides)
-    {
-        this(new DropwizardTestSupport<>(
+        Class<? extends Application<C>> applicationClass,
+        @Nullable String configPath,
+        @Nullable String customPropertyPrefix,
+        Function<Application<C>, Command> commandInstantiator,
+        ConfigOverride... configOverrides
+    ) {
+        this(
+            new DropwizardTestSupport<>(
                 applicationClass,
                 configPath,
                 customPropertyPrefix,
                 commandInstantiator,
-                configOverrides));
+                configOverrides
+            )
+        );
     }
 
-    public LiftwizardAppExtension(DropwizardTestSupport<C> testSupport)
-    {
+    public LiftwizardAppExtension(DropwizardTestSupport<C> testSupport) {
         this.testSupport = testSupport;
     }
 
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            @Nullable String configPath,
-            ConfigurationSourceProvider configSourceProvider,
-            ConfigOverride... configOverrides)
-    {
+        Class<? extends Application<C>> applicationClass,
+        @Nullable String configPath,
+        ConfigurationSourceProvider configSourceProvider,
+        ConfigOverride... configOverrides
+    ) {
         this(applicationClass, configPath, configSourceProvider, null, configOverrides);
     }
 
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            @Nullable String configPath,
-            ConfigurationSourceProvider configSourceProvider,
-            @Nullable String customPropertyPrefix,
-            ConfigOverride... configOverrides)
-    {
+        Class<? extends Application<C>> applicationClass,
+        @Nullable String configPath,
+        ConfigurationSourceProvider configSourceProvider,
+        @Nullable String customPropertyPrefix,
+        ConfigOverride... configOverrides
+    ) {
         this(
-                applicationClass,
-                configPath,
-                configSourceProvider,
-                customPropertyPrefix,
-                ServerCommand::new,
-                configOverrides);
+            applicationClass,
+            configPath,
+            configSourceProvider,
+            customPropertyPrefix,
+            ServerCommand::new,
+            configOverrides
+        );
     }
 
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            @Nullable String configPath,
-            ConfigurationSourceProvider configSourceProvider,
-            @Nullable String customPropertyPrefix,
-            Function<Application<C>, Command> commandInstantiator,
-            ConfigOverride... configOverrides)
-    {
-        this(new DropwizardTestSupport<>(
+        Class<? extends Application<C>> applicationClass,
+        @Nullable String configPath,
+        ConfigurationSourceProvider configSourceProvider,
+        @Nullable String customPropertyPrefix,
+        Function<Application<C>, Command> commandInstantiator,
+        ConfigOverride... configOverrides
+    ) {
+        this(
+            new DropwizardTestSupport<>(
                 applicationClass,
                 configPath,
                 configSourceProvider,
                 customPropertyPrefix,
                 commandInstantiator,
-                configOverrides));
+                configOverrides
+            )
+        );
     }
 
     /**
@@ -150,10 +153,7 @@ public class LiftwizardAppExtension<C extends Configuration>
      *
      * @since 0.9
      */
-    public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            C configuration)
-    {
+    public LiftwizardAppExtension(Class<? extends Application<C>> applicationClass, C configuration) {
         this(new DropwizardTestSupport<>(applicationClass, configuration));
     }
 
@@ -163,71 +163,60 @@ public class LiftwizardAppExtension<C extends Configuration>
      * @since 1.1.0
      */
     public LiftwizardAppExtension(
-            Class<? extends Application<C>> applicationClass,
-            C configuration, Function<Application<C>, Command> commandInstantiator)
-    {
+        Class<? extends Application<C>> applicationClass,
+        C configuration,
+        Function<Application<C>, Command> commandInstantiator
+    ) {
         this(new DropwizardTestSupport<>(applicationClass, configuration, commandInstantiator));
     }
 
-    public LiftwizardAppExtension<C> manage(Managed managed)
-    {
-        return this.addListener(new AbstractServiceListener<>()
-        {
-            @Override
-            public void onRun(C configuration, Environment environment, LiftwizardAppExtension<C> rule)
-            {
-                environment.lifecycle().manage(managed);
-            }
-        });
+    public LiftwizardAppExtension<C> manage(Managed managed) {
+        return this.addListener(
+                new AbstractServiceListener<>() {
+                    @Override
+                    public void onRun(C configuration, Environment environment, LiftwizardAppExtension<C> rule) {
+                        environment.lifecycle().manage(managed);
+                    }
+                }
+            );
     }
 
-    public LiftwizardAppExtension<C> addListener(AbstractServiceListener<C> listener)
-    {
-        this.testSupport.addListener(new DropwizardTestSupport.ServiceListener<>()
-        {
-            @Override
-            public void onRun(C configuration, Environment environment, DropwizardTestSupport<C> rule)
-                    throws Exception
-            {
-                listener.onRun(configuration, environment, LiftwizardAppExtension.this);
-            }
+    public LiftwizardAppExtension<C> addListener(AbstractServiceListener<C> listener) {
+        this.testSupport.addListener(
+                new DropwizardTestSupport.ServiceListener<>() {
+                    @Override
+                    public void onRun(C configuration, Environment environment, DropwizardTestSupport<C> rule)
+                        throws Exception {
+                        listener.onRun(configuration, environment, LiftwizardAppExtension.this);
+                    }
 
-            @Override
-            public void onStop(DropwizardTestSupport<C> rule)
-            {
-                listener.onStop(LiftwizardAppExtension.this);
-            }
-        });
+                    @Override
+                    public void onStop(DropwizardTestSupport<C> rule) {
+                        listener.onStop(LiftwizardAppExtension.this);
+                    }
+                }
+            );
         return this;
     }
 
     @Override
-    public void beforeEach(ExtensionContext context)
-            throws Exception
-    {
+    public void beforeEach(ExtensionContext context) throws Exception {
         this.before();
     }
 
     @Override
-    public void before()
-            throws Exception
-    {
-        if (this.recursiveCallCount.getAndIncrement() == 0)
-        {
+    public void before() throws Exception {
+        if (this.recursiveCallCount.getAndIncrement() == 0) {
             this.testSupport.before();
         }
     }
 
     @Override
-    public void after()
-    {
-        if (this.recursiveCallCount.decrementAndGet() == 0)
-        {
+    public void after() {
+        if (this.recursiveCallCount.decrementAndGet() == 0) {
             this.testSupport.after();
-            synchronized (this)
-            {
-                if (this.client != null)
-                {
+            synchronized (this) {
+                if (this.client != null) {
                     this.client.close();
                     this.client = null;
                 }
@@ -236,49 +225,40 @@ public class LiftwizardAppExtension<C extends Configuration>
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
+    public void afterEach(ExtensionContext context) {
         this.after();
     }
 
-    public C getConfiguration()
-    {
+    public C getConfiguration() {
         return this.testSupport.getConfiguration();
     }
 
-    public int getLocalPort()
-    {
+    public int getLocalPort() {
         return this.testSupport.getLocalPort();
     }
 
-    public int getPort(int connectorIndex)
-    {
+    public int getPort(int connectorIndex) {
         return this.testSupport.getPort(connectorIndex);
     }
 
-    public int getAdminPort()
-    {
+    public int getAdminPort() {
         return this.testSupport.getAdminPort();
     }
 
-    public Application<C> newApplication()
-    {
+    public Application<C> newApplication() {
         return this.testSupport.newApplication();
     }
 
     @SuppressWarnings("TypeParameterUnusedInFormals")
-    public <A extends Application<C>> A getApplication()
-    {
+    public <A extends Application<C>> A getApplication() {
         return this.testSupport.getApplication();
     }
 
-    public Environment getEnvironment()
-    {
+    public Environment getEnvironment() {
         return this.testSupport.getEnvironment();
     }
 
-    public DropwizardTestSupport<C> getTestSupport()
-    {
+    public DropwizardTestSupport<C> getTestSupport() {
         return this.testSupport;
     }
 
@@ -290,43 +270,37 @@ public class LiftwizardAppExtension<C extends Configuration>
      *
      * @return a new {@link Client} managed by the extension.
      */
-    public Client client()
-    {
-        synchronized (this)
-        {
-            if (this.client == null)
-            {
+    public Client client() {
+        synchronized (this) {
+            if (this.client == null) {
                 this.client = this.clientBuilder().build();
             }
             return this.client;
         }
     }
 
-    protected JerseyClientBuilder clientBuilder()
-    {
+    protected JerseyClientBuilder clientBuilder() {
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.connectorProvider(new GrizzlyConnectorProvider())
-                .register(new JacksonFeature(this.getObjectMapper()))
-                .property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT_MS)
-                .property(ClientProperties.READ_TIMEOUT, DEFAULT_READ_TIMEOUT_MS)
-                .property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+        clientConfig
+            .connectorProvider(new GrizzlyConnectorProvider())
+            .register(new JacksonFeature(this.getObjectMapper()))
+            .property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT_MS)
+            .property(ClientProperties.READ_TIMEOUT, DEFAULT_READ_TIMEOUT_MS)
+            .property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
         return new JerseyClientBuilder().withConfig(clientConfig);
     }
 
-    public ObjectMapper getObjectMapper()
-    {
+    public ObjectMapper getObjectMapper() {
         return this.testSupport.getObjectMapper();
     }
 
-    public abstract static class AbstractServiceListener<T extends Configuration>
-    {
-        public void onRun(T configuration, Environment environment, LiftwizardAppExtension<T> rule)
-        {
+    public abstract static class AbstractServiceListener<T extends Configuration> {
+
+        public void onRun(T configuration, Environment environment, LiftwizardAppExtension<T> rule) {
             // Default NOP
         }
 
-        public void onStop(LiftwizardAppExtension<T> rule)
-        {
+        public void onStop(LiftwizardAppExtension<T> rule) {
             // Default NOP
         }
     }

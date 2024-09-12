@@ -16,16 +16,14 @@
 
 package io.liftwizard.graphql.instrumentation.logging;
 
-import java.util.Objects;
-
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
+import java.util.Objects;
 
-public class MDCDataFetcher<T>
-        implements DataFetcher<T>
-{
+public class MDCDataFetcher<T> implements DataFetcher<T> {
+
     private final DataFetcher<T> dataFetcher;
     private final String executionId;
     private final String path;
@@ -34,13 +32,13 @@ public class MDCDataFetcher<T>
     private final String fieldTypeName;
 
     public MDCDataFetcher(
-            DataFetcher<T> dataFetcher,
-            String executionId,
-            String path,
-            String parentTypeName,
-            String fieldName,
-            String fieldTypeName)
-    {
+        DataFetcher<T> dataFetcher,
+        String executionId,
+        String path,
+        String parentTypeName,
+        String fieldName,
+        String fieldTypeName
+    ) {
         this.dataFetcher = Objects.requireNonNull(dataFetcher);
         this.executionId = executionId;
         this.path = path;
@@ -50,13 +48,10 @@ public class MDCDataFetcher<T>
     }
 
     @Override
-    public T get(DataFetchingEnvironment environment)
-            throws Exception
-    {
+    public T get(DataFetchingEnvironment environment) throws Exception {
         String dataFetcherName = this.getDataFetcherName();
 
-        try (MultiMDCCloseable mdc = new MultiMDCCloseable())
-        {
+        try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
             mdc.put("liftwizard.graphql.executionId", this.executionId);
             mdc.put("liftwizard.graphql.field.path", this.path);
             mdc.put("liftwizard.graphql.field.parentType", this.parentTypeName);
@@ -67,11 +62,10 @@ public class MDCDataFetcher<T>
         }
     }
 
-    private String getDataFetcherName()
-    {
+    private String getDataFetcherName() {
         DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
-                ? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
-                : this.dataFetcher;
+            ? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
+            : this.dataFetcher;
         String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
         return dataFetcherName;
     }

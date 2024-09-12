@@ -16,8 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -26,12 +24,11 @@ import com.google.auto.service.AutoService;
 import io.dropwizard.jackson.Discoverable;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Environment;
+import java.util.concurrent.ScheduledExecutorService;
 
 @JsonTypeInfo(use = Id.NAME, property = "type", defaultImpl = DefaultScheduledExecutorServiceFactory.class)
 @AutoService(Discoverable.class)
-public interface ScheduledExecutorServiceFactory
-        extends Discoverable
-{
+public interface ScheduledExecutorServiceFactory extends Discoverable {
     @JsonIgnore
     ScheduledExecutorService build(Environment environment);
 

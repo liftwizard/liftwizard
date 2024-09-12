@@ -17,31 +17,26 @@
 package io.liftwizard.junit.rule.liquibase.migrations;
 
 import java.util.Objects;
-
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-public class LiquibaseTestRule
-        implements TestRule
-{
+public class LiquibaseTestRule implements TestRule {
+
     private final String migrationsFile;
     private final boolean dropAll;
 
-    public LiquibaseTestRule(String migrationsFile)
-    {
+    public LiquibaseTestRule(String migrationsFile) {
         this(migrationsFile, true);
     }
 
-    public LiquibaseTestRule(String migrationsFile, boolean dropAll)
-    {
+    public LiquibaseTestRule(String migrationsFile, boolean dropAll) {
         this.migrationsFile = Objects.requireNonNull(migrationsFile);
         this.dropAll = dropAll;
     }
 
     @Override
-    public Statement apply(Statement base, Description description)
-    {
+    public Statement apply(Statement base, Description description) {
         return new LiquibaseStatement(base, this.migrationsFile, this.dropAll);
     }
 }

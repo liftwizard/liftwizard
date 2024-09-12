@@ -1,17 +1,15 @@
 package com.example.helloworld.resources;
 
+import com.example.helloworld.core.Person;
+import com.example.helloworld.db.PersonDAO;
+import com.example.helloworld.dto.PersonDTO;
+import io.dropwizard.hibernate.UnitOfWork;
 import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import com.example.helloworld.core.Person;
-import com.example.helloworld.db.PersonDAO;
-import com.example.helloworld.dto.PersonDTO;
-import io.dropwizard.hibernate.UnitOfWork;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 @Path("/people")
@@ -37,10 +35,8 @@ public class PeopleResource {
     @GET
     @UnitOfWork
     public List<PersonDTO> listPeople() {
-        return ListAdapter.adapt(this.peopleDAO.findAll())
-                .collect(each -> new PersonDTO(
-                        each.getId(),
-                        each.getFullName(),
-                        each.getJobTitle()));
+        return ListAdapter.adapt(this.peopleDAO.findAll()).collect(
+            each -> new PersonDTO(each.getId(), each.getFullName(), each.getJobTitle())
+        );
     }
 }
