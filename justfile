@@ -282,7 +282,7 @@ absorb:
 
 # git rebase onto configurable upstream/main
 rebase: _check-local-modifications fetch
-    git rebase --interactive --autosquash --rebase-merges {{upstream_remote}}/{{upstream_branch}}
+    git rebase --interactive --autosquash --rebase-merges --update-refs {{upstream_remote}}/{{upstream_branch}}
 
 # Delete local branches merged into configurable upstream/main
 delete-local-merged: fetch
