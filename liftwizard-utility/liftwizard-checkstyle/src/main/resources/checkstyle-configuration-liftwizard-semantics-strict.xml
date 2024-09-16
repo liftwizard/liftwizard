@@ -72,6 +72,7 @@
         </module>
         <module name="UnusedLocalVariable" />
         <module name="DeclarationOrder" />
+        <module name="ExplicitInitialization" />
         <!--endregion-->
 
         <!--region Imports-->
@@ -85,6 +86,30 @@
             <property name="excludes" value="org.junit.jupiter.api.Assertions.*" />
             <property name="excludes" value="org.assertj.core.api.Assertions.*" />
         </module>
+        <!--endregion-->
+
+        <!--region Javadoc-->
+        <!--https://checkstyle.sourceforge.io/checks/javadoc/index.html-->
+        <module name="AtclauseOrder" />
+        <module name="JavadocBlockTagLocation">
+            <!-- default tags -->
+            <property name="tags" value="author, deprecated, exception, hidden, param, provides" />
+            <property name="tags" value="return, see, serial, serialData, serialField, since, throws" />
+            <property name="tags" value="uses, version" />
+            <!-- additional tags used in the project -->
+            <property name="tags" value="noinspection" />
+        </module>
+        <module name="JavadocContentLocation" />
+        <module name="JavadocParagraph">
+            <property name="allowNewlineParagraph" value="false" />
+        </module>
+        <module name="JavadocStyle">
+            <property name="scope" value="public" />
+            <property name="checkFirstSentence" value="false" />
+        </module>
+        <module name="JavadocTagContinuationIndentation" />
+        <module name="MissingJavadocPackage" />
+        <module name="SingleLineJavadoc" />
         <!--endregion-->
 
         <!--region Modifiers-->

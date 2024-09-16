@@ -181,7 +181,6 @@
         <module name="EmptyStatement" />
         <!-- Effective Java Item 8 - Always override hashCode when you override equals -->
         <module name="EqualsHashCode" />
-        <module name="ExplicitInitialization" />
         <module name="FallThrough" />
         <module name="IllegalCatch">
             <property name="illegalClassNames" value="java.lang.Error" />
@@ -298,7 +297,6 @@
         <module name="StringLiteralEquality" />
         <module name="SuperClone" />
         <module name="SuperFinalize" />
-        <module name="UnnecessaryParentheses" />
         <module name="UnnecessarySemicolonAfterOuterTypeDeclaration" />
         <module name="UnnecessarySemicolonAfterTypeMemberDeclaration" />
         <module name="UnnecessarySemicolonInEnumeration" />
@@ -319,28 +317,8 @@
 
         <!--region Javadoc-->
         <!--https://checkstyle.sourceforge.io/checks/javadoc/index.html-->
-        <module name="AtclauseOrder" />
         <module name="InvalidJavadocPosition" />
-        <module name="JavadocBlockTagLocation">
-            <!-- default tags -->
-            <property name="tags" value="author, deprecated, exception, hidden, param, provides" />
-            <property name="tags" value="return, see, serial, serialData, serialField, since, throws" />
-            <property name="tags" value="uses, version" />
-            <!-- additional tags used in the project -->
-            <property name="tags" value="noinspection" />
-        </module>
-        <module name="JavadocContentLocation" />
-        <module name="JavadocParagraph">
-            <property name="allowNewlineParagraph" value="false" />
-        </module>
-        <module name="JavadocStyle">
-            <property name="scope" value="public" />
-            <property name="checkFirstSentence" value="false" />
-        </module>
-        <module name="JavadocTagContinuationIndentation" />
-        <module name="MissingJavadocPackage" />
         <module name="NonEmptyAtclauseDescription" />
-        <module name="SingleLineJavadoc" />
         <!--endregion-->
 
         <!--region Miscellaneous-->
