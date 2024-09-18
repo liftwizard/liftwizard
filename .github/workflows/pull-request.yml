@@ -50,7 +50,7 @@ jobs:
 
       - run: ./mvnw verify --activate-profiles jacoco-maven-plugin
 
-      - uses: madrapps/jacoco-report@v1.7.0
+      - uses: madrapps/jacoco-report@v1.7.1
         with:
           paths: |
             ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
