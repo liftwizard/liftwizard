@@ -16,6 +16,22 @@ setup-git-test:
     git test add --forget --test spotless-markdown          'just spotless unused-markdown'
     git test add --forget --test spotless-yaml              'just spotless unused-yaml'
 
+# Add git refspec to fetch GitHub PR refs from REMOTE
+setup-github-refspec REMOTE:
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+
+    if git remote get-url {{REMOTE}} &> /dev/null && git remote get-url {{REMOTE}} | grep -q 'github.com'; then
+        git config --add remote.{{REMOTE}}.fetch '+refs/pull/*/head:refs/remotes/{{REMOTE}}/pr/*'
+        git config --add remote.{{REMOTE}}.fetch '+refs/pull/*/merge:refs/remotes/{{REMOTE}}/pr/merge/*'
+        echo "Added refspec to fetch GitHub PR refs for {{REMOTE}}"
+    else
+        echo "Remote {{REMOTE}} is not a GitHub remote"
+    fi
+
+# Add git refspec to fetch GitHub PR refs from origin and upstream
+setup-github-refspecs: (setup-github-refspec "origin") (setup-github-refspec "upstream")
+
 # mise install
 mise:
     mise plugin install maven
