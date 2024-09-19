@@ -8,13 +8,22 @@ default: mise mvn
 
 # set up git-test
 setup-git-test:
-    git test add --forget --test default                    'just default'
-    git test add --forget --test spotless-formats           'just spotless formats'
-    git test add --forget --test spotless-java-sort-imports 'just spotless java-sort-imports'
-    git test add --forget --test spotless-cleanthat         'just spotless unused-cleanthat'
-    git test add --forget --test spotless-pom               'just spotless unused-pom'
-    git test add --forget --test spotless-markdown          'just spotless unused-markdown'
-    git test add --forget --test spotless-yaml              'just spotless unused-yaml'
+    git test add --forget --test default        'just default'
+    git test add --forget --test enforcer       'just enforcer'
+    git test add --forget --test dependency     'just dependency'
+    git test add --forget --test checkstyle     'just checkstyle'
+    git test add --forget --test javadoc        'just javadoc'
+    git test add --forget --test formats        'just spotless formats'
+    git test add --forget --test prettier       'just spotless prettier-java'
+    git test add --forget --test gjf            'just spotless google-java-format'
+    git test add --forget --test sort-imports   'just spotless java-sort-imports'
+    git test add --forget --test unused-imports 'just spotless java-unused-imports'
+    git test add --forget --test cleanthat      'just spotless java-cleanthat'
+    git test add --forget --test pom            'just spotless pom'
+    git test add --forget --test markdown       'just spotless markdown'
+    git test add --forget --test json           'just spotless json'
+    git test add --forget --test yaml           'just spotless yaml'
+    git test add --forget --test sql            'just spotless sql'
 
 # Add git refspec to fetch GitHub PR refs from REMOTE
 setup-github-refspec REMOTE:
@@ -63,33 +72,34 @@ verify MVN=default_mvn:
 install MVN=default_mvn:
     {{MVN}} install
 
+default_target   := env('MVN_TARGET',   "verify")
+default_flags    := env('MVN_FLAGS',    "--threads 2C")
+
+skip_tests_flags := default_flags + " -DskipTests"
+
 # mvn enforcer
-enforcer MVN=default_mvn:
-    {{MVN}} verify -DskipTests --activate-profiles maven-enforcer-plugin
+enforcer MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "--activate-profiles maven-enforcer-plugin" skip_tests_flags) && _check-local-modifications
 
 # mvn dependency
-analyze MVN=default_mvn:
-    {{MVN}} verify -DskipTests --activate-profiles maven-dependency-plugin
+dependency MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "--activate-profiles maven-dependency-plugin" skip_tests_flags) && _check-local-modifications
 
 # mvn javadoc
-javadoc MVN=default_mvn:
-    {{MVN}} verify -DskipTests --activate-profiles maven-javadoc-plugin
+javadoc MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "--activate-profiles maven-dependency-plugin" skip_tests_flags) && _check-local-modifications
 
-# mvn checkstyle
-checkstyle MVN="mvn":
-    {{MVN}} checkstyle:check --activate-profiles checkstyle-semantics
-    {{MVN}} checkstyle:check --activate-profiles checkstyle-formatting
-    {{MVN}} checkstyle:check --activate-profiles checkstyle-semantics-strict
-    {{MVN}} checkstyle:check --activate-profiles checkstyle-formatting-strict
+checkstyle-semantics MVN="mvn": _check-local-modifications clean (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics" default_flags) && _check-local-modifications
+checkstyle-formatting MVN="mvn": _check-local-modifications clean (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-formatting" default_flags) && _check-local-modifications
+checkstyle-semantics-strict MVN="mvn": _check-local-modifications clean (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics-strict" default_flags) && _check-local-modifications
+checkstyle-formatting-strict MVN="mvn": _check-local-modifications clean (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-formatting-strict" default_flags) && _check-local-modifications
+checkstyle: checkstyle-semantics checkstyle-formatting checkstyle-semantics-strict checkstyle-formatting-strict
 
 # spotless
-spotless NAME MVN=default_mvn:
+spotless NAME MVN=default_mvn: _check-local-modifications clean && _check-local-modifications
     {{MVN}} spotless:apply \
       --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' \
       --activate-profiles 'spotless-apply,spotless-{{NAME}}'
 
 # spotless-all
-spotless-all MVN=default_mvn:
+spotless-all MVN=default_mvn: _check-local-modifications clean && _check-local-modifications
     {{MVN}} spotless:apply \
       --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' \
       --activate-profiles 'spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml'
@@ -161,9 +171,7 @@ _check-local-modifications:
         exit $EXIT_CODE
     fi
 
-default_target   := env('MVN_TARGET',   "verify")
 default_profiles := env('MVN_PROFILES', "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
-default_flags    := env('MVN_FLAGS',    "--threads 2C")
 
 # mvn
 mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags:
