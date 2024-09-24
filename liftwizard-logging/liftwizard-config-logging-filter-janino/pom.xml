@@ -144,7 +144,9 @@
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <configuration>
-                            <ignoreNonCompile>true</ignoreNonCompile>
+                            <ignoredUnusedDeclaredDependencies combine.children="append">
+                                <ignoredUnusedDeclaredDependency>janino:janino</ignoredUnusedDeclaredDependency>
+                            </ignoredUnusedDeclaredDependencies>
                         </configuration>
                     </plugin>
                 </plugins>
