@@ -137,6 +137,18 @@
                                         <exclude>org.slf4j:slf4j-simple</exclude>
                                     </excludes>
                                 </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.google.auto.value:auto-value</exclude>
+                                    </excludes>
+                                    <message>Move auto-value to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.value:auto-value-annotations</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.google.auto.service:auto-service</exclude>
+                                    </excludes>
+                                    <message>Move auto-service to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.service:auto-service-annotations</message>
+                                </bannedDependencies>
                                 <banDuplicatePomDependencyVersions />
                                 <banDuplicateClasses>
                                     <findAllDuplicates>true</findAllDuplicates>
@@ -738,6 +750,7 @@
                             <ignoredUnusedDeclaredDependencies combine.children="append">
                                 <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>com.google.auto.value:auto-value-annotations</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
@@ -755,7 +768,6 @@
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
                             </ignoredUnusedDeclaredDependencies>
                         </configuration>
 
