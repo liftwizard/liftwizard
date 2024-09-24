@@ -772,6 +772,9 @@
                                 <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>com.google.auto.value:auto-value-annotations</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-header</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-impersonation</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-firebase</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
