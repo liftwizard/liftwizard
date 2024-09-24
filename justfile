@@ -288,7 +288,7 @@ rebase: _check-local-modifications fetch
 delete-local-merged: fetch
     git branch --merged remotes/{{upstream_remote}}/{{upstream_branch}} \
         | grep -v "^\*" \
-        | xargs git branch -D
+        | xargs --no-run-if-empty git branch -D
 
 # Delete branches from origin merged into configurable upstream/main
 delete-remote-merged: fetch
@@ -301,7 +301,7 @@ delete-remote-merged: fetch
             | grep "origin/" \
             | grep --invert-match "origin/pr/" \
             | cut -d "/" -f 2- \
-            | xargs git push --delete origin
+            | xargs --no-run-if-empty git push --delete origin
     else
         echo "Skipping delete-remote-merged in offline mode"
     fi
