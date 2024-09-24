@@ -149,6 +149,22 @@
                                     </excludes>
                                     <message>Move auto-service to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.service:auto-service-annotations</message>
                                 </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.junit.jupiter:junit-jupiter-engine</exclude>
+                                        <exclude>org.junit.platform:junit-platform-engine</exclude>
+                                    </excludes>
+                                    <!--searchTransitive is set to false because dropwizard-testing violates this rule, through jersey-test-framework-core-->
+                                    <searchTransitive>false</searchTransitive>
+                                    <message>To use JUnit 5, depend on org.junit.jupiter:junit-jupiter-api. If you need a particular engine, move the dependency into the dependencies section of maven-surefire-plugin.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.junit.vintage:junit-vintage-engine</exclude>
+                                    </excludes>
+                                    <searchTransitive>false</searchTransitive>
+                                    <message>To use JUnit 4, depend on junit:junit. If you need a particular engine, move the dependency into the dependencies section of maven-surefire-plugin.</message>
+                                </bannedDependencies>
                                 <banDuplicatePomDependencyVersions />
                                 <banDuplicateClasses>
                                     <findAllDuplicates>true</findAllDuplicates>
