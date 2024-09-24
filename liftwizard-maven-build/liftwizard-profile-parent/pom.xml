@@ -792,6 +792,8 @@
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>p6spy:p6spy</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>postgresql:postgresql</ignoredUnusedDeclaredDependency>
                             </ignoredUnusedDeclaredDependencies>
                         </configuration>
 

@@ -104,7 +104,9 @@
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <configuration>
-                            <ignoreNonCompile>true</ignoreNonCompile>
+                            <ignoredUnusedDeclaredDependencies combine.children="append">
+                                <ignoredUnusedDeclaredDependency>jakarta.xml.bind:jakarta.xml.bind-api</ignoredUnusedDeclaredDependency>
+                            </ignoredUnusedDeclaredDependencies>
                         </configuration>
                     </plugin>
                 </plugins>

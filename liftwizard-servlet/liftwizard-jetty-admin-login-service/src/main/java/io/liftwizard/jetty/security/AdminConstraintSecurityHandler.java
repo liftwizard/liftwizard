@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2024 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,17 @@
 
 package io.liftwizard.jetty.security;
 
+import java.io.IOException;
+
 import javax.annotation.Nonnull;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.security.Constraint;
 
 public class AdminConstraintSecurityHandler
@@ -62,5 +68,17 @@ public class AdminConstraintSecurityHandler
     private AdminLoginService getAdminLoginService(String userName, String password)
     {
         return new AdminLoginService(userName, password);
+    }
+
+    // Adding this method is a hack to get maven-dependency-plugin to recognize jakarta.servlet-api as a dependency
+    @Override
+    public void handle(
+            String pathInContext,
+            Request baseRequest,
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException, ServletException
+    {
+        super.handle(pathInContext, baseRequest, request, response);
     }
 }
