@@ -614,6 +614,7 @@
                                 <excludes>
                                     <exclude>**/target/**/*.yaml</exclude>
                                     <exclude>**/target/**/*.yml</exclude>
+                                    <exclude>**/src/main/resources/archetype-resources/**/*.yml</exclude>
                                 </excludes>
 
                                 <prettier>
