@@ -82,33 +82,6 @@
         <property name="message"
                 value="Package comment marker should not be used if other visibility is defined" />
     </module>
-    <module name="RegexpOnFilename">
-        <property name="id" value="regexpOnFilenameWithSpace" />
-    </module>
-    <module name="RegexpOnFilename">
-        <property name="id" value="javaFileLocation" />
-        <property name="folderPattern" value="[\\/]src[\\/]\w+[\\/]java[\\/]" />
-        <property name="fileNamePattern" value="\.java$" />
-        <property name="match" value="false" />
-        <message key="regexp.filename.mismatch"
-                value="Only java files should be located in the ''src/*/java'' folders." />
-    </module>
-    <module name="RegexpOnFilename">
-        <property name="id" value="xmlFileLocation" />
-        <property name="folderPattern" value="[\\/]src[\\/]xdocs[\\/]" />
-        <property name="fileNamePattern" value="\.(xml)|(vm)$" />
-        <property name="match" value="false" />
-        <message key="regexp.filename.mismatch"
-                value="All files in the ''src/xdocs'' folder should have the ''xml'' or ''vm'' extension." />
-    </module>
-    <module name="RegexpOnFilename">
-        <property name="folderPattern" value="[\\/]src[\\/]test[\\/]java[\\/]" />
-        <property name="fileNamePattern" value="^((\w+Test)|(Abstract\w+)|(Fake\w+))\.java$" />
-        <property name="match" value="false" />
-        <message
-                key="regexp.filename.mismatch"
-                value="All files in the ''src/test/java'' folder should be named ''*Test.java'' or ''Abstract*.java''." />
-    </module>
     <!--endregion-->
 
     <module name="TreeWalker">
@@ -151,20 +124,10 @@
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="ignored" />
         </module>
-        <module name="NeedBraces">
-            <property name="tokens" value="LITERAL_DO" />
-            <property name="tokens" value="LITERAL_ELSE" />
-            <property name="tokens" value="LITERAL_FOR" />
-            <property name="tokens" value="LITERAL_IF" />
-            <property name="tokens" value="LITERAL_WHILE" />
-        </module>
         <!--endregion-->
 
         <!--region Class Design-->
         <!--https://checkstyle.sourceforge.io/checks/design/index.html-->
-        <module name="FinalClass" />
-        <module name="HideUtilityClassConstructor" />
-        <module name="InnerTypeLast" />
         <!-- Effective Java Item 17 - Use interfaces only to define types -->
         <module name="InterfaceIsType" />
         <module name="MutableException" />
@@ -262,16 +225,6 @@
             ANNOTATION[./IDENT[@text='Test']]/ANNOTATION_MEMBER_VALUE_PAIR
             [./IDENT[@text='expected']]" />
             <message key="matchxpath.match" value="Avoid using 'expected' attribute in Test annotation." />
-        </module>
-        <module name="MatchXpath">
-            <property name="id" value="blockCommentStartWithSpace" />
-            <property name="query"
-                    value="//BLOCK_COMMENT_BEGIN[./COMMENT_CONTENT[matches(@text, '\\n+ *\*[^\\n ]\S')
-                       or matches(@text, '^[^\* \\n]') or matches(@text, '\\r+ *\*[^\\r ]\S')
-                       or matches(@text, '^[^\* \\r]') or matches(@text, '\\r\\n+ *\*[^\\r\\n ]\S')
-                       or matches(@text, '^[^\* \\r\\n]') and not(starts-with(@text, '*'))]]" />
-            <message key="matchxpath.match"
-                    value="Block comment text should start with space after asterisk." />
         </module>
         <module name="MatchXpath">
             <property name="query" value="//COMMENT_CONTENT[contains(@text, '@noinspection')

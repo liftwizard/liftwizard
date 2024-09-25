@@ -99,6 +99,41 @@
         </module>
         <!--endregion-->
 
+        <!--region Blocks-->
+        <!--https://checkstyle.sourceforge.io/checks/blocks/index.html-->
+        <module name="NeedBraces">
+            <property name="tokens" value="LITERAL_DO" />
+            <property name="tokens" value="LITERAL_ELSE" />
+            <property name="tokens" value="LITERAL_FOR" />
+            <property name="tokens" value="LITERAL_IF" />
+            <property name="tokens" value="LITERAL_WHILE" />
+        </module>
+        <!--endregion-->
+
+
+        <!--region Class Design-->
+        <!--https://checkstyle.sourceforge.io/checks/design/index.html-->
+        <!--endregion-->
+
+        <!--region Coding-->
+        <!--https://checkstyle.sourceforge.io/checks/coding/index.html-->
+        <module name="MatchXpath">
+            <property name="id" value="blockCommentStartWithSpace" />
+            <property name="query"
+                    value="//BLOCK_COMMENT_BEGIN[./COMMENT_CONTENT[matches(@text, '\\n+ *\*[^\\n ]\S')
+                       or matches(@text, '^[^\* \\n]') or matches(@text, '\\r+ *\*[^\\r ]\S')
+                       or matches(@text, '^[^\* \\r]') or matches(@text, '\\r\\n+ *\*[^\\r\\n ]\S')
+                       or matches(@text, '^[^\* \\r\\n]') and not(starts-with(@text, '*'))]]" />
+            <message key="matchxpath.match"
+                    value="Block comment text should start with space after asterisk." />
+        </module>
+        <!--endregion-->
+
+        <!--region Javadoc-->
+        <!--https://checkstyle.sourceforge.io/checks/javadoc/index.html-->
+        <module name="JavadocTagContinuationIndentation" />
+        <!--endregion-->
+
         <!--region Whitespace-->
         <!--https://checkstyle.sourceforge.io/checks/whitespace/index.html-->
         <module name="EmptyForInitializerPad" />
