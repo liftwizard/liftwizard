@@ -36,6 +36,33 @@
 
     <!--region Regexp-->
     <!--https://checkstyle.sourceforge.io/checks/regexp/index.html-->
+    <module name="RegexpOnFilename">
+        <property name="id" value="regexpOnFilenameWithSpace" />
+    </module>
+    <module name="RegexpOnFilename">
+        <property name="id" value="javaFileLocation" />
+        <property name="folderPattern" value="[\\/]src[\\/]\w+[\\/]java[\\/]" />
+        <property name="fileNamePattern" value="\.java$" />
+        <property name="match" value="false" />
+        <message key="regexp.filename.mismatch"
+                value="Only java files should be located in the ''src/*/java'' folders." />
+    </module>
+    <module name="RegexpOnFilename">
+        <property name="id" value="xmlFileLocation" />
+        <property name="folderPattern" value="[\\/]src[\\/]xdocs[\\/]" />
+        <property name="fileNamePattern" value="\.(xml)|(vm)$" />
+        <property name="match" value="false" />
+        <message key="regexp.filename.mismatch"
+                value="All files in the ''src/xdocs'' folder should have the ''xml'' or ''vm'' extension." />
+    </module>
+    <module name="RegexpOnFilename">
+        <property name="folderPattern" value="[\\/]src[\\/]test[\\/]java[\\/]" />
+        <property name="fileNamePattern" value="^((\w+Test)|(Abstract\w+)|(Fake\w+))\.java$" />
+        <property name="match" value="false" />
+        <message
+                key="regexp.filename.mismatch"
+                value="All files in the ''src/test/java'' folder should be named ''*Test.java'' or ''Abstract*.java''." />
+    </module>
     <!--endregion-->
 
     <module name="TreeWalker">
@@ -54,6 +81,9 @@
 
         <!--region Class Design-->
         <!--https://checkstyle.sourceforge.io/checks/design/index.html-->
+        <module name="FinalClass" />
+        <module name="HideUtilityClassConstructor" />
+        <module name="InnerTypeLast" />
         <module name="VisibilityModifier">
             <property name="ignoreAnnotationCanonicalNames" value="org.junit.Rule" />
             <property name="ignoreAnnotationCanonicalNames" value="org.junit.jupiter.api.io.TempDir" />
@@ -107,7 +137,6 @@
             <property name="scope" value="public" />
             <property name="checkFirstSentence" value="false" />
         </module>
-        <module name="JavadocTagContinuationIndentation" />
         <module name="MissingJavadocPackage" />
         <module name="SingleLineJavadoc" />
         <!--endregion-->
