@@ -18,18 +18,15 @@ package io.liftwizard.dropwizard.bundle.config.logging;
 
 import com.fasterxml.jackson.databind.introspect.ClassIntrospector.MixInResolver;
 
-public class JsonIncludeNonDefaultMixInResolver
-        implements MixInResolver
-{
+public class JsonIncludeNonDefaultMixInResolver implements MixInResolver {
+
     @Override
-    public Class<?> findMixInClassFor(Class<?> cls)
-    {
+    public Class<?> findMixInClassFor(Class<?> cls) {
         return JsonIncludeNonDefaultMixIn.class;
     }
 
     @Override
-    public MixInResolver copy()
-    {
+    public MixInResolver copy() {
         return this;
     }
 }

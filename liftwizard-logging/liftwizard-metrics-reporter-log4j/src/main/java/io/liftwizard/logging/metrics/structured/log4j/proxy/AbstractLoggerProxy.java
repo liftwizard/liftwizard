@@ -17,15 +17,13 @@
 package io.liftwizard.logging.metrics.structured.log4j.proxy;
 
 import java.util.Objects;
-
 import org.apache.log4j.Logger;
 
-public abstract class AbstractLoggerProxy
-{
+public abstract class AbstractLoggerProxy {
+
     protected final Logger logger;
 
-    protected AbstractLoggerProxy(Logger logger)
-    {
+    protected AbstractLoggerProxy(Logger logger) {
         this.logger = Objects.requireNonNull(logger);
     }
 

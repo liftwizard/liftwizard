@@ -16,8 +16,6 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.one;
 
-import java.util.Objects;
-
 import com.gs.fw.common.mithra.attribute.DoubleAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEqContext;
@@ -27,52 +25,45 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLe
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLessThanEqualsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.Objects;
 
-public class DoubleBinaryOperatorVisitor
-        extends AbstractBinaryOperatorVisitor
-{
+public class DoubleBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
+
     private final DoubleAttribute attribute;
     private final Double parameter;
 
-    public DoubleBinaryOperatorVisitor(DoubleAttribute attribute, Double parameter)
-    {
+    public DoubleBinaryOperatorVisitor(DoubleAttribute attribute, Double parameter) {
         this.attribute = Objects.requireNonNull(attribute);
         this.parameter = Objects.requireNonNull(parameter);
     }
 
     @Override
-    public Operation visitOperatorEq(OperatorEqContext ctx)
-    {
+    public Operation visitOperatorEq(OperatorEqContext ctx) {
         return this.attribute.eq(this.parameter);
     }
 
     @Override
-    public Operation visitOperatorNotEq(OperatorNotEqContext ctx)
-    {
+    public Operation visitOperatorNotEq(OperatorNotEqContext ctx) {
         return this.attribute.notEq(this.parameter);
     }
 
     @Override
-    public Operation visitOperatorGreaterThan(OperatorGreaterThanContext ctx)
-    {
+    public Operation visitOperatorGreaterThan(OperatorGreaterThanContext ctx) {
         return this.attribute.greaterThan(this.parameter);
     }
 
     @Override
-    public Operation visitOperatorGreaterThanEquals(OperatorGreaterThanEqualsContext ctx)
-    {
+    public Operation visitOperatorGreaterThanEquals(OperatorGreaterThanEqualsContext ctx) {
         return this.attribute.greaterThanEquals(this.parameter);
     }
 
     @Override
-    public Operation visitOperatorLessThan(OperatorLessThanContext ctx)
-    {
+    public Operation visitOperatorLessThan(OperatorLessThanContext ctx) {
         return this.attribute.lessThan(this.parameter);
     }
 
     @Override
-    public Operation visitOperatorLessThanEquals(OperatorLessThanEqualsContext ctx)
-    {
+    public Operation visitOperatorLessThanEquals(OperatorLessThanEqualsContext ctx) {
         return this.attribute.lessThanEquals(this.parameter);
     }
 }

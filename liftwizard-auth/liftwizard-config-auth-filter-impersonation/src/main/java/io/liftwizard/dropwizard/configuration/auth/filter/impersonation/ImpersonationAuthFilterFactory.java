@@ -16,26 +16,23 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.impersonation;
 
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
+import javax.annotation.Nonnull;
 
 @JsonTypeName("impersonation")
 @AutoService(AuthFilterFactory.class)
-public class ImpersonationAuthFilterFactory
-        implements AuthFilterFactory
-{
+public class ImpersonationAuthFilterFactory implements AuthFilterFactory {
+
     @Nonnull
     @Override
-    public AuthFilter<?, ImpersonatedPrincipal> createAuthFilter()
-    {
+    public AuthFilter<?, ImpersonatedPrincipal> createAuthFilter() {
         return new OAuthCredentialAuthFilter.Builder<ImpersonatedPrincipal>()
-                .setAuthenticator(new ImpersonationAuthenticator())
-                .setPrefix("Impersonation")
-                .buildAuthFilter();
+            .setAuthenticator(new ImpersonationAuthenticator())
+            .setPrefix("Impersonation")
+            .buildAuthFilter();
     }
 }

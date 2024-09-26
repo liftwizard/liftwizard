@@ -18,20 +18,18 @@ package io.liftwizard.servlet.logging.typesafe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StructuredArguments
-{
+public class StructuredArguments {
+
     private final StructuredArgumentsRequest request = new StructuredArgumentsRequest();
     private final StructuredArgumentsResponse response = new StructuredArgumentsResponse();
 
     @JsonProperty
-    public StructuredArgumentsRequest getRequest()
-    {
+    public StructuredArgumentsRequest getRequest() {
         return this.request;
     }
 
     @JsonProperty
-    public StructuredArgumentsResponse getResponse()
-    {
+    public StructuredArgumentsResponse getResponse() {
         return this.response;
     }
 }

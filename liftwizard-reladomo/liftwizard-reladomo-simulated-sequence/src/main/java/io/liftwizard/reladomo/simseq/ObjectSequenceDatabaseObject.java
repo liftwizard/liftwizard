@@ -16,7 +16,4 @@
 
 package io.liftwizard.reladomo.simseq;
 
-public class ObjectSequenceDatabaseObject
-        extends ObjectSequenceDatabaseObjectAbstract
-{
-}
+public class ObjectSequenceDatabaseObject extends ObjectSequenceDatabaseObjectAbstract {}

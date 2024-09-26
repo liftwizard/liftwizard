@@ -16,14 +16,6 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.sql.DataSource;
-
 import com.google.auto.service.AutoService;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.setup.Environment;
@@ -33,6 +25,12 @@ import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseDataS
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactory;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactoryProvider;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 import liquibase.Scope;
 import liquibase.Scope.Attr;
 import liquibase.database.Database;
@@ -48,67 +46,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class LiftwizardLiquibaseMigrationBundle
-        implements PrioritizedBundle
-{
+public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardLiquibaseMigrationBundle.class);
 
     @Override
-    public int getPriority()
-    {
+    public int getPriority() {
         return -6;
     }
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-            throws Exception
-    {
-        LiquibaseMigrationFactoryProvider liquibaseFactoryProvider = this.safeCastConfiguration(
-                LiquibaseMigrationFactoryProvider.class,
-                configuration);
-        if (liquibaseFactoryProvider == null)
-        {
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception {
+        LiquibaseMigrationFactoryProvider liquibaseFactoryProvider =
+            this.safeCastConfiguration(LiquibaseMigrationFactoryProvider.class, configuration);
+        if (liquibaseFactoryProvider == null) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
         LiquibaseMigrationFactory liquibaseMigrationFactory = liquibaseFactoryProvider.getLiquibaseMigrationFactory();
-        if (!liquibaseMigrationFactory.isEnabled())
-        {
+        if (!liquibaseMigrationFactory.isEnabled()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
-        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
-                NamedDataSourceProvider.class,
-                configuration);
+        NamedDataSourceProvider dataSourceProvider =
+            this.safeCastConfiguration(NamedDataSourceProvider.class, configuration);
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         Scope.child(
-                Attr.ui,
-                new LoggerUIService(),
-                () -> this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider));
+            Attr.ui,
+            new LoggerUIService(),
+            () -> this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider)
+        );
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
     private void runWithLogger(
-            @Nonnull Environment environment,
-            LiquibaseMigrationFactory liquibaseMigrationFactory,
-            NamedDataSourceProvider dataSourceProvider)
-    {
+        @Nonnull Environment environment,
+        LiquibaseMigrationFactory liquibaseMigrationFactory,
+        NamedDataSourceProvider dataSourceProvider
+    ) {
         boolean dryRun = liquibaseMigrationFactory.isDryRun();
 
-        boolean dropEntireSchemaOnStartupAndShutdown = liquibaseMigrationFactory.isDropEntireSchemaOnStartupAndShutdown();
+        boolean dropEntireSchemaOnStartupAndShutdown =
+            liquibaseMigrationFactory.isDropEntireSchemaOnStartupAndShutdown();
 
-        for (LiquibaseDataSourceMigrationFactory factory : liquibaseMigrationFactory.getDataSourceMigrations())
-        {
+        for (LiquibaseDataSourceMigrationFactory factory : liquibaseMigrationFactory.getDataSourceMigrations()) {
             String dataSourceName = factory.getDataSourceName();
-            ManagedDataSource dataSource = dataSourceProvider.getNamedDataSourcesFactory().getDataSourceByName(
-                    dataSourceName,
-                    environment.metrics(),
-                    environment.lifecycle());
+            ManagedDataSource dataSource = dataSourceProvider
+                .getNamedDataSourcesFactory()
+                .getDataSourceByName(dataSourceName, environment.metrics(), environment.lifecycle());
             String catalogName = factory.getCatalogName();
             String schemaName = factory.getSchemaName();
             String migrationFile = factory.getMigrationFileName();
@@ -117,69 +107,53 @@ public class LiftwizardLiquibaseMigrationBundle
             String context = String.join(",", contexts);
 
             try (
-                    CloseableLiquibase liquibase = this.openLiquibase(
-                            dataSource,
-                            catalogName,
-                            schemaName,
-                            migrationFile,
-                            migrationFileLocation))
-            {
-                if (dryRun)
-                {
+                CloseableLiquibase liquibase =
+                    this.openLiquibase(dataSource, catalogName, schemaName, migrationFile, migrationFileLocation)
+            ) {
+                if (dryRun) {
                     liquibase.update(context, new OutputStreamWriter(System.out, StandardCharsets.UTF_8));
-                }
-                else
-                {
-                    if (dropEntireSchemaOnStartupAndShutdown)
-                    {
+                } else {
+                    if (dropEntireSchemaOnStartupAndShutdown) {
                         liquibase.dropAll();
                     }
                     liquibase.update(context);
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
     private CloseableLiquibase openLiquibase(
-            ManagedDataSource dataSource,
-            String catalogName,
-            String schemaName,
-            String migrationsFile,
-            MigrationFileLocation migrationFileLocation)
-            throws SQLException, LiquibaseException
-    {
+        ManagedDataSource dataSource,
+        String catalogName,
+        String schemaName,
+        String migrationsFile,
+        MigrationFileLocation migrationFileLocation
+    ) throws SQLException, LiquibaseException {
         Database database = this.createDatabase(dataSource, catalogName, schemaName);
         ResourceAccessor resourceAccessor = getResourceAccessor(migrationFileLocation);
         return new CloseableLiquibase(migrationsFile, resourceAccessor, database, dataSource);
     }
 
     @Nonnull
-    private static ResourceAccessor getResourceAccessor(MigrationFileLocation migrationFileLocation)
-    {
-        return switch (migrationFileLocation)
-        {
+    private static ResourceAccessor getResourceAccessor(MigrationFileLocation migrationFileLocation) {
+        return switch (migrationFileLocation) {
             case CLASSPATH -> new ClassLoaderResourceAccessor();
             case FILESYSTEM -> new FileSystemResourceAccessor();
         };
     }
 
     private Database createDatabase(DataSource dataSource, String catalogName, String schemaName)
-            throws SQLException, LiquibaseException
-    {
+        throws SQLException, LiquibaseException {
         DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
-        if (database.supportsCatalogs() && catalogName != null)
-        {
+        if (database.supportsCatalogs() && catalogName != null) {
             database.setDefaultCatalogName(catalogName);
             database.setOutputDefaultCatalog(true);
         }
-        if (database.supportsSchemas() && schemaName != null)
-        {
+        if (database.supportsSchemas() && schemaName != null) {
             database.setDefaultSchemaName(schemaName);
             database.setOutputDefaultSchema(true);
         }

@@ -23,23 +23,21 @@ import graphql.schema.GraphQLScalarType;
  * Derived from <a href="https://github.com/graphql-java/graphql-java-extended-scalars">graphql-java-extended-scalars</a> but for Instant instead of OffsetDateTime.
  */
 @Internal
-public final class GraphQLTemporalScalar
-{
+public final class GraphQLTemporalScalar {
+
     public static final GraphQLScalarType INSTANT_INSTANCE = getGraphQLScalarType("Instant");
     public static final GraphQLScalarType TEMPORAL_INSTANT_INSTANCE = getGraphQLScalarType("TemporalInstant");
     public static final GraphQLScalarType TEMPORAL_RANGE_INSTANCE = getGraphQLScalarType("TemporalRange");
 
-    private GraphQLTemporalScalar()
-    {
+    private GraphQLTemporalScalar() {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    private static GraphQLScalarType getGraphQLScalarType(String name)
-    {
+    private static GraphQLScalarType getGraphQLScalarType(String name) {
         return GraphQLScalarType.newScalar()
-                .name(name)
-                .description("A slightly refined version of RFC-3339 compliant " + name + " Scalar")
-                .coercing(InstantCoercing.INSTANCE)
-                .build();
+            .name(name)
+            .description("A slightly refined version of RFC-3339 compliant " + name + " Scalar")
+            .coercing(InstantCoercing.INSTANCE)
+            .build();
     }
 }

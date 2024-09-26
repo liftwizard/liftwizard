@@ -20,28 +20,22 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import javax.annotation.Nonnull;
-
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class ReladomoExtensionBuilder
-        implements BeforeEachCallback, AfterEachCallback
-{
+public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCallback {
+
     private Optional<ExecuteSqlExtension> executeSqlExtension = Optional.empty();
     private Optional<ReladomoInitializeExtension> initializeExtension = Optional.empty();
     private Optional<ReladomoPurgeAllExtension> purgeAllExtension = Optional.empty();
     private ReladomoLoadDataExtension loadDataExtension = new ReladomoLoadDataExtension();
 
     @Override
-    public void beforeEach(ExtensionContext context)
-            throws SQLException
-    {
-        if (this.executeSqlExtension.isPresent())
-        {
+    public void beforeEach(ExtensionContext context) throws SQLException {
+        if (this.executeSqlExtension.isPresent()) {
             this.executeSqlExtension.get().beforeEach(context);
         }
         this.initializeExtension.ifPresent(extension -> extension.beforeEach(context));
@@ -50,99 +44,80 @@ public class ReladomoExtensionBuilder
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-            throws SQLException
-    {
+    public void afterEach(ExtensionContext context) throws SQLException {
         this.loadDataExtension.afterEach(context);
         this.purgeAllExtension.ifPresent(extension -> extension.afterEach(context));
         this.initializeExtension.ifPresent(extension -> extension.afterEach(context));
-        if (this.executeSqlExtension.isPresent())
-        {
+        if (this.executeSqlExtension.isPresent()) {
             this.executeSqlExtension.get().afterEach(context);
         }
     }
 
-    public ReladomoExtensionBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath)
-    {
+    public ReladomoExtensionBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath) {
         this.initializeExtension = Optional.of(new ReladomoInitializeExtension(runtimeConfigurationPath));
         return this;
     }
 
-    public ReladomoExtensionBuilder setTestDataFileNames(@Nonnull String... testDataFileNames)
-    {
+    public ReladomoExtensionBuilder setTestDataFileNames(@Nonnull String... testDataFileNames) {
         this.loadDataExtension = new ReladomoLoadDataExtension(testDataFileNames);
         return this;
     }
 
-    public ReladomoExtensionBuilder setTestDataFileNames(@Nonnull ImmutableList<String> testDataFileNames)
-    {
+    public ReladomoExtensionBuilder setTestDataFileNames(@Nonnull ImmutableList<String> testDataFileNames) {
         this.loadDataExtension = new ReladomoLoadDataExtension(testDataFileNames);
         return this;
     }
 
-    public ReladomoExtensionBuilder enableDropCreateTables()
-    {
-        if (this.executeSqlExtension.isEmpty())
-        {
+    public ReladomoExtensionBuilder enableDropCreateTables() {
+        if (this.executeSqlExtension.isEmpty()) {
             this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
         }
         return this;
     }
 
-    public ReladomoExtensionBuilder disableDropCreateTables()
-    {
+    public ReladomoExtensionBuilder disableDropCreateTables() {
         this.executeSqlExtension = Optional.empty();
         return this;
     }
 
-    public ReladomoExtensionBuilder setDdlLocationPattern(@Nonnull String ddlLocationPattern)
-    {
-        if (this.executeSqlExtension.isEmpty())
-        {
+    public ReladomoExtensionBuilder setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
+        if (this.executeSqlExtension.isEmpty()) {
             this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
         }
         this.executeSqlExtension.get().setDdlLocationPattern(ddlLocationPattern);
         return this;
     }
 
-    public ReladomoExtensionBuilder setIdxLocationPattern(@Nonnull String idxLocationPattern)
-    {
-        if (this.executeSqlExtension.isEmpty())
-        {
+    public ReladomoExtensionBuilder setIdxLocationPattern(@Nonnull String idxLocationPattern) {
+        if (this.executeSqlExtension.isEmpty()) {
             this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
         }
         this.executeSqlExtension.get().setIdxLocationPattern(idxLocationPattern);
         return this;
     }
 
-    public ReladomoExtensionBuilder setFkLocationPattern(@Nonnull String fkLocationPattern)
-    {
-        if (this.executeSqlExtension.isEmpty())
-        {
+    public ReladomoExtensionBuilder setFkLocationPattern(@Nonnull String fkLocationPattern) {
+        if (this.executeSqlExtension.isEmpty()) {
             this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
         }
         this.executeSqlExtension.get().setFkLocationPattern(fkLocationPattern);
         return this;
     }
 
-    public ReladomoExtensionBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
-    {
-        if (this.executeSqlExtension.isEmpty())
-        {
+    public ReladomoExtensionBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
+        if (this.executeSqlExtension.isEmpty()) {
             this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
         }
         this.executeSqlExtension.get().setConnectionSupplier(connectionSupplier);
         return this;
     }
 
-    public ReladomoExtensionBuilder withPurgeAllExtension()
-    {
+    public ReladomoExtensionBuilder withPurgeAllExtension() {
         this.purgeAllExtension = Optional.of(new ReladomoPurgeAllExtension());
         return this;
     }
 
-    public ReladomoExtensionBuilder withoutPurgeAllExtension()
-    {
+    public ReladomoExtensionBuilder withoutPurgeAllExtension() {
         this.purgeAllExtension = Optional.empty();
         return this;
     }

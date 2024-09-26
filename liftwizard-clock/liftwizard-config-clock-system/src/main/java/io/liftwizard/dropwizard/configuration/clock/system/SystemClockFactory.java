@@ -16,23 +16,19 @@
 
 package io.liftwizard.dropwizard.configuration.clock.system;
 
-import java.time.Clock;
-
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
+import java.time.Clock;
+import javax.annotation.Nonnull;
 
 @JsonTypeName("system")
 @AutoService(ClockFactory.class)
-public class SystemClockFactory
-        implements ClockFactory
-{
+public class SystemClockFactory implements ClockFactory {
+
     @Nonnull
     @Override
-    public Clock createClock()
-    {
+    public Clock createClock() {
         return Clock.systemUTC();
     }
 }

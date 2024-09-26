@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import org.hibernate.validator.constraints.Length;
 
 public class Saying {
+
     private long id;
 
     @Length(max = 3)
@@ -31,9 +32,6 @@ public class Saying {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("content", content)
-                .toString();
+        return MoreObjects.toStringHelper(this).add("id", id).add("content", content).toString();
     }
 }

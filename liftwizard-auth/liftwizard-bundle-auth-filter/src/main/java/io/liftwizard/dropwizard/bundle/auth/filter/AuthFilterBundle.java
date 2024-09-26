@@ -16,12 +16,6 @@
 
 package io.liftwizard.dropwizard.bundle.auth.filter;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-
 import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
@@ -31,37 +25,38 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
+import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class AuthFilterBundle
-        implements PrioritizedBundle
-{
+public class AuthFilterBundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-    {
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
         AuthFilterFactoryProvider authFilterFactoryProvider =
-                this.safeCastConfiguration(AuthFilterFactoryProvider.class, configuration);
+            this.safeCastConfiguration(AuthFilterFactoryProvider.class, configuration);
 
         List<AuthFilterFactory> authFilterFactories = authFilterFactoryProvider.getAuthFilterFactories();
 
         List<AuthFilter<?, ? extends Principal>> authFilters = this.getAuthFilters(authFilterFactories);
 
-        if (authFilters.isEmpty())
-        {
+        if (authFilters.isEmpty()) {
             LOGGER.warn("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
         List<String> authFilterNames = authFilters
-                .stream()
-                .map(Object::getClass)
-                .map(Class::getSimpleName)
-                .collect(Collectors.toList());
+            .stream()
+            .map(Object::getClass)
+            .map(Class::getSimpleName)
+            .collect(Collectors.toList());
 
         LOGGER.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
 
@@ -73,17 +68,12 @@ public class AuthFilterBundle
     }
 
     @Nonnull
-    private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories)
-    {
-        return authFilterFactories
-                .stream()
-                .map(AuthFilterFactory::createAuthFilter)
-                .collect(Collectors.toList());
+    private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories) {
+        return authFilterFactories.stream().map(AuthFilterFactory::createAuthFilter).collect(Collectors.toList());
     }
 
     @Nonnull
-    private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters)
-    {
+    private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters) {
         ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(authFilters);
         return new AuthDynamicFeature(chainedAuthFilter);
     }

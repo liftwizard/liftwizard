@@ -18,23 +18,19 @@ package io.liftwizard.logging.metrics.structured.log4j.proxy;
 
 import org.apache.log4j.Logger;
 
-public class InfoLoggerProxy
-        extends AbstractLoggerProxy
-{
-    public InfoLoggerProxy(Logger logger)
-    {
+public class InfoLoggerProxy extends AbstractLoggerProxy {
+
+    public InfoLoggerProxy(Logger logger) {
         super(logger);
     }
 
     @Override
-    public void log(Object structuredObject)
-    {
+    public void log(Object structuredObject) {
         this.logger.info(structuredObject);
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.logger.isInfoEnabled();
     }
 }

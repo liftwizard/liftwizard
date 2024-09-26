@@ -30,29 +30,25 @@ import org.slf4j.MarkerFactory;
  *
  * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-logmarkertestrule</a>
  */
-public class LogMarkerTestRule
-        extends TestWatcher
-{
+public class LogMarkerTestRule extends TestWatcher {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LogMarkerTestRule.class);
     private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
     private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 
     @Override
-    protected void starting(Description description)
-    {
+    protected void starting(Description description) {
         MDC.put("liftwizard.junit.test.name", description.getDisplayName());
         LOGGER.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
     }
 
     @Override
-    protected void failed(Throwable e, Description description)
-    {
+    protected void failed(Throwable e, Description description) {
         LOGGER.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.");
     }
 
     @Override
-    protected void finished(Description description)
-    {
+    protected void finished(Description description) {
         MDC.remove("liftwizard.junit.test.name");
     }
 }

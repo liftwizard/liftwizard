@@ -16,78 +16,61 @@
 
 package io.liftwizard.reladomo.test.rule;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
 import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.mithraruntime.MithraRuntimeType;
 import com.gs.fw.common.mithra.util.MithraConfigurationManager;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-public class ReladomoInitializeTestRule
-        implements TestRule
-{
+public class ReladomoInitializeTestRule implements TestRule {
+
     @Nonnull
     private final String runtimeConfigurationPath;
 
-    public ReladomoInitializeTestRule(@Nonnull String runtimeConfigurationPath)
-    {
+    public ReladomoInitializeTestRule(@Nonnull String runtimeConfigurationPath) {
         this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
     }
 
     @Nonnull
     @Override
-    public Statement apply(@Nonnull Statement base, @Nonnull Description description)
-    {
-        return new ReadRuntimeConfigurationStatement(
-                base,
-                this.runtimeConfigurationPath);
+    public Statement apply(@Nonnull Statement base, @Nonnull Description description) {
+        return new ReadRuntimeConfigurationStatement(base, this.runtimeConfigurationPath);
     }
 
-    public static class ReadRuntimeConfigurationStatement
-            extends Statement
-    {
+    public static class ReadRuntimeConfigurationStatement extends Statement {
+
         private final Statement base;
         private final String runtimeConfigurationPath;
 
-        public ReadRuntimeConfigurationStatement(
-                @Nonnull Statement base,
-                @Nonnull String runtimeConfigurationPath)
-        {
+        public ReadRuntimeConfigurationStatement(@Nonnull Statement base, @Nonnull String runtimeConfigurationPath) {
             this.base = Objects.requireNonNull(base);
             this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
         }
 
-        private void before()
-        {
+        private void before() {
             try (
-                    InputStream inputStream = ReladomoTestRuleBuilder.class.getClassLoader()
-                            .getResourceAsStream(this.runtimeConfigurationPath))
-            {
-                MithraConfigurationManager mithraConfigurationManager =
-                        MithraManagerProvider.getMithraManager().getConfigManager();
+                InputStream inputStream =
+                    ReladomoTestRuleBuilder.class.getClassLoader().getResourceAsStream(this.runtimeConfigurationPath)
+            ) {
+                MithraConfigurationManager mithraConfigurationManager = MithraManagerProvider.getMithraManager()
+                    .getConfigManager();
                 MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
                 mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
                 mithraConfigurationManager.fullyInitialize();
-            }
-            catch (MithraBusinessException e)
-            {
+            } catch (MithraBusinessException e) {
                 throw new RuntimeException(this.runtimeConfigurationPath, e);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void after()
-        {
+        private void after() {
             MithraManagerProvider.getMithraManager().clearAllQueryCaches();
             MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
             MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
@@ -95,16 +78,11 @@ public class ReladomoInitializeTestRule
         }
 
         @Override
-        public void evaluate()
-                throws Throwable
-        {
+        public void evaluate() throws Throwable {
             this.before();
-            try
-            {
+            try {
                 this.base.evaluate();
-            }
-            finally
-            {
+            } finally {
                 this.after();
             }
         }

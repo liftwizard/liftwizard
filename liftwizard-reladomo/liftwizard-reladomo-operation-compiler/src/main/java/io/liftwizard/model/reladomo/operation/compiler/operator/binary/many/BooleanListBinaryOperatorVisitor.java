@@ -16,38 +16,33 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.many;
 
-import java.util.Objects;
-
 import com.gs.fw.common.mithra.attribute.BooleanAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.Objects;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableBooleanSet;
 import org.eclipse.collections.impl.factory.primitive.BooleanSets;
 
-public class BooleanListBinaryOperatorVisitor
-        extends AbstractBinaryOperatorVisitor
-{
+public class BooleanListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
+
     private final BooleanAttribute<?> attribute;
     private final ImmutableBooleanSet booleanSet;
 
-    public BooleanListBinaryOperatorVisitor(BooleanAttribute<?> attribute, ImmutableList<Boolean> parameter)
-    {
+    public BooleanListBinaryOperatorVisitor(BooleanAttribute<?> attribute, ImmutableList<Boolean> parameter) {
         this.attribute = Objects.requireNonNull(attribute);
         this.booleanSet = BooleanSets.immutable.withAll(parameter);
     }
 
     @Override
-    public Operation visitOperatorIn(OperatorInContext ctx)
-    {
+    public Operation visitOperatorIn(OperatorInContext ctx) {
         return this.attribute.in(this.booleanSet);
     }
 
     @Override
-    public Operation visitOperatorNotIn(OperatorNotInContext ctx)
-    {
+    public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
         return this.attribute.notIn(this.booleanSet);
     }
 }

@@ -16,38 +16,33 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class StructuredArgumentsClient {
 
-public class StructuredArgumentsClient
-{
     private final String address;
     private final String host;
     private final int port;
 
-    public StructuredArgumentsClient(String address, String host, int port)
-    {
+    public StructuredArgumentsClient(String address, String host, int port) {
         this.address = Objects.requireNonNull(address);
         this.host = Objects.requireNonNull(host);
         this.port = port;
     }
 
     @JsonProperty
-    public String getAddress()
-    {
+    public String getAddress() {
         return this.address;
     }
 
     @JsonProperty
-    public String getHost()
-    {
+    public String getHost() {
         return this.host;
     }
 
     @JsonProperty
-    public int getPort()
-    {
+    public int getPort() {
         return this.port;
     }
 }

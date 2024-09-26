@@ -16,29 +16,26 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
-import javax.annotation.Nonnull;
-
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import graphql.execution.instrumentation.InstrumentationContext;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nonnull;
 
-public class FieldInstrumentationContext
-        implements InstrumentationContext<Object>
-{
+public class FieldInstrumentationContext implements InstrumentationContext<Object> {
+
     private final Meter allFieldsExceptionsMeter;
 
     private final Context allFieldsSyncClock;
     private final Context allFieldsAsyncClock;
 
     public FieldInstrumentationContext(
-            @Nonnull Timer allFieldsSyncTimer,
-            @Nonnull Timer allFieldsAsyncTimer,
-            @Nonnull Meter allFieldsExceptionsMeter)
-    {
+        @Nonnull Timer allFieldsSyncTimer,
+        @Nonnull Timer allFieldsAsyncTimer,
+        @Nonnull Meter allFieldsExceptionsMeter
+    ) {
         this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
 
         this.allFieldsSyncClock = allFieldsSyncTimer.time();
@@ -46,16 +43,13 @@ public class FieldInstrumentationContext
     }
 
     @Override
-    public void onDispatched(CompletableFuture<Object> result)
-    {
+    public void onDispatched(CompletableFuture<Object> result) {
         this.allFieldsSyncClock.stop();
     }
 
     @Override
-    public void onCompleted(Object result, Throwable throwable)
-    {
-        if (throwable != null)
-        {
+    public void onCompleted(Object result, Throwable throwable) {
+        if (throwable != null) {
             this.allFieldsExceptionsMeter.mark();
         }
 

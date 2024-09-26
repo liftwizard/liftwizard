@@ -16,10 +16,7 @@
 
 package io.liftwizard.dropwizard.testing.junit;
 
-import javax.annotation.Nonnull;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
@@ -29,28 +26,32 @@ import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.junit.extension.match.json.JsonMatchExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoLoadDataExtension;
+import javax.annotation.Nonnull;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ExtendWith(DropwizardExtensionsSupport.class)
-public abstract class AbstractDropwizardAppTest
-{
+public abstract class AbstractDropwizardAppTest {
+
     @RegisterExtension
     protected final JsonMatchExtension jsonMatchExtension = new JsonMatchExtension(this.getClass());
+
     @RegisterExtension
     protected final LiftwizardAppExtension<?> appExtension = this.getDropwizardAppExtension();
+
     @RegisterExtension
     protected final ReladomoLoadDataExtension reladomoLoadDataExtension = new ReladomoLoadDataExtension();
+
     @RegisterExtension
     protected final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
     @Nonnull
     protected abstract LiftwizardAppExtension<?> getDropwizardAppExtension();
 
-    protected Client getClient(@Nonnull String testName)
-    {
+    protected Client getClient(@Nonnull String testName) {
         var jerseyClientConfiguration = new JerseyClientConfiguration();
         jerseyClientConfiguration.setTimeout(Duration.minutes(5));
 
@@ -58,18 +59,16 @@ public abstract class AbstractDropwizardAppTest
         String clientName = className + "." + testName;
 
         return new JerseyClientBuilder(this.appExtension.getEnvironment())
-                .using(jerseyClientConfiguration)
-                .build(clientName);
+            .using(jerseyClientConfiguration)
+            .build(clientName);
     }
 
-    protected void assertEmptyResponse(Status expectedStatus, Response actualResponse)
-    {
+    protected void assertEmptyResponse(Status expectedStatus, Response actualResponse) {
         assertThat(actualResponse.hasEntity()).isFalse();
         assertThat(actualResponse.getStatusInfo()).isEqualTo(expectedStatus);
     }
 
-    protected void assertResponse(String testName, Status expectedStatus, Response actualResponse)
-    {
+    protected void assertResponse(String testName, Status expectedStatus, Response actualResponse) {
         this.assertResponseStatus(actualResponse, expectedStatus);
         String actualJsonResponse = actualResponse.readEntity(String.class);
 
@@ -78,8 +77,7 @@ public abstract class AbstractDropwizardAppTest
         this.jsonMatchExtension.assertFileContents(expectedResponseClassPathLocation, actualJsonResponse);
     }
 
-    protected void assertResponseStatus(@Nonnull Response response, Status status)
-    {
+    protected void assertResponseStatus(@Nonnull Response response, Status status) {
         assertThat(response.hasEntity()).isTrue();
         response.bufferEntity();
         String entityAsString = response.readEntity(String.class);

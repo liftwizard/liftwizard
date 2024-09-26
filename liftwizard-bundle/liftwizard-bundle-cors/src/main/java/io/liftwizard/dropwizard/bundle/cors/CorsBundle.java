@@ -16,34 +16,29 @@
 
 package io.liftwizard.dropwizard.bundle.cors;
 
-import java.util.EnumSet;
-
-import javax.annotation.Nonnull;
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration.Dynamic;
-
 import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.cors.CorsFactory;
 import io.liftwizard.dropwizard.configuration.cors.CorsFactoryProvider;
+import java.util.EnumSet;
+import javax.annotation.Nonnull;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration.Dynamic;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class CorsBundle
-        implements PrioritizedBundle
-{
+public class CorsBundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CorsBundle.class);
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-    {
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
         CorsFactoryProvider corsFactoryProvider = this.safeCastConfiguration(CorsFactoryProvider.class, configuration);
         CorsFactory corsFactory = corsFactoryProvider.getCorsFactory();
-        if (!corsFactory.isEnabled())
-        {
+        if (!corsFactory.isEnabled()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
@@ -58,9 +53,10 @@ public class CorsBundle
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, corsFactory.getAllowedMethods());
         cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, corsFactory.getAllowCredentials());
         cors.addMappingForUrlPatterns(
-                EnumSet.allOf(DispatcherType.class),
-                true,
-                corsFactory.getUrlPatterns().toArray(new String[]{}));
+            EnumSet.allOf(DispatcherType.class),
+            true,
+            corsFactory.getUrlPatterns().toArray(new String[] {})
+        );
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }

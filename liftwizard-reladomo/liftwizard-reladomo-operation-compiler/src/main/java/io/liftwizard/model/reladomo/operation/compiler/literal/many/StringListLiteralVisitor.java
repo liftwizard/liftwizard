@@ -23,28 +23,24 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.StringLiteral
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class StringListLiteralVisitor
-        extends AbstractLiteralVisitor<ImmutableList<String>>
-{
+public class StringListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<String>> {
+
     private final StringLiteralVisitor stringLiteralVisitor;
 
-    public StringListLiteralVisitor(RelatedFinder finder, String errorContext)
-    {
+    public StringListLiteralVisitor(RelatedFinder finder, String errorContext) {
         super(finder, errorContext);
         this.stringLiteralVisitor = new StringLiteralVisitor(finder, errorContext);
     }
 
     @Override
-    protected String getExpectedType()
-    {
+    protected String getExpectedType() {
         return "String list";
     }
 
     @Override
-    public ImmutableList<String> visitStringListLiteral(StringListLiteralContext ctx)
-    {
+    public ImmutableList<String> visitStringListLiteral(StringListLiteralContext ctx) {
         return ListAdapter.adapt(ctx.stringLiteral())
-                .collect(each -> each.accept(this.stringLiteralVisitor))
-                .toImmutable();
+            .collect(each -> each.accept(this.stringLiteralVisitor))
+            .toImmutable();
     }
 }

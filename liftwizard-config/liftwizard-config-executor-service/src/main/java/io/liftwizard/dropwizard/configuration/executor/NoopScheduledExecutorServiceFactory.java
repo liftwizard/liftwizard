@@ -16,8 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import com.codahale.metrics.InstrumentedScheduledExecutorService;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,28 +23,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Environment;
+import java.util.concurrent.ScheduledExecutorService;
 
 @JsonTypeName("noop")
 @AutoService(ScheduledExecutorServiceFactory.class)
-public class NoopScheduledExecutorServiceFactory
-        implements ScheduledExecutorServiceFactory
-{
+public class NoopScheduledExecutorServiceFactory implements ScheduledExecutorServiceFactory {
+
     @Override
     @JsonIgnore
-    public ScheduledExecutorService build(Environment environment)
-    {
+    public ScheduledExecutorService build(Environment environment) {
         return this.build(environment.lifecycle(), environment.metrics());
     }
 
     @Override
     @JsonIgnore
-    public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry)
-    {
-        ScheduledExecutorService scheduledExecutorService = environment
-                .scheduledExecutorService("noop", true)
-                .build();
+    public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
+        ScheduledExecutorService scheduledExecutorService = environment.scheduledExecutorService("noop", true).build();
         NoopScheduledExecutorService noopScheduledExecutorService = new NoopScheduledExecutorService(
-                scheduledExecutorService);
+            scheduledExecutorService
+        );
         return new InstrumentedScheduledExecutorService(noopScheduledExecutorService, metricRegistry, "noop");
     }
 }

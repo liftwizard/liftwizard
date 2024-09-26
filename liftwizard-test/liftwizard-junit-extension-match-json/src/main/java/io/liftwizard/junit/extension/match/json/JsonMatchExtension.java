@@ -16,6 +16,14 @@
 
 package io.liftwizard.junit.extension.match.json;
 
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
+import io.liftwizard.junit.extension.match.AbstractMatchExtension;
+import io.liftwizard.junit.extension.match.FileSlurper;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,53 +34,35 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-
 import javax.annotation.Nonnull;
-
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
-import io.liftwizard.junit.extension.match.AbstractMatchExtension;
-import io.liftwizard.junit.extension.match.FileSlurper;
-import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
 
-public class JsonMatchExtension
-        extends AbstractMatchExtension
-{
+public class JsonMatchExtension extends AbstractMatchExtension {
+
     private final ObjectMapper objectMapper;
 
-    public JsonMatchExtension(@Nonnull Class<?> callingClass)
-    {
+    public JsonMatchExtension(@Nonnull Class<?> callingClass) {
         this(callingClass, JsonMatchExtension.newObjectMapper());
     }
 
-    public JsonMatchExtension(@Nonnull Class<?> callingClass, ObjectMapper objectMapper)
-    {
+    public JsonMatchExtension(@Nonnull Class<?> callingClass, ObjectMapper objectMapper) {
         super(callingClass);
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
-    private static ObjectMapper newObjectMapper()
-    {
+    private static ObjectMapper newObjectMapper() {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         ObjectMapperConfig.configure(objectMapper);
         return objectMapper;
     }
 
     @Override
-    protected void assertFileContentsOrThrow(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull String actualString)
-            throws IOException, URISyntaxException
-    {
-        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation))
-        {
+    protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+        throws IOException, URISyntaxException {
+        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation)) {
             String prettyPrintedString = this.getPrettyPrintedString(actualString);
 
             Path packagePath = this.resourceRerecorderExtension.getPackagePath();
@@ -81,15 +71,13 @@ public class JsonMatchExtension
             this.resourceRerecorderExtension.writeStringToFile(
                     resourceClassPathLocation,
                     prettyPrintedString,
-                    resourceFile);
-            if (!this.rerecordEnabled)
-            {
+                    resourceFile
+                );
+            if (!this.rerecordEnabled) {
                 String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
                 this.errorCollectorExtension.addError(new AssertionError(detailMessage));
             }
-        }
-        else
-        {
+        } else {
             InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
             Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
             String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
@@ -97,63 +85,49 @@ public class JsonMatchExtension
             URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
             URI uri = resource.toURI();
 
-            if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri))
-            {
+            if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
                 return;
             }
 
             String fileContents = this.getPrettyPrintedString(actualString);
             Optional<String> message = this.compareAndGetDiff(fileContents, expectedStringFromFile);
-            if (message.isPresent())
-            {
-                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
-                        resourceClassPathLocation,
-                        fileContents);
+            if (message.isPresent()) {
+                String detailMessage =
+                    this.resourceRerecorderExtension.handleMismatch(resourceClassPathLocation, fileContents);
                 AssertionError assertionError = new AssertionError(detailMessage);
                 this.errorCollectorExtension.addError(assertionError);
             }
         }
     }
 
-    protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile)
-    {
-        try
-        {
+    protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile) {
+        try {
             JSONCompareResult result = JSONCompare.compareJSON(
-                    expectedStringFromFile,
-                    actualString,
-                    JSONCompareMode.STRICT);
-            if (result.passed())
-            {
+                expectedStringFromFile,
+                actualString,
+                JSONCompareMode.STRICT
+            );
+            if (result.passed()) {
                 return Optional.empty();
             }
 
-            if (result.failed())
-            {
+            if (result.failed()) {
                 String message = result.getMessage();
                 return Optional.of(message);
             }
 
             throw new AssertionError(result);
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri)
-    {
-        try
-        {
+    protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri) {
+        try {
             this.objectMapper.readTree(expectedStringFromFile);
             return true;
-        }
-        catch (JacksonException e)
-        {
-            String detailMessage = "Invalid JSON in %s:%n%s".formatted(
-                    uri,
-                    expectedStringFromFile);
+        } catch (JacksonException e) {
+            String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
             AssertionError assertionError = new AssertionError(detailMessage, e);
             this.errorCollectorExtension.addError(assertionError);
             return false;
@@ -161,16 +135,12 @@ public class JsonMatchExtension
     }
 
     @Override
-    protected String getPrettyPrintedString(@Nonnull String string)
-    {
-        try
-        {
+    protected String getPrettyPrintedString(@Nonnull String string) {
+        try {
             JsonNode jsonNode = this.objectMapper.readTree(string);
             String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
             return prettyPrintedString;
-        }
-        catch (JsonProcessingException e)
-        {
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }

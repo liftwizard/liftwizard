@@ -16,24 +16,22 @@
 
 package io.liftwizard.model.reladomo.operation.compiler;
 
-import java.util.regex.Pattern;
-
 import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationLexer;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.CompilationUnitContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationVisitor;
+import java.util.regex.Pattern;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-public class ReladomoOperationCompiler
-{
+public class ReladomoOperationCompiler {
+
     private static final Pattern NEWLINE_PATTERN = Pattern.compile("\\r?\\n");
 
-    public Operation compile(RelatedFinder<?> finder, String sourceCodeText)
-    {
+    public Operation compile(RelatedFinder<?> finder, String sourceCodeText) {
         String[] lines = NEWLINE_PATTERN.split(sourceCodeText);
         CodePointCharStream charStream = CharStreams.fromString(sourceCodeText);
 

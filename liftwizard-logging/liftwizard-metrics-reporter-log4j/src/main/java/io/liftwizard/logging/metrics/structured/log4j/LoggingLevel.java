@@ -16,11 +16,10 @@
 
 package io.liftwizard.logging.metrics.structured.log4j;
 
-public enum LoggingLevel
-{
+public enum LoggingLevel {
     TRACE,
     DEBUG,
     INFO,
     WARN,
-    ERROR
+    ERROR,
 }

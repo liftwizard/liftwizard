@@ -16,17 +16,15 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
-
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StructuredArgumentsStatus
-{
+public class StructuredArgumentsStatus {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
 
     private Status status;
@@ -35,13 +33,11 @@ public class StructuredArgumentsStatus
     private String phrase;
 
     @JsonProperty
-    public Status getStatus()
-    {
+    public Status getStatus() {
         return this.status;
     }
 
-    public void setStatus(Status status)
-    {
+    public void setStatus(Status status) {
         // It's possible to overwrite a non-null status with another non-null status due to the try-catch block in org.glassfish.jersey.server.ServerRuntime.process().
         // It happens when there is an error while processing an otherwise successful response.
         // For example, we try to return a successful response, but there is an error serializing the response body, because Jackson calls a getter which throws.
@@ -51,45 +47,36 @@ public class StructuredArgumentsStatus
     }
 
     @JsonProperty
-    public Integer getCode()
-    {
+    public Integer getCode() {
         return this.code;
     }
 
-    public void setCode(int code)
-    {
-        if (this.code != null)
-        {
+    public void setCode(int code) {
+        if (this.code != null) {
             LOGGER.warn("Overwriting code '{}' with '{}'.", this.code, code);
         }
         this.code = code;
     }
 
     @JsonProperty
-    public Family getFamily()
-    {
+    public Family getFamily() {
         return this.family;
     }
 
-    public void setFamily(Family family)
-    {
-        if (this.family != null)
-        {
+    public void setFamily(Family family) {
+        if (this.family != null) {
             LOGGER.warn("Overwriting family '{}' with '{}'.", this.family, family);
         }
         this.family = Objects.requireNonNull(family);
     }
 
     @JsonProperty
-    public String getPhrase()
-    {
+    public String getPhrase() {
         return this.phrase;
     }
 
-    public void setPhrase(String phrase)
-    {
-        if (this.phrase != null)
-        {
+    public void setPhrase(String phrase) {
+        if (this.phrase != null) {
             LOGGER.warn("Overwriting phrase '{}' with '{}'.", this.phrase, phrase);
         }
         this.phrase = Objects.requireNonNull(phrase);

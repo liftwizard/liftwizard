@@ -16,15 +16,13 @@
 
 package io.liftwizard.dropwizard.configuration.liquibase.migration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
+public class LiquibaseMigrationFactory extends EnabledFactory {
 
-public class LiquibaseMigrationFactory
-        extends EnabledFactory
-{
     private List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = new ArrayList<>();
 
     private boolean dropEntireSchemaOnStartupAndShutdown;
@@ -32,38 +30,32 @@ public class LiquibaseMigrationFactory
     private boolean dryRun;
 
     @JsonProperty
-    public List<LiquibaseDataSourceMigrationFactory> getDataSourceMigrations()
-    {
+    public List<LiquibaseDataSourceMigrationFactory> getDataSourceMigrations() {
         return this.dataSourceMigrations;
     }
 
     @JsonProperty
-    public void setDataSourceMigrations(List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations)
-    {
+    public void setDataSourceMigrations(List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations) {
         this.dataSourceMigrations = dataSourceMigrations;
     }
 
     @JsonProperty
-    public boolean isDropEntireSchemaOnStartupAndShutdown()
-    {
+    public boolean isDropEntireSchemaOnStartupAndShutdown() {
         return this.dropEntireSchemaOnStartupAndShutdown;
     }
 
     @JsonProperty
-    public void setDropEntireSchemaOnStartupAndShutdown(boolean dropEntireSchemaOnStartupAndShutdown)
-    {
+    public void setDropEntireSchemaOnStartupAndShutdown(boolean dropEntireSchemaOnStartupAndShutdown) {
         this.dropEntireSchemaOnStartupAndShutdown = dropEntireSchemaOnStartupAndShutdown;
     }
 
     @JsonProperty
-    public boolean isDryRun()
-    {
+    public boolean isDryRun() {
         return this.dryRun;
     }
 
     @JsonProperty
-    public void setDryRun(boolean dryRun)
-    {
+    public void setDryRun(boolean dryRun) {
         this.dryRun = dryRun;
     }
 }

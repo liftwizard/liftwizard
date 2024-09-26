@@ -16,23 +16,20 @@
 
 package io.liftwizard.configuration.metrics.reporter.logback;
 
-import java.util.Map;
-import java.util.function.Function;
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.metrics.ReporterFactory;
 import io.liftwizard.configuration.metrics.reporter.slf4j.StructuredSlf4jReporterFactory;
+import java.util.Map;
+import java.util.function.Function;
 import net.logstash.logback.argument.StructuredArguments;
 
 @JsonTypeName("structured-logback")
 @AutoService(ReporterFactory.class)
-public class StructuredLogbackReporterFactory
-        extends StructuredSlf4jReporterFactory
-{
+public class StructuredLogbackReporterFactory extends StructuredSlf4jReporterFactory {
+
     @Override
-    protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction()
-    {
+    protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
         return StructuredArguments::entries;
     }
 }

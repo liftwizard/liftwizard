@@ -20,12 +20,10 @@ import com.codahale.metrics.health.HealthCheck;
 import io.liftwizard.reladomo.simseq.ObjectSequenceFinder;
 import io.liftwizard.reladomo.simseq.ObjectSequenceList;
 
-public class ReladomoHealthCheck
-        extends HealthCheck
-{
+public class ReladomoHealthCheck extends HealthCheck {
+
     @Override
-    protected Result check()
-    {
+    protected Result check() {
         ObjectSequenceList objectSequences = ObjectSequenceFinder.findMany(ObjectSequenceFinder.all());
         int size = objectSequences.size();
         return Result.healthy("Found " + size + " rows.");

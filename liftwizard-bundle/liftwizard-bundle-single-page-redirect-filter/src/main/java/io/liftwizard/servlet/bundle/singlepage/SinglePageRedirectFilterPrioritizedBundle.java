@@ -16,24 +16,20 @@
 
 package io.liftwizard.servlet.bundle.singlepage;
 
-import javax.annotation.Nonnull;
-
 import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactory;
 import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactoryProvider;
+import javax.annotation.Nonnull;
 
 @AutoService(PrioritizedBundle.class)
-public class SinglePageRedirectFilterPrioritizedBundle
-        implements PrioritizedBundle
-{
+public class SinglePageRedirectFilterPrioritizedBundle implements PrioritizedBundle {
+
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-    {
-        SinglePageRedirectFilterFactoryProvider factoryProvider = this.safeCastConfiguration(
-                SinglePageRedirectFilterFactoryProvider.class,
-                configuration);
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+        SinglePageRedirectFilterFactoryProvider factoryProvider =
+            this.safeCastConfiguration(SinglePageRedirectFilterFactoryProvider.class, configuration);
 
         SinglePageRedirectFilterFactory factory = factoryProvider.getSinglePageRedirectFilterFactory();
         SinglePageRedirectFilterBundle.handleRegistration(this, environment, factory);

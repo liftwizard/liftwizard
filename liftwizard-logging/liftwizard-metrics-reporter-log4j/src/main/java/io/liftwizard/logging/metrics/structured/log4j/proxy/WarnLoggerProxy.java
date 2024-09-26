@@ -19,23 +19,19 @@ package io.liftwizard.logging.metrics.structured.log4j.proxy;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class WarnLoggerProxy
-        extends AbstractLoggerProxy
-{
-    public WarnLoggerProxy(Logger logger)
-    {
+public class WarnLoggerProxy extends AbstractLoggerProxy {
+
+    public WarnLoggerProxy(Logger logger) {
         super(logger);
     }
 
     @Override
-    public void log(Object structuredObject)
-    {
+    public void log(Object structuredObject) {
         this.logger.warn(structuredObject);
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.logger.isEnabledFor(Level.WARN);
     }
 }

@@ -16,17 +16,15 @@
 
 package io.liftwizard.servlet.logging.mdc;
 
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.factory.Stacks;
 import org.eclipse.collections.api.list.MutableList;
@@ -34,72 +32,61 @@ import org.eclipse.collections.api.stack.ImmutableStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StructuredArgumentsMDCLogger
-        implements Consumer<StructuredArguments>
-{
+public class StructuredArgumentsMDCLogger implements Consumer<StructuredArguments> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
 
     @Nonnull
     private final ObjectMapper objectMapper;
 
-    public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper)
-    {
+    public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments)
-    {
+    public void accept(@Nonnull StructuredArguments structuredArguments) {
         ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
-        try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode))
-        {
+        try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode)) {
             LOGGER.debug("Response sent");
         }
     }
 
-    private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode)
-    {
+    private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode) {
         MultiMDCCloseable result = new MultiMDCCloseable();
         this.structuredArgumentsToMDC(result, Stacks.immutable.empty(), objectNode);
         return result;
     }
 
     private void structuredArgumentsToMDC(
-            @Nonnull MultiMDCCloseable mdc,
-            @Nonnull ImmutableStack<String> stack,
-            @Nonnull ObjectNode objectNode)
-    {
+        @Nonnull MultiMDCCloseable mdc,
+        @Nonnull ImmutableStack<String> stack,
+        @Nonnull ObjectNode objectNode
+    ) {
         objectNode.fields().forEachRemaining(entry -> this.structuredArgumentToMDC(mdc, stack, entry));
     }
 
     private void structuredArgumentToMDC(
-            @Nonnull MultiMDCCloseable mdc,
-            @Nonnull ImmutableStack<String> stack,
-            @Nonnull Entry<String, JsonNode> entry)
-    {
+        @Nonnull MultiMDCCloseable mdc,
+        @Nonnull ImmutableStack<String> stack,
+        @Nonnull Entry<String, JsonNode> entry
+    ) {
         String key = entry.getKey();
         JsonNode value = entry.getValue();
 
-        if (value.isObject())
-        {
+        if (value.isObject()) {
             ImmutableStack<String> nextStack = stack.push(key);
             ObjectNode nextObjectNode = (ObjectNode) value;
             this.structuredArgumentsToMDC(mdc, nextStack, nextObjectNode);
             return;
         }
 
-        String keyString = stack.isEmpty()
-                ? key
-                : stack.toList().toReversed().makeString("", ".", "." + key);
+        String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
 
-        if (value.isArray())
-        {
+        if (value.isArray()) {
             MutableList<String> list = Lists.mutable.empty();
             value.iterator().forEachRemaining(each -> list.add(each.textValue()));
             mdc.put(keyString, list.makeString());
-        }
-        else
-        {
+        } else {
             mdc.put(keyString, value.asText());
         }
     }

@@ -16,9 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.TimeZone;
-
-import javax.validation.Validator;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,43 +31,45 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
+import java.util.TimeZone;
+import javax.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class ConnectionManagerFactoryTest {
 
-class ConnectionManagerFactoryTest
-{
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator validator = Validators.newValidator();
 
-    private final JsonConfigurationFactory<ConnectionManagerFactory> factory =
-            new JsonConfigurationFactory<>(ConnectionManagerFactory.class, this.validator, this.objectMapper, "dw");
+    private final JsonConfigurationFactory<ConnectionManagerFactory> factory = new JsonConfigurationFactory<>(
+        ConnectionManagerFactory.class,
+        this.validator,
+        this.objectMapper,
+        "dw"
+    );
 
     @Test
-    void createSourcelessConnectionManager()
-            throws Exception
-    {
-        ConnectionManagerFactory connectionManagerFactory = this.factory.build(
-                new ResourceConfigurationSourceProvider(),
-                "config-test.json5");
+    void createSourcelessConnectionManager() throws Exception {
+        ConnectionManagerFactory connectionManagerFactory =
+            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
 
         PooledDataSourceFactory dataSourceFactory = new DataSourceFactory();
         ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
 
         SourcelessConnectionManager sourcelessConnectionManager =
-                connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);
+            connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);
 
         assertThat(sourcelessConnectionManager.getDatabaseIdentifier()).isEqualTo("schemaName");
-        assertThat(sourcelessConnectionManager.getDatabaseTimeZone()).isEqualTo(TimeZone.getTimeZone("America/New_York"));
+        assertThat(sourcelessConnectionManager.getDatabaseTimeZone()).isEqualTo(
+            TimeZone.getTimeZone("America/New_York")
+        );
         assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(GenericDatabaseType.getInstance());
     }
 
-    private static ObjectMapper newObjectMapper()
-    {
+    private static ObjectMapper newObjectMapper() {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         ObjectMapperConfig.configure(objectMapper);
         return objectMapper;

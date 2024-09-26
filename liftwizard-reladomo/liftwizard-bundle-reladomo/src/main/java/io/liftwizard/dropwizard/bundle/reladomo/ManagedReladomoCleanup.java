@@ -19,17 +19,13 @@ package io.liftwizard.dropwizard.bundle.reladomo;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import io.dropwizard.lifecycle.Managed;
 
-public class ManagedReladomoCleanup
-        implements Managed
-{
-    @Override
-    public void start()
-    {
-    }
+public class ManagedReladomoCleanup implements Managed {
 
     @Override
-    public void stop()
-    {
+    public void start() {}
+
+    @Override
+    public void stop() {
         // TODO: Figure out which of these cleanups are necessary and which can be deleted
         MithraManagerProvider.getMithraManager().clearAllQueryCaches();
         MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
@@ -38,8 +34,7 @@ public class ManagedReladomoCleanup
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return ManagedReladomoCleanup.class.getSimpleName();
     }
 }

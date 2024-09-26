@@ -16,13 +16,6 @@
 
 package io.liftwizard.reladomo.test.extension;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
-
 import com.gs.fw.common.mithra.MithraDataObject;
 import com.gs.fw.common.mithra.MithraDatabaseObject;
 import com.gs.fw.common.mithra.MithraManagerProvider;
@@ -31,6 +24,11 @@ import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.test.MithraTestDataParser;
 import com.gs.fw.common.mithra.util.fileparser.MithraParsedData;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Optional;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.factory.Lists;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -39,9 +37,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReladomoLoadDataExtension
-        implements BeforeEachCallback, AfterEachCallback
-{
+public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachCallback {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataExtension.class);
 
     private static final Class<?>[] NO_PARAMS = {};
@@ -50,75 +47,62 @@ public class ReladomoLoadDataExtension
     @Nonnull
     private final ImmutableList<String> testDataFileNames;
 
-    public ReladomoLoadDataExtension(@Nonnull String... testDataFileNames)
-    {
+    public ReladomoLoadDataExtension(@Nonnull String... testDataFileNames) {
         this(Lists.immutable.with(testDataFileNames));
     }
 
-    public ReladomoLoadDataExtension(@Nonnull ImmutableList<String> testDataFileNames)
-    {
+    public ReladomoLoadDataExtension(@Nonnull ImmutableList<String> testDataFileNames) {
         this.testDataFileNames = testDataFileNames;
     }
 
     @Override
-    public void beforeEach(ExtensionContext context)
-    {
+    public void beforeEach(ExtensionContext context) {
         ImmutableList<String> configuredTestDataFileNames = this.getConfiguredTestDataFileNames(context);
 
-        for (String testDataFileName : configuredTestDataFileNames)
-        {
-            try
-            {
+        for (String testDataFileName : configuredTestDataFileNames) {
+            try {
                 this.loadTestData(testDataFileName);
-            }
-            catch (ReflectiveOperationException e)
-            {
+            } catch (ReflectiveOperationException e) {
                 throw new RuntimeException("Error while loading test data file: " + testDataFileName, e);
             }
         }
     }
 
-    private ImmutableList<String> getConfiguredTestDataFileNames(@Nonnull ExtensionContext context)
-    {
+    private ImmutableList<String> getConfiguredTestDataFileNames(@Nonnull ExtensionContext context) {
         Optional<AnnotatedElement> element = context.getElement();
-        if (element.isEmpty())
-        {
+        if (element.isEmpty()) {
             return this.testDataFileNames;
         }
 
         ReladomoTestFile reladomoTestFileAnnotation = element.get().getAnnotation(ReladomoTestFile.class);
-        if (reladomoTestFileAnnotation == null)
-        {
+        if (reladomoTestFileAnnotation == null) {
             return this.testDataFileNames;
         }
         return Lists.immutable.with(reladomoTestFileAnnotation.value());
     }
 
-    private void loadTestData(String testDataFileName)
-            throws ReflectiveOperationException
-    {
+    private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
         LOGGER.debug("Loading test data from file: {}", testDataFileName);
         MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
         List<MithraParsedData> parsedDataList = parser.getResults();
 
-        for (MithraParsedData mithraParsedData : parsedDataList)
-        {
+        for (MithraParsedData mithraParsedData : parsedDataList) {
             this.handleMithraParsedData(mithraParsedData);
         }
     }
 
     private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
-            throws ReflectiveOperationException
-    {
+        throws ReflectiveOperationException {
         List<Attribute<?, ?>> attributes = mithraParsedData.getAttributes();
         List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
         String parsedClassName = mithraParsedData.getParsedClassName();
 
-        if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName))
-        {
-            throw new RuntimeException("Class "
-                    + parsedClassName
-                    + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?");
+        if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName)) {
+            throw new RuntimeException(
+                "Class " +
+                parsedClassName +
+                " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?"
+            );
         }
 
         String finderClassName = parsedClassName + "Finder";
@@ -128,12 +112,13 @@ public class ReladomoLoadDataExtension
 
         MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
         SourcelessConnectionManager databaseObjectConnectionManager =
-                (SourcelessConnectionManager) databaseObject.getConnectionManager();
+            (SourcelessConnectionManager) databaseObject.getConnectionManager();
 
         LOGGER.debug(
-                "Loading test data for class {} using connection manager: {}",
-                parsedClassName,
-                databaseObjectConnectionManager);
+            "Loading test data for class {} using connection manager: {}",
+            parsedClassName,
+            databaseObjectConnectionManager
+        );
 
         Class<? extends MithraDatabaseObject> databaseObjectClass = databaseObject.getClass();
 
@@ -142,8 +127,7 @@ public class ReladomoLoadDataExtension
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
+    public void afterEach(ExtensionContext context) {
         MithraManagerProvider.getMithraManager().clearAllQueryCaches();
         MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
         MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();

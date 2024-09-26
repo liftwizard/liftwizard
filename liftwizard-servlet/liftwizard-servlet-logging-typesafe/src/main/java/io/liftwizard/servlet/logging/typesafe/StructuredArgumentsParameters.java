@@ -16,31 +16,27 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 import org.eclipse.collections.api.map.MapIterable;
 
-public class StructuredArgumentsParameters
-{
+public class StructuredArgumentsParameters {
+
     private final MapIterable<String, String> query;
     private final MapIterable<String, String> path;
 
-    public StructuredArgumentsParameters(MapIterable<String, String> query, MapIterable<String, String> path)
-    {
+    public StructuredArgumentsParameters(MapIterable<String, String> query, MapIterable<String, String> path) {
         this.query = Objects.requireNonNull(query);
         this.path = Objects.requireNonNull(path);
     }
 
     @JsonProperty
-    public MapIterable<String, String> getQuery()
-    {
+    public MapIterable<String, String> getQuery() {
         return this.query;
     }
 
     @JsonProperty
-    public MapIterable<String, String> getPath()
-    {
+    public MapIterable<String, String> getPath() {
         return this.path;
     }
 }

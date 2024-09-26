@@ -18,29 +18,25 @@ package io.liftwizard.dropwizard.configuration.enabled;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class EnabledFactory
-{
+public class EnabledFactory {
+
     private boolean enabled;
 
-    public EnabledFactory()
-    {
+    public EnabledFactory() {
         this(false);
     }
 
-    public EnabledFactory(boolean enabled)
-    {
+    public EnabledFactory(boolean enabled) {
         this.enabled = enabled;
     }
 
     @JsonProperty
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
     @JsonProperty
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 }
