@@ -108,6 +108,9 @@ spotless-all MVN=default_mvn: _check-local-modifications clean && _check-local-m
 reproducible MVN=default_mvn:
     {{MVN}} verify -DskipTests artifact:check-buildplan
 
+markdownlint:
+    npx markdownlint-cli --config .markdownlint.jsonc  --fix .
+
 # mvn rewrite
 rewrite-dry-run MVN=default_mvn:
     mvn --threads 1 install -DskipTests org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun
@@ -334,3 +337,4 @@ recover-detached-head:
         git checkout -b "$branch_name"
         echo "Created and checked out new branch: $branch_name"
     fi
+

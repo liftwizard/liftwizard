@@ -20,7 +20,7 @@ With logback configuration like this:
 
 The logs look like this:
 
-```shell
+```console
 WARN  12:00:00.000 (Slf4jUncaughtExceptionHandler.java:46) [main]  {exceptionClass=io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.RootException, liftwizard.error.message=example root, liftwizard.error.kind=io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.RootException, threadName=main, exceptionMessage=example root, liftwizard.error.thread=main} io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandler: Exception in thread "main"
 io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest$CauseException: example cause
 	at io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.testUncaughtException(Slf4jUncaughtExceptionHandlerTest.java:26) ~[test-classes/:na]
