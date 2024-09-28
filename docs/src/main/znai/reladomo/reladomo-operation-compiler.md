@@ -52,7 +52,7 @@ The compiler allows some flexibility in the syntax.
 
 ## Complete examples
 
-```
+```console
 # Attribute types
 this.booleanProperty = true
 this.integerProperty = 4

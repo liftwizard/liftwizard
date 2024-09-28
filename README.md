@@ -25,4 +25,4 @@ The bundles can be loosely grouped into categories.
 
 ## Documentation
 
-See the full docs at https://liftwizard.io/docs/
+See the full docs at <https://liftwizard.io/docs/>

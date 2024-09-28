@@ -63,7 +63,7 @@ All versions of maven bind the [same plugins](https://maven.apache.org/ref/3.9.6
 
 It's becoming more common to lock down the version of maven itself, but this wasn't always the case. If you haven't specified the versions of these plugins, [maven-enforcer-plugin](https://maven.apache.org/enforcer/enforcer-rules/requirePluginVersions.html) will log an error like:
 
-```
+```console
 [ERROR] Rule 3: org.apache.maven.enforcer.rules.RequirePluginVersions failed with message:
 
 Some plugins are missing valid versions or depend on Maven 3.9.5 defaults (LATEST, RELEASE as plugin version are not allowed)

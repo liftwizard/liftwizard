@@ -541,11 +541,41 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
 
+  reviewdog-markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-markdownlint@v0.24.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
   reviewdog-yamllint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-yamllint@v1.19.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
+  reviewdog-languagetool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-languagetool@v1.19.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
+  reviewdog-actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-actionlint@v1.54.0
         with:
           reporter: github-pr-check
           fail_on_error: true
