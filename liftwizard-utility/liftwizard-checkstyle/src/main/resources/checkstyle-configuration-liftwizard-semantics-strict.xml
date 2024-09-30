@@ -130,9 +130,6 @@
             <property name="tags" value="noinspection" />
         </module>
         <module name="JavadocContentLocation" />
-        <module name="JavadocParagraph">
-            <property name="allowNewlineParagraph" value="false" />
-        </module>
         <module name="JavadocStyle">
             <property name="scope" value="public" />
             <property name="checkFirstSentence" value="false" />
