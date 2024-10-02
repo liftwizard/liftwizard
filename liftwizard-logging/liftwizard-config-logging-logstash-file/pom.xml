@@ -95,23 +95,4 @@
 
     </dependencies>
 
-    <!--region Phase 21: verify-->
-    <profiles>
-        <profile>
-            <id>maven-dependency-plugin</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <configuration>
-                            <ignoredUnusedDeclaredDependencies combine.children="append">
-                                <ignoredUnusedDeclaredDependency>jakarta.xml.bind:jakarta.xml.bind-api</ignoredUnusedDeclaredDependency>
-                            </ignoredUnusedDeclaredDependencies>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    <!--endregion-->
 </project>
