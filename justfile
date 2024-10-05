@@ -250,7 +250,7 @@ fetch:
     #!/usr/bin/env bash
     set -Eeuo pipefail
     if [ "{{offline}}" != "true" ]; then
-        git fetch --all --prune --jobs=16
+        git fetch {{upstream_remote}} --tags --prune
     fi
 
 # Rebase all branches onto configurable upstream/main
@@ -316,6 +316,7 @@ qodana:
         --apply-fixes \
         --linter jetbrains/qodana-jvm:2024.1
 
+# Generate a markdown list of commit messages
 pull-request-description:
     git log {{upstream_remote}}/{{upstream_branch}}..HEAD --reverse --format='- %s'
 
