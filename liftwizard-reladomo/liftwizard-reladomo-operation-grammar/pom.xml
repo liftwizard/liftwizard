@@ -43,7 +43,7 @@
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
             </plugin>
-            <!--endregion-->
+            <!--endregion Phase 3: generate-sources-->
 
         </plugins>
     </build>

@@ -95,7 +95,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--endregion-->
+            <!--endregion Phase 3: generate-sources-->
 
             <!--region Phase 4: process-sources-->
             <plugin>
@@ -117,7 +117,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--endregion-->
+            <!--endregion Phase 4: process-sources-->
 
         </plugins>
     </build>

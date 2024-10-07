@@ -85,7 +85,7 @@
                 <artifactId>liftwizard-principal-firebase</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-auth-->
 
             <!--region liftwizard-bundle-->
             <dependency>
@@ -153,7 +153,7 @@
                 <artifactId>liftwizard-bundle-system-properties</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-bundle-->
 
             <!--region liftwizard-clock-->
             <dependency>
@@ -271,7 +271,7 @@
                 <artifactId>liftwizard-configuration-factory-json</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-config-->
 
             <!--region liftwizard-generator-plugins-->
             <dependency>
@@ -291,7 +291,7 @@
                 <artifactId>liftwizard-generator-xsd2bean-plugin</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-generator-plugins-->
 
             <!--region liftwizard-graphql-->
             <dependency>
@@ -359,7 +359,7 @@
                 <artifactId>liftwizard-graphql-reladomo-meta</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-graphql-->
 
             <!--region liftwizard-jackson-->
             <dependency>
@@ -385,7 +385,7 @@
                 <artifactId>liftwizard-jackson-pretty-printer</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-jackson-->
 
             <!--region liftwizard-logging-->
             <dependency>
@@ -513,7 +513,7 @@
                 <artifactId>liftwizard-metrics-reporter-slf4j</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-logging-->
 
             <!--region liftwizard-reladomo-->
             <dependency>
@@ -665,7 +665,7 @@
                 <artifactId>liftwizard-task-reladomo-clear-cache</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-reladomo-->
 
             <!--region liftwizard-servlet-->
             <dependency>
@@ -715,7 +715,7 @@
                 <artifactId>liftwizard-servlet-single-page-redirect-filter</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-servlet-->
 
             <!--region liftwizard-test-->
             <dependency>
@@ -795,7 +795,7 @@
                 <artifactId>liftwizard-junit-rule-match-json</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-test-->
 
             <!--region liftwizard-utility-->
             <dependency>
@@ -821,7 +821,7 @@
                 <artifactId>liftwizard-rewrite</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-utility-->
 
             <!--region liftwizard-uuid-->
             <dependency>
@@ -847,7 +847,7 @@
                 <artifactId>liftwizard-config-uuid</artifactId>
                 <version>2.1.21-SNAPSHOT</version>
             </dependency>
-            <!--endregion-->
+            <!--endregion liftwizard-uuid-->
 
         </dependencies>
     </dependencyManagement>
