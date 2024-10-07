@@ -30,7 +30,7 @@ setup-github-refspec REMOTE:
     #!/usr/bin/env bash
     set -Eeuo pipefail
 
-    if git remote get-url {{REMOTE}} &> /dev/null && git remote get-url {{REMOTE}} | grep -q 'github.com'; then
+    if git remote get-url {{REMOTE}} &> /dev/null && git remote get-url {{REMOTE}} | grep -q 'github\.'; then
         git config --add remote.{{REMOTE}}.fetch '+refs/pull/*/head:refs/remotes/{{REMOTE}}/pr/*'
         git config --add remote.{{REMOTE}}.fetch '+refs/pull/*/merge:refs/remotes/{{REMOTE}}/pr/merge/*'
         echo "Added refspec to fetch GitHub PR refs for {{REMOTE}}"
