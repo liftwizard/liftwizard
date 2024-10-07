@@ -546,7 +546,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--endregion-->
+            <!--endregion Phase 3: generate-sources-->
 
         </plugins>
     </build>
@@ -563,7 +563,7 @@
                 </plugins>
             </build>
         </profile>
-        <!--endregion-->
+        <!--endregion Phase 17: package-->
 
         <!--region Phase 21: verify-->
         <profile>
@@ -579,7 +579,7 @@
                 </plugins>
             </build>
         </profile>
-        <!--endregion-->
+        <!--endregion Phase 21: verify-->
 
     </profiles>
 

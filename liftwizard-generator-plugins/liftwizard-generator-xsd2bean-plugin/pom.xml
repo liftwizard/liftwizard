@@ -90,7 +90,7 @@
                     <goalPrefix>liftwizard-generator-xsd2bean</goalPrefix>
                 </configuration>
             </plugin>
-            <!--endregion-->
+            <!--endregion Phase 3: generate-sources through Phase 17: package-->
         </plugins>
     </build>
 </project>

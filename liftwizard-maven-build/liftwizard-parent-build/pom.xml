@@ -58,9 +58,7 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
-                <!--endregion-->
 
-                <!--region Phase 3: generate-sources-->
                 <plugin>
                     <groupId>org.antlr</groupId>
                     <artifactId>antlr4-maven-plugin</artifactId>
@@ -79,7 +77,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--endregion-->
+                <!--endregion Phase 3: generate-sources-->
 
                 <!--region Phase 3: generate-sources through Phase 17: package-->
                 <plugin>
@@ -101,7 +99,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--endregion-->
+                <!--endregion Phase 3: generate-sources through Phase 17: package-->
 
                 <!--region Phase 4: process-sources-->
                 <plugin>
@@ -109,7 +107,7 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>3.6.0</version>
                 </plugin>
-                <!--endregion-->
+                <!--endregion Phase 4: process-sources-->
 
                 <!--region Phase 7: compile-->
                 <plugin>
@@ -124,7 +122,7 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
-                <!--endregion-->
+                <!--endregion Phase 7: compile-->
 
             </plugins>
         </pluginManagement>
@@ -237,7 +235,7 @@
                 </pluginManagement>
             </build>
         </profile>
-        <!--endregion-->
+        <!--endregion No phase-->
 
         <!--region Phase 1: validate-->
         <profile>
@@ -270,7 +268,7 @@
                 </plugins>
             </build>
         </profile>
-        <!--endregion-->
+        <!--endregion Phase 1: validate-->
 
         <!--region Phase 16: prepare-package-->
         <profile>
@@ -289,7 +287,7 @@
                 </plugins>
             </build>
         </profile>
-        <!--endregion-->
+        <!--endregion Phase 16: prepare-package-->
 
         <!--region Phase 17: package-->
         <profile>
@@ -337,7 +335,7 @@
                 </pluginManagement>
             </build>
         </profile>
-        <!--endregion-->
+        <!--endregion Phase 17: package-->
 
     </profiles>
 
