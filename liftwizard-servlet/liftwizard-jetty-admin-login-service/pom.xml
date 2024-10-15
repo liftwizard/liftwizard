@@ -27,7 +27,7 @@
     <name>Liftwizard Jetty Admin Login Service</name>
 
     <properties>
-        <jetty.version>9.4.53.v20231009</jetty.version>
+        <jetty.version>9.4.55.v20240627</jetty.version>
     </properties>
 
     <dependencies>
