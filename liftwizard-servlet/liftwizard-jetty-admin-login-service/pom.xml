@@ -26,10 +26,6 @@
 
     <name>Liftwizard Jetty Admin Login Service</name>
 
-    <properties>
-        <jetty.version>9.4.53.v20231009</jetty.version>
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -40,7 +36,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-security</artifactId>
-            <version>${jetty.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>
@@ -52,7 +47,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>
