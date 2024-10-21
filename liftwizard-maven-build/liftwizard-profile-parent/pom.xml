@@ -576,6 +576,8 @@
                                 </includes>
 
                                 <excludes>
+                                    <exclude>.*/**/*.json</exclude>
+                                    <exclude>.*/**/*.json5</exclude>
                                     <exclude>**/target/**/*.json</exclude>
                                     <exclude>**/target/**/*.json5</exclude>
                                     <exclude>**/archetype-resources/**/*.json</exclude>
