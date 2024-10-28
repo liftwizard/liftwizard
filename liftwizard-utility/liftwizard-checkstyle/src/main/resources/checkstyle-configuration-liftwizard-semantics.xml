@@ -92,9 +92,6 @@
 
         <!--region Annotations-->
         <!--https://checkstyle.sourceforge.io/checks/annotation/index.html-->
-        <module name="AnnotationUseStyle">
-            <property name="trailingArrayComma" value="always" />
-        </module>
         <module name="MissingDeprecated" />
         <module name="MissingOverride" />
         <module name="PackageAnnotation" />
