@@ -54,7 +54,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.6.0</version>
                 <configuration>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <suppressionsLocation>${maven.multiModuleProjectDirectory}/checkstyle-suppressions.xml</suppressionsLocation>
@@ -858,7 +858,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-semantics.xml</configLocation>
                         </configuration>
@@ -890,7 +890,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-semantics-strict.xml</configLocation>
                         </configuration>
@@ -922,7 +922,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-formatting.xml</configLocation>
                         </configuration>
@@ -955,7 +955,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.0</version>
                         <configuration>
                             <configLocation>checkstyle-configuration-liftwizard-formatting-strict.xml</configLocation>
                         </configuration>
