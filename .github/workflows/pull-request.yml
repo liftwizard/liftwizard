@@ -540,3 +540,13 @@ jobs:
 
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
+
+  reviewdog-yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-yamllint@v1.18.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
