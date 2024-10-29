@@ -545,7 +545,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: reviewdog/action-yamllint@v1.18.0
+      - uses: reviewdog/action-yamllint@v1.19.0
         with:
           reporter: github-pr-check
           fail_on_error: true
