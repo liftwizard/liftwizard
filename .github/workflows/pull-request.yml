@@ -545,7 +545,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: reviewdog/action-markdownlint@v0.24.0
+      - uses: reviewdog/action-markdownlint@v0.25.0
         with:
           reporter: github-pr-check
           fail_on_error: true
