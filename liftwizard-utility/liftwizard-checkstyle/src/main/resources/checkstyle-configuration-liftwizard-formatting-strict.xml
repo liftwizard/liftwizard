@@ -53,20 +53,19 @@
     <module name="TreeWalker">
         <property name="tabWidth" value="4" />
 
-        <!--region Whitespace-->
-        <!--https://checkstyle.sourceforge.io/checks/whitespace/index.html-->
-        <module name="SingleSpaceSeparator">
-            <property name="validateComments" value="false" />
-        </module>
+        <!--region Filters-->
+        <!--endregion-->
 
-        <module name="MatchXpath">
-            <property name="id" value="singleLineCommentStartWithSpace" />
-            <property name="query"
-                    value="//SINGLE_LINE_COMMENT[./COMMENT_CONTENT[not(starts-with(@text, ' '))
-                       and not(@text = '\n') and not(ends-with(@text, '//\n'))
-                       and not(@text = '\r') and not(ends-with(@text, '//\r'))
-                       and not(@text = '\r\n') and not(ends-with(@text, '//\r\n'))]]" />
-            <message key="matchxpath.match" value="Single line comment text should start with space." />
+        <!--region Annotations-->
+        <!--https://checkstyle.sourceforge.io/checks/annotation/index.html-->
+        <module name="AnnotationLocation">
+            <property name="id" value="AnnotationLocationStrict" />
+            <property name="tokens" value="ANNOTATION_DEF" />
+            <property name="tokens" value="ANNOTATION_FIELD_DEF" />
+            <property name="tokens" value="PACKAGE_DEF" />
+            <property name="tokens" value="ENUM_CONSTANT_DEF" />
+            <property name="tokens" value="VARIABLE_DEF" />
+            <property name="allowSamelineSingleParameterlessAnnotation" value="false" />
         </module>
         <!--endregion-->
 
@@ -86,6 +85,7 @@
             <property name="sortImportsInGroupAlphabetically" value="true" />
             <property name="separateLineBetweenGroups" value="true" />
         </module>
+
         <module name="ImportOrder">
             <property name="groups" value="/^java\./,javax" />
             <property name="ordered" value="true" />
@@ -95,10 +95,121 @@
         </module>
         <!--endregion-->
 
+        <!--region Whitespace-->
+        <!--https://checkstyle.sourceforge.io/checks/whitespace/index.html-->
+        <module name="MatchXpath">
+            <property name="id" value="singleLineCommentStartWithSpace" />
+            <property name="query"
+                    value="//SINGLE_LINE_COMMENT[./COMMENT_CONTENT[not(starts-with(@text, ' '))
+                       and not(@text = '\n') and not(ends-with(@text, '//\n'))
+                       and not(@text = '\r') and not(ends-with(@text, '//\r'))
+                       and not(@text = '\r\n') and not(ends-with(@text, '//\r\n'))]]" />
+            <message key="matchxpath.match" value="Single line comment text should start with space." />
+        </module>
+
+        <module name="NoWhitespaceAfter">
+            <property name="id" value="NoWhitespaceAfterCurly" />
+            <property name="tokens" value="ARRAY_INIT" />
+            <property name="tokens" value="ARRAY_DECLARATOR" />
+            <property name="tokens" value="METHOD_REF" />
+        </module>
+
+        <module name="OperatorWrap">
+            <property name="tokens" value="QUESTION" />
+            <property name="tokens" value="COLON" />
+            <property name="tokens" value="EQUAL" />
+            <property name="tokens" value="NOT_EQUAL" />
+            <property name="tokens" value="DIV" />
+            <property name="tokens" value="PLUS" />
+            <property name="tokens" value="MINUS" />
+            <property name="tokens" value="STAR" />
+            <property name="tokens" value="MOD" />
+            <property name="tokens" value="SR" />
+            <property name="tokens" value="BSR" />
+            <property name="tokens" value="GE" />
+            <property name="tokens" value="GT" />
+            <property name="tokens" value="SL" />
+            <property name="tokens" value="LE" />
+            <property name="tokens" value="LT" />
+            <property name="tokens" value="BXOR" />
+            <property name="tokens" value="BOR" />
+            <property name="tokens" value="LOR" />
+            <property name="tokens" value="BAND" />
+            <property name="tokens" value="LAND" />
+            <property name="tokens" value="TYPE_EXTENSION_AND" />
+            <property name="tokens" value="LITERAL_INSTANCEOF" />
+            <property name="tokens" value="METHOD_REF" />
+            <property name="option" value="nl" />
+        </module>
+
+        <module name="OperatorWrap">
+            <property name="tokens" value="ASSIGN" />
+            <property name="tokens" value="DIV_ASSIGN" />
+            <property name="tokens" value="PLUS_ASSIGN" />
+            <property name="tokens" value="MINUS_ASSIGN" />
+            <property name="tokens" value="STAR_ASSIGN" />
+            <property name="tokens" value="MOD_ASSIGN" />
+            <property name="tokens" value="SR_ASSIGN" />
+            <property name="tokens" value="BSR_ASSIGN" />
+            <property name="tokens" value="SL_ASSIGN" />
+            <property name="tokens" value="BXOR_ASSIGN" />
+            <property name="tokens" value="BOR_ASSIGN" />
+            <property name="tokens" value="BAND_ASSIGN" />
+            <property name="option" value="eol" />
+        </module>
+
+        <module name="SeparatorWrap">
+            <property name="id" value="SeparatorWrapRparentEol" />
+            <property name="tokens" value="RPAREN" />
+        </module>
+
+        <module name="SingleSpaceSeparator">
+            <property name="validateComments" value="false" />
+        </module>
+        <!--endregion-->
+
         <!--region Indentation-->
+        <module name="Indentation">
+            <property name="basicOffset" value="4" />
+            <property name="braceAdjustment" value="0" />
+            <property name="caseIndent" value="4" />
+            <property name="throwsIndent" value="8" />
+            <property name="arrayInitIndent" value="4" />
+            <property name="lineWrappingIndentation" value="8" />
+        </module>
         <!--endregion-->
 
         <!--region Blocks-->
+        <module name="LeftCurly">
+            <property name="option" value="nl" />
+        </module>
+        <module name="RightCurly">
+            <property name="tokens" value="METHOD_DEF" />
+            <property name="tokens" value="CTOR_DEF" />
+            <property name="tokens" value="CLASS_DEF" />
+            <property name="tokens" value="INSTANCE_INIT" />
+            <property name="tokens" value="LITERAL_FOR" />
+            <property name="tokens" value="STATIC_INIT" />
+            <property name="tokens" value="LITERAL_WHILE" />
+            <property name="tokens" value="LITERAL_CATCH" />
+            <property name="tokens" value="LITERAL_ELSE" />
+            <property name="tokens" value="LITERAL_FINALLY" />
+            <property name="tokens" value="LITERAL_IF" />
+            <property name="tokens" value="LITERAL_TRY" />
+            <property name="tokens" value="LITERAL_SWITCH" />
+            <property name="tokens" value="ANNOTATION_DEF" />
+            <property name="tokens" value="ENUM_DEF" />
+            <property name="tokens" value="COMPACT_CTOR_DEF" />
+            <property name="option" value="alone" />
+        </module>
+        <module name="RightCurly">
+            <property name="tokens" value="RECORD_DEF" />
+            <property name="option" value="alone_or_singleline" />
+        </module>
+        <module name="RightCurly">
+            <property name="tokens" value="LITERAL_DO" />
+            <property name="option" value="same" />
+        </module>
         <!--endregion-->
 
         <!--region Miscellaneous-->
