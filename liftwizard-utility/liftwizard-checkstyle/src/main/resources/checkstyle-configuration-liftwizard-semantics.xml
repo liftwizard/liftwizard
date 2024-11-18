@@ -279,7 +279,6 @@
         </module>
         <module name="DescendantToken" />
         <module name="OuterTypeFilename" />
-        <module name="TrailingComment" />
         <module name="UpperEll" />
         <!--endregion-->
 
