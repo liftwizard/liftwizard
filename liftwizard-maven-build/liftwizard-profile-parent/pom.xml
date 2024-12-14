@@ -415,6 +415,7 @@
                                     <version>1.22.0</version>
                                     <style>AOSP</style>
                                     <reflowLongStrings>false</reflowLongStrings>
+                                    <reorderImports>true</reorderImports>
                                 </googleJavaFormat>
                             </java>
                         </configuration>
