@@ -241,7 +241,44 @@ jobs:
           sarif_file: target/checkstyle-result.xml
           # Optional category for the results
           # Used to differentiate multiple results for one commit
-          category: Checkstyle Semantics
+          category: Checkstyle Formatting
+
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  checkstyle-formatting-strict:
+    name: checkstyle xml (formatting strict)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Strict Formatting"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting-strict' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=sarif
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: target/checkstyle-result.xml
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: Checkstyle Formatting
 
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/io/liftwizard
