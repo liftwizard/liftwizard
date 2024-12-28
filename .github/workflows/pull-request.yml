@@ -6,6 +6,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  GROUP_ID: "io/liftwizard"
+
 jobs:
   maven-test:
     runs-on: ubuntu-latest
@@ -28,7 +31,7 @@ jobs:
       - run: ./mvnw verify
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-coverage:
     runs-on: ubuntu-latest
@@ -61,7 +64,7 @@ jobs:
           min-coverage-changed-files: 0
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-enforcer:
     runs-on: ubuntu-latest
@@ -85,7 +88,7 @@ jobs:
         run: ./mvnw verify --activate-profiles maven-enforcer-plugin -DskipTests
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-dependency:
     runs-on: ubuntu-latest
@@ -109,7 +112,7 @@ jobs:
         run: ./mvnw verify --activate-profiles maven-dependency-plugin -DskipTests
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-javadoc:
     runs-on: ubuntu-latest
@@ -133,7 +136,7 @@ jobs:
         run: ./mvnw verify --activate-profiles maven-javadoc-plugin -DskipTests
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   checkstyle-semantics:
     name: checkstyle xml (semantics)
@@ -163,7 +166,7 @@ jobs:
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   checkstyle-semantics-strict:
     name: checkstyle xml (semantics strict)
@@ -193,7 +196,7 @@ jobs:
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   checkstyle-formatting:
     name: checkstyle xml (formatting)
@@ -223,7 +226,7 @@ jobs:
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-rewrite:
     runs-on: ubuntu-latest
@@ -247,7 +250,7 @@ jobs:
         run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   # Check for reproducible builds with artifact:check-buildplan
   maven-reproducible:
@@ -272,7 +275,7 @@ jobs:
         run: ./mvnw verify artifact:check-buildplan -DskipTests
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   # Check if the new commits in a Pull Request contain a merge commit. If so, fail and print them out.
   forbid-merge-commits:
@@ -307,7 +310,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-formats'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-java-sort-imports:
     runs-on: ubuntu-latest
@@ -336,7 +339,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-java-sort-imports'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-java-unused-imports:
     runs-on: ubuntu-latest
@@ -365,7 +368,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-java-unused-imports'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-java-cleanthat:
     runs-on: ubuntu-latest
@@ -394,7 +397,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-java-cleanthat'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-sql:
     runs-on: ubuntu-latest
@@ -423,7 +426,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-sql'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-pom:
     runs-on: ubuntu-latest
@@ -452,7 +455,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-pom'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-markdown:
     runs-on: ubuntu-latest
@@ -481,7 +484,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-markdown'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-json:
     runs-on: ubuntu-latest
@@ -510,7 +513,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-json'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-yaml:
     runs-on: ubuntu-latest
@@ -539,7 +542,7 @@ jobs:
             --activate-profiles 'spotless-check,spotless-yaml'
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   reviewdog-markdownlint:
     runs-on: ubuntu-latest
