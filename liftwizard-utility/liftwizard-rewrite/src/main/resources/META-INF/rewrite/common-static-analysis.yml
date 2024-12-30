@@ -15,16 +15,13 @@
 #
 
 # Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/common-static-analysis.yml
-# But these recipes are disabled in Liftwizard:
-# - org.openrewrite.staticanalysis.EqualsAvoidsNull
-# - org.openrewrite.staticanalysis.InlineVariable
-# - org.openrewrite.staticanalysis.StringLiteralEquality
+# But with a few recipes disabled
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.staticanalysis.CommonStaticAnalysis
 displayName: Common static analysis issues
-description: Resolve common static analysis issues discovered through 3rd party tools.
+description: Resolve common static analysis issues (also known as SAST issues).
 recipeList:
   #  - org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable
   - org.openrewrite.staticanalysis.AtomicPrimitiveEqualsUsesGet
@@ -81,8 +78,9 @@ recipeList:
   #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
   #  - org.openrewrite.staticanalysis.RemoveUnusedPrivateMethods
   - org.openrewrite.staticanalysis.RenameLocalVariablesToCamelCase
-  - org.openrewrite.staticanalysis.RenameMethodsNamedHashcodeEqualOrTostring
+  - org.openrewrite.staticanalysis.RenameMethodsNamedHashcodeEqualOrToString
   - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
+  - org.openrewrite.staticanalysis.ReplaceClassIsInstanceWithInstanceof
   # Disabled in Liftwizard
   #  - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
   - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
@@ -97,6 +95,7 @@ recipeList:
   - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
   - org.openrewrite.staticanalysis.UnnecessaryParentheses
   - org.openrewrite.staticanalysis.UnnecessaryPrimitiveAnnotations
+  - org.openrewrite.staticanalysis.UnnecessaryReturnAsLastStatement
   - org.openrewrite.staticanalysis.UpperCaseLiteralSuffixes
   #  - org.openrewrite.staticanalysis.UnnecessaryThrows
   #  - org.openrewrite.staticanalysis.UseCollectionInterfaces
