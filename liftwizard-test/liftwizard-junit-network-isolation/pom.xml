@@ -79,6 +79,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <!-- Block all external network access -->
+                    <!-- by redirecting connections to a non-existing proxy -->
+                    <!-- https://stackoverflow.com/a/67550942 -->
+
+                    <!-- Port 9 chosen since it is reserved for the discard protocol and probably isn't used -->
                     <systemPropertyVariables>
                         <socksProxyHost>localhost</socksProxyHost>
                         <socksProxyPort>9</socksProxyPort>
