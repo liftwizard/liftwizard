@@ -1,6 +1,5 @@
 # set up git-test
 setup-git-test:
-    git test add --forget --test default        'just default'
     git test add --forget --test default        'just test'
     git test add --forget --test verify         'just verify'
     git test add --forget --test enforcer       'just enforcer'
