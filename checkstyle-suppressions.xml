@@ -36,4 +36,7 @@
 
     <suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*" />
 
+    <!-- Forked from Dropwizard so suppress all violations -->
+    <suppress files="io[\\/]liftwizard[\\/]logging[\\/]exception[\\/]mapper[\\/]LiftwizardLoggingExceptionMapper.java" checks="[a-zA-Z0-9]*" />
+
 </suppressions>
