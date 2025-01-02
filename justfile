@@ -64,6 +64,8 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     done
 
     {{MVN}} {{FLAGS}} install --projects liftwizard-utility/liftwizard-checkstyle
+
+    echo "Running: {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}"
     {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}
 
     EXIT_CODE=$?
