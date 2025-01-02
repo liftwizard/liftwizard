@@ -129,9 +129,6 @@
         <!--region Javadoc-->
         <!--https://checkstyle.sourceforge.io/checks/javadoc/index.html-->
         <module name="JavadocTagContinuationIndentation" />
-        <module name="JavadocParagraph">
-            <property name="allowNewlineParagraph" value="true" />
-        </module>
         <!--endregion-->
 
         <!--region Whitespace-->

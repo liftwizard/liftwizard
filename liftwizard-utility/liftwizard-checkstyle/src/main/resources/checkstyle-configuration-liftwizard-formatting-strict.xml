@@ -95,6 +95,13 @@
         </module>
         <!--endregion-->
 
+        <!--region Javadoc-->
+        <!--https://checkstyle.sourceforge.io/checks/javadoc/index.html-->
+        <module name="JavadocParagraph">
+            <property name="allowNewlineParagraph" value="true" />
+        </module>
+        <!--endregion-->
+
         <!--region Whitespace-->
         <!--https://checkstyle.sourceforge.io/checks/whitespace/index.html-->
         <module name="MatchXpath">
