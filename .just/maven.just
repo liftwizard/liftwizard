@@ -2,7 +2,7 @@ default_mvn      := env('MVN_BINARY',   "mvnd")
 default_target   := env('MVN_TARGET',   "verify")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
-default_profiles := env('MVN_PROFILES', "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
+default_profiles := env('MVN_PROFILES', "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
 
 # clean ~/.m2 with `rm -rf ~/.m2/repository/...`
 _clean-m2:
@@ -25,7 +25,7 @@ enforcer MVN=default_mvn: _check-local-modifications clean (mvn MVN default_targ
 dependency MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "--activate-profiles maven-dependency-plugin" skip_tests_flags) && _check-local-modifications
 
 # mvn javadoc
-javadoc MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "--activate-profiles maven-dependency-plugin" skip_tests_flags) && _check-local-modifications
+javadoc MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "--activate-profiles maven-javadoc-plugin" skip_tests_flags) && _check-local-modifications
 
 checkstyle-semantics MVN="mvn": _check-local-modifications clean (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics" default_flags) && _check-local-modifications
 checkstyle-formatting MVN="mvn": _check-local-modifications clean (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-formatting" default_flags) && _check-local-modifications
