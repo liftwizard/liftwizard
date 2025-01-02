@@ -1,4 +1,5 @@
 .envrc
+JUSTFILE_BRANCH
 
 # Project-specific
 spy.log
