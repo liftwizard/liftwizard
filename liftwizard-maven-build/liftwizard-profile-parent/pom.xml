@@ -552,6 +552,7 @@
 
                                 <excludes>
                                     <exclude>**/target/**/*.md</exclude>
+                                    <exclude>**/src/main/resources/archetype-resources/**/*.md</exclude>
                                 </excludes>
 
                                 <flexmark />
@@ -621,6 +622,7 @@
                                     <exclude>**/target/**/*.yaml</exclude>
                                     <exclude>**/target/**/*.yml</exclude>
                                     <exclude>**/src/main/resources/archetype-resources/**/*.yml</exclude>
+                                    <exclude>**/src/main/resources/archetype-resources/**/*.yaml</exclude>
                                 </excludes>
 
                                 <prettier>
