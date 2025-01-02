@@ -330,7 +330,6 @@
             <property name="format" value="(^[A-Z][a-zA-Z0-9]*$)|(^[A-Z][a-zA-Z0-9_]*Test$)" />
         </module>
         <module name="PatternVariableName" />
-        <module name="IllegalIdentifierName" />
         <!--endregion-->
 
         <!--region Regexp-->
