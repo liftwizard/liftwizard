@@ -38,12 +38,13 @@
         <module>liftwizard-config-logging-filter-requesturl</module>
         <module>liftwizard-config-logging-http</module>
         <module>liftwizard-config-logging-logstash-console</module>
-        <module>liftwizard-config-logging-logstash-file</module>
         <module>liftwizard-config-logging-logstash-encoder</module>
+        <module>liftwizard-config-logging-logstash-file</module>
         <module>liftwizard-config-metrics-reporter-log4j</module>
         <module>liftwizard-config-metrics-reporter-logback</module>
         <module>liftwizard-config-metrics-reporter-slf4j</module>
         <module>liftwizard-logging-buffered-appender</module>
+        <module>liftwizard-logging-exception-mapper</module>
         <module>liftwizard-logging-mdc-closeable</module>
         <module>liftwizard-logging-p6spy</module>
         <module>liftwizard-logging-uncaught-exception-handler</module>
