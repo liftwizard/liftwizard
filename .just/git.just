@@ -20,7 +20,7 @@ setup-github-refspecs: (setup-github-refspec "origin") (setup-github-refspec "up
 
 # git clean helper
 _clean-git:
-    git clean -fdx release.properties **/pom.xml.releaseBackup **/target
+    git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup **/target
 
 # Fail if there are local modifications or untracked files
 _check-local-modifications:
