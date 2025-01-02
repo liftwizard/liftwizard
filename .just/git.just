@@ -27,18 +27,16 @@ _check-local-modifications:
     #!/usr/bin/env bash
     set -uo pipefail
 
-    git diff --quiet
-    EXIT_CODE=$?
-    if [ $EXIT_CODE -ne 0 ]; then
-        {{echo_command}} "Locally modified files"
-        exit $EXIT_CODE
-    fi
+    ERRORS=""
 
-    git status --porcelain | (! grep -q '^??')
-    EXIT_CODE=$?
-    if [ $EXIT_CODE -ne 0 ]; then
-        {{echo_command}} "Untracked files"
-        exit $EXIT_CODE
+    git diff --quiet || ERRORS+="- Working tree has uncommitted changes\n"
+    git diff --staged --quiet || ERRORS+="- Index has staged changes\n"
+    git status --porcelain | grep -q '^??' && ERRORS+="- Untracked files exist\n"
+
+    if [ -n "$ERRORS" ]; then
+        {{echo_command}} "Local modifications"
+        echo -e "$ERRORS"
+        exit 1
     fi
 
 # git fetch configurable upstream
