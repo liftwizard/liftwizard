@@ -228,6 +228,36 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
+  checkstyle-formatting-strict:
+    name: checkstyle xml (formatting strict)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Strict Formatting"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting-strict'
+
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
   maven-rewrite:
     runs-on: ubuntu-latest
     steps:
