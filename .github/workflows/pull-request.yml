@@ -141,10 +141,10 @@ jobs:
   checkstyle-semantics:
     name: checkstyle xml (semantics)
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - uses: actions/cache@v4
         with:
@@ -163,7 +163,14 @@ jobs:
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Semantics"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics'
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=sarif
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: target/checkstyle-result.xml
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: Checkstyle Semantics
 
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -171,10 +178,10 @@ jobs:
   checkstyle-semantics-strict:
     name: checkstyle xml (semantics strict)
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - uses: actions/cache@v4
         with:
@@ -193,7 +200,14 @@ jobs:
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Strict Semantics"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=sarif
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: target/checkstyle-result.xml
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: Checkstyle Semantics
 
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -201,10 +215,10 @@ jobs:
   checkstyle-formatting:
     name: checkstyle xml (formatting)
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - uses: actions/cache@v4
         with:
@@ -223,7 +237,51 @@ jobs:
         run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Formatting"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting'
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=sarif
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: target/checkstyle-result.xml
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: Checkstyle Formatting
+
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/io/liftwizard
+
+  checkstyle-formatting-strict:
+    name: checkstyle xml (formatting strict)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Strict Formatting"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting-strict' -Dcheckstyle.failOnViolation=false -Dcheckstyle.failsOnError=false -Dcheckstyle.output.format=sarif
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: target/checkstyle-result.xml
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: Checkstyle Formatting
 
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
