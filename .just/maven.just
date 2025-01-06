@@ -12,8 +12,7 @@ _clean-m2:
     exit 0
 
 # mvn clean
-_clean-maven MVN=default_mvn *FLAGS=default_flags:
-    {{MVN}} clean {{FLAGS}}
+_clean-maven MVN=default_mvn *FLAGS=default_flags: (mvn MVN "clean" "" FLAGS)
 
 # mvn verify
 verify MVN=default_mvn: _check-local-modifications clean (mvn MVN default_target "" skip_tests_flags) && _check-local-modifications
@@ -34,8 +33,7 @@ checkstyle-formatting-strict MVN="mvn": _check-local-modifications clean (mvn MV
 checkstyle: checkstyle-semantics checkstyle-formatting checkstyle-semantics-strict checkstyle-formatting-strict
 
 # mvn reproducible
-reproducible MVN=default_mvn:
-    {{MVN}} verify -DskipTests artifact:check-buildplan
+reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags) && _check-local-modifications
 
 # mvn rewrite
 rewrite RECIPE:
