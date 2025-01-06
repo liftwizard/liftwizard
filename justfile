@@ -22,16 +22,10 @@ mise:
 clean: _clean-git _clean-maven _clean-m2
 
 # spotless
-spotless NAME MVN=default_mvn: _check-local-modifications clean && _check-local-modifications
-    {{MVN}} spotless:apply \
-      --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' \
-      --activate-profiles 'spotless-apply,spotless-{{NAME}}'
+spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-{{NAME}}" default_flags) && _check-local-modifications
 
 # spotless-all
-spotless-all MVN=default_mvn: _check-local-modifications clean && _check-local-modifications
-    {{MVN}} spotless:apply \
-      --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' \
-      --activate-profiles 'spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml'
+spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml" default_flags) && _check-local-modifications
 
 markdownlint:
     npx markdownlint-cli --config .markdownlint.jsonc  --fix .
@@ -65,7 +59,10 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
 
     {{MVN}} {{FLAGS}} install --projects liftwizard-utility/liftwizard-checkstyle
 
-    echo "Running: {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}"
+    bold=$(tput bold)
+    normal=$(tput sgr0)
+
+    echo "Running: ${bold}{{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}${normal}"
     {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}
 
     EXIT_CODE=$?

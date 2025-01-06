@@ -23,8 +23,8 @@ fail_fast := env('FAIL_FAST', "false")
 
 # git-test on the range of commits between a configurable upstream/main and {{BRANCH}}
 test-branch BRANCH="HEAD" TEST="default,verify,enforcer,dependency,checkstyle,javadoc,reproducible,formats,sort-imports,unused-imports,cleanthat,pom,markdown,json,yaml,sql" *FLAGS="--retest --verbose --verbose":
-    echo "Testing branch: {{BRANCH}}"
-    [ "{{BRANCH}}" = "HEAD" ] && git rev-parse HEAD > JUSTFILE_BRANCH || echo "{{BRANCH}}" > JUSTFILE_BRANCH
+    @echo "Testing branch: {{BRANCH}}"
+    @[ "{{BRANCH}}" = "HEAD" ] && git rev-parse HEAD > JUSTFILE_BRANCH || echo "{{BRANCH}}" > JUSTFILE_BRANCH
     git test run --test {{TEST}} {{FLAGS}} {{upstream_remote}}/{{upstream_branch}}..{{BRANCH}}
 
 # `just test` all commits with configurable upstream/main as ancestor
