@@ -23,6 +23,8 @@ jobs:
             maven-test-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -45,6 +47,8 @@ jobs:
           restore-keys: |
             maven-coverage-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -79,6 +83,8 @@ jobs:
             maven-enforcer-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -103,6 +109,8 @@ jobs:
             maven-dependency-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -126,6 +134,8 @@ jobs:
           restore-keys: |
             maven-javadoc-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -153,6 +163,8 @@ jobs:
           restore-keys: |
             maven-checkstyle-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -184,6 +196,8 @@ jobs:
             maven-checkstyle-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -213,6 +227,8 @@ jobs:
           restore-keys: |
             maven-checkstyle-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -244,6 +260,8 @@ jobs:
             maven-checkstyle-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -271,6 +289,8 @@ jobs:
             maven-rewrite-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -295,6 +315,8 @@ jobs:
           restore-keys: |
             maven-reproducible-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -328,6 +350,8 @@ jobs:
             maven-spotless-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -356,6 +380,8 @@ jobs:
           restore-keys: |
             maven-spotless-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -386,6 +412,8 @@ jobs:
             maven-spotless-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -414,6 +442,8 @@ jobs:
           restore-keys: |
             maven-spotless-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -444,6 +474,8 @@ jobs:
             maven-spotless-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -472,6 +504,8 @@ jobs:
           restore-keys: |
             maven-spotless-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
@@ -502,6 +536,8 @@ jobs:
             maven-spotless-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -531,6 +567,8 @@ jobs:
             maven-spotless-
             maven-
 
+      - uses: twosigma/maven-cache-cleaner@v1
+
       - uses: actions/setup-java@v4
         with:
           java-version-file: .tool-versions
@@ -559,6 +597,8 @@ jobs:
           restore-keys: |
             maven-spotless-
             maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
 
       - uses: actions/setup-java@v4
         with:
