@@ -36,6 +36,8 @@ _check-local-modifications:
     if [ -n "$ERRORS" ]; then
         {{echo_command}} "Local modifications"
         echo -e "$ERRORS"
+        echo -e "Running: git status\n"
+        git status
         exit 1
     fi
 

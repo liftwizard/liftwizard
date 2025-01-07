@@ -12,11 +12,11 @@ rebase-all: _check-local-modifications fetch
     do
         included_count=$(git branch --contains "$branch" | wc -l)
         if [ "$included_count" -gt 1 ]; then
-            echo "Skipping branch $branch as it is included in other branches"
+            echo "{{ANSI_BOLD}}Skipping branch {{ANSI_GREEN}}$branch as it is included in other branches{{ANSI_NORMAL}}"
             continue
         fi
 
-        echo "Processing branch: $branch"
+        echo "{{ANSI_BOLD}}Processing branch: {{ANSI_GREEN}}$branch{{ANSI_NORMAL}}"
         git checkout "$branch"
 
         # Check if origin/$branch exists

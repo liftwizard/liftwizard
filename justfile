@@ -3,6 +3,7 @@ set dotenv-filename := ".envrc"
 
 group_id_with_slashes := "io/liftwizard"
 
+import ".just/console.just"
 import ".just/maven.just"
 import ".just/git.just"
 import ".just/git-rebase.just"
@@ -20,6 +21,9 @@ mise:
 
 # clean (maven and git)
 clean: _clean-git _clean-maven _clean-m2
+
+# end-to-end test for git-test
+test: _check-local-modifications clean mvn && _check-local-modifications
 
 # spotless
 spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-{{NAME}}" default_flags) && _check-local-modifications
@@ -59,10 +63,7 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
 
     {{MVN}} {{FLAGS}} install --projects liftwizard-utility/liftwizard-checkstyle
 
-    bold=$(tput bold)
-    normal=$(tput sgr0)
-
-    echo "Running: ${bold}{{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}${normal}"
+    echo "Running: {{ANSI_BOLD}}{{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}{{ANSI_NORMAL}}"
     {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}
 
     EXIT_CODE=$?
@@ -75,9 +76,6 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     MESSAGE="Failed in directory ${DIRECTORY} on commit: '${COMMIT_MESSAGE}' with exit code ${EXIT_CODE}"
     {{echo_command}} "$MESSAGE"
     exit $EXIT_CODE
-
-# end-to-end test for git-test
-test: _check-local-modifications clean mvn && _check-local-modifications
 
 qodana:
     op run -- qodana scan \
