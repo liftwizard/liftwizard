@@ -26,7 +26,8 @@ ANSI_BLUE := `tput setaf 4`
 ANSI_MAGENTA := `tput setaf 5`
 ANSI_CYAN := `tput setaf 6`
 ANSI_WHITE := `tput setaf 7`
-ANSI_DEFAULT := `tput setaf 9`
+ANSI_GRAY := `tput setaf 8`
+ANSI_DEFAULT := `tput op`
 
 # Background colors
 ANSI_BG_BLACK := `tput setab 0`
@@ -37,6 +38,7 @@ ANSI_BG_BLUE := `tput setab 4`
 ANSI_BG_MAGENTA := `tput setab 5`
 ANSI_BG_CYAN := `tput setab 6`
 ANSI_BG_WHITE := `tput setab 7`
+ANSI_BG_GRAY := `tput setab 8`
 ANSI_BG_DEFAULT := `tput setab 9`
 
 # Bright foreground colors
@@ -58,3 +60,7 @@ ANSI_BG_BRIGHT_BLUE := `tput setab 12`
 ANSI_BG_BRIGHT_MAGENTA := `tput setab 13`
 ANSI_BG_BRIGHT_CYAN := `tput setab 14`
 ANSI_BG_BRIGHT_WHITE := `tput setab 15`
+
+@_run cmd:
+    echo "Running: {{ANSI_BOLD}}{{ cmd }}{{ANSI_NORMAL}}"
+    eval "$(echo "{{ cmd }}" | npx --yes strip-ansi-cli)"
