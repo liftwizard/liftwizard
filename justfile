@@ -14,19 +14,16 @@ default: mise mvn
 
 # mise install
 mise:
-    mise plugin install maven
-    mise plugin install mvnd https://github.com/joschi/asdf-mvnd
-    mise install
+    mise plugin install --quiet maven
+    mise plugin install --quiet mvnd https://github.com/joschi/asdf-mvnd
+    mise install --quiet
     mise current
 
 # clean (maven and git)
-clean: _clean-git _clean-maven _clean-m2
-
-# end-to-end test for git-test
-test: _check-local-modifications clean mvn && _check-local-modifications
+@clean: _clean-git _clean-maven _clean-m2
 
 # spotless
-spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-{{NAME}}" default_flags) && _check-local-modifications
+spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-" + NAME) default_flags) && _check-local-modifications
 
 # spotless-all
 spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-pom,spotless-markdown,spotless-json,spotless-yaml" default_flags) && _check-local-modifications
@@ -35,8 +32,8 @@ markdownlint:
     npx markdownlint-cli --config .markdownlint.jsonc  --fix .
 
 # mvn rewrite
-rewrite-dry-run MVN=default_mvn:
-    {{MVN}} --threads 1 install -DskipTests org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun
+@rewrite-dry-run MVN=default_mvn:
+    just _run "{{MVN}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} -DskipTests org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' {{ANSI_BLUE}}--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun"
 
 # Count lines of code
 scc:
@@ -56,15 +53,20 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
 
     for word in "${SKIPPABLE_WORDS[@]}"; do
         if [[ $COMMIT_MESSAGE == *\[${word}\]* ]]; then
-            echo "Skipping due to [${word}] in commit: '$COMMIT_MESSAGE'"
+            echo "Skipping due to [{{ANSI_YELLOW}}${word}{{ANSI_DEFAULT}}] in commit: '${COMMIT_MESSAGE}'"
             exit 0
         fi
     done
 
-    {{MVN}} {{FLAGS}} install --projects liftwizard-utility/liftwizard-checkstyle
+    # Set colors based on whether values match defaults
+    if [ "{{MVN}}" = "{{default_mvn}}" ]; then MVN_COLOR="{{ANSI_GRAY}}"; else MVN_COLOR="{{ANSI_MAGENTA}}"; fi
+    if [ "{{TARGET}}" = "{{default_target}}" ]; then TARGET_COLOR="{{ANSI_GRAY}}"; else TARGET_COLOR="{{ANSI_GREEN}}"; fi
+    if [ "{{PROFILES}}" = "{{default_profiles}}" ]; then PROFILES_COLOR="{{ANSI_GRAY}}"; else PROFILES_COLOR="{{ANSI_BLUE}}"; fi
+    if [ "{{FLAGS}}" = "{{default_flags}}" ]; then FLAGS_COLOR="{{ANSI_GRAY}}"; else FLAGS_COLOR="{{ANSI_MAGENTA}}"; fi
 
-    echo "Running: {{ANSI_BOLD}}{{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}{{ANSI_NORMAL}}"
-    {{MVN}} {{FLAGS}} {{TARGET}} {{PROFILES}}
+    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-utility/liftwizard-checkstyle"
+
+    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${TARGET_COLOR}{{TARGET}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} ${PROFILES_COLOR}{{PROFILES}}{{ANSI_DEFAULT}}"
 
     EXIT_CODE=$?
     if [ $EXIT_CODE -eq 0 ]; then
