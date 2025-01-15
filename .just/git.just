@@ -43,7 +43,7 @@ fetch:
     #!/usr/bin/env bash
     set -Eeuo pipefail
     if [ "{{offline}}" != "true" ]; then
-        just _run "git fetch {{ANSI_RED}}{{upstream_remote}}{{ANSI_DEFAULT}} --tags --prune"
+        just _run "git fetch {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}{{ANSI_NORMAL}} --tags --prune"
     fi
 
 # Create a branch if HEAD is detached
@@ -53,16 +53,16 @@ recover-detached-head:
 
     if git symbolic-ref -q HEAD >/dev/null; then
         current_branch=$(git symbolic-ref --short HEAD)
-        echo "Not in detached HEAD state. Current branch: {{ANSI_GREEN}}$current_branch{{ANSI_DEFAULT}}"
+        echo "Not in detached HEAD state. Current branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$current_branch{{ANSI_NORMAL}}"
     else
         current_date=$(date +%Y-%m-%d)
         branch_name="branch-${current_date}"
         git checkout -b "$branch_name"
-        echo "Created and checked out new branch: {{ANSI_GREEN}}$branch_name{{ANSI_DEFAULT}}"
+        echo "Created and checked out new branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch_name{{ANSI_NORMAL}}"
     fi
 
 # Generate a markdown list of commit messages
 pull-request-description:
     #!/usr/bin/env bash
     set -Eeuo pipefail
-    just _run "git log {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}..{{ANSI_CYAN}}HEAD{{ANSI_DEFAULT}} --reverse --format='- %s'"
+    just _run "git log {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}..{{ANSI_BRIGHT_CYAN}}{{ANSI_BOLD}}HEAD{{ANSI_NORMAL}} --reverse --format='- %s'"

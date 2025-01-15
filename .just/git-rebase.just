@@ -16,25 +16,25 @@ rebase-all: _check-local-modifications fetch
         current=$((current + 1))
         included_count=$(git branch --contains "$branch" | wc -l)
         if [ "$included_count" -gt 1 ]; then
-            echo "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total}] Skipping branch {{ANSI_GREEN}}$branch{{ANSI_DEFAULT}} as it is included in other branches{{ANSI_NORMAL}}"
+            echo "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total}] Skipping branch {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch{{ANSI_NORMAL}} as it is included in other branches"
             continue
         fi
 
-        echo "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total}] Processing branch: {{ANSI_GREEN}}$branch{{ANSI_NORMAL}}"
+        echo "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total}] Processing branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch{{ANSI_NORMAL}}"
         git checkout --quiet "$branch"
 
         # Check if origin/$branch exists
         if git rev-parse --verify origin/$branch &>/dev/null; then
             # Check if upstream/master is an ancestor of origin/$branch
             if git merge-base --is-ancestor {{upstream_remote}}/{{upstream_branch}} origin/$branch; then
-                echo "Rebasing onto {{ANSI_RED}}origin/$branch{{ANSI_DEFAULT}} (up-to-date with or ahead of {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}){{ANSI_NORMAL}}"
+                echo "Rebasing onto {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}origin/$branch{{ANSI_NORMAL}} (up-to-date with or ahead of {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}})"
                 git rebase --rebase-merges --update-refs origin/$branch
             else
-                echo "Rebasing onto {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}} ({{ANSI_RED}}origin/$branch{{ANSI_DEFAULT}} is behind){{ANSI_NORMAL}}"
+                echo "Rebasing onto {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} ({{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}origin/$branch{{ANSI_NORMAL}} is behind)"
                 git rebase --rebase-merges --update-refs {{upstream_remote}}/{{upstream_branch}}
             fi
         else
-            echo "Rebasing onto {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}} (no matching origin branch){{ANSI_NORMAL}}"
+            echo "Rebasing onto {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} (no matching origin branch)"
             git rebase --rebase-merges --update-refs {{upstream_remote}}/{{upstream_branch}}
         fi
     done
@@ -43,7 +43,7 @@ alias ra := rebase-all
 
 # git absorb into configurable upstream/main
 @absorb:
-    just _run "git absorb --base {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}} --force"
+    just _run "git absorb --base {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} --force"
 
 # Delete local branches merged into configurable upstream/main
 delete-merged-local: fetch
