@@ -42,7 +42,7 @@ test-branch BRANCH="HEAD" TESTS=git_tests *FLAGS="--retest --verbose --verbose":
         fi
     fi
     echo "$branch" > JUSTFILE_BRANCH
-    just _run "git test run {{ANSI_GRAY}}{{TESTS}}{{ANSI_DEFAULT}} {{FLAGS}} {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}..{{ANSI_GREEN}}${branch}{{ANSI_DEFAULT}}"
+    just _run "git test run {{ANSI_GRAY}}{{TESTS}}{{ANSI_DEFAULT}} {{FLAGS}} {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}..{{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}${branch}{{ANSI_NORMAL}}"
 
 # `just test` all commits with configurable upstream/main as ancestor
 test-all TESTS=git_tests *FLAGS="--retest --verbose --verbose":
@@ -56,13 +56,13 @@ test-all TESTS=git_tests *FLAGS="--retest --verbose --verbose":
     branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --contains {{upstream_remote}}/{{upstream_branch}}))
 
     total_branches=${#branches[@]}
-    echo "Found {{ANSI_YELLOW}}${total_branches}{{ANSI_DEFAULT}} branches containing remote ref {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}} as ancestor: {{ANSI_GREEN}}${branches[@]}{{ANSI_NORMAL}}"
+    echo "Found {{ANSI_YELLOW}}${total_branches}{{ANSI_DEFAULT}} branches containing remote ref {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} as ancestor: {{ANSI_GREEN}}${branches[@]}{{ANSI_NORMAL}}"
 
     current=1
     for branch in "${branches[@]}"
     do
         echo -n "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total_branches}] "
-        just _run "{{ANSI_RED}}just{{ANSI_DEFAULT}} test-branch {{ANSI_GREEN}}\"${branch}\"{{ANSI_DEFAULT}} {{ANSI_GRAY}}'{{TESTS}}'{{ANSI_DEFAULT}} {{FLAGS}}"
+        just _run "{{ANSI_BRIGHT_RED}}just{{ANSI_DEFAULT}} test-branch {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}\"${branch}\"{{ANSI_NORMAL}} {{ANSI_GRAY}}'{{TESTS}}'{{ANSI_DEFAULT}} {{FLAGS}}"
         ((current++))
     done
 
@@ -76,13 +76,13 @@ test-results:
     branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --contains {{upstream_remote}}/{{upstream_branch}}))
 
     total_branches=${#branches[@]}
-    echo "Found {{ANSI_YELLOW}}${total_branches}{{ANSI_DEFAULT}} branches containing remote ref {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}} as ancestor: {{ANSI_GREEN}}${branches[@]}{{ANSI_NORMAL}}"
+    echo "Found {{ANSI_YELLOW}}${total_branches}{{ANSI_DEFAULT}} branches containing remote ref {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}{{ANSI_DEFAULT}} as ancestor: {{ANSI_BRIGHT_GREEN}}${branches[@]}{{ANSI_NORMAL}}"
 
     current=1
     for branch in "${branches[@]}"
     do
         echo -n "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total_branches}] "
-        just _run "git test results --color {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}..{{ANSI_GREEN}}${branch}{{ANSI_DEFAULT}}"
+        just _run "git test results --color {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}..{{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}${branch}{{ANSI_NORMAL}}"
         ((current++))
     done
 
