@@ -658,7 +658,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: reviewdog/action-shellcheck@v1.28.0
+      - uses: reviewdog/action-shellcheck@v1.29.0
         with:
           reporter: github-pr-check
           fail_on_error: true
