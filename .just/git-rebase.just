@@ -1,6 +1,6 @@
 # git rebase onto configurable upstream/main
 @rebase: _check-local-modifications fetch
-    just _run "git rebase --interactive --autosquash --rebase-merges --update-refs {{ANSI_RED}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}"
+    just _run "git rebase --interactive --autosquash --rebase-merges --update-refs {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
 
 # Rebase all branches onto configurable upstream/main or matching up-to-date origin branch
 rebase-all: _check-local-modifications fetch
@@ -20,22 +20,22 @@ rebase-all: _check-local-modifications fetch
             continue
         fi
 
-        echo "[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total}] Processing branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch{{ANSI_NORMAL}}"
         git checkout --quiet "$branch"
+        rebase_message="[{{ANSI_YELLOW}}${current}{{ANSI_DEFAULT}}/${total}] Rebasing branch {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch{{ANSI_NORMAL}} onto"
 
         # Check if origin/$branch exists
         if git rev-parse --verify origin/$branch &>/dev/null; then
             # Check if upstream/master is an ancestor of origin/$branch
             if git merge-base --is-ancestor {{upstream_remote}}/{{upstream_branch}} origin/$branch; then
-                echo "Rebasing onto {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}origin/$branch{{ANSI_NORMAL}} (up-to-date with or ahead of {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}})"
-                git rebase --rebase-merges --update-refs origin/$branch
+                echo "$rebase_message {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}origin/$branch{{ANSI_NORMAL}} (because origin/$branch exists and is up-to-date with {{upstream_remote}}/{{upstream_branch}})"
+                git rebase --rebase-merges --update-refs --quiet origin/$branch
             else
-                echo "Rebasing onto {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} ({{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}origin/$branch{{ANSI_NORMAL}} is behind)"
-                git rebase --rebase-merges --update-refs {{upstream_remote}}/{{upstream_branch}}
+                echo "$rebase_message {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} (because origin/$branch exists but is not an ancestor)"
+                git rebase --rebase-merges --update-refs --quiet {{upstream_remote}}/{{upstream_branch}}
             fi
         else
-            echo "Rebasing onto {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} (no matching origin branch)"
-            git rebase --rebase-merges --update-refs {{upstream_remote}}/{{upstream_branch}}
+            echo "$rebase_message {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}} (because origin/$branch does not exist)"
+            git rebase --rebase-merges --update-refs --quiet {{upstream_remote}}/{{upstream_branch}}
         fi
     done
 
