@@ -68,5 +68,5 @@ reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip
 
 # mvn release:prepare
 @release NEXT_VERSION: clean _check-local-modifications && _clean-git _check-local-modifications
-    just _run "git checkout {{ANSI_RED}}{{upstream_remote}}{{ANSI_DEFAULT}}/{{ANSI_GREEN}}{{upstream_branch}}{{ANSI_DEFAULT}}"
+    just _run "git checkout {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
     just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}{{NEXT_VERSION}}{{ANSI_DEFAULT}}"
