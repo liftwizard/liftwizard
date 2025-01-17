@@ -8,10 +8,10 @@ setup-github-refspec REMOTE:
     set -Eeuo pipefail
 
     if git remote get-url {{REMOTE}} &> /dev/null && git remote get-url {{REMOTE}} | grep -q 'github\.'; then
-        just _run "git config --add remote.{{ANSI_RED}}{{REMOTE}}{{ANSI_DEFAULT}}.fetch '+refs/pull/*/head:refs/remotes/{{ANSI_RED}}{{REMOTE}}{{ANSI_DEFAULT}}/pr/*'"
-        just _run "git config --add remote.{{ANSI_RED}}{{REMOTE}}{{ANSI_DEFAULT}}.fetch '+refs/pull/*/merge:refs/remotes/{{ANSI_RED}}{{REMOTE}}{{ANSI_DEFAULT}}/pr/merge/*'"
+        just _run "git config --add remote.{{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{REMOTE}}{{ANSI_NORMAL}}.fetch '+refs/pull/*/head:refs/remotes/{{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{REMOTE}}{{ANSI_NORMAL}}/pr/*'"
+        just _run "git config --add remote.{{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{REMOTE}}{{ANSI_NORMAL}}.fetch '+refs/pull/*/merge:refs/remotes/{{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{REMOTE}}{{ANSI_NORMAL}}/pr/merge/*'"
     else
-        echo "Remote {{ANSI_RED}}{{REMOTE}}{{ANSI_DEFAULT}} is not a GitHub remote"
+        echo "Remote {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{REMOTE}}{{ANSI_NORMAL}} is not a GitHub remote"
     fi
 
 # Add git refspec to fetch GitHub PR refs from origin and upstream
