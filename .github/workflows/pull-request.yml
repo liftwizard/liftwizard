@@ -32,6 +32,7 @@ jobs:
 
       - run: ./mvnw verify
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -67,6 +68,7 @@ jobs:
           min-coverage-overall: 0
           min-coverage-changed-files: 0
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -93,6 +95,7 @@ jobs:
       - name: Run maven-enforcer-plugin
         run: ./mvnw verify --activate-profiles maven-enforcer-plugin -DskipTests
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -119,6 +122,7 @@ jobs:
       - name: Run maven-dependency-plugin
         run: ./mvnw verify --activate-profiles maven-dependency-plugin -DskipTests
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -145,6 +149,7 @@ jobs:
       - name: Run maven-javadoc-plugin
         run: ./mvnw verify --activate-profiles maven-javadoc-plugin -DskipTests
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -177,6 +182,7 @@ jobs:
       - name: "Produce Checkstyle XML: Semantics"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -209,6 +215,7 @@ jobs:
       - name: "Produce Checkstyle XML: Strict Semantics"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -241,6 +248,7 @@ jobs:
       - name: "Produce Checkstyle XML: Formatting"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -273,6 +281,7 @@ jobs:
       - name: "Produce Checkstyle XML: Strict Formatting"
         run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting-strict'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -299,6 +308,7 @@ jobs:
       - name: Run rewrite-maven-plugin
         run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -326,6 +336,7 @@ jobs:
       - name: Run artifact:check-buildplan
         run: ./mvnw verify artifact:check-buildplan -DskipTests
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -363,6 +374,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-formats'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -394,6 +406,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-sort-imports'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -425,6 +438,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-unused-imports'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -456,6 +470,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-cleanthat'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -487,6 +502,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-sql'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -518,6 +534,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-pom'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -549,6 +566,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-markdown'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -580,6 +598,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-json'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
@@ -611,6 +630,7 @@ jobs:
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-yaml'
 
+      # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
