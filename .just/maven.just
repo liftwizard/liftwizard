@@ -67,6 +67,26 @@ reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip
     just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} wrapper:wrapper -Dmaven={{ANSI_YELLOW}}{{VERSION}}{{ANSI_DEFAULT}}"
 
 # mvn release:prepare
-@release NEXT_VERSION: clean _check-local-modifications && _clean-git _check-local-modifications
+release: clean _check-local-modifications && _clean-git _check-local-modifications
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+
+    CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+
+    if [[ $CURRENT_VERSION =~ ([0-9]+)\.([0-9]+)\.([0-9]+)-SNAPSHOT ]]; then
+        MAJOR="${BASH_REMATCH[1]}"
+        MINOR="${BASH_REMATCH[2]}"
+        PATCH="${BASH_REMATCH[3]}"
+        NEXT_VERSION="$MAJOR.$MINOR.$((PATCH + 1))-SNAPSHOT"
+    else
+        NEXT_VERSION="$CURRENT_VERSION"
+    fi
+
+    echo "Current version is: {{ANSI_YELLOW}}$CURRENT_VERSION{{ANSI_DEFAULT}}"
+
+    read -p "Enter next version (default: {{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}): " INPUT_VERSION
+    NEXT_VERSION=${INPUT_VERSION:-$NEXT_VERSION}
+
     just _run "git checkout {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
-    just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}{{NEXT_VERSION}}{{ANSI_DEFAULT}}"
+
+    just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}"
