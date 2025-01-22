@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  GROUP_ID: "io/liftwizard"
+
 jobs:
   deploy-github-pages:
     runs-on: ubuntu-latest
@@ -55,4 +58,4 @@ jobs:
           commit_message: "[skip ci] deploy to gh-pages"
 
       - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/io/liftwizard
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
