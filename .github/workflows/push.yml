@@ -32,7 +32,7 @@ jobs:
       - name: "Install liftwizard-checkstyle module"
         run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
 
-      - run: mvn verify checkstyle:check spotless:check --activate-profiles maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,checkstyle-formatting-strict,spotless-check,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml
+      - run: mvn verify --activate-profiles maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,checkstyle-formatting-strict,spotless-check,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
