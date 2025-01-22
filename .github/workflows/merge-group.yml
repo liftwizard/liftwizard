@@ -1,0 +1,640 @@
+# Jobs that run on merge_group, meaning they must pass before changes land. They also run on pull_request.
+
+on:
+  pull_request:
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  GROUP_ID: "io/liftwizard"
+
+jobs:
+  maven-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - run: ./mvnw verify
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  maven-enforcer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run maven-enforcer-plugin
+        run: ./mvnw verify --activate-profiles maven-enforcer-plugin -DskipTests
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  maven-dependency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run maven-dependency-plugin
+        run: ./mvnw verify --activate-profiles maven-dependency-plugin -DskipTests
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  maven-javadoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run maven-javadoc-plugin
+        run: ./mvnw verify --activate-profiles maven-javadoc-plugin -DskipTests
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  checkstyle-semantics:
+    name: checkstyle xml (semantics)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Semantics"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  checkstyle-semantics-strict:
+    name: checkstyle xml (semantics strict)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Strict Semantics"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  checkstyle-formatting:
+    name: checkstyle xml (formatting)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Formatting"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  checkstyle-formatting-strict:
+    name: checkstyle xml (formatting strict)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-checkstyle-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Install liftwizard-checkstyle module"
+        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+
+      - name: "Produce Checkstyle XML: Strict Formatting"
+        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting-strict'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  maven-rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-rewrite-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run rewrite-maven-plugin
+        run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  # Check for reproducible builds with artifact:check-buildplan
+  maven-reproducible:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: Run artifact:check-buildplan
+        run: ./mvnw verify artifact:check-buildplan -DskipTests
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-formats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Formats"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-formats'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-java-sort-imports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Java Import Order"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-java-sort-imports'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-java-unused-imports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Java Unused Imports"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-java-unused-imports'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-java-cleanthat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Java cleanthat"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-java-cleanthat'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Sql"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-sql'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-pom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Pom"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-pom'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Markdown"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-markdown'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Json"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-json'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version-file: .tool-versions
+          distribution: oracle
+
+      - name: "Spotless Check: Yaml"
+        run: |
+          ./mvnw spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-yaml'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  reviewdog-markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-markdownlint@v0.26.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
+  reviewdog-yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-yamllint@v1.20.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
+  reviewdog-languagetool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-languagetool@v1.20.2
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
+  reviewdog-actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-actionlint@v1.64.1
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
+
+  reviewdog-shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-shellcheck@v1.29.0
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          filter_mode: nofilter
