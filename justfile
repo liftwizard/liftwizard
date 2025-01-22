@@ -14,9 +14,7 @@ default: mise mvn
 
 # mise install
 mise:
-    mise plugin install --quiet maven
-    mise plugin install --quiet mvnd https://github.com/joschi/asdf-mvnd
-    mise install --quiet
+    mise install
     mise current
 
 # clean (maven and git)
