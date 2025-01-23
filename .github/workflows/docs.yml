@@ -38,7 +38,7 @@ jobs:
         run: sudo apt-get install graphviz
 
       - name: Generate Znai docs
-        run: ./mvnw package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
+        run: mvn package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
       - name: Create deploy directory
         if: github.event_name == 'push'
