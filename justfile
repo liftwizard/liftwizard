@@ -1,6 +1,6 @@
 set shell := ["bash", "-O", "globstar", "-c"]
 set dotenv-filename := ".envrc"
-set highlight := "magenta"
+# set highlight := "magenta"
 
 group_id_with_slashes := "io/liftwizard"
 
