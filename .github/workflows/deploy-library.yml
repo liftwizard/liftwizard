@@ -26,6 +26,8 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
+      - uses: jdx/mise-action@v2
+
       - name: Publish package
         # For some reason this has to be `mvn`
         # Changing it to `./mvnw` breaks the nexus-staging-maven-plugin in a way where it only runs once, not once per module

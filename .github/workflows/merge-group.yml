@@ -26,12 +26,9 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
-      - run: ./mvnw verify
+      - run: mvn verify
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -51,13 +48,10 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: Run maven-enforcer-plugin
-        run: ./mvnw verify --activate-profiles maven-enforcer-plugin -DskipTests
+        run: mvn verify --activate-profiles maven-enforcer-plugin -DskipTests
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -77,13 +71,10 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: Run maven-dependency-plugin
-        run: ./mvnw verify --activate-profiles maven-dependency-plugin -DskipTests
+        run: mvn verify --activate-profiles maven-dependency-plugin -DskipTests
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -103,13 +94,10 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: Run maven-javadoc-plugin
-        run: ./mvnw verify --activate-profiles maven-javadoc-plugin -DskipTests
+        run: mvn verify --activate-profiles maven-javadoc-plugin -DskipTests
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -133,16 +121,13 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Install liftwizard-checkstyle module"
-        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Semantics"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics'
+        run: mvn checkstyle:check --activate-profiles 'checkstyle-semantics'
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -166,16 +151,13 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Install liftwizard-checkstyle module"
-        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Strict Semantics"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
+        run: mvn checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -199,16 +181,13 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Install liftwizard-checkstyle module"
-        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Formatting"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting'
+        run: mvn checkstyle:check --activate-profiles 'checkstyle-formatting'
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -232,16 +211,13 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Install liftwizard-checkstyle module"
-        run: ./mvnw install --projects liftwizard-utility/liftwizard-checkstyle
+        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
 
       - name: "Produce Checkstyle XML: Strict Formatting"
-        run: ./mvnw checkstyle:check --activate-profiles 'checkstyle-formatting-strict'
+        run: mvn checkstyle:check --activate-profiles 'checkstyle-formatting-strict'
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -262,13 +238,10 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: Run rewrite-maven-plugin
-        run: ./mvnw install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
+        run: mvn install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -289,13 +262,10 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: Run artifact:check-buildplan
-        run: ./mvnw verify artifact:check-buildplan -DskipTests
+        run: mvn verify artifact:check-buildplan -DskipTests
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -318,14 +288,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Formats"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-formats'
 
@@ -350,14 +317,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Java Import Order"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-sort-imports'
 
@@ -382,14 +346,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Java Unused Imports"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-unused-imports'
 
@@ -414,14 +375,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Java cleanthat"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-java-cleanthat'
 
@@ -446,14 +404,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Sql"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-sql'
 
@@ -478,14 +433,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Pom"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-pom'
 
@@ -510,14 +462,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Markdown"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-markdown'
 
@@ -542,14 +491,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Json"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-json'
 
@@ -574,14 +520,11 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version-file: .tool-versions
-          distribution: oracle
+      - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Yaml"
         run: |
-          ./mvnw spotless:check \
+          mvn spotless:check \
             --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
             --activate-profiles 'spotless-check,spotless-yaml'
 
