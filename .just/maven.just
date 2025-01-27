@@ -33,6 +33,9 @@ dependency MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-depende
 # mvn javadoc
 javadoc MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-javadoc-plugin" skip_tests_flags) && _check-local-modifications
 
+# mvn errorprone
+errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags) && _check-local-modifications
+
 checkstyle-semantics MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics" default_flags) && _check-local-modifications
 checkstyle-formatting MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-formatting" default_flags) && _check-local-modifications
 checkstyle-semantics-strict MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics-strict" default_flags) && _check-local-modifications
