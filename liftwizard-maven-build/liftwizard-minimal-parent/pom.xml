@@ -26,16 +26,16 @@
 
     <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web services.</description>
 
-    <url>https://github.com/motlin/liftwizard</url>
+    <url>https://github.com/liftwizard/liftwizard</url>
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/motlin/liftwizard/issues</url>
+        <url>https://github.com/liftwizard/liftwizard/issues</url>
     </issueManagement>
 
     <ciManagement>
         <system>GitHub</system>
-        <url>https://github.com/motlin/liftwizard/actions</url>
+        <url>https://github.com/liftwizard/liftwizard/actions</url>
     </ciManagement>
 
     <licenses>
@@ -47,9 +47,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/motlin/liftwizard</url>
-        <connection>scm:git:https://github.com/motlin/liftwizard.git</connection>
-        <developerConnection>scm:git:https@github.com:motlin/liftwizard.git</developerConnection>
+        <url>https://github.com/liftwizard/liftwizard</url>
+        <connection>scm:git:https://github.com/liftwizard/liftwizard.git</connection>
+        <developerConnection>scm:git:https@github.com:liftwizard/liftwizard.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
