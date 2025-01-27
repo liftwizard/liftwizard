@@ -71,3 +71,4 @@ delete-merged-remote: fetch
 delete-merged: delete-merged-local delete-merged-remote
 
 git-all: rebase-all delete-merged
+alias g := git-all
