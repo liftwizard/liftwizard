@@ -29,7 +29,6 @@ public final class ConnectionManagerHolder
 {
     private static final String KEY_NAME = "connectionManagerName";
 
-    private static SourcelessConnectionManager instance;
     private static ImmutableMap<String, SourcelessConnectionManager> connectionManagersByName;
 
     private ConnectionManagerHolder()

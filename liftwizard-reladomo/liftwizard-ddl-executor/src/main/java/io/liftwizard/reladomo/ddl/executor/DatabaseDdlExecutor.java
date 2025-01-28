@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -108,7 +109,7 @@ public final class DatabaseDdlExecutor
             throw new RuntimeException(message);
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream)))
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)))
         {
             RunScript.execute(connection, reader);
         }

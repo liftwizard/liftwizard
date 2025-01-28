@@ -3,15 +3,15 @@ package io.liftwizard.graphql.scalar;
 import java.util.function.Consumer;
 
 import graphql.scalars.java.JavaPrimitives;
-import graphql.schema.idl.RuntimeWiring.Builder;
+import graphql.schema.idl.RuntimeWiring;
 import io.liftwizard.graphql.scalar.temporal.GraphQLLocalDateScalar;
 import io.liftwizard.graphql.scalar.temporal.GraphQLTemporalScalar;
 
 public class ScalarRuntimeWiringBuilder
-        implements Consumer<Builder>
+        implements Consumer<RuntimeWiring.Builder>
 {
     @Override
-    public void accept(Builder builder)
+    public void accept(RuntimeWiring.Builder builder)
     {
         builder
                 .scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)

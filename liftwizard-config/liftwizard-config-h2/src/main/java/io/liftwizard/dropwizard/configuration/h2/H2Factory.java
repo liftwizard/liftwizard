@@ -127,6 +127,10 @@ public class H2Factory
     @ValidationMethod(message = "webPort and tcpPort must be non-null if enabled is true")
     public boolean isWebPortAndTcpPortDifferent()
     {
-        return !this.enabled || this.webPort != null && this.tcpPort != null;
+        if (!this.enabled)
+        {
+            return true;
+        }
+        return this.webPort != null && this.tcpPort != null;
     }
 }

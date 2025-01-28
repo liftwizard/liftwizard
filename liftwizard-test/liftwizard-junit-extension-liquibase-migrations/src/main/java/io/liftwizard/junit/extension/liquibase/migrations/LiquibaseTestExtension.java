@@ -19,9 +19,6 @@ package io.liftwizard.junit.extension.liquibase.migrations;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
 
 import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import liquibase.Liquibase;
@@ -41,11 +38,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public class LiquibaseTestExtension
         implements BeforeEachCallback
 {
-    @Nonnull
-    private final Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager
-            .getInstance()
-            .getConnection();
-
     private final String migrationsFile;
     private final boolean dropAll;
 
@@ -71,7 +63,7 @@ public class LiquibaseTestExtension
             throws SQLException, LiquibaseException
     {
         try (
-                Connection connection = this.connectionSupplier.get();
+                Connection connection = H2InMemoryConnectionManager.getInstance().getConnection();
                 Liquibase liquibase = this.openLiquibase(connection))
         {
             if (this.dropAll)
