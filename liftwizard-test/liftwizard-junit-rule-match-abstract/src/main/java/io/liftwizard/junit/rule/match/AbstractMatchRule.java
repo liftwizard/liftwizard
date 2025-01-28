@@ -17,7 +17,6 @@
 package io.liftwizard.junit.rule.match;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -137,7 +136,7 @@ public abstract class AbstractMatchRule
             @Nonnull String resourceClassPathLocation,
             @Nonnull String string,
             @Nonnull File file)
-            throws FileNotFoundException
+            throws IOException
     {
         this.rerecordedPaths.add(resourceClassPathLocation);
 
@@ -146,7 +145,7 @@ public abstract class AbstractMatchRule
             file.getParentFile().mkdirs();
         }
 
-        try (PrintWriter printWriter = new PrintWriter(file))
+        try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8))
         {
             String prettyPrintedString = this.getPrettyPrintedString(string);
             printWriter.print(prettyPrintedString);

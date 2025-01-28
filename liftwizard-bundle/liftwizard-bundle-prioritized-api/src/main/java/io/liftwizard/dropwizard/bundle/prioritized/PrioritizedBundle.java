@@ -18,6 +18,7 @@ package io.liftwizard.dropwizard.bundle.prioritized;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -73,7 +74,7 @@ public interface PrioritizedBundle
         String durationPrettyString = DURATION_PATTERN
                 .matcher(duration.toString().substring(2))
                 .replaceAll("$1 ")
-                .toLowerCase();
+                .toLowerCase(Locale.ENGLISH);
         LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
     }
 
@@ -97,7 +98,7 @@ public interface PrioritizedBundle
         String durationPrettyString = DURATION_PATTERN
                 .matcher(duration.toString().substring(2))
                 .replaceAll("$1 ")
-                .toLowerCase();
+                .toLowerCase(Locale.ENGLISH);
         LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
     }
 
