@@ -22,7 +22,10 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auto.service.AutoService;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter.Builder;
@@ -37,14 +40,13 @@ public class FirebaseAuthFilterFactory
     private @Valid @NotNull String databaseUrl;
     private @Valid @NotNull String firebaseConfig;
 
+    private FirebaseAuth firebaseAuthFactory;
+
     @Nonnull
     @Override
     public AuthFilter<?, FirebasePrincipal> createAuthFilter()
     {
-        FirebaseAuth firebaseAuthFactory = new FirebaseAuth(
-                this.databaseUrl,
-                this.firebaseConfig);
-        com.google.firebase.auth.FirebaseAuth firebaseAuth = firebaseAuthFactory.getFirebaseAuth();
+        com.google.firebase.auth.FirebaseAuth firebaseAuth = this.createFirebaseAuth();
 
         Authenticator<String, FirebasePrincipal> authenticator = new FirebaseOAuthAuthenticator(firebaseAuth);
 
@@ -52,6 +54,40 @@ public class FirebaseAuthFilterFactory
                 .setAuthenticator(authenticator)
                 .setPrefix("Bearer")
                 .buildAuthFilter();
+    }
+
+    public GoogleCredentials createFirebaseCredentials()
+    {
+        this.initFirebaseAuthFactory();
+        return this.firebaseAuthFactory.getCredentials();
+    }
+
+    public FirebaseApp createFirebaseApp()
+    {
+        this.initFirebaseAuthFactory();
+        return this.firebaseAuthFactory.getFirebaseApp();
+    }
+
+    public com.google.firebase.auth.FirebaseAuth createFirebaseAuth()
+    {
+        this.initFirebaseAuthFactory();
+        return this.firebaseAuthFactory.getFirebaseAuth();
+    }
+
+    public FirebaseDatabase createFirebaseDatabase()
+    {
+        this.initFirebaseAuthFactory();
+        return this.firebaseAuthFactory.getFirebaseDatabase();
+    }
+
+    private void initFirebaseAuthFactory()
+    {
+        if (this.firebaseAuthFactory == null)
+        {
+            this.firebaseAuthFactory = new FirebaseAuth(
+                    this.databaseUrl,
+                    this.firebaseConfig);
+        }
     }
 
     @JsonProperty
