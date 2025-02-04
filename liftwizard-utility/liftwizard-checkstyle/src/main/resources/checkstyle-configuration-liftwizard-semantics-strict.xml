@@ -156,6 +156,8 @@
         </module>
 
         <module name="RegexpSinglelineJava">
+            <property name="id" value="sysout" />
+
             <property name="ignoreComments" value="true" />
 
             <property
@@ -168,6 +170,8 @@
         </module>
 
         <module name="RegexpSinglelineJava">
+            <property name="id" value="syserr" />
+
             <property name="ignoreComments" value="true" />
 
             <property

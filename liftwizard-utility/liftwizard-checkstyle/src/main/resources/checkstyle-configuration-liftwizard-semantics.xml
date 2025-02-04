@@ -347,6 +347,8 @@
         </module>
 
         <module name="RegexpSinglelineJava">
+            <property name="id" value="commaWrap" />
+
             <property name="ignoreComments" value="true" />
 
             <property
@@ -359,6 +361,8 @@
         </module>
 
         <module name="RegexpSinglelineJava">
+            <property name="id" value="commaWrapFirst" />
+
             <property name="ignoreComments" value="true" />
 
             <property
