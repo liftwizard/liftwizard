@@ -12,7 +12,7 @@ import ".just/git-test.just"
 # Setup the project (mise) and run the default build (mvn)
 default: mise mvn
 
-# mise install
+# `mise install`
 mise:
     mise install
     mise current
@@ -41,7 +41,7 @@ scc:
 # My `woof` command uses `echo`, `say`, and sends a Pushover notification.
 echo_command := env('ECHO_COMMAND', "echo")
 
-# mvn
+# Run `mvn` with configurable target, profiles, and flags
 mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags:
     #!/usr/bin/env bash
     set -uo pipefail

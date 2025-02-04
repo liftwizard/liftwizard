@@ -1,4 +1,4 @@
-# set up git-test
+# set up `git-test`
 setup-git-test:
     # Combined
     git test add --forget --test default                      'just clean _check-local-modifications mvn'
@@ -31,7 +31,7 @@ fail_fast := env('FAIL_FAST', "false")
 
 git_tests := env('GIT_TESTS', "--tests default,checkstyle,spotless-all")
 
-# git-test on the range of commits between a configurable upstream/main and {{BRANCH}}
+# `git-test` on the range of commits between a configurable upstream/main and {{BRANCH}}
 test-branch BRANCH="HEAD" TESTS=git_tests *FLAGS="--retest --verbose --verbose":
     #!/usr/bin/env bash
     branch="{{BRANCH}}"
@@ -86,7 +86,7 @@ test-results:
         ((current++))
     done
 
-# Fix the current commit and rebase
+# Fix the current commit and `git rebase`
 test-fix:
     git add --update
     git commit --fixup HEAD
