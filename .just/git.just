@@ -2,7 +2,7 @@ upstream_remote := env('UPSTREAM_REMOTE', "upstream")
 upstream_branch := env('UPSTREAM_BRANCH', "main")
 offline := env_var_or_default('OFFLINE', 'false')
 
-# Add git refspec to fetch GitHub PR refs from REMOTE
+# Add git refspec to fetch GitHub PR refs from `REMOTE`
 setup-github-refspec REMOTE:
     #!/usr/bin/env bash
     set -Eeuo pipefail

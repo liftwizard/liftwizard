@@ -61,16 +61,18 @@ ANSI_BG_BRIGHT_MAGENTA := `tput setab 13`
 ANSI_BG_BRIGHT_CYAN := `tput setab 14`
 ANSI_BG_BRIGHT_WHITE := `tput setab 15`
 
-_run cmd:
+# Run command, stripping ansi color codes
+_run command:
    #!/usr/bin/env bash
    set -Eeu
    offline_flag=""
    if [ -n "$(npm cache ls strip-ansi-cli)" ]; then
        offline_flag="--offline"
    fi
-   echo "{{ANSI_BOLD}}Running command: {{ANSI_NORMAL}}{{ cmd }}{{ANSI_NORMAL}}"
-   eval "$(echo "{{ cmd }}" | npx ${offline_flag} --yes strip-ansi-cli)"
+   echo "{{ANSI_BOLD}}Running command: {{ANSI_NORMAL}}{{command}}{{ANSI_NORMAL}}"
+   eval "$(echo "{{command}}" | npx ${offline_flag} --yes strip-ansi-cli)"
 
+# `echo` text in each color
 @demo-console-colors:
     #!/usr/bin/env bash
     set -uo pipefail
