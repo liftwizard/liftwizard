@@ -4,6 +4,42 @@ default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
 default_profiles := env('MVN_PROFILES', "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,checkstyle-formatting-strict,spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
 
+# Run `mvn` with configurable target, profiles, and flags
+mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags:
+    #!/usr/bin/env bash
+    set -uo pipefail
+
+    COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
+    SKIPPABLE_WORDS=("skip" "pass" "stop" "fail")
+
+    for word in "${SKIPPABLE_WORDS[@]}"; do
+        if [[ $COMMIT_MESSAGE == *\[${word}\]* ]]; then
+            echo "Skipping due to [{{ANSI_YELLOW}}${word}{{ANSI_DEFAULT}}] in commit: '${COMMIT_MESSAGE}'"
+            exit 0
+        fi
+    done
+
+    # Set colors based on whether values match defaults
+    if [ "{{MVN}}" = "{{default_mvn}}" ]; then MVN_COLOR="{{ANSI_GRAY}}"; else MVN_COLOR="{{ANSI_MAGENTA}}"; fi
+    if [ "{{TARGET}}" = "{{default_target}}" ]; then TARGET_COLOR="{{ANSI_GRAY}}"; else TARGET_COLOR="{{ANSI_GREEN}}"; fi
+    if [ "{{PROFILES}}" = "{{default_profiles}}" ]; then PROFILES_COLOR="{{ANSI_GRAY}}"; else PROFILES_COLOR="{{ANSI_BLUE}}"; fi
+    if [ "{{FLAGS}}" = "{{default_flags}}" ]; then FLAGS_COLOR="{{ANSI_GRAY}}"; else FLAGS_COLOR="{{ANSI_MAGENTA}}"; fi
+
+    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-utility/liftwizard-checkstyle"
+
+    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${TARGET_COLOR}{{TARGET}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} ${PROFILES_COLOR}{{PROFILES}}{{ANSI_DEFAULT}}"
+
+    EXIT_CODE=$?
+    if [ $EXIT_CODE -eq 0 ]; then
+        exit 0
+    fi
+
+    DIRECTORY=$(basename $(pwd))
+
+    MESSAGE="Failed in directory ${DIRECTORY} on commit: '${COMMIT_MESSAGE}' with exit code ${EXIT_CODE}"
+    {{echo_command}} "$MESSAGE"
+    exit $EXIT_CODE
+
 # clean ~/.m2 with `rm -rf ~/.m2/repository/...`
 _clean-m2:
     #!/usr/bin/env bash
@@ -47,12 +83,20 @@ checkstyle-formatting-strict MVN="mvn": (mvn MVN "checkstyle:check" "--activate-
 # checksyle with all profiles
 checkstyle: checkstyle-semantics checkstyle-formatting checkstyle-semantics-strict checkstyle-formatting-strict
 
+# spotless
+spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-" + NAME) default_flags) && _check-local-modifications
+
+# spotless-all
+spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml" default_flags) && _check-local-modifications
+
 # `mvn` with reproducible build check
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags) && _check-local-modifications
 
+# `mvn` rewrite
+rewrite-dry-run MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example'" "--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun" skip_tests_flags) && _check-local-modifications
+
 # `mvn` with rewrite-maven-plugin for single recipe
-@rewrite RECIPE: && _check-local-modifications
-    just _run "mvn {{ANSI_MAGENTA}}--threads 1 -U -DskipTests{{ANSI_DEFAULT}} org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.activeRecipes={{ANSI_YELLOW}}{{RECIPE}}{{ANSI_DEFAULT}}"
+rewrite RECIPE MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run --projects '!liftwizard-example'" ("--activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) skip_tests_flags) && _check-local-modifications
 
 # display available updates (dependencies, plugins, properties)
 @display-updates:
