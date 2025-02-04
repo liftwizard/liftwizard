@@ -63,6 +63,20 @@
                 key="regexp.filename.mismatch"
                 value="All files in the ''src/test/java'' folder should be named ''*Test.java'' or ''Abstract*.java''." />
     </module>
+    <module name="RegexpMultiline">
+        <property name="id" value="commentFirstSentenceMultiline" />
+        <property name="format" value="/\*\*\W+\* +\p{javaLowerCase}" />
+        <property name="fileExtensions" value="java" />
+        <property name="message"
+                value="First sentence in a comment should start with a capital letter" />
+    </module>
+    <module name="RegexpSingleline">
+        <property name="id" value="commentFirstSentenceSingleline" />
+        <property name="format" value="/\*\* +\p{javaLowerCase}" />
+        <property name="fileExtensions" value="java" />
+        <property name="message"
+                value="First sentence in a comment should start with a capital letter" />
+    </module>
     <!--endregion-->
 
     <module name="TreeWalker">
