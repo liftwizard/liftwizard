@@ -62,15 +62,9 @@ ANSI_BG_BRIGHT_CYAN := `tput setab 14`
 ANSI_BG_BRIGHT_WHITE := `tput setab 15`
 
 # Run command, stripping ansi color codes
-_run command:
-   #!/usr/bin/env bash
-   set -Eeu
-   offline_flag=""
-   if [ -n "$(npm cache ls strip-ansi-cli)" ]; then
-       offline_flag="--offline"
-   fi
-   echo "{{ANSI_BOLD}}Running command: {{ANSI_NORMAL}}{{command}}{{ANSI_NORMAL}}"
-   eval "$(echo "{{command}}" | npx ${offline_flag} --yes strip-ansi-cli)"
+@_run command:
+    echo "{{ANSI_BOLD}}Running command: {{ANSI_NORMAL}}{{command}}{{ANSI_NORMAL}}"
+    eval "$(echo "{{command}}" | strip-ansi)"
 
 # `echo` text in each color
 @demo-console-colors:
