@@ -30,8 +30,3 @@ scc:
 # Override this with a command called `woof` which notifies you in whatever ways you prefer.
 # My `woof` command uses `echo`, `say`, and sends a Pushover notification.
 echo_command := env('ECHO_COMMAND', "echo")
-
-qodana:
-    op run -- qodana scan \
-        --apply-fixes \
-        --linter jetbrains/qodana-jvm:2024.1

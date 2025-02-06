@@ -51,14 +51,11 @@ recover-detached-head:
     #!/usr/bin/env bash
     set -Eeuo pipefail
 
-    if git symbolic-ref -q HEAD >/dev/null; then
-        current_branch=$(git symbolic-ref --short HEAD)
-        echo "Not in detached HEAD state. Current branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$current_branch{{ANSI_NORMAL}}"
-    else
+    if ! git symbolic-ref -q HEAD >/dev/null; then
         current_date=$(date +%Y-%m-%d)
         branch_name="branch-${current_date}"
         git checkout -b "$branch_name"
-        echo "Created and checked out new branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch_name{{ANSI_NORMAL}}"
+        echo "Recovering detached HEAD. Created new branch: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$branch_name{{ANSI_NORMAL}}"
     fi
 
 # Generate a markdown list of commit messages

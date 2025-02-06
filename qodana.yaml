@@ -1,5 +1,0 @@
-version: "1.0"
-linter: jetbrains/qodana-jvm:2024.1
-bootstrap: ./mvnw clean install -DskipTests
-profile:
-  path: .idea/inspectionProfiles/Qodana.xml
