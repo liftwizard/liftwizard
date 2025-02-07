@@ -5,6 +5,7 @@ mvnd = "1.0.2"
 node = "22.13.1"
 "npm:markdownlint-cli" = "0.44.0"
 "npm:strip-ansi-cli" = "4.0.0"
+shellcheck = "0.10.0"
 
 [alias]
 mvnd = "asdf:https://github.com/joschi/asdf-mvnd"
