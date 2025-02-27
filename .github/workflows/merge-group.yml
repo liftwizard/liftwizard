@@ -603,3 +603,39 @@ jobs:
         with:
           reporter: github-pr-check
           filter_mode: nofilter
+
+  all-checks:
+    name: All checks
+    needs:
+      [
+        maven-test,
+        maven-errorprone,
+        maven-enforcer,
+        maven-dependency,
+        maven-javadoc,
+        checkstyle-semantics,
+        checkstyle-semantics-strict,
+        checkstyle-formatting,
+        checkstyle-formatting-strict,
+        maven-rewrite,
+        maven-reproducible,
+        spotless-formats,
+        spotless-java-sort-imports,
+        spotless-java-unused-imports,
+        spotless-java-cleanthat,
+        spotless-sql,
+        spotless-pom,
+        spotless-markdown,
+        spotless-json,
+        spotless-yaml,
+        reviewdog-markdownlint,
+        reviewdog-yamllint,
+        reviewdog-languagetool,
+        reviewdog-actionlint,
+        reviewdog-shellcheck,
+      ]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: All checks passed
+        run: echo "All checks passed!"
