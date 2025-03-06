@@ -59,17 +59,8 @@ The `BufferedAppenderFactory` allows you to use an appender with the type `buffe
 
 Note: `BufferedAppenderFactory` is primarily useful for tests that use [Dropwizard's JUnit 4 Rule](https://www.dropwizard.io/en/release-2.1.x/manual/testing.html#junit-4) `DropwizardAppRule` or [Dropwizard's JUnit 5 Extension](https://www.dropwizard.io/en/release-2.1.x/manual/testing.html#junit-5) `DropwizardAppExtension`.
 
-```java
-private final TestRule logMarkerTestRule = new LogMarkerTestRule();
-
-private final DropwizardAppRule<HelloWorldConfiguration> dropwizardAppRule = new DropwizardAppRule<>(
-        HelloWorldApplication.class,
-        ResourceHelpers.resourceFilePath("test-example.json5"));
-
-@Rule
-public final RuleChain ruleChain = RuleChain
-        .outerRule(this.dropwizardAppRule)
-        .around(this.logMarkerTestRule);
+```tabs {default: "JUnit 5"}
+"JUnit 4": :include-markdown: snippets/LogMarkerTestRuleWithDropwizard.md
+"JUnit 5": :include-markdown: snippets/LogMarkerTestExtensionWithDropwizard.md
 ```
 
-Note: `LogMarkerTestRule` needs to be an inner rule, with any other rules that tear down logging outer to it.

@@ -2,7 +2,7 @@ set shell := ["bash", "-O", "globstar", "-c"]
 
 # docs generate
 generate:
-    mvnd ./mvnw package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
+    mvn package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
 # docs preview
 preview:
