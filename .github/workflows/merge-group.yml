@@ -577,14 +577,6 @@ jobs:
           fail_on_error: true
           filter_mode: nofilter
 
-  reviewdog-languagetool:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: reviewdog/action-languagetool@v1.20.2
-        with:
-          reporter: github-pr-check
-
   reviewdog-actionlint:
     runs-on: ubuntu-latest
     steps:
@@ -630,7 +622,6 @@ jobs:
         spotless-yaml,
         reviewdog-markdownlint,
         reviewdog-yamllint,
-        reviewdog-languagetool,
         reviewdog-actionlint,
         reviewdog-shellcheck,
       ]
