@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#MISE description="Set up git-test tests"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+echo "${ANSI_BOLD}Setting up git-test tests${ANSI_NORMAL}"
+
+# Combined tests
+mise run console:run "git test add --forget --test default                      'mise run maven:clean git:check-local-modifications maven git:check-local-modifications'"
+mise run console:run "git test add --forget --test checkstyle                   'mise run maven:clean git:check-local-modifications maven:checkstyle git:check-local-modifications'"
+mise run console:run "git test add --forget --test spotless-all                 'mise run maven:clean git:check-local-modifications maven:spotless-all git:check-local-modifications'"
+
+# Individual tests (commented out by default)
+# mise run console:run "git test add --forget --test compile                      'mise run maven:clean git:check-local-modifications maven:compile git:check-local-modifications'"
+# mise run console:run "git test add --forget --test test                         'mise run maven:clean git:check-local-modifications maven:test git:check-local-modifications'"
+# mise run console:run "git test add --forget --test enforcer                     'mise run maven:clean git:check-local-modifications maven:enforcer git:check-local-modifications'"
+# mise run console:run "git test add --forget --test dependency                   'mise run maven:clean git:check-local-modifications maven:dependency git:check-local-modifications'"
+# mise run console:run "git test add --forget --test checkstyle-semantics         'mise run maven:clean git:check-local-modifications maven:checkstyle:semantics git:check-local-modifications'"
+# mise run console:run "git test add --forget --test checkstyle-formatting        'mise run maven:clean git:check-local-modifications maven:checkstyle:formatting git:check-local-modifications'"
+# mise run console:run "git test add --forget --test checkstyle-semantics-strict  'mise run maven:clean git:check-local-modifications maven:checkstyle:semantics-strict git:check-local-modifications'"
+# mise run console:run "git test add --forget --test checkstyle-formatting-strict 'mise run maven:clean git:check-local-modifications maven:checkstyle:formatting-strict git:check-local-modifications'"
+# mise run console:run "git test add --forget --test javadoc                      'mise run maven:clean git:check-local-modifications maven:javadoc git:check-local-modifications'"
+# mise run console:run "git test add --forget --test reproducible                 'mise run maven:clean git:check-local-modifications maven:reproducible git:check-local-modifications'"
+# mise run console:run "git test add --forget --test formats                      'mise run maven:clean git:check-local-modifications maven:spotless formats git:check-local-modifications'"
+# mise run console:run "git test add --forget --test prettier                     'mise run maven:clean git:check-local-modifications maven:spotless prettier-java git:check-local-modifications'"
+# mise run console:run "git test add --forget --test gjf                          'mise run maven:clean git:check-local-modifications maven:spotless google-java-format git:check-local-modifications'"
+# mise run console:run "git test add --forget --test sort-imports                 'mise run maven:clean git:check-local-modifications maven:spotless java-sort-imports git:check-local-modifications'"
+# mise run console:run "git test add --forget --test unused-imports               'mise run maven:clean git:check-local-modifications maven:spotless java-unused-imports git:check-local-modifications'"
+# mise run console:run "git test add --forget --test cleanthat                    'mise run maven:clean git:check-local-modifications maven:spotless java-cleanthat git:check-local-modifications'"
+# mise run console:run "git test add --forget --test pom                          'mise run maven:clean git:check-local-modifications maven:spotless pom git:check-local-modifications'"
+# mise run console:run "git test add --forget --test markdown                     'mise run maven:clean git:check-local-modifications maven:spotless markdown git:check-local-modifications'"
+# mise run console:run "git test add --forget --test json                         'mise run maven:clean git:check-local-modifications maven:spotless json git:check-local-modifications'"
+# mise run console:run "git test add --forget --test yaml                         'mise run maven:clean git:check-local-modifications maven:spotless yaml git:check-local-modifications'"
+# mise run console:run "git test add --forget --test sql                          'mise run maven:clean git:check-local-modifications maven:spotless sql git:check-local-modifications'"

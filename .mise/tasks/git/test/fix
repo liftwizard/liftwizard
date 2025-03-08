@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#MISE description="Fix the current commit and git rebase"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+echo "${ANSI_BOLD}Staging changes.${ANSI_NORMAL}"
+mise run console:run "git add --update"
+
+echo "${ANSI_BOLD}Committing fixup.${ANSI_NORMAL}"
+mise run console:run "git commit --fixup ${ANSI_BOLD}${ANSI_CYAN}HEAD${ANSI_NORMAL}"
+
+echo "${ANSI_BOLD}Checking for unstaged files.${ANSI_NORMAL}"
+mise run git:check-local-modifications
+
+BRANCH=$(cat JUSTFILE_BRANCH)
+echo "Rebasing the last branch used with mise run git:test:branch: ${ANSI_BRIGHT_GREEN}${ANSI_BOLD}$BRANCH${ANSI_NORMAL}"
+mise run console:run "git rebase --onto HEAD HEAD^ ${ANSI_BRIGHT_GREEN}${ANSI_BOLD}$BRANCH${ANSI_NORMAL}"
+mise run console:run "git checkout $BRANCH"
+
+echo "${ANSI_BOLD}Squashing changes.${ANSI_NORMAL}"
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+mise run console:run "git rebase --interactive --autosquash --rebase-merges --update-refs ${ANSI_BRIGHT_RED}${ANSI_BOLD}${upstream_remote}/${upstream_branch}${ANSI_NORMAL}"
+
+echo "${ANSI_BOLD}Cleaning up.${ANSI_NORMAL}"
+mise run console:run "rm ${ANSI_YELLOW}JUSTFILE_BRANCH${ANSI_NORMAL}"

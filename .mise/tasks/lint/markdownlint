@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Run markdownlint to check and fix markdown files"
+
+set -Eeuo pipefail
+
+markdownlint --config .markdownlint.jsonc --fix .

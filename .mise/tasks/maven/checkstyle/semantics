@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#MISE description="Run checkstyle with semantics profile"
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+#USAGE flag "--git_worktree <git_worktree>" help="If provided, run in a fresh git worktree with this name"
+
+set -Eeuo pipefail
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:-${MVN_FLAGS}}"
+git_worktree="${usage_git_worktree:-checkstyle-semantics}"
+
+mise run maven:checkstyle --mvn_binary "${mvn_binary}" --flags "${flags}" --git_worktree "${git_worktree}" semantics

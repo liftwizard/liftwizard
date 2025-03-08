@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#MISE description="Add git refspec to fetch GitHub PR refs from origin and upstream"
+#MISE depends=["git:setup-github-refspec origin", "git:setup-github-refspec upstream"]

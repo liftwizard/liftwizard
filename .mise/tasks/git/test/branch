@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#MISE description="Run git-test on the range of commits between upstream/main and a branch"
+
+#USAGE arg "branch"                 help="The branch to test, defaults to HEAD" default="HEAD"
+#USAGE flag "--tests <tests>"         help="The git-test tests to run" default="default,checkstyle,spotless-all"
+#USAGE arg "flags"                   help="Additional flags to pass to git-test run" default="--retest --verbose --verbose"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+branch="${usage_branch:-HEAD}"
+tests="${usage_tests:-${GIT_TESTS:-default,checkstyle,spotless-all}}"
+flags="${usage_flags:---retest --verbose --verbose}"
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+
+if [ "$branch" = "HEAD" ]; then
+    branch=$(git branch --show-current)
+    if [ -z "$branch" ]; then
+        branch=$(git rev-parse HEAD)
+    fi
+fi
+
+echo "$branch" > JUSTFILE_BRANCH
+mise run console:run "git test run --tests ${ANSI_GRAY}${tests}${ANSI_DEFAULT} ${flags} ${ANSI_BRIGHT_RED}${ANSI_BOLD}${upstream_remote}/${upstream_branch}${ANSI_NORMAL}..${ANSI_BRIGHT_GREEN}${ANSI_BOLD}${branch}${ANSI_NORMAL}"

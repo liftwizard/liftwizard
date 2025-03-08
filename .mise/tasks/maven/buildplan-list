@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+#MISE description="`mvn buildplan:list`"
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+
+set -Eeuo pipefail
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:---threads 1}"
+
+mise run maven --mvn_binary "${mvn_binary}" --target buildplan:list --flags "${flags}" --profiles ""

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+#MISE description="Run checkstyle with a configurable profile"
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+#USAGE flag "--git_worktree <git_worktree>" help="If provided, run in a fresh git worktree with this name"
+#USAGE arg "profile"                     help="Checkstyle profile to use"
+
+set -Eeuo pipefail
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:-${MVN_FLAGS:-}}"
+git_worktree="${usage_git_worktree:-}"
+profile="${usage_profile}"
+
+if [ -n "$git_worktree" ]; then
+  worktree_flag="--git_worktree $git_worktree"
+else
+  worktree_flag=""
+fi
+
+mise run maven --mvn_binary "$mvn_binary" --target "checkstyle:check" --profiles "--activate-profiles checkstyle-$profile" --flags "$flags" $worktree_flag
+
+mise run git:check-local-modifications

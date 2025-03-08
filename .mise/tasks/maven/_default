@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+
+#MISE description="Run Maven with configurable target, profiles, and flags"
+#MISE sources=["**/src/", "**/pom.xml"]
+#MISE outputs=["**/target/"]
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--target <target>"          help="Maven phase to execute"
+#USAGE flag "--profiles <profiles>"      help="Maven profiles to activate"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+#USAGE flag "--echo_cmd <echo_cmd>"      help="Command to echo error messages"
+#USAGE flag "--git_worktree <git_worktree>" help="If provided, run maven in a fresh git worktree with this name"
+
+set -Eeuo pipefail
+
+# TODO Change --target to a positional argument
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+target="${usage_target:-${MVN_TARGET}}"
+
+# Check if profiles parameter was explicitly passed (even if empty)
+if [ -n "${usage_profiles+x}" ]; then
+  profiles="${usage_profiles}"
+else
+  profiles="${MVN_PROFILES}"
+fi
+
+flags="${usage_flags:-${MVN_FLAGS}}"
+echo_cmd="${usage_echo_cmd:-${ECHO_COMMAND}}"
+git_worktree="${usage_git_worktree:-}"
+
+source .mise/tasks/console/ansi-colors
+
+# Determine if we should skip Maven execution based on the commit message.
+COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
+SKIPPABLE_WORDS=("skip" "pass" "stop" "fail")
+
+for word in "${SKIPPABLE_WORDS[@]}"; do
+  if [[ "$COMMIT_MESSAGE" == *"[$word]"* ]]; then
+    echo "Skipping Maven execution due to [$word] in commit: '$COMMIT_MESSAGE'"
+        exit 0
+    fi
+done
+
+# Use colors to highlight non-default values.
+if [ "$mvn_binary" = "mvn" ]; then MVN_COLOR="${ANSI_GRAY}"; else MVN_COLOR="${ANSI_MAGENTA}"; fi
+if [ "$target" = "verify" ]; then TARGET_COLOR="${ANSI_GRAY}"; else TARGET_COLOR="${ANSI_GREEN}"; fi
+if [ "$profiles" = "--activate-profiles maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin,checkstyle-semantics,checkstyle-formatting,spotless-apply,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml" ]; then
+  PROFILES_COLOR="${ANSI_GRAY}"
+else
+  PROFILES_COLOR="${ANSI_BLUE}"
+fi
+if [ "$flags" = "--threads 2C" ]; then FLAGS_COLOR="${ANSI_GRAY}"; else FLAGS_COLOR="${ANSI_MAGENTA}"; fi
+
+# Check for nested quotes which can cause problems
+if [[ "$flags" == *"\""* ]]; then
+  echo "ERROR: Maven flags contains double quotes which can cause parsing issues: '$flags'"
+  echo "Please remove nested quotes from flags parameter"
+  exit 1
+fi
+
+if [[ "$profiles" == *"\""* ]]; then
+  echo "ERROR: Maven profiles contains double quotes which can cause parsing issues: '$profiles'"
+  echo "Please remove nested quotes from profiles parameter"
+  exit 1
+fi
+
+CMD1="${MVN_COLOR}${mvn_binary}${ANSI_DEFAULT} ${ANSI_GREEN}install${ANSI_DEFAULT} ${ANSI_MAGENTA}--projects liftwizard-utility/liftwizard-checkstyle${ANSI_DEFAULT}"
+CMD2="${MVN_COLOR}${mvn_binary}${ANSI_DEFAULT} ${TARGET_COLOR}${target}${ANSI_DEFAULT} ${FLAGS_COLOR}${flags}${ANSI_DEFAULT} ${PROFILES_COLOR}${profiles}${ANSI_DEFAULT}"
+
+if [ -n "$git_worktree" ]; then
+  mise run console:run "mkdir -p .worktrees"
+
+  worktree_path=".worktrees/${git_worktree}"
+
+  if [ -d "${worktree_path}" ]; then
+    mise run console:run "git worktree remove --force ${ANSI_YELLOW}${worktree_path}${ANSI_DEFAULT}"
+    mise run console:run "git worktree prune"
+  fi
+
+  mise run console:run "git worktree add --quiet --detach ${ANSI_YELLOW}${worktree_path}${ANSI_DEFAULT} HEAD"
+
+  mise run --cd ${worktree_path} console:run "$CMD1"
+  mise run --cd ${worktree_path} console:run "$CMD2"
+  EXIT_CODE=$?
+
+  mise run console:run "git worktree remove --force ${ANSI_YELLOW}${worktree_path}${ANSI_DEFAULT}"
+  mise run console:run "git worktree prune"
+else
+  mise run console:run "$CMD1"
+  mise run console:run "$CMD2"
+  EXIT_CODE=$?
+fi
+
+if [ $EXIT_CODE -eq 0 ]; then
+    exit 0
+fi
+
+DIRECTORY=$(basename "$(pwd)")
+MESSAGE="Failed in directory ${ANSI_YELLOW}${DIRECTORY}${ANSI_DEFAULT} on commit: '${ANSI_YELLOW}${COMMIT_MESSAGE}${ANSI_DEFAULT}' with exit code ${ANSI_RED}${EXIT_CODE}${ANSI_DEFAULT}"
+$echo_cmd "$MESSAGE"
+exit $EXIT_CODE

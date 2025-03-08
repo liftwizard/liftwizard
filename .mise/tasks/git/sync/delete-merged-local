@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Delete local branches merged into configurable upstream/main"
+#MISE depends=["git:fetch"]
+
+set -Eeu
+
+source .mise/tasks/console/ansi-colors
+
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+
+git branch --merged remotes/${upstream_remote}/${upstream_branch} \
+    | grep -v "^\*" \
+    | xargs --no-run-if-empty git branch -D

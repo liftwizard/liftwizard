@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Delete local and remote branches that are merged into configurable upstream/main"
+#MISE depends=["git:sync:delete-merged-local", "git:sync:delete-merged-remote"]
+
+set -Eeuo pipefail
+
+# This task just depends on the other tasks and doesn't need to do anything else

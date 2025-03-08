@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#MISE description="`mvn wrapper:wrapper`"
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+#USAGE arg "version"                    help="Maven version to use for the wrapper"
+
+set -Eeuo pipefail
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:---threads 1}"
+version="${usage_version}"
+
+mise run maven --mvn_binary "${mvn_binary}" --target "wrapper:wrapper" --flags "${flags} -Dmaven=${version}" --profiles ""

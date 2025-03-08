@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+#MISE description="Run spotless with a specific format"
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+#USAGE arg "format"                      help="Spotless format to use"
+
+set -Eeuo pipefail
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:-${MVN_FLAGS}}"
+format="${usage_format}"
+
+# First check for local modifications
+mise run git:check-local-modifications
+
+# Clean to avoid issues
+mise run maven:clean --mvn_binary "${mvn_binary}" --flags "${flags}"
+
+# Run spotless for the specified format
+$mvn_binary spotless:apply --projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-${format} ${flags}
+
+# Check for local modifications again
+mise run git:check-local-modifications

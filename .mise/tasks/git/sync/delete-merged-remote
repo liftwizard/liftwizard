@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#MISE description="Delete branches from origin merged into configurable upstream/main"
+#MISE depends=["git:fetch"]
+
+set -Eeu pipefail
+
+source .mise/tasks/console/ansi-colors
+
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+offline="${OFFLINE:-false}"
+
+if [ "$offline" != "true" ]; then
+    git branch --remote --list 'origin/*' --merged remotes/${upstream_remote}/${upstream_branch} \
+        | grep --invert-match ${upstream_branch} \
+        | grep --invert-match HEAD \
+        | grep "origin/" \
+        | grep --invert-match "origin/pr/" \
+        | cut -d "/" -f 2- \
+        | xargs --no-run-if-empty git push --delete origin
+else
+    echo "Skipping delete-remote-merged in offline mode"
+fi

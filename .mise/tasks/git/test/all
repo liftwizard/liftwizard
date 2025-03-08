@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#MISE description="Run git-test on all commits with configurable upstream/main as ancestor"
+
+#USAGE flag "--tests <tests>"         help="The git-test tests to run" default="default,checkstyle,spotless-all"
+#USAGE flag "--fail-fast"             help="Exit immediately if a test fails"
+#USAGE arg "flags"                   help="Additional flags to pass to git-test run" default="--retest --verbose --verbose"
+
+set -uo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+tests="${usage_tests:-${GIT_TESTS:-default,checkstyle,spotless-all}}"
+flags="${usage_flags:---retest --verbose --verbose}"
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+
+if [ "${usage_fail_fast}" = "true" ]; then
+    set -Ee
+fi
+
+branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --contains ${upstream_remote}/${upstream_branch}))
+
+total_branches=${#branches[@]}
+echo "Found ${ANSI_YELLOW}${total_branches}${ANSI_DEFAULT} branches containing remote ref ${ANSI_BRIGHT_RED}${ANSI_BOLD}${upstream_remote}/${upstream_branch}${ANSI_NORMAL} as ancestor: ${ANSI_GREEN}${branches[@]}${ANSI_NORMAL}"
+
+current=1
+for branch in "${branches[@]}"
+do
+    echo -n "[${ANSI_YELLOW}${current}${ANSI_DEFAULT}/${total_branches}] "
+    mise run console:run "${ANSI_BRIGHT_RED}mise run${ANSI_DEFAULT} git:test:branch ${ANSI_BRIGHT_GREEN}${ANSI_BOLD}\"${branch}\"${ANSI_NORMAL} ${ANSI_GRAY}--tests '${tests}'${ANSI_DEFAULT} '${flags}'"
+    ((current++))
+done

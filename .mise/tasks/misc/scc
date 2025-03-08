@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Count lines of code using scc"
+
+set -Eeuo pipefail
+
+scc **/src/{main,test}

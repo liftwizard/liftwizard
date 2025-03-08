@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#MISE description="`mvn clean`"
+#MISE hide=true
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+
+set -Eeuo pipefail
+
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+
+# Add --quiet to MVN_FLAGS if not already present
+if [[ "${MVN_FLAGS:-}" != *"--quiet"* ]]; then
+  MVN_FLAGS_WITH_QUIET="${MVN_FLAGS:-} --quiet"
+else
+  MVN_FLAGS_WITH_QUIET="${MVN_FLAGS:-}"
+fi
+
+flags="${usage_flags:-${MVN_FLAGS_WITH_QUIET}}"
+
+mise run maven --mvn_binary "$mvn_binary" --target clean --flags "$flags" --profiles ""
+
+mise run console:run 'git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup **/target'

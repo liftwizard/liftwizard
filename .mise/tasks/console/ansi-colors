@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+# ansi_colors.sh - Centralized ANSI color and style definitions
+#
+# This script defines text styles, resets, foreground colors,
+# background colors, bright foreground colors, and bright background colors.
+#
+# Usage:
+#   source ansi_colors.sh
+
+# A helper function to call tput safely.
+safe_tput() {
+  tput "$@" 2>/dev/null || echo ""
+}
+
+# -----------------------------
+# Text Styling
+# -----------------------------
+ANSI_BOLD=$(safe_tput bold)
+ANSI_DIM=$(safe_tput dim)
+ANSI_ITALIC=$(safe_tput sitm)
+ANSI_UNDERLINE=$(safe_tput smul)
+ANSI_BLINK=$(safe_tput blink)
+ANSI_REVERSE=$(safe_tput rev)
+ANSI_HIDDEN=$(safe_tput invis)
+
+# -----------------------------
+# Resetting Attributes
+# -----------------------------
+ANSI_NORMAL=$(safe_tput sgr0)
+ANSI_RESET_BOLD=$(safe_tput rmso)
+ANSI_RESET_DIM=$(safe_tput dim)
+ANSI_RESET_ITALIC=$(safe_tput ritm)
+ANSI_RESET_UNDERLINE=$(safe_tput rmul)
+ANSI_RESET_BLINK=$(safe_tput blink)
+ANSI_RESET_REVERSE=$(safe_tput rev)
+ANSI_RESET_HIDDEN=$(safe_tput invis)
+
+# -----------------------------
+# Foreground Colors (Text)
+# -----------------------------
+ANSI_BLACK=$(safe_tput setaf 0)
+ANSI_RED=$(safe_tput setaf 1)
+ANSI_GREEN=$(safe_tput setaf 2)
+ANSI_YELLOW=$(safe_tput setaf 3)
+ANSI_BLUE=$(safe_tput setaf 4)
+ANSI_MAGENTA=$(safe_tput setaf 5)
+ANSI_CYAN=$(safe_tput setaf 6)
+ANSI_WHITE=$(safe_tput setaf 7)
+ANSI_GRAY=$(safe_tput setaf 8)
+ANSI_DEFAULT=$(safe_tput op)
+
+# -----------------------------
+# Background Colors
+# -----------------------------
+ANSI_BG_BLACK=$(safe_tput setab 0)
+ANSI_BG_RED=$(safe_tput setab 1)
+ANSI_BG_GREEN=$(safe_tput setab 2)
+ANSI_BG_YELLOW=$(safe_tput setab 3)
+ANSI_BG_BLUE=$(safe_tput setab 4)
+ANSI_BG_MAGENTA=$(safe_tput setab 5)
+ANSI_BG_CYAN=$(safe_tput setab 6)
+ANSI_BG_WHITE=$(safe_tput setab 7)
+ANSI_BG_GRAY=$(safe_tput setab 8)
+ANSI_BG_DEFAULT=$(safe_tput setab 9)
+
+# -----------------------------
+# Bright Foreground Colors
+# -----------------------------
+ANSI_BRIGHT_BLACK=$(safe_tput setaf 8)    # Same as ANSI_GRAY
+ANSI_BRIGHT_RED=$(safe_tput setaf 9)
+ANSI_BRIGHT_GREEN=$(safe_tput setaf 10)
+ANSI_BRIGHT_YELLOW=$(safe_tput setaf 11)
+ANSI_BRIGHT_BLUE=$(safe_tput setaf 12)
+ANSI_BRIGHT_MAGENTA=$(safe_tput setaf 13)
+ANSI_BRIGHT_CYAN=$(safe_tput setaf 14)
+ANSI_BRIGHT_WHITE=$(safe_tput setaf 15)
+
+# -----------------------------
+# Bright Background Colors
+# -----------------------------
+ANSI_BG_BRIGHT_BLACK=$(safe_tput setab 8)
+ANSI_BG_BRIGHT_RED=$(safe_tput setab 9)
+ANSI_BG_BRIGHT_GREEN=$(safe_tput setab 10)
+ANSI_BG_BRIGHT_YELLOW=$(safe_tput setab 11)
+ANSI_BG_BRIGHT_BLUE=$(safe_tput setab 12)
+ANSI_BG_BRIGHT_MAGENTA=$(safe_tput setab 13)
+ANSI_BG_BRIGHT_CYAN=$(safe_tput setab 14)
+ANSI_BG_BRIGHT_WHITE=$(safe_tput setab 15)
+

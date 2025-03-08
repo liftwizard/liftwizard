@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#MISE description="Git fetch from configurable upstream"
+
+#USAGE flag "--upstream_remote <upstream_remote>"  help="Git upstream remote"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+REMOTE="${usage_upstream_remote:-${UPSTREAM_REMOTE}}"
+
+if [ "$OFFLINE" != "true" ]; then
+    mise run console:run "git fetch ${ANSI_BRIGHT_RED}${ANSI_BOLD}${REMOTE}${ANSI_NORMAL} --tags --prune"
+else
+    echo "${ANSI_BRIGHT_YELLOW}${ANSI_BOLD}Warning:${ANSI_NORMAL} Skipping fetch from ${ANSI_BRIGHT_RED}${ANSI_BOLD}${REMOTE}${ANSI_NORMAL} because offline mode is enabled."
+fi

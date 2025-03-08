@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+#MISE description="spotless for all formats"
+#MISE depends_post=["git:check-local-modifications"]
+#MISE depends=["maven:clean"]
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+
+set -Eeuo pipefail
+
+# Fallback to environment variables if flags aren't provided
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:-${MVN_FLAGS}}"
+
+# Use the spotless profiles from environment
+profiles="--activate-profiles ${MVN_SPOTLESS_PROFILES}"
+
+mise run maven --mvn_binary "$mvn_binary" --target "spotless:apply" --profiles "$profiles" --flags "$flags"

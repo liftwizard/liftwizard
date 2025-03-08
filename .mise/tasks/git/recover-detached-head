@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#MISE description="Create a branch if HEAD is detached"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+if ! git symbolic-ref -q HEAD >/dev/null; then
+    current_date=$(date +%Y-%m-%d)
+    branch_name="${ANSI_BRIGHT_GREEN}${ANSI_BOLD}branch-${current_date}${ANSI_NORMAL}"
+    mise run console:run "git checkout -b ${branch_name}"
+    echo "Recovering detached HEAD. Created new branch: ${branch_name}"
+else
+    echo "HEAD is not detached. Current branch: ${ANSI_BRIGHT_GREEN}${ANSI_BOLD}$(git branch --show-current)${ANSI_NORMAL}"
+fi

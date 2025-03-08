@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#MISE description="Generate a markdown list of commit messages"
+
+#USAGE flag "--upstream_remote <upstream_remote>"  help="Git upstream remote"
+#USAGE flag "--upstream_branch <upstream_branch>"  help="Git upstream branch"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+REMOTE="${usage_upstream_remote:-${UPSTREAM_REMOTE}}"
+BRANCH="${usage_upstream_branch:-${UPSTREAM_BRANCH}}"
+
+COMMAND="git log ${ANSI_BRIGHT_RED}${ANSI_BOLD}${REMOTE}/${BRANCH}${ANSI_NORMAL}..${ANSI_BRIGHT_CYAN}${ANSI_BOLD}HEAD${ANSI_NORMAL} --reverse --format='- %s'"
+mise run console:run "$COMMAND"

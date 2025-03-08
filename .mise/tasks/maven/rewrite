@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#MISE description="`mvn` with rewrite-maven-plugin for single recipe"
+#MISE depends_post=["git:check-local-modifications"]
+#MISE depends=["maven:clean"]
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+#USAGE arg "recipe"                      help="The rewrite recipe to run"
+
+set -Eeuo pipefail
+
+# Fallback to environment variables if flags aren't provided
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:-${MVN_FLAGS} -DskipTests}"
+recipe="$usage_recipe"
+
+# Build the command with the recipe parameter
+rewrite_flags="$flags -Drewrite.activeRecipes=$recipe"
+
+mise run maven --mvn_binary "$mvn_binary" --target "install org.openrewrite.maven:rewrite-maven-plugin:run" --profiles "--activate-profiles rewrite-maven-plugin" --flags "$rewrite_flags"

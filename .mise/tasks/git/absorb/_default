@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Git absorb into configurable upstream/main"
+
+#USAGE flag "--flags <flags>" help="Additional flags to pass to git absorb"
+
+set -Eeuo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+flags="${usage_flags:-}"
+
+mise run console:run "git absorb --base ${ANSI_BRIGHT_RED}${ANSI_BOLD}${upstream_remote}/${upstream_branch}${ANSI_NORMAL} --force ${flags}"

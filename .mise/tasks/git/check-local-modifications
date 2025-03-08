@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#MISE description="Fail if there are local modifications or untracked files"
+
+#USAGE flag "--echo-cmd <echo_command>"  help="Command to echo error messages"
+
+set -uo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+echo_cmd="${usage_echo_cmd:-${ECHO_COMMAND}}"
+
+ERRORS=""
+
+git diff --quiet || ERRORS+="- Working tree has uncommitted changes\n"
+git diff --staged --quiet || ERRORS+="- Index has staged changes\n"
+git status --porcelain | grep -q '^??' && ERRORS+="- Untracked files exist\n"
+
+if [ -n "$ERRORS" ]; then
+    $echo_cmd "${ANSI_RED}${ANSI_BOLD}Local modifications${ANSI_NORMAL}"
+    echo -e "$ERRORS"
+    mise run console:run "git status"
+    exit 1
+fi

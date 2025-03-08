@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+#MISE description="Run all checkstyle profiles"
+#MISE depends=["maven:checkstyle/*"]
+
+set -Eeuo pipefail
+
+# This task is just a wrapper that depends on all the individual checkstyle tasks
+echo "All checkstyle tasks completed successfully"

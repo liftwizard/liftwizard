@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#MISE description="Clean Maven local repository snapshots for the project group"
+#MISE hide=true
+
+set -Eeuo pipefail
+# Enable the globstar option for ** pattern to work recursively
+shopt -s globstar
+
+# Get the group ID with slashes instead of dots
+GROUP_ID_WITH_SLASHES=${GROUP_ID//./\/}
+
+# Source the ansi colors for console output
+source .mise/tasks/console/ansi-colors
+
+# Remove snapshot artifacts under the given group path.
+mise run console:run "rm -rf ~/.m2/repository/${ANSI_YELLOW}${GROUP_ID_WITH_SLASHES}${ANSI_DEFAULT}/**/*-SNAPSHOT"
+exit 0

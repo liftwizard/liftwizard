@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Run git rebase-all and delete-merged"
+#MISE depends=["git:rebase:all", "git:sync:delete-merged"]
+#MISE aliases=["g"]
+
+set -Eeuo pipefail
+
+# This task just depends on the other tasks and doesn't need to do anything else

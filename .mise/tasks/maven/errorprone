@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#MISE description="`mvn` with errorprone"
+#MISE depends_post=["git:check-local-modifications"]
+
+#USAGE flag "--mvn_binary <mvn_binary>"  help="Maven binary to use"
+#USAGE flag "--flags <flags>"            help="Additional Maven flags"
+
+set -Eeuo pipefail
+
+# Fallback to environment variables if flags aren't provided
+mvn_binary="${usage_mvn_binary:-${MVN_BINARY}}"
+flags="${usage_flags:-${MVN_FLAGS} -DskipTests}"
+
+mise run maven --mvn_binary "$mvn_binary" --target verify --profiles "--activate-profiles errorprone" --flags "$flags"

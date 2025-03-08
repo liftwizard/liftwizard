@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#MISE description="Show git-test results for all branches with configurable upstream/main as ancestor"
+
+set -uo pipefail
+
+source .mise/tasks/console/ansi-colors
+
+upstream_remote="${UPSTREAM_REMOTE:-upstream}"
+upstream_branch="${UPSTREAM_BRANCH:-main}"
+
+branches=($(git for-each-ref --format='%(refname:short)' refs/heads/ --sort -committerdate --contains ${upstream_remote}/${upstream_branch}))
+
+total_branches=${#branches[@]}
+echo "Found ${ANSI_YELLOW}${total_branches}${ANSI_DEFAULT} branches containing remote ref ${ANSI_BRIGHT_RED}${ANSI_BOLD}${upstream_remote}/${upstream_branch}${ANSI_NORMAL}${ANSI_DEFAULT} as ancestor: ${ANSI_BRIGHT_GREEN}${branches[@]}${ANSI_NORMAL}"
+
+current=1
+for branch in "${branches[@]}"
+do
+    echo -n "[${ANSI_YELLOW}${current}${ANSI_DEFAULT}/${total_branches}] "
+    mise run console:run "git test results --color ${ANSI_BRIGHT_RED}${ANSI_BOLD}${upstream_remote}/${upstream_branch}${ANSI_NORMAL}..${ANSI_BRIGHT_GREEN}${ANSI_BOLD}${branch}${ANSI_NORMAL}"
+    ((current++))
+done

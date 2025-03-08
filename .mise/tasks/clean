@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+#MISE description="Clean (maven and git and m2)"
+
+set -Eeuo pipefail
+
+mise run git:check-local-modifications
+mise run maven:clean
+mise run maven:clean-m2

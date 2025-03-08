@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#MISE description="Execute a command with ANSI color stripping"
+#MISE hidden=true
+#MISE quiet=true
+#MISE raw=true
+
+#USAGE arg "<command>"                  help="The command to execute"
+
+set -Eeuo pipefail
+
+# Source ANSI color definitions if available.
+if [ -f "$(dirname "$0")/ansi-colors" ]; then
+  source "$(dirname "$0")/ansi-colors"
+fi
+
+echo "${ANSI_BOLD:-}Running command: ${ANSI_NORMAL:-}${usage_command}${ANSI_NORMAL:-}"
+
+# Execute the command after stripping ANSI color codes using strip-ansi
+eval "$(echo "${usage_command}" | strip-ansi)"
