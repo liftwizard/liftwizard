@@ -17,15 +17,17 @@
 package io.liftwizard.reladomo.connectionmanager.h2.memory;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
 import com.gs.fw.common.mithra.bulkloader.BulkLoader;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
-import com.gs.fw.common.mithra.connectionmanager.XAConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import com.gs.fw.common.mithra.databasetype.H2DatabaseType;
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 public final class H2InMemoryConnectionManager
         implements SourcelessConnectionManager
@@ -34,8 +36,7 @@ public final class H2InMemoryConnectionManager
 
     private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("UTC");
     private static final String SCHEMA_NAME = "liftwizard-app-h2";
-    private static final XAConnectionManager XA_CONNECTION_MANAGER =
-            H2InMemoryConnectionManager.createXaConnectionManager();
+    private static final DataSource DATA_SOURCE = H2InMemoryConnectionManager.createDataSource();
 
     private H2InMemoryConnectionManager()
     {
@@ -43,21 +44,29 @@ public final class H2InMemoryConnectionManager
     }
 
     @Nonnull
-    private static XAConnectionManager createXaConnectionManager()
+    private static DataSource createDataSource()
     {
-        // TODO: Consider using org.apache.tomcat.jdbc.pool.DataSourceProxy and org.apache.tomcat.jdbc.pool.PoolProperties instead
-        XAConnectionManager connectionManager = new XAConnectionManager();
-        connectionManager.setDatabaseType(H2DatabaseType.getInstance());
-        connectionManager.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
-        connectionManager.setMaxWait(500);
-        connectionManager.setJdbcConnectionString("jdbc:p6spy:h2:mem:");
-        connectionManager.setJdbcUser("sa");
-        connectionManager.setJdbcPassword("");
-        connectionManager.setPoolName("Reladomo default connection pool");
-        connectionManager.setInitialSize(1);
-        connectionManager.setPoolSize(10);
-        connectionManager.initialisePool();
-        return connectionManager;
+        PoolProperties poolProperties = new PoolProperties();
+        poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
+        poolProperties.setUrl("jdbc:p6spy:h2:mem:");
+        poolProperties.setUsername("sa");
+        poolProperties.setPassword("");
+        poolProperties.setInitialSize(1);
+        poolProperties.setMaxActive(10);
+        poolProperties.setMaxWait(500);
+        poolProperties.setTestOnBorrow(true);
+        poolProperties.setTestOnReturn(false);
+        poolProperties.setTestWhileIdle(true);
+        poolProperties.setValidationQuery("SELECT 1");
+        poolProperties.setValidationInterval(30000);
+        poolProperties.setTimeBetweenEvictionRunsMillis(30000);
+        poolProperties.setMinEvictableIdleTimeMillis(60000);
+        poolProperties.setName("Reladomo default connection pool");
+
+        DataSource dataSource = new DataSource();
+        dataSource.setPoolProperties(poolProperties);
+
+        return dataSource;
     }
 
     @Nonnull
@@ -77,7 +86,14 @@ public final class H2InMemoryConnectionManager
     @Override
     public Connection getConnection()
     {
-        return XA_CONNECTION_MANAGER.getConnection();
+        try
+        {
+            return DATA_SOURCE.getConnection();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException("Could not obtain database connection", e);
+        }
     }
 
     @Override
