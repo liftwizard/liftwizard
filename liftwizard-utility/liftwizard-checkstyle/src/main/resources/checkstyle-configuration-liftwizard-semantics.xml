@@ -326,12 +326,6 @@
             <property name="message" value="Curly quotes aren't allowed." />
         </module>
 
-        <module name="Regexp">
-            <property name="illegalPattern" value="true" />
-            <property name="format" value="[ ]+$" />
-            <property name="message" value="Line has trailing spaces." />
-        </module>
-
         <module name="RegexpSinglelineJava">
             <property name="id" value="commaWrap" />
 
