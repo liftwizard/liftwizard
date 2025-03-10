@@ -165,6 +165,10 @@
                     <argLine>-XX:-OmitStackTraceInFastThrow @{argLine}</argLine>
                     <runOrder>random</runOrder>
                     <trimStackTrace>false</trimStackTrace>
+                    <systemPropertyVariables>
+                        <!-- Only relevant when using AssertJ. Disables org.assertj.core.util.Throwables.removeAssertJRelatedElementsFromStackTrace() -->
+                        <assertj.remove.assertj.related.elements.from.stack.trace>false</assertj.remove.assertj.related.elements.from.stack.trace>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <!--endregion Phase 15: test-->
