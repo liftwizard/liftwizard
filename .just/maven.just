@@ -137,7 +137,7 @@ release: clean _check-local-modifications && _clean-git _check-local-modificatio
         MAJOR="${BASH_REMATCH[1]}"
         MINOR="${BASH_REMATCH[2]}"
         PATCH="${BASH_REMATCH[3]}"
-        NEXT_VERSION="$MAJOR.$((MINOR + 1)).0-SNAPSHOT"
+        NEXT_VERSION="$MAJOR.$MINOR.$((PATCH + 1))-SNAPSHOT"
     else
         NEXT_VERSION="$CURRENT_VERSION"
     fi
