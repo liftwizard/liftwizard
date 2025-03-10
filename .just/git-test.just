@@ -29,7 +29,7 @@ setup-git-test:
 
 fail_fast := env('FAIL_FAST', "false")
 
-git_tests := env('GIT_TESTS', "--tests default,checkstyle,spotless-all")
+git_tests := env('GIT_TESTS', "default,checkstyle,spotless-all")
 
 # `git-test` on the range of commits between a configurable upstream/main and {{BRANCH}}
 test-branch BRANCH="HEAD" TESTS=git_tests *FLAGS="--retest --verbose --verbose":
@@ -42,7 +42,8 @@ test-branch BRANCH="HEAD" TESTS=git_tests *FLAGS="--retest --verbose --verbose":
         fi
     fi
     echo "$branch" > JUSTFILE_BRANCH
-    just _run "git test run {{ANSI_GRAY}}{{TESTS}}{{ANSI_DEFAULT}} {{FLAGS}} {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}..{{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}${branch}{{ANSI_NORMAL}}"
+    tests=$([ -n "{{TESTS}}" ] && echo "--tests {{TESTS}}" || echo "")
+    just _run "git test run {{ANSI_GRAY}}${tests}{{ANSI_DEFAULT}} {{FLAGS}} {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}..{{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}${branch}{{ANSI_NORMAL}}"
 
 # `just test` all commits with configurable upstream/main as ancestor
 test-all TESTS=git_tests *FLAGS="--retest --verbose --verbose":
@@ -99,8 +100,14 @@ test-fix:
 
     echo "{{ANSI_BOLD}}Checking for unstaged files.{{ANSI_NORMAL}}"
     just _check-local-modifications
-    cat JUSTFILE_BRANCH
-    git rebase --onto HEAD HEAD^ $(cat JUSTFILE_BRANCH)
-    just rebase
-    cat JUSTFILE_BRANCH
-    rm JUSTFILE_BRANCH
+
+    BRANCH=$(cat JUSTFILE_BRANCH)
+    echo "Rebasing the last branch used with just test-fix: {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$BRANCH{{ANSI_NORMAL}}"
+    just _run "git rebase --onto HEAD HEAD^ {{ANSI_BRIGHT_GREEN}}{{ANSI_BOLD}}$BRANCH{{ANSI_NORMAL}}"
+    just _run "git checkout $BRANCH"
+
+    echo "{{ANSI_BOLD}}Squashing changes.{{ANSI_NORMAL}}"
+    just _run "just rebase"
+
+    echo "{{ANSI_BOLD}}Cleaning up.{{ANSI_NORMAL}}"
+    just _run "rm {{ANSI_YELLOW}}JUSTFILE_BRANCH{{ANSI_NORMAL}}"
