@@ -28,6 +28,7 @@
     <name>Liftwizard Bundle (Module Group)</name>
 
     <modules>
+        <module>liftwizard-bundle-assets-cache</module>
         <module>liftwizard-bundle-cors</module>
         <module>liftwizard-bundle-ddl-executor</module>
         <module>liftwizard-bundle-dynamic-bundles</module>
