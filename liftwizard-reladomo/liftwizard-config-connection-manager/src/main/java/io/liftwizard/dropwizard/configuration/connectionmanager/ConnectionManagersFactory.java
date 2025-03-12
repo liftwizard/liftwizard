@@ -64,10 +64,6 @@ public class ConnectionManagersFactory
     @JsonIgnore
     public boolean isValidConnectionManagerNames()
     {
-        /* TODO: We could validate more here. If multiple connectionManagers share a data source,
-         * they should also share almost everything, except schemaNames should be different.
-         */
-
         List<String> orderedConnectionManagerNames = this.connectionManagerFactories
                 .stream()
                 .map(ConnectionManagerFactory::getConnectionManagerName)
@@ -80,13 +76,70 @@ public class ConnectionManagersFactory
                 .filter(p -> p.getValue() > 1)
                 .map(Map.Entry::getKey)
                 .toList();
-        if (duplicateConnectionManagerNames.isEmpty())
+        if (!duplicateConnectionManagerNames.isEmpty())
         {
-            return true;
+            String errorMessage = "Duplicate names found in connectionManagers: " + duplicateConnectionManagerNames;
+            throw new IllegalStateException(errorMessage);
         }
 
-        String errorMessage = "Duplicate names found in connectionManagers: " + duplicateConnectionManagerNames;
-        throw new IllegalStateException(errorMessage);
+        // Validate that connection managers sharing the same data source have compatible configurations
+        Map<String, List<ConnectionManagerFactory>> managersByDataSource = this.connectionManagerFactories.stream()
+                .collect(Collectors.groupingBy(ConnectionManagerFactory::getDataSourceName));
+
+        for (List<ConnectionManagerFactory> managersWithSameDataSource : managersByDataSource.values())
+        {
+            if (managersWithSameDataSource.size() <= 1)
+            {
+                continue;
+            }
+
+            // For managers sharing a data source, verify that they have the same configuration except schema
+            ConnectionManagerFactory firstManager = managersWithSameDataSource.get(0);
+            for (int i = 1; i < managersWithSameDataSource.size(); i++)
+            {
+                ConnectionManagerFactory currentManager = managersWithSameDataSource.get(i);
+
+                // Verify that database type matches
+                if (!firstManager.getDatabaseType().equals(currentManager.getDatabaseType()))
+                {
+                    String errorMessage = "Connection managers '%s' and '%s' share data source '%s' but have different database types: %s vs %s"
+                            .formatted(
+                                    firstManager.getConnectionManagerName(),
+                                    currentManager.getConnectionManagerName(),
+                                    firstManager.getDataSourceName(),
+                                    firstManager.getDatabaseType(),
+                                    currentManager.getDatabaseType());
+                    throw new IllegalStateException(errorMessage);
+                }
+
+                // Verify that time zone matches
+                if (!firstManager.getTimeZoneName().equals(currentManager.getTimeZoneName()))
+                {
+                    String errorMessage = "Connection managers '%s' and '%s' share data source '%s' but have different time zones: %s vs %s"
+                            .formatted(
+                                    firstManager.getConnectionManagerName(),
+                                    currentManager.getConnectionManagerName(),
+                                    firstManager.getDataSourceName(),
+                                    firstManager.getTimeZoneName(),
+                                    currentManager.getTimeZoneName());
+                    throw new IllegalStateException(errorMessage);
+                }
+
+                // Verify that schemas are different
+                if (firstManager.getSchemaName().equals(currentManager.getSchemaName()))
+                {
+                    String errorMessage = "Connection managers '%s' and '%s' share data source '%s' but also have the same schema: %s"
+                            .formatted(
+                                    firstManager.getConnectionManagerName(),
+                                    currentManager.getConnectionManagerName(),
+                                    firstManager.getDataSourceName(),
+                                    firstManager.getSchemaName());
+                    throw new IllegalStateException(errorMessage);
+                }
+            }
+        }
+
+        return true;
     }
 
     @JsonIgnore
