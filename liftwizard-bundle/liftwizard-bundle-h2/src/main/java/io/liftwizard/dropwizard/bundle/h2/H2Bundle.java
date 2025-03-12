@@ -80,7 +80,10 @@ public class H2Bundle
         h2ConsoleServlet.setInitParameter("-properties", propertiesLocation);
         h2ConsoleServlet.setLoadOnStartup(1);
 
-        // TODO: Add logging about what's happening here
+        LOGGER.debug("H2 Console servlet '{}' configured at URL mapping '{}'", servletName, servletUrlMapping);
+        LOGGER.debug("H2 TCP Server running on port {}", h2Factory.getTcpPort());
+        LOGGER.debug("H2 Web Console available at http://localhost:{}/h2-console", h2Factory.getWebPort());
+        LOGGER.debug("JDBC URL for H2 Console: jdbc:h2:tcp://localhost:{}/./target/h2db/liftwizard", h2Factory.getTcpPort());
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
