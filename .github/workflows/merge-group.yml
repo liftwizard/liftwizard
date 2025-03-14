@@ -412,6 +412,35 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
+  spotless-java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: "Spotless Check: Java"
+        run: |
+          mvn spotless:check \
+            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
+            --activate-profiles 'spotless-check,spotless-java'
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
   spotless-sql:
     runs-on: ubuntu-latest
     steps:
@@ -612,6 +641,7 @@ jobs:
         maven-rewrite,
         maven-reproducible,
         spotless-formats,
+        spotless-java,
         spotless-java-sort-imports,
         spotless-java-unused-imports,
         spotless-java-cleanthat,
