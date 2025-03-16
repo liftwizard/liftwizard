@@ -61,8 +61,11 @@ public class GenerateReladomoDatabaseMojo
     @Parameter(property = "classListFileName", defaultValue = "ReladomoClassList.xml")
     private String classListFileName;
 
-    @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}/generated-resources/sql")
-    private File outputDirectory;
+    @Parameter(property = "generatedResourcesDirectory", defaultValue = "${project.build.directory}/generated-resources")
+    private File generatedResourcesDirectory;
+
+    @Parameter(property = "outputDirectory", defaultValue = "sql")
+    private String outputDirectory;
 
     @Parameter(property = "databaseType", defaultValue = "postgres")
     private String databaseType;
@@ -83,9 +86,11 @@ public class GenerateReladomoDatabaseMojo
     @Override
     public void execute()
     {
-        if (!this.outputDirectory.exists())
+        File generatedOutputDirectory = new File(this.generatedResourcesDirectory, this.outputDirectory);
+
+        if (!generatedOutputDirectory.exists())
         {
-            this.outputDirectory.mkdirs();
+            generatedOutputDirectory.mkdirs();
         }
 
         Path tempFile = this.getTempFile();
@@ -94,23 +99,23 @@ public class GenerateReladomoDatabaseMojo
             throw new IllegalStateException("Could not find " + tempFile);
         }
 
-        CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(tempFile);
+        CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(tempFile, generatedOutputDirectory);
         coreGenerator.execute();
 
         Resource resource = new Resource();
-        resource.setDirectory(this.outputDirectory.getAbsolutePath());
-        // TODO: Should be based on the output path
-        resource.setTargetPath("sql");
+        resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
+
+        LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
         this.mavenProject.addResource(resource);
     }
 
     @Nonnull
-    private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile)
+    private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile, File generatedOutputDirectory)
     {
         var coreGenerator = new CoreMithraDbDefinitionGenerator();
         coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
         coreGenerator.setXml(tempFile.toString());
-        coreGenerator.setGeneratedDir(this.outputDirectory.getAbsolutePath());
+        coreGenerator.setGeneratedDir(generatedOutputDirectory.getAbsolutePath());
         coreGenerator.setDatabaseType(this.databaseType);
         coreGenerator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
         coreGenerator.setIgnoreTransactionalMethods(this.ignoreTransactionalMethods);
