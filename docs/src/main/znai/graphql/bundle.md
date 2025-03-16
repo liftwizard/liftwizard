@@ -21,10 +21,10 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
     bootstrap.addBundle(new LiftwizardGraphQLBundle<>(
             builder ->
             {
-                // TODO: Set up GraphQL wiring
+                // Set up GraphQL wiring
                 // builder.scalar(...);
                 // builder.type(...);
-            })); 
+            }));
 
     // ...
 }
