@@ -44,7 +44,7 @@ public class CacheAssetServlet
         Instant now = this.clock.instant();
         Instant expires = now.plus(this.amountToAdd, this.temporalUnit);
 
-        long number = Duration.of(this.amountToAdd, this.temporalUnit).getSeconds();
+        long number = Duration.of(this.amountToAdd, this.temporalUnit).toSeconds();
         resp.setHeader("Cache-Control", "public, max-age=" + number);
         resp.setHeader("Expires", String.valueOf(expires.toEpochMilli()));
     }

@@ -318,7 +318,7 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertBooleanAttribute(
-            RelatedFinder<?> finderInstance,
+            RelatedFinder<?> unused,
             BooleanAttribute<?> attribute,
             String operationName,
             Object operationParameter)
@@ -665,7 +665,7 @@ public class GraphQLQueryToOperationConverter
     }
 
     private Operation convertAsOfAttribute(
-            RelatedFinder<?> finderInstance,
+            RelatedFinder<?> unused,
             AsOfAttribute<?> attribute,
             String operationName,
             Object operationParameter)

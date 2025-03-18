@@ -34,8 +34,6 @@ public class StructuredArgumentsRequestHttp
     private StructuredArgumentsClient client;
     private StructuredArgumentsServer server;
 
-    private String body;
-
     @JsonProperty
     public String getMethod()
     {
@@ -172,20 +170,5 @@ public class StructuredArgumentsRequestHttp
             throw new AssertionError(this.server);
         }
         this.server = Objects.requireNonNull(server);
-    }
-
-    @JsonProperty
-    public String getBody()
-    {
-        return this.body;
-    }
-
-    public void setBody(String body)
-    {
-        if (this.body != null)
-        {
-            throw new AssertionError(this.body);
-        }
-        this.body = Objects.requireNonNull(body);
     }
 }

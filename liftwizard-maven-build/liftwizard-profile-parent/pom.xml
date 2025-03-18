@@ -680,7 +680,13 @@
                                 -XepDisableWarningsInGeneratedCode \
                                 -Xep:CanIgnoreReturnValueSuggester:OFF \
                                 -Xep:NullableOnContainingClass:OFF \
-                                -XepExcludedPaths:.*/generated-sources/.*</arg>
+                                -XepExcludedPaths:.*/generated-sources/.* \
+                                -Xep:DefaultCharset:ERROR \
+                                -Xep:InvalidInlineTag:ERROR \
+                                -Xep:JavaDurationGetSecondsToToSeconds:ERROR \
+                                -Xep:MissingOverride:ERROR \
+                                -Xep:UnusedVariable:ERROR \
+                                -Xep:UnnecessaryLambda:ERROR</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>

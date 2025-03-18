@@ -165,7 +165,7 @@ public class Builder
     /**
      * Use Logging Level when reporting.
      *
-     * @param newLoggingLevel a (@link Slf4jReporter.LoggingLevel}
+     * @param newLoggingLevel a {@link LoggingLevel}
      * @return {@code this}
      */
     public Builder withLoggingLevel(LoggingLevel newLoggingLevel)
