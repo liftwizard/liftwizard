@@ -41,9 +41,8 @@ public class LiquibaseStatement
         extends Statement
 {
     @Nonnull
-    private final Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager
-            .getInstance()
-            .getConnection();
+    private final Supplier<? extends Connection> connectionSupplier = H2InMemoryConnectionManager
+            .getInstance()::getConnection;
 
     private final Statement baseStatement;
     private final String migrationsFile;

@@ -59,7 +59,7 @@ public final class AnsiColorStrip
                         false))
         {
             ansiOutputStream.write(bytes);
-            return byteArrayOutputStream.toString();
+            return byteArrayOutputStream.toString(charset);
         }
         catch (IOException e)
         {
