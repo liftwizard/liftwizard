@@ -35,7 +35,6 @@ import graphql.kickstart.servlet.GraphQLHttpServlet;
 import graphql.scalars.java.JavaPrimitives;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
-import graphql.schema.idl.RuntimeWiring.Builder;
 import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -68,12 +67,12 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
     private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
 
     @Nonnull
-    private final ImmutableList<Consumer<Builder>> runtimeWiringBuilders;
+    private final ImmutableList<Consumer<RuntimeWiring.Builder>> runtimeWiringBuilders;
 
     private MetricRegistry metricRegistry;
 
     @SafeVarargs
-    public LiftwizardGraphQLBundle(@Nonnull Consumer<Builder>... runtimeWiringBuilders)
+    public LiftwizardGraphQLBundle(@Nonnull Consumer<RuntimeWiring.Builder>... runtimeWiringBuilders)
     {
         this.runtimeWiringBuilders = Lists.immutable.with(runtimeWiringBuilders);
     }
@@ -144,7 +143,7 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
         List<Instrumentation> instrumentations = this.getInstrumentations(configuration);
         factory.setInstrumentations(instrumentations);
 
-        Builder builder = RuntimeWiring.newRuntimeWiring();
+        RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
         builder
                 .scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)
                 .scalar(GraphQLTemporalScalar.TEMPORAL_INSTANT_INSTANCE)
@@ -152,7 +151,7 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
                 .scalar(JavaPrimitives.GraphQLLong)
                 .scalar(GraphQLLocalDateScalar.INSTANCE);
 
-        for (Consumer<Builder> runtimeWiringBuilder : this.runtimeWiringBuilders)
+        for (Consumer<RuntimeWiring.Builder> runtimeWiringBuilder : this.runtimeWiringBuilders)
         {
             runtimeWiringBuilder.accept(builder);
         }

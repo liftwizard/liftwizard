@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.uuid.seed;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -39,7 +40,7 @@ public class SeedUUIDSupplier
     {
         this.counter++;
         String name = this.seed + this.counter;
-        byte[] bytes = name.getBytes();
+        byte[] bytes = name.getBytes(StandardCharsets.UTF_8);
         return UUID.nameUUIDFromBytes(bytes);
     }
 }
