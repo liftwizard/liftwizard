@@ -27,8 +27,6 @@ import javax.ws.rs.RuntimeType;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.StatusType;
 
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
@@ -38,9 +36,6 @@ import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
 public final class ServerLoggingResponseFilter
         implements ContainerResponseFilter
 {
-    @Context
-    private ResourceInfo resourceInfo;
-
     @Override
     public void filter(
             @Nonnull ContainerRequestContext requestContext,

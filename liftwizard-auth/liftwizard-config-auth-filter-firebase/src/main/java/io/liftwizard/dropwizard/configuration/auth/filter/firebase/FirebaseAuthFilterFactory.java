@@ -28,7 +28,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.Authenticator;
-import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter.Builder;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.firebase.principal.FirebasePrincipal;
 
@@ -50,7 +50,7 @@ public class FirebaseAuthFilterFactory
 
         Authenticator<String, FirebasePrincipal> authenticator = new FirebaseOAuthAuthenticator(firebaseAuth);
 
-        return new Builder<FirebasePrincipal>()
+        return new OAuthCredentialAuthFilter.Builder<FirebasePrincipal>()
                 .setAuthenticator(authenticator)
                 .setPrefix("Bearer")
                 .buildAuthFilter();

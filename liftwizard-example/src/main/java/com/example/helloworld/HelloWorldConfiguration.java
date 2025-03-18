@@ -230,6 +230,7 @@ public class HelloWorldConfiguration
         this.reladomoFactory = reladomoFactory;
     }
 
+    @Override
     @JsonProperty("dataSources")
     @JsonUnwrapped
     public NamedDataSourcesFactory getNamedDataSourcesFactory()

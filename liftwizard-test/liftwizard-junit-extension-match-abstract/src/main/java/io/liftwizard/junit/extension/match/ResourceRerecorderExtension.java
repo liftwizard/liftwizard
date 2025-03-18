@@ -17,13 +17,13 @@
 package io.liftwizard.junit.extension.match;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -107,7 +107,7 @@ public class ResourceRerecorderExtension
     }
 
     public String handleMismatch(String resourceClassPathLocation, String fileContents)
-            throws URISyntaxException, FileNotFoundException
+            throws URISyntaxException, IOException
     {
         URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
         URI uri = resource.toURI();
@@ -129,7 +129,7 @@ public class ResourceRerecorderExtension
             @Nonnull String resourceClassPathLocation,
             @Nonnull String fileContents,
             @Nonnull File destinationFile)
-            throws FileNotFoundException
+            throws IOException
     {
         this.rerecordedPaths.add(resourceClassPathLocation);
 
@@ -138,7 +138,7 @@ public class ResourceRerecorderExtension
             destinationFile.getParentFile().mkdirs();
         }
 
-        try (PrintWriter printWriter = new PrintWriter(destinationFile))
+        try (PrintWriter printWriter = new PrintWriter(destinationFile, StandardCharsets.UTF_8))
         {
             printWriter.print(fileContents);
         }
