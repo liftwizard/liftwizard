@@ -3,7 +3,7 @@ default_target   := env('MVN_TARGET',   "verify")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
 
-default_verify_profiles := env('MVN_VERIFY_PROFILES', "maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin")
+default_verify_profiles := env('MVN_VERIFY_PROFILES', "maven-errorprone-plugin,maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin")
 default_checkstyle_profiles := env('MVN_CHECKSTYLE_PROFILES', "checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,checkstyle-formatting-strict")
 default_spotless_profiles := env('MVN_SPOTLESS_PROFILES', "spotless-apply,spotless-formats,spotless-java,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
 default_profiles := env('MVN_PROFILES', "--activate-profiles " + default_verify_profiles + "," + default_checkstyle_profiles + "," + default_spotless_profiles)
