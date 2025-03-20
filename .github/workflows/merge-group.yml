@@ -652,6 +652,7 @@ jobs:
     needs:
       [
         maven-test,
+        maven-spotbugs,
         maven-errorprone,
         maven-enforcer,
         maven-dependency,
@@ -677,7 +678,6 @@ jobs:
         reviewdog-actionlint,
         reviewdog-shellcheck,
       ]
-
     runs-on: ubuntu-latest
     steps:
       - name: All checks passed
