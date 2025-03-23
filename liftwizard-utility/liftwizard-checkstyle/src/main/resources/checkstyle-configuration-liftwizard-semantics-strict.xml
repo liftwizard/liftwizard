@@ -114,7 +114,11 @@
             <property name="ignoreSetter" value="true" />
             <property name="setterCanReturnItsClass" value="true" />
         </module>
-        <module name="UnusedLocalVariable" />
+        <module name="UnusedLocalVariable">
+            <!-- Set to warning because ErrorProne recommends using variable name 'unused' for unused variables,
+                 but CheckStyle's UnusedLocalVariable rule still flags it as an error by default -->
+            <property name="severity" value="warning" />
+        </module>
         <module name="DeclarationOrder" />
         <module name="ExplicitInitialization" />
         <!--endregion-->
