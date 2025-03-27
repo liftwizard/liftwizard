@@ -6,7 +6,6 @@ group_id_with_slashes := "io/liftwizard"
 import ".just/console.just"
 import ".just/maven.just"
 import ".just/git.just"
-import ".just/git-rebase.just"
 import ".just/git-test.just"
 
 # Setup the project (mise) and run the default build (mvn)
