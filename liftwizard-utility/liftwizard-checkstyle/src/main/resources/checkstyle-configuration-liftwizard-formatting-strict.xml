@@ -69,11 +69,6 @@
         </module>
         <!--endregion-->
 
-        <!--region Coding-->
-        <!--https://checkstyle.sourceforge.io/checks/coding/index.html-->
-        <module name="UnnecessaryParentheses" />
-        <!--endregion-->
-
         <!--region Imports-->
         <!--https://checkstyle.sourceforge.io/checks/imports/index.html-->
         <module name="CustomImportOrder">
