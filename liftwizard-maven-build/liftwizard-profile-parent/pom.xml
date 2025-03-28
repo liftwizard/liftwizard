@@ -673,20 +673,26 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <fork>true</fork>
-                            <compilerArgs>
+                            <compilerArgs combine.children="append">
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
-                                <arg>-Xplugin:ErrorProne \
-                                -XepDisableWarningsInGeneratedCode \
-                                -Xep:CanIgnoreReturnValueSuggester:OFF \
-                                -Xep:NullableOnContainingClass:OFF \
-                                -XepExcludedPaths:.*/generated-sources/.* \
-                                -Xep:DefaultCharset:ERROR \
-                                -Xep:InvalidInlineTag:ERROR \
-                                -Xep:JavaDurationGetSecondsToToSeconds:ERROR \
-                                -Xep:MissingOverride:ERROR \
-                                -Xep:UnusedVariable:ERROR \
-                                -Xep:UnnecessaryLambda:ERROR</arg>
+                                <arg>
+                                    -Xplugin:ErrorProne \
+                                    -XepDisableWarningsInGeneratedCode \
+                                    -Xep:CanIgnoreReturnValueSuggester:OFF \
+                                    -Xep:NullableOnContainingClass:OFF \
+                                    <!-- Suppressing EqualsGetClass due to https://github.com/google/error-prone/issues/1144 -->
+                                    -Xep:EqualsGetClass:OFF \
+                                    -XepExcludedPaths:.*/generated-sources/.* \
+                                    -Xep:DefaultCharset:ERROR \
+                                    -Xep:InvalidInlineTag:ERROR \
+                                    -Xep:JavaDurationGetSecondsToToSeconds:ERROR \
+                                    -Xep:MissingOverride:ERROR \
+                                    -Xep:ObjectToString:ERROR \
+                                    -Xep:StringSplitter:ERROR \
+                                    -Xep:UnusedVariable:WARN \
+                                    -Xep:UnnecessaryLambda:ERROR
+                                </arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
@@ -698,7 +704,7 @@
                                 <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
                                 <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
                             </compilerArgs>
-                            <annotationProcessorPaths>
+                            <annotationProcessorPaths combine.self="append">
                                 <path>
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
