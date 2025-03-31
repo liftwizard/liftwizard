@@ -108,8 +108,16 @@
                                     <excludes>
                                         <exclude>commons-logging-api</exclude>
                                         <exclude>commons-logging</exclude>
+                                        <exclude>commons-logging:commons-logging</exclude>
+                                        <exclude>commons-logging:commons-logging-api</exclude>
                                     </excludes>
                                     <message>commons-logging is banned. Use SLF4J with the jcl-over-slf4j bridge instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.springframework:spring-jcl</exclude>
+                                    </excludes>
+                                    <message>spring-jcl is banned. Use SLF4J with the jcl-over-slf4j bridge instead.</message>
                                 </bannedDependencies>
                                 <bannedDependencies>
                                     <excludes>
