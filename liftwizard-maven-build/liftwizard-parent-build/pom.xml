@@ -248,7 +248,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
-                            <rules>
+                            <rules combine.children="append">
                                 <enforceBytecodeVersion>
                                     <maxJdkVersion>17</maxJdkVersion>
                                 </enforceBytecodeVersion>
