@@ -259,6 +259,13 @@
                 <version>1</version>
             </dependency>
 
+            <!-- Jakarta replacement for javax.inject -->
+            <dependency>
+                <groupId>jakarta.inject</groupId>
+                <artifactId>jakarta.inject-api</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.google.auto.service</groupId>
                 <artifactId>auto-service-annotations</artifactId>
