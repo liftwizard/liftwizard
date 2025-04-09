@@ -211,6 +211,10 @@
                                 <banDuplicateClasses>
                                     <findAllDuplicates>true</findAllDuplicates>
                                     <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                                    <ignoreClasses>
+                                        <ignoreClass>org.aopalliance.aop.*</ignoreClass>
+                                        <ignoreClass>org.aopalliance.intercept.*</ignoreClass>
+                                    </ignoreClasses>
                                 </banDuplicateClasses>
                             </rules>
                         </configuration>
