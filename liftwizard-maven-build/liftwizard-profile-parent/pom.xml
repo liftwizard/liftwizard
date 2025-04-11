@@ -85,154 +85,6 @@
 
         <!--region Phase 1: validate-->
         <profile>
-            <id>maven-enforcer-plugin</id>
-
-            <build>
-                <plugins>
-
-                    <plugin>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <configuration>
-                            <rules combine.children="append">
-                                <dependencyConvergence />
-                                <requirePluginVersions>
-                                    <banLatest>true</banLatest>
-                                    <banRelease>true</banRelease>
-                                    <banSnapshots>false</banSnapshots>
-                                    <unCheckedPluginList xml:space="preserve">
-                                        org.apache.maven.plugins:maven-site-plugin,
-                                        org.apache.maven.plugins:maven-deploy-plugin
-                                    </unCheckedPluginList>
-                                </requirePluginVersions>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>commons-logging-api</exclude>
-                                        <exclude>commons-logging</exclude>
-                                        <exclude>commons-logging:commons-logging</exclude>
-                                        <exclude>commons-logging:commons-logging-api</exclude>
-                                    </excludes>
-                                    <message>commons-logging is banned. Use SLF4J with the jcl-over-slf4j bridge instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>org.springframework:spring-jcl</exclude>
-                                    </excludes>
-                                    <message>spring-jcl is banned. Use SLF4J with the jcl-over-slf4j bridge instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>com.sun.activation:javax.activation</exclude>
-                                        <exclude>javax.activation:javax.activation-api</exclude>
-                                    </excludes>
-                                    <message>javax.activation is banned. Use Jakarta Activation (jakarta.activation:jakarta.activation-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>javax.inject:javax.inject</exclude>
-                                    </excludes>
-                                    <message>javax.inject is banned. Use Jakarta Inject (jakarta.inject:jakarta.inject-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>javax.servlet:javax.servlet-api</exclude>
-                                    </excludes>
-                                    <message>javax.servlet-api is banned. Use Jakarta Servlet (jakarta.servlet:jakarta.servlet-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>javax.validation:validation-api</exclude>
-                                    </excludes>
-                                    <message>validation-api is banned. Use Jakarta Validation (jakarta.validation:jakarta.validation-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>javax.ws.rs:javax.ws.rs-api</exclude>
-                                    </excludes>
-                                    <message>javax.ws.rs-api is banned. Use Jakarta REST (jakarta.ws.rs:jakarta.ws.rs-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>javax.xml.bind:jaxb-api</exclude>
-                                    </excludes>
-                                    <message>jaxb-api is banned. Use Jakarta XML Binding (jakarta.xml.bind:jakarta.xml.bind-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>javax.xml.ws:jaxws-api</exclude>
-                                    </excludes>
-                                    <message>jaxws-api is banned. Use Jakarta XML Web Services (jakarta.xml.ws:jakarta.xml.ws-api) instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>log4j:log4j</exclude>
-                                        <exclude>org.apache.logging.log4j:log4j</exclude>
-                                    </excludes>
-                                    <message>log4j 1.x is banned. Use SLF4J with the log4j-over-slf4j bridge instead.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>org.slf4j:jcl</exclude>
-                                        <exclude>org.slf4j:nop</exclude>
-                                        <exclude>org.slf4j:slf4j-jdk14</exclude>
-                                        <exclude>org.slf4j:slf4j-log4j12</exclude>
-                                        <exclude>org.slf4j:slf4j-simple</exclude>
-                                    </excludes>
-                                    <message>Conflicting SLF4J bindings are banned. Use Logback (ch.qos.logback:logback-classic) as the SLF4J implementation.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>com.google.auto.value:auto-value</exclude>
-                                    </excludes>
-                                    <message>Move auto-value to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.value:auto-value-annotations</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>com.google.auto.service:auto-service</exclude>
-                                    </excludes>
-                                    <message>Move auto-service to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.service:auto-service-annotations</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>org.junit.jupiter:junit-jupiter-engine</exclude>
-                                        <exclude>org.junit.platform:junit-platform-engine</exclude>
-                                    </excludes>
-                                    <!--searchTransitive is set to false because dropwizard-testing violates this rule, through jersey-test-framework-core-->
-                                    <searchTransitive>false</searchTransitive>
-                                    <message>To use JUnit 5, depend on org.junit.jupiter:junit-jupiter-api. If you need a particular engine, move the dependency into the dependencies section of maven-surefire-plugin.</message>
-                                </bannedDependencies>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>org.junit.vintage:junit-vintage-engine</exclude>
-                                    </excludes>
-                                    <searchTransitive>false</searchTransitive>
-                                    <message>To use JUnit 4, depend on junit:junit. If you need a particular engine, move the dependency into the dependencies section of maven-surefire-plugin.</message>
-                                </bannedDependencies>
-                                <banDuplicatePomDependencyVersions />
-                                <banDuplicateClasses>
-                                    <findAllDuplicates>true</findAllDuplicates>
-                                    <ignoreWhenIdentical>true</ignoreWhenIdentical>
-                                    <ignoreClasses>
-                                        <ignoreClass>org.aopalliance.aop.*</ignoreClass>
-                                        <ignoreClass>org.aopalliance.intercept.*</ignoreClass>
-                                    </ignoreClasses>
-                                </banDuplicateClasses>
-                            </rules>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>enforce</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
             <id>prettier-check</id>
 
             <build>
@@ -926,70 +778,6 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>maven-dependency-plugin</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>3.8.1</version>
-                        <configuration>
-                            <failOnWarning>true</failOnWarning>
-                            <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
-                            <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.8.1 support Java 17. -->
-                            <ignoredNonTestScopedDependencies>
-                                <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
-                            </ignoredNonTestScopedDependencies>
-                            <ignoredUnusedDeclaredDependencies combine.children="append">
-                                <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>com.google.auto.value:auto-value-annotations</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-firebase</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-header</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-impersonation</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-buffered</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-janino</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-requesturl</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-console</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-file</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-seed</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-system</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-connection-manager-h2-memory</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-query-schema</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-reladomo-meta</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-liquibase-simulated-sequence</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>jakarta.inject:jakarta.inject-api</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>jakarta.xml.bind:jakarta.xml.bind-api</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>org.slf4j:jcl-over-slf4j</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>org.slf4j:jul-to-slf4j</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>org.slf4j:log4j-over-slf4j</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>org.slf4j:slf4j-reload4j</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>p6spy:p6spy</ignoredUnusedDeclaredDependency>
-                                <ignoredUnusedDeclaredDependency>postgresql:postgresql</ignoredUnusedDeclaredDependency>
-                            </ignoredUnusedDeclaredDependencies>
-                        </configuration>
-
-                        <executions>
-                            <execution>
-                                <id>dependency:analyze-only</id>
-                                <goals>
-                                    <goal>analyze-only</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
         <profile>
             <id>jacoco-maven-plugin</id>
@@ -1152,6 +940,219 @@
                 </plugins>
             </build>
 
+        </profile>
+
+        <profile>
+            <id>maven-dependency-plugin</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>3.8.1</version>
+                        <configuration>
+                            <failOnWarning>true</failOnWarning>
+                            <!-- Workaround for bug in maven-dependency-plugin tracked in https://issues.apache.org/jira/browse/MDEP-791 -->
+                            <!-- Version 3.1.2 was the last version with a working algorithm. Version 3.2.0 and 3.8.1 support Java 17. -->
+                            <ignoredNonTestScopedDependencies>
+                                <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
+                            </ignoredNonTestScopedDependencies>
+                            <ignoredUnusedDeclaredDependencies combine.children="append">
+                                <ignoredUnusedDeclaredDependency>ch.qos.logback:logback-classic</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>com.google.auto.service:auto-service-annotations</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>com.google.auto.value:auto-value-annotations</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>com.h2database:h2</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-firebase</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-header</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-auth-filter-impersonation</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-fixed</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-incrementing</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-clock-system</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-buffered</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-janino</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-filter-requesturl</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-console</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-logging-logstash-file</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-seed</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-config-uuid-system</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-connection-manager-h2-memory</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-query-schema</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-graphql-reladomo-meta</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-liquibase-simulated-sequence</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-buffered-appender</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-logging-p6spy</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.liftwizard:liftwizard-reladomo-simulated-sequence</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>jakarta.inject:jakarta.inject-api</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>jakarta.xml.bind:jakarta.xml.bind-api</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.slf4j:jcl-over-slf4j</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.slf4j:jul-to-slf4j</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.slf4j:log4j-over-slf4j</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.slf4j:slf4j-reload4j</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>p6spy:p6spy</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>postgresql:postgresql</ignoredUnusedDeclaredDependency>
+                            </ignoredUnusedDeclaredDependencies>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>dependency:analyze-only</id>
+                                <goals>
+                                    <goal>analyze-only</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>maven-enforcer-plugin</id>
+
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <configuration>
+                            <rules combine.children="append">
+                                <requirePluginVersions>
+                                    <banLatest>true</banLatest>
+                                    <banRelease>true</banRelease>
+                                    <banSnapshots>false</banSnapshots>
+                                    <unCheckedPluginList xml:space="preserve">
+                                        org.apache.maven.plugins:maven-site-plugin,
+                                        org.apache.maven.plugins:maven-deploy-plugin
+                                    </unCheckedPluginList>
+                                </requirePluginVersions>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>commons-logging-api</exclude>
+                                        <exclude>commons-logging</exclude>
+                                        <exclude>commons-logging:commons-logging</exclude>
+                                        <exclude>commons-logging:commons-logging-api</exclude>
+                                    </excludes>
+                                    <message>commons-logging is banned. Use SLF4J with the jcl-over-slf4j bridge instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.springframework:spring-jcl</exclude>
+                                    </excludes>
+                                    <message>spring-jcl is banned. Use SLF4J with the jcl-over-slf4j bridge instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.sun.activation:javax.activation</exclude>
+                                        <exclude>javax.activation:javax.activation-api</exclude>
+                                    </excludes>
+                                    <message>javax.activation is banned. Use Jakarta Activation (jakarta.activation:jakarta.activation-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>javax.inject:javax.inject</exclude>
+                                    </excludes>
+                                    <message>javax.inject is banned. Use Jakarta Inject (jakarta.inject:jakarta.inject-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>javax.servlet:javax.servlet-api</exclude>
+                                    </excludes>
+                                    <message>javax.servlet-api is banned. Use Jakarta Servlet (jakarta.servlet:jakarta.servlet-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>javax.validation:validation-api</exclude>
+                                    </excludes>
+                                    <message>validation-api is banned. Use Jakarta Validation (jakarta.validation:jakarta.validation-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>javax.ws.rs:javax.ws.rs-api</exclude>
+                                    </excludes>
+                                    <message>javax.ws.rs-api is banned. Use Jakarta REST (jakarta.ws.rs:jakarta.ws.rs-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>javax.xml.bind:jaxb-api</exclude>
+                                    </excludes>
+                                    <message>jaxb-api is banned. Use Jakarta XML Binding (jakarta.xml.bind:jakarta.xml.bind-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>javax.xml.ws:jaxws-api</exclude>
+                                    </excludes>
+                                    <message>jaxws-api is banned. Use Jakarta XML Web Services (jakarta.xml.ws:jakarta.xml.ws-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>log4j:log4j</exclude>
+                                        <exclude>org.apache.logging.log4j:log4j</exclude>
+                                    </excludes>
+                                    <message>log4j 1.x is banned. Use SLF4J with the log4j-over-slf4j bridge instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.slf4j:jcl</exclude>
+                                        <exclude>org.slf4j:nop</exclude>
+                                        <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                        <exclude>org.slf4j:slf4j-log4j12</exclude>
+                                        <exclude>org.slf4j:slf4j-simple</exclude>
+                                    </excludes>
+                                    <message>Conflicting SLF4J bindings are banned. Use Logback (ch.qos.logback:logback-classic) as the SLF4J implementation.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.google.auto.value:auto-value</exclude>
+                                    </excludes>
+                                    <message>Move auto-value to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.value:auto-value-annotations</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.google.auto.service:auto-service</exclude>
+                                    </excludes>
+                                    <message>Move auto-service to maven-compiler-plugin's annotationProcessorPaths. The compile time dependency is com.google.auto.service:auto-service-annotations</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.junit.jupiter:junit-jupiter-engine</exclude>
+                                        <exclude>org.junit.platform:junit-platform-engine</exclude>
+                                    </excludes>
+                                    <!--searchTransitive is set to false because dropwizard-testing violates this rule, through jersey-test-framework-core-->
+                                    <searchTransitive>false</searchTransitive>
+                                    <message>To use JUnit 5, depend on org.junit.jupiter:junit-jupiter-api. If you need a particular engine, move the dependency into the dependencies section of maven-surefire-plugin.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.junit.vintage:junit-vintage-engine</exclude>
+                                    </excludes>
+                                    <searchTransitive>false</searchTransitive>
+                                    <message>To use JUnit 4, depend on junit:junit. If you need a particular engine, move the dependency into the dependencies section of maven-surefire-plugin.</message>
+                                </bannedDependencies>
+                                <banDuplicatePomDependencyVersions />
+                                <banDuplicateClasses>
+                                    <findAllDuplicates>true</findAllDuplicates>
+                                    <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                                    <ignoreClasses>
+                                        <ignoreClass>org.aopalliance.aop.*</ignoreClass>
+                                        <ignoreClass>org.aopalliance.intercept.*</ignoreClass>
+                                    </ignoreClasses>
+                                </banDuplicateClasses>
+                            </rules>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>enforce</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
         </profile>
         <!--endregion Phase 21: verify-->
 
