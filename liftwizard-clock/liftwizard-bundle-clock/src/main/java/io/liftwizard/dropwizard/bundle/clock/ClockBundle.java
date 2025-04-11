@@ -28,27 +28,19 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
-public class ClockBundle
-        implements ConfiguredBundle<ClockFactoryProvider>
-{
-    @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
+public class ClockBundle implements ConfiguredBundle<ClockFactoryProvider> {
 
     @Override
-    public void run(ClockFactoryProvider configuration, @Nonnull Environment environment)
-    {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
-        {
+    public void initialize(Bootstrap<?> bootstrap) {}
+
+    @Override
+    public void run(ClockFactoryProvider configuration, @Nonnull Environment environment) {
+        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
             this.runWithMdc(configuration, environment);
         }
     }
 
-    private void runWithMdc(
-            ClockFactoryProvider configuration,
-            @Nonnull Environment environment)
-    {
+    private void runWithMdc(ClockFactoryProvider configuration, @Nonnull Environment environment) {
         ClockFactory clockFactory = configuration.getClockFactory();
         Clock clock = clockFactory.createClock();
         ClockBinder clockBinder = new ClockBinder(clock);

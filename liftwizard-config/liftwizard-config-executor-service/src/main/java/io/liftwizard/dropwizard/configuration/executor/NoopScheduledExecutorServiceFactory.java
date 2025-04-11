@@ -28,25 +28,21 @@ import io.dropwizard.setup.Environment;
 
 @JsonTypeName("noop")
 @AutoService(ScheduledExecutorServiceFactory.class)
-public class NoopScheduledExecutorServiceFactory
-        implements ScheduledExecutorServiceFactory
-{
+public class NoopScheduledExecutorServiceFactory implements ScheduledExecutorServiceFactory {
+
     @Override
     @JsonIgnore
-    public ScheduledExecutorService build(Environment environment)
-    {
+    public ScheduledExecutorService build(Environment environment) {
         return this.build(environment.lifecycle(), environment.metrics());
     }
 
     @Override
     @JsonIgnore
-    public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry)
-    {
-        ScheduledExecutorService scheduledExecutorService = environment
-                .scheduledExecutorService("noop", true)
-                .build();
+    public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
+        ScheduledExecutorService scheduledExecutorService = environment.scheduledExecutorService("noop", true).build();
         NoopScheduledExecutorService noopScheduledExecutorService = new NoopScheduledExecutorService(
-                scheduledExecutorService);
+            scheduledExecutorService
+        );
         return new InstrumentedScheduledExecutorService(noopScheduledExecutorService, metricRegistry, "noop");
     }
 }

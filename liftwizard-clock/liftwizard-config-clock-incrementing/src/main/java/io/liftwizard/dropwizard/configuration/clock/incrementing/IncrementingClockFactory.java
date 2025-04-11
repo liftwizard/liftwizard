@@ -39,9 +39,8 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 
 @JsonTypeName("incrementing")
 @AutoService(ClockFactory.class)
-public class IncrementingClockFactory
-        implements ClockFactory
-{
+public class IncrementingClockFactory implements ClockFactory {
+
     private @Valid @NotNull Instant instant = Instant.parse("2000-12-31T23:59:59Z");
     private @Valid @NotNull String timeZoneName = "UTC";
 
@@ -53,17 +52,14 @@ public class IncrementingClockFactory
 
     @Nonnull
     @Override
-    public Clock createClock()
-    {
-        if (this.incrementingClock == null)
-        {
+    public Clock createClock() {
+        if (this.incrementingClock == null) {
             this.incrementingClock = this.createIncrementingClock();
         }
         return this.incrementingClock;
     }
 
-    private IncrementingClock createIncrementingClock()
-    {
+    private IncrementingClock createIncrementingClock() {
         ZoneId zoneId = ZoneId.of(this.timeZoneName);
         long nanoseconds = this.incrementAmount.toNanoseconds();
         Duration duration = Duration.ofNanos(nanoseconds);
@@ -71,54 +67,48 @@ public class IncrementingClockFactory
     }
 
     @JsonProperty
-    public Instant getInstant()
-    {
+    public Instant getInstant() {
         return this.instant;
     }
 
     @JsonProperty
-    public void setInstant(Instant instant)
-    {
+    public void setInstant(Instant instant) {
         this.instant = instant;
     }
 
     @JsonProperty("timeZone")
-    public String getTimeZoneName()
-    {
+    public String getTimeZoneName() {
         return this.timeZoneName;
     }
 
     @JsonProperty("timeZone")
-    public void setTimeZoneName(String timeZoneName)
-    {
+    public void setTimeZoneName(String timeZoneName) {
         this.timeZoneName = timeZoneName;
     }
 
     @JsonProperty
-    public io.dropwizard.util.Duration getIncrementAmount()
-    {
+    public io.dropwizard.util.Duration getIncrementAmount() {
         return this.incrementAmount;
     }
 
     @JsonProperty
-    public void setIncrementAmount(io.dropwizard.util.Duration incrementAmount)
-    {
+    public void setIncrementAmount(io.dropwizard.util.Duration incrementAmount) {
         this.incrementAmount = incrementAmount;
     }
 
     @ValidationMethod(message = "Invalid timeZoneName")
     @JsonIgnore
-    public boolean isValidTimezone()
-    {
+    public boolean isValidTimezone() {
         TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-        if (zoneInfo != null)
-        {
+        if (zoneInfo != null) {
             return true;
         }
 
-        String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-                this.timeZoneName,
-                Arrays.toString(TimeZone.getAvailableIDs()));
+        String message =
+            "Got timeZoneName '%s' but expected one of: %s".formatted(
+                    this.timeZoneName,
+                    Arrays.toString(TimeZone.getAvailableIDs())
+                );
         throw new IllegalStateException(message);
     }
 }

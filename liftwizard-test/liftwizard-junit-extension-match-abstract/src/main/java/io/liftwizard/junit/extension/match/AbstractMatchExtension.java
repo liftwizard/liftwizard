@@ -30,66 +30,53 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public abstract class AbstractMatchExtension
-        implements BeforeEachCallback, AfterEachCallback
-{
+public abstract class AbstractMatchExtension implements BeforeEachCallback, AfterEachCallback {
+
     protected final Class<?> callingClass;
     protected final boolean rerecordEnabled;
 
     protected final ResourceRerecorderExtension resourceRerecorderExtension;
     protected final ErrorCollectorExtension errorCollectorExtension = new ErrorCollectorExtension();
 
-    protected AbstractMatchExtension(@Nonnull Class<?> callingClass)
-    {
+    protected AbstractMatchExtension(@Nonnull Class<?> callingClass) {
         this(callingClass, Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD")));
     }
 
-    protected AbstractMatchExtension(@Nonnull Class<?> callingClass, boolean rerecordEnabled)
-    {
+    protected AbstractMatchExtension(@Nonnull Class<?> callingClass, boolean rerecordEnabled) {
         this.callingClass = Objects.requireNonNull(callingClass);
         this.rerecordEnabled = rerecordEnabled;
         this.resourceRerecorderExtension = new ResourceRerecorderExtension(callingClass, rerecordEnabled);
     }
 
-    protected Path getPackagePath()
-    {
+    protected Path getPackagePath() {
         String packageName = this.callingClass.getPackage().getName();
         ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
         Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
         return packageNameParts.injectInto(testResources, Path::resolve);
     }
 
-    public void assertFileContents(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull String actualString)
-    {
-        try
-        {
+    public void assertFileContents(@Nonnull String resourceClassPathLocation, @Nonnull String actualString) {
+        try {
             this.assertFileContentsOrThrow(resourceClassPathLocation, actualString);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(resourceClassPathLocation, e);
         }
     }
 
     protected abstract void assertFileContentsOrThrow(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull String actualString)
-            throws Exception;
+        @Nonnull String resourceClassPathLocation,
+        @Nonnull String actualString
+    ) throws Exception;
 
     protected abstract String getPrettyPrintedString(@Nonnull String string);
 
     @Override
-    public void beforeEach(ExtensionContext context)
-            throws IOException
-    {
+    public void beforeEach(ExtensionContext context) throws IOException {
         this.resourceRerecorderExtension.beforeEach(context);
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
+    public void afterEach(ExtensionContext context) {
         this.errorCollectorExtension.afterEach(context);
     }
 }

@@ -30,41 +30,33 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class ReladomoInitializeExtension
-        implements BeforeEachCallback, AfterEachCallback
-{
+public class ReladomoInitializeExtension implements BeforeEachCallback, AfterEachCallback {
+
     @Nonnull
     private final String runtimeConfigurationPath;
 
-    public ReladomoInitializeExtension(@Nonnull String runtimeConfigurationPath)
-    {
+    public ReladomoInitializeExtension(@Nonnull String runtimeConfigurationPath) {
         this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
     }
 
     @Override
-    public void beforeEach(ExtensionContext context)
-    {
+    public void beforeEach(ExtensionContext context) {
         try (
-                InputStream inputStream = this
-                        .getClass()
-                        .getClassLoader()
-                        .getResourceAsStream(this.runtimeConfigurationPath))
-        {
-            MithraConfigurationManager mithraConfigurationManager =
-                    MithraManagerProvider.getMithraManager().getConfigManager();
+            InputStream inputStream =
+                this.getClass().getClassLoader().getResourceAsStream(this.runtimeConfigurationPath)
+        ) {
+            MithraConfigurationManager mithraConfigurationManager = MithraManagerProvider.getMithraManager()
+                .getConfigManager();
             MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
             mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
             mithraConfigurationManager.fullyInitialize();
-        }
-        catch (MithraBusinessException | IOException e)
-        {
+        } catch (MithraBusinessException | IOException e) {
             throw new RuntimeException(this.runtimeConfigurationPath, e);
         }
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
+    public void afterEach(ExtensionContext context) {
         MithraManagerProvider.getMithraManager().clearAllQueryCaches();
         MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
         MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();

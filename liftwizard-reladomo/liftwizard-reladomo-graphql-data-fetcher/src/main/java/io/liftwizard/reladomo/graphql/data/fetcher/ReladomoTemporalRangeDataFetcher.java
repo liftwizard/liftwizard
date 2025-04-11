@@ -26,35 +26,29 @@ import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoTemporalRangeDataFetcher<Input>
-        implements TrivialDataFetcher<Instant>
-{
+public class ReladomoTemporalRangeDataFetcher<Input> implements TrivialDataFetcher<Instant> {
+
     private final AsOfAttribute<Input> asOfAttribute;
 
-    public ReladomoTemporalRangeDataFetcher(AsOfAttribute<Input> asOfAttribute)
-    {
+    public ReladomoTemporalRangeDataFetcher(AsOfAttribute<Input> asOfAttribute) {
         this.asOfAttribute = asOfAttribute;
     }
 
     @Nullable
     @Override
-    public Instant get(@Nonnull DataFetchingEnvironment environment)
-    {
+    public Instant get(@Nonnull DataFetchingEnvironment environment) {
         Input persistentInstance = environment.getSource();
-        if (persistentInstance == null)
-        {
+        if (persistentInstance == null) {
             return null;
         }
 
-        if (this.asOfAttribute.isAttributeNull(persistentInstance))
-        {
+        if (this.asOfAttribute.isAttributeNull(persistentInstance)) {
             return null;
         }
 
         Timestamp result = this.asOfAttribute.valueOf(persistentInstance);
         Timestamp infinity = this.asOfAttribute.getInfinityDate();
-        if (infinity.equals(result))
-        {
+        if (infinity.equals(result)) {
             return null;
         }
 

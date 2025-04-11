@@ -40,24 +40,20 @@ import org.slf4j.LoggerFactory;
  * @see <a href="https://github.com/jhipster/jhipster/blob/master/jhipster-framework/src/main/java/io/github/jhipster/config/h2/H2ConfigurationHelper.java">H2ConfigurationHelper</a>
  */
 @AutoService(PrioritizedBundle.class)
-public class H2Bundle
-        implements PrioritizedBundle
-{
+public class H2Bundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(H2Bundle.class);
 
     @Override
-    public int getPriority()
-    {
+    public int getPriority() {
         return -7;
     }
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-    {
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
         H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
         H2Factory h2Factory = h2FactoryProvider.getH2Factory();
-        if (h2Factory == null || !h2Factory.isEnabled())
-        {
+        if (h2Factory == null || !h2Factory.isEnabled()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
@@ -65,9 +61,11 @@ public class H2Bundle
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
         ImmutableList<String> args = Lists.immutable
-                .withAll(h2Factory.getTcpServerArgs())
-                .newWith("-tcpPort").newWith(String.valueOf(h2Factory.getTcpPort()))
-                .newWith("-webPort").newWith(String.valueOf(h2Factory.getWebPort()));
+            .withAll(h2Factory.getTcpServerArgs())
+            .newWith("-tcpPort")
+            .newWith(String.valueOf(h2Factory.getTcpPort()))
+            .newWith("-webPort")
+            .newWith(String.valueOf(h2Factory.getWebPort()));
         Server tcpServer = this.createTcpServer(args.castToList());
         environment.lifecycle().manage(new TcpServerShutdownHook(tcpServer));
 
@@ -83,24 +81,23 @@ public class H2Bundle
         LOGGER.debug("H2 Console servlet '{}' configured at URL mapping '{}'", servletName, servletUrlMapping);
         LOGGER.debug("H2 TCP Server running on port {}", h2Factory.getTcpPort());
         LOGGER.debug("H2 Web Console available at http://localhost:{}/h2-console", h2Factory.getWebPort());
-        LOGGER.debug("JDBC URL for H2 Console: jdbc:h2:tcp://localhost:{}/./target/h2db/liftwizard", h2Factory.getTcpPort());
+        LOGGER.debug(
+            "JDBC URL for H2 Console: jdbc:h2:tcp://localhost:{}/./target/h2db/liftwizard",
+            h2Factory.getTcpPort()
+        );
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());
     }
 
     @Nonnull
-    private Server createTcpServer(List<String> tcpServerArgs)
-    {
+    private Server createTcpServer(List<String> tcpServerArgs) {
         LOGGER.info("Starting H2 TCP Server with args: {}", tcpServerArgs);
-        try
-        {
-            Server server = Server.createTcpServer(tcpServerArgs.toArray(new String[]{}));
+        try {
+            Server server = Server.createTcpServer(tcpServerArgs.toArray(new String[] {}));
             server.start();
             LOGGER.info(server.getStatus());
             return server;
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

@@ -32,16 +32,13 @@ import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
 
-public class LocalDateCoercing
-        implements Coercing<LocalDate, String>
-{
+public class LocalDateCoercing implements Coercing<LocalDate, String> {
+
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Nonnull
-    private static String typeName(@Nullable Object input)
-    {
-        if (input == null)
-        {
+    private static String typeName(@Nullable Object input) {
+        if (input == null) {
             return "null";
         }
         return input.getClass().getSimpleName();
@@ -49,92 +46,74 @@ public class LocalDateCoercing
 
     @Nonnull
     @Override
-    public String serialize(@Nonnull Object input)
-    {
+    public String serialize(@Nonnull Object input) {
         TemporalAccessor temporalAccessor = this.getTemporalAccessorSerialize(input);
-        try
-        {
+        try {
             return DATE_FORMATTER.format(temporalAccessor);
-        }
-        catch (DateTimeException e)
-        {
+        } catch (DateTimeException e) {
             String message = "Unable to turn TemporalAccessor into LocalDate because of: '" + e.getMessage() + "'.";
             throw new CoercingSerializeException(message);
         }
     }
 
-    private TemporalAccessor getTemporalAccessorSerialize(Object input)
-    {
-        if (input instanceof TemporalAccessor temporalAccessor)
-        {
+    private TemporalAccessor getTemporalAccessorSerialize(Object input) {
+        if (input instanceof TemporalAccessor temporalAccessor) {
             return temporalAccessor;
         }
 
-        if (input instanceof String)
-        {
+        if (input instanceof String) {
             return this.parseLocalDate(input.toString(), CoercingSerializeException::new);
         }
 
-        String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
-                LocalDateCoercing.typeName(input));
+        String error =
+            "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
+                    LocalDateCoercing.typeName(input)
+                );
         throw new CoercingSerializeException(error);
     }
 
     @Override
-    public LocalDate parseValue(@Nonnull Object input)
-    {
+    public LocalDate parseValue(@Nonnull Object input) {
         TemporalAccessor temporalAccessor = this.getTemporalAccessorParse(input);
-        try
-        {
+        try {
             return LocalDate.from(temporalAccessor);
-        }
-        catch (DateTimeException e)
-        {
+        } catch (DateTimeException e) {
             String message = "Unable to turn TemporalAccessor into full date because of: '" + e.getMessage() + "'.";
             throw new CoercingParseValueException(message);
         }
     }
 
-    private TemporalAccessor getTemporalAccessorParse(Object input)
-    {
-        if (input instanceof TemporalAccessor temporalAccessor)
-        {
+    private TemporalAccessor getTemporalAccessorParse(Object input) {
+        if (input instanceof TemporalAccessor temporalAccessor) {
             return temporalAccessor;
         }
 
-        if (input instanceof String)
-        {
+        if (input instanceof String) {
             return this.parseLocalDate(input.toString(), CoercingParseValueException::new);
         }
 
-        String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
-                LocalDateCoercing.typeName(input));
+        String error =
+            "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
+                    LocalDateCoercing.typeName(input)
+                );
         throw new CoercingParseValueException(error);
     }
 
     @Override
-    public LocalDate parseLiteral(@Nonnull Object input)
-    {
-        if (!(input instanceof StringValue))
-        {
+    public LocalDate parseLiteral(@Nonnull Object input) {
+        if (!(input instanceof StringValue)) {
             String message = "Expected AST type 'StringValue' but was '" + LocalDateCoercing.typeName(input) + "'.";
             throw new CoercingParseLiteralException(message);
         }
         return this.parseLocalDate(((StringValue) input).getValue(), CoercingParseLiteralException::new);
     }
 
-    private LocalDate parseLocalDate(String s, Function<String, RuntimeException> exceptionMaker)
-    {
-        try
-        {
+    private LocalDate parseLocalDate(String s, Function<String, RuntimeException> exceptionMaker) {
+        try {
             TemporalAccessor temporalAccessor = DATE_FORMATTER.parse(s);
             return LocalDate.from(temporalAccessor);
-        }
-        catch (DateTimeParseException e)
-        {
-            String message = "Invalid RFC3339 full date value: '%s'. because of: '%s'".formatted(
-                    s,
-                    e.getMessage());
+        } catch (DateTimeParseException e) {
+            String message = "Invalid RFC3339 full date value: '%s'. because of: '%s'".formatted(s, e.getMessage());
             throw exceptionMaker.apply(message);
         }
     }

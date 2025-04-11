@@ -29,40 +29,36 @@ import org.fusesource.jansi.io.AnsiOutputStream;
 /**
  * Based on the Jansi test <a href="https://github.com/fusesource/jansi/blob/master/src/test/java/org/fusesource/jansi/io/AnsiOutputStreamTest.java">AnsiOutputStreamTest</a>
  */
-public final class AnsiColorStrip
-{
-    private AnsiColorStrip()
-    {
+public final class AnsiColorStrip {
+
+    private AnsiColorStrip() {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static String strip(String input)
-    {
+    public static String strip(String input) {
         return strip(input, StandardCharsets.UTF_8);
     }
 
-    public static String strip(String input, Charset charset)
-    {
+    public static String strip(String input, Charset charset) {
         byte[] bytes = input.getBytes(charset);
         try (
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                AnsiOutputStream ansiOutputStream = new AnsiOutputStream(
-                        byteArrayOutputStream,
-                        null,
-                        AnsiMode.Strip,
-                        null,
-                        AnsiType.Emulation,
-                        AnsiColors.TrueColor,
-                        charset,
-                        null,
-                        null,
-                        false))
-        {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            AnsiOutputStream ansiOutputStream = new AnsiOutputStream(
+                byteArrayOutputStream,
+                null,
+                AnsiMode.Strip,
+                null,
+                AnsiType.Emulation,
+                AnsiColors.TrueColor,
+                charset,
+                null,
+                null,
+                false
+            )
+        ) {
             ansiOutputStream.write(bytes);
             return byteArrayOutputStream.toString(charset);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

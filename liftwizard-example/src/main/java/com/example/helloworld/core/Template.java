@@ -5,6 +5,7 @@ import java.util.Optional;
 import static java.lang.String.format;
 
 public class Template {
+
     private final String content;
     private final String defaultName;
 

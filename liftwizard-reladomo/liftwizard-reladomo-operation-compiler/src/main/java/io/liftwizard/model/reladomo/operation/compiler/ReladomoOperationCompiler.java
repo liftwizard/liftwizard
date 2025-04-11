@@ -28,12 +28,11 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-public class ReladomoOperationCompiler
-{
+public class ReladomoOperationCompiler {
+
     private static final Pattern NEWLINE_PATTERN = Pattern.compile("\\r?\\n");
 
-    public Operation compile(RelatedFinder<?> finder, String sourceCodeText)
-    {
+    public Operation compile(RelatedFinder<?> finder, String sourceCodeText) {
         String[] lines = NEWLINE_PATTERN.split(sourceCodeText);
         CodePointCharStream charStream = CharStreams.fromString(sourceCodeText);
 

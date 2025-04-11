@@ -30,17 +30,15 @@ import org.slf4j.MDC;
  *
  * @see <a href="https://liftwizard.io/docs/graphql/instrumentation-logging">https://liftwizard.io/docs/graphql/instrumentation-logging</a>
  */
-public class LiftwizardGraphQLLoggingInstrumentation
-        extends SimpleInstrumentation
-{
+public class LiftwizardGraphQLLoggingInstrumentation extends SimpleInstrumentation {
+
     @Override
     @Nonnull
     public DataFetcher<?> instrumentDataFetcher(
-            DataFetcher<?> dataFetcher,
-            @Nonnull InstrumentationFieldFetchParameters parameters)
-    {
-        if (parameters.isTrivialDataFetcher())
-        {
+        DataFetcher<?> dataFetcher,
+        @Nonnull InstrumentationFieldFetchParameters parameters
+    ) {
+        if (parameters.isTrivialDataFetcher()) {
             return super.instrumentDataFetcher(dataFetcher, parameters);
         }
 

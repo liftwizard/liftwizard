@@ -8,16 +8,17 @@ import com.example.helloworld.core.PersonList;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 
 public class PersonDAO {
+
     public Optional<Person> findById(Long id) {
         return Optional.ofNullable(PersonFinder.findOne(PersonFinder.id().eq(id)));
     }
 
     public Person create(Person person) {
-        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx ->
-        {
-            person.insert();
-            return null;
-        });
+        MithraManagerProvider.getMithraManager()
+            .executeTransactionalCommand(tx -> {
+                person.insert();
+                return null;
+            });
         return person;
     }
 

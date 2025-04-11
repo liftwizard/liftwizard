@@ -33,70 +33,54 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-class ExecutorServiceFactoryTest
-{
+class ExecutorServiceFactoryTest {
+
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
-    private <T> T getConfiguredType(Class<T> klass, String path)
-            throws IOException, ConfigurationException
-    {
+    private <T> T getConfiguredType(Class<T> klass, String path) throws IOException, ConfigurationException {
         JsonConfigurationFactory<T> factory = new JsonConfigurationFactory<>(
-                klass,
-                Validators.newValidator(),
-                ExecutorServiceFactoryTest.newObjectMapper(),
-                "dw");
+            klass,
+            Validators.newValidator(),
+            ExecutorServiceFactoryTest.newObjectMapper(),
+            "dw"
+        );
         return factory.build(new ResourceConfigurationSourceProvider(), path);
     }
 
     @Test
-    void executorServiceFactory()
-            throws Exception
-    {
-        ExecutorServiceFactory executorServiceFactory = this.getConfiguredType(
-                ExecutorServiceFactory.class,
-                "default-executor-service-config-test.json5");
+    void executorServiceFactory() throws Exception {
+        ExecutorServiceFactory executorServiceFactory =
+            this.getConfiguredType(ExecutorServiceFactory.class, "default-executor-service-config-test.json5");
         assertThat(executorServiceFactory).isInstanceOf(ExecutorServiceFactory.class);
     }
 
     @Test
-    void defaultScheduledExecutorServiceFactory()
-            throws Exception
-    {
-        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
-                ScheduledExecutorServiceFactory.class,
-                "default-executor-service-config-test.json5");
+    void defaultScheduledExecutorServiceFactory() throws Exception {
+        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory =
+            this.getConfiguredType(ScheduledExecutorServiceFactory.class, "default-executor-service-config-test.json5");
         assertThat(scheduledExecutorServiceFactory).isInstanceOf(DefaultScheduledExecutorServiceFactory.class);
     }
 
     @Test
-    void noopScheduledExecutorServiceFactory()
-            throws Exception
-    {
-        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
-                ScheduledExecutorServiceFactory.class,
-                "noop-executor-service-config-test.json5");
+    void noopScheduledExecutorServiceFactory() throws Exception {
+        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory =
+            this.getConfiguredType(ScheduledExecutorServiceFactory.class, "noop-executor-service-config-test.json5");
         assertThat(scheduledExecutorServiceFactory).isInstanceOf(NoopScheduledExecutorServiceFactory.class);
     }
 
     @Test
-    void invalidExecutorServiceFactory()
-            throws Exception
-    {
-        try
-        {
+    void invalidExecutorServiceFactory() throws Exception {
+        try {
             this.getConfiguredType(ExecutorServiceFactory.class, "invalid-executor-service-config-test.json5");
             fail("");
-        }
-        catch (ConfigurationValidationException e)
-        {
+        } catch (ConfigurationValidationException e) {
             String message = e.getMessage();
             assertThat(message).contains("maxThreads < minThreads");
         }
     }
 
-    private static ObjectMapper newObjectMapper()
-    {
+    private static ObjectMapper newObjectMapper() {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         ObjectMapperConfig.configure(objectMapper);
         return objectMapper;

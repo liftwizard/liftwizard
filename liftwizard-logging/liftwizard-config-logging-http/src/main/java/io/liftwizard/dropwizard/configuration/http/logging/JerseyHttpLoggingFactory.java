@@ -28,8 +28,8 @@ import io.dropwizard.util.DataSizeUnit;
 import io.dropwizard.validation.MinDataSize;
 import io.dropwizard.validation.ValidationMethod;
 
-public class JerseyHttpLoggingFactory
-{
+public class JerseyHttpLoggingFactory {
+
     // Should usually be disabled in production
     private boolean enabled = true;
     private boolean logRequests = true;
@@ -42,204 +42,168 @@ public class JerseyHttpLoggingFactory
     private boolean logExcludedResponseHeaderNames;
 
     @NotNull
-    private List<String> includedRequestHeaders = List.of(
-            "Host",
-            "User-Agent",
-            "Content-Type");
+    private List<String> includedRequestHeaders = List.of("Host", "User-Agent", "Content-Type");
 
     @NotNull
-    private List<String> includedResponseHeaders = List.of(
-            "Host",
-            "User-Agent",
-            "Content-Type");
+    private List<String> includedResponseHeaders = List.of("Host", "User-Agent", "Content-Type");
 
     @NotNull
     @MinDataSize(value = 1, unit = DataSizeUnit.BYTES)
     private DataSize maxEntitySize = DataSize.kilobytes(8);
 
     @JsonProperty
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
     @JsonProperty
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
     @JsonProperty
-    public boolean isLogRequests()
-    {
+    public boolean isLogRequests() {
         return this.logRequests;
     }
 
     @JsonProperty
-    public void setLogRequests(boolean logRequests)
-    {
+    public void setLogRequests(boolean logRequests) {
         this.logRequests = logRequests;
     }
 
     @JsonProperty
-    public boolean isLogRequestBodies()
-    {
+    public boolean isLogRequestBodies() {
         return this.logRequestBodies;
     }
 
     @JsonProperty
-    public void setLogRequestBodies(boolean logRequestBodies)
-    {
+    public void setLogRequestBodies(boolean logRequestBodies) {
         this.logRequestBodies = logRequestBodies;
     }
 
     @JsonProperty
-    public boolean isLogResponses()
-    {
+    public boolean isLogResponses() {
         return this.logResponses;
     }
 
     @JsonProperty
-    public void setLogResponses(boolean logResponses)
-    {
+    public void setLogResponses(boolean logResponses) {
         this.logResponses = logResponses;
     }
 
     @JsonProperty
-    public boolean isLogResponseBodies()
-    {
+    public boolean isLogResponseBodies() {
         return this.logResponseBodies;
     }
 
     @JsonProperty
-    public void setLogResponseBodies(boolean logResponseBodies)
-    {
+    public void setLogResponseBodies(boolean logResponseBodies) {
         this.logResponseBodies = logResponseBodies;
     }
 
     @JsonProperty
-    public boolean isLogRequestHeaderNames()
-    {
+    public boolean isLogRequestHeaderNames() {
         return this.logRequestHeaderNames;
     }
 
     @JsonProperty
-    public void setLogRequestHeaderNames(boolean logRequestHeaderNames)
-    {
+    public void setLogRequestHeaderNames(boolean logRequestHeaderNames) {
         this.logRequestHeaderNames = logRequestHeaderNames;
     }
 
     @JsonProperty
-    public boolean isLogExcludedRequestHeaderNames()
-    {
+    public boolean isLogExcludedRequestHeaderNames() {
         return this.logExcludedRequestHeaderNames;
     }
 
     @JsonProperty
-    public void setLogExcludedRequestHeaderNames(boolean logExcludedRequestHeaderNames)
-    {
+    public void setLogExcludedRequestHeaderNames(boolean logExcludedRequestHeaderNames) {
         this.logExcludedRequestHeaderNames = logExcludedRequestHeaderNames;
     }
 
     @JsonProperty
-    public boolean isLogResponseHeaderNames()
-    {
+    public boolean isLogResponseHeaderNames() {
         return this.logResponseHeaderNames;
     }
 
     @JsonProperty
-    public void setLogResponseHeaderNames(boolean logResponseHeaderNames)
-    {
+    public void setLogResponseHeaderNames(boolean logResponseHeaderNames) {
         this.logResponseHeaderNames = logResponseHeaderNames;
     }
 
     @JsonProperty
-    public boolean isLogExcludedResponseHeaderNames()
-    {
+    public boolean isLogExcludedResponseHeaderNames() {
         return this.logExcludedResponseHeaderNames;
     }
 
     @JsonProperty
-    public void setLogExcludedResponseHeaderNames(boolean logExcludedResponseHeaderNames)
-    {
+    public void setLogExcludedResponseHeaderNames(boolean logExcludedResponseHeaderNames) {
         this.logExcludedResponseHeaderNames = logExcludedResponseHeaderNames;
     }
 
     @JsonProperty
-    public List<String> getIncludedRequestHeaders()
-    {
+    public List<String> getIncludedRequestHeaders() {
         return Collections.unmodifiableList(this.includedRequestHeaders);
     }
 
     @JsonProperty
-    public void setIncludedRequestHeaders(List<String> includedRequestHeaders)
-    {
+    public void setIncludedRequestHeaders(List<String> includedRequestHeaders) {
         this.includedRequestHeaders = Collections.unmodifiableList(includedRequestHeaders);
     }
 
     @JsonProperty
-    public List<String> getIncludedResponseHeaders()
-    {
+    public List<String> getIncludedResponseHeaders() {
         return Collections.unmodifiableList(this.includedResponseHeaders);
     }
 
     @JsonProperty
-    public void setIncludedResponseHeaders(List<String> includedResponseHeaders)
-    {
+    public void setIncludedResponseHeaders(List<String> includedResponseHeaders) {
         this.includedResponseHeaders = Collections.unmodifiableList(includedResponseHeaders);
     }
 
     @JsonProperty
-    public DataSize getMaxEntitySize()
-    {
+    public DataSize getMaxEntitySize() {
         return this.maxEntitySize;
     }
 
     @JsonProperty
-    public void setMaxEntitySize(DataSize maxEntitySize)
-    {
+    public void setMaxEntitySize(DataSize maxEntitySize) {
         this.maxEntitySize = maxEntitySize;
     }
 
     @ValidationMethod(message = "Logging request bodies requires logging requests")
     @JsonIgnore
-    public boolean isValidRequestBodies()
-    {
+    public boolean isValidRequestBodies() {
         return !this.logRequestBodies || this.logRequests;
     }
 
     @ValidationMethod(message = "Logging request header names requires logging requests")
     @JsonIgnore
-    public boolean isValidRequestHeaderNames()
-    {
+    public boolean isValidRequestHeaderNames() {
         return !this.logRequestHeaderNames || this.logRequests;
     }
 
     @ValidationMethod(message = "Logging request headers requires logging requests")
     @JsonIgnore
-    public boolean isValidRequestHeaders()
-    {
+    public boolean isValidRequestHeaders() {
         return this.includedRequestHeaders.isEmpty() || this.logRequests;
     }
 
     @ValidationMethod(message = "Logging response bodies requires logging responses")
     @JsonIgnore
-    public boolean isValidResponseBodies()
-    {
+    public boolean isValidResponseBodies() {
         return !this.logResponseBodies || this.logResponses;
     }
 
     @ValidationMethod(message = "Logging response header names requires logging responses")
     @JsonIgnore
-    public boolean isValidResponseHeaderNames()
-    {
+    public boolean isValidResponseHeaderNames() {
         return !this.logResponseHeaderNames || this.logResponses;
     }
 
     @ValidationMethod(message = "Logging response headers requires logging responses")
     @JsonIgnore
-    public boolean isValidResponseHeaders()
-    {
+    public boolean isValidResponseHeaders() {
         return this.includedResponseHeaders.isEmpty() || this.logResponses;
     }
 }

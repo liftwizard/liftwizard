@@ -21,25 +21,20 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLite
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 import org.apache.commons.text.StringEscapeUtils;
 
-public class StringLiteralVisitor
-        extends AbstractLiteralVisitor<String>
-{
-    public StringLiteralVisitor(RelatedFinder finder, String errorContext)
-    {
+public class StringLiteralVisitor extends AbstractLiteralVisitor<String> {
+
+    public StringLiteralVisitor(RelatedFinder finder, String errorContext) {
         super(finder, errorContext);
     }
 
     @Override
-    protected String getExpectedType()
-    {
+    protected String getExpectedType() {
         return "String";
     }
 
     @Override
-    public String visitStringLiteral(StringLiteralContext ctx)
-    {
-        if (ctx.NullLiteral() != null)
-        {
+    public String visitStringLiteral(StringLiteralContext ctx) {
+        if (ctx.NullLiteral() != null) {
             return null;
         }
         String quotedText = ctx.StringLiteral().getText();

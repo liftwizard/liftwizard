@@ -23,42 +23,35 @@ import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StructuredArgumentsRequest
-{
+public class StructuredArgumentsRequest {
+
     private final StructuredArgumentsRequestHttp http = new StructuredArgumentsRequestHttp();
 
     private Class<?> resourceClass;
     private String resourceMethod;
 
-    public StructuredArgumentsRequestHttp getHttp()
-    {
+    public StructuredArgumentsRequestHttp getHttp() {
         return this.http;
     }
 
-    public Class<?> getResourceClass()
-    {
+    public Class<?> getResourceClass() {
         return this.resourceClass;
     }
 
-    public void setResourceClass(@Nonnull Class<?> resourceClass)
-    {
-        if (this.resourceClass != null)
-        {
+    public void setResourceClass(@Nonnull Class<?> resourceClass) {
+        if (this.resourceClass != null) {
             throw new AssertionError(this.resourceClass);
         }
         this.resourceClass = Objects.requireNonNull(resourceClass);
     }
 
     @JsonProperty
-    public String getResourceMethod()
-    {
+    public String getResourceMethod() {
         return this.resourceMethod;
     }
 
-    public void setResourceMethod(@Nonnull Method resourceMethod)
-    {
-        if (this.resourceMethod != null)
-        {
+    public void setResourceMethod(@Nonnull Method resourceMethod) {
+        if (this.resourceMethod != null) {
             throw new AssertionError(this.resourceMethod);
         }
         this.resourceMethod = Objects.requireNonNull(resourceMethod.getName());

@@ -39,5 +39,4 @@ public final class ProtectedClassResource {
     public String showAdminSecret(@Auth User user) {
         return String.format("Hey there, %s. It looks like you are an admin. %d", user.getName(), user.getId());
     }
-
 }

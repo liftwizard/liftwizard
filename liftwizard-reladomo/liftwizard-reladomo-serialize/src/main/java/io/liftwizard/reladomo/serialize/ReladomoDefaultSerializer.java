@@ -27,33 +27,27 @@ import com.gs.fw.common.mithra.util.serializer.Serialized;
 import io.dropwizard.jackson.Jackson;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 
-public final class ReladomoDefaultSerializer
-{
-    private ReladomoDefaultSerializer()
-    {
+public final class ReladomoDefaultSerializer {
+
+    private ReladomoDefaultSerializer() {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static String serialize(@Nonnull MithraObject mithraObject)
-    {
+    public static String serialize(@Nonnull MithraObject mithraObject) {
         // TODO: Initialize with shared ObjectMapper
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         ObjectMapperConfig.configure(objectMapper);
         return serialize(mithraObject, objectMapper);
     }
 
-    public static String serialize(@Nonnull MithraObject mithraObject, @Nonnull ObjectMapper objectMapper)
-    {
+    public static String serialize(@Nonnull MithraObject mithraObject, @Nonnull ObjectMapper objectMapper) {
         RelatedFinder finder = mithraObject.zGetPortal().getFinder();
         SerializationConfig serializationConfig = SerializationConfig.shallowWithDefaultAttributes(finder);
         Serialized<MithraObject> serialized = new Serialized<>(mithraObject, serializationConfig);
 
-        try
-        {
+        try {
             return objectMapper.writeValueAsString(serialized);
-        }
-        catch (JsonProcessingException e)
-        {
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }

@@ -333,6 +333,47 @@
         </profile>
 
         <profile>
+            <id>spotless-prettier-java-sort-imports</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <configuration>
+                            <java>
+                                <toggleOffOn>
+                                    <off>@formatter:off</off>
+                                    <on>@formatter:on</on>
+                                </toggleOffOn>
+
+                                <prettier>
+                                    <devDependencies>
+                                        <prettier>3.3.2</prettier>
+                                        <prettier-plugin-java>2.6.0</prettier-plugin-java>
+                                    </devDependencies>
+                                    <config>
+                                        <tabWidth>4</tabWidth>
+                                        <printWidth>120</printWidth>
+                                        <parser>java</parser>
+                                        <plugins>prettier-plugin-java</plugins>
+                                    </config>
+                                </prettier>
+
+                                <importOrder>
+                                    <!-- use an empty string for all the imports not specified explicitly, '|' to join group without blank line, and '\#` prefix for static imports. -->
+                                    <order>java,javax,,\#java|\#javax,\#</order>
+                                </importOrder>
+
+                                <removeUnusedImports />
+                            </java>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>spotless-google-java-format</id>
 
             <build>

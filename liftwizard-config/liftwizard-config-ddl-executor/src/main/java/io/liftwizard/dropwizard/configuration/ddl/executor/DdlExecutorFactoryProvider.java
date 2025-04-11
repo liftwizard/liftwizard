@@ -18,7 +18,6 @@ package io.liftwizard.dropwizard.configuration.ddl.executor;
 
 import java.util.List;
 
-public interface DdlExecutorFactoryProvider
-{
+public interface DdlExecutorFactoryProvider {
     List<DdlExecutorFactory> getDdlExecutorFactories();
 }

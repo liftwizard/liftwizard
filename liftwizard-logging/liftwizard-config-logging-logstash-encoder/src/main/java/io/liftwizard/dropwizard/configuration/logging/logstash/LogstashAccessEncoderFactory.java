@@ -29,81 +29,72 @@ import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider;
 import net.logstash.logback.decorate.JsonFactoryDecorator;
 import net.logstash.logback.encoder.LogstashAccessEncoder;
 
-public class LogstashAccessEncoderFactory
-{
+public class LogstashAccessEncoderFactory {
+
     private boolean includeContext = true;
     private ObjectNode customFields;
     private boolean prettyPrint;
     private @NotNull Include serializationInclusion = Include.NON_ABSENT;
 
     @JsonProperty
-    public boolean isIncludeContext()
-    {
+    public boolean isIncludeContext() {
         return this.includeContext;
     }
 
     @JsonProperty
-    public void setIncludeContext(boolean includeContext)
-    {
+    public void setIncludeContext(boolean includeContext) {
         this.includeContext = includeContext;
     }
 
     @JsonProperty
-    public ObjectNode getCustomFields()
-    {
+    public ObjectNode getCustomFields() {
         return this.customFields;
     }
 
     @JsonProperty
-    public void setCustomFields(ObjectNode customFields)
-    {
+    public void setCustomFields(ObjectNode customFields) {
         this.customFields = customFields;
     }
 
     @JsonProperty
-    public boolean isPrettyPrint()
-    {
+    public boolean isPrettyPrint() {
         return this.prettyPrint;
     }
 
     @JsonProperty
-    public void setPrettyPrint(boolean prettyPrint)
-    {
+    public void setPrettyPrint(boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
     }
 
     @JsonProperty
-    public Include getSerializationInclusion()
-    {
+    public Include getSerializationInclusion() {
         return this.serializationInclusion;
     }
 
     @JsonProperty
-    public void setSerializationInclusion(Include serializationInclusion)
-    {
+    public void setSerializationInclusion(Include serializationInclusion) {
         this.serializationInclusion = serializationInclusion;
     }
 
-    public Encoder<IAccessEvent> build(TimeZone timeZone)
-    {
+    public Encoder<IAccessEvent> build(TimeZone timeZone) {
         LogstashAccessEncoder encoder = new LogstashAccessEncoder();
         encoder.setIncludeContext(this.includeContext);
 
-        if (this.customFields != null && !this.customFields.isEmpty())
-        {
-            GlobalCustomFieldsJsonProvider<IAccessEvent> globalCustomFieldsProvider = new GlobalCustomFieldsJsonProvider<>();
+        if (this.customFields != null && !this.customFields.isEmpty()) {
+            GlobalCustomFieldsJsonProvider<IAccessEvent> globalCustomFieldsProvider =
+                new GlobalCustomFieldsJsonProvider<>();
             globalCustomFieldsProvider.setCustomFieldsNode(this.customFields);
             encoder.getProviders().addProvider(globalCustomFieldsProvider);
         }
 
         encoder.setTimeZone(timeZone.getID());
-        if (this.prettyPrint)
-        {
+        if (this.prettyPrint) {
             encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
         }
         JsonFactoryDecorator decorator = new ObjectMapperConfigJsonFactoryDecorator(
-                this.prettyPrint,
-                this.serializationInclusion);
+            this.prettyPrint,
+            this.serializationInclusion
+        );
         encoder.setJsonFactoryDecorator(decorator);
         return encoder;
     }

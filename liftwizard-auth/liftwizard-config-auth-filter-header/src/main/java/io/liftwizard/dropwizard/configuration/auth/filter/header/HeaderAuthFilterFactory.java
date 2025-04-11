@@ -29,41 +29,35 @@ import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 
 @JsonTypeName("header")
 @AutoService(AuthFilterFactory.class)
-public class HeaderAuthFilterFactory
-        implements AuthFilterFactory
-{
+public class HeaderAuthFilterFactory implements AuthFilterFactory {
+
     @NotNull
     private final String header;
+
     private final String prefix;
 
     @JsonCreator
-    public HeaderAuthFilterFactory(
-            @JsonProperty("header") String header,
-            @JsonProperty("prefix") String prefix)
-    {
+    public HeaderAuthFilterFactory(@JsonProperty("header") String header, @JsonProperty("prefix") String prefix) {
         this.header = header;
         this.prefix = prefix;
     }
 
     @NotNull
-    public String getHeader()
-    {
+    public String getHeader() {
         return this.header;
     }
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return this.prefix;
     }
 
     @Nonnull
     @Override
-    public AuthFilter<?, HeaderPrincipal> createAuthFilter()
-    {
+    public AuthFilter<?, HeaderPrincipal> createAuthFilter() {
         return new HeaderAuthFilter.Builder(this.header, this.prefix)
-                .setAuthenticator(new HeaderAuthenticator(this.prefix))
-                .setUnauthorizedHandler(new JSONUnauthorizedHandler())
-                .setPrefix("Header")
-                .buildAuthFilter();
+            .setAuthenticator(new HeaderAuthenticator(this.prefix))
+            .setUnauthorizedHandler(new JSONUnauthorizedHandler())
+            .setPrefix("Header")
+            .buildAuthFilter();
     }
 }

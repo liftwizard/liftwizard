@@ -28,43 +28,36 @@ import javax.ws.rs.core.Response;
 import io.dropwizard.auth.AuthFilter;
 
 @Priority(Priorities.AUTHENTICATION)
-public class HeaderAuthFilter
-        extends AuthFilter<String, HeaderPrincipal>
-{
+public class HeaderAuthFilter extends AuthFilter<String, HeaderPrincipal> {
+
     private final String headerName;
     private final String headerPrefix;
 
-    public HeaderAuthFilter(String headerName, String headerPrefix)
-    {
+    public HeaderAuthFilter(String headerName, String headerPrefix) {
         this.headerName = Objects.requireNonNull(headerName);
         this.headerPrefix = headerPrefix;
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext)
-    {
+    public void filter(ContainerRequestContext requestContext) {
         List<String> headerValues = requestContext.getHeaders().get(this.headerName);
-        if (headerValues == null || headerValues.size() != 1)
-        {
+        if (headerValues == null || headerValues.size() != 1) {
             throw new WebApplicationException(this.unauthorizedHandler.buildResponse(this.headerName, "unused realm"));
         }
 
         String credentials = headerValues.get(0);
-        if (!this.authenticate(requestContext, credentials, "Header"))
-        {
+        if (!this.authenticate(requestContext, credentials, "Header")) {
             Response response = this.unauthorizedHandler.buildResponse(this.headerName, this.headerPrefix);
             throw new WebApplicationException(response);
         }
     }
 
-    public static class Builder
-            extends AuthFilterBuilder<String, HeaderPrincipal, HeaderAuthFilter>
-    {
+    public static class Builder extends AuthFilterBuilder<String, HeaderPrincipal, HeaderAuthFilter> {
+
         private final String headerName;
         private final String headerPrefix;
 
-        public Builder(String headerName, String headerPrefix)
-        {
+        public Builder(String headerName, String headerPrefix) {
             this.headerName = Objects.requireNonNull(headerName);
             this.headerPrefix = headerPrefix;
             this.setAuthenticator(new HeaderAuthenticator(headerPrefix));
@@ -72,8 +65,7 @@ public class HeaderAuthFilter
         }
 
         @Override
-        protected HeaderAuthFilter newInstance()
-        {
+        protected HeaderAuthFilter newInstance() {
             return new HeaderAuthFilter(this.headerName, this.headerPrefix);
         }
     }

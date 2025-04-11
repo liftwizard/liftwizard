@@ -24,29 +24,23 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import graphql.execution.instrumentation.InstrumentationContext;
 
-public class GlobalInstrumentationContext<T>
-        implements InstrumentationContext<T>
-{
+public class GlobalInstrumentationContext<T> implements InstrumentationContext<T> {
+
     private final Context clock;
     private final Meter exceptionsMeter;
 
-    public GlobalInstrumentationContext(Timer timer, Meter exceptionsMeter)
-    {
+    public GlobalInstrumentationContext(Timer timer, Meter exceptionsMeter) {
         Objects.requireNonNull(timer);
         this.clock = timer.time();
         this.exceptionsMeter = Objects.requireNonNull(exceptionsMeter);
     }
 
     @Override
-    public void onDispatched(CompletableFuture<T> result)
-    {
-    }
+    public void onDispatched(CompletableFuture<T> result) {}
 
     @Override
-    public void onCompleted(T result, Throwable t)
-    {
-        if (t != null)
-        {
+    public void onCompleted(T result, Throwable t) {
+        if (t != null) {
             this.exceptionsMeter.mark();
         }
         Objects.requireNonNull(this.clock);

@@ -31,37 +31,29 @@ import io.liftwizard.firebase.principal.FirebasePrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FirebaseOAuthAuthenticator
-        implements Authenticator<String, FirebasePrincipal>
-{
+public class FirebaseOAuthAuthenticator implements Authenticator<String, FirebasePrincipal> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FirebaseOAuthAuthenticator.class);
 
     private final FirebaseAuth firebaseAuth;
 
-    public FirebaseOAuthAuthenticator(FirebaseAuth firebaseAuth)
-    {
+    public FirebaseOAuthAuthenticator(FirebaseAuth firebaseAuth) {
         this.firebaseAuth = firebaseAuth;
     }
 
     @Override
-    public Optional<FirebasePrincipal> authenticate(String credentials)
-    {
-        try
-        {
+    public Optional<FirebasePrincipal> authenticate(String credentials) {
+        try {
             FirebaseToken firebaseToken = this.firebaseAuth.verifyIdToken(credentials);
             FirebasePrincipal firebasePrincipal = getFirebasePrincipal(firebaseToken);
 
             return Optional.of(firebasePrincipal);
-        }
-        catch (FirebaseAuthException e)
-        {
+        } catch (FirebaseAuthException e) {
             Throwable cause = e.getCause();
-            if (cause instanceof UnknownHostException)
-            {
+            if (cause instanceof UnknownHostException) {
                 throw new RuntimeException(e);
             }
-            if (cause instanceof SocketTimeoutException)
-            {
+            if (cause instanceof SocketTimeoutException) {
                 throw new RuntimeException(e);
             }
             LOGGER.warn(credentials, e.getMessage());
@@ -70,8 +62,7 @@ public class FirebaseOAuthAuthenticator
     }
 
     @Nonnull
-    private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken)
-    {
+    private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken) {
         Map<String, Object> claims = firebaseToken.getClaims();
 
         Map<String, Object> firebase = (Map<String, Object>) claims.get("firebase");
@@ -84,13 +75,6 @@ public class FirebaseOAuthAuthenticator
         String issuer = firebaseToken.getIssuer();
         String picture = firebaseToken.getPicture();
 
-        return new FirebasePrincipal(
-                uid,
-                name,
-                email,
-                emailVerified,
-                issuer,
-                picture,
-                signInProvider);
+        return new FirebasePrincipal(uid, name, email, emailVerified, issuer, picture, signInProvider);
     }
 }

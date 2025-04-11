@@ -24,32 +24,28 @@ import java.util.Scanner;
 
 import javax.annotation.Nonnull;
 
-public final class FileSlurper
-{
-    private FileSlurper()
-    {
+public final class FileSlurper {
+
+    private FileSlurper() {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass)
-    {
+    public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass) {
         return slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
     }
 
     public static String slurp(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull Class<?> callingClass,
-            Charset charset)
-    {
+        @Nonnull String resourceClassPathLocation,
+        @Nonnull Class<?> callingClass,
+        Charset charset
+    ) {
         InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
         Objects.requireNonNull(inputStream, resourceClassPathLocation);
         return slurp(inputStream, charset);
     }
 
-    public static String slurp(@Nonnull InputStream inputStream, Charset charset)
-    {
-        try (Scanner scanner = new Scanner(inputStream, charset))
-        {
+    public static String slurp(@Nonnull InputStream inputStream, Charset charset) {
+        try (Scanner scanner = new Scanner(inputStream, charset)) {
             return scanner.useDelimiter("\\A").next();
         }
     }

@@ -21,54 +21,41 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPo
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 
-public class FloatLiteralVisitor
-        extends AbstractLiteralVisitor<Float>
-{
-    public FloatLiteralVisitor(RelatedFinder finder, String errorContext)
-    {
+public class FloatLiteralVisitor extends AbstractLiteralVisitor<Float> {
+
+    public FloatLiteralVisitor(RelatedFinder finder, String errorContext) {
         super(finder, errorContext);
     }
 
     @Override
-    protected String getExpectedType()
-    {
+    protected String getExpectedType() {
         return "Float";
     }
 
     @Override
-    public Float visitIntegerLiteral(IntegerLiteralContext ctx)
-    {
-        if (ctx.NullLiteral() != null)
-        {
+    public Float visitIntegerLiteral(IntegerLiteralContext ctx) {
+        if (ctx.NullLiteral() != null) {
             return null;
         }
 
         String text = ctx.IntegerLiteral().getText();
-        try
-        {
+        try {
             return Float.valueOf(text);
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             return this.throwTypeError(ctx);
         }
     }
 
     @Override
-    public Float visitFloatingPointLiteral(FloatingPointLiteralContext ctx)
-    {
-        if (ctx.NullLiteral() != null)
-        {
+    public Float visitFloatingPointLiteral(FloatingPointLiteralContext ctx) {
+        if (ctx.NullLiteral() != null) {
             return null;
         }
 
         String text = ctx.FloatingPointLiteral().getText();
-        try
-        {
+        try {
             return Float.valueOf(text);
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             return this.throwTypeError(ctx);
         }
     }

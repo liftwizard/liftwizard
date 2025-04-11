@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 @Path("/hello-world")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloWorldResource {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldResource.class);
 
     private final Template template;

@@ -21,39 +21,30 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-public class ThrowingErrorListener
-        extends BaseErrorListener
-{
+public class ThrowingErrorListener extends BaseErrorListener {
+
     private final String[] lines;
 
-    public ThrowingErrorListener(String[] lines)
-    {
+    public ThrowingErrorListener(String[] lines) {
         this.lines = lines;
     }
 
     @Override
     public void syntaxError(
-            Recognizer<?, ?> recognizer,
-            Object offendingSymbol,
-            int line,
-            int charPositionInLine,
-            String msg,
-            RecognitionException e)
-    {
+        Recognizer<?, ?> recognizer,
+        Object offendingSymbol,
+        int line,
+        int charPositionInLine,
+        String msg,
+        RecognitionException e
+    ) {
         String sourceLine = this.getSourceLine(line);
-        String error = "(%d) %s [%d:%d]%n%s".formatted(
-                line,
-                msg,
-                line,
-                charPositionInLine,
-                sourceLine);
+        String error = "(%d) %s [%d:%d]%n%s".formatted(line, msg, line, charPositionInLine, sourceLine);
         throw new ParseCancellationException(error);
     }
 
-    private String getSourceLine(int line)
-    {
-        if (line == 1)
-        {
+    private String getSourceLine(int line) {
+        if (line == 1) {
             return this.lines[0];
         }
 

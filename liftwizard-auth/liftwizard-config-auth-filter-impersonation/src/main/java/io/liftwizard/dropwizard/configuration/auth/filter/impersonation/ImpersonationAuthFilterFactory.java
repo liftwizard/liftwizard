@@ -26,16 +26,14 @@ import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 
 @JsonTypeName("impersonation")
 @AutoService(AuthFilterFactory.class)
-public class ImpersonationAuthFilterFactory
-        implements AuthFilterFactory
-{
+public class ImpersonationAuthFilterFactory implements AuthFilterFactory {
+
     @Nonnull
     @Override
-    public AuthFilter<?, ImpersonatedPrincipal> createAuthFilter()
-    {
+    public AuthFilter<?, ImpersonatedPrincipal> createAuthFilter() {
         return new OAuthCredentialAuthFilter.Builder<ImpersonatedPrincipal>()
-                .setAuthenticator(new ImpersonationAuthenticator())
-                .setPrefix("Impersonation")
-                .buildAuthFilter();
+            .setAuthenticator(new ImpersonationAuthenticator())
+            .setPrefix("Impersonation")
+            .buildAuthFilter();
     }
 }

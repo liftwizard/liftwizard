@@ -27,26 +27,24 @@ import com.gs.fw.common.mithra.connectionmanager.XAConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import com.gs.fw.common.mithra.databasetype.PostgresDatabaseType;
 
-public final class HerokuConnectionManager
-        implements SourcelessConnectionManager
-{
+public final class HerokuConnectionManager implements SourcelessConnectionManager {
+
     private static final HerokuConnectionManager INSTANCE = new HerokuConnectionManager();
 
     @Nonnull
     private final XAConnectionManager xaConnectionManager;
+
     private final TimeZone databaseTimeZone;
     private final String schemaName;
 
-    private HerokuConnectionManager()
-    {
+    private HerokuConnectionManager() {
         this.schemaName = "liftwizard-app";
         this.databaseTimeZone = TimeZone.getTimeZone("UTC");
         this.xaConnectionManager = this.createXaConnectionManager();
     }
 
     @Nonnull
-    private XAConnectionManager createXaConnectionManager()
-    {
+    private XAConnectionManager createXaConnectionManager() {
         XAConnectionManager connectionManager = new XAConnectionManager();
         connectionManager.setDriverClassName("org.postgresql.Driver");
         connectionManager.setMaxWait(500);
@@ -62,39 +60,33 @@ public final class HerokuConnectionManager
 
     @Nonnull
     @SuppressWarnings("unused")
-    public static HerokuConnectionManager getInstance()
-    {
+    public static HerokuConnectionManager getInstance() {
         return INSTANCE;
     }
 
     @Nonnull
     @Override
-    public BulkLoader createBulkLoader()
-    {
+    public BulkLoader createBulkLoader() {
         throw new RuntimeException("BulkLoader is not supported");
     }
 
     @Override
-    public Connection getConnection()
-    {
+    public Connection getConnection() {
         return this.xaConnectionManager.getConnection();
     }
 
     @Override
-    public DatabaseType getDatabaseType()
-    {
+    public DatabaseType getDatabaseType() {
         return PostgresDatabaseType.getInstance();
     }
 
     @Override
-    public TimeZone getDatabaseTimeZone()
-    {
+    public TimeZone getDatabaseTimeZone() {
         return this.databaseTimeZone;
     }
 
     @Override
-    public String getDatabaseIdentifier()
-    {
+    public String getDatabaseIdentifier() {
         return this.schemaName;
     }
 }

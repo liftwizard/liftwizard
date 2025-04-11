@@ -30,27 +30,23 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 
 @JsonTypeName("seed")
 @AutoService(UUIDSupplierFactory.class)
-public class SeedUUIDSupplierFactory
-        implements UUIDSupplierFactory
-{
+public class SeedUUIDSupplierFactory implements UUIDSupplierFactory {
+
     private @Valid @NotNull String seed = "example seed";
 
     @Nonnull
     @Override
-    public Supplier<UUID> createUUIDSupplier()
-    {
+    public Supplier<UUID> createUUIDSupplier() {
         return new SeedUUIDSupplier(this.seed);
     }
 
     @JsonProperty
-    public String getSeed()
-    {
+    public String getSeed() {
         return this.seed;
     }
 
     @JsonProperty
-    public void setSeed(String seed)
-    {
+    public void setSeed(String seed) {
         this.seed = seed;
     }
 }

@@ -34,26 +34,20 @@ import io.dropwizard.configuration.JsonConfigurationFactory;
  * @see DefaultConfigurationFactoryFactory
  * @see <a href="https://liftwizard.io/docs/configuration/json5-configuration#configuration-through-json5-instead-of-yaml">https://liftwizard.io/docs/configuration/json5-configuration#configuration-through-json5-instead-of-yaml</a>
  */
-public class JsonConfigurationFactoryFactory<T>
-        implements ConfigurationFactoryFactory<T>
-{
+public class JsonConfigurationFactoryFactory<T> implements ConfigurationFactoryFactory<T> {
+
     @Override
     public ConfigurationFactory<T> create(
-            Class<T> aClass,
-            Validator validator,
-            ObjectMapper objectMapper,
-            String propertyPrefix)
-    {
+        Class<T> aClass,
+        Validator validator,
+        ObjectMapper objectMapper,
+        String propertyPrefix
+    ) {
         ObjectMapper strictObjectMapper = this.getStrictObjectMapper(objectMapper);
-        return new JsonConfigurationFactory<>(
-                aClass,
-                validator,
-                strictObjectMapper,
-                propertyPrefix);
+        return new JsonConfigurationFactory<>(aClass, validator, strictObjectMapper, propertyPrefix);
     }
 
-    private ObjectMapper getStrictObjectMapper(ObjectMapper objectMapper)
-    {
+    private ObjectMapper getStrictObjectMapper(ObjectMapper objectMapper) {
         ObjectMapper strictObjectMapper = objectMapper.copy();
         strictObjectMapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // strictObjectMapper.enable(Feature.STRICT_DUPLICATE_DETECTION);

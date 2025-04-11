@@ -25,8 +25,7 @@ import javax.annotation.Nonnull;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ReladomoTestFile
-{
+public @interface ReladomoTestFile {
     @Nonnull
     String[] value();
 }

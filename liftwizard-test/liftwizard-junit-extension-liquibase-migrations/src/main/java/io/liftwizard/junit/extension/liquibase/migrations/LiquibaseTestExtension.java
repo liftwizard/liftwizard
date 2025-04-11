@@ -35,57 +35,45 @@ import liquibase.ui.LoggerUIService;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class LiquibaseTestExtension
-        implements BeforeEachCallback
-{
+public class LiquibaseTestExtension implements BeforeEachCallback {
+
     private final String migrationsFile;
     private final boolean dropAll;
 
-    public LiquibaseTestExtension(String migrationsFile)
-    {
+    public LiquibaseTestExtension(String migrationsFile) {
         this(migrationsFile, true);
     }
 
-    public LiquibaseTestExtension(String migrationsFile, boolean dropAll)
-    {
+    public LiquibaseTestExtension(String migrationsFile, boolean dropAll) {
         this.migrationsFile = Objects.requireNonNull(migrationsFile);
         this.dropAll = dropAll;
     }
 
     @Override
-    public void beforeEach(ExtensionContext context)
-            throws Exception
-    {
+    public void beforeEach(ExtensionContext context) throws Exception {
         Scope.child(Attr.ui, new LoggerUIService(), this::runWithLogger);
     }
 
-    private void runWithLogger()
-            throws SQLException, LiquibaseException
-    {
+    private void runWithLogger() throws SQLException, LiquibaseException {
         try (
-                Connection connection = H2InMemoryConnectionManager.getInstance().getConnection();
-                Liquibase liquibase = this.openLiquibase(connection))
-        {
-            if (this.dropAll)
-            {
+            Connection connection = H2InMemoryConnectionManager.getInstance().getConnection();
+            Liquibase liquibase = this.openLiquibase(connection)
+        ) {
+            if (this.dropAll) {
                 liquibase.dropAll();
             }
             liquibase.update("");
         }
     }
 
-    private Liquibase openLiquibase(Connection connection)
-            throws LiquibaseException
-    {
+    private Liquibase openLiquibase(Connection connection) throws LiquibaseException {
         Database database = this.createDatabase(connection);
         Liquibase liquibase = new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
         liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
         return liquibase;
     }
 
-    private Database createDatabase(Connection connection)
-            throws LiquibaseException
-    {
+    private Database createDatabase(Connection connection) throws LiquibaseException {
         DatabaseConnection jdbcConnection = new JdbcConnection(connection);
 
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);

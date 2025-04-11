@@ -36,20 +36,23 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SystemUUIDFactoryTest
-{
+class SystemUUIDFactoryTest {
+
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator validator = Validators.newValidator();
 
-    private final JsonConfigurationFactory<UUIDSupplierFactory> factory =
-            new JsonConfigurationFactory<>(UUIDSupplierFactory.class, this.validator, this.objectMapper, "dw");
+    private final JsonConfigurationFactory<UUIDSupplierFactory> factory = new JsonConfigurationFactory<>(
+        UUIDSupplierFactory.class,
+        this.validator,
+        this.objectMapper,
+        "dw"
+    );
 
     @Test
-    void isDiscoverable()
-    {
+    void isDiscoverable() {
         // Make sure the types we specified in META-INF gets picked up
         var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
@@ -57,20 +60,16 @@ class SystemUUIDFactoryTest
     }
 
     @Test
-    void systemUUID()
-            throws Exception
-    {
-        UUIDSupplierFactory uuidFactory = this.factory.build(
-                new ResourceConfigurationSourceProvider(),
-                "config-test.json5");
+    void systemUUID() throws Exception {
+        UUIDSupplierFactory uuidFactory =
+            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
         assertThat(uuidFactory).isInstanceOf(SystemUUIDSupplierFactory.class);
         Supplier<UUID> uuidSupplier = uuidFactory.createUUIDSupplier();
         UUID uuid = uuidSupplier.get();
         assertThat(uuid).isNotNull();
     }
 
-    private static ObjectMapper newObjectMapper()
-    {
+    private static ObjectMapper newObjectMapper() {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         ObjectMapperConfig.configure(objectMapper);
         return objectMapper;

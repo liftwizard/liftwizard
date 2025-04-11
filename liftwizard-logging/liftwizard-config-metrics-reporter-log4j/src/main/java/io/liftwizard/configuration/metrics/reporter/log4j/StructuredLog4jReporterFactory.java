@@ -33,37 +33,32 @@ import org.apache.log4j.Logger;
  */
 @JsonTypeName("structured-log4j")
 @AutoService(ReporterFactory.class)
-public class StructuredLog4jReporterFactory
-        extends BaseReporterFactory
-{
+public class StructuredLog4jReporterFactory extends BaseReporterFactory {
+
     @NotEmpty
     private String loggerName = "metrics";
 
     @JsonProperty("logger")
-    public String getLoggerName()
-    {
+    public String getLoggerName() {
         return this.loggerName;
     }
 
     @JsonProperty("logger")
-    public void setLoggerName(String loggerName)
-    {
+    public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
     }
 
-    public Logger getLogger()
-    {
+    public Logger getLogger() {
         return Logger.getLogger(this.getLoggerName());
     }
 
     @Override
-    public ScheduledReporter build(MetricRegistry registry)
-    {
-        return StructuredLog4jReporter
-                .forRegistry(registry)
-                .convertDurationsTo(this.getDurationUnit())
-                .convertRatesTo(this.getRateUnit())
-                .filter(this.getFilter())
-                .outputTo(this.getLogger()).build();
+    public ScheduledReporter build(MetricRegistry registry) {
+        return StructuredLog4jReporter.forRegistry(registry)
+            .convertDurationsTo(this.getDurationUnit())
+            .convertRatesTo(this.getRateUnit())
+            .filter(this.getFilter())
+            .outputTo(this.getLogger())
+            .build();
     }
 }

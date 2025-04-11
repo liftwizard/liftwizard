@@ -4,6 +4,7 @@ import com.example.helloworld.core.Person;
 import io.dropwizard.views.View;
 
 public class PersonView extends View {
+
     private final Person person;
 
     public enum Template {
