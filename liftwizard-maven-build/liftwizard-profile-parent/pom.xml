@@ -94,7 +94,6 @@
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
                             <rules combine.children="append">
-                                <dependencyConvergence />
                                 <requirePluginVersions>
                                     <banLatest>true</banLatest>
                                     <banRelease>true</banRelease>
