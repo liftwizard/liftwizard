@@ -23,6 +23,7 @@ name: io.liftwizard.staticanalysis.CommonStaticAnalysis
 displayName: Common static analysis issues
 description: Resolve common static analysis issues (also known as SAST issues).
 recipeList:
+  - org.openrewrite.staticanalysis.AbstractClassPublicConstructor
   #  - org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable
   - org.openrewrite.staticanalysis.AtomicPrimitiveEqualsUsesGet
   - org.openrewrite.staticanalysis.BigDecimalDoubleConstructorRecipe
