@@ -33,8 +33,8 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
  *
  * Forked from io.dropwizard.setup.ExceptionMapperBinder to register LiftwizardLoggingExceptionMapper instead of LoggingExceptionMapper.
  */
-public class LiftwizardExceptionMapperBinder
-        extends AbstractBinder {
+public class LiftwizardExceptionMapperBinder extends AbstractBinder {
+
     private final boolean showDetails;
 
     public LiftwizardExceptionMapperBinder(boolean showDetails) {
@@ -43,8 +43,7 @@ public class LiftwizardExceptionMapperBinder
 
     @Override
     protected void configure() {
-        bind(new LiftwizardLoggingExceptionMapper<Throwable>() {
-        }).to(ExceptionMapper.class);
+        bind(new LiftwizardLoggingExceptionMapper<Throwable>() {}).to(ExceptionMapper.class);
         bind(JerseyViolationExceptionMapper.class).to(ExceptionMapper.class);
         bind(new JsonProcessingExceptionMapper(isShowDetails())).to(ExceptionMapper.class);
         bind(EarlyEofExceptionMapper.class).to(ExceptionMapper.class);

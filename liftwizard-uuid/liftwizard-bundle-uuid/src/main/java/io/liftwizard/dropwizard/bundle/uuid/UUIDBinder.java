@@ -23,19 +23,16 @@ import java.util.function.Supplier;
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
-public class UUIDBinder
-        extends AbstractBinder
-{
+public class UUIDBinder extends AbstractBinder {
+
     private final Supplier<UUID> uuidSupplier;
 
-    public UUIDBinder(Supplier<UUID> uuidSupplier)
-    {
+    public UUIDBinder(Supplier<UUID> uuidSupplier) {
         this.uuidSupplier = Objects.requireNonNull(uuidSupplier);
     }
 
     @Override
-    protected void configure()
-    {
+    protected void configure() {
         this.bind(this.uuidSupplier).to(new TypeLiteral<Supplier<UUID>>() {});
     }
 }

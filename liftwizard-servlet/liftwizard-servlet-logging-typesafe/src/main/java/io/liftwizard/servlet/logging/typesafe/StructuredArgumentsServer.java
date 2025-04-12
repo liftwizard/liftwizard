@@ -20,34 +20,30 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StructuredArgumentsServer
-{
+public class StructuredArgumentsServer {
+
     private final String scheme;
     private final String name;
     private final int port;
 
-    public StructuredArgumentsServer(String scheme, String name, int port)
-    {
+    public StructuredArgumentsServer(String scheme, String name, int port) {
         this.scheme = Objects.requireNonNull(scheme);
         this.name = Objects.requireNonNull(name);
         this.port = port;
     }
 
     @JsonProperty
-    public String getScheme()
-    {
+    public String getScheme() {
         return this.scheme;
     }
 
     @JsonProperty
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     @JsonProperty
-    public int getPort()
-    {
+    public int getPort() {
         return this.port;
     }
 }

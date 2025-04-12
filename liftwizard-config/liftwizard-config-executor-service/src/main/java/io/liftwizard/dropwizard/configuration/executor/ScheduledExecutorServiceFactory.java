@@ -28,9 +28,7 @@ import io.dropwizard.setup.Environment;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DefaultScheduledExecutorServiceFactory.class)
 @AutoService(Discoverable.class)
-public interface ScheduledExecutorServiceFactory
-        extends Discoverable
-{
+public interface ScheduledExecutorServiceFactory extends Discoverable {
     @JsonIgnore
     ScheduledExecutorService build(Environment environment);
 

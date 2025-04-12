@@ -41,38 +41,41 @@ import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DatabaseDdlExecutor
-{
+public final class DatabaseDdlExecutor {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseDdlExecutor.class);
 
-    private DatabaseDdlExecutor()
-    {
+    private DatabaseDdlExecutor() {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
     public static void executeSql(
-            Connection connection,
-            String ddlLocationPattern,
-            String idxLocationPattern,
-            String fkLocationPattern)
-    {
+        Connection connection,
+        String ddlLocationPattern,
+        String idxLocationPattern,
+        String fkLocationPattern
+    ) {
         MutableSet<URL> urls = Sets.mutable
-                // Maven's classpath, including maven itself, appears here
-                .withAll(ClasspathHelper.forJavaClassPath())
-                // The "usual" classpath appears here
-                .withAll(ClasspathHelper.forClassLoader());
+            // Maven's classpath, including maven itself, appears here
+            .withAll(ClasspathHelper.forJavaClassPath())
+            // The "usual" classpath appears here
+            .withAll(ClasspathHelper.forClassLoader());
         FilterBuilder filterBuilder = new FilterBuilder()
-                .include(ddlLocationPattern)
-                .include(idxLocationPattern)
-                .include(fkLocationPattern)
-                .exclude("^META-INF\\.");
+            .include(ddlLocationPattern)
+            .include(idxLocationPattern)
+            .include(fkLocationPattern)
+            .exclude("^META-INF\\.");
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-                .setScanners(new ResourcesScanner())
-                .filterInputsBy(filterBuilder)
-                .setUrls(urls);
+            .setScanners(new ResourcesScanner())
+            .filterInputsBy(filterBuilder)
+            .setUrls(urls);
         Reflections reflections = new Reflections(configurationBuilder);
-        MutableSet<String> ddlLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(ddlLocationPattern)));
-        MutableSet<String> idxLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(idxLocationPattern)));
+        MutableSet<String> ddlLocations = SetAdapter.adapt(
+            reflections.getResources(Pattern.compile(ddlLocationPattern))
+        );
+        MutableSet<String> idxLocations = SetAdapter.adapt(
+            reflections.getResources(Pattern.compile(idxLocationPattern))
+        );
         MutableSet<String> fkLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(fkLocationPattern)));
         LOGGER.info("Scanning urls: {}", urls.collect(URL::toString).toSortedList());
         LOGGER.info("Found {} SQL ddl scripts.", ddlLocations.size());
@@ -84,37 +87,28 @@ public final class DatabaseDdlExecutor
         fkLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
     }
 
-    public static void dropAllObjects(Connection connection)
-    {
-        try (Statement statement = connection.createStatement())
-        {
+    public static void dropAllObjects(Connection connection) {
+        try (Statement statement = connection.createStatement()) {
             String dropSql = "DROP ALL OBJECTS";
             LOGGER.info("Executing SQL: {}", dropSql);
             statement.execute(dropSql);
-        }
-        catch (@Nonnull SQLException e)
-        {
+        } catch (@Nonnull SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void runScript(String ddlLocation, @Nonnull Connection connection)
-    {
+    private static void runScript(String ddlLocation, @Nonnull Connection connection) {
         LOGGER.debug("Running SQL script: {}", ddlLocation);
 
         InputStream inputStream = DatabaseDdlExecutor.class.getResourceAsStream("/" + ddlLocation);
-        if (inputStream == null)
-        {
+        if (inputStream == null) {
             String message = "Could not find sql script '%s' on classpath.".formatted(ddlLocation);
             throw new RuntimeException(message);
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)))
-        {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             RunScript.execute(connection, reader);
-        }
-        catch (@Nonnull IOException | SQLException e)
-        {
+        } catch (@Nonnull IOException | SQLException e) {
             LOGGER.error("Failed to run sql script {}.", ddlLocation, e);
             throw new RuntimeException(e);
         }

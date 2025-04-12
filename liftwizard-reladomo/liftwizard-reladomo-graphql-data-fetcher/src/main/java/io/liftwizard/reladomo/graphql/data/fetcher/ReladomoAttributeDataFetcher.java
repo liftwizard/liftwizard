@@ -25,35 +25,29 @@ import com.gs.fw.common.mithra.attribute.Attribute;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoAttributeDataFetcher<Input, T>
-        implements TrivialDataFetcher<T>
-{
+public class ReladomoAttributeDataFetcher<Input, T> implements TrivialDataFetcher<T> {
+
     private final Attribute<Input, T> attribute;
 
-    public ReladomoAttributeDataFetcher(Attribute<Input, T> attribute)
-    {
+    public ReladomoAttributeDataFetcher(Attribute<Input, T> attribute) {
         this.attribute = Objects.requireNonNull(attribute);
     }
 
     @Nullable
     @Override
-    public T get(@Nonnull DataFetchingEnvironment environment)
-    {
+    public T get(@Nonnull DataFetchingEnvironment environment) {
         Input persistentInstance = environment.getSource();
-        if (persistentInstance == null)
-        {
+        if (persistentInstance == null) {
             return null;
         }
 
-        if (this.attribute.isAttributeNull(persistentInstance))
-        {
+        if (this.attribute.isAttributeNull(persistentInstance)) {
             return null;
         }
 
         String fullyQualifiedClassName = this.attribute.zGetTopOwnerClassName().replaceAll("/", ".");
         String canonicalName = persistentInstance.getClass().getCanonicalName();
-        if (!fullyQualifiedClassName.equals(canonicalName))
-        {
+        if (!fullyQualifiedClassName.equals(canonicalName)) {
             String message = "Expected " + fullyQualifiedClassName + " but got " + canonicalName;
             throw new AssertionError(message);
         }

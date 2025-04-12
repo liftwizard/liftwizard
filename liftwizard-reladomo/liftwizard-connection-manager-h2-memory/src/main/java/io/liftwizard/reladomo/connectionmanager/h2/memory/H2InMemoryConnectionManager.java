@@ -29,23 +29,20 @@ import com.gs.fw.common.mithra.databasetype.H2DatabaseType;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
-public final class H2InMemoryConnectionManager
-        implements SourcelessConnectionManager
-{
+public final class H2InMemoryConnectionManager implements SourcelessConnectionManager {
+
     private static final H2InMemoryConnectionManager INSTANCE = new H2InMemoryConnectionManager();
 
     private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("UTC");
     private static final String SCHEMA_NAME = "liftwizard-app-h2";
     private static final DataSource DATA_SOURCE = H2InMemoryConnectionManager.createDataSource();
 
-    private H2InMemoryConnectionManager()
-    {
+    private H2InMemoryConnectionManager() {
         // singleton
     }
 
     @Nonnull
-    private static DataSource createDataSource()
-    {
+    private static DataSource createDataSource() {
         PoolProperties poolProperties = new PoolProperties();
         poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
         poolProperties.setUrl("jdbc:p6spy:h2:mem:");
@@ -71,46 +68,37 @@ public final class H2InMemoryConnectionManager
 
     @Nonnull
     @SuppressWarnings("unused")
-    public static H2InMemoryConnectionManager getInstance()
-    {
+    public static H2InMemoryConnectionManager getInstance() {
         return INSTANCE;
     }
 
     @Nonnull
     @Override
-    public BulkLoader createBulkLoader()
-    {
+    public BulkLoader createBulkLoader() {
         throw new RuntimeException("BulkLoader is not supported");
     }
 
     @Override
-    public Connection getConnection()
-    {
-        try
-        {
+    public Connection getConnection() {
+        try {
             return DATA_SOURCE.getConnection();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Could not obtain database connection", e);
         }
     }
 
     @Override
-    public DatabaseType getDatabaseType()
-    {
+    public DatabaseType getDatabaseType() {
         return H2DatabaseType.getInstance();
     }
 
     @Override
-    public TimeZone getDatabaseTimeZone()
-    {
+    public TimeZone getDatabaseTimeZone() {
         return TIME_ZONE;
     }
 
     @Override
-    public String getDatabaseIdentifier()
-    {
+    public String getDatabaseIdentifier() {
         return SCHEMA_NAME;
     }
 }

@@ -39,32 +39,30 @@ import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
 import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
-public abstract class AbstractLiftwizardApplication<T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider>
-        extends Application<T>
-{
+public abstract class AbstractLiftwizardApplication<
+    T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider
+>
+    extends Application<T> {
+
     protected final String name;
 
-    protected AbstractLiftwizardApplication(String name)
-    {
+    protected AbstractLiftwizardApplication(String name) {
         this.name = Objects.requireNonNull(name);
     }
 
     @Override
-    protected Level bootstrapLogLevel()
-    {
+    protected Level bootstrapLogLevel() {
         return Level.INFO;
     }
 
     @Nonnull
     @Override
-    public final String getName()
-    {
+    public final String getName() {
         return this.name;
     }
 
     @Override
-    public void initialize(@Nonnull Bootstrap<T> bootstrap)
-    {
+    public void initialize(@Nonnull Bootstrap<T> bootstrap) {
         super.initialize(bootstrap);
 
         this.initializeConfiguration(bootstrap);
@@ -74,18 +72,14 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
         this.initializeBundles(bootstrap);
     }
 
-    protected void initializeConfiguration(@Nonnull Bootstrap<T> bootstrap)
-    {
+    protected void initializeConfiguration(@Nonnull Bootstrap<T> bootstrap) {
         bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
         bootstrap.addBundle(new EnvironmentConfigBundle());
     }
 
-    protected void initializeCommands(@Nonnull Bootstrap<T> bootstrap)
-    {
-    }
+    protected void initializeCommands(@Nonnull Bootstrap<T> bootstrap) {}
 
-    protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap)
-    {
+    protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap) {
         bootstrap.addBundle(new ClockBundle());
         var httpsRedirect = new HttpsRedirect();
         var redirectBundle = new RedirectBundle(httpsRedirect);
@@ -94,36 +88,28 @@ public abstract class AbstractLiftwizardApplication<T extends Configuration & UU
         bootstrap.addBundle(new MetricsUIBundle("/dashboard/*"));
     }
 
-    protected void initializeBundles(@Nonnull Bootstrap<T> bootstrap)
-    {
-    }
+    protected void initializeBundles(@Nonnull Bootstrap<T> bootstrap) {}
 
-    protected void initializeDynamicBundles(@Nonnull Bootstrap<T> bootstrap)
-    {
+    protected void initializeDynamicBundles(@Nonnull Bootstrap<T> bootstrap) {
         bootstrap.addBundle(new DynamicBundlesBundle());
     }
 
     @Override
-    public void run(@Nonnull T configuration, @Nonnull Environment environment)
-            throws Exception
-    {
+    public void run(@Nonnull T configuration, @Nonnull Environment environment) throws Exception {
         this.registerJacksonModules(environment);
         this.registerHealthChecks(environment);
         this.registerTasks(environment);
     }
 
-    protected void registerJacksonModules(@Nonnull Environment environment)
-    {
+    protected void registerJacksonModules(@Nonnull Environment environment) {
         environment.getObjectMapper().registerModule(new JacksonReladomoModule());
     }
 
-    protected void registerHealthChecks(@Nonnull Environment environment)
-    {
+    protected void registerHealthChecks(@Nonnull Environment environment) {
         environment.healthChecks().register("reladomo", new ReladomoHealthCheck());
     }
 
-    protected void registerTasks(@Nonnull Environment environment)
-    {
+    protected void registerTasks(@Nonnull Environment environment) {
         environment.admin().addTask(new ReladomoClearCacheTask());
     }
 }

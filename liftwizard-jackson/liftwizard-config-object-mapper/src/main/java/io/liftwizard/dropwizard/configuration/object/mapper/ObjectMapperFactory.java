@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.Nulls;
 
-public class ObjectMapperFactory
-{
+public class ObjectMapperFactory {
+
     private boolean enabled = true;
     // Should usually be false in production
     private boolean prettyPrint = true;
@@ -31,58 +31,48 @@ public class ObjectMapperFactory
     private @NotNull Include serializationInclusion = Include.NON_ABSENT;
     private @NotNull Nulls defaultNullSetterInfo = Nulls.AS_EMPTY;
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
     @JsonProperty
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public boolean isPrettyPrint()
-    {
+    public boolean isPrettyPrint() {
         return this.prettyPrint;
     }
 
     @JsonProperty
-    public void setPrettyPrint(boolean prettyPrint)
-    {
+    public void setPrettyPrint(boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
     }
 
-    public boolean getFailOnUnknownProperties()
-    {
+    public boolean getFailOnUnknownProperties() {
         return this.failOnUnknownProperties;
     }
 
     @JsonProperty
-    public void setFailOnUnknownProperties(boolean failOnUnknownProperties)
-    {
+    public void setFailOnUnknownProperties(boolean failOnUnknownProperties) {
         this.failOnUnknownProperties = failOnUnknownProperties;
     }
 
-    public Include getSerializationInclusion()
-    {
+    public Include getSerializationInclusion() {
         return this.serializationInclusion;
     }
 
     @JsonProperty
-    public void setSerializationInclusion(Include serializationInclusion)
-    {
+    public void setSerializationInclusion(Include serializationInclusion) {
         this.serializationInclusion = serializationInclusion;
     }
 
-    public Nulls getDefaultNullSetterInfo()
-    {
+    public Nulls getDefaultNullSetterInfo() {
         return this.defaultNullSetterInfo;
     }
 
     @JsonProperty
-    public void setDefaultNullSetterInfo(Nulls defaultNullSetterInfo)
-    {
+    public void setDefaultNullSetterInfo(Nulls defaultNullSetterInfo) {
         this.defaultNullSetterInfo = defaultNullSetterInfo;
     }
 }

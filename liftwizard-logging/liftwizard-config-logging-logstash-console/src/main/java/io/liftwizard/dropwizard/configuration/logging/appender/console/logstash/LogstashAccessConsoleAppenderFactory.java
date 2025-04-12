@@ -38,9 +38,8 @@ import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashAccessEnc
 
 @JsonTypeName("console-access-logstash")
 @AutoService(AppenderFactory.class)
-public class LogstashAccessConsoleAppenderFactory
-        extends AbstractAppenderFactory<IAccessEvent>
-{
+public class LogstashAccessConsoleAppenderFactory extends AbstractAppenderFactory<IAccessEvent> {
+
     @NotNull
     private ConsoleStream target = ConsoleStream.STDOUT;
 
@@ -48,37 +47,33 @@ public class LogstashAccessConsoleAppenderFactory
     private LogstashAccessEncoderFactory encoderFactory = new LogstashAccessEncoderFactory();
 
     @JsonProperty
-    public ConsoleStream getTarget()
-    {
+    public ConsoleStream getTarget() {
         return this.target;
     }
 
     @JsonProperty
-    public void setTarget(ConsoleStream target)
-    {
+    public void setTarget(ConsoleStream target) {
         this.target = target;
     }
 
     @JsonProperty
-    public LogstashAccessEncoderFactory getEncoder()
-    {
+    public LogstashAccessEncoderFactory getEncoder() {
         return this.encoderFactory;
     }
 
     @JsonProperty
-    public void setEncoder(LogstashAccessEncoderFactory newEncoderFactory)
-    {
+    public void setEncoder(LogstashAccessEncoderFactory newEncoderFactory) {
         this.encoderFactory = newEncoderFactory;
     }
 
     @Override
     public Appender<IAccessEvent> build(
-            LoggerContext context,
-            String applicationName,
-            LayoutFactory<IAccessEvent> layoutFactory,
-            LevelFilterFactory<IAccessEvent> levelFilterFactory,
-            AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory)
-    {
+        LoggerContext context,
+        String applicationName,
+        LayoutFactory<IAccessEvent> layoutFactory,
+        LevelFilterFactory<IAccessEvent> levelFilterFactory,
+        AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory
+    ) {
         Encoder<IAccessEvent> encoder = this.encoderFactory.build(this.getTimeZone());
         OutputStreamAppender<IAccessEvent> appender = this.appender(context);
         appender.setEncoder(encoder);
@@ -90,8 +85,7 @@ public class LogstashAccessConsoleAppenderFactory
         return this.wrapAsync(appender, asyncAppenderFactory);
     }
 
-    private OutputStreamAppender<IAccessEvent> appender(Context context)
-    {
+    private OutputStreamAppender<IAccessEvent> appender(Context context) {
         ConsoleAppender<IAccessEvent> appender = new ConsoleAppender<>();
         appender.setName("console-access-logstash-appender");
         appender.setContext(context);
@@ -100,20 +94,17 @@ public class LogstashAccessConsoleAppenderFactory
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public enum ConsoleStream
-    {
+    public enum ConsoleStream {
         STDOUT("System.out"),
         STDERR("System.err");
 
         private final String value;
 
-        ConsoleStream(String value)
-        {
+        ConsoleStream(String value) {
             this.value = value;
         }
 
-        public String get()
-        {
+        public String get() {
             return this.value;
         }
     }

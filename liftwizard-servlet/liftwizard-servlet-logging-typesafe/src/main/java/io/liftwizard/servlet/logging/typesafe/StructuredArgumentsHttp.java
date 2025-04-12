@@ -23,70 +23,58 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
 
-public class StructuredArgumentsHttp
-{
+public class StructuredArgumentsHttp {
+
     private MapIterable<String, String> headers;
     private ImmutableList<String> excludedHeaders;
     private String body;
     private Long contentLength;
 
     @JsonProperty
-    public MapIterable<String, String> getHeaders()
-    {
+    public MapIterable<String, String> getHeaders() {
         return this.headers;
     }
 
     @JsonProperty
-    public void setHeaders(MutableMap<String, String> headers)
-    {
-        if (this.headers != null)
-        {
+    public void setHeaders(MutableMap<String, String> headers) {
+        if (this.headers != null) {
             throw new AssertionError(this.headers);
         }
         this.headers = headers.asUnmodifiable();
     }
 
     @JsonProperty
-    public ImmutableList<String> getExcludedHeaders()
-    {
+    public ImmutableList<String> getExcludedHeaders() {
         return this.excludedHeaders;
     }
 
     @JsonProperty
-    public void setExcludedHeaders(ImmutableList<String> excludedHeaders)
-    {
-        if (this.excludedHeaders != null)
-        {
+    public void setExcludedHeaders(ImmutableList<String> excludedHeaders) {
+        if (this.excludedHeaders != null) {
             throw new AssertionError(this.excludedHeaders);
         }
         this.excludedHeaders = Objects.requireNonNull(excludedHeaders);
     }
 
     @JsonProperty
-    public String getBody()
-    {
+    public String getBody() {
         return this.body;
     }
 
-    public void setBody(String body)
-    {
-        if (this.body != null)
-        {
+    public void setBody(String body) {
+        if (this.body != null) {
             throw new AssertionError(this.body);
         }
         this.body = Objects.requireNonNull(body);
     }
 
     @JsonProperty
-    public Long getContentLength()
-    {
+    public Long getContentLength() {
         return this.contentLength;
     }
 
-    public void setContentLength(long contentLength)
-    {
-        if (this.contentLength != null)
-        {
+    public void setContentLength(long contentLength) {
+        if (this.contentLength != null) {
             throw new AssertionError(this.contentLength);
         }
         this.contentLength = contentLength;

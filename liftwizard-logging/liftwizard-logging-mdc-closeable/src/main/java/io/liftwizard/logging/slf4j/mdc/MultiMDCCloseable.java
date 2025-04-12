@@ -23,27 +23,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-public final class MultiMDCCloseable
-        implements AutoCloseable
-{
+public final class MultiMDCCloseable implements AutoCloseable {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiMDCCloseable.class);
 
     private final Set<String> keys = new LinkedHashSet<>();
 
-    public void put(String key, String value)
-    {
-        if (key == null)
-        {
+    public void put(String key, String value) {
+        if (key == null) {
             throw new IllegalArgumentException("key parameter cannot be null");
         }
 
-        if (!this.keys.add(key))
-        {
+        if (!this.keys.add(key)) {
             throw new IllegalArgumentException(key);
         }
 
-        if (value == null)
-        {
+        if (value == null) {
             LOGGER.warn("Dropping null value for key: {}", key);
             return;
         }
@@ -52,8 +47,7 @@ public final class MultiMDCCloseable
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         this.keys.forEach(MDC::remove);
     }
 }

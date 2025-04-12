@@ -24,22 +24,18 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.opentest4j.MultipleFailuresError;
 
-public class ErrorCollectorExtension
-        implements AfterEachCallback
-{
+public class ErrorCollectorExtension implements AfterEachCallback {
+
     private final MutableList<Throwable> errors = Lists.mutable.empty();
 
-    public void addError(AssertionError error)
-    {
+    public void addError(AssertionError error) {
         Objects.requireNonNull(error, "Error cannot be null");
         this.errors.add(error);
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-    {
-        if (this.errors.isEmpty())
-        {
+    public void afterEach(ExtensionContext context) {
+        if (this.errors.isEmpty()) {
             return;
         }
 

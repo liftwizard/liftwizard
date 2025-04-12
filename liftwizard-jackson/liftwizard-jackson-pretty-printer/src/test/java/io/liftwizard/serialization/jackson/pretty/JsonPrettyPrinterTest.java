@@ -30,13 +30,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JsonPrettyPrinterTest
-{
+class JsonPrettyPrinterTest {
+
     private final ObjectMapper mapper = JsonPrettyPrinterTest.getObjectMapper();
 
     @Nonnull
-    private static ObjectMapper getObjectMapper()
-    {
+    private static ObjectMapper getObjectMapper() {
         PrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -46,9 +45,7 @@ class JsonPrettyPrinterTest
     }
 
     @Test
-    void smokeTest()
-            throws JsonProcessingException
-    {
+    void smokeTest() throws JsonProcessingException {
         Map<String, List<String>> map = new HashMap<>();
         map.put("a", List.of("b", "c"));
         map.put("d", List.of("e", "f"));
@@ -56,26 +53,25 @@ class JsonPrettyPrinterTest
         String actualJson = this.mapper.writeValueAsString(map);
 
         // language=JSON
-        String expectedJson = """
-                {
-                  "a": [
-                    "b",
-                    "c"
-                  ],
-                  "d": [
-                    "e",
-                    "f"
-                  ]
-                }
-                """;
+        String expectedJson =
+            """
+            {
+              "a": [
+                "b",
+                "c"
+              ],
+              "d": [
+                "e",
+                "f"
+              ]
+            }
+            """;
 
         assertThat(actualJson).isEqualTo(expectedJson);
     }
 
     @Test
-    void emptyArray()
-            throws JsonProcessingException
-    {
+    void emptyArray() throws JsonProcessingException {
         List<String> emptyList = List.of();
         String actualJson = this.mapper.writeValueAsString(emptyList);
         String expectedJson = "[ ]";

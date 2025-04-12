@@ -35,15 +35,13 @@ import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReladomoOperationDataFetcher<T>
-        implements DataFetcher<List<T>>
-{
+public class ReladomoOperationDataFetcher<T> implements DataFetcher<List<T>> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoOperationDataFetcher.class);
 
     private final RelatedFinder<T> finder;
 
-    public ReladomoOperationDataFetcher(RelatedFinder<T> finder)
-    {
+    public ReladomoOperationDataFetcher(RelatedFinder<T> finder) {
         this.finder = Objects.requireNonNull(finder);
     }
 
@@ -51,8 +49,7 @@ public class ReladomoOperationDataFetcher<T>
     @Metered
     @ExceptionMetered
     @Override
-    public List<T> get(DataFetchingEnvironment environment)
-    {
+    public List<T> get(DataFetchingEnvironment environment) {
         Map<String, Object> arguments = environment.getArguments();
         String inputOperation = (String) arguments.get("operation");
         Operation operation = this.compileOperation(this.finder, inputOperation);
@@ -62,15 +59,11 @@ public class ReladomoOperationDataFetcher<T>
         return result;
     }
 
-    private Operation compileOperation(RelatedFinder<T> relatedFinder, String inputOperation)
-    {
-        try
-        {
+    private Operation compileOperation(RelatedFinder<T> relatedFinder, String inputOperation) {
+        try {
             var compiler = new ReladomoOperationCompiler();
             return compiler.compile(relatedFinder, inputOperation);
-        }
-        catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             throw new LiftwizardGraphQLException(e.getMessage(), Lists.immutable.with(inputOperation), e);
         }
     }

@@ -27,28 +27,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import org.apache.log4j.Logger;
 
-public class StructuredArgumentsLog4jMapLogger
-        implements Consumer<StructuredArguments>
-{
+public class StructuredArgumentsLog4jMapLogger implements Consumer<StructuredArguments> {
+
     private static final Logger LOGGER = Logger.getLogger(StructuredArgumentsLog4jMapLogger.class);
 
     @Nonnull
     private final ObjectMapper objectMapper;
 
-    public StructuredArgumentsLog4jMapLogger(@Nonnull ObjectMapper objectMapper)
-    {
+    public StructuredArgumentsLog4jMapLogger(@Nonnull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
-    public void accept(StructuredArguments structuredArguments)
-    {
+    public void accept(StructuredArguments structuredArguments) {
         Map<?, ?> structuredArgumentsMap = this.objectMapper.convertValue(structuredArguments, Map.class);
-        Map<?, ?> mapWithToString = new HashMap<Object, Object>(structuredArgumentsMap)
-        {
+        Map<?, ?> mapWithToString = new HashMap<Object, Object>(structuredArgumentsMap) {
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return "Response sent";
             }
         };

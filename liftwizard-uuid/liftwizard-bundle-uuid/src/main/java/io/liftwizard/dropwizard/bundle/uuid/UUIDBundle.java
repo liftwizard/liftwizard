@@ -29,27 +29,19 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
-public class UUIDBundle
-        implements ConfiguredBundle<UUIDSupplierFactoryProvider>
-{
-    @Override
-    public void initialize(Bootstrap<?> bootstrap)
-    {
-    }
+public class UUIDBundle implements ConfiguredBundle<UUIDSupplierFactoryProvider> {
 
     @Override
-    public void run(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment)
-    {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
-        {
+    public void initialize(Bootstrap<?> bootstrap) {}
+
+    @Override
+    public void run(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment) {
+        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
             this.runWithMdc(configuration, environment);
         }
     }
 
-    private void runWithMdc(
-            UUIDSupplierFactoryProvider configuration,
-            @Nonnull Environment environment)
-    {
+    private void runWithMdc(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment) {
         UUIDSupplierFactory uuidSupplierFactory = configuration.getUuidSupplierFactory();
         Supplier<UUID> uuidSupplier = uuidSupplierFactory.createUUIDSupplier();
         UUIDBinder uuidBinder = new UUIDBinder(uuidSupplier);

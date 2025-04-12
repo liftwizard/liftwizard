@@ -18,31 +18,29 @@ package io.liftwizard.logging.slf4j.uncaught.exception.handler;
 
 import org.junit.jupiter.api.Test;
 
-class Slf4jUncaughtExceptionHandlerTest
-{
+class Slf4jUncaughtExceptionHandlerTest {
+
     @Test
-    void testUncaughtException()
-    {
+    void testUncaughtException() {
         CauseException causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
-        RootException rootException = new RootException("Slf4jUncaughtExceptionHandlerTest root exception", causeException);
+        RootException rootException = new RootException(
+            "Slf4jUncaughtExceptionHandlerTest root exception",
+            causeException
+        );
 
         new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
     }
 
-    private static class CauseException
-            extends RuntimeException
-    {
-        CauseException(String message)
-        {
+    private static class CauseException extends RuntimeException {
+
+        CauseException(String message) {
             super(message);
         }
     }
 
-    private static class RootException
-            extends RuntimeException
-    {
-        RootException(String message, Throwable cause)
-        {
+    private static class RootException extends RuntimeException {
+
+        RootException(String message, Throwable cause) {
             super(message, cause);
         }
     }

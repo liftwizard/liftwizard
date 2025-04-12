@@ -30,9 +30,8 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.reflections.Reflections;
 
-public class ExecuteSqlTestRule
-        implements TestRule
-{
+public class ExecuteSqlTestRule implements TestRule {
+
     /**
      * The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
      */
@@ -44,56 +43,46 @@ public class ExecuteSqlTestRule
     private String fkLocationPattern = "^(?!META-INF\\.).*\\.fk$";
 
     @Nonnull
-    private Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager
-            .getInstance()
-            .getConnection();
+    private Supplier<? extends Connection> connectionSupplier = () ->
+        H2InMemoryConnectionManager.getInstance().getConnection();
 
-    public ExecuteSqlTestRule setDdlLocationPattern(@Nonnull String ddlLocationPattern)
-    {
+    public ExecuteSqlTestRule setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
         this.ddlLocationPattern = Objects.requireNonNull(ddlLocationPattern);
         return this;
     }
 
-    public ExecuteSqlTestRule setIdxLocationPattern(@Nonnull String idxLocationPattern)
-    {
+    public ExecuteSqlTestRule setIdxLocationPattern(@Nonnull String idxLocationPattern) {
         this.idxLocationPattern = Objects.requireNonNull(idxLocationPattern);
         return this;
     }
 
-    public ExecuteSqlTestRule setFkLocationPattern(@Nonnull String fkLocationPattern)
-    {
+    public ExecuteSqlTestRule setFkLocationPattern(@Nonnull String fkLocationPattern) {
         this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
         return this;
     }
 
-    public ExecuteSqlTestRule setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
-    {
+    public ExecuteSqlTestRule setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
         this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
         return this;
     }
 
     @Nonnull
     @Override
-    public Statement apply(@Nonnull Statement base, @Nonnull Description description)
-    {
-        return new Statement()
-        {
+    public Statement apply(@Nonnull Statement base, @Nonnull Description description) {
+        return new Statement() {
             @Override
-            public void evaluate()
-                    throws Throwable
-            {
-                try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get())
-                {
+            public void evaluate() throws Throwable {
+                try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get()) {
                     DatabaseDdlExecutor.dropAllObjects(connection);
                     DatabaseDdlExecutor.executeSql(
-                            connection,
-                            ExecuteSqlTestRule.this.ddlLocationPattern,
-                            ExecuteSqlTestRule.this.idxLocationPattern,
-                            ExecuteSqlTestRule.this.fkLocationPattern);
+                        connection,
+                        ExecuteSqlTestRule.this.ddlLocationPattern,
+                        ExecuteSqlTestRule.this.idxLocationPattern,
+                        ExecuteSqlTestRule.this.fkLocationPattern
+                    );
                 }
                 base.evaluate();
-                try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get())
-                {
+                try (Connection connection = ExecuteSqlTestRule.this.connectionSupplier.get()) {
                     DatabaseDdlExecutor.dropAllObjects(connection);
                 }
             }

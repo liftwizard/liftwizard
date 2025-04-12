@@ -35,32 +35,27 @@ import org.eclipse.collections.api.stack.ImmutableStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StructuredArgumentsOpenTracingLogger
-        implements Consumer<StructuredArguments>
-{
+public class StructuredArgumentsOpenTracingLogger implements Consumer<StructuredArguments> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsOpenTracingLogger.class);
 
     @Nonnull
     private final ObjectMapper objectMapper;
 
-    public StructuredArgumentsOpenTracingLogger(@Nonnull ObjectMapper objectMapper)
-    {
+    public StructuredArgumentsOpenTracingLogger(@Nonnull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
-    public void accept(StructuredArguments structuredArguments)
-    {
+    public void accept(StructuredArguments structuredArguments) {
         ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
         this.structuredArgumentsToSpans(objectNode);
         LOGGER.info("Response sent");
     }
 
-    private void structuredArgumentsToSpans(@Nonnull ObjectNode objectNode)
-    {
+    private void structuredArgumentsToSpans(@Nonnull ObjectNode objectNode) {
         Span span = GlobalTracer.get().activeSpan();
-        if (span == null)
-        {
+        if (span == null) {
             return;
         }
 
@@ -68,53 +63,41 @@ public class StructuredArgumentsOpenTracingLogger
     }
 
     private void structuredArgumentsToSpans(
-            @Nonnull Span span,
-            @Nonnull ImmutableStack<String> stack,
-            @Nonnull ObjectNode objectNode)
-    {
+        @Nonnull Span span,
+        @Nonnull ImmutableStack<String> stack,
+        @Nonnull ObjectNode objectNode
+    ) {
         objectNode.fields().forEachRemaining(entry -> this.structuredArgumentToSpan(span, stack, entry));
     }
 
     private void structuredArgumentToSpan(
-            @Nonnull Span span,
-            @Nonnull ImmutableStack<String> stack,
-            @Nonnull Entry<String, JsonNode> entry)
-    {
+        @Nonnull Span span,
+        @Nonnull ImmutableStack<String> stack,
+        @Nonnull Entry<String, JsonNode> entry
+    ) {
         String key = entry.getKey();
         JsonNode value = entry.getValue();
 
-        if (value.isObject())
-        {
+        if (value.isObject()) {
             ImmutableStack<String> nextStack = stack.push(key);
             ObjectNode nextObjectNode = (ObjectNode) value;
             this.structuredArgumentsToSpans(span, nextStack, nextObjectNode);
             return;
         }
 
-        String keyString = stack.isEmpty()
-                ? key
-                : stack.toList().toReversed().makeString("", ".", "." + key);
+        String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
 
-        if (value.isArray())
-        {
+        if (value.isArray()) {
             MutableList<String> list = Lists.mutable.empty();
             value.iterator().forEachRemaining(each -> list.add(each.textValue()));
             span.setTag(keyString, list.makeString());
-        }
-        else if (value.isNumber())
-        {
+        } else if (value.isNumber()) {
             span.setTag(keyString, value.numberValue());
-        }
-        else if (value.isBoolean())
-        {
+        } else if (value.isBoolean()) {
             span.setTag(keyString, value.booleanValue());
-        }
-        else if (value.isTextual())
-        {
+        } else if (value.isTextual()) {
             span.setTag(keyString, value.textValue());
-        }
-        else
-        {
+        } else {
             throw new AssertionError(value);
         }
     }

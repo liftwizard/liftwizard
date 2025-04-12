@@ -24,16 +24,13 @@ import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Slf4jUncaughtExceptionHandler
-        implements UncaughtExceptionHandler
-{
+public class Slf4jUncaughtExceptionHandler implements UncaughtExceptionHandler {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jUncaughtExceptionHandler.class);
 
     @Override
-    public void uncaughtException(Thread thread, Throwable throwable)
-    {
-        try (MultiMDCCloseable mdc = new MultiMDCCloseable())
-        {
+    public void uncaughtException(Thread thread, Throwable throwable) {
+        try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
             mdc.put("threadName", thread.getName());
             mdc.put("exceptionClass", throwable.getClass().getCanonicalName());
             mdc.put("exceptionMessage", throwable.getMessage());

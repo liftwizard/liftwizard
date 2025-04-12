@@ -18,7 +18,6 @@ package io.liftwizard.dropwizard.configuration.auth.filter;
 
 import java.util.List;
 
-public interface AuthFilterFactoryProvider
-{
+public interface AuthFilterFactoryProvider {
     List<AuthFilterFactory> getAuthFilterFactories();
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import io.dropwizard.servlets.tasks.PostBodyTask;
 
 public class EchoTask extends PostBodyTask {
+
     public EchoTask() {
         super("echo");
     }

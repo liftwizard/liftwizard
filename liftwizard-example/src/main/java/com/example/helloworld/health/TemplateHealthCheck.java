@@ -6,6 +6,7 @@ import com.codahale.metrics.health.HealthCheck;
 import com.example.helloworld.core.Template;
 
 public class TemplateHealthCheck extends HealthCheck {
+
     private final Template template;
 
     public TemplateHealthCheck(Template template) {

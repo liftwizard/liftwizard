@@ -31,24 +31,20 @@ import graphql.schema.DataFetchingEnvironment;
  *
  * @see graphql.schema.PropertyDataFetcher
  */
-public class FunctionDataFetcher<Input, Output>
-        implements DataFetcher<Output>
-{
+public class FunctionDataFetcher<Input, Output> implements DataFetcher<Output> {
+
     @Nonnull
     private final Function<Input, Output> function;
 
-    public FunctionDataFetcher(@Nonnull Function<Input, Output> function)
-    {
+    public FunctionDataFetcher(@Nonnull Function<Input, Output> function) {
         this.function = Objects.requireNonNull(function);
     }
 
     @Nullable
     @Override
-    public Output get(@Nonnull DataFetchingEnvironment environment)
-    {
+    public Output get(@Nonnull DataFetchingEnvironment environment) {
         Input source = environment.getSource();
-        if (source == null)
-        {
+        if (source == null) {
             return null;
         }
 

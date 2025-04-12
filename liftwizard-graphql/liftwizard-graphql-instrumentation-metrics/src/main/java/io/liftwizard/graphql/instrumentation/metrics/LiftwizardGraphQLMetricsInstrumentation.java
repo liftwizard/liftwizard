@@ -42,9 +42,8 @@ import io.liftwizard.instrumentation.GraphQLInstrumentationUtils;
  *
  * @see <a href="https://liftwizard.io/docs/graphql/instrumentation-metrics">https://liftwizard.io/docs/graphql/instrumentation-metrics</a>
  */
-public class LiftwizardGraphQLMetricsInstrumentation
-        extends SimpleInstrumentation
-{
+public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentation {
+
     private final MetricRegistry metricRegistry;
     private final Clock clock;
 
@@ -58,82 +57,70 @@ public class LiftwizardGraphQLMetricsInstrumentation
     private final Timer validationTimer;
     private final Meter validationExceptionsMeter;
 
-    public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock)
-    {
+    public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock) {
         this.metricRegistry = Objects.requireNonNull(metricRegistry);
         this.clock = Objects.requireNonNull(clock);
 
         this.allFieldsSyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
         this.allFieldsAsyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
-        this.allFieldsExceptionsMeter = metricRegistry.meter(MetricRegistry.name(
-                "liftwizard",
-                "graphql",
-                "field",
-                "exceptions"));
+        this.allFieldsExceptionsMeter = metricRegistry.meter(
+            MetricRegistry.name("liftwizard", "graphql", "field", "exceptions")
+        );
         this.executionTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "execution"));
-        this.executionExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name(
-                "liftwizard",
-                "graphql",
-                "execution",
-                "exceptions"));
+        this.executionExceptionsMeter = this.metricRegistry.meter(
+                MetricRegistry.name("liftwizard", "graphql", "execution", "exceptions")
+            );
         this.parseTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "parse"));
-        this.parseExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name(
-                "liftwizard",
-                "graphql",
-                "parse",
-                "exceptions"));
+        this.parseExceptionsMeter = this.metricRegistry.meter(
+                MetricRegistry.name("liftwizard", "graphql", "parse", "exceptions")
+            );
         this.validationTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "validation"));
-        this.validationExceptionsMeter = this.metricRegistry.meter(MetricRegistry.name(
-                "liftwizard",
-                "graphql",
-                "validation",
-                "exceptions"));
+        this.validationExceptionsMeter = this.metricRegistry.meter(
+                MetricRegistry.name("liftwizard", "graphql", "validation", "exceptions")
+            );
     }
 
     @Override
     @Nonnull
-    public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters)
-    {
+    public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
         return new GlobalInstrumentationContext<>(this.executionTimer, this.executionExceptionsMeter);
     }
 
     @Override
     @Nonnull
-    public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters)
-    {
+    public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters) {
         return new GlobalInstrumentationContext<>(this.parseTimer, this.parseExceptionsMeter);
     }
 
     @Override
     @Nonnull
-    public InstrumentationContext<List<ValidationError>> beginValidation(InstrumentationValidationParameters parameters)
-    {
+    public InstrumentationContext<List<ValidationError>> beginValidation(
+        InstrumentationValidationParameters parameters
+    ) {
         return new GlobalInstrumentationContext<>(this.validationTimer, this.validationExceptionsMeter);
     }
 
     @Override
     @Nonnull
-    public InstrumentationContext<Object> beginFieldFetch(@Nonnull InstrumentationFieldFetchParameters parameters)
-    {
-        if (parameters.isTrivialDataFetcher())
-        {
+    public InstrumentationContext<Object> beginFieldFetch(@Nonnull InstrumentationFieldFetchParameters parameters) {
+        if (parameters.isTrivialDataFetcher()) {
             return super.beginFieldFetch(parameters);
         }
 
         return new FieldInstrumentationContext(
-                this.allFieldsSyncTimer,
-                this.allFieldsAsyncTimer,
-                this.allFieldsExceptionsMeter);
+            this.allFieldsSyncTimer,
+            this.allFieldsAsyncTimer,
+            this.allFieldsExceptionsMeter
+        );
     }
 
     @Override
     @Nonnull
     public DataFetcher<?> instrumentDataFetcher(
-            @Nonnull DataFetcher<?> dataFetcher,
-            @Nonnull InstrumentationFieldFetchParameters parameters)
-    {
-        if (parameters.isTrivialDataFetcher())
-        {
+        @Nonnull DataFetcher<?> dataFetcher,
+        @Nonnull InstrumentationFieldFetchParameters parameters
+    ) {
+        if (parameters.isTrivialDataFetcher()) {
             return dataFetcher;
         }
 

@@ -27,13 +27,11 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 
 @JsonTypeName("system")
 @AutoService(UUIDSupplierFactory.class)
-public class SystemUUIDSupplierFactory
-        implements UUIDSupplierFactory
-{
+public class SystemUUIDSupplierFactory implements UUIDSupplierFactory {
+
     @Nonnull
     @Override
-    public Supplier<UUID> createUUIDSupplier()
-    {
+    public Supplier<UUID> createUUIDSupplier() {
         return new SystemUUIDSupplier();
     }
 }

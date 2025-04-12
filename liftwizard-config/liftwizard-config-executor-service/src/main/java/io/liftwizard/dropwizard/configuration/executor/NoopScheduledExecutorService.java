@@ -22,27 +22,22 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NoopScheduledExecutorService
-        extends AbstractDelegatingScheduledExecutorService
-{
+public class NoopScheduledExecutorService extends AbstractDelegatingScheduledExecutorService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NoopScheduledExecutorService.class);
 
-    public NoopScheduledExecutorService(ScheduledExecutorService delegate)
-    {
+    public NoopScheduledExecutorService(ScheduledExecutorService delegate) {
         super(delegate);
     }
 
     @Override
-    protected Runnable wrapTask(Runnable runnable)
-    {
+    protected Runnable wrapTask(Runnable runnable) {
         return () -> LOGGER.debug("Skip scheduled runnable: {}", runnable);
     }
 
     @Override
-    protected <V> Callable<V> wrapTask(Callable<V> callable)
-    {
-        return () ->
-        {
+    protected <V> Callable<V> wrapTask(Callable<V> callable) {
+        return () -> {
             LOGGER.debug("Skip scheduled callable: {}", callable);
             return null;
         };

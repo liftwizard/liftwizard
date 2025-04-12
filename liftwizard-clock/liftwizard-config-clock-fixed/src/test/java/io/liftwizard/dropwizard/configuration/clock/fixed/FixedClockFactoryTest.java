@@ -37,20 +37,23 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FixedClockFactoryTest
-{
+class FixedClockFactoryTest {
+
     @RegisterExtension
     private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
     private final ObjectMapper objectMapper = newObjectMapper();
     private final Validator validator = Validators.newValidator();
 
-    private final JsonConfigurationFactory<ClockFactory> factory =
-            new JsonConfigurationFactory<>(ClockFactory.class, this.validator, this.objectMapper, "dw");
+    private final JsonConfigurationFactory<ClockFactory> factory = new JsonConfigurationFactory<>(
+        ClockFactory.class,
+        this.validator,
+        this.objectMapper,
+        "dw"
+    );
 
     @Test
-    void isDiscoverable()
-    {
+    void isDiscoverable() {
         // Make sure the types we specified in META-INF gets picked up
         var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
         List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
@@ -58,9 +61,7 @@ class FixedClockFactoryTest
     }
 
     @Test
-    void fixedClock()
-            throws Exception
-    {
+    void fixedClock() throws Exception {
         ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
         assertThat(clockFactory).isInstanceOf(FixedClockFactory.class);
         Clock clock = clockFactory.createClock();
@@ -70,8 +71,7 @@ class FixedClockFactoryTest
         assertThat(actualInstant).isEqualTo(expectedInstant);
     }
 
-    private static ObjectMapper newObjectMapper()
-    {
+    private static ObjectMapper newObjectMapper() {
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         ObjectMapperConfig.configure(objectMapper);
         return objectMapper;

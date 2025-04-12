@@ -36,42 +36,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class DdlExecutorBundle
-        implements PrioritizedBundle
-{
+public class DdlExecutorBundle implements PrioritizedBundle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DdlExecutorBundle.class);
 
     @Override
-    public int getPriority()
-    {
+    public int getPriority() {
         return -6;
     }
 
     @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-            throws SQLException
-    {
-        DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
-                DdlExecutorFactoryProvider.class,
-                configuration);
-        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
-                NamedDataSourceProvider.class,
-                configuration);
+    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws SQLException {
+        DdlExecutorFactoryProvider ddlExecutorFactoryProvider =
+            this.safeCastConfiguration(DdlExecutorFactoryProvider.class, configuration);
+        NamedDataSourceProvider dataSourceProvider =
+            this.safeCastConfiguration(NamedDataSourceProvider.class, configuration);
 
         List<DdlExecutorFactory> ddlExecutorFactories = ddlExecutorFactoryProvider.getDdlExecutorFactories();
 
         NamedDataSourcesFactory namedDataSourcesFactory = dataSourceProvider.getNamedDataSourcesFactory();
 
-        if (ddlExecutorFactories.isEmpty())
-        {
+        if (ddlExecutorFactories.isEmpty()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
         }
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories)
-        {
+        for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories) {
             String dataSourceName = ddlExecutorFactory.getDataSourceName();
             String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
             String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
@@ -80,12 +72,12 @@ public class DdlExecutorBundle
             LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 
             DataSource dataSource = namedDataSourcesFactory.getDataSourceByName(
-                    dataSourceName,
-                    environment.metrics(),
-                    environment.lifecycle());
+                dataSourceName,
+                environment.metrics(),
+                environment.lifecycle()
+            );
             Objects.requireNonNull(dataSource, dataSourceName);
-            try (Connection connection = dataSource.getConnection())
-            {
+            try (Connection connection = dataSource.getConnection()) {
                 DatabaseDdlExecutor.executeSql(connection, ddlLocationPattern, idxLocationPattern, fkLocationPattern);
             }
         }

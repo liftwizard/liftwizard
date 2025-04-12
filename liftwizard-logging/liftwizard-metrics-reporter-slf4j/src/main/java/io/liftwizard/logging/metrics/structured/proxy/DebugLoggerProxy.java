@@ -19,23 +19,19 @@ package io.liftwizard.logging.metrics.structured.proxy;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
-public class DebugLoggerProxy
-        extends AbstractLoggerProxy
-{
-    public DebugLoggerProxy(Logger logger)
-    {
+public class DebugLoggerProxy extends AbstractLoggerProxy {
+
+    public DebugLoggerProxy(Logger logger) {
         super(logger);
     }
 
     @Override
-    public void log(Marker marker, String message, Object structuredObject)
-    {
+    public void log(Marker marker, String message, Object structuredObject) {
         this.logger.debug(marker, message, structuredObject);
     }
 
     @Override
-    public boolean isEnabled(Marker marker)
-    {
+    public boolean isEnabled(Marker marker) {
         return this.logger.isDebugEnabled(marker);
     }
 }

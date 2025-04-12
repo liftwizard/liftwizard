@@ -33,6 +33,7 @@ import static java.util.Objects.requireNonNull;
 
 @Provider
 public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
+
     protected final Logger logger;
 
     /**
@@ -65,9 +66,9 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
             }
 
             return Response.fromResponse(response)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(new ErrorMessage(response.getStatus(), exception.getLocalizedMessage()))
-                    .build();
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .entity(new ErrorMessage(response.getStatus(), exception.getLocalizedMessage()))
+                .build();
         }
 
         // Else the thrown exception is a not a web exception, so the exception is most likely
@@ -75,14 +76,18 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
         // correlation
         final long id = logException(exception);
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(new ErrorMessage(formatErrorMessage(id, exception)))
-                .build();
+            .type(MediaType.APPLICATION_JSON_TYPE)
+            .entity(new ErrorMessage(formatErrorMessage(id, exception)))
+            .build();
     }
 
     @SuppressWarnings("UnusedParameters")
     protected String formatErrorMessage(long id, E exception) {
-        return String.format(Locale.ROOT, "There was an error processing your request. It has been logged (ID %016x).", id);
+        return String.format(
+            Locale.ROOT,
+            "There was an error processing your request. It has been logged (ID %016x).",
+            id
+        );
     }
 
     protected long logException(E exception) {

@@ -31,9 +31,8 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.reflections.Reflections;
 
-public class ExecuteSqlExtension
-        implements BeforeEachCallback, AfterEachCallback
-{
+public class ExecuteSqlExtension implements BeforeEachCallback, AfterEachCallback {
+
     /**
      * The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
      */
@@ -45,55 +44,45 @@ public class ExecuteSqlExtension
     private String fkLocationPattern = "^(?!META-INF\\.).*\\.fk$";
 
     @Nonnull
-    private Supplier<? extends Connection> connectionSupplier = () -> H2InMemoryConnectionManager
-            .getInstance()
-            .getConnection();
+    private Supplier<? extends Connection> connectionSupplier = () ->
+        H2InMemoryConnectionManager.getInstance().getConnection();
 
-    public ExecuteSqlExtension setDdlLocationPattern(@Nonnull String ddlLocationPattern)
-    {
+    public ExecuteSqlExtension setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
         this.ddlLocationPattern = Objects.requireNonNull(ddlLocationPattern);
         return this;
     }
 
-    public ExecuteSqlExtension setIdxLocationPattern(@Nonnull String idxLocationPattern)
-    {
+    public ExecuteSqlExtension setIdxLocationPattern(@Nonnull String idxLocationPattern) {
         this.idxLocationPattern = Objects.requireNonNull(idxLocationPattern);
         return this;
     }
 
-    public ExecuteSqlExtension setFkLocationPattern(@Nonnull String fkLocationPattern)
-    {
+    public ExecuteSqlExtension setFkLocationPattern(@Nonnull String fkLocationPattern) {
         this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
         return this;
     }
 
-    public ExecuteSqlExtension setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
-    {
+    public ExecuteSqlExtension setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
         this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
         return this;
     }
 
     @Override
-    public void beforeEach(ExtensionContext context)
-            throws SQLException
-    {
-        try (Connection connection = this.connectionSupplier.get())
-        {
+    public void beforeEach(ExtensionContext context) throws SQLException {
+        try (Connection connection = this.connectionSupplier.get()) {
             DatabaseDdlExecutor.dropAllObjects(connection);
             DatabaseDdlExecutor.executeSql(
-                    connection,
-                    this.ddlLocationPattern,
-                    this.idxLocationPattern,
-                    this.fkLocationPattern);
+                connection,
+                this.ddlLocationPattern,
+                this.idxLocationPattern,
+                this.fkLocationPattern
+            );
         }
     }
 
     @Override
-    public void afterEach(ExtensionContext context)
-            throws SQLException
-    {
-        try (Connection connection = this.connectionSupplier.get())
-        {
+    public void afterEach(ExtensionContext context) throws SQLException {
+        try (Connection connection = this.connectionSupplier.get()) {
             DatabaseDdlExecutor.dropAllObjects(connection);
         }
     }

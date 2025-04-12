@@ -36,9 +36,8 @@ import io.dropwizard.logging.filter.FilterFactory;
 
 @JsonTypeName("url")
 @AutoService(FilterFactory.class)
-public class RequestUrlFilterFactory
-        implements FilterFactory<IAccessEvent>
-{
+public class RequestUrlFilterFactory implements FilterFactory<IAccessEvent> {
+
     @NotEmpty
     private @Valid @NotNull List<String> urls = new ArrayList<>();
 
@@ -46,8 +45,7 @@ public class RequestUrlFilterFactory
     private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
     @Override
-    public Filter<IAccessEvent> build()
-    {
+    public Filter<IAccessEvent> build() {
         var evaluator = new URLEvaluator();
         this.urls.forEach(evaluator::addURL);
         evaluator.start();
@@ -62,38 +60,32 @@ public class RequestUrlFilterFactory
     }
 
     @JsonProperty
-    public List<String> getUrls()
-    {
+    public List<String> getUrls() {
         return this.urls;
     }
 
     @JsonProperty
-    public void setUrls(List<String> urls)
-    {
+    public void setUrls(List<String> urls) {
         this.urls = Objects.requireNonNull(urls);
     }
 
     @JsonProperty
-    public FilterReply getOnMatch()
-    {
+    public FilterReply getOnMatch() {
         return this.onMatch;
     }
 
     @JsonProperty
-    public void setOnMatch(FilterReply onMatch)
-    {
+    public void setOnMatch(FilterReply onMatch) {
         this.onMatch = onMatch;
     }
 
     @JsonProperty
-    public FilterReply getOnMismatch()
-    {
+    public FilterReply getOnMismatch() {
         return this.onMismatch;
     }
 
     @JsonProperty
-    public void setOnMismatch(FilterReply onMismatch)
-    {
+    public void setOnMismatch(FilterReply onMismatch) {
         this.onMismatch = onMismatch;
     }
 }

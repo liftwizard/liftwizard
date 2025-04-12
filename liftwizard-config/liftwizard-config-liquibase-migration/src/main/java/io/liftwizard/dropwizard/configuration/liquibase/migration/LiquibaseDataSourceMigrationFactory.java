@@ -22,8 +22,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LiquibaseDataSourceMigrationFactory
-{
+public class LiquibaseDataSourceMigrationFactory {
+
     private @NotNull String dataSourceName;
     private String catalogName;
     private String schemaName;
@@ -32,74 +32,62 @@ public class LiquibaseDataSourceMigrationFactory
     private @NotNull List<String> contexts = List.of();
 
     @JsonProperty
-    public String getDataSourceName()
-    {
+    public String getDataSourceName() {
         return this.dataSourceName;
     }
 
     @JsonProperty
-    public void setDataSourceName(String dataSourceName)
-    {
+    public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
 
     @JsonProperty
-    public String getCatalogName()
-    {
+    public String getCatalogName() {
         return this.catalogName;
     }
 
     @JsonProperty
-    public void setCatalogName(String catalogName)
-    {
+    public void setCatalogName(String catalogName) {
         this.catalogName = catalogName;
     }
 
     @JsonProperty
-    public String getSchemaName()
-    {
+    public String getSchemaName() {
         return this.schemaName;
     }
 
     @JsonProperty
-    public void setSchemaName(String schemaName)
-    {
+    public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
 
     @JsonProperty
-    public String getMigrationFileName()
-    {
+    public String getMigrationFileName() {
         return this.migrationFileName;
     }
 
     @JsonProperty
-    public void setMigrationFileName(String migrationFileName)
-    {
+    public void setMigrationFileName(String migrationFileName) {
         this.migrationFileName = migrationFileName;
     }
 
     @JsonProperty
-    public MigrationFileLocation getMigrationFileLocation()
-    {
+    public MigrationFileLocation getMigrationFileLocation() {
         return this.migrationFileLocation;
     }
 
     @JsonProperty
-    public void setMigrationFileLocation(MigrationFileLocation migrationFileLocation)
-    {
+    public void setMigrationFileLocation(MigrationFileLocation migrationFileLocation) {
         this.migrationFileLocation = migrationFileLocation;
     }
 
     @JsonProperty
-    public List<String> getContexts()
-    {
+    public List<String> getContexts() {
         return this.contexts;
     }
 
     @JsonProperty
-    public void setContexts(List<String> contexts)
-    {
+    public void setContexts(List<String> contexts) {
         this.contexts = contexts;
     }
 }

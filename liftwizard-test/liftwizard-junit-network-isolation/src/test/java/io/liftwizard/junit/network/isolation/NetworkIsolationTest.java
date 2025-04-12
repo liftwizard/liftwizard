@@ -29,22 +29,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(LogMarkerTestExtension.class)
-public class NetworkIsolationTest
-{
+public class NetworkIsolationTest {
+
     @Test
-    void shouldFailToConnectWhenNetworkIsDisabled()
-    {
-        assertThatThrownBy(() ->
-        {
-            try (CloseableHttpClient httpClient = HttpClients.createDefault())
-            {
+    void shouldFailToConnectWhenNetworkIsDisabled() {
+        assertThatThrownBy(() -> {
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                 HttpGet request = new HttpGet("https://www.google.com");
-                httpClient.execute(
-                        request, response ->
-                                EntityUtils.toString(response.getEntity()));
+                httpClient.execute(request, response -> EntityUtils.toString(response.getEntity()));
             }
         })
-                .isInstanceOf(SocketException.class)
-                .hasMessageContaining("Can't connect to SOCKS proxy:Connection refused");
+            .isInstanceOf(SocketException.class)
+            .hasMessageContaining("Can't connect to SOCKS proxy:Connection refused");
     }
 }

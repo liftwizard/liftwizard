@@ -25,41 +25,33 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEx
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotExistsContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
 
-public class ReladomoExistsOperatorVisitor
-        extends ReladomoOperationThrowingVisitor<Operation>
-{
+public class ReladomoExistsOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation> {
+
     private final AbstractRelatedFinder navigation;
     private final Operation notExistsOperation;
 
-    public ReladomoExistsOperatorVisitor(
-            AbstractRelatedFinder navigation,
-            Operation notExistsOperation)
-    {
+    public ReladomoExistsOperatorVisitor(AbstractRelatedFinder navigation, Operation notExistsOperation) {
         this.navigation = Objects.requireNonNull(navigation);
         this.notExistsOperation = notExistsOperation;
     }
 
     @Override
-    public Operation visitExistsOperator(ExistsOperatorContext ctx)
-    {
+    public Operation visitExistsOperator(ExistsOperatorContext ctx) {
         return this.visitChildren(ctx);
     }
 
     @Override
-    public Operation visitOperatorExists(OperatorExistsContext ctx)
-    {
-        if (this.notExistsOperation != null)
-        {
+    public Operation visitOperatorExists(OperatorExistsContext ctx) {
+        if (this.notExistsOperation != null) {
             throw new AssertionError();
         }
         return this.navigation.exists();
     }
 
     @Override
-    public Operation visitOperatorNotExists(OperatorNotExistsContext ctx)
-    {
+    public Operation visitOperatorNotExists(OperatorNotExistsContext ctx) {
         return this.notExistsOperation == null
-                ? this.navigation.notExists()
-                : this.navigation.notExists(this.notExistsOperation);
+            ? this.navigation.notExists()
+            : this.navigation.notExists(this.notExistsOperation);
     }
 }

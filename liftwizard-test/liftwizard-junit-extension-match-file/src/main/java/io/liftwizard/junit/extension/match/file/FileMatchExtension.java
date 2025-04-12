@@ -29,22 +29,16 @@ import javax.annotation.Nonnull;
 import io.liftwizard.junit.extension.match.AbstractMatchExtension;
 import io.liftwizard.junit.extension.match.FileSlurper;
 
-public class FileMatchExtension
-        extends AbstractMatchExtension
-{
-    public FileMatchExtension(@Nonnull Class<?> callingClass)
-    {
+public class FileMatchExtension extends AbstractMatchExtension {
+
+    public FileMatchExtension(@Nonnull Class<?> callingClass) {
         super(callingClass);
     }
 
     @Override
-    protected void assertFileContentsOrThrow(
-            @Nonnull String resourceClassPathLocation,
-            @Nonnull String actualString)
-            throws URISyntaxException, IOException
-    {
-        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation))
-        {
+    protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+        throws URISyntaxException, IOException {
+        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation)) {
             String prettyPrintedString = this.getPrettyPrintedString(actualString);
 
             Path packagePath = this.resourceRerecorderExtension.getPackagePath();
@@ -53,24 +47,20 @@ public class FileMatchExtension
             this.resourceRerecorderExtension.writeStringToFile(
                     resourceClassPathLocation,
                     prettyPrintedString,
-                    resourceFile);
-            if (!this.rerecordEnabled)
-            {
+                    resourceFile
+                );
+            if (!this.rerecordEnabled) {
                 String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
                 this.errorCollectorExtension.addError(new AssertionError(detailMessage));
             }
-        }
-        else
-        {
+        } else {
             InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
             Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
             String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
 
-            if (!actualString.equals(expectedStringFromFile))
-            {
-                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
-                        resourceClassPathLocation,
-                        actualString);
+            if (!actualString.equals(expectedStringFromFile)) {
+                String detailMessage =
+                    this.resourceRerecorderExtension.handleMismatch(resourceClassPathLocation, actualString);
                 var assertionError = new AssertionError(detailMessage);
                 this.errorCollectorExtension.addError(assertionError);
             }
@@ -78,8 +68,7 @@ public class FileMatchExtension
     }
 
     @Override
-    protected String getPrettyPrintedString(@Nonnull String string)
-    {
+    protected String getPrettyPrintedString(@Nonnull String string) {
         return string;
     }
 }
