@@ -45,7 +45,7 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
     /**
      * @since 2.0
      */
-    public LiftwizardLoggingExceptionMapper() {
+    protected LiftwizardLoggingExceptionMapper() {
         this(LoggerFactory.getLogger(LiftwizardLoggingExceptionMapper.class));
     }
 
