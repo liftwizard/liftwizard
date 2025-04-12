@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-profile-parent</artifactId>
-        <version>2.1.27</version>
+        <version>2.1.28-SNAPSHOT</version>
         <relativePath>../liftwizard-profile-parent</relativePath>
     </parent>
 
@@ -40,7 +40,7 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-dependencies</artifactId>
-                <version>2.1.27</version>
+                <version>2.1.28-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -171,7 +171,7 @@
                                 <dependency>
                                     <groupId>io.liftwizard</groupId>
                                     <artifactId>liftwizard-rewrite</artifactId>
-                                    <version>2.1.27</version>
+                                    <version>2.1.28-SNAPSHOT</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
@@ -201,7 +201,7 @@
                                 <dependency>
                                     <groupId>io.liftwizard</groupId>
                                     <artifactId>liftwizard-rewrite</artifactId>
-                                    <version>2.1.27</version>
+                                    <version>2.1.28-SNAPSHOT</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
