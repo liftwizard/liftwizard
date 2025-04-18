@@ -108,24 +108,25 @@
                     <version>3.6.0</version>
                 </plugin>
                 <!--endregion Phase 4: process-sources-->
-
-                <!--region Phase 7: compile-->
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <annotationProcessorPaths combine.children="append">
-                            <path>
-                                <groupId>com.google.auto.service</groupId>
-                                <artifactId>auto-service</artifactId>
-                                <version>1.0.1</version>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
-                <!--endregion Phase 7: compile-->
-
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <!--region Phase 7: compile-->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths combine.children="append">
+                        <path>
+                            <groupId>com.google.auto.service</groupId>
+                            <artifactId>auto-service</artifactId>
+                            <version>1.0.1</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <!--endregion Phase 7: compile-->
+        </plugins>
     </build>
 
     <profiles>
