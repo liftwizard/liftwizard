@@ -131,6 +131,8 @@ release: clean _check-local-modifications && _clean-git _check-local-modificatio
     #!/usr/bin/env bash
     set -Eeuo pipefail
 
+    just _run "git checkout {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
+
     CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
     if [[ $CURRENT_VERSION =~ ([0-9]+)\.([0-9]+)\.([0-9]+)-SNAPSHOT ]]; then
@@ -146,7 +148,5 @@ release: clean _check-local-modifications && _clean-git _check-local-modificatio
 
     read -p "Enter next version (default: {{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}): " INPUT_VERSION
     NEXT_VERSION=${INPUT_VERSION:-$NEXT_VERSION}
-
-    just _run "git checkout {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
 
     just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}"
