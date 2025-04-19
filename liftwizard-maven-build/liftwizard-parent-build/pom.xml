@@ -252,15 +252,6 @@
                                 <enforceBytecodeVersion>
                                     <maxJdkVersion>17</maxJdkVersion>
                                 </enforceBytecodeVersion>
-                                <requirePluginVersions>
-                                    <unCheckedPluginList xml:space="preserve">
-                                        org.apache.maven.plugins:maven-site-plugin,
-                                        org.apache.maven.plugins:maven-deploy-plugin,
-                                        io.liftwizard:liftwizard-generator-reladomo-code-plugin,
-                                        io.liftwizard:liftwizard-generator-reladomo-database-plugin,
-                                        io.liftwizard:liftwizard-generator-xsd2bean-plugin
-                                    </unCheckedPluginList>
-                                </requirePluginVersions>
                             </rules>
                         </configuration>
                     </plugin>
