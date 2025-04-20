@@ -389,7 +389,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Prettier Java (with sorted imports)"
-        run: just spotless java-prettier-sort-imports
+        run: just spotless prettier-java-sort-imports
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"

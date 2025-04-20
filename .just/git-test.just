@@ -19,7 +19,7 @@ setup-git-test:
     # git test add --forget --test prettier                     'just clean _check-local-modifications spotless prettier-java'
     # git test add --forget --test gjf                          'just clean _check-local-modifications spotless google-java-format'
     # git test add --forget --test sort-imports                 'just clean _check-local-modifications spotless java-sort-imports'
-    # git test add --forget --test prettier-sort-imports        'just clean _check-local-modifications spotless java-prettier-sort-imports'
+    # git test add --forget --test prettier-sort-imports        'just clean _check-local-modifications spotless prettier-java-sort-imports'
     # git test add --forget --test unused-imports               'just clean _check-local-modifications spotless java-unused-imports'
     # git test add --forget --test cleanthat                    'just clean _check-local-modifications spotless java-cleanthat'
     # git test add --forget --test pom                          'just clean _check-local-modifications spotless pom'
