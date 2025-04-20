@@ -1,4 +1,3 @@
-set shell := ["bash", "-O", "globstar", "-c"]
 set dotenv-filename := ".envrc"
 
 group_id_with_slashes := "io/liftwizard"
@@ -21,10 +20,6 @@ mise:
 
 markdownlint:
     markdownlint --config .markdownlint.jsonc  --fix .
-
-# Count lines of code
-scc:
-    scc **/src/{main,test}
 
 # Override this with a command called `woof` which notifies you in whatever ways you prefer.
 # My `woof` command uses `echo`, `say`, and sends a Pushover notification.

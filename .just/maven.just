@@ -1,4 +1,4 @@
-default_mvn      := env('MVN_BINARY',   "mvnd")
+default_mvn      := env('MVN_BINARY',   "mvn")
 default_target   := env('MVN_TARGET',   "verify")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
@@ -73,35 +73,39 @@ dependency MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-depende
 # `mvn` with javadoc plugin
 javadoc MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-javadoc-plugin" skip_tests_flags) && _check-local-modifications
 
+# `mvn` with jacoco plugin for code coverage
+coverage MVN=default_mvn: (mvn MVN "verify" "--activate-profiles jacoco-maven-plugin" default_flags)
+
 # `mvn` with errorprone
 errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags) && _check-local-modifications
 
-# checksyle with semantics profile
-checkstyle-semantics MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics" default_flags) && _check-local-modifications
+# `mvn` with spotbugs
+spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs" skip_tests_flags) && _check-local-modifications
 
-# checksyle with formatting profile
-checkstyle-formatting MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-formatting" default_flags) && _check-local-modifications
+# `mvn checkstyle:check` with the given profile
+checkstyle-profile PROFILE FAIL_ON_VIOLATION="true" MVN="mvn": (mvn MVN "checkstyle:check" ("--activate-profiles " + PROFILE) (default_flags + " -Dcheckstyle.failOnViolation=" + FAIL_ON_VIOLATION)) && _check-local-modifications
 
-# checksyle with semantics-strict profile
-checkstyle-semantics-strict MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-semantics-strict" default_flags) && _check-local-modifications
-
-# checksyle with formatting-strict profile
-checkstyle-formatting-strict MVN="mvn": (mvn MVN "checkstyle:check" "--activate-profiles checkstyle-formatting-strict" default_flags) && _check-local-modifications
-
-# checksyle with all profiles
-checkstyle: checkstyle-semantics checkstyle-formatting checkstyle-semantics-strict
+# Run checkstyle with all profiles
+checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
+    (checkstyle-profile "checkstyle-semantics" FAIL_ON_VIOLATION MVN) \
+    (checkstyle-profile "checkstyle-formatting" FAIL_ON_VIOLATION MVN) \
+    (checkstyle-profile "checkstyle-semantics-strict" FAIL_ON_VIOLATION MVN) \
+    (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
 
 # spotless
 spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-" + NAME) default_flags) && _check-local-modifications
 
 # spotless-all
-spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" "--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-formats,spotless-java,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml" default_flags) && _check-local-modifications
+spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles " + default_spotless_profiles) default_flags) && _check-local-modifications
 
 # `mvn` with reproducible build check
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags) && _check-local-modifications
 
-# `mvn` rewrite
-rewrite-dry-run MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example'" "--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun" skip_tests_flags) && _check-local-modifications
+# `mvn` rewrite dry run
+rewrite-dry-run MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:dryRun" "--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun" skip_tests_flags) && _check-local-modifications
+
+# `mvn` rewrite run
+rewrite-run MVN=default_mvn: clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run" "--activate-profiles rewrite-maven-plugin" skip_tests_flags)
 
 # `mvn` with rewrite-maven-plugin for single recipe
 rewrite RECIPE MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run --projects '!liftwizard-example'" ("--activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) skip_tests_flags) && _check-local-modifications
@@ -150,3 +154,6 @@ release: clean _check-local-modifications && _clean-git _check-local-modificatio
     NEXT_VERSION=${INPUT_VERSION:-$NEXT_VERSION}
 
     just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}"
+
+# `mvn deploy`
+deploy MVN="mvn": (mvn MVN "deploy" "--activate-profiles liftwizard-deploy,deploy,maven-javadoc-plugin" "")

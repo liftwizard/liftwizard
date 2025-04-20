@@ -27,7 +27,7 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - run: mvn verify --activate-profiles jacoco-maven-plugin
+      - run: just coverage
 
       - uses: madrapps/jacoco-report@v1.7.1
         with:
@@ -62,3 +62,50 @@ jobs:
         run: gh pr merge --rebase --auto "${{ github.event.pull_request.number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  maven-rewrite-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-rewrite-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Run rewrite-maven-plugin and commit changes
+        run: |
+          # Run the rewrite plugin to make actual changes
+          just rewrite-run
+
+          # Commit the changes if any files were modified
+          if [[ -n $(git status --porcelain) ]]; then
+            git add --all
+            git commit -m "Auto-fix: Apply OpenRewrite recipe changes"
+            git push
+            echo "Committed and pushed OpenRewrite fixes"
+          else
+            echo "No changes needed by OpenRewrite"
+          fi
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}

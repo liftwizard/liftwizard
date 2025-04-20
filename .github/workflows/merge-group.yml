@@ -28,7 +28,7 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - run: mvn verify
+      - run: just test
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -50,7 +50,7 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - run: mvn verify --fail-at-end --activate-profiles spotbugs-maven-plugin -DskipTests
+      - run: just spotbugs
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -75,7 +75,7 @@ jobs:
       - name: Add Error Prone problem matcher
         run: echo "::add-matcher::.github/errorprone.json"
 
-      - run: mvn verify --activate-profiles errorprone -DskipTests
+      - run: just errorprone
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -98,7 +98,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: Run maven-enforcer-plugin
-        run: mvn verify --activate-profiles maven-enforcer-plugin -DskipTests
+        run: just enforcer
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -121,7 +121,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: Run maven-dependency-plugin
-        run: mvn verify --activate-profiles maven-dependency-plugin -DskipTests
+        run: just dependency
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -144,7 +144,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: Run maven-javadoc-plugin
-        run: mvn verify --activate-profiles maven-javadoc-plugin -DskipTests
+        run: just javadoc
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -170,11 +170,12 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - name: "Install liftwizard-checkstyle module"
-        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
-
       - name: "Produce Checkstyle XML: Semantics"
-        run: mvn checkstyle:check --activate-profiles 'checkstyle-semantics'
+        run: just checkstyle-profile checkstyle-semantics false
+
+      - uses: motlin/checkstyle-results@v1
+        with:
+          checkstyle_files: "**/checkstyle-result.xml"
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -200,11 +201,12 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - name: "Install liftwizard-checkstyle module"
-        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
-
       - name: "Produce Checkstyle XML: Strict Semantics"
-        run: mvn checkstyle:check --activate-profiles 'checkstyle-semantics-strict'
+        run: just checkstyle-profile checkstyle-semantics-strict false
+
+      - uses: motlin/checkstyle-results@v1
+        with:
+          checkstyle_files: "**/checkstyle-result.xml"
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -230,11 +232,12 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - name: "Install liftwizard-checkstyle module"
-        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
-
       - name: "Produce Checkstyle XML: Formatting"
-        run: mvn checkstyle:check --activate-profiles 'checkstyle-formatting'
+        run: just checkstyle-profile checkstyle-formatting false
+
+      - uses: motlin/checkstyle-results@v1
+        with:
+          checkstyle_files: "**/checkstyle-result.xml"
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -257,8 +260,8 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - name: Run rewrite-maven-plugin
-        run: mvn install org.openrewrite.maven:rewrite-maven-plugin:dryRun --projects '!liftwizard-example' --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun -DskipTests
+      - name: Run rewrite-maven-plugin (dry run)
+        run: just rewrite-dry-run
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -282,7 +285,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: Run artifact:check-buildplan
-        run: mvn verify artifact:check-buildplan -DskipTests
+        run: just reproducible
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -308,10 +311,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Formats"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-formats'
+        run: just spotless formats
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -337,10 +337,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Java cleanthat"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-java-cleanthat'
+        run: just spotless java-cleanthat
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -366,10 +363,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Java"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-java'
+        run: just spotless java
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -395,10 +389,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Prettier Java (with sorted imports)"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-prettier-java-sort-imports'
+        run: just spotless java-prettier-sort-imports
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -424,10 +415,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Sql"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-sql'
+        run: just spotless sql
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -453,10 +441,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Pom"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-pom'
+        run: just spotless pom
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -482,10 +467,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Markdown"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-markdown'
+        run: just spotless markdown
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -511,10 +493,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Json"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-json'
+        run: just spotless json
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -540,10 +519,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: "Spotless Check: Yaml"
-        run: |
-          mvn spotless:check \
-            --projects '!liftwizard-maven-build/liftwizard-minimal-parent' \
-            --activate-profiles 'spotless-check,spotless-yaml'
+        run: just spotless yaml
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
