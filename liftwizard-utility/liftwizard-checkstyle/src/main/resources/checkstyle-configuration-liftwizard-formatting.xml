@@ -90,7 +90,7 @@
             <property name="allowSamelineMultipleAnnotations" value="true" />
         </module>
         <module name="AnnotationUseStyle">
-            <property name="trailingArrayComma" value="always" />
+            <property name="trailingArrayComma" value="ignore" />
         </module>
         <!--endregion-->
 
@@ -187,6 +187,7 @@
             <property name="allowEmptyMethods" value="true" />
             <property name="allowEmptyTypes" value="true" />
             <property name="allowEmptyLoops" value="true" />
+            <property name="allowEmptyLambdas" value="true" />
         </module>
         <!--endregion-->
 
