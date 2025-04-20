@@ -31,7 +31,7 @@ jobs:
       - name: Publish package
         # For some reason this has to be `mvn`
         # Changing it to `./mvnw` breaks the nexus-staging-maven-plugin in a way where it only runs once, not once per module
-        run: mvn --activate-profiles liftwizard-deploy,deploy,maven-javadoc-plugin deploy
+        run: just deploy
         env:
           MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}

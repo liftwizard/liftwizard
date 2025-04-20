@@ -29,10 +29,7 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
-      - name: "Install liftwizard-checkstyle module"
-        run: mvn install --projects liftwizard-utility/liftwizard-checkstyle
-
-      - run: mvn verify --activate-profiles maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin,checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict,spotless-check,spotless-formats,spotless-java-sort-imports,spotless-java-unused-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml
+      - run: just mvn
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
