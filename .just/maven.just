@@ -80,7 +80,7 @@ coverage MVN=default_mvn: (mvn MVN "verify" "--activate-profiles jacoco-maven-pl
 errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags) && _check-local-modifications
 
 # `mvn` with spotbugs
-spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs" skip_tests_flags) && _check-local-modifications
+spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin" skip_tests_flags) && _check-local-modifications
 
 # `mvn checkstyle:check` with the given profile
 checkstyle-profile PROFILE FAIL_ON_VIOLATION="true" MVN="mvn": (mvn MVN "checkstyle:check" ("--activate-profiles " + PROFILE) (default_flags + " -Dcheckstyle.failOnViolation=" + FAIL_ON_VIOLATION)) && _check-local-modifications
