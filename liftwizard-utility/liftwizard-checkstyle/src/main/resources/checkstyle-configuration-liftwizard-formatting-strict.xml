@@ -67,6 +67,10 @@
             <property name="tokens" value="VARIABLE_DEF" />
             <property name="allowSamelineSingleParameterlessAnnotation" value="false" />
         </module>
+
+        <module name="AnnotationUseStyle">
+            <property name="trailingArrayComma" value="always" />
+        </module>
         <!--endregion-->
 
         <!--region Imports-->
