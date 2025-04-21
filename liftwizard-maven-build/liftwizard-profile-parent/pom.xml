@@ -1058,6 +1058,7 @@
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
                             <rules combine.children="append">
+                                <requireProfileIdsExist />
                                 <bannedDependencies>
                                     <excludes>
                                         <exclude>commons-logging-api</exclude>
