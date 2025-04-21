@@ -78,6 +78,26 @@
                     </upToDateChecking>
                 </configuration>
             </plugin>
+
+            <!--region Phase 21: verify-->
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <configuration>
+                    <rules combine.children="append">
+                        <requireProfileIdsExist />
+                    </rules>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>enforce-requireProfileIdsExist</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--endregion Phase 21: verify-->
         </plugins>
     </build>
 
@@ -1058,7 +1078,6 @@
                         <artifactId>maven-enforcer-plugin</artifactId>
                         <configuration>
                             <rules combine.children="append">
-                                <requireProfileIdsExist />
                                 <bannedDependencies>
                                     <excludes>
                                         <exclude>commons-logging-api</exclude>
