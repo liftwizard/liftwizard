@@ -81,6 +81,31 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
+  maven-errorprone-strict:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Add Error Prone problem matcher
+        run: echo "::add-matcher::.github/errorprone.json"
+
+      - run: just errorprone-strict
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
   maven-enforcer:
     runs-on: ubuntu-latest
     steps:
@@ -570,6 +595,7 @@ jobs:
       [
         maven-test,
         maven-spotbugs,
+        maven-errorprone-strict,
         maven-errorprone,
         maven-enforcer,
         maven-dependency,
