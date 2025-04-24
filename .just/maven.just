@@ -29,7 +29,7 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     if [ "{{PROFILES}}" = "{{default_profiles}}" ]; then PROFILES_COLOR="{{ANSI_GRAY}}"; else PROFILES_COLOR="{{ANSI_BLUE}}"; fi
     if [ "{{FLAGS}}" = "{{default_flags}}" ]; then FLAGS_COLOR="{{ANSI_GRAY}}"; else FLAGS_COLOR="{{ANSI_MAGENTA}}"; fi
 
-    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-utility/liftwizard-checkstyle"
+    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-utility/liftwizard-checkstyle,liftwizard-utility/liftwizard-rewrite"
 
     just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${TARGET_COLOR}{{TARGET}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} ${PROFILES_COLOR}{{PROFILES}}{{ANSI_DEFAULT}}"
 
@@ -96,10 +96,10 @@ checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
     (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
 
 # spotless
-spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles spotless-apply,spotless-" + NAME) default_flags) && _check-local-modifications
+spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles spotless-apply,spotless-" + NAME) default_flags) && _check-local-modifications
 
 # spotless-all
-spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle' --activate-profiles " + default_spotless_profiles) default_flags) && _check-local-modifications
+spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles " + default_spotless_profiles) default_flags) && _check-local-modifications
 
 # `mvn` with reproducible build check
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags) && _check-local-modifications
