@@ -853,6 +853,28 @@
         </profile>
         <!--endregion Phase 15: test-->
 
+        <profile>
+            <id>spotless-preserve-cache</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <configuration>
+                            <filesets combine.children="append">
+                                <fileset>
+                                    <directory>${project.build.directory}</directory>
+                                    <excludes>
+                                        <exclude>spotless/spotless-maven-plugin.upToDate</exclude>
+                                    </excludes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <!--region Phase 16: prepare-package-->
         <profile>
             <id>znai-maven-plugin</id>
