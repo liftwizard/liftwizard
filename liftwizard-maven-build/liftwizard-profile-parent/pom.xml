@@ -1280,6 +1280,12 @@
                                 </bannedDependencies>
                                 <bannedDependencies>
                                     <excludes>
+                                        <exclude>javax.annotation:javax.annotation-api</exclude>
+                                    </excludes>
+                                    <message>javax.annotation:javax.annotation-api is banned. Use Jakarta Annotations (jakarta.annotation:jakarta.annotation-api) instead.</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <excludes>
                                         <exclude>log4j:log4j</exclude>
                                         <exclude>org.apache.logging.log4j:log4j</exclude>
                                     </excludes>
