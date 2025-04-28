@@ -861,11 +861,12 @@
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
                             <filesets combine.children="append">
                                 <fileset>
-                                    <directory>${project.build.directory}</directory>
+                                    <directory>target</directory>
                                     <excludes>
-                                        <exclude>spotless/spotless-maven-plugin.upToDate</exclude>
+                                        <exclude>spotless-index</exclude>
                                     </excludes>
                                 </fileset>
                             </filesets>

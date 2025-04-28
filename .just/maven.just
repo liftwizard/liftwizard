@@ -3,7 +3,7 @@ default_target   := env('MVN_TARGET',   "verify")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
 
-default_verify_profiles := env('MVN_VERIFY_PROFILES', "errorprone-strict,maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin")
+default_verify_profiles := env('MVN_VERIFY_PROFILES', "spotless-preserve-cache,errorprone-strict,maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin")
 default_checkstyle_profiles := env('MVN_CHECKSTYLE_PROFILES', "checkstyle-semantics,checkstyle-formatting,checkstyle-semantics-strict")
 default_spotless_profiles := env('MVN_SPOTLESS_PROFILES', "spotless-apply,spotless-formats,spotless-java,spotless-prettier-java-sort-imports,spotless-java-cleanthat,spotless-sql,spotless-pom,spotless-markdown,spotless-json,spotless-yaml")
 default_profiles := env('MVN_PROFILES', "--activate-profiles " + default_verify_profiles + "," + default_checkstyle_profiles + "," + default_spotless_profiles)
@@ -52,8 +52,8 @@ _clean-m2:
     exit 0
 
 # `mvn clean`
-@_clean-maven MVN=default_mvn *FLAGS=default_flags: && (mvn MVN "clean" "" FLAGS)
-    just _run "git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup **/target"
+@_clean-maven MVN=default_mvn *FLAGS=default_flags: && (mvn MVN "clean" "--activate-profiles spotless-preserve-cache" FLAGS)
+    just _run "git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup"
 
 # `mvn verify` without tests
 compile MVN=default_mvn: (mvn MVN "verify" "" skip_tests_flags) && _check-local-modifications
