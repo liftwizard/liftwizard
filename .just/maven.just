@@ -52,8 +52,8 @@ _clean-m2:
     exit 0
 
 # `mvn clean`
-@_clean-maven MVN=default_mvn *FLAGS=default_flags: && (mvn MVN "clean" "" FLAGS)
-    just _run "git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup **/target"
+@_clean-maven MVN=default_mvn *FLAGS=default_flags: && (mvn MVN "clean" "--activate-profiles spotless-preserve-cache" FLAGS)
+    just _run "git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup"
 
 # `mvn verify` without tests
 compile MVN=default_mvn: (mvn MVN "verify" "" skip_tests_flags) && _check-local-modifications
