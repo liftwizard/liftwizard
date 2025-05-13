@@ -93,17 +93,126 @@ jobs:
 
       - name: Run rewrite-maven-plugin and commit changes
         run: |
-          # Run the rewrite plugin to make actual changes
           just rewrite-run
+
+          if [[ -n $(git status --porcelain) ]]; then
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-rewrite"
+            git switch --create $FIX_BRANCH
+
+            git add --all
+            git commit --message "Auto-fix: Apply OpenRewrite recipe changes"
+            git push origin $FIX_BRANCH
+
+            echo "OpenRewrite fixes have been pushed to the $FIX_BRANCH branch."
+            exit 1
+          else
+            echo "No changes needed by OpenRewrite"
+          fi
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-prettier-java-sort-imports-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-prettier-java-sort-imports-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Run Spotless Apply for Prettier Java with Sorted Imports
+        run: |
+          just spotless prettier-java-sort-imports
+
+          if [[ -n $(git status --porcelain) ]]; then
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless"
+            git switch --create $FIX_BRANCH
+
+            git add --all
+            git commit --message "Auto-fix: Apply Spotless Prettier Java with Sorted Imports"
+            git push origin $FIX_BRANCH
+
+            echo "Spotless fixes have been pushed to the $FIX_BRANCH branch."
+            exit 1
+          else
+            echo "No changes needed by Spotless"
+          fi
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  errorprone-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-errorprone-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-errorprone-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Run Error Prone
+        run: |
+          just errorprone-patch
+
+          find . -name "error-prone.patch" -type f | while read -r patch_file; do
+            echo "Applying patch file: $patch_file"
+            patch -p0 -u -i "$patch_file"
+          done
 
           # Commit the changes if any files were modified
           if [[ -n $(git status --porcelain) ]]; then
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-errorprone"
+            git switch --create $FIX_BRANCH
+
             git add --all
-            git commit -m "Auto-fix: Apply OpenRewrite recipe changes"
-            git push
-            echo "Committed and pushed OpenRewrite fixes"
+            git commit --message "Auto-fix: Apply Error Prone fixes"
+            git push origin $FIX_BRANCH
+
+            echo "Error Prone fixes have been pushed to the $FIX_BRANCH branch."
+            exit 1
           else
-            echo "No changes needed by OpenRewrite"
+            echo "No changes needed by Error Prone"
           fi
 
       # Remove any jars we may have created before actions/cache caches .m2
