@@ -82,6 +82,9 @@ errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" s
 # `mvn` with errorprone-strict
 errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-strict" skip_tests_flags) && _check-local-modifications
 
+# `mvn` with errorprone-patch to generate auto-fixes
+errorprone-patch MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-patch" skip_tests_flags) && _check-local-modifications
+
 # `mvn` with spotbugs
 spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin" skip_tests_flags) && _check-local-modifications
 
