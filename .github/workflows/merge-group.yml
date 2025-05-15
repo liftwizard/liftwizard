@@ -338,6 +338,9 @@ jobs:
       - name: "Spotless Check: Formats"
         run: just spotless formats
 
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
+
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -363,6 +366,9 @@ jobs:
 
       - name: "Spotless Check: Java cleanthat"
         run: just spotless java-cleanthat
+
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -390,6 +396,9 @@ jobs:
       - name: "Spotless Check: Java"
         run: just spotless java
 
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
+
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -415,6 +424,9 @@ jobs:
 
       - name: "Spotless Check: Prettier Java (with sorted imports)"
         run: just spotless prettier-java-sort-imports
+
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -442,6 +454,9 @@ jobs:
       - name: "Spotless Check: Sql"
         run: just spotless sql
 
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
+
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -467,6 +482,9 @@ jobs:
 
       - name: "Spotless Check: Pom"
         run: just spotless pom
+
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
@@ -494,6 +512,9 @@ jobs:
       - name: "Spotless Check: Markdown"
         run: just spotless markdown
 
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
+
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -520,6 +541,9 @@ jobs:
       - name: "Spotless Check: Json"
         run: just spotless json
 
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
+
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
@@ -545,6 +569,9 @@ jobs:
 
       - name: "Spotless Check: Yaml"
         run: just spotless yaml
+
+      - name: "Check for local modifications"
+        run: just _check-local-modifications
 
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
