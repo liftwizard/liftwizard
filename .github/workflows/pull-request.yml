@@ -153,10 +153,60 @@ jobs:
             git commit --message "Auto-fix: Apply Spotless POM formatting"
             git push origin $FIX_BRANCH
 
-            echo "Spotless fixes have been pushed to the $FIX_BRANCH branch."
+            echo "Spotless POM fixes have been pushed to the $FIX_BRANCH branch."
             exit 1
           else
             echo "No changes needed by Spotless POM"
+          fi
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-java-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-java-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Run Spotless Apply for Java
+        run: |
+          just spotless java
+
+          if [[ -n $(git status --porcelain) ]]; then
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-java"
+            git switch --create $FIX_BRANCH
+
+            git add --all
+            git commit --message "Auto-fix: Apply Spotless Java"
+            git push origin $FIX_BRANCH
+
+            echo "Spotless Java fixes have been pushed to the $FIX_BRANCH branch."
+            exit 1
+          else
+            echo "No changes needed by Spotless"
           fi
 
       # Remove any jars we may have created before actions/cache caches .m2
@@ -196,14 +246,64 @@ jobs:
           just spotless prettier-java-sort-imports
 
           if [[ -n $(git status --porcelain) ]]; then
-            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless"
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-prettier-java-sort-imports"
             git switch --create $FIX_BRANCH
 
             git add --all
             git commit --message "Auto-fix: Apply Spotless Prettier Java with Sorted Imports"
             git push origin $FIX_BRANCH
 
-            echo "Spotless fixes have been pushed to the $FIX_BRANCH branch."
+            echo "Spotless Prettier Java with Sorted Imports fixes have been pushed to the $FIX_BRANCH branch."
+            exit 1
+          else
+            echo "No changes needed by Spotless"
+          fi
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  spotless-java-cleanthat-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-spotless-java-cleanthat-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-spotless-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Run Spotless Apply for Java Cleanthat
+        run: |
+          just spotless java-cleanthat
+
+          if [[ -n $(git status --porcelain) ]]; then
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-java-cleanthat"
+            git switch --create $FIX_BRANCH
+
+            git add --all
+            git commit --message "Auto-fix: Apply Spotless Java Cleanthat formatting"
+            git push origin $FIX_BRANCH
+
+            echo "Spotless Java Cleanthat fixes have been pushed to the $FIX_BRANCH branch."
             exit 1
           else
             echo "No changes needed by Spotless"
@@ -250,7 +350,6 @@ jobs:
             patch -p0 -u -i "$patch_file"
           done
 
-          # Commit the changes if any files were modified
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-errorprone"
             git switch --create $FIX_BRANCH
@@ -263,6 +362,58 @@ jobs:
             exit 1
           else
             echo "No changes needed by Error Prone"
+          fi
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+  liftwizard-file-match-rerecord-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          key: maven-liftwizard-rerecord-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            maven-liftwizard-rerecord-
+            maven-
+
+      - uses: twosigma/maven-cache-cleaner@v1
+
+      - uses: jdx/mise-action@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Run Maven with LIFTWIZARD_FILE_MATCH_RULE_RERECORD=true
+        env:
+          LIFTWIZARD_FILE_MATCH_RULE_RERECORD: true
+        run: |
+          just mvn
+
+          if [[ -n $(git status --porcelain) ]]; then
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-liftwizard-file-match-rerecord"
+            git switch --create $FIX_BRANCH
+
+            git add --all
+            git commit --message "Auto-fix: Update file match test expectations"
+            git push origin $FIX_BRANCH
+
+            echo "Updated Liftwizard test expectations have been pushed to the $FIX_BRANCH branch."
+            exit 1
+          else
+            echo "No changes needed in test expectations"
           fi
 
       # Remove any jars we may have created before actions/cache caches .m2
