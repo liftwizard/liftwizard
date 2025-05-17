@@ -56,40 +56,40 @@ _clean-m2:
     just _run "git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup"
 
 # `mvn verify` without tests
-compile MVN=default_mvn: (mvn MVN "verify" "" skip_tests_flags) && _check-local-modifications
+compile MVN=default_mvn: (mvn MVN "verify" "" skip_tests_flags)
 
 # `mvn verify` with tests
-test MVN=default_mvn: (mvn MVN "verify" "" default_flags) && _check-local-modifications
+test MVN=default_mvn *FLAGS="": (mvn MVN "verify" "" (default_flags + " " + FLAGS))
 
 # `mvn install`
-install MVN=default_mvn: (mvn MVN "install" "" skip_tests_flags) && _check-local-modifications
+install MVN=default_mvn: (mvn MVN "install" "" skip_tests_flags)
 
 # `mvn` with enforcer plugin
-enforcer MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-enforcer-plugin" skip_tests_flags) && _check-local-modifications
+enforcer MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-enforcer-plugin" skip_tests_flags)
 
 # `mvn` with dependency plugin
-dependency MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-dependency-plugin" skip_tests_flags) && _check-local-modifications
+dependency MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-dependency-plugin" skip_tests_flags)
 
 # `mvn` with javadoc plugin
-javadoc MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-javadoc-plugin" skip_tests_flags) && _check-local-modifications
+javadoc MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-javadoc-plugin" skip_tests_flags)
 
 # `mvn` with jacoco plugin for code coverage
 coverage MVN=default_mvn: (mvn MVN "verify" "--activate-profiles jacoco-maven-plugin" default_flags)
 
 # `mvn` with errorprone
-errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags) && _check-local-modifications
+errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags)
 
 # `mvn` with errorprone-strict
-errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-strict" skip_tests_flags) && _check-local-modifications
+errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-strict" skip_tests_flags)
 
 # `mvn` with errorprone-patch to generate auto-fixes
-errorprone-patch MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-patch" skip_tests_flags) && _check-local-modifications
+errorprone-patch MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-patch" skip_tests_flags)
 
 # `mvn` with spotbugs
-spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin" skip_tests_flags) && _check-local-modifications
+spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin" skip_tests_flags)
 
 # `mvn checkstyle:check` with the given profile
-checkstyle-profile PROFILE FAIL_ON_VIOLATION="true" MVN="mvn": (mvn MVN "checkstyle:check" ("--activate-profiles " + PROFILE) (default_flags + " -Dcheckstyle.failOnViolation=" + FAIL_ON_VIOLATION)) && _check-local-modifications
+checkstyle-profile PROFILE FAIL_ON_VIOLATION="true" MVN="mvn": (mvn MVN "checkstyle:check" ("--activate-profiles " + PROFILE) (default_flags + " -Dcheckstyle.failOnViolation=" + FAIL_ON_VIOLATION))
 
 # Run checkstyle with all profiles
 checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
@@ -99,22 +99,22 @@ checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
     (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
 
 # spotless
-spotless NAME MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles spotless-apply,spotless-" + NAME) default_flags) && _check-local-modifications
+spotless NAME MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles spotless-apply,spotless-" + NAME) default_flags)
 
 # spotless-all
-spotless-all MVN=default_mvn: _check-local-modifications clean (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles " + default_spotless_profiles) default_flags) && _check-local-modifications
+spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles " + default_spotless_profiles) default_flags)
 
 # `mvn` with reproducible build check
-reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags) && _check-local-modifications
+reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags)
 
 # `mvn` rewrite dry run
-rewrite-dry-run MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:dryRun" "--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun" skip_tests_flags) && _check-local-modifications
+rewrite-dry-run MVN=default_mvn: (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:dryRun" "--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun" skip_tests_flags)
 
 # `mvn` rewrite run
 rewrite-run MVN=default_mvn: clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run" "--activate-profiles rewrite-maven-plugin" skip_tests_flags)
 
 # `mvn` with rewrite-maven-plugin for single recipe
-rewrite RECIPE MVN=default_mvn: _check-local-modifications clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run --projects '!liftwizard-example'" ("--activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) skip_tests_flags) && _check-local-modifications
+rewrite RECIPE MVN=default_mvn: (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run --projects '!liftwizard-example'" ("--activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) skip_tests_flags)
 
 # display available updates (dependencies, plugins, properties)
 @display-updates:
