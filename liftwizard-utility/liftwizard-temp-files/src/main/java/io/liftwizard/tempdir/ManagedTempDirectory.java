@@ -118,21 +118,6 @@ public final class ManagedTempDirectory implements AutoCloseable {
     }
 
     @Override
-    protected void finalize() throws Throwable {
-        try {
-            if (!this.closed.get()) {
-                LOGGER.warn(
-                    "ManagedTempDirectory instance garbage collected without being closed, cleaning up: {}",
-                    this.path
-                );
-                this.tryClose();
-            }
-        } finally {
-            super.finalize();
-        }
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
