@@ -55,7 +55,6 @@ public class ExecutorServiceFactory {
     @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private Duration shutdownTime = Duration.seconds(5);
 
-    // Method that must return true for the object to be valid
     @ValidationMethod(message = "maxThreads < minThreads")
     @JsonIgnore
     public boolean isValidPoolSize() {
