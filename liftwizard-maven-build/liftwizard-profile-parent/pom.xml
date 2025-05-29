@@ -134,6 +134,8 @@
                                     <recipe>org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64</recipe>
                                     <recipe>org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes</recipe>
                                     <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
+
+                                    <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
