@@ -396,11 +396,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@github.com"
 
-      - name: Run Maven with LIFTWIZARD_FILE_MATCH_RULE_RERECORD=true
-        env:
-          LIFTWIZARD_FILE_MATCH_RULE_RERECORD: true
+      - name: Run tests with rerecord profile
         run: |
-          just mvn
+          just test-rerecord
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-liftwizard-file-match-rerecord"
