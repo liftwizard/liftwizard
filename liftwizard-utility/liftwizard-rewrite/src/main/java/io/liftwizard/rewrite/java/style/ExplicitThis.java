@@ -33,7 +33,7 @@ public class ExplicitThis extends Recipe {
 
     @Override
     public String getDisplayName() {
-        return "Add explicit 'this.' prefix to field and method access";
+        return "`field` → `this.field`";
     }
 
     @Override
