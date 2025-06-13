@@ -7,10 +7,11 @@ import ".just/maven.just"
 import ".just/git.just"
 import ".just/git-test.just"
 
+# `just --list--unsorted`
 default:
     @just --list --unsorted
 
-# Run formatters, build, and checkstyle before committing
+# Run build and auto-formatters
 precommit: mise mvn
 
 # `mise install`
