@@ -11,7 +11,7 @@ default:
     @just --list --unsorted
 
 # Run formatters, build, and checkstyle before committing
-precommit: mise mvn
+precommit: spotless-all mvn checkstyle
 
 # `mise install`
 mise:
