@@ -7,8 +7,11 @@ import ".just/maven.just"
 import ".just/git.just"
 import ".just/git-test.just"
 
-# Setup the project (mise) and run the default build (mvn)
-default: mise mvn
+default:
+    @just --list --unsorted
+
+# Run formatters, build, and checkstyle before committing
+precommit: mise mvn
 
 # `mise install`
 mise:
