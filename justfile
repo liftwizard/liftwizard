@@ -25,6 +25,10 @@ mise:
 markdownlint:
     markdownlint --config .markdownlint.jsonc  --fix .
 
+# Run all formatting tools for pre-commit
+precommit: spotless-all
+    uv tool run pre-commit run
+
 # Override this with a command called `woof` which notifies you in whatever ways you prefer.
 # My `woof` command uses `echo`, `say`, and sends a Pushover notification.
 echo_command := env('ECHO_COMMAND', "echo")
