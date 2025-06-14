@@ -168,12 +168,6 @@
         <!--region Regexp-->
         <!--https://checkstyle.sourceforge.io/checks/regexp/index.html-->
         <module name="RegexpSinglelineJava">
-            <property name="id" value="checkASCII" />
-            <property name="format" value="[^\p{ASCII}]" />
-            <property name="ignoreComments" value="true" />
-        </module>
-
-        <module name="RegexpSinglelineJava">
             <property name="id" value="sysout" />
 
             <property name="ignoreComments" value="true" />
