@@ -322,7 +322,7 @@
 
     <profiles>
         <profile>
-            <id>liftwizard-deploy</id>
+            <id>maven-central-deploy</id>
 
             <distributionManagement>
                 <snapshotRepository>
