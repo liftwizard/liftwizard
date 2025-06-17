@@ -165,4 +165,4 @@ release: clean _check-local-modifications && _clean-git _check-local-modificatio
     just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}"
 
 # `mvn deploy`
-deploy MVN="mvn": (mvn MVN "deploy" "--activate-profiles liftwizard-deploy,deploy,maven-javadoc-plugin" "")
+deploy MVN="mvn": (mvn MVN "deploy" "--activate-profiles maven-central-deploy,deploy,maven-javadoc-plugin" "")
