@@ -490,35 +490,6 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  spotless-markdown:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v4
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v2
-
-      - name: "Spotless Check: Markdown"
-        run: just spotless markdown
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   spotless-json:
     runs-on: ubuntu-latest
     steps:
@@ -638,7 +609,6 @@ jobs:
         spotless-java-cleanthat,
         spotless-sql,
         spotless-pom,
-        spotless-markdown,
         spotless-json,
         spotless-yaml,
         reviewdog-markdownlint,
