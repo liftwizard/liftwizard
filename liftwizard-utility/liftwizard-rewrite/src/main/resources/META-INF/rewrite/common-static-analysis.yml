@@ -80,7 +80,8 @@ recipeList:
   #  - org.openrewrite.staticanalysis.RemoveUnusedPrivateMethods
   - org.openrewrite.staticanalysis.RenameLocalVariablesToCamelCase
   - org.openrewrite.staticanalysis.RenameMethodsNamedHashcodeEqualOrToString
-  - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
+  # Disabled in Liftwizard
+  # - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
   - org.openrewrite.staticanalysis.ReplaceClassIsInstanceWithInstanceof
   # Disabled in Liftwizard
   #  - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
