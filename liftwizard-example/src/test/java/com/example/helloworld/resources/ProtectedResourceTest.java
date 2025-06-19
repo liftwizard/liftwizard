@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-public class ProtectedResourceTest {
+class ProtectedResourceTest {
 
     private static final BasicCredentialAuthFilter<User> BASIC_AUTH_HANDLER = new BasicCredentialAuthFilter.Builder<
         User
@@ -41,7 +41,7 @@ public class ProtectedResourceTest {
         .build();
 
     @Test
-    public void testProtectedEndpoint() {
+    void protectedEndpoint() {
         String secret = RULE.target("/protected")
             .request()
             .header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0")
@@ -50,7 +50,7 @@ public class ProtectedResourceTest {
     }
 
     @Test
-    public void testProtectedEndpointNoCredentials401() {
+    void protectedEndpointNoCredentials401() {
         try {
             RULE.target("/protected").request().get(String.class);
             failBecauseExceptionWasNotThrown(NotAuthorizedException.class);
@@ -63,7 +63,7 @@ public class ProtectedResourceTest {
     }
 
     @Test
-    public void testProtectedEndpointBadCredentials401() {
+    void protectedEndpointBadCredentials401() {
         try {
             RULE.target("/protected")
                 .request()
@@ -79,7 +79,7 @@ public class ProtectedResourceTest {
     }
 
     @Test
-    public void testProtectedAdminEndpoint() {
+    void protectedAdminEndpoint() {
         String secret = RULE.target("/protected/admin")
             .request()
             .header(HttpHeaders.AUTHORIZATION, "Basic Y2hpZWYtd2l6YXJkOnNlY3JldA==")
@@ -88,7 +88,7 @@ public class ProtectedResourceTest {
     }
 
     @Test
-    public void testProtectedAdminEndpointPrincipalIsNotAuthorized403() {
+    void protectedAdminEndpointPrincipalIsNotAuthorized403() {
         try {
             RULE.target("/protected/admin")
                 .request()

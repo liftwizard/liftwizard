@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-public final class ProtectedClassResourceTest {
+final class ProtectedClassResourceTest {
 
     private static final BasicCredentialAuthFilter<User> BASIC_AUTH_HANDLER = new BasicCredentialAuthFilter.Builder<
         User
@@ -40,7 +40,7 @@ public final class ProtectedClassResourceTest {
         .build();
 
     @Test
-    public void testProtectedAdminEndpoint() {
+    void protectedAdminEndpoint() {
         String secret = RULE.target("/protected/admin")
             .request()
             .header(HttpHeaders.AUTHORIZATION, "Basic Y2hpZWYtd2l6YXJkOnNlY3JldA==")
@@ -49,7 +49,7 @@ public final class ProtectedClassResourceTest {
     }
 
     @Test
-    public void testProtectedBasicUserEndpoint() {
+    void protectedBasicUserEndpoint() {
         String secret = RULE.target("/protected")
             .request()
             .header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0")
@@ -58,7 +58,7 @@ public final class ProtectedClassResourceTest {
     }
 
     @Test
-    public void testProtectedBasicUserEndpointAsAdmin() {
+    void protectedBasicUserEndpointAsAdmin() {
         String secret = RULE.target("/protected")
             .request()
             .header(HttpHeaders.AUTHORIZATION, "Basic Y2hpZWYtd2l6YXJkOnNlY3JldA==")
@@ -67,7 +67,7 @@ public final class ProtectedClassResourceTest {
     }
 
     @Test
-    public void testProtectedGuestEndpoint() {
+    void protectedGuestEndpoint() {
         String secret = RULE.target("/protected/guest")
             .request()
             .header(HttpHeaders.AUTHORIZATION, "Basic Z3Vlc3Q6c2VjcmV0")
@@ -76,7 +76,7 @@ public final class ProtectedClassResourceTest {
     }
 
     @Test
-    public void testProtectedBasicUserEndpointPrincipalIsNotAuthorized403() {
+    void protectedBasicUserEndpointPrincipalIsNotAuthorized403() {
         try {
             RULE.target("/protected")
                 .request()
