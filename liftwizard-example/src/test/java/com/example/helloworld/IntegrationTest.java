@@ -29,7 +29,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class IntegrationTest {
+class IntegrationTest {
 
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
@@ -60,7 +60,7 @@ public class IntegrationTest {
     private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
     @Test
-    public void testHelloWorld() throws Exception {
+    void helloWorld() throws Exception {
         Response response =
             this.dropwizardAppExtension.client()
                 .target("http://localhost:{port}/hello-world")
@@ -91,7 +91,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void validDateParameter() {
+    void validDateParameter() {
         String date =
             this.dropwizardAppExtension.client()
                 .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
@@ -102,7 +102,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void invalidDateParameter() {
+    void invalidDateParameter() {
         assertThatExceptionOfType(BadRequestException.class).isThrownBy(
             () ->
                 this.dropwizardAppExtension.client()
@@ -114,7 +114,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void noDateParameter() {
+    void noDateParameter() {
         String date =
             this.dropwizardAppExtension.client()
                 .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
@@ -124,7 +124,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testPostPerson() {
+    void postPerson() {
         PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
         PersonDTO newPerson = this.postPerson(person);
         assertThat(newPerson.getId()).isNotNull();
@@ -133,12 +133,12 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testRenderingPersonFreemarker() throws Exception {
+    void renderingPersonFreemarker() throws Exception {
         this.testRenderingPerson("view_freemarker");
     }
 
     @Test
-    public void testRenderingPersonMustache() throws Exception {
+    void renderingPersonMustache() throws Exception {
         this.testRenderingPerson("view_mustache");
     }
 
@@ -164,7 +164,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testLogFileWritten() throws IOException {
+    void logFileWritten() throws IOException {
         // The log file is using a size and time based policy, which used to silently
         // fail (and not write to a log file). This test ensures not only that the
         // log file exists, but also contains the log line that jetty prints on startup
