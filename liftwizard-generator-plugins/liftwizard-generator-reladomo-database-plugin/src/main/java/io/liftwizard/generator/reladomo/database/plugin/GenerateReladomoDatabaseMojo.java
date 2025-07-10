@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Craig Motlin
+ * Copyright 2025 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import com.gs.fw.common.mithra.generator.dbgenerator.CoreMithraDbDefinitionGenerator;
 import io.liftwizard.filesystem.ManagedFileSystem;
 import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
+import io.liftwizard.tempdir.ManagedTempDirectory;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -99,26 +100,25 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
             generatedOutputDirectory.mkdirs();
         }
 
-        Path tempFile = this.getTempFile();
-        if (!tempFile.toFile().exists()) {
-            throw new IllegalStateException("Could not find " + tempFile);
+        try (var tempFile = this.getTempFile()) {
+            CoreMithraDbDefinitionGenerator coreGenerator =
+                this.getGenerator(tempFile.getPath(), generatedOutputDirectory);
+            coreGenerator.execute();
+
+            Resource resource = new Resource();
+            resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
+
+            LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
+            this.mavenProject.addResource(resource);
         }
-
-        CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(tempFile, generatedOutputDirectory);
-        coreGenerator.execute();
-
-        Resource resource = new Resource();
-        resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
-
-        LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
-        this.mavenProject.addResource(resource);
     }
 
     @Nonnull
     private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile, File generatedOutputDirectory) {
+        Path classListFile = tempFile.resolve(this.definitionsAndClassListDirectory).resolve(this.classListFileName);
         var coreGenerator = new CoreMithraDbDefinitionGenerator();
         coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
-        coreGenerator.setXml(tempFile.toString());
+        coreGenerator.setXml(classListFile.toString());
         coreGenerator.setGeneratedDir(generatedOutputDirectory.getAbsolutePath());
         coreGenerator.setDatabaseType(this.databaseType);
         coreGenerator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
@@ -131,7 +131,7 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
     }
 
     @Nonnull
-    private Path getTempFile() {
+    private ManagedTempDirectory getTempFile() {
         if (this.definitionsAndClassListDirectory.startsWith("/")) {
             throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
         }
@@ -141,11 +141,14 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
             Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
             URI uri = resource.toURI();
             Path from = ManagedFileSystem.get(uri);
-            Path to = Files.createTempDirectory(this.getClass().getSimpleName());
+            ManagedTempDirectory managedTempDirectory = ManagedTempDirectory.create(this.getClass().getSimpleName());
+            Path to = managedTempDirectory.getPath();
 
             this.copyDirectory(from, to);
-            return to.resolve(this.definitionsAndClassListDirectory).resolve(this.classListFileName);
-        } catch (URISyntaxException | IOException e) {
+            return managedTempDirectory;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
