@@ -169,7 +169,9 @@ public class ExplicitThis extends Recipe {
                 return m;
             }
 
-            Cursor classDeclarationCursor = this.getCursor().dropParentUntil(p -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE);
+            Cursor classDeclarationCursor = this.getCursor().dropParentUntil(
+                p -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE
+            );
             if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration)) {
                 return m;
             }
@@ -199,7 +201,9 @@ public class ExplicitThis extends Recipe {
         }
 
         private J.FieldAccess createFieldAccess(J.Identifier identifier) {
-            Cursor classDeclarationCursor = this.getCursor().dropParentUntil(p -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE);
+            Cursor classDeclarationCursor = this.getCursor().dropParentUntil(
+                p -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE
+            );
             if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration)) {
                 return null;
             }

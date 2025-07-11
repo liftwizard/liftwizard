@@ -27,6 +27,8 @@ testing
     testing
     matching-files
     matching-json
+file-system
+    managed-temp-directory
 maven
     maven-best-practices
     minimal-parent
