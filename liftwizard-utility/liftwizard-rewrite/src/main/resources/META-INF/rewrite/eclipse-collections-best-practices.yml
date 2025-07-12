@@ -37,3 +37,4 @@ recipeList:
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFListToMutableList
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFMapToMutableMap
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSetToMutableSet
+  - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertEmptyToAssertJ
