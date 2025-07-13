@@ -28,6 +28,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.MethodMatcher;
+import org.openrewrite.java.OrderImports;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
@@ -68,11 +69,13 @@ public class VerifyAssertEmptyToAssertJ extends Recipe {
                     J.MethodInvocation m = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
                     if (VERIFY_ASSERT_EMPTY_MATCHER.matches(m)) {
-                        Expression stringArg = m.getArguments().get(0);
-                        Expression collectionArg = m.getArguments().get(1);
+                        final Expression stringArg = m.getArguments().get(0);
+                        final Expression collectionArg = m.getArguments().get(1);
 
                         maybeAddImport("org.assertj.core.api.Assertions");
                         maybeRemoveImport("org.eclipse.collections.impl.test.Verify");
+
+                        doAfterVisit(new OrderImports(false).getVisitor());
 
                         JavaTemplate template = JavaTemplate.builder(
                             "Assertions.assertThat(#{any(java.lang.Iterable)}).as(#{any(java.lang.String)}).isEmpty()"

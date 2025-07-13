@@ -33,20 +33,20 @@ import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class VerifyAssertContainsToAssertJ extends Recipe {
+public class VerifyAssertNotContainsToAssertJ extends Recipe {
 
-    private static final MethodMatcher VERIFY_ASSERT_CONTAINS_MATCHER = new MethodMatcher(
-        "org.eclipse.collections.impl.test.Verify assertContains(java.lang.String, java.lang.Object, java.lang.Iterable)"
+    private static final MethodMatcher VERIFY_ASSERT_NOT_CONTAINS_MATCHER = new MethodMatcher(
+        "org.eclipse.collections.impl.test.Verify assertNotContains(java.lang.String, java.lang.Object, java.lang.Iterable)"
     );
 
     @Override
     public String getDisplayName() {
-        return "Verify.assertContains() → AssertJ assertThat().contains()";
+        return "Verify.assertNotContains() → AssertJ assertThat().doesNotContain()";
     }
 
     @Override
     public String getDescription() {
-        return "Transforms Eclipse Collections Verify.assertContains(message, object, collection) calls to AssertJ assertThat(collection).as(message).contains(object) for better test readability and modern assertion style.";
+        return "Transforms Eclipse Collections Verify.assertNotContains(message, object, collection) calls to AssertJ assertThat(collection).as(message).doesNotContain(object) for better test readability and modern assertion style.";
     }
 
     @Override
@@ -62,15 +62,15 @@ public class VerifyAssertContainsToAssertJ extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return Preconditions.check(
-            new UsesMethod<>(VERIFY_ASSERT_CONTAINS_MATCHER),
+            new UsesMethod<>(VERIFY_ASSERT_NOT_CONTAINS_MATCHER),
             new JavaVisitor<ExecutionContext>() {
                 @Override
                 public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
                     J.MethodInvocation m = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
-                    if (VERIFY_ASSERT_CONTAINS_MATCHER.matches(m)) {
+                    if (VERIFY_ASSERT_NOT_CONTAINS_MATCHER.matches(m)) {
                         final JavaTemplate template = JavaTemplate.builder(
-                            "Assertions.assertThat(#{any(java.lang.Iterable)}).as(#{any(java.lang.String)}).contains(#{any(java.lang.Object)})"
+                            "Assertions.assertThat(#{any(java.lang.Iterable)}).as(#{any(java.lang.String)}).doesNotContain(#{any(java.lang.Object)})"
                         )
                             .imports("org.assertj.core.api.Assertions")
                             .contextSensitive()

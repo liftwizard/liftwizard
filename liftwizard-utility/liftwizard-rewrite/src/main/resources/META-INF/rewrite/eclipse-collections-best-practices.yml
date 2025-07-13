@@ -39,3 +39,4 @@ recipeList:
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSetToMutableSet
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertEmptyToAssertJ
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertContainsToAssertJ
+  - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertNotContainsToAssertJ
