@@ -22,9 +22,9 @@ Next, annotate the DataFetchers that you want to monitor with `@Timed`, `@Metere
 
 `@Timed` adds three timers:
 
-* {DataFetcher's fully-qualified class name}.get.sync
-* liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.sync
-* liftwizard.graphql.path.{path}.sync
+- {DataFetcher's fully-qualified class name}.get.sync
+- liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.sync
+- liftwizard.graphql.path.{path}.sync
 
 All three timers track the number of times each DataFetcher is called, and the amount of time spent in the get() method.
 
@@ -34,17 +34,17 @@ If your DataFetcher returns [`CompleteableFuture`](https://docs.oracle.com/en/ja
 
 ## Meters
 
-Timers *are* meters, so if you want to know the number of times a fetcher is called, annotate them with *@Timer*.
+Timers _are_ meters, so if you want to know the number of times a fetcher is called, annotate them with _@Timer_.
 
-If you annotate your DataFetcher with `@Metered`, the Intrumentation will add meters that track *the number of items returned* by the DataFetcher. If the `DataFetcher` returns a `Collection` or `CompleteableFuture<Collection>`, the meter will increment by the size of the Collection.
+If you annotate your DataFetcher with `@Metered`, the Intrumentation will add meters that track _the number of items returned_ by the DataFetcher. If the `DataFetcher` returns a `Collection` or `CompleteableFuture<Collection>`, the meter will increment by the size of the Collection.
 
 ## ExceptionMeters
 
 `@ExceptionMetered` adds meters that track the number of times the DataFetcher throws uncaught exceptions, plus the number of CompleteableFutures they return that complete exceptionally. The meters have the same names as the timers, but with the suffix "exceptions":
 
-* {DataFetcher's fully-qualified class name}.get.exceptions
-* liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.exceptions
-* liftwizard.graphql.path.{path}.exceptions
+- {DataFetcher's fully-qualified class name}.get.exceptions
+- liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.exceptions
+- liftwizard.graphql.path.{path}.exceptions
 
 `LiftwizardGraphQLMetricsInstrumentation` lives in the `liftwizard-graphql-instrumentation-metrics` module.
 
@@ -54,4 +54,3 @@ If you annotate your DataFetcher with `@Metered`, the Intrumentation will add me
     <artifactId>liftwizard-graphql-instrumentation-metrics</artifactId>
 </dependency>
 ```
-

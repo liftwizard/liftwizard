@@ -38,13 +38,13 @@ The schema maps closely to the json examples above, so if you're comfortable wit
 
 ## Temporal Schema patterns
 
-* All tables have `systemFrom` and `systemTo` columns.
-* Old data is phased out by setting `systemTo` to now.
-* New data is phased in by setting `systemFrom` to now.
-* The new row's `systemFrom` and the old row's `systemTo` are set to the same value, forming a contiguous timeline.
-* When several tables are edited within a transaction, the `systemFrom` and `systemTo` values are set to the same value across all tables.
-* Unchanged data is copied from the old row to the new row. For very wide columns that don't change frequently, it may be more efficient to split out a separate table.
-* The `systemTo` value of the new row is set to `9999-12-01 23:59:00.00` to indicate that the row is still active. In json, we had used `null` to represent the infinity date.
+- All tables have `systemFrom` and `systemTo` columns.
+- Old data is phased out by setting `systemTo` to now.
+- New data is phased in by setting `systemFrom` to now.
+- The new row's `systemFrom` and the old row's `systemTo` are set to the same value, forming a contiguous timeline.
+- When several tables are edited within a transaction, the `systemFrom` and `systemTo` values are set to the same value across all tables.
+- Unchanged data is copied from the old row to the new row. For very wide columns that don't change frequently, it may be more efficient to split out a separate table.
+- The `systemTo` value of the new row is set to `9999-12-01 23:59:00.00` to indicate that the row is still active. In json, we had used `null` to represent the infinity date.
 
 # Temporal queries in SQL
 
@@ -74,9 +74,9 @@ Joins that are two hops away from our main table are more complicated. We'll see
 
 ## Temporal query patterns
 
-* We perform asOf queries by adding `where system_from <= {asOf} and system_to > {asOf}` to our `WHERE` clause.
-* We add this exact came criteria to every query.
-* We always `SELECT` all columns from the table. In the examples above we used `SELECT *`. In production usage, it's common to list the columns explicitly.
-* We never `SELECT` columns from two tables in the same query. Even in the upcoming examples of joins, we always `SELECT` from one table at a time.
+- We perform asOf queries by adding `where system_from <= {asOf} and system_to > {asOf}` to our `WHERE` clause.
+- We add this exact came criteria to every query.
+- We always `SELECT` all columns from the table. In the examples above we used `SELECT *`. In production usage, it's common to list the columns explicitly.
+- We never `SELECT` columns from two tables in the same query. Even in the upcoming examples of joins, we always `SELECT` from one table at a time.
 
 In the next section, we'll learn about adding versions and querying "as of" a version number.

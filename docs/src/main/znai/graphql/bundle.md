@@ -38,4 +38,3 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
     <artifactId>liftwizard-bundle-graphql</artifactId>
 </dependency>
 ```
-

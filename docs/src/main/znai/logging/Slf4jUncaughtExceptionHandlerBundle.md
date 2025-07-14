@@ -66,4 +66,3 @@ And add the dependency:
     <artifactId>liftwizard-logging-uncaught-exception-handler</artifactId>
 </dependency>
 ```
-

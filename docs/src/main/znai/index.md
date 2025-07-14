@@ -8,12 +8,12 @@ There are very few dependencies between the bundles, so you can pick and choose 
 
 The bundles can be loosely grouped into categories.
 
-* Dropwizard configuration
-* JSON serialization/deserialization
-* Servlet client/server logging
-* GraphQL utility
-* [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
-* Other Dropwizard utility
+- Dropwizard configuration
+- JSON serialization/deserialization
+- Servlet client/server logging
+- GraphQL utility
+- [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
+- Other Dropwizard utility
 
 ## Guide structure
 

@@ -53,4 +53,3 @@ Here's an example of what SQL logging might look like with MDC attached when for
     <artifactId>liftwizard-graphql-instrumentation-logging</artifactId>
 </dependency>
 ```
-

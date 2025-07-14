@@ -8,11 +8,10 @@ After achieving feature parity, we'll see some of the power of Reladomo by addin
 
 To replace Hibernate with Reladomo in `liftwizard-example`, we'll need to:
 
-* Create separate DTOs and POJOs
-* Change the rest resources to return DTOs
-* Create a Reladomo definition of the Person class
-* Create a Reladomo class list and runtime configuration
-* Replace `HibernateBundle` with `H2Bundle`, `NamedDataSourceBundle`, `ConnectionManagerBundle`, `ConnectionManagerHolderBundle`, and `ReladomoBundle`
-* Replace the queries inside PersonDAO
-* Add temporal columns and a sequence table to the database migrations
-
+- Create separate DTOs and POJOs
+- Change the rest resources to return DTOs
+- Create a Reladomo definition of the Person class
+- Create a Reladomo class list and runtime configuration
+- Replace `HibernateBundle` with `H2Bundle`, `NamedDataSourceBundle`, `ConnectionManagerBundle`, `ConnectionManagerHolderBundle`, and `ReladomoBundle`
+- Replace the queries inside PersonDAO
+- Add temporal columns and a sequence table to the database migrations

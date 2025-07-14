@@ -2,11 +2,11 @@ The `JerseyHttpLoggingBundle` is an alternative to Jersey's `LoggingFeature`. Je
 
 The bundle can be configured:
 
-* include/exclude request bodies
-* include/exclude response bodies
-* allow-list of headers
-* include/exclude the list of excluded header _names_
-* the max body size before truncation
+- include/exclude request bodies
+- include/exclude response bodies
+- allow-list of headers
+- include/exclude the list of excluded header _names_
+- the max body size before truncation
 
 Through code, the bundle can be configured to log using different combinations of slf4j/log4j/logback with context in MDC or OpenTracing or a Map.
 
@@ -17,7 +17,7 @@ To turn it on, add `JerseyHttpLoggingBundle` to the list of registered bundles.
 public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
     bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
     bootstrap.addBundle(new EnvironmentConfigBundle());
- 
+
     bootstrap.addBundle(new ObjectMapperBundle());
     bootstrap.addBundle(new ConfigLoggingBundle());
 
@@ -60,10 +60,10 @@ In order to see the logging in action, we'll need to configure a log format that
 
 ```json5
 {
-  "type": "console",
-  "timeZone": "${LOGGING_TIMEZONE:-system}",
-  "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-  "includeCallerData": true,
+  type: "console",
+  timeZone: "${LOGGING_TIMEZONE:-system}",
+  logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+  includeCallerData: true,
 }
 ```
 
@@ -118,30 +118,30 @@ Let's add the logstash-file appender to the list of configured appenders.
 ```json5
 {
   // ...
-  "logging": {
-    "level": "DEBUG",
-    "appenders": [
+  logging: {
+    level: "DEBUG",
+    appenders: [
       {
-        "type": "console",
-        "timeZone": "${LOGGING_TIMEZONE:-system}",
-        "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-        "includeCallerData": true,
+        type: "console",
+        timeZone: "${LOGGING_TIMEZONE:-system}",
+        logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+        includeCallerData: true,
       },
       {
-        "type"                      : "file-logstash",
-        "currentLogFilename"        : "./logs/logstash.jsonl",
-        "archivedLogFilenamePattern": "./logs/logstash-%d.jsonl",
-        "includeCallerData"         : true,
-        "encoder": {
-          "includeContext": true,
-          "includeMdc": true,
-          "includeStructuredArguments": true,
-          "includedNonStructuredArguments": true,
-          "includeTags": true,
-          "prettyPrint": false,
-        }
-      }
-    ]
+        type: "file-logstash",
+        currentLogFilename: "./logs/logstash.jsonl",
+        archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+        includeCallerData: true,
+        encoder: {
+          includeContext: true,
+          includeMdc: true,
+          includeStructuredArguments: true,
+          includedNonStructuredArguments: true,
+          includeTags: true,
+          prettyPrint: false,
+        },
+      },
+    ],
   },
   // ...
 }
@@ -191,4 +191,3 @@ Let's add the logstash-file appender to the list of configured appenders.
   "caller_line_number": 56
 }
 ```
-

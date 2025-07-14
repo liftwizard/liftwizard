@@ -132,4 +132,3 @@ this.target { RelatedType.source.value = "value" } not exists
 # Edge points
 this.system equalsEdgePoint
 ```
-
