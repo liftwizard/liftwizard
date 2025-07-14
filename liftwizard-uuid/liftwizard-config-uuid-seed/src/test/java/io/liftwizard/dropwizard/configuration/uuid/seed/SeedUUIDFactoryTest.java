@@ -61,8 +61,10 @@ class SeedUUIDFactoryTest {
 
     @Test
     void seedUUID() throws Exception {
-        UUIDSupplierFactory uuidFactory =
-            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
+        UUIDSupplierFactory uuidFactory = this.factory.build(
+            new ResourceConfigurationSourceProvider(),
+            "config-test.json5"
+        );
         assertThat(uuidFactory).isInstanceOf(SeedUUIDSupplierFactory.class);
         Supplier<UUID> uuidSupplier = uuidFactory.createUUIDSupplier();
         UUID uuid = uuidSupplier.get();

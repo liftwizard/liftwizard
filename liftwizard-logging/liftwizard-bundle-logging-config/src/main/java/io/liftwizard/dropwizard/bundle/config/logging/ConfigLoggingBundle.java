@@ -53,8 +53,10 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
         throws JsonProcessingException {
-        ConfigLoggingFactoryProvider configLoggingFactoryProvider =
-            this.safeCastConfiguration(ConfigLoggingFactoryProvider.class, configuration);
+        ConfigLoggingFactoryProvider configLoggingFactoryProvider = this.safeCastConfiguration(
+            ConfigLoggingFactoryProvider.class,
+            configuration
+        );
 
         EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
         if (!configLoggingFactory.isEnabled()) {

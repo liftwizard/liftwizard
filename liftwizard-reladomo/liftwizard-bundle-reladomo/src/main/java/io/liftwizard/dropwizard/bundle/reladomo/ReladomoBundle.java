@@ -51,8 +51,10 @@ public class ReladomoBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        ReladomoFactoryProvider reladomoFactoryProvider =
-            this.safeCastConfiguration(ReladomoFactoryProvider.class, configuration);
+        ReladomoFactoryProvider reladomoFactoryProvider = this.safeCastConfiguration(
+            ReladomoFactoryProvider.class,
+            configuration
+        );
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 

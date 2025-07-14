@@ -53,8 +53,7 @@ class JsonPrettyPrinterTest {
         String actualJson = this.mapper.writeValueAsString(map);
 
         // language=JSON
-        String expectedJson =
-            """
+        String expectedJson = """
             {
               "a": [
                 "b",

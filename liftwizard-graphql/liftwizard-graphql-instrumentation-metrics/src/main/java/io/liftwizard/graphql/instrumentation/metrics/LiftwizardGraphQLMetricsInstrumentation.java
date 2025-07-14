@@ -68,16 +68,16 @@ public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentati
         );
         this.executionTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "execution"));
         this.executionExceptionsMeter = this.metricRegistry.meter(
-                MetricRegistry.name("liftwizard", "graphql", "execution", "exceptions")
-            );
+            MetricRegistry.name("liftwizard", "graphql", "execution", "exceptions")
+        );
         this.parseTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "parse"));
         this.parseExceptionsMeter = this.metricRegistry.meter(
-                MetricRegistry.name("liftwizard", "graphql", "parse", "exceptions")
-            );
+            MetricRegistry.name("liftwizard", "graphql", "parse", "exceptions")
+        );
         this.validationTimer = this.metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "validation"));
         this.validationExceptionsMeter = this.metricRegistry.meter(
-                MetricRegistry.name("liftwizard", "graphql", "validation", "exceptions")
-            );
+            MetricRegistry.name("liftwizard", "graphql", "validation", "exceptions")
+        );
     }
 
     @Override

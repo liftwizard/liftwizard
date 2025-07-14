@@ -57,7 +57,7 @@ public class LiquibaseTestExtension implements BeforeEachCallback {
     private void runWithLogger() throws SQLException, LiquibaseException {
         try (
             Connection connection = H2InMemoryConnectionManager.getInstance().getConnection();
-            Liquibase liquibase = this.openLiquibase(connection)
+            Liquibase liquibase = this.openLiquibase(connection);
         ) {
             if (this.dropAll) {
                 liquibase.dropAll();

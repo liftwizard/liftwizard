@@ -47,10 +47,14 @@ public class DdlExecutorBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws SQLException {
-        DdlExecutorFactoryProvider ddlExecutorFactoryProvider =
-            this.safeCastConfiguration(DdlExecutorFactoryProvider.class, configuration);
-        NamedDataSourceProvider dataSourceProvider =
-            this.safeCastConfiguration(NamedDataSourceProvider.class, configuration);
+        DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
+            DdlExecutorFactoryProvider.class,
+            configuration
+        );
+        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+            NamedDataSourceProvider.class,
+            configuration
+        );
 
         List<DdlExecutorFactory> ddlExecutorFactories = ddlExecutorFactoryProvider.getDdlExecutorFactories();
 

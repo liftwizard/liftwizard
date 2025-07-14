@@ -38,8 +38,10 @@ public class SystemPropertiesBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        SystemPropertiesFactoryProvider systemPropertiesFactoryProvider =
-            this.safeCastConfiguration(SystemPropertiesFactoryProvider.class, configuration);
+        SystemPropertiesFactoryProvider systemPropertiesFactoryProvider = this.safeCastConfiguration(
+            SystemPropertiesFactoryProvider.class,
+            configuration
+        );
         SystemPropertiesFactory systemPropertiesFactory = systemPropertiesFactoryProvider.getSystemPropertiesFactory();
         if (systemPropertiesFactory.getSystemProperties().isEmpty()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());

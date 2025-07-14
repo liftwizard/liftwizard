@@ -89,8 +89,10 @@ public class JsonMatchRule extends AbstractMatchRule {
             Optional<String> message = this.compareAndGetDiff(actualString, expectedStringFromFile);
             if (message.isPresent()) {
                 if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
-                    String detailMessage =
-                        "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(uri, actualString);
+                    String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
+                        uri,
+                        actualString
+                    );
                     AssertionError assertionError = new AssertionError(detailMessage);
                     this.addError(assertionError);
                     return;

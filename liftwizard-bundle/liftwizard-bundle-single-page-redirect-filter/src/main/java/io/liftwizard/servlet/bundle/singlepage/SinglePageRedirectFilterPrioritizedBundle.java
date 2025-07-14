@@ -29,8 +29,10 @@ public class SinglePageRedirectFilterPrioritizedBundle implements PrioritizedBun
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        SinglePageRedirectFilterFactoryProvider factoryProvider =
-            this.safeCastConfiguration(SinglePageRedirectFilterFactoryProvider.class, configuration);
+        SinglePageRedirectFilterFactoryProvider factoryProvider = this.safeCastConfiguration(
+            SinglePageRedirectFilterFactoryProvider.class,
+            configuration
+        );
 
         SinglePageRedirectFilterFactory factory = factoryProvider.getSinglePageRedirectFilterFactory();
         SinglePageRedirectFilterBundle.handleRegistration(this, environment, factory);

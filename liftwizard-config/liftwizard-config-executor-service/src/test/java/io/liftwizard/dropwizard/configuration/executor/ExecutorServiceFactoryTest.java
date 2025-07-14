@@ -50,22 +50,28 @@ class ExecutorServiceFactoryTest {
 
     @Test
     void executorServiceFactory() throws Exception {
-        ExecutorServiceFactory executorServiceFactory =
-            this.getConfiguredType(ExecutorServiceFactory.class, "default-executor-service-config-test.json5");
+        ExecutorServiceFactory executorServiceFactory = this.getConfiguredType(
+            ExecutorServiceFactory.class,
+            "default-executor-service-config-test.json5"
+        );
         assertThat(executorServiceFactory).isInstanceOf(ExecutorServiceFactory.class);
     }
 
     @Test
     void defaultScheduledExecutorServiceFactory() throws Exception {
-        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory =
-            this.getConfiguredType(ScheduledExecutorServiceFactory.class, "default-executor-service-config-test.json5");
+        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
+            ScheduledExecutorServiceFactory.class,
+            "default-executor-service-config-test.json5"
+        );
         assertThat(scheduledExecutorServiceFactory).isInstanceOf(DefaultScheduledExecutorServiceFactory.class);
     }
 
     @Test
     void noopScheduledExecutorServiceFactory() throws Exception {
-        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory =
-            this.getConfiguredType(ScheduledExecutorServiceFactory.class, "noop-executor-service-config-test.json5");
+        ScheduledExecutorServiceFactory scheduledExecutorServiceFactory = this.getConfiguredType(
+            ScheduledExecutorServiceFactory.class,
+            "noop-executor-service-config-test.json5"
+        );
         assertThat(scheduledExecutorServiceFactory).isInstanceOf(NoopScheduledExecutorServiceFactory.class);
     }
 

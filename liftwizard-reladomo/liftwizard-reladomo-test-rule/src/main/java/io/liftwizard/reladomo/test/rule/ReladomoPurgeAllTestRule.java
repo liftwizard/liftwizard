@@ -66,8 +66,7 @@ public class ReladomoPurgeAllTestRule implements TestRule {
         }
 
         private void purgeTypes() {
-            MithraManagerProvider.getMithraManager()
-                .executeTransactionalCommand(tx -> {
+            MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
                     MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet().forEach(this::purgeType);
 
                     return null;
