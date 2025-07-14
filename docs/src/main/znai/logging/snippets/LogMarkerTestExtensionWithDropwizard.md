@@ -9,4 +9,3 @@ final DropwizardAppExtension<MyAppConfiguration> dropwizardAppExtension = new Dr
 @RegisterExtension
 final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 ```
-

@@ -63,4 +63,3 @@ Note: `BufferedAppenderFactory` is primarily useful for tests that use [Dropwiza
 "JUnit 4": :include-markdown: snippets/LogMarkerTestRuleWithDropwizard.md
 "JUnit 5": :include-markdown: snippets/LogMarkerTestExtensionWithDropwizard.md
 ```
-

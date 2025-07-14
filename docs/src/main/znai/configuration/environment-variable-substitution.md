@@ -30,7 +30,7 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
                     new EnvironmentVariableSubstitutor(false)
             )
     );
- 
+
     // ...
 }
 ```
@@ -53,4 +53,3 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
     <artifactId>liftwizard-bundle-environment-config</artifactId>
 </dependency>
 ```
-

@@ -12,12 +12,12 @@ public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
     // JsonConfigurationFactoryFactory uses a separate ObjectMapper, and can be configured earlier
     bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
     bootstrap.addBundle(new EnvironmentConfigBundle());
- 
+
     bootstrap.addBundle(new ObjectMapperBundle());
- 
+
     // ConfigLoggingBundle uses the ObjectMapper configured by ObjectMapperBundle
     bootstrap.addBundle(new ConfigLoggingBundle());
- 
+
     // ...
 }
 ```
@@ -34,4 +34,3 @@ You'll be able to see that `ObjectMapperBundle` is working because the output of
     <artifactId>liftwizard-bundle-object-mapper</artifactId>
 </dependency>
 ```
-

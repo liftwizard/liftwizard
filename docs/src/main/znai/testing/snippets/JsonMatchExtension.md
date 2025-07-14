@@ -17,7 +17,7 @@ public class ExampleTest
                 ExampleApplication.class,
                 ResourceHelpers.resourceFilePath("config-test.json5"));
     }
-    
+
     @Test
     public void smokeTest()
     {
@@ -34,4 +34,3 @@ public class ExampleTest
     }
 }
 ```
-

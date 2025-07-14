@@ -34,4 +34,3 @@ After adding the bundle, you'll have to convert your configuration files to json
     <artifactId>liftwizard-configuration-factory-json</artifactId>
 </dependency>
 ```
-

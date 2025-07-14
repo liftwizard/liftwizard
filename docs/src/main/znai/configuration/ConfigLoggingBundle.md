@@ -13,16 +13,16 @@ INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingB
 
 ```json5 {title: "Output configuration"}
 {
-  "template": "Hello, %s!",
-  "defaultName": "Stranger",
-  "configLogging": {
-    "enabled": true
+  template: "Hello, %s!",
+  defaultName: "Stranger",
+  configLogging: {
+    enabled: true,
   },
   // ...
-  "metrics": {
-    "frequency": "1 minute",
-    "reporters": [ ]
-  }
+  metrics: {
+    frequency: "1 minute",
+    reporters: [],
+  },
 }
 ```
 
@@ -46,4 +46,3 @@ The `ConfigLoggingBundle` also logs the "default" configuration at the `DEBUG` l
     <artifactId>liftwizard-bundle-logging-config</artifactId>
 </dependency>
 ```
-

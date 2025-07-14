@@ -16,4 +16,3 @@ If `LIFTWIZARD_FILE_MATCH_RULE_RERECORD` is set to `true`, `assertJsonContents` 
 "JUnit 4": :include-markdown: snippets/JsonMatchRule.md
 "JUnit 5": :include-markdown: snippets/JsonMatchExtension.md
 ```
-

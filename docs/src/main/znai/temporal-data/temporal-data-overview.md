@@ -18,6 +18,6 @@ In an application with temporal data storage, data is stored along with timestam
 
 [Diff](temporal-data/diffs): See the differences between data at two version numbers.
 
-[Maker/Checker workflows](temporal-data/maker-checker-workflows): **Make and review changes** before exposing them to all users. Most users view the latest *approved* version of the data, while makers/checkers see the *latest* version.
+[Maker/Checker workflows](temporal-data/maker-checker-workflows): **Make and review changes** before exposing them to all users. Most users view the latest _approved_ version of the data, while makers/checkers see the _latest_ version.
 
 In the next section, we'll walk through a [running example](temporal-data/running-example) that showcases these features.

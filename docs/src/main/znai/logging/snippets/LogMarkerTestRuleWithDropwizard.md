@@ -12,4 +12,3 @@ public final RuleChain ruleChain = RuleChain
         .outerRule(this.dropwizardAppRule)
         .around(this.logMarkerTestRule);
 ```
-
