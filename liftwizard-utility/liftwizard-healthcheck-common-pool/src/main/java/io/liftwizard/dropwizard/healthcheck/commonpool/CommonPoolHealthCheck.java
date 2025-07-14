@@ -114,23 +114,20 @@ public class CommonPoolHealthCheck extends HealthCheck {
             .filter(
                 threadInfo ->
                     this.bannedPatterns.isEmpty() ||
-                    this.bannedPatterns.anySatisfy(
-                            bannedPattern ->
-                                ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
-                                    this::traceMatchesPattern,
-                                    bannedPattern
-                                )
+                    this.bannedPatterns.anySatisfy(bannedPattern ->
+                            ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
+                                this::traceMatchesPattern,
+                                bannedPattern
+                            )
                         )
             )
-            .filter(
-                threadInfo ->
-                    this.alwaysAllowedPatterns.noneSatisfy(
-                            alwaysAllowedPattern ->
-                                ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
-                                    this::traceMatchesPattern,
-                                    alwaysAllowedPattern
-                                )
+            .filter(threadInfo ->
+                this.alwaysAllowedPatterns.noneSatisfy(alwaysAllowedPattern ->
+                        ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
+                            this::traceMatchesPattern,
+                            alwaysAllowedPattern
                         )
+                    )
             )
             .toList();
 

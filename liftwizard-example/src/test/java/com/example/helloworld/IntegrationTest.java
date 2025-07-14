@@ -103,13 +103,12 @@ class IntegrationTest {
 
     @Test
     void invalidDateParameter() {
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
-            () ->
-                this.dropwizardAppExtension.client()
-                    .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
-                    .queryParam("date", "abc")
-                    .request()
-                    .get(String.class)
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() ->
+            this.dropwizardAppExtension.client()
+                .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
+                .queryParam("date", "abc")
+                .request()
+                .get(String.class)
         );
     }
 
