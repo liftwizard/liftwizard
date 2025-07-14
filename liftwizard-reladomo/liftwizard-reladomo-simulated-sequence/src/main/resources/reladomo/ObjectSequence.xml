@@ -37,5 +37,3 @@
     <Attribute name="nextId" javaType="long" columnName="next_id" />
 
 </MithraObject>
-
-
