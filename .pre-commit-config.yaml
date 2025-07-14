@@ -3,10 +3,37 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-yaml
+        args: ["--allow-multiple-documents"]
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
       - id: end-of-file-fixer
+        exclude: ^\.idea/
       - id: trailing-whitespace
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.1.0
+        exclude: ^\.idea/
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+        exclude: ^\.idea/
+
+  - repo: local
     hooks:
+      - id: biome
+        name: biome
+        entry: npx biome format --write
+        language: system
+        types: [file]
+        files: \.(js|jsx|ts|tsx|mjs|cjs|json|json5)$
+        exclude: "package(-lock)?\\.json"
+
       - id: prettier
-        types_or: [json, yaml, markdown]
+        name: prettier
+        entry: npx prettier --write
+        language: system
+        types_or: [yaml, markdown, html]
+        exclude: "(^\\.idea/)"
+        require_serial: true
