@@ -60,7 +60,7 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
         Instant start = Instant.now();
         try (
             MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
-            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
+            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()))
         ) {
             this.initializeWithMdc(bootstrap);
         }
@@ -79,7 +79,7 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
         Instant start = Instant.now();
         try (
             MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
-            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
+            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()))
         ) {
             this.runWithMdc(configuration, environment);
         }

@@ -59,7 +59,7 @@ public class ReladomoInitializeTestRule implements TestRule {
             try (
                 InputStream inputStream = ReladomoTestRuleBuilder.class.getClassLoader().getResourceAsStream(
                     this.runtimeConfigurationPath
-                );
+                )
             ) {
                 MithraConfigurationManager mithraConfigurationManager =
                     MithraManagerProvider.getMithraManager().getConfigManager();

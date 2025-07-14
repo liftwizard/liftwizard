@@ -117,7 +117,7 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
                     schemaName,
                     migrationFile,
                     migrationFileLocation
-                );
+                )
             ) {
                 if (dryRun) {
                     liquibase.update(context, new OutputStreamWriter(System.out, StandardCharsets.UTF_8));

@@ -44,7 +44,7 @@ public class ReladomoInitializeExtension implements BeforeEachCallback, AfterEac
         try (
             InputStream inputStream = this.getClass()
                 .getClassLoader()
-                .getResourceAsStream(this.runtimeConfigurationPath);
+                .getResourceAsStream(this.runtimeConfigurationPath)
         ) {
             MithraConfigurationManager mithraConfigurationManager =
                 MithraManagerProvider.getMithraManager().getConfigManager();
