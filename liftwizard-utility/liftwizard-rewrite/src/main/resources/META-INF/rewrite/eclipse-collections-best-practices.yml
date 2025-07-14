@@ -44,3 +44,4 @@ recipeList:
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertInstanceOfToAssertJ
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertItemAtIndexToAssertJ
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertNotEqualsToAssertJ
+  - io.liftwizard.rewrite.eclipse.collections.bestpractices.VerifyAssertContainsAllToAssertJ
