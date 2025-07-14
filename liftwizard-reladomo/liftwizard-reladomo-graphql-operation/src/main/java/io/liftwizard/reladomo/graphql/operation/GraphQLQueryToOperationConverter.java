@@ -133,15 +133,15 @@ public class GraphQLQueryToOperationConverter {
 
         List<?> nestedGraphQlOperations = (List<?>) graphQlOperation;
         MutableList<Operation> nestedOperations = ListAdapter.adapt(nestedGraphQlOperations).collectWithIndex(
-            (nestedGraphQlOperation, index) -> {
-                this.context.push(conjunctionName + "[" + index + "]");
-                try {
-                    return this.convert(finder, (Map<?, ?>) nestedGraphQlOperation);
-                } finally {
-                    this.context.pop();
+                (nestedGraphQlOperation, index) -> {
+                    this.context.push(conjunctionName + "[" + index + "]");
+                    try {
+                        return this.convert(finder, (Map<?, ?>) nestedGraphQlOperation);
+                    } finally {
+                        this.context.pop();
+                    }
                 }
-            }
-        );
+            );
         return nestedOperations.reduce(conjunctionFunction).orElseGet(finder::all);
     }
 
@@ -239,18 +239,18 @@ public class GraphQLQueryToOperationConverter {
             case "contains" -> attribute.contains((String) operationParameter);
             case "notContains" -> attribute.notContains((String) operationParameter);
             case "lower", "toLowerCase" -> this.convertStringAttribute(
-                    finderInstance,
-                    attribute.toLowerCase(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.toLowerCase(),
+                (Map<String, ?>) operationParameter
+            );
             case "wildCardEq", "wildCardEquals" -> attribute.wildCardEq((String) operationParameter);
             case "wildCardIn" -> attribute.wildCardIn(new LinkedHashSet<>((Collection<String>) operationParameter));
             case "wildCardNotEq", "wildCardNotEquals" -> attribute.wildCardNotEq((String) operationParameter);
             case "subString" -> this.convertStringAttribute(
-                    finderInstance,
-                    attribute.substring(0, 0),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.substring(0, 0),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 var message = "Unknown operation on StringAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
@@ -322,10 +322,10 @@ public class GraphQLQueryToOperationConverter {
             case "lessThan" -> attribute.lessThan((Integer) operationParameter);
             case "lessThanEquals" -> attribute.lessThanEquals((Integer) operationParameter);
             case "abs", "absoluteValue" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.absoluteValue(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.absoluteValue(),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 var message = "Unknown operation on IntegerAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
@@ -364,10 +364,10 @@ public class GraphQLQueryToOperationConverter {
             case "lessThan" -> attribute.lessThan((Long) operationParameter);
             case "lessThanEquals" -> attribute.lessThanEquals((Long) operationParameter);
             case "absoluteValue" -> this.convertLongAttribute(
-                    finderInstance,
-                    attribute.absoluteValue(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.absoluteValue(),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 var message = "Unknown operation on LongAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
@@ -406,10 +406,10 @@ public class GraphQLQueryToOperationConverter {
             case "lessThan" -> attribute.lessThan((Double) operationParameter);
             case "lessThanEquals" -> attribute.lessThanEquals((Double) operationParameter);
             case "absoluteValue" -> this.convertDoubleAttribute(
-                    finderInstance,
-                    attribute.absoluteValue(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.absoluteValue(),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 var message = "Unknown operation on DoubleAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
@@ -458,10 +458,10 @@ public class GraphQLQueryToOperationConverter {
             case "lessThan" -> attribute.lessThan(((Double) operationParameter).floatValue());
             case "lessThanEquals" -> attribute.lessThanEquals(((Double) operationParameter).floatValue());
             case "absoluteValue" -> this.convertFloatAttribute(
-                    finderInstance,
-                    attribute.absoluteValue(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.absoluteValue(),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 var message = "Unknown operation on FloatAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
@@ -510,20 +510,20 @@ public class GraphQLQueryToOperationConverter {
                 GraphQLQueryToOperationConverter.getDate((String) operationParameter)
             );
             case "year" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.year(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.year(),
+                (Map<String, ?>) operationParameter
+            );
             case "month" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.month(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.month(),
+                (Map<String, ?>) operationParameter
+            );
             case "dayOfMonth" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.dayOfMonth(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.dayOfMonth(),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 String message = "Unknown operation on IntegerAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());
@@ -572,20 +572,20 @@ public class GraphQLQueryToOperationConverter {
                 GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter)
             );
             case "year" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.year(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.year(),
+                (Map<String, ?>) operationParameter
+            );
             case "month" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.month(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.month(),
+                (Map<String, ?>) operationParameter
+            );
             case "dayOfMonth" -> this.convertIntegerAttribute(
-                    finderInstance,
-                    attribute.dayOfMonth(),
-                    (Map<String, ?>) operationParameter
-                );
+                finderInstance,
+                attribute.dayOfMonth(),
+                (Map<String, ?>) operationParameter
+            );
             default -> {
                 var message = "Unknown operation on IntegerAttribute: " + operationName;
                 throw new LiftwizardGraphQLContextException(message, this.getContext());

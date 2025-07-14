@@ -63,7 +63,7 @@ public class LiquibaseStatement extends Statement {
     private void runWithLogger() throws SQLException, LiquibaseException {
         try (
             Connection connection = this.connectionSupplier.get();
-            Liquibase liquibase = this.openLiquibase(connection)
+            Liquibase liquibase = this.openLiquibase(connection);
         ) {
             if (this.dropAll) {
                 liquibase.dropAll();

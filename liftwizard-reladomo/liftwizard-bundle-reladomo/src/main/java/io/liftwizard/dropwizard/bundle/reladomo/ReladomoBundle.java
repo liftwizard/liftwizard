@@ -51,8 +51,10 @@ public class ReladomoBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        ReladomoFactoryProvider reladomoFactoryProvider =
-            this.safeCastConfiguration(ReladomoFactoryProvider.class, configuration);
+        ReladomoFactoryProvider reladomoFactoryProvider = this.safeCastConfiguration(
+            ReladomoFactoryProvider.class,
+            configuration
+        );
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
@@ -110,13 +112,11 @@ public class ReladomoBundle implements PrioritizedBundle {
     }
 
     private void registerRetrieveCountMetrics(MetricRegistry metricRegistry) {
-        metricRegistry.gauge(
-            MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"),
-            () -> MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount
+        metricRegistry.gauge(MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"), () ->
+            MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount
         );
-        metricRegistry.gauge(
-            MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"),
-            () -> MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount
+        metricRegistry.gauge(MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"), () ->
+            MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount
         );
     }
 

@@ -61,8 +61,9 @@ public class NamedDataSourcesFactory {
     @ValidationMethod
     @JsonIgnore
     public boolean isValidDataSourceNames() {
-        List<String> orderedDataSourceNames =
-            this.namedDataSourceFactories.stream().map(NamedDataSourceFactory::getName).toList();
+        List<String> orderedDataSourceNames = this.namedDataSourceFactories.stream()
+            .map(NamedDataSourceFactory::getName)
+            .toList();
         Map<String, Long> frequencies = orderedDataSourceNames
             .stream()
             .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
@@ -102,11 +103,10 @@ public class NamedDataSourcesFactory {
         }
 
         if (!this.namedDataSourceFactoriesByName.containsKey(name)) {
-            String message =
-                "No data source named: '%s'. Known data sources: %s".formatted(
-                        name,
-                        this.namedDataSourceFactoriesByName.keySet()
-                    );
+            String message = "No data source named: '%s'. Known data sources: %s".formatted(
+                name,
+                this.namedDataSourceFactoriesByName.keySet()
+            );
             throw new IllegalStateException(message);
         }
 

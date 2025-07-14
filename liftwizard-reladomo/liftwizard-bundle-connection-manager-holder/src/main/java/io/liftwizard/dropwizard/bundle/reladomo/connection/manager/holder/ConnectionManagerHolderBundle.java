@@ -43,11 +43,15 @@ public class ConnectionManagerHolderBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        NamedDataSourceProvider dataSourceProvider =
-            this.safeCastConfiguration(NamedDataSourceProvider.class, configuration);
+        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+            NamedDataSourceProvider.class,
+            configuration
+        );
 
-        ConnectionManagerProvider connectionManagerFactoryProvider =
-            this.safeCastConfiguration(ConnectionManagerProvider.class, configuration);
+        ConnectionManagerProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
+            ConnectionManagerProvider.class,
+            configuration
+        );
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 

@@ -71,10 +71,10 @@ public class JsonMatchExtension extends AbstractMatchExtension {
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
             this.resourceRerecorderExtension.writeStringToFile(
-                    resourceClassPathLocation,
-                    prettyPrintedString,
-                    resourceFile
-                );
+                resourceClassPathLocation,
+                prettyPrintedString,
+                resourceFile
+            );
             if (!this.rerecordEnabled) {
                 String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
                 this.errorCollectorExtension.addError(new AssertionError(detailMessage));
@@ -94,8 +94,10 @@ public class JsonMatchExtension extends AbstractMatchExtension {
             String fileContents = this.getPrettyPrintedString(actualString);
             Optional<String> message = this.compareAndGetDiff(fileContents, expectedStringFromFile);
             if (message.isPresent()) {
-                String detailMessage =
-                    this.resourceRerecorderExtension.handleMismatch(resourceClassPathLocation, fileContents);
+                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
+                    resourceClassPathLocation,
+                    fileContents
+                );
                 AssertionError assertionError = new AssertionError(detailMessage);
                 this.errorCollectorExtension.addError(assertionError);
             }
