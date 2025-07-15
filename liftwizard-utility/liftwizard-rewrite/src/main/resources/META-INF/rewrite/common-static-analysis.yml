@@ -73,7 +73,8 @@ recipeList:
   - org.openrewrite.staticanalysis.ObjectFinalizeCallsSuper
   - org.openrewrite.staticanalysis.PrimitiveWrapperClassConstructorToValueOf
   - org.openrewrite.staticanalysis.RedundantFileCreation
-  - org.openrewrite.staticanalysis.RemoveExtraSemicolons
+  # Disabled in Liftwizard
+  #  - org.openrewrite.staticanalysis.RemoveExtraSemicolons
   #  - org.openrewrite.staticanalysis.RemoveRedundantTypeCast
   #  - org.openrewrite.java.RemoveUnusedImports
   #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
