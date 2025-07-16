@@ -42,8 +42,10 @@ public class AuthFilterBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        AuthFilterFactoryProvider authFilterFactoryProvider =
-            this.safeCastConfiguration(AuthFilterFactoryProvider.class, configuration);
+        AuthFilterFactoryProvider authFilterFactoryProvider = this.safeCastConfiguration(
+            AuthFilterFactoryProvider.class,
+            configuration
+        );
 
         List<AuthFilterFactory> authFilterFactories = authFilterFactoryProvider.getAuthFilterFactories();
 

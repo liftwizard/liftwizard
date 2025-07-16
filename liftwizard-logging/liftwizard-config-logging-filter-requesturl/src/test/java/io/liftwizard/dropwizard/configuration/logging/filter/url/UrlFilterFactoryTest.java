@@ -61,8 +61,10 @@ class UrlFilterFactoryTest {
 
     @Test
     void filterUrl() throws Exception {
-        RequestUrlFilterFactory urlFilterFactory =
-            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
+        RequestUrlFilterFactory urlFilterFactory = this.factory.build(
+            new ResourceConfigurationSourceProvider(),
+            "config-test.json5"
+        );
         Filter<IAccessEvent> filter = urlFilterFactory.build();
 
         assertThat(urlFilterFactory).isInstanceOf(RequestUrlFilterFactory.class);

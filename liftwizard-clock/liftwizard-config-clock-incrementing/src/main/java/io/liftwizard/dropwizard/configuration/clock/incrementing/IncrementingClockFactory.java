@@ -104,11 +104,10 @@ public class IncrementingClockFactory implements ClockFactory {
             return true;
         }
 
-        String message =
-            "Got timeZoneName '%s' but expected one of: %s".formatted(
-                    this.timeZoneName,
-                    Arrays.toString(TimeZone.getAvailableIDs())
-                );
+        String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
+            this.timeZoneName,
+            Arrays.toString(TimeZone.getAvailableIDs())
+        );
         throw new IllegalStateException(message);
     }
 }

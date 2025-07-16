@@ -14,8 +14,7 @@ public class PersonDAO {
     }
 
     public Person create(Person person) {
-        MithraManagerProvider.getMithraManager()
-            .executeTransactionalCommand(tx -> {
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
                 person.insert();
                 return null;
             });

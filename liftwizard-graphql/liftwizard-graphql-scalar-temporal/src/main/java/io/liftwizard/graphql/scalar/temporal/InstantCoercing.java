@@ -87,10 +87,9 @@ public class InstantCoercing implements Coercing<Instant, String> {
             return parsedOffsetDateTime.toInstant();
         }
 
-        String error =
-            "Expected something we can convert to 'java.time.OffsetDateTime' but was '%s'.".formatted(
-                    InstantCoercing.typeName(input)
-                );
+        String error = "Expected something we can convert to 'java.time.OffsetDateTime' but was '%s'.".formatted(
+            InstantCoercing.typeName(input)
+        );
         throw new CoercingSerializeException(error);
     }
 

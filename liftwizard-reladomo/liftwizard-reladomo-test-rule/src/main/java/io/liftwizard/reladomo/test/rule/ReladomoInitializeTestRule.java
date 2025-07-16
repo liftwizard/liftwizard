@@ -57,11 +57,12 @@ public class ReladomoInitializeTestRule implements TestRule {
 
         private void before() {
             try (
-                InputStream inputStream =
-                    ReladomoTestRuleBuilder.class.getClassLoader().getResourceAsStream(this.runtimeConfigurationPath)
+                InputStream inputStream = ReladomoTestRuleBuilder.class.getClassLoader().getResourceAsStream(
+                    this.runtimeConfigurationPath
+                );
             ) {
-                MithraConfigurationManager mithraConfigurationManager = MithraManagerProvider.getMithraManager()
-                    .getConfigManager();
+                MithraConfigurationManager mithraConfigurationManager =
+                    MithraManagerProvider.getMithraManager().getConfigManager();
                 MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
                 mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
                 mithraConfigurationManager.fullyInitialize();

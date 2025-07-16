@@ -61,13 +61,12 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         Attribute attribute = ctx.attribute().accept(this);
 
         if (!(attribute instanceof StringAttribute)) {
-            String error =
-                "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
-                        ctx.functionName.getText(),
-                        attribute.getAttributeName(),
-                        attribute.getClass().getSuperclass().getSimpleName(),
-                        this.errorContext
-                    );
+            String error = "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
+                ctx.functionName.getText(),
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext
+            );
 
             throw new IllegalArgumentException(error);
         }
@@ -82,10 +81,10 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         if (!(attribute instanceof StringAttribute)) {
             String error =
                 "Function 'substring' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
-                        attribute.getAttributeName(),
-                        attribute.getClass().getSuperclass().getSimpleName(),
-                        this.errorContext
-                    );
+                    attribute.getAttributeName(),
+                    attribute.getClass().getSuperclass().getSimpleName(),
+                    this.errorContext
+                );
 
             throw new IllegalArgumentException(error);
         }
@@ -102,13 +101,12 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
         Attribute attribute = ctx.attribute().accept(this);
 
         if (!(attribute instanceof NumericAttribute)) {
-            String error =
-                "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s".formatted(
-                        ctx.functionName.getText(),
-                        attribute.getAttributeName(),
-                        attribute.getClass().getSuperclass().getSimpleName(),
-                        this.errorContext
-                    );
+            String error = "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s".formatted(
+                ctx.functionName.getText(),
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext
+            );
 
             throw new IllegalArgumentException(error);
         }
@@ -129,10 +127,10 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
         String error =
             "Function 'year' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
-                    attribute.getAttributeName(),
-                    attribute.getClass().getSuperclass().getSimpleName(),
-                    this.errorContext
-                );
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext
+            );
 
         throw new IllegalArgumentException(error);
     }
@@ -150,10 +148,10 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
         String error =
             "Function 'month' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
-                    attribute.getAttributeName(),
-                    attribute.getClass().getSuperclass().getSimpleName(),
-                    this.errorContext
-                );
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext
+            );
 
         throw new IllegalArgumentException(error);
     }
@@ -171,10 +169,10 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
         String error =
             "Function 'dayOfMonth' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
-                    attribute.getAttributeName(),
-                    attribute.getClass().getSuperclass().getSimpleName(),
-                    this.errorContext
-                );
+                attribute.getAttributeName(),
+                attribute.getClass().getSuperclass().getSimpleName(),
+                this.errorContext
+            );
 
         throw new IllegalArgumentException(error);
     }
@@ -192,12 +190,11 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
             ctx.className() != null &&
             !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
         ) {
-            String error =
-                "Expected 'this' or <%s> but found: <%s> in %s".formatted(
-                        this.getExpectedClassName(this.finder),
-                        ctx.className().getText(),
-                        this.errorContext
-                    );
+            String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
+                this.getExpectedClassName(this.finder),
+                ctx.className().getText(),
+                this.errorContext
+            );
             throw new IllegalArgumentException(error);
         }
 
@@ -211,13 +208,12 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
                     .selectInstancesOf(AbstractRelatedFinder.class)
                     .collect(AbstractRelatedFinder::getRelationshipName);
 
-                String error =
-                    "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s".formatted(
-                            relationshipName,
-                            this.getExpectedClassName(currentFinder),
-                            this.errorContext,
-                            validRelationshipNames
-                        );
+                String error = "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s".formatted(
+                    relationshipName,
+                    this.getExpectedClassName(currentFinder),
+                    this.errorContext,
+                    validRelationshipNames
+                );
                 throw new IllegalArgumentException(error);
             }
             currentFinder = nextFinder;
@@ -233,13 +229,12 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
             MutableList<String> validAttributeNames = ArrayAdapter.adapt(persistentAttributes).collect(
                 Attribute::getAttributeName
             );
-            String error =
-                "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s".formatted(
-                        attributeName,
-                        this.getExpectedClassName(currentFinder),
-                        this.errorContext,
-                        validAttributeNames
-                    );
+            String error = "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s".formatted(
+                attributeName,
+                this.getExpectedClassName(currentFinder),
+                this.errorContext,
+                validAttributeNames
+            );
             throw new IllegalArgumentException(error);
         }
         return attribute;

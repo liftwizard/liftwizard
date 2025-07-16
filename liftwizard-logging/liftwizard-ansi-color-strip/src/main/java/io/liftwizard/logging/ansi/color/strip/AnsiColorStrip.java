@@ -54,7 +54,7 @@ public final class AnsiColorStrip {
                 null,
                 null,
                 false
-            )
+            );
         ) {
             ansiOutputStream.write(bytes);
             return byteArrayOutputStream.toString(charset);

@@ -66,8 +66,10 @@ public class FileMatchRule extends AbstractMatchRule {
 
             if (!actualString.equals(expectedStringFromFile)) {
                 if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
-                    String detailMessage =
-                        "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(uri, actualString);
+                    String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
+                        uri,
+                        actualString
+                    );
                     AssertionError assertionError = new AssertionError(detailMessage);
                     this.addError(assertionError);
                     return;

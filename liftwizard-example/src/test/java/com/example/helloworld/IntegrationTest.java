@@ -61,21 +61,19 @@ class IntegrationTest {
 
     @Test
     void helloWorld() throws Exception {
-        Response response =
-            this.dropwizardAppExtension.client()
-                .target("http://localhost:{port}/hello-world")
-                .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
-                .queryParam("name", "Dr. IntegrationTest")
-                .request()
-                .header("Authorization", "example user")
-                .get();
+        Response response = this.dropwizardAppExtension.client()
+            .target("http://localhost:{port}/hello-world")
+            .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
+            .queryParam("name", "Dr. IntegrationTest")
+            .request()
+            .header("Authorization", "example user")
+            .get();
 
         this.assertResponseStatus(response, Status.OK);
 
         String jsonResponse = response.readEntity(String.class);
         // language=JSON
-        String expected =
-            """
+        String expected = """
             {
               "id"     : 1,
               "content": "Hello, Dr. IntegrationTest!"
@@ -92,34 +90,31 @@ class IntegrationTest {
 
     @Test
     void validDateParameter() {
-        String date =
-            this.dropwizardAppExtension.client()
-                .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
-                .queryParam("date", "2022-01-20")
-                .request()
-                .get(String.class);
+        String date = this.dropwizardAppExtension.client()
+            .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
+            .queryParam("date", "2022-01-20")
+            .request()
+            .get(String.class);
         assertThat(date).isEqualTo("2022-01-20T00:00:00.000Z");
     }
 
     @Test
     void invalidDateParameter() {
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
-            () ->
-                this.dropwizardAppExtension.client()
-                    .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
-                    .queryParam("date", "abc")
-                    .request()
-                    .get(String.class)
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() ->
+            this.dropwizardAppExtension.client()
+                .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
+                .queryParam("date", "abc")
+                .request()
+                .get(String.class)
         );
     }
 
     @Test
     void noDateParameter() {
-        String date =
-            this.dropwizardAppExtension.client()
-                .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
-                .request()
-                .get(String.class);
+        String date = this.dropwizardAppExtension.client()
+            .target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
+            .request()
+            .get(String.class);
         assertThat(date).isEmpty();
     }
 
@@ -145,12 +140,11 @@ class IntegrationTest {
     private void testRenderingPerson(String viewName) {
         PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
         PersonDTO newPerson = this.postPerson(person);
-        String url =
-            "http://localhost:%d/people/%d/%s".formatted(
-                    this.dropwizardAppExtension.getLocalPort(),
-                    newPerson.getId(),
-                    viewName
-                );
+        String url = "http://localhost:%d/people/%d/%s".formatted(
+            this.dropwizardAppExtension.getLocalPort(),
+            newPerson.getId(),
+            viewName
+        );
         Response response = this.dropwizardAppExtension.client().target(url).request().get();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200.getStatusCode());
     }

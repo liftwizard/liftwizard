@@ -52,17 +52,18 @@ public class ConnectionManagersFactory {
         this.connectionManagerFactoriesByName = new LinkedHashMap<>();
         for (ConnectionManagerFactory connectionManagerFactory : connectionManagerFactories) {
             this.connectionManagerFactoriesByName.put(
-                    connectionManagerFactory.getConnectionManagerName(),
-                    connectionManagerFactory
-                );
+                connectionManagerFactory.getConnectionManagerName(),
+                connectionManagerFactory
+            );
         }
     }
 
     @ValidationMethod
     @JsonIgnore
     public boolean isValidConnectionManagerNames() {
-        List<String> orderedConnectionManagerNames =
-            this.connectionManagerFactories.stream().map(ConnectionManagerFactory::getConnectionManagerName).toList();
+        List<String> orderedConnectionManagerNames = this.connectionManagerFactories.stream()
+            .map(ConnectionManagerFactory::getConnectionManagerName)
+            .toList();
         List<String> duplicateConnectionManagerNames = orderedConnectionManagerNames
             .stream()
             .collect(Collectors.groupingBy(key -> key, LinkedHashMap::new, Collectors.counting()))
@@ -78,8 +79,9 @@ public class ConnectionManagersFactory {
 
         // Validate that connection managers sharing the same data source have compatible configurations
         Map<String, List<ConnectionManagerFactory>> managersByDataSource =
-            this.connectionManagerFactories.stream()
-                .collect(Collectors.groupingBy(ConnectionManagerFactory::getDataSourceName));
+            this.connectionManagerFactories.stream().collect(
+                Collectors.groupingBy(ConnectionManagerFactory::getDataSourceName)
+            );
 
         for (List<ConnectionManagerFactory> managersWithSameDataSource : managersByDataSource.values()) {
             if (managersWithSameDataSource.size() <= 1) {
@@ -95,12 +97,12 @@ public class ConnectionManagersFactory {
                 if (!firstManager.getDatabaseType().equals(currentManager.getDatabaseType())) {
                     String errorMessage =
                         "Connection managers '%s' and '%s' share data source '%s' but have different database types: %s vs %s".formatted(
-                                firstManager.getConnectionManagerName(),
-                                currentManager.getConnectionManagerName(),
-                                firstManager.getDataSourceName(),
-                                firstManager.getDatabaseType(),
-                                currentManager.getDatabaseType()
-                            );
+                            firstManager.getConnectionManagerName(),
+                            currentManager.getConnectionManagerName(),
+                            firstManager.getDataSourceName(),
+                            firstManager.getDatabaseType(),
+                            currentManager.getDatabaseType()
+                        );
                     throw new IllegalStateException(errorMessage);
                 }
 
@@ -108,12 +110,12 @@ public class ConnectionManagersFactory {
                 if (!firstManager.getTimeZoneName().equals(currentManager.getTimeZoneName())) {
                     String errorMessage =
                         "Connection managers '%s' and '%s' share data source '%s' but have different time zones: %s vs %s".formatted(
-                                firstManager.getConnectionManagerName(),
-                                currentManager.getConnectionManagerName(),
-                                firstManager.getDataSourceName(),
-                                firstManager.getTimeZoneName(),
-                                currentManager.getTimeZoneName()
-                            );
+                            firstManager.getConnectionManagerName(),
+                            currentManager.getConnectionManagerName(),
+                            firstManager.getDataSourceName(),
+                            firstManager.getTimeZoneName(),
+                            currentManager.getTimeZoneName()
+                        );
                     throw new IllegalStateException(errorMessage);
                 }
 
@@ -121,11 +123,11 @@ public class ConnectionManagersFactory {
                 if (firstManager.getSchemaName().equals(currentManager.getSchemaName())) {
                     String errorMessage =
                         "Connection managers '%s' and '%s' share data source '%s' but also have the same schema: %s".formatted(
-                                firstManager.getConnectionManagerName(),
-                                currentManager.getConnectionManagerName(),
-                                firstManager.getDataSourceName(),
-                                firstManager.getSchemaName()
-                            );
+                            firstManager.getConnectionManagerName(),
+                            currentManager.getConnectionManagerName(),
+                            firstManager.getDataSourceName(),
+                            firstManager.getSchemaName()
+                        );
                     throw new IllegalStateException(errorMessage);
                 }
             }
@@ -159,11 +161,10 @@ public class ConnectionManagersFactory {
         }
 
         if (!this.connectionManagerFactoriesByName.containsKey(connectionManagerName)) {
-            String message =
-                "No connection manager named: '%s'. Known connection managers: %s".formatted(
-                        connectionManagerName,
-                        this.connectionManagerFactoriesByName.keySet()
-                    );
+            String message = "No connection manager named: '%s'. Known connection managers: %s".formatted(
+                connectionManagerName,
+                this.connectionManagerFactoriesByName.keySet()
+            );
             throw new IllegalStateException(message);
         }
 
@@ -175,10 +176,9 @@ public class ConnectionManagersFactory {
                 environment.lifecycle()
             );
 
-        SourcelessConnectionManager sourcelessConnectionManager =
-            this.connectionManagerFactoriesByName.get(connectionManagerName).createSourcelessConnectionManager(
-                    managedDataSource
-                );
+        SourcelessConnectionManager sourcelessConnectionManager = this.connectionManagerFactoriesByName.get(
+            connectionManagerName
+        ).createSourcelessConnectionManager(managedDataSource);
         this.connectionManagersByName.put(connectionManagerName, sourcelessConnectionManager);
         return sourcelessConnectionManager;
     }
