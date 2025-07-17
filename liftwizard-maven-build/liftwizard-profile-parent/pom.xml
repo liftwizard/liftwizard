@@ -219,7 +219,7 @@
                         <artifactId>prettier-maven-plugin</artifactId>
                         <version>0.22</version>
                         <configuration>
-                            <prettierJavaVersion>2.7.2</prettierJavaVersion>
+                            <prettierJavaVersion>2.7.3</prettierJavaVersion>
                             <printWidth>120</printWidth>
                             <tabWidth>4</tabWidth>
                             <nodePath>node</nodePath>
@@ -248,7 +248,7 @@
                         <artifactId>prettier-maven-plugin</artifactId>
                         <version>0.22</version>
                         <configuration>
-                            <prettierJavaVersion>2.7.2</prettierJavaVersion>
+                            <prettierJavaVersion>2.7.3</prettierJavaVersion>
                             <printWidth>120</printWidth>
                             <tabWidth>4</tabWidth>
                             <nodePath>node</nodePath>
