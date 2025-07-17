@@ -85,8 +85,8 @@ public class ReladomoTestResourceColumn {
 
             String paddedHeader = ReladomoTestResourceColumn.padRight(attributeName, maxLength);
 
-            ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(
-                each -> ReladomoTestResourceColumn.padRight(each, maxLength)
+            ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(each ->
+                ReladomoTestResourceColumn.padRight(each, maxLength)
             );
             this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
         } else if (valueType == Long.class) {
@@ -107,8 +107,8 @@ public class ReladomoTestResourceColumn {
 
             String paddedHeader = ReladomoTestResourceColumn.padRight(attributeName, maxLength);
 
-            ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(
-                each -> ReladomoTestResourceColumn.padRight(each, maxLength)
+            ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(each ->
+                ReladomoTestResourceColumn.padRight(each, maxLength)
             );
             this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
         } else if (valueType == Date.class) {
@@ -119,8 +119,8 @@ public class ReladomoTestResourceColumn {
 
             String paddedHeader = ReladomoTestResourceColumn.padRight(attributeName, maxLength);
 
-            ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(
-                each -> ReladomoTestResourceColumn.padRight(each, maxLength)
+            ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(each ->
+                ReladomoTestResourceColumn.padRight(each, maxLength)
             );
             this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
         } else {
@@ -135,8 +135,8 @@ public class ReladomoTestResourceColumn {
         int maxLength = Math.max(attributeName.length(), maxValueLength);
 
         String paddedHeader = ReladomoTestResourceColumn.padRight(attributeName, maxLength);
-        ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(
-            each -> ReladomoTestResourceColumn.padLeft(each, maxLength)
+        ImmutableList<String> paddedValueStrings = unpaddedValueStrings.collect(each ->
+            ReladomoTestResourceColumn.padLeft(each, maxLength)
         );
         this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
     }

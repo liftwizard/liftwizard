@@ -47,12 +47,8 @@ public class LogMarkerTestExtension implements BeforeEachCallback, AfterEachCall
     @Override
     public void afterEach(ExtensionContext context) {
         Optional<Throwable> execution = context.getExecutionException();
-        execution.ifPresent(
-            throwable ->
-                LOGGER.info(
-                    MARKER_FLUSH,
-                    "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender."
-                )
+        execution.ifPresent(throwable ->
+            LOGGER.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.")
         );
 
         MDC.remove("liftwizard.junit.test.name");

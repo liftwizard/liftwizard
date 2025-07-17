@@ -77,10 +77,8 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        Scope.child(
-            Attr.ui,
-            new LoggerUIService(),
-            () -> this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider)
+        Scope.child(Attr.ui, new LoggerUIService(), () ->
+            this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider)
         );
 
         LOGGER.info("Completing {}.", this.getClass().getSimpleName());

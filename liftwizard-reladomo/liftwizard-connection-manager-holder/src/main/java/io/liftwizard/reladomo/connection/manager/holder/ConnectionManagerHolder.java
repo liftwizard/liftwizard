@@ -48,13 +48,11 @@ public final class ConnectionManagerHolder {
             "connectionManagersByName is null. Did you remember to run ConnectionManagerHolderBundle?"
         );
         SourcelessConnectionManager sourcelessConnectionManager = connectionManagersByName.get(name);
-        Objects.requireNonNull(
-            sourcelessConnectionManager,
-            () ->
-                "Could not find connection manager with name %s. Valid choices are %s".formatted(
-                        name,
-                        connectionManagersByName.keysView()
-                    )
+        Objects.requireNonNull(sourcelessConnectionManager, () ->
+            "Could not find connection manager with name %s. Valid choices are %s".formatted(
+                    name,
+                    connectionManagersByName.keysView()
+                )
         );
         return sourcelessConnectionManager;
     }

@@ -37,8 +37,8 @@ public class PeopleResource {
     @GET
     @UnitOfWork
     public List<PersonDTO> listPeople() {
-        return ListAdapter.adapt(this.peopleDAO.findAll()).collect(
-            each -> new PersonDTO(each.getId(), each.getFullName(), each.getJobTitle())
+        return ListAdapter.adapt(this.peopleDAO.findAll()).collect(each ->
+            new PersonDTO(each.getId(), each.getFullName(), each.getJobTitle())
         );
     }
 }

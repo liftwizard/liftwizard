@@ -110,13 +110,11 @@ public class ReladomoBundle implements PrioritizedBundle {
     }
 
     private void registerRetrieveCountMetrics(MetricRegistry metricRegistry) {
-        metricRegistry.gauge(
-            MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"),
-            () -> MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount
+        metricRegistry.gauge(MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"), () ->
+            MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount
         );
-        metricRegistry.gauge(
-            MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"),
-            () -> MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount
+        metricRegistry.gauge(MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"), () ->
+            MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount
         );
     }
 
