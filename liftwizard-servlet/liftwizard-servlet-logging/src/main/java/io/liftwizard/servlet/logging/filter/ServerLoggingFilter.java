@@ -181,8 +181,10 @@ public class ServerLoggingFilter implements Filter {
             return;
         }
 
-        String payload =
-            this.getPayloadFromByteArray(requestWrapper.getContentAsByteArray(), requestWrapper.getCharacterEncoding());
+        String payload = this.getPayloadFromByteArray(
+            requestWrapper.getContentAsByteArray(),
+            requestWrapper.getCharacterEncoding()
+        );
 
         String truncatedPayload = this.getTruncatedPayload(payload);
         structuredArguments.getRequest().getHttp().setBody(truncatedPayload);
@@ -209,11 +211,10 @@ public class ServerLoggingFilter implements Filter {
         this.addResponseHeaders(httpServletResponse, http);
 
         if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getContentAsByteArray().length > 0) {
-            String payload =
-                this.getPayloadFromByteArray(
-                        responseWrapper.getContentAsByteArray(),
-                        responseWrapper.getCharacterEncoding()
-                    );
+            String payload = this.getPayloadFromByteArray(
+                responseWrapper.getContentAsByteArray(),
+                responseWrapper.getCharacterEncoding()
+            );
 
             String truncatedPayload = this.getTruncatedPayload(payload);
             http.setBody(truncatedPayload);

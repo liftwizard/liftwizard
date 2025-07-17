@@ -78,8 +78,9 @@ public class ReladomoTestResourceColumn {
         Class<?> valueType = this.attribute.valueType();
 
         if (valueType == String.class) {
-            ImmutableList<String> unpaddedValueStrings =
-                this.values.collect(String.class::cast).collect(ReladomoTestResourceColumn::quote).toImmutable();
+            ImmutableList<String> unpaddedValueStrings = this.values.collect(String.class::cast)
+                .collect(ReladomoTestResourceColumn::quote)
+                .toImmutable();
             int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
             int maxLength = Math.max(attributeName.length(), maxValueLength);
 
@@ -100,8 +101,9 @@ public class ReladomoTestResourceColumn {
         } else if (valueType == Boolean.class) {
             this.handlePrimitive(attributeName, Boolean.class);
         } else if (valueType == Timestamp.class) {
-            ImmutableList<String> unpaddedValueStrings =
-                this.values.collect(Timestamp.class::cast).collect(ReladomoTestResourceColumn::quote).toImmutable();
+            ImmutableList<String> unpaddedValueStrings = this.values.collect(Timestamp.class::cast)
+                .collect(ReladomoTestResourceColumn::quote)
+                .toImmutable();
             int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
             int maxLength = Math.max(attributeName.length(), maxValueLength);
 
@@ -112,8 +114,9 @@ public class ReladomoTestResourceColumn {
             );
             this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
         } else if (valueType == Date.class) {
-            ImmutableList<String> unpaddedValueStrings =
-                this.values.collect(Date.class::cast).collect(ReladomoTestResourceColumn::quote).toImmutable();
+            ImmutableList<String> unpaddedValueStrings = this.values.collect(Date.class::cast)
+                .collect(ReladomoTestResourceColumn::quote)
+                .toImmutable();
             int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
             int maxLength = Math.max(attributeName.length(), maxValueLength);
 
@@ -129,8 +132,9 @@ public class ReladomoTestResourceColumn {
     }
 
     private void handlePrimitive(String attributeName, Class<?> aClass) {
-        ImmutableList<String> unpaddedValueStrings =
-            this.values.collect(aClass::cast).collect(String::valueOf).toImmutable();
+        ImmutableList<String> unpaddedValueStrings = this.values.collect(aClass::cast)
+            .collect(String::valueOf)
+            .toImmutable();
         int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
         int maxLength = Math.max(attributeName.length(), maxValueLength);
 

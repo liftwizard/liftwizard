@@ -59,8 +59,10 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception {
-        LiquibaseMigrationFactoryProvider liquibaseFactoryProvider =
-            this.safeCastConfiguration(LiquibaseMigrationFactoryProvider.class, configuration);
+        LiquibaseMigrationFactoryProvider liquibaseFactoryProvider = this.safeCastConfiguration(
+            LiquibaseMigrationFactoryProvider.class,
+            configuration
+        );
         if (liquibaseFactoryProvider == null) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());
             return;
@@ -72,8 +74,10 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
             return;
         }
 
-        NamedDataSourceProvider dataSourceProvider =
-            this.safeCastConfiguration(NamedDataSourceProvider.class, configuration);
+        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+            NamedDataSourceProvider.class,
+            configuration
+        );
 
         LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
@@ -107,8 +111,13 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
             String context = String.join(",", contexts);
 
             try (
-                CloseableLiquibase liquibase =
-                    this.openLiquibase(dataSource, catalogName, schemaName, migrationFile, migrationFileLocation)
+                CloseableLiquibase liquibase = this.openLiquibase(
+                    dataSource,
+                    catalogName,
+                    schemaName,
+                    migrationFile,
+                    migrationFileLocation
+                );
             ) {
                 if (dryRun) {
                     liquibase.update(context, new OutputStreamWriter(System.out, StandardCharsets.UTF_8));

@@ -101,8 +101,10 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
         }
 
         try (var tempFile = this.getTempFile()) {
-            CoreMithraDbDefinitionGenerator coreGenerator =
-                this.getGenerator(tempFile.getPath(), generatedOutputDirectory);
+            CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(
+                tempFile.getPath(),
+                generatedOutputDirectory
+            );
             coreGenerator.execute();
 
             Resource resource = new Resource();

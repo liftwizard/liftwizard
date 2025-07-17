@@ -69,8 +69,11 @@ public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowin
     }
 
     protected T throwTypeError(ParseTree ctx) {
-        String error =
-            "Expected <%s> but found: <%s> in %s".formatted(this.getExpectedType(), ctx.getText(), this.errorContext);
+        String error = "Expected <%s> but found: <%s> in %s".formatted(
+            this.getExpectedType(),
+            ctx.getText(),
+            this.errorContext
+        );
         throw new IllegalArgumentException(error);
     }
 
