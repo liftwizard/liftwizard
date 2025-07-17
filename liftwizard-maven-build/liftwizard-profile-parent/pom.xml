@@ -219,7 +219,7 @@
                         <artifactId>prettier-maven-plugin</artifactId>
                         <version>0.22</version>
                         <configuration>
-                            <prettierJavaVersion>2.6.4</prettierJavaVersion>
+                            <prettierJavaVersion>2.6.5</prettierJavaVersion>
                             <printWidth>120</printWidth>
                             <tabWidth>4</tabWidth>
                             <nodePath>node</nodePath>
@@ -248,7 +248,7 @@
                         <artifactId>prettier-maven-plugin</artifactId>
                         <version>0.22</version>
                         <configuration>
-                            <prettierJavaVersion>2.6.4</prettierJavaVersion>
+                            <prettierJavaVersion>2.6.5</prettierJavaVersion>
                             <printWidth>120</printWidth>
                             <tabWidth>4</tabWidth>
                             <nodePath>node</nodePath>
@@ -441,7 +441,7 @@
                                 <prettier>
                                     <devDependencies>
                                         <prettier>3.3.2</prettier>
-                                        <prettier-plugin-java>2.6.4</prettier-plugin-java>
+                                        <prettier-plugin-java>2.6.5</prettier-plugin-java>
                                     </devDependencies>
                                     <config>
                                         <tabWidth>4</tabWidth>
@@ -475,7 +475,7 @@
                                 <prettier>
                                     <devDependencies>
                                         <prettier>3.3.2</prettier>
-                                        <prettier-plugin-java>2.6.4</prettier-plugin-java>
+                                        <prettier-plugin-java>2.6.5</prettier-plugin-java>
                                     </devDependencies>
                                     <config>
                                         <tabWidth>4</tabWidth>
