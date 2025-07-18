@@ -25,3 +25,4 @@ recipeList:
   - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedSatisfies
   - io.liftwizard.rewrite.eclipse.collections.VerifyAssertCountToAssertJ
   - io.liftwizard.rewrite.eclipse.collections.VerifyAssertThrowsToAssertJ
+  - io.liftwizard.rewrite.eclipse.collections.UseIterateIsEmpty
