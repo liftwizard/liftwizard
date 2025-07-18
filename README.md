@@ -22,6 +22,43 @@ The bundles can be loosely grouped into categories.
 - Servlet client/server logging
 - [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
 - JUnit 4 and JUnit 5 test utilities
+- OpenRewrite recipes for code modernization
+
+## OpenRewrite Recipes
+
+Liftwizard includes OpenRewrite recipes for automating code modernization tasks. These recipes help migrate from older APIs to newer ones and apply best practices.
+
+### Eclipse Collections Recipes
+
+- **SimplifyNegatedEmptyChecks**: Simplifies `!iterable.isEmpty()` to `iterable.notEmpty()` and `!iterable.notEmpty()` to `iterable.isEmpty()`
+- **SimplifyNegatedSatisfies**: Simplifies negated satisfies checks for Eclipse Collections
+- **VerifyAssertThrowsToAssertJ**: Migrates `Verify.assertThrows()` calls to AssertJ's `assertThatThrownBy()` pattern
+
+### Usage
+
+To use these recipes in your project, add the following to your `pom.xml`:
+
+```xml
+<plugin>
+    <groupId>org.openrewrite.maven</groupId>
+    <artifactId>rewrite-maven-plugin</artifactId>
+    <version>5.42.0</version>
+    <configuration>
+        <activeRecipes>
+            <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
+        </activeRecipes>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-rewrite</artifactId>
+            <version>${liftwizard.version}</version>
+        </dependency>
+    </dependencies>
+</plugin>
+```
+
+Then run: `mvn rewrite:run`
 
 ## Documentation
 
