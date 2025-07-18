@@ -21,3 +21,6 @@ displayName: Add explicit 'this.' prefix
 description: Adds explicit 'this.' prefix to instance field accesses and method invocations.
 recipeList:
   - io.liftwizard.rewrite.java.style.ExplicitThis
+  - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedEmptyChecks
+  - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedSatisfies
+  - io.liftwizard.rewrite.eclipse.collections.VerifyAssertCountToAssertJ
