@@ -80,8 +80,7 @@ public class PeopleResourceTest {
 
             // <editor-fold desc="Expected JSON">
             // language=JSON
-            String expected =
-                """
+            String expected = """
                 {
                   "id"      : 1,
                   "fullName": "Full Name",
@@ -104,8 +103,7 @@ public class PeopleResourceTest {
 
             // <editor-fold desc="Expected JSON">
             // language=JSON
-            String expected =
-                """
+            String expected = """
                 [
                   {
                     "id"      : 1,

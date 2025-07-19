@@ -45,10 +45,10 @@ public class FileMatchExtension extends AbstractMatchExtension {
             File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
             this.resourceRerecorderExtension.writeStringToFile(
-                    resourceClassPathLocation,
-                    prettyPrintedString,
-                    resourceFile
-                );
+                resourceClassPathLocation,
+                prettyPrintedString,
+                resourceFile
+            );
             if (!this.rerecordEnabled) {
                 String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
                 this.errorCollectorExtension.addError(new AssertionError(detailMessage));
@@ -59,8 +59,10 @@ public class FileMatchExtension extends AbstractMatchExtension {
             String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
 
             if (!actualString.equals(expectedStringFromFile)) {
-                String detailMessage =
-                    this.resourceRerecorderExtension.handleMismatch(resourceClassPathLocation, actualString);
+                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
+                    resourceClassPathLocation,
+                    actualString
+                );
                 var assertionError = new AssertionError(detailMessage);
                 this.errorCollectorExtension.addError(assertionError);
             }

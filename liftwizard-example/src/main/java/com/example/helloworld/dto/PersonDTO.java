@@ -79,13 +79,13 @@ public class PersonDTO {
     @Override
     public String toString() {
         return "PersonDTO{id=%d, fullName='%s', jobTitle='%s', system=%s, systemFrom=%s, systemTo=%s}".formatted(
-                this.id,
-                this.fullName,
-                this.jobTitle,
-                this.system,
-                this.systemFrom,
-                this.systemTo
-            );
+            this.id,
+            this.fullName,
+            this.jobTitle,
+            this.system,
+            this.systemFrom,
+            this.systemTo
+        );
     }
 
     @Override

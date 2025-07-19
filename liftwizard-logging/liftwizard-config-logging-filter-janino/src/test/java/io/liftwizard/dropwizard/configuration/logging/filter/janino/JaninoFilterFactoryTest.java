@@ -63,8 +63,10 @@ class JaninoFilterFactoryTest {
 
     @Test
     void filterJanino() throws Exception {
-        JaninoFilterFactory janinoFilterFactory =
-            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
+        JaninoFilterFactory janinoFilterFactory = this.factory.build(
+            new ResourceConfigurationSourceProvider(),
+            "config-test.json5"
+        );
         Filter<ILoggingEvent> filter = janinoFilterFactory.build();
 
         assertThat(janinoFilterFactory).isInstanceOf(JaninoFilterFactory.class);

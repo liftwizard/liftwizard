@@ -41,8 +41,8 @@ public final class ReladomoTestResourceWriter {
     }
 
     public static String generate(ImmutableList<String> classNamesInOrder) {
-        Set<MithraRuntimeCacheController> runtimeCacheControllerSet = MithraManagerProvider.getMithraManager()
-            .getRuntimeCacheControllerSet();
+        Set<MithraRuntimeCacheController> runtimeCacheControllerSet =
+            MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet();
         ImmutableList<MithraRuntimeCacheController> mithraRuntimeCacheControllers = Lists.immutable.withAll(
             runtimeCacheControllerSet
         );

@@ -35,8 +35,10 @@ public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        CommonPoolHealthCheckFactoryProvider factoryProvider =
-            this.safeCastConfiguration(CommonPoolHealthCheckFactoryProvider.class, configuration);
+        CommonPoolHealthCheckFactoryProvider factoryProvider = this.safeCastConfiguration(
+            CommonPoolHealthCheckFactoryProvider.class,
+            configuration
+        );
         CommonPoolHealthCheckFactory factory = factoryProvider.getCommonPoolHealthCheckFactory();
         if (!factory.isEnabled()) {
             LOGGER.info("{} disabled.", this.getClass().getSimpleName());

@@ -48,11 +48,10 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
             return aClass.cast(configuration);
         }
 
-        String message =
-            "Expected configuration to implement %s but found %s".formatted(
-                    aClass.getCanonicalName(),
-                    configuration.getClass().getCanonicalName()
-                );
+        String message = "Expected configuration to implement %s but found %s".formatted(
+            aClass.getCanonicalName(),
+            configuration.getClass().getCanonicalName()
+        );
         throw new IllegalStateException(message);
     }
 
@@ -61,7 +60,7 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
         Instant start = Instant.now();
         try (
             MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
-            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()))
+            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
         ) {
             this.initializeWithMdc(bootstrap);
         }
@@ -80,7 +79,7 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
         Instant start = Instant.now();
         try (
             MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
-            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()))
+            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
         ) {
             this.runWithMdc(configuration, environment);
         }

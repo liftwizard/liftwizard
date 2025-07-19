@@ -55,8 +55,10 @@ public class ObjectMapperBundle implements PrioritizedBundle {
 
     @Override
     public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        ObjectMapperFactoryProvider objectMapperFactoryProvider =
-            this.safeCastConfiguration(ObjectMapperFactoryProvider.class, configuration);
+        ObjectMapperFactoryProvider objectMapperFactoryProvider = this.safeCastConfiguration(
+            ObjectMapperFactoryProvider.class,
+            configuration
+        );
         ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
         ObjectMapper objectMapper = environment.getObjectMapper();
 

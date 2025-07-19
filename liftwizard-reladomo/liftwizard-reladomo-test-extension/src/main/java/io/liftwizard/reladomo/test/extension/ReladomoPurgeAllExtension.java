@@ -45,8 +45,7 @@ public class ReladomoPurgeAllExtension implements BeforeEachCallback, AfterEachC
     }
 
     private void purgeTypes() {
-        MithraManagerProvider.getMithraManager()
-            .executeTransactionalCommand(tx -> {
+        MithraManagerProvider.getMithraManager().executeTransactionalCommand(tx -> {
                 MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet().forEach(this::purgeType);
 
                 return null;

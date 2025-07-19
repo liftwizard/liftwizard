@@ -182,12 +182,11 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
             ctx.className() != null &&
             !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
         ) {
-            String error =
-                "Expected 'this' or <%s> but found: <%s> in %s".formatted(
-                        this.getExpectedClassName(this.finder),
-                        ctx.className().getText(),
-                        errorContext
-                    );
+            String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
+                this.getExpectedClassName(this.finder),
+                ctx.className().getText(),
+                errorContext
+            );
             throw new IllegalArgumentException(error);
         }
 
@@ -196,12 +195,11 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
         for (String relationshipName : relationshipNames) {
             RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
             if (nextFinder == null) {
-                String error =
-                    "Could not find relationship '%s' on type '%s' in %s".formatted(
-                            relationshipName,
-                            this.getExpectedClassName(currentFinder),
-                            errorContext
-                        );
+                String error = "Could not find relationship '%s' on type '%s' in %s".formatted(
+                    relationshipName,
+                    this.getExpectedClassName(currentFinder),
+                    errorContext
+                );
                 throw new IllegalArgumentException(error);
             }
             currentFinder = nextFinder;
@@ -230,8 +228,11 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
         ParameterCardinality parameterCardinality,
         String errorContext
     ) {
-        ReladomoOperationVisitor<?> parameterVisitor =
-            this.getParameterVisitor(attribute, parameterCardinality, errorContext);
+        ReladomoOperationVisitor<?> parameterVisitor = this.getParameterVisitor(
+            attribute,
+            parameterCardinality,
+            errorContext
+        );
         return ctx.parameter().accept(parameterVisitor);
     }
 
@@ -309,8 +310,11 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
         ParameterCardinality parameterCardinality,
         Object parameter
     ) {
-        ReladomoOperationVisitor<Operation> operatorVisitor =
-            this.getBinaryOperatorVisitor(attribute, parameterCardinality, parameter);
+        ReladomoOperationVisitor<Operation> operatorVisitor = this.getBinaryOperatorVisitor(
+            attribute,
+            parameterCardinality,
+            parameter
+        );
         return binaryOperatorContext.accept(operatorVisitor);
     }
 

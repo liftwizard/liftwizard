@@ -110,11 +110,10 @@ public class ConnectionManagerFactory {
     public boolean isValidTimezone() {
         TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
         if (zoneInfo == null) {
-            String message =
-                "Got timeZoneName '%s' but expected one of: %s".formatted(
-                        this.timeZoneName,
-                        Arrays.toString(TimeZone.getAvailableIDs())
-                    );
+            String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
+                this.timeZoneName,
+                Arrays.toString(TimeZone.getAvailableIDs())
+            );
             throw new IllegalStateException(message);
         }
         return true;

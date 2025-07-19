@@ -62,8 +62,10 @@ class ImpersonationAuthFilterFactoryTest {
 
     @Test
     void impersonationAuthFilter() throws Exception {
-        AuthFilterFactory authFilterFactory =
-            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
+        AuthFilterFactory authFilterFactory = this.factory.build(
+            new ResourceConfigurationSourceProvider(),
+            "config-test.json5"
+        );
         assertThat(authFilterFactory).isInstanceOf(ImpersonationAuthFilterFactory.class);
         AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();
         assertThat(authFilter).isInstanceOf(OAuthCredentialAuthFilter.class);

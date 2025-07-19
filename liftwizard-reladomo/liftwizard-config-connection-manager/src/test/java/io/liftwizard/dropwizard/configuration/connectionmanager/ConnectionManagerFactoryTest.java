@@ -55,8 +55,10 @@ class ConnectionManagerFactoryTest {
 
     @Test
     void createSourcelessConnectionManager() throws Exception {
-        ConnectionManagerFactory connectionManagerFactory =
-            this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
+        ConnectionManagerFactory connectionManagerFactory = this.factory.build(
+            new ResourceConfigurationSourceProvider(),
+            "config-test.json5"
+        );
 
         PooledDataSourceFactory dataSourceFactory = new DataSourceFactory();
         ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");

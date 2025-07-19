@@ -65,10 +65,9 @@ public class LocalDateCoercing implements Coercing<LocalDate, String> {
             return this.parseLocalDate(input.toString(), CoercingSerializeException::new);
         }
 
-        String error =
-            "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
-                    LocalDateCoercing.typeName(input)
-                );
+        String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
+            LocalDateCoercing.typeName(input)
+        );
         throw new CoercingSerializeException(error);
     }
 
@@ -92,10 +91,9 @@ public class LocalDateCoercing implements Coercing<LocalDate, String> {
             return this.parseLocalDate(input.toString(), CoercingParseValueException::new);
         }
 
-        String error =
-            "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
-                    LocalDateCoercing.typeName(input)
-                );
+        String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
+            LocalDateCoercing.typeName(input)
+        );
         throw new CoercingParseValueException(error);
     }
 

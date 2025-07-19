@@ -50,9 +50,9 @@ public final class ConnectionManagerHolder {
         SourcelessConnectionManager sourcelessConnectionManager = connectionManagersByName.get(name);
         Objects.requireNonNull(sourcelessConnectionManager, () ->
             "Could not find connection manager with name %s. Valid choices are %s".formatted(
-                    name,
-                    connectionManagersByName.keysView()
-                )
+                name,
+                connectionManagersByName.keysView()
+            )
         );
         return sourcelessConnectionManager;
     }
