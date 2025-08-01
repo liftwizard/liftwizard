@@ -13,15 +13,9 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     #!/usr/bin/env bash
     set -uo pipefail
 
-    COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
-    SKIPPABLE_WORDS=("skip" "pass" "stop" "fail")
-
-    for word in "${SKIPPABLE_WORDS[@]}"; do
-        if [[ $COMMIT_MESSAGE == *\[${word}\]* ]]; then
-            echo "Skipping due to [{{ANSI_YELLOW}}${word}{{ANSI_DEFAULT}}] in commit: '${COMMIT_MESSAGE}'"
-            exit 0
-        fi
-    done
+    if command -v should-skip-commit >/dev/null 2>&1 && should-skip-commit HEAD; then
+        exit 0
+    fi
 
     # Set colors based on whether values match defaults
     if [ "{{MVN}}" = "{{default_mvn}}" ]; then MVN_COLOR="{{ANSI_GRAY}}"; else MVN_COLOR="{{ANSI_MAGENTA}}"; fi
@@ -39,6 +33,7 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     fi
 
     DIRECTORY=$(basename $(pwd))
+    COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
 
     MESSAGE="Failed in directory ${DIRECTORY} on commit: '${COMMIT_MESSAGE}' with exit code ${EXIT_CODE}"
     {{echo_command}} "$MESSAGE"
