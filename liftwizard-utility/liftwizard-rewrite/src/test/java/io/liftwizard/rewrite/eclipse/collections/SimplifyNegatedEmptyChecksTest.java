@@ -39,19 +39,18 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
         rewriteRun(
             spec ->
                 spec.parser(
-                    JavaParser.fromJavaVersion()
-                        .dependsOn(
-                            "package org.eclipse.collections.api.list;\n" +
-                            "public interface MutableList<T> extends org.eclipse.collections.api.RichIterable<T> {\n" +
-                            "    boolean isEmpty();\n" +
-                            "    boolean notEmpty();\n" +
-                            "}\n",
-                            "package org.eclipse.collections.api;\n" +
-                            "public interface RichIterable<T> {\n" +
-                            "    boolean isEmpty();\n" +
-                            "    boolean notEmpty();\n" +
-                            "}\n"
-                        )
+                    JavaParser.fromJavaVersion().dependsOn(
+                        "package org.eclipse.collections.api.list;\n" +
+                        "public interface MutableList<T> extends org.eclipse.collections.api.RichIterable<T> {\n" +
+                        "    boolean isEmpty();\n" +
+                        "    boolean notEmpty();\n" +
+                        "}\n",
+                        "package org.eclipse.collections.api;\n" +
+                        "public interface RichIterable<T> {\n" +
+                        "    boolean isEmpty();\n" +
+                        "    boolean notEmpty();\n" +
+                        "}\n"
+                    )
                 ),
             java(
                 "import org.eclipse.collections.api.list.MutableList;\n" +
