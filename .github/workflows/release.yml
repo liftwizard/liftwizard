@@ -12,10 +12,8 @@ jobs:
   release:
     permissions:
       contents: write
-      id-token: write
-      attestations: write
 
-    name: Release and Deploy
+    name: Create Release Tag
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +26,6 @@ jobs:
         with:
           java-version: 17.0.10
           distribution: oracle
-          server-id: central
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - uses: jdx/mise-action@v2
 
@@ -47,20 +41,8 @@ jobs:
             -Darguments="-DskipTests"
         env:
           NEXT_VERSION: ${{ inputs.next-version }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Push changes
         run: |
           git push origin HEAD:main
           git push origin --tags
-
-      - name: Deploy to Maven Central
-        run: just deploy
-        env:
-          MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
-      - uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: "**/target/*.jar"
