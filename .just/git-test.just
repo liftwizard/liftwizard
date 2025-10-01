@@ -24,7 +24,6 @@ setup-git-test:
     # git test add --forget --test cleanthat                    'just clean _check-local-modifications spotless java-cleanthat'
     # git test add --forget --test pom                          'just clean _check-local-modifications spotless pom'
     # git test add --forget --test markdown                     'just clean _check-local-modifications spotless markdown'
-    # git test add --forget --test json                         'just clean _check-local-modifications spotless json'
     # git test add --forget --test yaml                         'just clean _check-local-modifications spotless yaml'
     # git test add --forget --test sql                          'just clean _check-local-modifications spotless sql'
 

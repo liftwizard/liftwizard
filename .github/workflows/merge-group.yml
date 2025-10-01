@@ -490,63 +490,17 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  spotless-json:
+  prettier:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v4
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
       - uses: jdx/mise-action@v2
 
-      - name: "Spotless Check: Json"
-        run: just spotless json
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v4
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v2
-
-      - name: "Spotless Check: Yaml"
-        run: just spotless yaml
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+      - name: "Prettier Format Check"
+        run: npx prettier --check .
 
   biome:
     runs-on: ubuntu-latest
@@ -621,8 +575,7 @@ jobs:
         spotless-java-cleanthat,
         spotless-sql,
         spotless-pom,
-        spotless-json,
-        spotless-yaml,
+        prettier,
         biome,
         reviewdog-markdownlint,
         reviewdog-yamllint,

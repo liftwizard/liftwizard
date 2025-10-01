@@ -32,6 +32,6 @@ repos:
 
       - id: prettier
         name: prettier
-        entry: npx prettier --write
+        entry: npx prettier --write --ignore-unknown
         language: system
-        types_or: [yaml, markdown, html]
+        types: [file]
