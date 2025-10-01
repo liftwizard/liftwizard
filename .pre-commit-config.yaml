@@ -34,4 +34,5 @@ repos:
         name: prettier
         entry: npx prettier --write
         language: system
-        types_or: [yaml, markdown, html]
+        types: [file]
+        exclude: '(\.(json|jsonc)$)|(\.prettierignore)$'
