@@ -2,9 +2,13 @@
 java = "oracle-17.0.10"
 just = "1.40.0"
 maven = "3.9.11"
+mvnd = "1.0.2"
 node = "24.4.1"
 "npm:markdownlint-cli" = "0.45.0"
 "npm:strip-ansi-cli" = "4.0.0"
+
+[alias]
+mvnd = "asdf:https://github.com/joschi/asdf-mvnd"
 
 [env]
 TERM = 'xterm-256color'
