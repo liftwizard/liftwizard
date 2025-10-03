@@ -17,7 +17,7 @@ jobs:
   deploy-github-pages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -29,7 +29,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Set up grahpviz
         run: sudo apt-get install graphviz
