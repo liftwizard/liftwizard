@@ -10,10 +10,10 @@
           "line": 5,
           "column": 6,
           "code": 7,
-          "message": 8
-        }
+          "message": 8,
+        },
       ],
-      "source": "errorprone"
-    }
-  ]
+      "source": "errorprone",
+    },
+  ],
 }
