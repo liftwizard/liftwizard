@@ -8,12 +8,7 @@
           "filterFactories": [
             {
               "type": "url",
-              "urls": [
-                "/manifest.json",
-                "/assets-manifest.json",
-                "/favicon.ico",
-                "/service-worker.js"
-              ]
+              "urls": ["/manifest.json", "/assets-manifest.json", "/favicon.ico", "/service-worker.js"]
             }
           ]
         }
