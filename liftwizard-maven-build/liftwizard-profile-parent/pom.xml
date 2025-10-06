@@ -136,6 +136,8 @@
                                     <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
 
                                     <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
+
+                                    <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
@@ -164,8 +166,6 @@
                                 <activeRecipes>
                                     <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
-
-                                    <recipe>io.liftwizard.java.migrate.UpgradeToJava17</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
