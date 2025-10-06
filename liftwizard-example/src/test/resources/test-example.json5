@@ -104,7 +104,9 @@
     },
   ],
   reladomo: {
-    runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
+    runtimeConfigurationPaths: [
+      "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml",
+    ],
   },
   liquibase: {
     enabled: true,
