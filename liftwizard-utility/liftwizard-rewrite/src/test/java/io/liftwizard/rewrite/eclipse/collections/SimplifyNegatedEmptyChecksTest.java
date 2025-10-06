@@ -36,7 +36,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
     @Test
     @DocumentExample
     void replacesNegatedIsEmptyWithNotEmptyOnRichIterable() {
-        rewriteRun(
+        this.rewriteRun(
             spec ->
                 spec.parser(
                     JavaParser.fromJavaVersion().dependsOn(
@@ -73,7 +73,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void replacesNegatedIsEmptyWithNotEmptyOnPrimitiveIterable() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.list.primitive.MutableIntList;\n" +
                 "\n" +
@@ -95,7 +95,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void replacesNegatedIsEmptyWithNotEmptyOnMultimap() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.multimap.MutableMultimap;\n" +
                 "\n" +
@@ -117,7 +117,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void replacesNegatedNotEmptyWithIsEmpty() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.list.MutableList;\n" +
                 "\n" +
@@ -139,7 +139,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void doesNotChangeNonNegatedIsEmpty() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.list.MutableList;\n" +
                 "\n" +
@@ -154,7 +154,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void doesNotChangeNonNegatedNotEmpty() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.list.MutableList;\n" +
                 "\n" +
@@ -169,7 +169,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void doesNotChangeJavaUtilCollections() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.List;\n" +
                 "\n" +
@@ -184,7 +184,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void handlesComplexExpressions() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.list.MutableList;\n" +
                 "\n" +
@@ -206,7 +206,7 @@ class SimplifyNegatedEmptyChecksTest implements RewriteTest {
 
     @Test
     void preservesWhitespaceAndComments() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import org.eclipse.collections.api.list.MutableList;\n" +
                 "\n" +
