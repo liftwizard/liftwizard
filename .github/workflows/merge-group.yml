@@ -548,6 +548,18 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
+  biome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: jdx/mise-action@v2
+
+      - name: "Biome Format Check"
+        run: npx @biomejs/biome ci
+
   reviewdog-markdownlint:
     runs-on: ubuntu-latest
     steps:
@@ -611,6 +623,7 @@ jobs:
         spotless-pom,
         spotless-json,
         spotless-yaml,
+        biome,
         reviewdog-markdownlint,
         reviewdog-yamllint,
         reviewdog-actionlint,
