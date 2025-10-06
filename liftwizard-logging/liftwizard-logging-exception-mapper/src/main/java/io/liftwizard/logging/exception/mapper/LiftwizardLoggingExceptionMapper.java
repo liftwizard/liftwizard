@@ -74,10 +74,10 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
         // Else the thrown exception is a not a web exception, so the exception is most likely
         // unexpected. We'll create a unique id in the server error response that is also logged for
         // correlation
-        final long id = logException(exception);
+        final long id = this.logException(exception);
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
             .type(MediaType.APPLICATION_JSON_TYPE)
-            .entity(new ErrorMessage(formatErrorMessage(id, exception)))
+            .entity(new ErrorMessage(this.formatErrorMessage(id, exception)))
             .build();
     }
 
@@ -92,13 +92,13 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 
     protected long logException(E exception) {
         final long id = ThreadLocalRandom.current().nextLong();
-        logException(id, exception);
+        this.logException(id, exception);
         return id;
     }
 
     @SuppressWarnings("Slf4jFormatShouldBeConst")
     protected void logException(long id, E exception) {
-        logger.error(formatLogMessage(id, exception), exception);
+        this.logger.error(this.formatLogMessage(id, exception), exception);
     }
 
     @SuppressWarnings("UnusedParameters")

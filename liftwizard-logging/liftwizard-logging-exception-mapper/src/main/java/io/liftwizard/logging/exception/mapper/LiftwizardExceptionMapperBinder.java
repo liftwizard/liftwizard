@@ -43,16 +43,16 @@ public class LiftwizardExceptionMapperBinder extends AbstractBinder {
 
     @Override
     protected void configure() {
-        bind(new LiftwizardLoggingExceptionMapper<Throwable>() {}).to(ExceptionMapper.class);
-        bind(JerseyViolationExceptionMapper.class).to(ExceptionMapper.class);
-        bind(new JsonProcessingExceptionMapper(isShowDetails())).to(ExceptionMapper.class);
-        bind(EarlyEofExceptionMapper.class).to(ExceptionMapper.class);
-        bind(EofExceptionWriterInterceptor.class).to(WriterInterceptor.class);
-        bind(EmptyOptionalExceptionMapper.class).to(ExceptionMapper.class);
-        bind(IllegalStateExceptionMapper.class).to(ExceptionMapper.class);
+        this.bind(new LiftwizardLoggingExceptionMapper<Throwable>() {}).to(ExceptionMapper.class);
+        this.bind(JerseyViolationExceptionMapper.class).to(ExceptionMapper.class);
+        this.bind(new JsonProcessingExceptionMapper(this.isShowDetails())).to(ExceptionMapper.class);
+        this.bind(EarlyEofExceptionMapper.class).to(ExceptionMapper.class);
+        this.bind(EofExceptionWriterInterceptor.class).to(WriterInterceptor.class);
+        this.bind(EmptyOptionalExceptionMapper.class).to(ExceptionMapper.class);
+        this.bind(IllegalStateExceptionMapper.class).to(ExceptionMapper.class);
     }
 
     public boolean isShowDetails() {
-        return showDetails;
+        return this.showDetails;
     }
 }
