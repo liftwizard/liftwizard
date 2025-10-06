@@ -22,16 +22,16 @@ public class Saying {
 
     @JsonProperty
     public long getId() {
-        return id;
+        return this.id;
     }
 
     @JsonProperty
     public String getContent() {
-        return content;
+        return this.content;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", id).add("content", content).toString();
+        return MoreObjects.toStringHelper(this).add("id", this.id).add("content", this.content).toString();
     }
 }
