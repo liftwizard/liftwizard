@@ -1,0 +1,7 @@
+*.graphqls
+**/*.jsonc
+**/*.json
+**/*.just
+**/pom.xml
+.prettierignore
+**/*-min.css

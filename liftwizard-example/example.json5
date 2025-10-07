@@ -31,9 +31,7 @@
   },
   reladomo: {
     transactionTimeout: "5 minutes",
-    runtimeConfigurationPaths: [
-      "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml",
-    ],
+    runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
   },
   dataSources: [
     {
