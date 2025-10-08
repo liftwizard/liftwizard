@@ -16,9 +16,11 @@
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
-name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
-displayName: Eclipse Collections best practices
-description: Apply Eclipse Collections best practices and idiomatic usage patterns.
+name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
+displayName: Eclipse Collections adoption
+description: Migrate from Java Collections Framework to Eclipse Collections with idiomatic patterns and factory methods.
 recipeList:
-  - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedEmptyChecks
-  - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedSatisfies
+  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFListConstructorToFactory
+  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFMapConstructorToFactory
+  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFSetConstructorToFactory
+  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFCollectionsToFactories
