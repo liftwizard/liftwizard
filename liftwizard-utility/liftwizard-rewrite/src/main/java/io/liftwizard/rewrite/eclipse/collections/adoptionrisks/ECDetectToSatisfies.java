@@ -73,12 +73,12 @@ public class ECDetectToSatisfies extends Recipe {
                         return b;
                     }
 
-                    J.MethodInvocation detectCall = getDetectCall(b.getLeft());
-                    boolean isNullOnRight = isNullLiteral(b.getRight());
+                    J.MethodInvocation detectCall = this.getDetectCall(b.getLeft());
+                    boolean isNullOnRight = this.isNullLiteral(b.getRight());
 
                     if (detectCall == null && !isNullOnRight) {
-                        detectCall = getDetectCall(b.getRight());
-                        isNullOnRight = isNullLiteral(b.getLeft());
+                        detectCall = this.getDetectCall(b.getRight());
+                        isNullOnRight = this.isNullLiteral(b.getLeft());
                     }
 
                     if (detectCall == null || !isNullOnRight) {

@@ -18,8 +18,11 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
@@ -146,7 +149,7 @@ public class ECMapConstructorToFactory extends Recipe {
             }
 
             // Try to extract type parameters from various sources
-            String typeParams = extractTypeParameters(nc);
+            String typeParams = this.extractTypeParameters(nc);
 
             // If typeParams is null, this means we have explicit type parameters and should not transform
             if (typeParams == null) {
@@ -155,11 +158,11 @@ public class ECMapConstructorToFactory extends Recipe {
 
             if (isTreeSortedMap) {
                 // Add import for SortedMaps factory and remove the impl import
-                maybeAddImport(SORTED_MAPS_FACTORY);
-                maybeRemoveImport(TREE_SORTED_MAP);
+                this.maybeAddImport(SORTED_MAPS_FACTORY);
+                this.maybeRemoveImport(TREE_SORTED_MAP);
 
                 // Ensure imports are properly ordered
-                doAfterVisit(new OrderImports(false).getVisitor());
+                this.doAfterVisit(new OrderImports(false).getVisitor());
 
                 if (!typeParams.isEmpty()) {
                     JavaTemplate genericTemplate = JavaTemplate.builder(
@@ -170,19 +173,19 @@ public class ECMapConstructorToFactory extends Recipe {
                         .javaParser(JavaParser.fromJavaVersion().classpath(JavaParser.runtimeClasspath()))
                         .build();
 
-                    return genericTemplate.apply(getCursor(), nc.getCoordinates().replace());
+                    return genericTemplate.apply(this.getCursor(), nc.getCoordinates().replace());
                 }
 
                 // Diamond operator case or simple constructor - use no explicit generics
-                return sortedMapsEmptyTemplate.apply(getCursor(), nc.getCoordinates().replace());
+                return this.sortedMapsEmptyTemplate.apply(this.getCursor(), nc.getCoordinates().replace());
             } else {
                 // UnifiedMap case
                 // Add import for Maps factory and remove the impl import
-                maybeAddImport(MAPS_FACTORY);
-                maybeRemoveImport(UNIFIED_MAP);
+                this.maybeAddImport(MAPS_FACTORY);
+                this.maybeRemoveImport(UNIFIED_MAP);
 
                 // Ensure imports are properly ordered
-                doAfterVisit(new OrderImports(false).getVisitor());
+                this.doAfterVisit(new OrderImports(false).getVisitor());
 
                 if (!typeParams.isEmpty()) {
                     JavaTemplate genericTemplate = JavaTemplate.builder("Maps.mutable.<" + typeParams + ">empty()")
@@ -191,11 +194,11 @@ public class ECMapConstructorToFactory extends Recipe {
                         .javaParser(JavaParser.fromJavaVersion().classpath(JavaParser.runtimeClasspath()))
                         .build();
 
-                    return genericTemplate.apply(getCursor(), nc.getCoordinates().replace());
+                    return genericTemplate.apply(this.getCursor(), nc.getCoordinates().replace());
                 }
 
                 // Diamond operator case or simple constructor - use no explicit generics
-                return mapsEmptyTemplate.apply(getCursor(), nc.getCoordinates().replace());
+                return this.mapsEmptyTemplate.apply(this.getCursor(), nc.getCoordinates().replace());
             }
         }
 
@@ -228,13 +231,13 @@ public class ECMapConstructorToFactory extends Recipe {
             }
 
             // Raw type case - need to infer and add explicit generics
-            return inferTypeParametersFromContext(nc);
+            return this.inferTypeParametersFromContext(nc);
         }
 
         private String inferTypeParametersFromContext(J.NewClass nc) {
             // Look for variable declaration that contains this constructor
             // Walk up the tree to find the variable declaration
-            org.openrewrite.Cursor cursor = getCursor();
+            Cursor cursor = this.getCursor();
             while (cursor != null) {
                 Object value = cursor.getValue();
 
@@ -245,7 +248,7 @@ public class ECMapConstructorToFactory extends Recipe {
                     if (varType instanceof JavaType.Parameterized) {
                         JavaType.Parameterized paramType = (JavaType.Parameterized) varType;
                         if (!paramType.getTypeParameters().isEmpty()) {
-                            return buildTypeParameterString(paramType.getTypeParameters());
+                            return this.buildTypeParameterString(paramType.getTypeParameters());
                         }
                     }
                     // If the variable type is not parameterized, it's a raw type
@@ -261,7 +264,7 @@ public class ECMapConstructorToFactory extends Recipe {
                         if (returnType instanceof JavaType.Parameterized) {
                             JavaType.Parameterized paramType = (JavaType.Parameterized) returnType;
                             if (!paramType.getTypeParameters().isEmpty()) {
-                                return buildTypeParameterString(paramType.getTypeParameters());
+                                return this.buildTypeParameterString(paramType.getTypeParameters());
                             }
                         }
                         // If the return type is not parameterized, it's a raw type
@@ -278,7 +281,7 @@ public class ECMapConstructorToFactory extends Recipe {
                         if (fieldType instanceof JavaType.Parameterized) {
                             JavaType.Parameterized paramType = (JavaType.Parameterized) fieldType;
                             if (!paramType.getTypeParameters().isEmpty()) {
-                                return buildTypeParameterString(paramType.getTypeParameters());
+                                return this.buildTypeParameterString(paramType.getTypeParameters());
                             }
                         }
                         // If the field type is not parameterized, it's a raw type
@@ -294,8 +297,8 @@ public class ECMapConstructorToFactory extends Recipe {
             return "";
         }
 
-        private String buildTypeParameterString(java.util.List<JavaType> typeParameters) {
-            return typeParameters.stream().map(this::formatJavaType).collect(java.util.stream.Collectors.joining(", "));
+        private String buildTypeParameterString(List<JavaType> typeParameters) {
+            return typeParameters.stream().map(this::formatJavaType).collect(Collectors.joining(", "));
         }
 
         private String formatJavaType(JavaType javaType) {
@@ -306,9 +309,9 @@ public class ECMapConstructorToFactory extends Recipe {
             } else if (javaType instanceof JavaType.Parameterized) {
                 // Handle nested generics recursively
                 JavaType.Parameterized pType = (JavaType.Parameterized) javaType;
-                String baseType = formatJavaType(pType.getType());
+                String baseType = this.formatJavaType(pType.getType());
                 if (!pType.getTypeParameters().isEmpty()) {
-                    String params = buildTypeParameterString(pType.getTypeParameters());
+                    String params = this.buildTypeParameterString(pType.getTypeParameters());
                     return baseType + "<" + params + ">";
                 }
                 return baseType;

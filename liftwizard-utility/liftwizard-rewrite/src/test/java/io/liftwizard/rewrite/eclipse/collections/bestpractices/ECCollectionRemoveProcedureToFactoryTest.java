@@ -16,9 +16,11 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -30,13 +32,13 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
     public void defaults(RecipeSpec spec) {
         spec
             .recipe(new ECCollectionRemoveProcedureToFactory())
-            .parser(org.openrewrite.java.JavaParser.fromJavaVersion().classpath("eclipse-collections"));
+            .parser(JavaParser.fromJavaVersion().classpath("eclipse-collections"));
     }
 
     @Test
     @DocumentExample
     void replaceParameterizedCollectionRemoveProcedure() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
@@ -68,7 +70,7 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceDiamondOperatorCollectionRemoveProcedure() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
@@ -100,7 +102,7 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceRawTypeCollectionRemoveProcedure() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
@@ -131,9 +133,9 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Disabled("Type resolution issues with CollectionRemoveProcedure")
+    @Disabled("Type resolution issues with CollectionRemoveProcedure")
     void doNotChangeConstructorWithNoArguments() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
@@ -150,9 +152,9 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Disabled("Type resolution issues with CollectionRemoveProcedure")
+    @Disabled("Type resolution issues with CollectionRemoveProcedure")
     void doNotChangeConstructorWithMultipleArguments() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
@@ -174,7 +176,7 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceInMethodArgument() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
@@ -208,7 +210,7 @@ class ECCollectionRemoveProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceMultipleInSameClass() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;

@@ -19,6 +19,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Set;
+import java.util.UUID;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -117,7 +118,7 @@ public class JCFListToMutableList extends Recipe {
                         // java.util.List<String>
                         // Replace with just MutableList<String> and add import
                         J.Identifier mutableListIdent = new J.Identifier(
-                            java.util.UUID.randomUUID(),
+                            UUID.randomUUID(),
                             clazz.getPrefix(),
                             clazz.getMarkers(),
                             "MutableList",
@@ -129,7 +130,7 @@ public class JCFListToMutableList extends Recipe {
                 } else if (typeExpr instanceof J.FieldAccess) {
                     // Fully qualified without generics: java.util.List variable = ...
                     J.Identifier mutableListIdent = new J.Identifier(
-                        java.util.UUID.randomUUID(),
+                        UUID.randomUUID(),
                         typeExpr.getPrefix(),
                         typeExpr.getMarkers(),
                         "MutableList",
@@ -141,7 +142,7 @@ public class JCFListToMutableList extends Recipe {
 
                 if (newTypeExpr != null) {
                     this.maybeAddImport(MUTABLE_LIST);
-                    doAfterVisit(new RemoveUnusedImports().getVisitor());
+                    this.doAfterVisit(new RemoveUnusedImports().getVisitor());
                     return vd.withTypeExpression(newTypeExpr);
                 }
 

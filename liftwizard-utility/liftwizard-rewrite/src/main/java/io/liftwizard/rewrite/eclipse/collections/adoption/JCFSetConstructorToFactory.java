@@ -160,10 +160,9 @@ public class JCFSetConstructorToFactory extends Recipe {
                             String typeParams = paramType
                                 .getTypeParameters()
                                 .stream()
-                                .map(tp -> {
+                                .map(tp ->
                                     // Get the source representation of the type parameter
-                                    return tp.print(this.getCursor());
-                                })
+                                    tp.print(this.getCursor()))
                                 .collect(Collectors.joining(", "));
 
                             String templatePrefix = isTreeSet ? "SortedSets" : "Sets";

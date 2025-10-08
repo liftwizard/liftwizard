@@ -118,7 +118,7 @@ public class JCFListConstructorToFactory extends Recipe {
             }
 
             // Ensure imports are properly ordered
-            doAfterVisit(new OrderImports(false).getVisitor());
+            this.doAfterVisit(new OrderImports(false).getVisitor());
 
             // Check if this is a diamond operator by looking at the type parameters
             boolean isDiamondOperator =
@@ -134,10 +134,9 @@ public class JCFListConstructorToFactory extends Recipe {
             String typeParams = paramType
                 .getTypeParameters()
                 .stream()
-                .map(tp -> {
+                .map(tp ->
                     // Get the source representation of the type parameter
-                    return tp.print(this.getCursor());
-                })
+                    tp.print(this.getCursor()))
                 .collect(Collectors.joining(", "));
 
             JavaTemplate genericTemplate = JavaTemplate.builder("Lists.mutable.<" + typeParams + ">empty()")

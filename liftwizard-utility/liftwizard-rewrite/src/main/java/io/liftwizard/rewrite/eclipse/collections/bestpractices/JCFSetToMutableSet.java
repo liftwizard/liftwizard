@@ -19,6 +19,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Set;
+import java.util.UUID;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -110,7 +111,7 @@ public class JCFSetToMutableSet extends Recipe {
                             // java.util.Set<String>
                             // Replace with just MutableSet<String> and add import
                             J.Identifier mutableSetIdent = new J.Identifier(
-                                java.util.UUID.randomUUID(),
+                                UUID.randomUUID(),
                                 clazz.getPrefix(),
                                 clazz.getMarkers(),
                                 "MutableSet",
@@ -123,7 +124,7 @@ public class JCFSetToMutableSet extends Recipe {
                     } else if (typeExpr instanceof J.FieldAccess) {
                         // Fully qualified without generics: java.util.Set variable = ...
                         J.Identifier mutableSetIdent = new J.Identifier(
-                            java.util.UUID.randomUUID(),
+                            UUID.randomUUID(),
                             typeExpr.getPrefix(),
                             typeExpr.getMarkers(),
                             "MutableSet",

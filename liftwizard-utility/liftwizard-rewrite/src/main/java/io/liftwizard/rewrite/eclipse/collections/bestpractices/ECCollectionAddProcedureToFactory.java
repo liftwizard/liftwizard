@@ -82,8 +82,8 @@ public class ECCollectionAddProcedureToFactory extends Recipe {
                 }
 
                 // Replace with CollectionAddProcedure.on() static factory method
-                return collectionAddProcedureOnTemplate.apply(
-                    getCursor(),
+                return this.collectionAddProcedureOnTemplate.apply(
+                    this.getCursor(),
                     nc.getCoordinates().replace(),
                     nc.getArguments().get(0)
                 );

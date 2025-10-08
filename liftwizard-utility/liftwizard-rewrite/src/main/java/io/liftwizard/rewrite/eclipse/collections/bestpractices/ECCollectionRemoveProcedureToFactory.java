@@ -82,8 +82,8 @@ public class ECCollectionRemoveProcedureToFactory extends Recipe {
                 }
 
                 // Replace with CollectionRemoveProcedure.on() static factory method
-                return collectionRemoveProcedureOnTemplate.apply(
-                    getCursor(),
+                return this.collectionRemoveProcedureOnTemplate.apply(
+                    this.getCursor(),
                     nc.getCoordinates().replace(),
                     nc.getArguments().get(0)
                 );

@@ -311,7 +311,7 @@ class JCFSetConstructorToFactoryTest implements RewriteTest {
 
     @Test
     void hashSetDiamondOperatorShouldNotAddExplicitGenerics() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.HashSet;\n" +
                 "import java.util.Set;\n" +
@@ -336,7 +336,7 @@ class JCFSetConstructorToFactoryTest implements RewriteTest {
 
     @Test
     void treeSetDiamondOperatorShouldNotAddExplicitGenerics() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.TreeSet;\n" +
                 "import java.util.Set;\n" +
@@ -361,7 +361,7 @@ class JCFSetConstructorToFactoryTest implements RewriteTest {
 
     @Test
     void explicitGenericsShouldBePreserved() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.HashSet;\n" +
                 "import java.util.Set;\n" +
@@ -386,7 +386,7 @@ class JCFSetConstructorToFactoryTest implements RewriteTest {
 
     @Test
     void shouldAddImportAndNotUseFullyQualifiedName() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.HashSet;\n" +
                 "\n" +
@@ -408,7 +408,7 @@ class JCFSetConstructorToFactoryTest implements RewriteTest {
 
     @Test
     void nestedGenericsWithDiamondOperator() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.HashSet;\n" +
                 "import java.util.Set;\n" +
@@ -435,7 +435,7 @@ class JCFSetConstructorToFactoryTest implements RewriteTest {
 
     @Test
     void wildcardGenerics() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 "import java.util.HashSet;\n" +
                 "import java.util.Set;\n" +

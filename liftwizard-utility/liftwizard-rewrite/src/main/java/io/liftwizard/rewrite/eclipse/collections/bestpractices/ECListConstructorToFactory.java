@@ -91,7 +91,7 @@ public class ECListConstructorToFactory extends Recipe {
                 this.maybeRemoveImport(FAST_LIST);
 
                 // Ensure imports are properly ordered
-                doAfterVisit(new OrderImports(false).getVisitor());
+                this.doAfterVisit(new OrderImports(false).getVisitor());
 
                 // Check if it's a parameterized type
                 if (nc.getClazz() instanceof J.ParameterizedType paramType) {

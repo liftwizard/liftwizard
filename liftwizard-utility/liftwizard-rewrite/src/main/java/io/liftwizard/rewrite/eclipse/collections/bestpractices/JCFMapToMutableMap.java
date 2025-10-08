@@ -19,6 +19,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Set;
+import java.util.UUID;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -108,7 +109,7 @@ public class JCFMapToMutableMap extends Recipe {
                             // java.util.Map<K, V>
                             // Replace with just MutableMap<K, V> and add import
                             J.Identifier mutableMapIdent = new J.Identifier(
-                                java.util.UUID.randomUUID(),
+                                UUID.randomUUID(),
                                 clazz.getPrefix(),
                                 clazz.getMarkers(),
                                 "MutableMap",
@@ -121,7 +122,7 @@ public class JCFMapToMutableMap extends Recipe {
                     } else if (typeExpr instanceof J.FieldAccess) {
                         // Fully qualified without generics: java.util.Map variable = ...
                         J.Identifier mutableMapIdent = new J.Identifier(
-                            java.util.UUID.randomUUID(),
+                            UUID.randomUUID(),
                             typeExpr.getPrefix(),
                             typeExpr.getMarkers(),
                             "MutableMap",

@@ -16,9 +16,11 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -30,13 +32,13 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
     public void defaults(RecipeSpec spec) {
         spec
             .recipe(new ECCollectionAddProcedureToFactory())
-            .parser(org.openrewrite.java.JavaParser.fromJavaVersion().classpath("eclipse-collections"));
+            .parser(JavaParser.fromJavaVersion().classpath("eclipse-collections"));
     }
 
     @Test
     @DocumentExample
     void replaceParameterizedCollectionAddProcedure() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
@@ -68,7 +70,7 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceDiamondOperatorCollectionAddProcedure() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
@@ -100,7 +102,7 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceRawTypeCollectionAddProcedure() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
@@ -131,9 +133,9 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Disabled("Type resolution issues with CollectionAddProcedure")
+    @Disabled("Type resolution issues with CollectionAddProcedure")
     void doNotChangeConstructorWithNoArguments() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
@@ -150,9 +152,9 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Disabled("Type resolution issues with CollectionAddProcedure")
+    @Disabled("Type resolution issues with CollectionAddProcedure")
     void doNotChangeConstructorWithMultipleArguments() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
@@ -174,7 +176,7 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceInMethodArgument() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
@@ -208,7 +210,7 @@ class ECCollectionAddProcedureToFactoryTest implements RewriteTest {
 
     @Test
     void replaceMultipleInSameClass() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;

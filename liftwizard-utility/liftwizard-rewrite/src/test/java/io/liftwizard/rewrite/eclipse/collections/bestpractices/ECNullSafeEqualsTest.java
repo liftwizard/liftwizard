@@ -19,6 +19,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -30,13 +31,13 @@ class ECNullSafeEqualsTest implements RewriteTest {
     public void defaults(RecipeSpec spec) {
         spec
             .recipe(new ECNullSafeEquals())
-            .parser(org.openrewrite.java.JavaParser.fromJavaVersion().classpath("eclipse-collections"));
+            .parser(JavaParser.fromJavaVersion().classpath("eclipse-collections"));
     }
 
     @Test
     @DocumentExample
     void replacePattern1NotEquals() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -60,7 +61,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replacePattern2Equals() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -84,7 +85,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replacePattern3ReferenceOrEquals() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -108,7 +109,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replacePattern4ShortCircuitOr() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -132,7 +133,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replacePattern5ShortCircuitOrReversed() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -156,7 +157,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replacePattern6EitherNull() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -180,7 +181,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void doNotReplaceSimpleEquals() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -195,7 +196,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void doNotReplaceSimpleNullCheck() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -210,7 +211,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void doNotReplaceDifferentTernaryPattern() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -225,7 +226,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replaceNestedInIfStatement() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -253,7 +254,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replaceWithDifferentTypes() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -277,7 +278,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void replaceMultipleInSameClass() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -317,7 +318,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void doNotReplaceWhenVariablesDontMatch() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -332,7 +333,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void doNotReplaceWhenNotEqualsMethod() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {
@@ -347,7 +348,7 @@ class ECNullSafeEqualsTest implements RewriteTest {
 
     @Test
     void doNotReplaceWhenEqualsHasMultipleArguments() {
-        rewriteRun(
+        this.rewriteRun(
             java(
                 """
                 class Test {

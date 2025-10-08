@@ -80,23 +80,23 @@ public class ECNullSafeEquals extends Recipe {
                 // Pattern 1: left == null ? right != null : !left.equals(right)
                 // Result: !Comparators.nullSafeEquals(left, right)
                 if (e instanceof J.Ternary ternary) {
-                    if (isNullCheck(ternary.getCondition(), true)) {
+                    if (this.isNullCheck(ternary.getCondition(), true)) {
                         J.Binary nullCheck = (J.Binary) ternary.getCondition();
                         Expression left = nullCheck.getLeft();
 
                         if (
                             ternary.getTruePart() instanceof J.Binary truePart &&
                             truePart.getOperator() == J.Binary.Type.NotEqual &&
-                            isNullLiteral(truePart.getRight())
+                            this.isNullLiteral(truePart.getRight())
                         ) {
                             Expression right = truePart.getLeft();
 
                             if (
                                 ternary.getFalsePart() instanceof J.Unary unary &&
                                 unary.getOperator() == J.Unary.Type.Not &&
-                                isEqualsCall(unary.getExpression(), left, right)
+                                this.isEqualsCall(unary.getExpression(), left, right)
                             ) {
-                                return replaceWithNullSafeEquals(ternary, left, right, true);
+                                return this.replaceWithNullSafeEquals(ternary, left, right, true);
                             }
                         }
                     }
@@ -105,19 +105,19 @@ public class ECNullSafeEquals extends Recipe {
                 // Pattern 2: left == null ? right == null : left.equals(right)
                 // Result: Comparators.nullSafeEquals(left, right)
                 if (e instanceof J.Ternary ternary) {
-                    if (isNullCheck(ternary.getCondition(), true)) {
+                    if (this.isNullCheck(ternary.getCondition(), true)) {
                         J.Binary nullCheck = (J.Binary) ternary.getCondition();
                         Expression left = nullCheck.getLeft();
 
                         if (
                             ternary.getTruePart() instanceof J.Binary truePart &&
                             truePart.getOperator() == J.Binary.Type.Equal &&
-                            isNullLiteral(truePart.getRight())
+                            this.isNullLiteral(truePart.getRight())
                         ) {
                             Expression right = truePart.getLeft();
 
-                            if (isEqualsCall(ternary.getFalsePart(), left, right)) {
-                                return replaceWithNullSafeEquals(ternary, left, right, false);
+                            if (this.isEqualsCall(ternary.getFalsePart(), left, right)) {
+                                return this.replaceWithNullSafeEquals(ternary, left, right, false);
                             }
                         }
                     }
@@ -126,14 +126,14 @@ public class ECNullSafeEquals extends Recipe {
                 // Pattern 3: left == null ? right == null : left == right || left.equals(right)
                 // Result: Comparators.nullSafeEquals(left, right)
                 if (e instanceof J.Ternary ternary) {
-                    if (isNullCheck(ternary.getCondition(), true)) {
+                    if (this.isNullCheck(ternary.getCondition(), true)) {
                         J.Binary nullCheck = (J.Binary) ternary.getCondition();
                         Expression left = nullCheck.getLeft();
 
                         if (
                             ternary.getTruePart() instanceof J.Binary truePart &&
                             truePart.getOperator() == J.Binary.Type.Equal &&
-                            isNullLiteral(truePart.getRight())
+                            this.isNullLiteral(truePart.getRight())
                         ) {
                             Expression right = truePart.getLeft();
 
@@ -144,11 +144,11 @@ public class ECNullSafeEquals extends Recipe {
                                 if (
                                     falsePart.getLeft() instanceof J.Binary referenceCheck &&
                                     referenceCheck.getOperator() == J.Binary.Type.Equal &&
-                                    isSameVariable(referenceCheck.getLeft(), left) &&
-                                    isSameVariable(referenceCheck.getRight(), right) &&
-                                    isEqualsCall(falsePart.getRight(), left, right)
+                                    this.isSameVariable(referenceCheck.getLeft(), left) &&
+                                    this.isSameVariable(referenceCheck.getRight(), right) &&
+                                    this.isEqualsCall(falsePart.getRight(), left, right)
                                 ) {
-                                    return replaceWithNullSafeEquals(ternary, left, right, false);
+                                    return this.replaceWithNullSafeEquals(ternary, left, right, false);
                                 }
                             }
                         }
@@ -171,11 +171,11 @@ public class ECNullSafeEquals extends Recipe {
                             if (
                                 andExpr.getLeft() instanceof J.Binary notNullCheck &&
                                 notNullCheck.getOperator() == J.Binary.Type.NotEqual &&
-                                isSameVariable(notNullCheck.getLeft(), left) &&
-                                isNullLiteral(notNullCheck.getRight()) &&
-                                isEqualsCall(andExpr.getRight(), left, right)
+                                this.isSameVariable(notNullCheck.getLeft(), left) &&
+                                this.isNullLiteral(notNullCheck.getRight()) &&
+                                this.isEqualsCall(andExpr.getRight(), left, right)
                             ) {
-                                return replaceWithNullSafeEquals(binary, left, right, false);
+                                return this.replaceWithNullSafeEquals(binary, left, right, false);
                             }
                         }
                     }
@@ -197,11 +197,11 @@ public class ECNullSafeEquals extends Recipe {
                             if (
                                 andExpr.getLeft() instanceof J.Binary notNullCheck &&
                                 notNullCheck.getOperator() == J.Binary.Type.NotEqual &&
-                                isSameVariable(notNullCheck.getLeft(), left) &&
-                                isNullLiteral(notNullCheck.getRight()) &&
-                                isEqualsCall(andExpr.getRight(), left, right)
+                                this.isSameVariable(notNullCheck.getLeft(), left) &&
+                                this.isNullLiteral(notNullCheck.getRight()) &&
+                                this.isEqualsCall(andExpr.getRight(), left, right)
                             ) {
-                                return replaceWithNullSafeEquals(binary, left, right, false);
+                                return this.replaceWithNullSafeEquals(binary, left, right, false);
                             }
                         }
                     }
@@ -220,7 +220,7 @@ public class ECNullSafeEquals extends Recipe {
                         if (
                             orCondition.getLeft() instanceof J.Binary leftNullCheck &&
                             leftNullCheck.getOperator() == J.Binary.Type.Equal &&
-                            isNullLiteral(leftNullCheck.getRight())
+                            this.isNullLiteral(leftNullCheck.getRight())
                         ) {
                             left = leftNullCheck.getLeft();
                         }
@@ -228,7 +228,7 @@ public class ECNullSafeEquals extends Recipe {
                         if (
                             orCondition.getRight() instanceof J.Binary rightNullCheck &&
                             rightNullCheck.getOperator() == J.Binary.Type.Equal &&
-                            isNullLiteral(rightNullCheck.getRight())
+                            this.isNullLiteral(rightNullCheck.getRight())
                         ) {
                             right = rightNullCheck.getLeft();
                         }
@@ -238,11 +238,11 @@ public class ECNullSafeEquals extends Recipe {
                             right != null &&
                             ternary.getTruePart() instanceof J.Binary truePart &&
                             truePart.getOperator() == J.Binary.Type.Equal &&
-                            isSameVariable(truePart.getLeft(), left) &&
-                            isSameVariable(truePart.getRight(), right) &&
-                            isEqualsCall(ternary.getFalsePart(), left, right)
+                            this.isSameVariable(truePart.getLeft(), left) &&
+                            this.isSameVariable(truePart.getRight(), right) &&
+                            this.isEqualsCall(ternary.getFalsePart(), left, right)
                         ) {
-                            return replaceWithNullSafeEquals(ternary, left, right, false);
+                            return this.replaceWithNullSafeEquals(ternary, left, right, false);
                         }
                     }
                 }
@@ -253,7 +253,7 @@ public class ECNullSafeEquals extends Recipe {
             private boolean isNullCheck(Expression expr, boolean checkEqual) {
                 if (expr instanceof J.Binary binary) {
                     J.Binary.Type expectedOp = checkEqual ? J.Binary.Type.Equal : J.Binary.Type.NotEqual;
-                    return binary.getOperator() == expectedOp && isNullLiteral(binary.getRight());
+                    return binary.getOperator() == expectedOp && this.isNullLiteral(binary.getRight());
                 }
                 return false;
             }
@@ -267,8 +267,8 @@ public class ECNullSafeEquals extends Recipe {
                     if (
                         "equals".equals(method.getSimpleName()) &&
                         method.getArguments().size() == 1 &&
-                        isSameVariable(method.getSelect(), expectedReceiver) &&
-                        isSameVariable(method.getArguments().get(0), expectedArg)
+                        this.isSameVariable(method.getSelect(), expectedReceiver) &&
+                        this.isSameVariable(method.getArguments().get(0), expectedArg)
                     ) {
                         return true;
                     }
@@ -290,10 +290,10 @@ public class ECNullSafeEquals extends Recipe {
                 boolean negate
             ) {
                 this.maybeAddImport(COMPARATORS);
-                doAfterVisit(new OrderImports(false).getVisitor());
+                this.doAfterVisit(new OrderImports(false).getVisitor());
 
-                JavaTemplate template = negate ? notNullSafeEqualsTemplate : nullSafeEqualsTemplate;
-                return template.apply(getCursor(), original.getCoordinates().replace(), left, right);
+                JavaTemplate template = negate ? this.notNullSafeEqualsTemplate : this.nullSafeEqualsTemplate;
+                return template.apply(this.getCursor(), original.getCoordinates().replace(), left, right);
             }
         };
     }

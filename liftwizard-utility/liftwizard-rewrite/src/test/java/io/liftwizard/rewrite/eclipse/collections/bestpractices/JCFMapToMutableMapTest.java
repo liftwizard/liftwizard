@@ -22,6 +22,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
+import org.openrewrite.test.TypeValidation;
 
 import static org.openrewrite.java.Assertions.java;
 
@@ -398,7 +399,7 @@ class JCFMapToMutableMapTest implements RewriteTest {
     @Test
     void shouldNotChangeJavaDocReferences() {
         this.rewriteRun(
-                spec -> spec.typeValidationOptions(org.openrewrite.test.TypeValidation.none()),
+                spec -> spec.typeValidationOptions(TypeValidation.none()),
                 java(
                     """
                     import java.util.Map;

@@ -87,7 +87,7 @@ public class ECSimplifyNegatedSatisfies extends Recipe {
                     }
 
                     // Skip transformation if we're inside anySatisfy or noneSatisfy method AND the call is on 'this'
-                    J.MethodDeclaration enclosingMethod = getCursor().firstEnclosing(J.MethodDeclaration.class);
+                    J.MethodDeclaration enclosingMethod = this.getCursor().firstEnclosing(J.MethodDeclaration.class);
                     if (enclosingMethod != null) {
                         String methodName = enclosingMethod.getSimpleName();
                         if ("anySatisfy".equals(methodName) || "noneSatisfy".equals(methodName)) {

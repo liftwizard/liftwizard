@@ -73,7 +73,7 @@ public class ECSimplifyNegatedIterateSatisfies extends Recipe {
                 }
 
                 // Skip double negation: !!expr
-                Object parent = getCursor().getParentTreeCursor().getValue();
+                Object parent = this.getCursor().getParentTreeCursor().getValue();
                 if (parent instanceof J.Unary && ((J.Unary) parent).getOperator() == J.Unary.Type.Not) {
                     return e;
                 }
