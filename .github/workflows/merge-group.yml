@@ -15,7 +15,7 @@ jobs:
   maven-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -26,7 +26,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - run: just test
 
@@ -37,7 +37,7 @@ jobs:
   maven-spotbugs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -48,7 +48,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - run: just spotbugs
 
@@ -59,7 +59,7 @@ jobs:
   maven-errorprone:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -70,7 +70,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Add Error Prone problem matcher
         run: echo "::add-matcher::.github/errorprone.json"
@@ -84,7 +84,7 @@ jobs:
   maven-errorprone-strict:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -95,7 +95,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Add Error Prone problem matcher
         run: echo "::add-matcher::.github/errorprone.json"
@@ -109,7 +109,7 @@ jobs:
   maven-enforcer:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -120,7 +120,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Run maven-enforcer-plugin
         run: just enforcer
@@ -132,7 +132,7 @@ jobs:
   maven-dependency:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -143,7 +143,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Run maven-dependency-plugin
         run: just dependency
@@ -155,7 +155,7 @@ jobs:
   maven-javadoc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -166,7 +166,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Run maven-javadoc-plugin
         run: just javadoc
@@ -179,7 +179,7 @@ jobs:
     name: checkstyle xml (semantics)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -193,7 +193,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Produce Checkstyle XML: Semantics"
         run: just checkstyle-profile checkstyle-semantics false
@@ -210,7 +210,7 @@ jobs:
     name: checkstyle xml (semantics strict)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -224,7 +224,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Produce Checkstyle XML: Strict Semantics"
         run: just checkstyle-profile checkstyle-semantics-strict false
@@ -241,7 +241,7 @@ jobs:
     name: checkstyle xml (formatting)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -255,7 +255,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Produce Checkstyle XML: Formatting"
         run: just checkstyle-profile checkstyle-formatting false
@@ -271,7 +271,7 @@ jobs:
   maven-rewrite:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -283,7 +283,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Run rewrite-maven-plugin (dry run)
         run: just rewrite-dry-run
@@ -296,7 +296,7 @@ jobs:
   maven-reproducible:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -307,7 +307,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: Run artifact:check-buildplan
         run: just reproducible
@@ -319,7 +319,7 @@ jobs:
   spotless-formats:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -333,7 +333,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Spotless Check: Formats"
         run: just spotless formats
@@ -348,7 +348,7 @@ jobs:
   spotless-java-cleanthat:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -362,7 +362,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Spotless Check: Java cleanthat"
         run: just spotless java-cleanthat
@@ -377,7 +377,7 @@ jobs:
   spotless-java:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -391,7 +391,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Spotless Check: Java"
         run: just spotless java
@@ -406,7 +406,7 @@ jobs:
   spotless-prettier-java-sort-imports:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -420,7 +420,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Spotless Check: Prettier Java (with sorted imports)"
         run: just spotless prettier-java-sort-imports
@@ -435,7 +435,7 @@ jobs:
   spotless-sql:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -449,7 +449,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Spotless Check: Sql"
         run: just spotless sql
@@ -464,7 +464,7 @@ jobs:
   spotless-pom:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -478,7 +478,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Spotless Check: Pom"
         run: just spotless pom
@@ -493,11 +493,11 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Prettier Format Check"
         run: npx prettier --check .
@@ -505,11 +505,11 @@ jobs:
   biome:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: jdx/mise-action@v2
+      - uses: jdx/mise-action@v3
 
       - name: "Biome Format Check"
         run: npx @biomejs/biome ci
@@ -517,7 +517,8 @@ jobs:
   reviewdog-markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
       - uses: reviewdog/action-markdownlint@v0.26.0
         with:
           reporter: github-pr-check
@@ -527,7 +528,8 @@ jobs:
   reviewdog-yamllint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
       - uses: reviewdog/action-yamllint@v1.21.0
         with:
           reporter: github-pr-check
@@ -537,7 +539,8 @@ jobs:
   reviewdog-actionlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
       - uses: reviewdog/action-actionlint@v1.65.2
         with:
           reporter: github-pr-check
@@ -547,7 +550,8 @@ jobs:
   reviewdog-shellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
       - uses: reviewdog/action-shellcheck@v1.29.0
         with:
           reporter: github-pr-check
