@@ -1,0 +1,25 @@
+#
+# Copyright 2025 Craig Motlin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.eclipse.collections.adoptionrisks.EclipseCollectionsAdoptionRisks
+displayName: Eclipse Collections adoption recipes with potential semantic changes
+description: |
+  Collection of recipes that help adopt Eclipse Collections patterns but may change program semantics.
+  These recipes should be applied with careful review as they may change behavior when collections contain null values.
+recipeList:
+  - io.liftwizard.rewrite.eclipse.collections.adoptionrisks.ECDetectToSatisfies
