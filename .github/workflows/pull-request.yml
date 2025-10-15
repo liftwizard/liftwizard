@@ -183,7 +183,7 @@ jobs:
 
       - name: Run Prettier Format
         run: |
-          npx prettier --write .
+          npx prettier --write . '!.github/workflows/**'
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-prettier"
@@ -525,7 +525,7 @@ jobs:
           just test
 
           npx @biomejs/biome format --write
-          npx prettier --write .
+          npx prettier --write . '!.github/workflows/**'
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-liftwizard-file-match-rerecord"
