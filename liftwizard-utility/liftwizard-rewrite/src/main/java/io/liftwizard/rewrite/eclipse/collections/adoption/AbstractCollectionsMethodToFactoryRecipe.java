@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.eclipse.collections.adoption;
 
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Objects;
@@ -167,7 +168,7 @@ public abstract class AbstractCollectionsMethodToFactoryRecipe extends Recipe {
                         public {1} java.util.{0}{1} {2}({3}) '{ return null; }'
                     '}'
                 '}'""";
-            String factoryStubCode = java.text.MessageFormat.format(
+            String factoryStubCode = MessageFormat.format(
                 factoryTemplateCode,
                 this.collectionType,
                 this.getTypeParameters(),
