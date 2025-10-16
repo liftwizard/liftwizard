@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.liftwizard.rewrite.eclipse.collections;
+package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -30,7 +30,7 @@ import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class SimplifyNegatedSatisfies extends Recipe {
+public class ECSimplifyNegatedSatisfies extends Recipe {
 
     private static final MethodMatcher NONE_SATISFY_MATCHER = new MethodMatcher(
         "org.eclipse.collections.api..* noneSatisfy(..)",
@@ -43,7 +43,7 @@ public class SimplifyNegatedSatisfies extends Recipe {
 
     @Override
     public String getDisplayName() {
-        return "Simplify negated satisfies checks";
+        return "`!noneSatisfy()` → `anySatisfy()`";
     }
 
     @Override
@@ -75,26 +75,66 @@ public class SimplifyNegatedSatisfies extends Recipe {
                 public Expression visitExpression(Expression expression, ExecutionContext ctx) {
                     Expression e = (Expression) super.visitExpression(expression, ctx);
 
-                    if (!(e instanceof J.Unary)) {
+                    if (!(e instanceof J.Unary unary)) {
                         return e;
                     }
 
-                    J.Unary unary = (J.Unary) e;
                     if (
                         unary.getOperator() != J.Unary.Type.Not ||
-                        !(unary.getExpression() instanceof J.MethodInvocation)
+                        !(unary.getExpression() instanceof J.MethodInvocation methodInvocation)
                     ) {
                         return e;
                     }
 
-                    J.MethodInvocation methodInvocation = (J.MethodInvocation) unary.getExpression();
+                    // Skip transformation if we're inside anySatisfy or noneSatisfy method AND the call is on 'this'
+                    J.MethodDeclaration enclosingMethod = this.getCursor().firstEnclosing(J.MethodDeclaration.class);
+                    if (enclosingMethod != null) {
+                        String methodName = enclosingMethod.getSimpleName();
+                        if ("anySatisfy".equals(methodName) || "noneSatisfy".equals(methodName)) {
+                            // Check if the method is being called on 'this' (either explicitly or implicitly)
+                            Expression select = methodInvocation.getSelect();
+                            if (
+                                select == null ||
+                                (select instanceof J.Identifier &&
+                                    "this".equals(((J.Identifier) select).getSimpleName()))
+                            ) {
+                                return e;
+                            }
+                        }
+                    }
 
                     if (NONE_SATISFY_MATCHER.matches(methodInvocation)) {
+                        // Check if we're inside the anySatisfy() method to avoid issues
+
+                        if (
+                            enclosingMethod != null &&
+                            "anySatisfy".equals(enclosingMethod.getSimpleName()) &&
+                            methodInvocation.getSelect() instanceof J.Identifier &&
+                            "this".equals(((J.Identifier) methodInvocation.getSelect()).getSimpleName())
+                        ) {
+                            // Don't transform this.noneSatisfy() inside anySatisfy() method
+                            return e;
+                        }
+
                         // Transform !noneSatisfy(predicate) to anySatisfy(predicate)
                         return methodInvocation
                             .withName(methodInvocation.getName().withSimpleName("anySatisfy"))
                             .withPrefix(unary.getPrefix());
-                    } else if (ANY_SATISFY_MATCHER.matches(methodInvocation)) {
+                    }
+
+                    if (ANY_SATISFY_MATCHER.matches(methodInvocation)) {
+                        // Check if we're inside the noneSatisfy() method to avoid issues
+
+                        if (
+                            enclosingMethod != null &&
+                            "noneSatisfy".equals(enclosingMethod.getSimpleName()) &&
+                            methodInvocation.getSelect() instanceof J.Identifier &&
+                            "this".equals(((J.Identifier) methodInvocation.getSelect()).getSimpleName())
+                        ) {
+                            // Don't transform this.anySatisfy() inside noneSatisfy() method
+                            return e;
+                        }
+
                         // Transform !anySatisfy(predicate) to noneSatisfy(predicate)
                         return methodInvocation
                             .withName(methodInvocation.getName().withSimpleName("noneSatisfy"))
