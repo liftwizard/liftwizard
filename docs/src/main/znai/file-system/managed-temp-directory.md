@@ -1,10 +1,10 @@
 # ManagedTempDirectory
 
-`ManagedTempDirectory` provides automatic cleanup of temporary directories, ensuring they are deleted even if the JVM terminates unexpectedly.
+`ManagedTempDirectory` provides automatic cleanup of temporary directories using JVM shutdown hooks.
 
 ## Problem
 
-When creating temporary directories in Java, it's easy to forget to clean them up, leading to disk space issues. Even when using try-with-resources, directories won't be cleaned up if the JVM crashes or is forcefully terminated.
+When creating temporary directories in Java, it's easy to forget to clean them up, leading to disk space issues.
 
 ## Solution
 
@@ -57,11 +57,13 @@ boolean deleted = tempDir.tryClose(); // Returns true if successfully deleted
 
 ### Automatic Shutdown Hook
 
-All created directories are registered with a JVM shutdown hook, ensuring cleanup even if:
+All created directories are registered with a JVM shutdown hook, ensuring cleanup when:
 
-- The application crashes
+- The application exits normally
 - `System.exit()` is called
-- The JVM is terminated normally
+- The JVM receives termination signals like SIGTERM
+
+Shutdown hooks do not run if the JVM is killed forcefully (e.g., `kill -9`) or crashes.
 
 ### Thread-Safe
 
