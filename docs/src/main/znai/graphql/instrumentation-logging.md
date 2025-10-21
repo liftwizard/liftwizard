@@ -37,7 +37,7 @@ Here's an example of what SQL logging might look like with MDC attached when for
   "liftwizard.p6spy.category": "statement",
   "liftwizard.p6spy.prepared": "select t0.key,t0.title,t0.description_markdown,t0.imgur_image_id,t0.created_by_id,t0.created_on,t0.last_updated_by_id,t0.system_from,t0.system_to from BLUEPRINT t0 inner join FIREBASE_USER t1 on t0.created_by_id = t1.user_id where  t1.system_to = ? and substr(t1.display_name,1,9) = ? and t0.system_to = ?",
   "liftwizard.p6spy.sql": "select t0.key,t0.title,t0.description_markdown,t0.imgur_image_id,t0.created_by_id,t0.created_on,t0.last_updated_by_id,t0.system_from,t0.system_to from BLUEPRINT t0 inner join FIREBASE_USER t1 on t0.created_by_id = t1.user_id where  t1.system_to = '9999-12-01T18:59:00.000-0500' and substr(t1.display_name,1,9) = 'factorioi' and t0.system_to = '9999-12-01T18:59:00.000-0500'",
-  "liftwizard.p6spy.url": "jdbc:p6spy:h2:tcp://localhost:9096/liftwizard-app-h2;query_timeout=600000",
+  "liftwizard.p6spy.url": "jdbc:p6spy:h2:tcp://localhost:9096/liftwizard-app-h2;NON_KEYWORDS=USER;query_timeout=600000",
   "caller_class_name": "io.liftwizard.logging.p6spy.P6SpySlf4jLogger",
   "caller_method_name": "logSQL",
   "caller_file_name": "P6SpySlf4jLogger.java",

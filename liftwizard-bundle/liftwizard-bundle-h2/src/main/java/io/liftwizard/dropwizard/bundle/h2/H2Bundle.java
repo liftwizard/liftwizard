@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Craig Motlin
+ * Copyright 2025 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public class H2Bundle implements PrioritizedBundle {
         LOGGER.debug("H2 TCP Server running on port {}", h2Factory.getTcpPort());
         LOGGER.debug("H2 Web Console available at http://localhost:{}/h2-console", h2Factory.getWebPort());
         LOGGER.debug(
-            "JDBC URL for H2 Console: jdbc:h2:tcp://localhost:{}/./target/h2db/liftwizard",
+            "JDBC URL for H2 Console: jdbc:h2:tcp://localhost:{}/./target/h2db/liftwizard;NON_KEYWORDS=USER",
             h2Factory.getTcpPort()
         );
 
