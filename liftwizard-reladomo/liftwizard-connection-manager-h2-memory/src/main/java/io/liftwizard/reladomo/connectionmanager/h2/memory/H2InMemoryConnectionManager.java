@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Craig Motlin
+ * Copyright 2025 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public final class H2InMemoryConnectionManager implements SourcelessConnectionMa
     private static DataSource createDataSource() {
         PoolProperties poolProperties = new PoolProperties();
         poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
-        poolProperties.setUrl("jdbc:p6spy:h2:mem:");
+        poolProperties.setUrl("jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER");
         poolProperties.setUsername("sa");
         poolProperties.setPassword("");
         poolProperties.setInitialSize(1);
