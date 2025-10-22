@@ -61,8 +61,9 @@ public class LogstashEncoderFactory {
     private boolean includeTags = true;
     private boolean rootCauseFirst = true;
     private List<String> truncateStackTracesAfterPrefixes = List.of(
-            "^org\\.junit\\.platform\\.engine",
-            "^org\\.junit\\.jupiter\\.engine");
+        "^org\\.junit\\.platform\\.engine",
+        "^org\\.junit\\.jupiter\\.engine"
+    );
     private ObjectNode customFields;
     private boolean prettyPrint;
     private @NotNull Include serializationInclusion = Include.NON_ABSENT;
