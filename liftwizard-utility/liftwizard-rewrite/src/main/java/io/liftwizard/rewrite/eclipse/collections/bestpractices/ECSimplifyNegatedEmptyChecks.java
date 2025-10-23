@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.liftwizard.rewrite.eclipse.collections;
+package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -30,7 +30,7 @@ import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class SimplifyNegatedEmptyChecks extends Recipe {
+public class ECSimplifyNegatedEmptyChecks extends Recipe {
 
     private static final MethodMatcher IS_EMPTY_MATCHER = new MethodMatcher(
         "org.eclipse.collections.api..* isEmpty()",
@@ -43,7 +43,7 @@ public class SimplifyNegatedEmptyChecks extends Recipe {
 
     @Override
     public String getDisplayName() {
-        return "Simplify negated empty checks";
+        return "`!isEmpty()` → `notEmpty()`";
     }
 
     @Override
@@ -70,31 +70,58 @@ public class SimplifyNegatedEmptyChecks extends Recipe {
 
         return Preconditions.check(
             check,
-            new JavaVisitor<ExecutionContext>() {
+            new JavaVisitor<>() {
                 @Override
                 public Expression visitExpression(Expression expression, ExecutionContext ctx) {
                     Expression e = (Expression) super.visitExpression(expression, ctx);
 
-                    if (!(e instanceof J.Unary)) {
+                    if (!(e instanceof J.Unary unary)) {
                         return e;
                     }
 
-                    J.Unary unary = (J.Unary) e;
                     if (
                         unary.getOperator() != J.Unary.Type.Not ||
-                        !(unary.getExpression() instanceof J.MethodInvocation)
+                        !(unary.getExpression() instanceof J.MethodInvocation methodInvocation)
                     ) {
                         return e;
                     }
 
-                    J.MethodInvocation methodInvocation = (J.MethodInvocation) unary.getExpression();
-
                     if (IS_EMPTY_MATCHER.matches(methodInvocation)) {
+                        // Check if we're inside the notEmpty() method to avoid infinite recursion
+                        J.MethodDeclaration enclosingMethod = this.getCursor().firstEnclosing(
+                            J.MethodDeclaration.class
+                        );
+                        if (
+                            enclosingMethod != null &&
+                            "notEmpty".equals(enclosingMethod.getSimpleName()) &&
+                            methodInvocation.getSelect() instanceof J.Identifier &&
+                            "this".equals(((J.Identifier) methodInvocation.getSelect()).getSimpleName())
+                        ) {
+                            // Don't transform !this.isEmpty() inside notEmpty() method
+                            return e;
+                        }
+
                         // Transform !isEmpty() to notEmpty()
                         return methodInvocation
                             .withName(methodInvocation.getName().withSimpleName("notEmpty"))
                             .withPrefix(unary.getPrefix());
-                    } else if (NOT_EMPTY_MATCHER.matches(methodInvocation)) {
+                    }
+
+                    if (NOT_EMPTY_MATCHER.matches(methodInvocation)) {
+                        // Check if we're inside the isEmpty() method to avoid infinite recursion
+                        J.MethodDeclaration enclosingMethod = this.getCursor().firstEnclosing(
+                            J.MethodDeclaration.class
+                        );
+                        if (
+                            enclosingMethod != null &&
+                            "isEmpty".equals(enclosingMethod.getSimpleName()) &&
+                            methodInvocation.getSelect() instanceof J.Identifier &&
+                            "this".equals(((J.Identifier) methodInvocation.getSelect()).getSimpleName())
+                        ) {
+                            // Don't transform !this.notEmpty() inside isEmpty() method
+                            return e;
+                        }
+
                         // Transform !notEmpty() to isEmpty()
                         return methodInvocation
                             .withName(methodInvocation.getName().withSimpleName("isEmpty"))

@@ -151,6 +151,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.eclipse.collections</groupId>
+                <artifactId>eclipse-collections-testutils</artifactId>
+                <version>12.0.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.goldmansachs.reladomo</groupId>
                 <artifactId>reladomo</artifactId>
                 <version>18.0.0</version>
