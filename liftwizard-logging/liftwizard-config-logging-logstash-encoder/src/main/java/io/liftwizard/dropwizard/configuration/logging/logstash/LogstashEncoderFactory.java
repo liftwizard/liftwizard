@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Craig Motlin
+ * Copyright 2025 Craig Motlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.logging.logstash;
 
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.validation.constraints.NotNull;
@@ -59,12 +60,9 @@ public class LogstashEncoderFactory {
     private boolean includedNonStructuredArguments;
     private boolean includeTags = true;
     private boolean rootCauseFirst = true;
-    /*
-    TODO: re-enable this after upgrading to logstash-logback-encoder 7.3
     private List<String> truncateStackTracesAfterPrefixes = List.of(
             "^org\\.junit\\.platform\\.engine",
             "^org\\.junit\\.jupiter\\.engine");
-    */
     private ObjectNode customFields;
     private boolean prettyPrint;
     private @NotNull Include serializationInclusion = Include.NON_ABSENT;
@@ -139,20 +137,15 @@ public class LogstashEncoderFactory {
         this.rootCauseFirst = rootCauseFirst;
     }
 
-    /*
-    TODO: re-enable this after upgrading to logstash-logback-encoder 7.3
     @JsonProperty
-    public List<String> getTruncateStackTracesAfterPrefixes()
-    {
+    public List<String> getTruncateStackTracesAfterPrefixes() {
         return this.truncateStackTracesAfterPrefixes;
     }
 
     @JsonProperty
-    public void setTruncateStackTracesAfterPrefixes(List<String> truncateStackTracesAfterPrefixes)
-    {
+    public void setTruncateStackTracesAfterPrefixes(List<String> truncateStackTracesAfterPrefixes) {
         this.truncateStackTracesAfterPrefixes = truncateStackTracesAfterPrefixes;
     }
-    */
 
     @JsonProperty
     public boolean isPrettyPrint() {
@@ -287,10 +280,7 @@ public class LogstashEncoderFactory {
         if (this.rootCauseFirst) {
             throwableConverter.setRootCauseFirst(true);
         }
-        /*
-        TODO: re-enable this after upgrading to logstash-logback-encoder 7.3
         this.truncateStackTracesAfterPrefixes.forEach(throwableConverter::addTruncateAfter);
-        */
         return throwableConverter;
     }
 
