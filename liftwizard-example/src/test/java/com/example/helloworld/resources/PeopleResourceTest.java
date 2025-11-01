@@ -28,7 +28,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 /**
  * Unit tests for {@link PeopleResource}.
  */
-public class PeopleResourceTest {
+class PeopleResourceTest {
 
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
@@ -65,7 +65,7 @@ public class PeopleResourceTest {
     private final PersonDTO personDTO = new PersonDTO("Full Name", "Job Title");
 
     @Test
-    public void createPerson() throws JSONException {
+    void createPerson() throws JSONException {
         Client client = this.dropwizardAppExtension.client();
 
         {
