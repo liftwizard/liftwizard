@@ -34,8 +34,7 @@ class ManagedTempDirectoryTest {
     void createTempDirectory_shouldCreateDirectoryThatExistsAndIsWritable() throws IOException {
         Path tempDir = ManagedTempDirectory.createTempDirectory("test-prefix");
 
-        assertThat(tempDir).exists();
-        assertThat(tempDir).isDirectory();
+        assertThat(tempDir).exists().isDirectory();
         assertThat(tempDir.toFile().canWrite()).isTrue();
         assertThat(tempDir.getFileName().toString()).startsWith("test-prefix");
 
@@ -47,8 +46,7 @@ class ManagedTempDirectoryTest {
         try (ManagedTempDirectory managedDir = ManagedTempDirectory.create("managed-test")) {
             Path tempDir = managedDir.getPath();
 
-            assertThat(tempDir).exists();
-            assertThat(tempDir).isDirectory();
+            assertThat(tempDir).exists().isDirectory();
             assertThat(tempDir.getFileName().toString()).startsWith("managed-test");
 
             Path testFile = tempDir.resolve("test-file.txt");
