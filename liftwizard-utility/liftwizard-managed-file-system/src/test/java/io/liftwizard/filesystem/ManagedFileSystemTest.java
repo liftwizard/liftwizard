@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ManagedFileSystemTest {
 
     @Test
-    public void smokeTest() throws URISyntaxException {
+    void smokeTest() throws URISyntaxException {
         Path path1 = ManagedFileSystem.get(new URI("file:///"));
         assertTrue(path1.isAbsolute());
         assertTrue(path1.toFile().exists());

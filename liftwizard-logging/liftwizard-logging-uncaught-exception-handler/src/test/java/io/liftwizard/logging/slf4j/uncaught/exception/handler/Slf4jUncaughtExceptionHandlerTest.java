@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 class Slf4jUncaughtExceptionHandlerTest {
 
     @Test
-    void testUncaughtException() {
+    void uncaughtException() {
         CauseException causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
         RootException rootException = new RootException(
             "Slf4jUncaughtExceptionHandlerTest root exception",

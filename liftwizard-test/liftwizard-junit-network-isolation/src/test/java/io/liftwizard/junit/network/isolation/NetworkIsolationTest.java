@@ -29,7 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(LogMarkerTestExtension.class)
-public class NetworkIsolationTest {
+class NetworkIsolationTest {
 
     @Test
     void shouldFailToConnectWhenNetworkIsDisabled() {

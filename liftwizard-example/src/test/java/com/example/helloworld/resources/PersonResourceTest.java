@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-public class PersonResourceTest {
+class PersonResourceTest {
 
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
@@ -58,7 +58,7 @@ public class PersonResourceTest {
 
     @Test
     @ReladomoTestFile("test-data/person.txt")
-    public void getPersonSuccess() throws JSONException {
+    void getPersonSuccess() throws JSONException {
         Response response = this.getPersonResponse(1);
         this.assertResponseStatus(response, Status.OK);
         String jsonResponse = response.readEntity(String.class);
@@ -77,7 +77,7 @@ public class PersonResourceTest {
 
     @Test
     @ReladomoTestFile("test-data/person.txt")
-    public void getPersonNotFound() throws JSONException {
+    void getPersonNotFound() throws JSONException {
         Response response = this.getPersonResponse(2);
         this.assertResponseStatus(response, Status.NOT_FOUND);
         String jsonResponse = response.readEntity(String.class);
