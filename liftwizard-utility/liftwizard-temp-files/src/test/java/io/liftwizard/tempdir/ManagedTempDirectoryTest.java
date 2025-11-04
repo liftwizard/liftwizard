@@ -35,7 +35,7 @@ class ManagedTempDirectoryTest {
         Path tempDir = ManagedTempDirectory.createTempDirectory("test-prefix");
 
         assertThat(tempDir).exists().isDirectory();
-        assertThat(tempDir.toFile().canWrite()).isTrue();
+        assertThat(tempDir.toFile()).canWrite();
         assertThat(tempDir.getFileName().toString()).startsWith("test-prefix");
 
         RecursiveDirectoryDeleter.deleteRecursively(tempDir);
