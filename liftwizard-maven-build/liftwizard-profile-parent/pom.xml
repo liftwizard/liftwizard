@@ -140,6 +140,9 @@
                                     <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
 
                                     <recipe>org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions</recipe>
+                                    <recipe>org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements</recipe>
+
+                                    <recipe>org.openrewrite.java.testing.junit.JupiterBestPractices</recipe>
 
                                     <recipe>io.liftwizard.UpdateCopyrightYear</recipe>
                                 </activeRecipes>
