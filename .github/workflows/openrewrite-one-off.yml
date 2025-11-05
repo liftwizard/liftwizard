@@ -24,6 +24,9 @@ jobs:
 
       - uses: jdx/mise-action@v3
 
+      - name: Build liftwizard-rewrite module
+        run: mvn install --projects liftwizard-utility/liftwizard-rewrite -DskipTests -Dspotless.skip -Dspotbugs.skip -Djacoco.skip -Dcheckstyle.skip -Denforcer.skip
+
       - name: Run OpenRewrite one-off recipes
         run: mvn rewrite:run -Prewrite-maven-plugin-one-off
 
