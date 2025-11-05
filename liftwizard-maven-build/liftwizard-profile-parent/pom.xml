@@ -125,6 +125,7 @@
                                     <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
                                     <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
                                     <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
+                                    <recipe>org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions</recipe>
                                 </activeRecipes>
                             </configuration>
