@@ -157,6 +157,7 @@
                                     <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
                                     <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.mockito.MockitoBestPractices</recipe>
+                                    <recipe>org.openrewrite.java.testing.testcontainers.TestContainersBestPractices</recipe>
                                     <recipe>org.openrewrite.maven.BestPractices</recipe>
                                 </activeRecipes>
                             </configuration>
