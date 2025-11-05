@@ -138,6 +138,8 @@
                                     <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
 
                                     <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
+
+                                    <recipe>io.liftwizard.UpdateCopyrightYear</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
