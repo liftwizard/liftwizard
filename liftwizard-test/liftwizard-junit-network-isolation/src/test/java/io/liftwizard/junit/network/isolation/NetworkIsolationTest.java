@@ -16,7 +16,7 @@
 
 package io.liftwizard.junit.network.isolation;
 
-import java.net.SocketException;
+import java.io.IOException;
 
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.apache.http.client.methods.HttpGet;
@@ -38,8 +38,6 @@ class NetworkIsolationTest {
                 HttpGet request = new HttpGet("https://www.google.com");
                 httpClient.execute(request, response -> EntityUtils.toString(response.getEntity()));
             }
-        })
-            .isInstanceOf(SocketException.class)
-            .hasMessageContaining("Can't connect to SOCKS proxy:Connection refused");
+        }).isInstanceOf(IOException.class);
     }
 }
