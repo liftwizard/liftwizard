@@ -154,6 +154,7 @@
                                 <activeRecipes>
                                     <recipe>org.openrewrite.github.PreferTemurinDistributions</recipe>
                                     <recipe>org.openrewrite.java.logging.slf4j.Slf4jBestPractices</recipe>
+                                    <recipe>org.openrewrite.java.migrate.lombok.LombokBestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
                                     <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.mockito.MockitoBestPractices</recipe>
