@@ -152,6 +152,7 @@
                             <artifactId>rewrite-maven-plugin</artifactId>
                             <configuration>
                                 <activeRecipes>
+                                    <recipe>org.openrewrite.github.PreferTemurinDistributions</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
                                     <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
                                 </activeRecipes>
@@ -161,6 +162,11 @@
                                     <groupId>io.liftwizard</groupId>
                                     <artifactId>liftwizard-rewrite</artifactId>
                                     <version>2.1.34-SNAPSHOT</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-github</artifactId>
+                                    <version>2.15.3</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
