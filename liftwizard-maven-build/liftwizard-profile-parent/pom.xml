@@ -139,6 +139,8 @@
 
                                     <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
 
+                                    <recipe>org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions</recipe>
+
                                     <recipe>io.liftwizard.UpdateCopyrightYear</recipe>
                                 </activeRecipes>
                             </configuration>
