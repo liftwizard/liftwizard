@@ -15,7 +15,6 @@
 #
 
 # Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/common-static-analysis.yml
-# But with a few recipes disabled
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
@@ -32,26 +31,27 @@ recipeList:
   - org.openrewrite.staticanalysis.CaseInsensitiveComparisonsDoNotChangeCase
   - org.openrewrite.staticanalysis.CatchClauseOnlyRethrows
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
+  # - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
+  - org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType
   - org.openrewrite.staticanalysis.CovariantEquals
   - org.openrewrite.staticanalysis.DefaultComesLast
   - org.openrewrite.staticanalysis.EmptyBlock
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.EqualsAvoidsNull
+  # - org.openrewrite.staticanalysis.EqualsAvoidsNull
   - org.openrewrite.staticanalysis.ExplicitInitialization
   - org.openrewrite.staticanalysis.ExternalizableHasNoArgsConstructor
   - org.openrewrite.staticanalysis.FinalizePrivateFields
   - org.openrewrite.staticanalysis.FallThrough
   - org.openrewrite.staticanalysis.FinalClass
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.FixStringFormatExpressions
+  # - org.openrewrite.staticanalysis.FixStringFormatExpressions
   - org.openrewrite.staticanalysis.ForLoopIncrementInUpdate
   #  - org.openrewrite.staticanalysis.HideUtilityClassConstructor
   - org.openrewrite.staticanalysis.IndexOfChecksShouldUseAStartPosition
   - org.openrewrite.staticanalysis.IndexOfReplaceableByContains
   - org.openrewrite.staticanalysis.IndexOfShouldNotCompareGreaterThanZero
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.InlineVariable
+  # - org.openrewrite.staticanalysis.InlineVariable
   - org.openrewrite.staticanalysis.IsEmptyCallOnCollections
   - org.openrewrite.staticanalysis.LambdaBlockToExpression
   #  - org.openrewrite.staticanalysis.LowercasePackage
@@ -71,11 +71,13 @@ recipeList:
   - org.openrewrite.staticanalysis.NoToStringOnStringType
   - org.openrewrite.staticanalysis.NoValueOfOnStringType
   - org.openrewrite.staticanalysis.ObjectFinalizeCallsSuper
+  - org.openrewrite.staticanalysis.PreferSystemGetPropertyOverGetenv
   - org.openrewrite.staticanalysis.PrimitiveWrapperClassConstructorToValueOf
   - org.openrewrite.staticanalysis.RedundantFileCreation
-  - org.openrewrite.staticanalysis.RemoveEmptyJavaDocParameters
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.RemoveExtraSemicolons
+  # - org.openrewrite.staticanalysis.RemoveExtraSemicolons
+  - org.openrewrite.staticanalysis.RemoveRedundantNullCheckBeforeInstanceof
+  - org.openrewrite.staticanalysis.RemoveRedundantNullCheckBeforeLiteralEquals
   #  - org.openrewrite.staticanalysis.RemoveRedundantTypeCast
   #  - org.openrewrite.java.RemoveUnusedImports
   #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
@@ -86,26 +88,32 @@ recipeList:
   # - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
   - org.openrewrite.staticanalysis.ReplaceClassIsInstanceWithInstanceof
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
+  # - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
   - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
+  - org.openrewrite.staticanalysis.ReplaceStringConcatenationWithStringValueOf
+  - org.openrewrite.staticanalysis.SimplifyArraysAsList
   - org.openrewrite.staticanalysis.SimplifyBooleanExpression
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.SimplifyBooleanReturn
-  #  - org.openrewrite.staticanalysis.SimplifyTernaryRecipes
+  # - org.openrewrite.staticanalysis.SimplifyBooleanReturn
+  #  - org.openrewrite.staticanalysis.SimplifyElseBranch # TODO Add once we've tried this out at scale
+  # Disabled in Liftwizard
+  # - org.openrewrite.staticanalysis.SimplifyTernaryRecipes
   - org.openrewrite.staticanalysis.StaticMethodNotFinal
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.StringLiteralEquality
+  # - org.openrewrite.staticanalysis.StringLiteralEquality
   - org.openrewrite.staticanalysis.UnnecessaryCloseInTryWithResources
   - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
   # Disabled in Liftwizard
   # - org.openrewrite.staticanalysis.UnnecessaryParentheses
   - org.openrewrite.staticanalysis.UnnecessaryPrimitiveAnnotations
   - org.openrewrite.staticanalysis.UnnecessaryReturnAsLastStatement
+  #  - org.openrewrite.staticanalysis.UnwrapElseAfterReturn
   - org.openrewrite.staticanalysis.UpperCaseLiteralSuffixes
   #  - org.openrewrite.staticanalysis.UnnecessaryThrows
   #  - org.openrewrite.staticanalysis.UseCollectionInterfaces
   - org.openrewrite.staticanalysis.UseDiamondOperator
   - org.openrewrite.staticanalysis.UseJavaStyleArrayDeclarations
+  - org.openrewrite.staticanalysis.UsePortableNewlines
   # https://github.com/openrewrite/rewrite-static-analysis/issues/10
   #  - org.openrewrite.staticanalysis.UseLambdaForFunctionalInterface
   #  - org.openrewrite.staticanalysis.UseStringReplace
@@ -114,3 +122,4 @@ recipeList:
   - org.openrewrite.kotlin.cleanup.EqualsMethodUsage
   - org.openrewrite.kotlin.cleanup.ImplicitParameterInLambda
   - org.openrewrite.kotlin.cleanup.ReplaceCharToIntWithCode
+  - org.openrewrite.staticanalysis.CustomImportOrder

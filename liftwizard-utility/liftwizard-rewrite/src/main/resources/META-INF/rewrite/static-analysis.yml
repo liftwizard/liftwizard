@@ -15,13 +15,6 @@
 #
 
 # Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/static-analysis.yml
-# But these recipes are disabled in Liftwizard:
-# - org.openrewrite.staticanalysis.EqualsAvoidsNull
-# As well as all formatting recipes, since we can rely on auto-formatters instead.
-# - org.openrewrite.java.format.MethodParamPad
-# - org.openrewrite.java.format.NoWhitespaceAfter
-# - org.openrewrite.java.format.NoWhitespaceBefore
-# - org.openrewrite.java.format.PadEmptyForLoopComponents
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
@@ -31,26 +24,26 @@ description: Automatically cleanup code, e.g. remove unnecessary parentheses, si
 recipeList:
   - org.openrewrite.staticanalysis.DefaultComesLast
   - org.openrewrite.staticanalysis.EmptyBlock
-  # Disabled in Liftwizard
-  #  - org.openrewrite.java.format.EmptyNewlineAtEndOfFile
+  # Disabled in Liftwizard - formatting handled by auto-formatters
+  # - org.openrewrite.java.format.EmptyNewlineAtEndOfFile
   - org.openrewrite.staticanalysis.ForLoopControlVariablePostfixOperators
   - org.openrewrite.staticanalysis.FinalizePrivateFields
-  # Disabled in Liftwizard
-  #  - org.openrewrite.java.format.MethodParamPad
-  # Disabled in Liftwizard
-  #  - org.openrewrite.java.format.NoWhitespaceAfter
-  # Disabled in Liftwizard
-  #  - org.openrewrite.java.format.NoWhitespaceBefore
-  # Disabled in Liftwizard
-  #  - org.openrewrite.java.format.PadEmptyForLoopComponents
+  # Disabled in Liftwizard - formatting handled by auto-formatters
+  # - org.openrewrite.java.format.MethodParamPad
+  # Disabled in Liftwizard - formatting handled by auto-formatters
+  # - org.openrewrite.java.format.NoWhitespaceAfter
+  # Disabled in Liftwizard - formatting handled by auto-formatters
+  # - org.openrewrite.java.format.NoWhitespaceBefore
+  # Disabled in Liftwizard - formatting handled by auto-formatters
+  # - org.openrewrite.java.format.PadEmptyForLoopComponents
   - org.openrewrite.staticanalysis.TypecastParenPad
   # Disabled in Liftwizard
-  #  - org.openrewrite.staticanalysis.EqualsAvoidsNull
+  # - org.openrewrite.staticanalysis.EqualsAvoidsNull
   - org.openrewrite.staticanalysis.ExplicitInitialization
   - org.openrewrite.staticanalysis.FallThrough
   - org.openrewrite.staticanalysis.HideUtilityClassConstructor
   - org.openrewrite.staticanalysis.NeedBraces
-  # Disabled in Liftwizard
+  # Disabled in Liftwizard - formatting handled by auto-formatters
   # - org.openrewrite.staticanalysis.OperatorWrap
   # Disabled in Liftwizard
   # - org.openrewrite.staticanalysis.UnnecessaryParentheses
@@ -58,6 +51,8 @@ recipeList:
   - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
   - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
   - org.openrewrite.java.ShortenFullyQualifiedTypeReferences
+  - org.openrewrite.java.SimplifySingleElementAnnotation
+  - org.openrewrite.staticanalysis.CustomImportOrder
 ---
 type: specs.openrewrite.org/v1beta/recipe
 name: org.openrewrite.staticanalysis.ReplaceThreadRunWithThreadStart
