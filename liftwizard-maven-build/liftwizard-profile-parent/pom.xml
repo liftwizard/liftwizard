@@ -115,33 +115,18 @@
                             <artifactId>rewrite-maven-plugin</artifactId>
                             <configuration>
                                 <activeRecipes>
-                                    <!-- Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/static-analysis.yml-->
-                                    <!-- But these recipes are disabled in Liftwizard:-->
-                                    <!-- - org.openrewrite.staticanalysis.EqualsAvoidsNull-->
-                                    <!-- As well as all formatting recipes, since we can rely on auto-formatters instead.-->
+                                    <recipe>io.liftwizard.UpdateCopyrightYear</recipe>
+                                    <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
+                                    <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
                                     <recipe>io.liftwizard.staticanalysis.CodeCleanup</recipe>
-
-                                    <!-- Based on https://github.com/openrewrite/rewrite-static-analysis/blob/main/src/main/resources/META-INF/rewrite/common-static-analysis.yml-->
-                                    <!-- But these recipes are disabled in Liftwizard:-->
-                                    <!-- - org.openrewrite.staticanalysis.EqualsAvoidsNull-->
-                                    <!-- - org.openrewrite.staticanalysis.InlineVariable-->
-                                    <!-- - org.openrewrite.staticanalysis.StringLiteralEquality-->
                                     <recipe>io.liftwizard.staticanalysis.CommonStaticAnalysis</recipe>
-
-                                    <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
-                                    <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
-
                                     <recipe>org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64</recipe>
                                     <recipe>org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes</recipe>
                                     <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
-
-                                    <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
-
-                                    <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
-
+                                    <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
+                                    <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
+                                    <recipe>org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions</recipe>
-
-                                    <recipe>io.liftwizard.UpdateCopyrightYear</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
@@ -168,8 +153,14 @@
                             <artifactId>rewrite-maven-plugin</artifactId>
                             <configuration>
                                 <activeRecipes>
-                                    <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
+                                    <recipe>org.openrewrite.github.PreferTemurinDistributions</recipe>
+                                    <recipe>org.openrewrite.java.logging.slf4j.Slf4jBestPractices</recipe>
+                                    <recipe>org.openrewrite.java.migrate.lombok.LombokBestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.Assertj</recipe>
+                                    <recipe>org.openrewrite.java.testing.junit5.JUnit5BestPractices</recipe>
+                                    <recipe>org.openrewrite.java.testing.mockito.MockitoBestPractices</recipe>
+                                    <recipe>org.openrewrite.java.testing.testcontainers.TestContainersBestPractices</recipe>
+                                    <recipe>org.openrewrite.maven.BestPractices</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
@@ -177,6 +168,11 @@
                                     <groupId>io.liftwizard</groupId>
                                     <artifactId>liftwizard-rewrite</artifactId>
                                     <version>2.1.34-SNAPSHOT</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-github</artifactId>
+                                    <version>2.15.3</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
