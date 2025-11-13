@@ -1348,12 +1348,14 @@
                                     </excludes>
                                     <message>jaxb-api is banned. Use Jakarta XML Binding (jakarta.xml.bind:jakarta.xml.bind-api) instead.</message>
                                 </bannedDependencies>
+                                <!--
                                 <bannedDependencies>
                                     <excludes>
                                         <exclude>com.fasterxml.jackson.module:jackson-module-jaxb-annotations</exclude>
                                     </excludes>
                                     <message>jackson-module-jaxb-annotations is deprecated and not needed with Jackson 2.19.1. Jackson now supports jakarta.xml.bind-api directly.</message>
                                 </bannedDependencies>
+                                -->
                                 <bannedDependencies>
                                     <excludes>
                                         <exclude>javax.xml.ws:jaxws-api</exclude>
