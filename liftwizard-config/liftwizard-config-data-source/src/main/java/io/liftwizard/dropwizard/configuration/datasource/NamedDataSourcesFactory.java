@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.datasource;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +34,11 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
+import org.eclipse.collections.api.factory.Lists;
 
 public class NamedDataSourcesFactory {
 
-    private @Valid @NotNull List<NamedDataSourceFactory> namedDataSourceFactories = new ArrayList<>();
+    private @Valid @NotNull List<NamedDataSourceFactory> namedDataSourceFactories = Lists.mutable.empty();
 
     private Map<String, NamedDataSourceFactory> namedDataSourceFactoriesByName = new LinkedHashMap<>();
 

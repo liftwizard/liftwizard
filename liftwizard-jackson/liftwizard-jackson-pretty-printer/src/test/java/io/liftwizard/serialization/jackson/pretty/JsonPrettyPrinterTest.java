@@ -16,7 +16,7 @@
 
 package io.liftwizard.serialization.jackson.pretty;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +46,7 @@ class JsonPrettyPrinterTest {
 
     @Test
     void smokeTest() throws JsonProcessingException {
-        Map<String, List<String>> map = new HashMap<>();
+        Map<String, List<String>> map = new LinkedHashMap<>();
         map.put("a", List.of("b", "c"));
         map.put("d", List.of("e", "f"));
 

@@ -13,7 +13,6 @@ import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoLoadDataExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoPurgeAllExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoTestFile;
-import org.assertj.core.api.Assertions;
 import org.json.JSONException;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,8 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class PersonResourceTest {
 
@@ -105,6 +106,6 @@ class PersonResourceTest {
     private void assertResponseStatus(@Nonnull Response response, Status status) {
         response.bufferEntity();
         String entityAsString = response.readEntity(String.class);
-        Assertions.assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
+        assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
     }
 }

@@ -16,15 +16,15 @@
 
 package io.liftwizard.dropwizard.configuration.liquibase.migration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
+import org.eclipse.collections.api.factory.Lists;
 
 public class LiquibaseMigrationFactory extends EnabledFactory {
 
-    private List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = new ArrayList<>();
+    private List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = Lists.mutable.empty();
 
     private boolean dropEntireSchemaOnStartupAndShutdown;
 

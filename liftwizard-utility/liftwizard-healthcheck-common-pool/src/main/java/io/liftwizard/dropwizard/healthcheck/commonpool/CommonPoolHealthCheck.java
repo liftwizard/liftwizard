@@ -20,7 +20,6 @@ import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +34,7 @@ import com.codahale.metrics.health.HealthCheck;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,7 +135,7 @@ public class CommonPoolHealthCheck extends HealthCheck {
             return Result.healthy();
         }
 
-        List<String> badThreadInfoStrings = new ArrayList<>();
+        MutableList<String> badThreadInfoStrings = Lists.mutable.empty();
 
         for (ThreadInfo badThreadInfo : badThreadInfos) {
             State threadState = badThreadInfo.getThreadState();

@@ -1,6 +1,5 @@
 package com.example.helloworld;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import com.example.helloworld.core.Template;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.collect.ImmutableMap;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.Configuration;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
@@ -43,6 +41,8 @@ import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFactory;
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.map.MutableMap;
 
 @JsonPropertyOrder({ "template", "defaultName", "viewRendererConfiguration" })
 public class HelloWorldConfiguration
@@ -69,7 +69,7 @@ public class HelloWorldConfiguration
     private String defaultName = "Stranger";
 
     @NotNull
-    private Map<String, Map<String, String>> viewRendererConfiguration = Collections.emptyMap();
+    private MutableMap<String, Map<String, String>> viewRendererConfiguration = Maps.fixedSize.empty();
 
     private @NotNull @Valid EnabledFactory configLoggingFactory = new EnabledFactory(true);
     private @NotNull @Valid ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
@@ -133,11 +133,11 @@ public class HelloWorldConfiguration
 
     @JsonProperty("viewRendererConfiguration")
     public void setViewRendererConfiguration(Map<String, Map<String, String>> viewRendererConfiguration) {
-        ImmutableMap.Builder<String, Map<String, String>> builder = ImmutableMap.builder();
+        MutableMap<String, Map<String, String>> mutableMap = Maps.mutable.empty();
         for (Map.Entry<String, Map<String, String>> entry : viewRendererConfiguration.entrySet()) {
-            builder.put(entry.getKey(), ImmutableMap.copyOf(entry.getValue()));
+            mutableMap.put(entry.getKey(), entry.getValue());
         }
-        this.viewRendererConfiguration = builder.build();
+        this.viewRendererConfiguration = mutableMap;
     }
 
     @Override

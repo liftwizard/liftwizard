@@ -23,9 +23,9 @@ import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import org.eclipse.collections.api.factory.primitive.LongSets;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableLongSet;
-import org.eclipse.collections.impl.factory.primitive.LongSets;
 
 public class LongListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 

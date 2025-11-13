@@ -16,7 +16,6 @@
 
 package io.liftwizard.logging.metrics.structured;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -33,6 +32,7 @@ import io.liftwizard.logging.metrics.structured.proxy.ErrorLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.InfoLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.TraceLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.WarnLoggerProxy;
+import org.eclipse.collections.api.factory.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -53,7 +53,7 @@ public class Builder {
     private MetricFilter filter = MetricFilter.ALL;
     private ScheduledExecutorService executor;
     private boolean shutdownExecutorOnStop = true;
-    private Set<MetricAttribute> disabledMetricAttributes = Collections.emptySet();
+    private Set<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
     private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = Function.identity();
     private String message = "metrics";
 
