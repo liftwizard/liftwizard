@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.url;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,13 +32,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.logging.filter.FilterFactory;
+import org.eclipse.collections.api.factory.Lists;
 
 @JsonTypeName("url")
 @AutoService(FilterFactory.class)
 public class RequestUrlFilterFactory implements FilterFactory<IAccessEvent> {
 
     @NotEmpty
-    private @Valid @NotNull List<String> urls = new ArrayList<>();
+    private @Valid @NotNull List<String> urls = Lists.mutable.empty();
 
     private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
     private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;

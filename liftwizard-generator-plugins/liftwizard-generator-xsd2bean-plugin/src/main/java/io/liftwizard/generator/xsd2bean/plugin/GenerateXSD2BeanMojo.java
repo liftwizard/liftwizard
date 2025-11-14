@@ -19,8 +19,6 @@ package io.liftwizard.generator.xsd2bean.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -69,7 +67,7 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 
     @Nonnull
     @Parameter
-    private Set<String> excludes = new HashSet<>();
+    private MutableSet<String> excludes = Sets.mutable.empty();
 
     @Parameter(property = "freya.generateTestSources", defaultValue = "false")
     private boolean generateTestSources;
@@ -186,7 +184,7 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
     private Set<File> scanSchemaFiles() throws InclusionScanException {
         Set<String> includesPatterns = this.getIncludesPatterns();
         SourceInclusionScanner scan = new SimpleSourceInclusionScanner(includesPatterns, this.excludes);
-        SourceMapping suffixMapping = new SuffixMapping("xsd", Collections.emptySet());
+        SourceMapping suffixMapping = new SuffixMapping("xsd", Sets.fixedSize.empty());
         scan.addSourceMapping(suffixMapping);
         return scan.getIncludedSources(this.sourceDirectory, null);
     }

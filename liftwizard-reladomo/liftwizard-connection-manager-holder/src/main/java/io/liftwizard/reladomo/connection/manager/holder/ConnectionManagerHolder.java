@@ -22,8 +22,8 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
+import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.map.ImmutableMap;
-import org.eclipse.collections.impl.factory.Sets;
 
 public final class ConnectionManagerHolder {
 
