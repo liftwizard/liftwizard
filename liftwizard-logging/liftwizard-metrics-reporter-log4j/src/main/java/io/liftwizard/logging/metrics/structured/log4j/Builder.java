@@ -33,6 +33,7 @@ import io.liftwizard.logging.metrics.structured.log4j.proxy.TraceLoggerProxy;
 import io.liftwizard.logging.metrics.structured.log4j.proxy.WarnLoggerProxy;
 import org.apache.log4j.Logger;
 import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.api.set.MutableSet;
 
 /**
  * A builder for {@link StructuredLog4jReporter} instances. Defaults to logging to {@code metrics}, not using a marker, converting rates to events/second, converting durations to milliseconds, and not filtering metrics.
@@ -49,7 +50,7 @@ public class Builder {
     private MetricFilter filter = MetricFilter.ALL;
     private ScheduledExecutorService executor;
     private boolean shutdownExecutorOnStop = true;
-    private Set<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
+    private MutableSet<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
 
     public Builder(MetricRegistry registry) {
         this.registry = registry;
@@ -155,7 +156,7 @@ public class Builder {
      * @return {@code this}
      */
     public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes) {
-        this.disabledMetricAttributes = newDisabledMetricAttributes;
+        this.disabledMetricAttributes = Sets.mutable.withAll(newDisabledMetricAttributes);
         return this;
     }
 

@@ -33,6 +33,7 @@ import io.liftwizard.logging.metrics.structured.proxy.InfoLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.TraceLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.WarnLoggerProxy;
 import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.api.set.MutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -53,7 +54,7 @@ public class Builder {
     private MetricFilter filter = MetricFilter.ALL;
     private ScheduledExecutorService executor;
     private boolean shutdownExecutorOnStop = true;
-    private Set<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
+    private MutableSet<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
     private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = Function.identity();
     private String message = "metrics";
 
@@ -172,7 +173,7 @@ public class Builder {
      * @return {@code this}
      */
     public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes) {
-        this.disabledMetricAttributes = newDisabledMetricAttributes;
+        this.disabledMetricAttributes = Sets.mutable.withAll(newDisabledMetricAttributes);
         return this;
     }
 
