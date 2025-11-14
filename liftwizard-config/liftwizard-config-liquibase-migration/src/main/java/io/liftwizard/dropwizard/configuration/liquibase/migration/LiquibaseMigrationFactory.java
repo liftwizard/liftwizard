@@ -21,10 +21,11 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
 import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
 
 public class LiquibaseMigrationFactory extends EnabledFactory {
 
-    private List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = Lists.mutable.empty();
+    private MutableList<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = Lists.mutable.empty();
 
     private boolean dropEntireSchemaOnStartupAndShutdown;
 
