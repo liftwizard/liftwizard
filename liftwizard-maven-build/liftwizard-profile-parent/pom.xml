@@ -47,6 +47,12 @@
                 <artifactId>eclipse-collections</artifactId>
                 <version>11.1.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.collections</groupId>
+                <artifactId>eclipse-collections-testutils</artifactId>
+                <version>11.1.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -114,9 +120,16 @@
                             <groupId>org.openrewrite.maven</groupId>
                             <artifactId>rewrite-maven-plugin</artifactId>
                             <configuration>
+                                <exclusions>
+                                    <exclusion>**/liftwizard-utility/liftwizard-rewrite/**</exclusion>
+                                </exclusions>
                                 <activeRecipes>
                                     <recipe>io.liftwizard.UpdateCopyrightYear</recipe>
+                                    <recipe>io.liftwizard.rewrite.BestPractices</recipe>
+                                    <recipe>io.liftwizard.rewrite.assertj.AssertJMigration</recipe>
+                                    <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption</recipe>
                                     <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
+                                    <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval</recipe>
                                     <recipe>io.liftwizard.rewrite.java.style.ExplicitThis</recipe>
                                     <recipe>io.liftwizard.staticanalysis.CodeCleanup</recipe>
                                     <recipe>io.liftwizard.staticanalysis.CommonStaticAnalysis</recipe>
@@ -152,7 +165,11 @@
                             <groupId>org.openrewrite.maven</groupId>
                             <artifactId>rewrite-maven-plugin</artifactId>
                             <configuration>
+                                <exclusions>
+                                    <exclusion>**/liftwizard-utility/liftwizard-rewrite/**</exclusion>
+                                </exclusions>
                                 <activeRecipes>
+                                    <recipe>io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe</recipe>
                                     <recipe>io.liftwizard.testing.junit.JupiterBestPractices</recipe>
                                     <recipe>org.openrewrite.github.PreferTemurinDistributions</recipe>
                                     <recipe>org.openrewrite.java.logging.slf4j.Slf4jBestPractices</recipe>
@@ -172,8 +189,8 @@
                                 </dependency>
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
-                                    <artifactId>rewrite-github</artifactId>
-                                    <version>2.15.3</version>
+                                    <artifactId>rewrite-github-actions</artifactId>
+                                    <version>2.7.3</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
