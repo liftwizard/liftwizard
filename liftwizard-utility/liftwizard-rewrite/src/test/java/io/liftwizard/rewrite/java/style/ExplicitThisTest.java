@@ -17,6 +17,7 @@
 package io.liftwizard.rewrite.java.style;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -30,7 +31,8 @@ class ExplicitThisTest implements RewriteTest {
     }
 
     @Test
-    void addsThisToFieldsAndMethods() {
+    @DocumentExample
+    void replacePatterns() {
         this.rewriteRun(
                 java(
                     """
@@ -182,6 +184,31 @@ class ExplicitThisTest implements RewriteTest {
                         void helper() {}
                         void alreadyPrefixedMethod() {}
                         static void staticHelper() {}
+                    }"""
+                )
+            );
+    }
+
+    @Test
+    void doNotReplaceInvalidPatterns() {
+        this.rewriteRun(
+                java(
+                    """
+                    import java.util.function.Consumer;
+
+                    class Test {
+                        private String field;
+                        private static String staticField;
+
+                        void instanceMethod(String parameter) {
+                            this.field = "already has this";
+                            String localVariable = parameter;
+                            String result = parameter + localVariable;
+                        }
+
+                        static void staticMethod() {
+                            staticField = "static context";
+                        }
                     }"""
                 )
             );

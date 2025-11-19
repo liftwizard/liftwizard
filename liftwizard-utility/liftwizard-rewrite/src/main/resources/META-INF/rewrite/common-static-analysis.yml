@@ -102,7 +102,8 @@ recipeList:
   # Disabled in Liftwizard
   # - org.openrewrite.staticanalysis.StringLiteralEquality
   - org.openrewrite.staticanalysis.UnnecessaryCloseInTryWithResources
-  - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
+  # Disabled in Liftwizard
+  # - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
   # Disabled in Liftwizard
   # - org.openrewrite.staticanalysis.UnnecessaryParentheses
   - org.openrewrite.staticanalysis.UnnecessaryPrimitiveAnnotations

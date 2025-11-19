@@ -37,7 +37,7 @@ public class ExplicitThis extends Recipe {
 
     @Override
     public String getDisplayName() {
-        return "Add explicit 'this.' prefix to field and method access";
+        return "`field` → `this.field`";
     }
 
     @Override
@@ -185,12 +185,11 @@ public class ExplicitThis extends Recipe {
         }
 
         private boolean isPartOfDeclaration() {
-            // Check if this identifier is the name of a variable being declared
             Cursor parent = this.getCursor().getParent();
-            if (parent == null || !(parent.getValue() instanceof J.VariableDeclarations.NamedVariable namedVar)) {
+            if (parent == null || !(parent.getValue() instanceof J.VariableDeclarations.NamedVariable)) {
                 return false;
             }
-            // Check if this identifier is the variable's name (not the initializer)
+            J.VariableDeclarations.NamedVariable namedVar = (J.VariableDeclarations.NamedVariable) parent.getValue();
             return namedVar.getName() == this.getCursor().getValue();
         }
 

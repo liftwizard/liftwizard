@@ -151,6 +151,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.eclipse.collections</groupId>
+                <artifactId>eclipse-collections-testutils</artifactId>
+                <version>12.0.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.goldmansachs.reladomo</groupId>
                 <artifactId>reladomo</artifactId>
                 <version>18.0.0</version>
@@ -257,6 +263,12 @@
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>1.3.5</version>
             </dependency>
 
             <!-- Jakarta replacement for javax.inject -->

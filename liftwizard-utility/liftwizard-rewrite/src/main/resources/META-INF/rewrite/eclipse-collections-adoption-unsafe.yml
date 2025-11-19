@@ -16,9 +16,8 @@
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
-name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
-displayName: Eclipse Collections best practices
-description: Apply Eclipse Collections best practices and idiomatic usage patterns.
+name: io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe
+displayName: Eclipse Collections adoption recipes with potential semantic changes
+description: Collection of recipes that help adopt Eclipse Collections patterns but may change program semantics. These recipes should be applied with careful review as they may change behavior when collections contain null values.
 recipeList:
-  - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedEmptyChecks
-  - io.liftwizard.rewrite.eclipse.collections.SimplifyNegatedSatisfies
+  - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.ECDetectToSatisfiesRecipes
