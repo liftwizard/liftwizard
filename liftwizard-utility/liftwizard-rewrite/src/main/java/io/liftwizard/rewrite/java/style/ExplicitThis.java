@@ -107,7 +107,8 @@ public class ExplicitThis extends Recipe {
                 return id;
             }
 
-            return this.createFieldAccess(id);
+            J.FieldAccess fieldAccess = this.createFieldAccess(id);
+            return fieldAccess != null ? fieldAccess : id;
         }
 
         @Override
@@ -167,9 +168,13 @@ public class ExplicitThis extends Recipe {
             ) {
                 return m;
             }
-            J.ClassDeclaration classDeclaration = this.getCursor()
-                .dropParentUntil(J.ClassDeclaration.class::isInstance)
-                .getValue();
+
+            Cursor classDeclarationCursor = this.getCursor().dropParentUntil(p -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE);
+            if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration)) {
+                return m;
+            }
+
+            J.ClassDeclaration classDeclaration = classDeclarationCursor.getValue();
             JavaType.FullyQualified classType = classDeclaration.getType();
 
             Identifier identifier = new Identifier(
@@ -194,10 +199,12 @@ public class ExplicitThis extends Recipe {
         }
 
         private J.FieldAccess createFieldAccess(J.Identifier identifier) {
-            J.ClassDeclaration classDeclaration = this.getCursor()
-                .dropParentUntil(J.ClassDeclaration.class::isInstance)
-                .getValue();
+            Cursor classDeclarationCursor = this.getCursor().dropParentUntil(p -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE);
+            if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration)) {
+                return null;
+            }
 
+            J.ClassDeclaration classDeclaration = classDeclarationCursor.getValue();
             JavaType.FullyQualified classType = classDeclaration.getType();
 
             J.Identifier thisIdentifier = new J.Identifier(
