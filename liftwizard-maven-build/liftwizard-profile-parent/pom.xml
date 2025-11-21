@@ -138,6 +138,7 @@
                                     <recipe>org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes</recipe>
                                     <recipe>org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass</recipe>
                                     <recipe>org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant</recipe>
+                                    <recipe>org.openrewrite.java.recipes.JavaRecipeBestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions</recipe>
                                 </activeRecipes>
@@ -147,6 +148,11 @@
                                     <groupId>io.liftwizard</groupId>
                                     <artifactId>liftwizard-rewrite</artifactId>
                                     <version>2.1.35-SNAPSHOT</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-rewrite</artifactId>
+                                    <version>0.15.0</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
