@@ -472,6 +472,7 @@
                                         <printWidth>120</printWidth>
                                         <parser>java</parser>
                                         <plugins>prettier-plugin-java</plugins>
+                                        <experimentalOperatorPosition>start</experimentalOperatorPosition>
                                     </config>
                                 </prettier>
                             </java>
@@ -506,6 +507,7 @@
                                         <printWidth>120</printWidth>
                                         <parser>java</parser>
                                         <plugins>prettier-plugin-java</plugins>
+                                        <experimentalOperatorPosition>start</experimentalOperatorPosition>
                                     </config>
                                 </prettier>
 

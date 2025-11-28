@@ -26,15 +26,15 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "Collection first element access → `Iterate.getFirst()`",
-    description = "Replace iterator().next() and listIterator().next() calls with " +
-    "`Iterate.getFirst()` for safer and more expressive first element access."
+    description = "Replace iterator().next() and listIterator().next() calls with "
+    + "`Iterate.getFirst()` for safer and more expressive first element access."
 )
 public class IterateGetFirst {
 
     @RecipeDescriptor(
         name = "`collection.iterator().next()` → " + "`Iterate.getFirst(collection)`",
-        description = "Replace iterator().next() with " +
-        "`Iterate.getFirst(collection)` for safer first element access."
+        description = "Replace iterator().next() with "
+        + "`Iterate.getFirst(collection)` for safer first element access."
     )
     public static final class IteratorNextPattern<T, C extends Collection<T>> {
 

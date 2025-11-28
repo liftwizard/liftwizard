@@ -101,9 +101,9 @@ public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachC
 
         if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName)) {
             throw new RuntimeException(
-                "Class " +
-                parsedClassName +
-                " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?"
+                "Class "
+                + parsedClassName
+                + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?"
             );
         }
 

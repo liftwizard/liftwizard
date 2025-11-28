@@ -85,24 +85,24 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
             boolean isEmptyConstructor =
                 arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
             boolean isInitialCapacityConstructor =
-                arguments.size() == 1 &&
-                !(arguments.get(0) instanceof J.Empty) &&
-                isNumericType(arguments.get(0).getType());
+                arguments.size() == 1
+                && !(arguments.get(0) instanceof J.Empty)
+                && isNumericType(arguments.get(0).getType());
             boolean isComparatorConstructor =
-                arguments.size() == 1 &&
-                !(arguments.get(0) instanceof J.Empty) &&
-                isComparatorType(arguments.get(0).getType());
+                arguments.size() == 1
+                && !(arguments.get(0) instanceof J.Empty)
+                && isComparatorType(arguments.get(0).getType());
             boolean isCollectionConstructor =
-                arguments.size() == 1 &&
-                !(arguments.get(0) instanceof J.Empty) &&
-                !isNumericType(arguments.get(0).getType()) &&
-                !isComparatorType(arguments.get(0).getType());
+                arguments.size() == 1
+                && !(arguments.get(0) instanceof J.Empty)
+                && !isNumericType(arguments.get(0).getType())
+                && !isComparatorType(arguments.get(0).getType());
 
             if (
-                !isEmptyConstructor &&
-                !isInitialCapacityConstructor &&
-                !isComparatorConstructor &&
-                !isCollectionConstructor
+                !isEmptyConstructor
+                && !isInitialCapacityConstructor
+                && !isComparatorConstructor
+                && !isCollectionConstructor
             ) {
                 return nc;
             }
@@ -120,8 +120,12 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
             String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
             String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
             String templateSource =
-                prefix +
-                this.getTemplateSource(isInitialCapacityConstructor, isComparatorConstructor, isCollectionConstructor);
+                prefix
+                + this.getTemplateSource(
+                    isInitialCapacityConstructor,
+                    isComparatorConstructor,
+                    isCollectionConstructor
+                );
             JavaTemplate template = JavaTemplate.builder(templateSource)
                 .imports("org.eclipse.collections.api.factory." + this.targetFactorySimpleName)
                 .contextSensitive()

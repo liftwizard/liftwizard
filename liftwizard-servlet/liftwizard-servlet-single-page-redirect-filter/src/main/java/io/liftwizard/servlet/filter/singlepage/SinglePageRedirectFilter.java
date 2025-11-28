@@ -52,8 +52,8 @@ public class SinglePageRedirectFilter implements Filter {
         // Let all handlers and filters process before we do anything. That way we can capture if this is a 404.
         chain.doFilter(request, response);
         if (
-            !(request instanceof HttpServletRequest httpServletRequest) ||
-            !(response instanceof HttpServletResponse httpServletResponse)
+            !(request instanceof HttpServletRequest httpServletRequest)
+            || !(response instanceof HttpServletResponse httpServletResponse)
         ) {
             return;
         }
@@ -68,8 +68,8 @@ public class SinglePageRedirectFilter implements Filter {
 
         if (requestedPath.equals(this.redirectPage)) {
             throw new ServletException(
-                "SinglePageRedirectFilter redirectPage cannot be the same as the path being redirected to. Both are: " +
-                requestedPath
+                "SinglePageRedirectFilter redirectPage cannot be the same as the path being redirected to. Both are: "
+                + requestedPath
             );
         }
 

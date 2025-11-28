@@ -25,8 +25,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "Collection empty checks → `Iterate`",
-    description = "Replace manual collection null and isEmpty checks with " +
-    "`Iterate.isEmpty()` and `Iterate.notEmpty()`."
+    description = "Replace manual collection null and isEmpty checks with "
+    + "`Iterate.isEmpty()` and `Iterate.notEmpty()`."
 )
 public class IterateEmpty {
 

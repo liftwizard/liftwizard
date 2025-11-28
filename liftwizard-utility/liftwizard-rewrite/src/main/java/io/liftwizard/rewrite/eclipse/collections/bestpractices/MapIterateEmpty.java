@@ -25,8 +25,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "Map empty checks → `MapIterate`",
-    description = "Replace manual map null and isEmpty checks with " +
-    "`MapIterate.isEmpty()` and `MapIterate.notEmpty()`."
+    description = "Replace manual map null and isEmpty checks with "
+    + "`MapIterate.isEmpty()` and `MapIterate.notEmpty()`."
 )
 public class MapIterateEmpty {
 

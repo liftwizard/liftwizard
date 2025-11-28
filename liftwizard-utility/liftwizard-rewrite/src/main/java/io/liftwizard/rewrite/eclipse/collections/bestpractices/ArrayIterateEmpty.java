@@ -23,8 +23,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "Array empty checks → `ArrayIterate`",
-    description = "Replace manual array null and length checks with " +
-    "`ArrayIterate.isEmpty()` and `ArrayIterate.notEmpty()`."
+    description = "Replace manual array null and length checks with "
+    + "`ArrayIterate.isEmpty()` and `ArrayIterate.notEmpty()`."
 )
 public class ArrayIterateEmpty {
 

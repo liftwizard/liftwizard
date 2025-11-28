@@ -121,29 +121,29 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
             boolean isEmptyConstructor =
                 arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
             boolean isInitialCapacityConstructor =
-                arguments.size() == 1 &&
-                !(arguments.get(0) instanceof J.Empty) &&
-                isNumericType(arguments.get(0).getType());
+                arguments.size() == 1
+                && !(arguments.get(0) instanceof J.Empty)
+                && isNumericType(arguments.get(0).getType());
             boolean isComparatorConstructor =
-                arguments.size() == 1 &&
-                !(arguments.get(0) instanceof J.Empty) &&
-                isComparatorType(arguments.get(0).getType());
+                arguments.size() == 1
+                && !(arguments.get(0) instanceof J.Empty)
+                && isComparatorType(arguments.get(0).getType());
             boolean isComparatorWithIterableConstructor =
-                arguments.size() == 2 &&
-                isComparatorType(arguments.get(0).getType()) &&
-                isIterableType(arguments.get(1).getType());
+                arguments.size() == 2
+                && isComparatorType(arguments.get(0).getType())
+                && isIterableType(arguments.get(1).getType());
             boolean isCollectionConstructor =
-                arguments.size() == 1 &&
-                !(arguments.get(0) instanceof J.Empty) &&
-                !isNumericType(arguments.get(0).getType()) &&
-                !isComparatorType(arguments.get(0).getType());
+                arguments.size() == 1
+                && !(arguments.get(0) instanceof J.Empty)
+                && !isNumericType(arguments.get(0).getType())
+                && !isComparatorType(arguments.get(0).getType());
 
             if (
-                !isEmptyConstructor &&
-                !isInitialCapacityConstructor &&
-                !isComparatorConstructor &&
-                !isComparatorWithIterableConstructor &&
-                !isCollectionConstructor
+                !isEmptyConstructor
+                && !isInitialCapacityConstructor
+                && !isComparatorConstructor
+                && !isComparatorWithIterableConstructor
+                && !isCollectionConstructor
             ) {
                 return nc;
             }
@@ -170,8 +170,8 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
             String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
             String prefix = this.factoryClassName + "." + this.factoryMethod + "." + typeParamsTemplate;
             String templateSource =
-                prefix +
-                this.getTemplateSource(
+                prefix
+                + this.getTemplateSource(
                     isInitialCapacityConstructor,
                     isComparatorConstructor,
                     isComparatorWithIterableConstructor,
@@ -264,11 +264,11 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
             }
             String typeName = fqType.getFullyQualifiedName();
             return (
-                "java.lang.Iterable".equals(typeName) ||
-                "java.util.Collection".equals(typeName) ||
-                "java.util.List".equals(typeName) ||
-                "java.util.Set".equals(typeName) ||
-                typeName.startsWith("org.eclipse.collections.")
+                "java.lang.Iterable".equals(typeName)
+                || "java.util.Collection".equals(typeName)
+                || "java.util.List".equals(typeName)
+                || "java.util.Set".equals(typeName)
+                || typeName.startsWith("org.eclipse.collections.")
             );
         }
 
@@ -386,12 +386,12 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
             );
 
             if (
-                this.getCursor().getParentTreeCursor().getValue() instanceof
-                J.VariableDeclarations.NamedVariable namedVariable
+                this.getCursor().getParentTreeCursor().getValue()
+                instanceof J.VariableDeclarations.NamedVariable namedVariable
             ) {
                 if (
-                    this.getCursor().getParentTreeCursor().getParentTreeCursor().getValue() instanceof
-                    J.VariableDeclarations variableDecls
+                    this.getCursor().getParentTreeCursor().getParentTreeCursor().getValue()
+                    instanceof J.VariableDeclarations variableDecls
                 ) {
                     JavaType.FullyQualified variableType = TypeUtils.asFullyQualified(variableDecls.getType());
                     if (variableType != null) {

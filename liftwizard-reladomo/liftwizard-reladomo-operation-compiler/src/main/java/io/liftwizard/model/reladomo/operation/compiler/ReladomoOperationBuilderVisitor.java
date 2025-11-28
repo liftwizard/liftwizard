@@ -179,8 +179,8 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
 
     private AbstractRelatedFinder getNavigation(NavigationContext ctx, String errorContext) {
         if (
-            ctx.className() != null &&
-            !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
+            ctx.className() != null
+            && !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
         ) {
             String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
                 this.getExpectedClassName(this.finder),

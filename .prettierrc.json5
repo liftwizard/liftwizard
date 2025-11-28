@@ -32,4 +32,9 @@
   // Line length where Prettier will try to wrap
   // Default: 80
   printWidth: 120,
+
+  // prettier-plugin-java: Position of binary operators in wrapped lines
+  // Default: "end"
+  // Options: "start" | "end"
+  experimentalOperatorPosition: "start",
 }
