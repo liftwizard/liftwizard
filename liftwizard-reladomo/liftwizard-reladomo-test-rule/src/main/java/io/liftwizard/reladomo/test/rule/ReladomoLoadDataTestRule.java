@@ -110,9 +110,9 @@ public class ReladomoLoadDataTestRule implements TestRule {
 
             if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName)) {
                 String message =
-                    "Class " +
-                    parsedClassName +
-                    " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?";
+                    "Class "
+                    + parsedClassName
+                    + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?";
                 throw new RuntimeException(message);
             }
 

@@ -31,8 +31,8 @@ public class ECSimplifyNegatedIterateSatisfies {
 
     @RecipeDescriptor(
         name = "`!Iterate.noneSatisfy()` → `Iterate.anySatisfy()`",
-        description = "Converts `!Iterate.noneSatisfy(iterable, predicate)` to `Iterate.anySatisfy(iterable, predicate)`. " +
-        "Also handles double negation: `Iterate.anySatisfy(iterable, Predicates.not(predicate))` to `Iterate.anySatisfy(iterable, predicate)`."
+        description = "Converts `!Iterate.noneSatisfy(iterable, predicate)` to `Iterate.anySatisfy(iterable, predicate)`. "
+        + "Also handles double negation: `Iterate.anySatisfy(iterable, Predicates.not(predicate))` to `Iterate.anySatisfy(iterable, predicate)`."
     )
     public static final class NegatedNoneSatisfyToAnySatisfy<T> {
 
@@ -54,8 +54,8 @@ public class ECSimplifyNegatedIterateSatisfies {
 
     @RecipeDescriptor(
         name = "`!Iterate.anySatisfy()` → `Iterate.noneSatisfy()`",
-        description = "Converts `!Iterate.anySatisfy(iterable, predicate)` to `Iterate.noneSatisfy(iterable, predicate)`. " +
-        "Also handles double negation: `!Iterate.noneSatisfy(iterable, Predicates.not(predicate))` to `Iterate.noneSatisfy(iterable, predicate)`."
+        description = "Converts `!Iterate.anySatisfy(iterable, predicate)` to `Iterate.noneSatisfy(iterable, predicate)`. "
+        + "Also handles double negation: `!Iterate.noneSatisfy(iterable, Predicates.not(predicate))` to `Iterate.noneSatisfy(iterable, predicate)`."
     )
     public static final class NegatedAnySatisfyToNoneSatisfy<T> {
 

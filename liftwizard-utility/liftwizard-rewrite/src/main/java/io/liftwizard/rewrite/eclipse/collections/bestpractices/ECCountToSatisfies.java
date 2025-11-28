@@ -24,10 +24,10 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "`count() == 0` → `noneSatisfy()`",
-    description = "Converts count() comparisons to more efficient satisfies methods for Eclipse Collections types. " +
-    "Handles patterns like `count(predicate) == 0` -> `noneSatisfy(predicate)`, `count(predicate) > 0` -> `anySatisfy(predicate)`, " +
-    "`count(predicate) != 0` -> `anySatisfy(predicate)`, `count(predicate) <= 0` -> `noneSatisfy(predicate)`, " +
-    "and `count(predicate) >= 1` -> `anySatisfy(predicate)`."
+    description = "Converts count() comparisons to more efficient satisfies methods for Eclipse Collections types. "
+    + "Handles patterns like `count(predicate) == 0` -> `noneSatisfy(predicate)`, `count(predicate) > 0` -> `anySatisfy(predicate)`, "
+    + "`count(predicate) != 0` -> `anySatisfy(predicate)`, `count(predicate) <= 0` -> `noneSatisfy(predicate)`, "
+    + "and `count(predicate) >= 1` -> `anySatisfy(predicate)`."
 )
 public class ECCountToSatisfies {
 

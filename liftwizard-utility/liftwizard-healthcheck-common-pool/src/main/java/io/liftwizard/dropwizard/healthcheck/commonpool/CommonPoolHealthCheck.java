@@ -113,8 +113,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
             .filter(threadInfo -> this.threadStates.contains(threadInfo.getThreadState()))
             .filter(
                 threadInfo ->
-                    this.bannedPatterns.isEmpty() ||
-                    this.bannedPatterns.anySatisfy(bannedPattern ->
+                    this.bannedPatterns.isEmpty()
+                    || this.bannedPatterns.anySatisfy(bannedPattern ->
                         ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
                             this::traceMatchesPattern,
                             bannedPattern

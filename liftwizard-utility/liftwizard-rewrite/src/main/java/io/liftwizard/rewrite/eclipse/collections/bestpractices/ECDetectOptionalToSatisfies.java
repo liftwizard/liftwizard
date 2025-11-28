@@ -24,10 +24,10 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "`detectOptional().isPresent()` → `anySatisfy()`",
-    description = "Converts `iterable.detectOptional(predicate).isPresent()` to `iterable.anySatisfy(predicate)`, " +
-    "`!iterable.detectOptional(predicate).isPresent()` to `iterable.noneSatisfy(predicate)`, " +
-    "`iterable.detectOptional(predicate).isEmpty()` to `iterable.noneSatisfy(predicate)`, and " +
-    "`!iterable.detectOptional(predicate).isEmpty()` to `iterable.anySatisfy(predicate)` for Eclipse Collections types."
+    description = "Converts `iterable.detectOptional(predicate).isPresent()` to `iterable.anySatisfy(predicate)`, "
+    + "`!iterable.detectOptional(predicate).isPresent()` to `iterable.noneSatisfy(predicate)`, "
+    + "`iterable.detectOptional(predicate).isEmpty()` to `iterable.noneSatisfy(predicate)`, and "
+    + "`!iterable.detectOptional(predicate).isEmpty()` to `iterable.anySatisfy(predicate)` for Eclipse Collections types."
 )
 public class ECDetectOptionalToSatisfies {
 

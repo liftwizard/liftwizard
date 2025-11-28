@@ -24,9 +24,9 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
     name = "`detect() != null` → `anySatisfy()`",
-    description = "Converts `iterable.detect(predicate) != null` to `iterable.anySatisfy(predicate)` and " +
-    "`iterable.detect(predicate) == null` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types. " +
-    "Warning: This transformation can change semantics if the collection contains null values."
+    description = "Converts `iterable.detect(predicate) != null` to `iterable.anySatisfy(predicate)` and "
+    + "`iterable.detect(predicate) == null` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types. "
+    + "Warning: This transformation can change semantics if the collection contains null values."
 )
 public class ECDetectToSatisfies {
 

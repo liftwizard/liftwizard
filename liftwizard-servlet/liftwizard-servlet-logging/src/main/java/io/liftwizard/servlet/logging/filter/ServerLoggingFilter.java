@@ -81,8 +81,8 @@ public class ServerLoggingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
         if (
-            !(request instanceof HttpServletRequest httpServletRequest) ||
-            !(response instanceof HttpServletResponse httpServletResponse)
+            !(request instanceof HttpServletRequest httpServletRequest)
+            || !(response instanceof HttpServletResponse httpServletResponse)
         ) {
             chain.doFilter(request, response);
             return;
@@ -174,9 +174,9 @@ public class ServerLoggingFilter implements Filter {
         ContentCachingRequestWrapper requestWrapper
     ) {
         if (
-            !this.loggingConfig.isLogRequestBodies() ||
-            requestWrapper == null ||
-            requestWrapper.getContentLengthLong() <= 0
+            !this.loggingConfig.isLogRequestBodies()
+            || requestWrapper == null
+            || requestWrapper.getContentLengthLong() <= 0
         ) {
             return;
         }
