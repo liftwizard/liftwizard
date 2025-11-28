@@ -541,7 +541,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: reviewdog/action-actionlint@v1.65.2
+      - uses: reviewdog/action-actionlint@v1.69.0
         with:
           reporter: github-pr-check
           fail_on_error: true
