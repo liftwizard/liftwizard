@@ -552,7 +552,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: reviewdog/action-shellcheck@v1.29.0
+      - uses: reviewdog/action-shellcheck@v1.32.0
         with:
           reporter: github-pr-check
           filter_mode: nofilter
