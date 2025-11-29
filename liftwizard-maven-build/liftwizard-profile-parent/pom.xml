@@ -185,6 +185,7 @@
                                     <recipe>org.openrewrite.java.testing.mockito.MockitoBestPractices</recipe>
                                     <recipe>org.openrewrite.java.testing.testcontainers.TestContainersBestPractices</recipe>
                                     <recipe>org.openrewrite.maven.BestPractices</recipe>
+                                    <recipe>org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments</recipe>
                                 </activeRecipes>
                             </configuration>
                             <dependencies>
@@ -197,6 +198,11 @@
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-github-actions</artifactId>
                                     <version>3.15.0</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-static-analysis</artifactId>
+                                    <version>2.22.0</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
