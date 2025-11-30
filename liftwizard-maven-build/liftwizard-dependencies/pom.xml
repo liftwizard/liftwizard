@@ -141,7 +141,7 @@
             <dependency>
                 <groupId>org.eclipse.collections</groupId>
                 <artifactId>eclipse-collections-api</artifactId>
-                <version>12.0.0</version>
+                <version>13.0.0</version>
             </dependency>
 
             <dependency>
