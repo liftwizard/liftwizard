@@ -1,4 +1,4 @@
-The most minimal parent pom is `liftwizard-minimal-parent`. If you are able to accept more opinionated defaults, continue to [`liftwizard-profile-parent`](profile-parent). The minimal parent is meant to contain uncontroversial best practices that are applicable to all projects.
+The most minimal parent pom is `liftwizard-minimal-parent`. If you are able to accept more opinionated defaults, continue to [`liftwizard-profile-parent`](maven/profile-parent). The minimal parent is meant to contain uncontroversial best practices that are applicable to all projects.
 
 # Usage
 
