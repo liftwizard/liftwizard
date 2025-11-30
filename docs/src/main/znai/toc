@@ -17,6 +17,7 @@ graphql
     instrumentation-metrics
     data-fetcher-async
 reladomo
+    reladomo-overview
     reladomo-operation-compiler
 database
     named-data-source

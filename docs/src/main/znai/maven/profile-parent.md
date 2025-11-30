@@ -1,4 +1,4 @@
-The "profile" parent pom inherits from [`liftwizard-minimal-parent`](minimal-parent). If you are able to accept more opinionated defaults, continue to [`bill-of-materials`](bill-of-materials). The profile parent contains a number of plugins you may want to enable, each wrapped individually in a maven profile.
+The "profile" parent pom inherits from [`liftwizard-minimal-parent`](maven/minimal-parent). If you are able to accept more opinionated defaults, continue to [`bill-of-materials`](maven/bill-of-materials). The profile parent contains a number of plugins you may want to enable, each wrapped individually in a maven profile.
 
 ## Usage
 
