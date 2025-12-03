@@ -110,6 +110,7 @@
     <profiles>
 
         <!--region No phase-->
+        <!-- profile:rewrite-maven-plugin -->
         <profile>
             <!--Rules that are meant to always pass. They can run in CI with dryRun, or one-off for rewrites.-->
             <id>rewrite-maven-plugin</id>
@@ -160,7 +161,9 @@
                 </pluginManagement>
             </build>
         </profile>
+        <!-- /profile:rewrite-maven-plugin -->
 
+        <!-- profile:rewrite-maven-plugin-one-off -->
         <profile>
             <!--Rules that don't reliably pass. They can't run in CI with dryRun, only one-off for rewrites.-->
             <id>rewrite-maven-plugin-one-off</id>
@@ -210,7 +213,9 @@
                 </pluginManagement>
             </build>
         </profile>
+        <!-- /profile:rewrite-maven-plugin-one-off -->
 
+        <!-- profile:rewrite-maven-plugin-dryRun -->
         <profile>
             <id>rewrite-maven-plugin-dryRun</id>
             <build>
@@ -236,9 +241,11 @@
                 </pluginManagement>
             </build>
         </profile>
+        <!-- /profile:rewrite-maven-plugin-dryRun -->
         <!--endregion No phase-->
 
         <!--region Phase 1: validate-->
+        <!-- profile:prettier-check -->
         <profile>
             <id>prettier-check</id>
 
@@ -267,7 +274,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:prettier-check -->
 
+        <!-- profile:prettier-apply -->
         <profile>
             <id>prettier-apply</id>
 
@@ -296,7 +305,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:prettier-apply -->
 
+        <!-- profile:spotless-check -->
         <profile>
             <id>spotless-check</id>
 
@@ -321,7 +332,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-check -->
 
+        <!-- profile:spotless-apply -->
         <profile>
             <id>spotless-apply</id>
 
@@ -346,7 +359,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-apply -->
 
+        <!-- profile:spotless-java -->
         <profile>
             <id>spotless-java</id>
 
@@ -371,7 +386,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-java -->
 
+        <!-- profile:spotless-formats -->
         <profile>
             <id>spotless-formats</id>
 
@@ -401,7 +418,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-formats -->
 
+        <!-- profile:spotless-java-sort-imports -->
         <profile>
             <id>spotless-java-sort-imports</id>
 
@@ -429,7 +448,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-java-sort-imports -->
 
+        <!-- profile:spotless-java-unused-imports -->
         <profile>
             <id>spotless-java-unused-imports</id>
 
@@ -452,7 +473,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-java-unused-imports -->
 
+        <!-- profile:spotless-prettier-java -->
         <profile>
             <id>spotless-prettier-java</id>
 
@@ -487,7 +510,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-prettier-java -->
 
+        <!-- profile:spotless-prettier-java-sort-imports -->
         <profile>
             <id>spotless-prettier-java-sort-imports</id>
 
@@ -529,7 +554,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-prettier-java-sort-imports -->
 
+        <!-- profile:spotless-google-java-format -->
         <profile>
             <id>spotless-google-java-format</id>
 
@@ -557,7 +584,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-google-java-format -->
 
+        <!-- profile:spotless-java-cleanthat -->
         <profile>
             <id>spotless-java-cleanthat</id>
 
@@ -581,7 +610,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-java-cleanthat -->
 
+        <!-- profile:spotless-antlr -->
         <profile>
             <id>spotless-antlr</id>
 
@@ -601,7 +632,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-antlr -->
 
+        <!-- profile:spotless-sql -->
         <profile>
             <id>spotless-sql</id>
 
@@ -636,7 +669,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-sql -->
 
+        <!-- profile:spotless-pom -->
         <profile>
             <id>spotless-pom</id>
 
@@ -667,7 +702,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-pom -->
 
+        <!-- profile:spotless-markdown -->
         <profile>
             <id>spotless-markdown</id>
 
@@ -696,7 +733,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-markdown -->
 
+        <!-- profile:spotless-json -->
         <profile>
             <id>spotless-json</id>
 
@@ -730,7 +769,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-json -->
 
+        <!-- profile:spotless-yaml -->
         <profile>
             <id>spotless-yaml</id>
 
@@ -766,9 +807,11 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-yaml -->
         <!--endregion Phase 1: validate-->
 
         <!--region Phase 7: compile-->
+        <!-- profile:errorprone -->
         <profile>
             <id>errorprone</id>
             <build>
@@ -813,7 +856,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:errorprone -->
 
+        <!-- profile:errorprone-strict -->
         <profile>
             <id>errorprone-strict</id>
             <build>
@@ -860,7 +905,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:errorprone-strict -->
 
+        <!-- profile:errorprone-patch -->
         <profile>
             <id>errorprone-patch</id>
             <build>
@@ -909,9 +956,11 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:errorprone-patch -->
         <!--endregion Phase 7: compile-->
 
         <!--region Phase 15: test-->
+        <!-- profile:rerecord -->
         <profile>
             <id>rerecord</id>
 
@@ -930,8 +979,10 @@
                 </pluginManagement>
             </build>
         </profile>
+        <!-- /profile:rerecord -->
         <!--endregion Phase 15: test-->
 
+        <!-- profile:spotless-preserve-cache -->
         <profile>
             <id>spotless-preserve-cache</id>
 
@@ -954,8 +1005,10 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotless-preserve-cache -->
 
         <!--region Phase 16: prepare-package-->
+        <!-- profile:znai-maven-plugin -->
         <profile>
             <id>znai-maven-plugin</id>
             <build>
@@ -972,9 +1025,11 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:znai-maven-plugin -->
         <!--endregion Phase 16: prepare-package-->
 
         <!--region Phase 17: package-->
+        <!-- profile:maven-shade-plugin -->
         <profile>
             <id>maven-shade-plugin</id>
             <build>
@@ -1020,7 +1075,9 @@
                 </pluginManagement>
             </build>
         </profile>
+        <!-- /profile:maven-shade-plugin -->
 
+        <!-- profile:maven-javadoc-plugin -->
         <profile>
             <id>maven-javadoc-plugin</id>
 
@@ -1050,9 +1107,11 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:maven-javadoc-plugin -->
         <!--endregion Phase 17: package-->
 
         <!--region Phase 21: verify-->
+        <!-- profile:spotbugs-maven-plugin -->
         <profile>
             <id>spotbugs-maven-plugin</id>
             <build>
@@ -1083,7 +1142,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:spotbugs-maven-plugin -->
 
+        <!-- profile:jacoco-maven-plugin -->
         <profile>
             <id>jacoco-maven-plugin</id>
 
@@ -1116,7 +1177,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:jacoco-maven-plugin -->
 
+        <!-- profile:checkstyle-semantics -->
         <profile>
             <id>checkstyle-semantics</id>
 
@@ -1148,7 +1211,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:checkstyle-semantics -->
 
+        <!-- profile:checkstyle-semantics-strict -->
         <profile>
             <id>checkstyle-semantics-strict</id>
 
@@ -1180,7 +1245,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:checkstyle-semantics-strict -->
 
+        <!-- profile:checkstyle-formatting -->
         <profile>
             <id>checkstyle-formatting</id>
 
@@ -1213,7 +1280,9 @@
             </build>
 
         </profile>
+        <!-- /profile:checkstyle-formatting -->
 
+        <!-- profile:checkstyle-formatting-strict -->
         <profile>
             <id>checkstyle-formatting-strict</id>
 
@@ -1246,7 +1315,9 @@
             </build>
 
         </profile>
+        <!-- /profile:checkstyle-formatting-strict -->
 
+        <!-- profile:maven-dependency-plugin -->
         <profile>
             <id>maven-dependency-plugin</id>
 
@@ -1316,7 +1387,9 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:maven-dependency-plugin -->
 
+        <!-- profile:maven-enforcer-plugin -->
         <profile>
             <id>maven-enforcer-plugin</id>
 
@@ -1469,8 +1542,10 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:maven-enforcer-plugin -->
         <!--endregion Phase 21: verify-->
 
+        <!-- profile:deploy -->
         <profile>
             <id>deploy</id>
 
@@ -1494,6 +1569,7 @@
                 </plugins>
             </build>
         </profile>
+        <!-- /profile:deploy -->
 
     </profiles>
 </project>
