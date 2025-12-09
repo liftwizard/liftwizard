@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard</artifactId>
-        <version>2.1.36</version>
+        <version>2.1.37-SNAPSHOT</version>
     </parent>
 
     <artifactId>liftwizard-reladomo</artifactId>
@@ -55,8 +55,4 @@
         <module>liftwizard-reladomo-utc-infinity-timestamp</module>
         <module>liftwizard-task-reladomo-clear-cache</module>
     </modules>
-
-  <scm>
-    <tag>2.1.36</tag>
-  </scm>
 </project>

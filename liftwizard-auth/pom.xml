@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard</artifactId>
-        <version>2.1.36</version>
+        <version>2.1.37-SNAPSHOT</version>
     </parent>
 
     <artifactId>liftwizard-auth</artifactId>
@@ -36,8 +36,4 @@
         <module>liftwizard-firebase-dependencies</module>
         <module>liftwizard-principal-firebase</module>
     </modules>
-
-  <scm>
-    <tag>2.1.36</tag>
-  </scm>
 </project>
