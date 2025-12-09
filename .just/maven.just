@@ -134,12 +134,36 @@ rewrite RECIPE MVN=default_mvn: (mvn MVN "install org.openrewrite.maven:rewrite-
 @wrapper VERSION:
     just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} wrapper:wrapper -Dmaven={{ANSI_YELLOW}}{{VERSION}}{{ANSI_DEFAULT}}"
 
-# `mvn release:prepare`
-release: clean _check-local-modifications && _clean-git _check-local-modifications
+# Trigger GitHub Actions release workflow
+[group('release')]
+release:
     #!/usr/bin/env bash
     set -Eeuo pipefail
 
     just _run "git checkout {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
+
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$current_branch" = "HEAD" ]; then
+        current_ref="detached at $(git rev-parse --short HEAD)"
+    else
+        current_ref="$current_branch"
+    fi
+    if [ "$current_branch" != "{{upstream_branch}}" ]; then
+        echo "⚠️  Not on {{ANSI_YELLOW}}{{upstream_branch}}{{ANSI_DEFAULT}} branch (currently on {{ANSI_RED}}${current_ref}{{ANSI_DEFAULT}})"
+        read -p "Continue anyway? [y/N] " -n 1 -r
+        echo
+        [[ $REPLY =~ ^[Yy]$ ]] || exit 1
+    fi
+    local_sha=$(git rev-parse HEAD)
+    remote_sha=$(git rev-parse {{upstream_remote}}/{{upstream_branch}})
+    if [ "$local_sha" != "$remote_sha" ]; then
+        echo "⚠️  Local {{ANSI_YELLOW}}{{upstream_branch}}{{ANSI_DEFAULT}} is not up to date with {{ANSI_YELLOW}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}"
+        echo "   Local:  ${local_sha}"
+        echo "   Remote: ${remote_sha}"
+        read -p "Continue anyway? [y/N] " -n 1 -r
+        echo
+        [[ $REPLY =~ ^[Yy]$ ]] || exit 1
+    fi
 
     CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
@@ -147,17 +171,23 @@ release: clean _check-local-modifications && _clean-git _check-local-modificatio
         MAJOR="${BASH_REMATCH[1]}"
         MINOR="${BASH_REMATCH[2]}"
         PATCH="${BASH_REMATCH[3]}"
+        RELEASE_VERSION="$MAJOR.$MINOR.$PATCH"
         NEXT_VERSION="$MAJOR.$MINOR.$((PATCH + 1))-SNAPSHOT"
     else
-        NEXT_VERSION="$CURRENT_VERSION"
+        echo "❌ Could not parse version: ${CURRENT_VERSION}"
+        exit 1
     fi
 
-    echo "Current version is: {{ANSI_YELLOW}}$CURRENT_VERSION{{ANSI_DEFAULT}}"
+    echo "📦 Current version: {{ANSI_YELLOW}}${CURRENT_VERSION}{{ANSI_DEFAULT}}"
+    echo "🏷️  Release version: {{ANSI_GREEN}}${RELEASE_VERSION}{{ANSI_DEFAULT}}"
 
     read -p "Enter next version (default: {{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}): " INPUT_VERSION
     NEXT_VERSION=${INPUT_VERSION:-$NEXT_VERSION}
 
-    just _run "mvn {{ANSI_MAGENTA}}--batch-mode{{ANSI_DEFAULT}} clean release:clean release:prepare -DdevelopmentVersion={{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}"
+    just _run "gh workflow run {{ANSI_YELLOW}}release.yml{{ANSI_DEFAULT}} --field next-version={{ANSI_YELLOW}}${NEXT_VERSION}{{ANSI_DEFAULT}}"
+    just _run "sleep {{ANSI_YELLOW}}2{{ANSI_DEFAULT}}"
+    run_id=$(gh run list --workflow=release.yml --limit 1 --json databaseId --jq '.[0].databaseId')
+    just _run "gh run watch {{ANSI_YELLOW}}${run_id}{{ANSI_DEFAULT}}"
 
 # `mvn deploy`
 deploy MVN="mvn": (mvn MVN "deploy" "--activate-profiles maven-central-deploy,deploy,maven-javadoc-plugin" "")
