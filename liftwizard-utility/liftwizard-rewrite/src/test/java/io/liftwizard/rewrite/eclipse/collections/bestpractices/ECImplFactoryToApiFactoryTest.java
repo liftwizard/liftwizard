@@ -29,7 +29,7 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
         spec
-            .recipeFromResources("io.liftwizard.rewrite.eclipse.collections.bestpractices.ECImplFactoryToApiFactory")
+            .recipe(new ECImplFactoryToApiFactoryRecipes())
             .parser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api", "eclipse-collections"));
     }
 
@@ -47,11 +47,6 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
                 import org.eclipse.collections.impl.factory.SortedSets;
                 import org.eclipse.collections.impl.factory.SortedMaps;
                 import org.eclipse.collections.impl.factory.SortedBags;
-                import org.eclipse.collections.impl.factory.primitive.BooleanSets;
-                import org.eclipse.collections.impl.factory.primitive.IntSets;
-                import org.eclipse.collections.impl.factory.primitive.LongSets;
-                import org.eclipse.collections.impl.factory.primitive.FloatSets;
-                import org.eclipse.collections.impl.factory.primitive.DoubleSets;
                 import org.eclipse.collections.api.list.MutableList;
                 import org.eclipse.collections.api.set.MutableSet;
 
@@ -72,17 +67,11 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
                         var sortedSet = SortedSets.mutable.empty();
                         var sortedMap = SortedMaps.mutable.empty();
                         var sortedBag = SortedBags.mutable.empty();
-                        var booleanSet = BooleanSets.mutable.empty();
-                        var intSet = IntSets.mutable.empty();
-                        var longSet = LongSets.mutable.empty();
-                        var floatSet = FloatSets.mutable.empty();
-                        var doubleSet = DoubleSets.mutable.empty();
                     }
                 }
                 """,
                 """
                 import org.eclipse.collections.api.factory.*;
-                import org.eclipse.collections.api.factory.primitive.*;
                 import org.eclipse.collections.api.list.MutableList;
                 import org.eclipse.collections.api.set.MutableSet;
 
@@ -103,11 +92,6 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
                         var sortedSet = SortedSets.mutable.empty();
                         var sortedMap = SortedMaps.mutable.empty();
                         var sortedBag = SortedBags.mutable.empty();
-                        var booleanSet = BooleanSets.mutable.empty();
-                        var intSet = IntSets.mutable.empty();
-                        var longSet = LongSets.mutable.empty();
-                        var floatSet = FloatSets.mutable.empty();
-                        var doubleSet = DoubleSets.mutable.empty();
                     }
                 }
                 """
@@ -116,7 +100,7 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
     }
 
     @Test
-    void doNotReplaceInvalidPatterns() {
+    void doNotReplaceAlreadyApiFactory() {
         rewriteRun(
             java(
                 """
@@ -129,6 +113,42 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
                         var list = Lists.mutable.empty();
                         var set = Sets.mutable.empty();
                         var map = Maps.mutable.empty();
+                    }
+                }
+                """
+            )
+        );
+    }
+
+    @Test
+    void doNotTransformStaticUtilityMethods() {
+        rewriteRun(
+            java(
+                """
+                import java.util.ArrayList;
+                import java.util.HashMap;
+                import java.util.List;
+                import java.util.Map;
+                import java.util.Set;
+                import org.eclipse.collections.api.list.MutableList;
+                import org.eclipse.collections.api.map.MutableMap;
+                import org.eclipse.collections.impl.factory.Lists;
+                import org.eclipse.collections.impl.factory.Maps;
+                import org.eclipse.collections.impl.factory.Sets;
+
+                public class Example {
+                    void setsUnion(Set<String> a, Set<String> b) {
+                        Set<String> union = Sets.union(a, b);
+                    }
+
+                    void listsAdapt() {
+                        List<String> javaList = new ArrayList<>();
+                        MutableList<String> adapted = Lists.adapt(javaList);
+                    }
+
+                    void mapsAdapt() {
+                        Map<String, String> javaMap = new HashMap<>();
+                        MutableMap<String, String> adapted = Maps.adapt(javaMap);
                     }
                 }
                 """

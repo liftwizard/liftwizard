@@ -20,7 +20,7 @@ name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
 displayName: Eclipse Collections best practices
 description: Apply Eclipse Collections best practices and idiomatic usage patterns for optimizing existing Eclipse Collections code.
 recipeList:
-  - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECImplFactoryToApiFactory
+  - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECImplFactoryToApiFactoryRecipes
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedEmptyChecksRecipes
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedSatisfiesRecipes
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECDetectOptionalToSatisfiesRecipes
