@@ -43,3 +43,13 @@ recipeList:
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSetToMutableSet
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedMapToMutableSortedMap
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedSetToMutableSortedSet
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.eclipse.collections
+      artifactId: eclipse-collections-api
+      version: 11.x
+      onlyIfUsing: org.eclipse.collections.api..*
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.eclipse.collections
+      artifactId: eclipse-collections
+      version: 11.x
+      onlyIfUsing: org.eclipse.collections.impl..*

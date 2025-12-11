@@ -21,3 +21,13 @@ displayName: Eclipse Collections adoption recipes with potential semantic change
 description: Collection of recipes that help adopt Eclipse Collections patterns but may change program semantics. These recipes should be applied with careful review as they may change behavior when collections contain null values.
 recipeList:
   - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.ECDetectToSatisfiesRecipes
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.eclipse.collections
+      artifactId: eclipse-collections-api
+      version: 11.x
+      onlyIfUsing: org.eclipse.collections.api..*
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.eclipse.collections
+      artifactId: eclipse-collections
+      version: 11.x
+      onlyIfUsing: org.eclipse.collections.impl..*
