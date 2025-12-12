@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -75,7 +75,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -126,7 +126,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-spotless-pom-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -251,7 +251,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-spotless-formats-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -302,7 +302,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-spotless-java-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -353,7 +353,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-spotless-prettier-java-sort-imports-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -404,7 +404,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-spotless-java-cleanthat-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -455,7 +455,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-errorprone-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -511,7 +511,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: maven-liftwizard-rerecord-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
