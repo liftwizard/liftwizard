@@ -19,7 +19,7 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard</artifactId>
-        <version>2.1.37-SNAPSHOT</version>
+        <version>2.1.37</version>
     </parent>
 
     <artifactId>docs</artifactId>
@@ -101,4 +101,8 @@
         </profile>
     </profiles>
     <!--endregion Phase 16: prepare-package-->
+
+  <scm>
+    <tag>2.1.37</tag>
+  </scm>
 </project>

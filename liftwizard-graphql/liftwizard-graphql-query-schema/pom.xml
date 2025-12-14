@@ -19,10 +19,14 @@
     <parent>
         <groupId>io.liftwizard</groupId>
         <artifactId>liftwizard-graphql</artifactId>
-        <version>2.1.37-SNAPSHOT</version>
+        <version>2.1.37</version>
     </parent>
 
     <artifactId>liftwizard-graphql-query-schema</artifactId>
 
     <name>Liftwizard GraphQL Query Schema</name>
+
+  <scm>
+    <tag>2.1.37</tag>
+  </scm>
 </project>
