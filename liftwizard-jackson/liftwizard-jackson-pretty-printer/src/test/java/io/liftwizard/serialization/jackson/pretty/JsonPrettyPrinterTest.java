@@ -73,7 +73,7 @@ class JsonPrettyPrinterTest {
     void emptyArray() throws JsonProcessingException {
         List<String> emptyList = List.of();
         String actualJson = this.mapper.writeValueAsString(emptyList);
-        String expectedJson = "[ ]";
+        String expectedJson = "[ ]\n";
         assertThat(actualJson).isEqualTo(expectedJson);
     }
 }

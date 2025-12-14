@@ -53,4 +53,12 @@ public class JsonPrettyPrinter extends DefaultPrettyPrinter {
             jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
         }
     }
+
+    @Override
+    public void writeEndArray(@Nonnull JsonGenerator jsonGenerator, int nrOfValues) throws IOException {
+        super.writeEndArray(jsonGenerator, nrOfValues);
+        if (this._nesting == 0) {
+            jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
+        }
+    }
 }
