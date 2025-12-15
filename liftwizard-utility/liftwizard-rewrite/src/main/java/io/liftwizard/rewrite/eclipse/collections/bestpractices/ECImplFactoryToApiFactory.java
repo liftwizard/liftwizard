@@ -42,8 +42,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
     name = "Replace impl.factory with api.factory",
     description = "Replace org.eclipse.collections.impl.factory.* factory field access "
-        + "with api.factory equivalents. Does not transform static utility methods like "
-        + "Sets.union(), Lists.adapt(), etc."
+    + "with api.factory equivalents. Does not transform static utility methods like "
+    + "Sets.union(), Lists.adapt(), etc."
 )
 public class ECImplFactoryToApiFactory {
 
@@ -52,6 +52,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Lists.mutable with api.factory.Lists.mutable."
     )
     public static class ListsMutable {
+
         @BeforeTemplate
         MutableListFactory before() {
             return org.eclipse.collections.impl.factory.Lists.mutable;
@@ -68,6 +69,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Lists.immutable with api.factory.Lists.immutable."
     )
     public static class ListsImmutable {
+
         @BeforeTemplate
         ImmutableListFactory before() {
             return org.eclipse.collections.impl.factory.Lists.immutable;
@@ -84,6 +86,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Lists.fixedSize with api.factory.Lists.fixedSize."
     )
     public static class ListsFixedSize {
+
         @BeforeTemplate
         FixedSizeListFactory before() {
             return org.eclipse.collections.impl.factory.Lists.fixedSize;
@@ -100,6 +103,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Sets.mutable with api.factory.Sets.mutable."
     )
     public static class SetsMutable {
+
         @BeforeTemplate
         MutableSetFactory before() {
             return org.eclipse.collections.impl.factory.Sets.mutable;
@@ -116,6 +120,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Sets.immutable with api.factory.Sets.immutable."
     )
     public static class SetsImmutable {
+
         @BeforeTemplate
         ImmutableSetFactory before() {
             return org.eclipse.collections.impl.factory.Sets.immutable;
@@ -132,6 +137,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Sets.fixedSize with api.factory.Sets.fixedSize."
     )
     public static class SetsFixedSize {
+
         @BeforeTemplate
         FixedSizeSetFactory before() {
             return org.eclipse.collections.impl.factory.Sets.fixedSize;
@@ -148,6 +154,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Maps.mutable with api.factory.Maps.mutable."
     )
     public static class MapsMutable {
+
         @BeforeTemplate
         MutableMapFactory before() {
             return org.eclipse.collections.impl.factory.Maps.mutable;
@@ -164,6 +171,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Maps.immutable with api.factory.Maps.immutable."
     )
     public static class MapsImmutable {
+
         @BeforeTemplate
         ImmutableMapFactory before() {
             return org.eclipse.collections.impl.factory.Maps.immutable;
@@ -180,6 +188,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Maps.fixedSize with api.factory.Maps.fixedSize."
     )
     public static class MapsFixedSize {
+
         @BeforeTemplate
         FixedSizeMapFactory before() {
             return org.eclipse.collections.impl.factory.Maps.fixedSize;
@@ -196,6 +205,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Bags.mutable with api.factory.Bags.mutable."
     )
     public static class BagsMutable {
+
         @BeforeTemplate
         MutableBagFactory before() {
             return org.eclipse.collections.impl.factory.Bags.mutable;
@@ -212,6 +222,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Bags.immutable with api.factory.Bags.immutable."
     )
     public static class BagsImmutable {
+
         @BeforeTemplate
         ImmutableBagFactory before() {
             return org.eclipse.collections.impl.factory.Bags.immutable;
@@ -228,6 +239,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Stacks.mutable with api.factory.Stacks.mutable."
     )
     public static class StacksMutable {
+
         @BeforeTemplate
         MutableStackFactory before() {
             return org.eclipse.collections.impl.factory.Stacks.mutable;
@@ -244,6 +256,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.Stacks.immutable with api.factory.Stacks.immutable."
     )
     public static class StacksImmutable {
+
         @BeforeTemplate
         ImmutableStackFactory before() {
             return org.eclipse.collections.impl.factory.Stacks.immutable;
@@ -260,6 +273,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.SortedSets.mutable with api.factory.SortedSets.mutable."
     )
     public static class SortedSetsMutable {
+
         @BeforeTemplate
         MutableSortedSetFactory before() {
             return org.eclipse.collections.impl.factory.SortedSets.mutable;
@@ -276,6 +290,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.SortedSets.immutable with api.factory.SortedSets.immutable."
     )
     public static class SortedSetsImmutable {
+
         @BeforeTemplate
         ImmutableSortedSetFactory before() {
             return org.eclipse.collections.impl.factory.SortedSets.immutable;
@@ -292,6 +307,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.SortedMaps.mutable with api.factory.SortedMaps.mutable."
     )
     public static class SortedMapsMutable {
+
         @BeforeTemplate
         MutableSortedMapFactory before() {
             return org.eclipse.collections.impl.factory.SortedMaps.mutable;
@@ -308,6 +324,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.SortedMaps.immutable with api.factory.SortedMaps.immutable."
     )
     public static class SortedMapsImmutable {
+
         @BeforeTemplate
         ImmutableSortedMapFactory before() {
             return org.eclipse.collections.impl.factory.SortedMaps.immutable;
@@ -324,6 +341,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.SortedBags.mutable with api.factory.SortedBags.mutable."
     )
     public static class SortedBagsMutable {
+
         @BeforeTemplate
         MutableSortedBagFactory before() {
             return org.eclipse.collections.impl.factory.SortedBags.mutable;
@@ -340,6 +358,7 @@ public class ECImplFactoryToApiFactory {
         description = "Replace impl.factory.SortedBags.immutable with api.factory.SortedBags.immutable."
     )
     public static class SortedBagsImmutable {
+
         @BeforeTemplate
         ImmutableSortedBagFactory before() {
             return org.eclipse.collections.impl.factory.SortedBags.immutable;
