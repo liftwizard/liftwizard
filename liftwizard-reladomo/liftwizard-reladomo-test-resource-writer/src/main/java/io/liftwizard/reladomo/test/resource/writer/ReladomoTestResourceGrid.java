@@ -83,13 +83,19 @@ public class ReladomoTestResourceGrid {
         }
 
         String classString = "class " + this.metaData.getBusinessOrInterfaceClassName() + "\n";
-        String headerRowString = this.columns.collect(ReladomoTestResourceColumn::getPaddedHeader).makeString() + "\n";
+        String headerRowString =
+            this.columns.collect(ReladomoTestResourceColumn::getPaddedHeader).makeString().stripTrailing() + "\n";
         LazyIterable<String> rowStrings = Interval.zeroTo(this.mithraList.size() - 1).collect(this::getRowString);
         String bodyString = rowStrings.makeString("");
         return classString + headerRowString + bodyString;
     }
 
     private String getRowString(int index) {
-        return this.columns.collect(each -> each.getPaddedValueString(index)).makeString() + "\n";
+        return (
+            this.columns.collect(each -> each.getPaddedValueString(index))
+                .makeString()
+                .stripTrailing()
+            + "\n"
+        );
     }
 }
