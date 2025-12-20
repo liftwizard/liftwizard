@@ -829,6 +829,7 @@
                                     -XepExcludedPaths:.*/generated-sources/.* \
                                     -Xep:CanIgnoreReturnValueSuggester:OFF \
                                     -Xep:NullableOnContainingClass:OFF \
+                                    -Xep:OperatorPrecedence:OFF \
                                     <!-- Suppressing EqualsGetClass due to https://github.com/google/error-prone/issues/1144 -->
                                     -Xep:EqualsGetClass:OFF \
                                     -Xep:UnusedVariable:WARN
