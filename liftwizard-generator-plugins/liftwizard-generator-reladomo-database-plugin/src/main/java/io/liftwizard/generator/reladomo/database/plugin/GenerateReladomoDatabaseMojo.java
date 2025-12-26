@@ -107,11 +107,33 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
             );
             coreGenerator.execute();
 
+            this.deleteLogFiles(generatedOutputDirectory);
+
             Resource resource = new Resource();
             resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
 
             LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
             this.mavenProject.addResource(resource);
+        }
+    }
+
+    private void deleteLogFiles(File directory) {
+        try (Stream<Path> logFiles = Files.walk(directory.toPath())) {
+            logFiles
+                .filter(Files::isRegularFile)
+                .filter(path -> path.toString().endsWith(".log"))
+                .forEach(this::deleteLogFile);
+        } catch (IOException e) {
+            this.getLog().warn("Failed to clean up Reladomo log files", e);
+        }
+    }
+
+    private void deleteLogFile(Path path) {
+        try {
+            Files.delete(path);
+            this.getLog().debug("Deleted Reladomo log file: " + path);
+        } catch (IOException e) {
+            this.getLog().warn("Failed to delete Reladomo log file: " + path, e);
         }
     }
 
