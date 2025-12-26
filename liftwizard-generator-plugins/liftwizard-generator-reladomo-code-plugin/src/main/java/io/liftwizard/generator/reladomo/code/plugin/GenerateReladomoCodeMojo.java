@@ -82,7 +82,29 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
             CoreMithraGenerator coreGenerator = this.getGenerator(tempFile.getPath());
             coreGenerator.execute();
 
+            this.deleteLogFiles();
+
             this.mavenProject.addCompileSourceRoot(this.generatedDir.getAbsolutePath());
+        }
+    }
+
+    private void deleteLogFiles() {
+        try (Stream<Path> logFiles = Files.walk(this.generatedDir.toPath())) {
+            logFiles
+                .filter(Files::isRegularFile)
+                .filter(path -> path.toString().endsWith(".log"))
+                .forEach(this::deleteLogFile);
+        } catch (IOException e) {
+            this.getLog().warn("Failed to clean up Reladomo log files", e);
+        }
+    }
+
+    private void deleteLogFile(Path path) {
+        try {
+            Files.delete(path);
+            this.getLog().debug("Deleted Reladomo log file: " + path);
+        } catch (IOException e) {
+            this.getLog().warn("Failed to delete Reladomo log file: " + path, e);
         }
     }
 
