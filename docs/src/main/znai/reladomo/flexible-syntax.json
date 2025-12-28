@@ -1,78 +1,78 @@
 [
-  {
-    "toString()": "`&`",
-    "Alternatives": "`&&`, `and`"
-  },
-  {
-    "toString()": "`|`",
-    "Alternatives": "`||`, `or`"
-  },
-  {
-    "toString()": "`<class name>`",
-    "Alternatives": "`this`"
-  },
-  {
-    "toString()": "`lower`",
-    "Alternatives": "`toLowerCase`"
-  },
-  {
-    "toString()": "`abs`",
-    "Alternatives": "`absoluteValue`"
-  },
-  {
-    "toString()": "`=`",
-    "Alternatives": "`==`, `eq`"
-  },
-  {
-    "toString()": "`!=`",
-    "Alternatives": "`not eq`, `notEq`"
-  },
-  {
-    "toString()": "`>`",
-    "Alternatives": "`greaterThan`"
-  },
-  {
-    "toString()": "`>=`",
-    "Alternatives": "`greaterThanEquals`"
-  },
-  {
-    "toString()": "`<`",
-    "Alternatives": "`lessThan`"
-  },
-  {
-    "toString()": "`<=`",
-    "Alternatives": "`lessThanEquals`"
-  },
-  {
-    "toString()": "`not in`",
-    "Alternatives": "`notIn`"
-  },
-  {
-    "toString()": "`not startsWith`",
-    "Alternatives": "`notStartsWith`"
-  },
-  {
-    "toString()": "`not endsWith`",
-    "Alternatives": "`notEndsWith`"
-  },
-  {
-    "toString()": "`not contains`",
-    "Alternatives": "`notContains`"
-  },
-  {
-    "toString()": "`not wildCardEquals`",
-    "Alternatives": "`wildCardNotEquals`"
-  },
-  {
-    "toString()": "`is null`",
-    "Alternatives": "`== null`"
-  },
-  {
-    "toString()": "`is not null`",
-    "Alternatives": "`!= null`"
-  },
-  {
-    "toString()": "`all of <class name}`",
-    "Alternatives": "`all`"
-  }
+	{
+		"toString()": "`&`",
+		"Alternatives": "`&&`, `and`"
+	},
+	{
+		"toString()": "`|`",
+		"Alternatives": "`||`, `or`"
+	},
+	{
+		"toString()": "`<class name>`",
+		"Alternatives": "`this`"
+	},
+	{
+		"toString()": "`lower`",
+		"Alternatives": "`toLowerCase`"
+	},
+	{
+		"toString()": "`abs`",
+		"Alternatives": "`absoluteValue`"
+	},
+	{
+		"toString()": "`=`",
+		"Alternatives": "`==`, `eq`"
+	},
+	{
+		"toString()": "`!=`",
+		"Alternatives": "`not eq`, `notEq`"
+	},
+	{
+		"toString()": "`>`",
+		"Alternatives": "`greaterThan`"
+	},
+	{
+		"toString()": "`>=`",
+		"Alternatives": "`greaterThanEquals`"
+	},
+	{
+		"toString()": "`<`",
+		"Alternatives": "`lessThan`"
+	},
+	{
+		"toString()": "`<=`",
+		"Alternatives": "`lessThanEquals`"
+	},
+	{
+		"toString()": "`not in`",
+		"Alternatives": "`notIn`"
+	},
+	{
+		"toString()": "`not startsWith`",
+		"Alternatives": "`notStartsWith`"
+	},
+	{
+		"toString()": "`not endsWith`",
+		"Alternatives": "`notEndsWith`"
+	},
+	{
+		"toString()": "`not contains`",
+		"Alternatives": "`notContains`"
+	},
+	{
+		"toString()": "`not wildCardEquals`",
+		"Alternatives": "`wildCardNotEquals`"
+	},
+	{
+		"toString()": "`is null`",
+		"Alternatives": "`== null`"
+	},
+	{
+		"toString()": "`is not null`",
+		"Alternatives": "`!= null`"
+	},
+	{
+		"toString()": "`all of <class name}`",
+		"Alternatives": "`all`"
+	}
 ]
