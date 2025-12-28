@@ -28,25 +28,25 @@ import graphql.schema.DataFetchingEnvironment;
 
 public class ReladomoLocalDateDataFetcher<Input> implements TrivialDataFetcher<LocalDate> {
 
-    private final DateAttribute<Input> dateAttribute;
+	private final DateAttribute<Input> dateAttribute;
 
-    public ReladomoLocalDateDataFetcher(DateAttribute<Input> dateAttribute) {
-        this.dateAttribute = dateAttribute;
-    }
+	public ReladomoLocalDateDataFetcher(DateAttribute<Input> dateAttribute) {
+		this.dateAttribute = dateAttribute;
+	}
 
-    @Nullable
-    @Override
-    public LocalDate get(@Nonnull DataFetchingEnvironment environment) {
-        Input persistentInstance = environment.getSource();
-        if (persistentInstance == null) {
-            return null;
-        }
+	@Nullable
+	@Override
+	public LocalDate get(@Nonnull DataFetchingEnvironment environment) {
+		Input persistentInstance = environment.getSource();
+		if (persistentInstance == null) {
+			return null;
+		}
 
-        if (this.dateAttribute.isAttributeNull(persistentInstance)) {
-            return null;
-        }
+		if (this.dateAttribute.isAttributeNull(persistentInstance)) {
+			return null;
+		}
 
-        Date result = (Date) this.dateAttribute.valueOf(persistentInstance);
-        return result.toLocalDate();
-    }
+		Date result = (Date) this.dateAttribute.valueOf(persistentInstance);
+		return result.toLocalDate();
+	}
 }

@@ -29,21 +29,21 @@ import org.eclipse.collections.api.set.primitive.ImmutableFloatSet;
 
 public class FloatListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final FloatAttribute<?> attribute;
-    private final ImmutableFloatSet floatSet;
+	private final FloatAttribute<?> attribute;
+	private final ImmutableFloatSet floatSet;
 
-    public FloatListBinaryOperatorVisitor(FloatAttribute<?> attribute, ImmutableList<Float> parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.floatSet = FloatSets.immutable.withAll(parameter);
-    }
+	public FloatListBinaryOperatorVisitor(FloatAttribute<?> attribute, ImmutableList<Float> parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.floatSet = FloatSets.immutable.withAll(parameter);
+	}
 
-    @Override
-    public Operation visitOperatorIn(OperatorInContext ctx) {
-        return this.attribute.in(this.floatSet);
-    }
+	@Override
+	public Operation visitOperatorIn(OperatorInContext ctx) {
+		return this.attribute.in(this.floatSet);
+	}
 
-    @Override
-    public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
-        return this.attribute.notIn(this.floatSet);
-    }
+	@Override
+	public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
+		return this.attribute.notIn(this.floatSet);
+	}
 }

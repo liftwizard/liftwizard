@@ -34,33 +34,33 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ConnectionManagerHolderBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManagerHolderBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManagerHolderBundle.class);
 
-    @Override
-    public int getPriority() {
-        return -4;
-    }
+	@Override
+	public int getPriority() {
+		return -4;
+	}
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
-            NamedDataSourceProvider.class,
-            configuration
-        );
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+			NamedDataSourceProvider.class,
+			configuration
+		);
 
-        ConnectionManagerProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
-            ConnectionManagerProvider.class,
-            configuration
-        );
+		ConnectionManagerProvider connectionManagerFactoryProvider = this.safeCastConfiguration(
+			ConnectionManagerProvider.class,
+			configuration
+		);
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        Map<String, SourcelessConnectionManager> connectionManagersByName = connectionManagerFactoryProvider
-            .getConnectionManagersFactory()
-            .getConnectionManagersByName(dataSourceProvider, environment);
+		Map<String, SourcelessConnectionManager> connectionManagersByName = connectionManagerFactoryProvider
+			.getConnectionManagersFactory()
+			.getConnectionManagersByName(dataSourceProvider, environment);
 
-        ConnectionManagerHolder.setConnectionManagersByName(Maps.immutable.withAll(connectionManagersByName));
+		ConnectionManagerHolder.setConnectionManagersByName(Maps.immutable.withAll(connectionManagersByName));
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 }

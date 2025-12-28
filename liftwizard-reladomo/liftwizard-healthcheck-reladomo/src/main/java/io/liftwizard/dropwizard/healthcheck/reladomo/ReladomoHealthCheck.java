@@ -22,10 +22,10 @@ import io.liftwizard.reladomo.simseq.ObjectSequenceList;
 
 public class ReladomoHealthCheck extends HealthCheck {
 
-    @Override
-    protected Result check() {
-        ObjectSequenceList objectSequences = ObjectSequenceFinder.findMany(ObjectSequenceFinder.all());
-        int size = objectSequences.size();
-        return Result.healthy("Found " + size + " rows.");
-    }
+	@Override
+	protected Result check() {
+		ObjectSequenceList objectSequences = ObjectSequenceFinder.findMany(ObjectSequenceFinder.all());
+		int size = objectSequences.size();
+		return Result.healthy("Found " + size + " rows.");
+	}
 }

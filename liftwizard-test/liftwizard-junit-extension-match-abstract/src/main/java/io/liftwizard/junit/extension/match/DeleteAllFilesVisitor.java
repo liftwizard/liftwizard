@@ -27,15 +27,15 @@ import javax.annotation.Nonnull;
 
 public final class DeleteAllFilesVisitor extends SimpleFileVisitor<Path> {
 
-    @Override
-    public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs) throws IOException {
-        Files.delete(file);
-        return super.visitFile(file, attrs);
-    }
+	@Override
+	public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs) throws IOException {
+		Files.delete(file);
+		return super.visitFile(file, attrs);
+	}
 
-    @Override
-    public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc) throws IOException {
-        Files.delete(dir);
-        return super.postVisitDirectory(dir, exc);
-    }
+	@Override
+	public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc) throws IOException {
+		Files.delete(dir);
+		return super.postVisitDirectory(dir, exc);
+	}
 }

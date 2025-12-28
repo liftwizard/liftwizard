@@ -44,108 +44,108 @@ import org.skyscreamer.jsonassert.JSONCompareResult;
 
 public class JsonMatchExtension extends AbstractMatchExtension {
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    public JsonMatchExtension(@Nonnull Class<?> callingClass) {
-        this(callingClass, JsonMatchExtension.newObjectMapper());
-    }
+	public JsonMatchExtension(@Nonnull Class<?> callingClass) {
+		this(callingClass, JsonMatchExtension.newObjectMapper());
+	}
 
-    public JsonMatchExtension(@Nonnull Class<?> callingClass, ObjectMapper objectMapper) {
-        super(callingClass);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
-    }
+	public JsonMatchExtension(@Nonnull Class<?> callingClass, ObjectMapper objectMapper) {
+		super(callingClass);
+		this.objectMapper = Objects.requireNonNull(objectMapper);
+	}
 
-    private static ObjectMapper newObjectMapper() {
-        ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper);
-        return objectMapper;
-    }
+	private static ObjectMapper newObjectMapper() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		ObjectMapperConfig.configure(objectMapper);
+		return objectMapper;
+	}
 
-    @Override
-    protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
-        throws IOException, URISyntaxException {
-        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation)) {
-            String prettyPrintedString = this.getPrettyPrintedString(actualString);
+	@Override
+	protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+		throws IOException, URISyntaxException {
+		if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation)) {
+			String prettyPrintedString = this.getPrettyPrintedString(actualString);
 
-            Path packagePath = this.resourceRerecorderExtension.getPackagePath();
-            File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
+			Path packagePath = this.resourceRerecorderExtension.getPackagePath();
+			File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.resourceRerecorderExtension.writeStringToFile(
-                resourceClassPathLocation,
-                prettyPrintedString,
-                resourceFile
-            );
-            if (!this.rerecordEnabled) {
-                String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
-                this.errorCollectorExtension.addError(new AssertionError(detailMessage));
-            }
-        } else {
-            InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-            Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-            String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
+			this.resourceRerecorderExtension.writeStringToFile(
+				resourceClassPathLocation,
+				prettyPrintedString,
+				resourceFile
+			);
+			if (!this.rerecordEnabled) {
+				String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
+				this.errorCollectorExtension.addError(new AssertionError(detailMessage));
+			}
+		} else {
+			InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
 
-            URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-            URI uri = resource.toURI();
+			URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+			URI uri = resource.toURI();
 
-            if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
-                return;
-            }
+			if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
+				return;
+			}
 
-            String fileContents = this.getPrettyPrintedString(actualString);
-            Optional<String> message = this.compareAndGetDiff(fileContents, expectedStringFromFile);
-            if (message.isPresent()) {
-                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
-                    resourceClassPathLocation,
-                    fileContents
-                );
-                AssertionError assertionError = new AssertionError(detailMessage);
-                this.errorCollectorExtension.addError(assertionError);
-            }
-        }
-    }
+			String fileContents = this.getPrettyPrintedString(actualString);
+			Optional<String> message = this.compareAndGetDiff(fileContents, expectedStringFromFile);
+			if (message.isPresent()) {
+				String detailMessage = this.resourceRerecorderExtension.handleMismatch(
+					resourceClassPathLocation,
+					fileContents
+				);
+				AssertionError assertionError = new AssertionError(detailMessage);
+				this.errorCollectorExtension.addError(assertionError);
+			}
+		}
+	}
 
-    protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile) {
-        try {
-            JSONCompareResult result = JSONCompare.compareJSON(
-                expectedStringFromFile,
-                actualString,
-                JSONCompareMode.STRICT
-            );
-            if (result.passed()) {
-                return Optional.empty();
-            }
+	protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile) {
+		try {
+			JSONCompareResult result = JSONCompare.compareJSON(
+				expectedStringFromFile,
+				actualString,
+				JSONCompareMode.STRICT
+			);
+			if (result.passed()) {
+				return Optional.empty();
+			}
 
-            if (result.failed()) {
-                String message = result.getMessage();
-                return Optional.of(message);
-            }
+			if (result.failed()) {
+				String message = result.getMessage();
+				return Optional.of(message);
+			}
 
-            throw new AssertionError(result);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
+			throw new AssertionError(result);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri) {
-        try {
-            this.objectMapper.readTree(expectedStringFromFile);
-            return true;
-        } catch (JacksonException e) {
-            String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
-            AssertionError assertionError = new AssertionError(detailMessage, e);
-            this.errorCollectorExtension.addError(assertionError);
-            return false;
-        }
-    }
+	protected boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri) {
+		try {
+			this.objectMapper.readTree(expectedStringFromFile);
+			return true;
+		} catch (JacksonException e) {
+			String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
+			AssertionError assertionError = new AssertionError(detailMessage, e);
+			this.errorCollectorExtension.addError(assertionError);
+			return false;
+		}
+	}
 
-    @Override
-    protected String getPrettyPrintedString(@Nonnull String string) {
-        try {
-            JsonNode jsonNode = this.objectMapper.readTree(string);
-            String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
-            return prettyPrintedString;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	protected String getPrettyPrintedString(@Nonnull String string) {
+		try {
+			JsonNode jsonNode = this.objectMapper.readTree(string);
+			String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
+			return prettyPrintedString;
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

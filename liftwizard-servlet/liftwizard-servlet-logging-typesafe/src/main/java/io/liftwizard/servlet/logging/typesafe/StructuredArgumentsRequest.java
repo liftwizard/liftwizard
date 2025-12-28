@@ -25,35 +25,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArgumentsRequest {
 
-    private final StructuredArgumentsRequestHttp http = new StructuredArgumentsRequestHttp();
+	private final StructuredArgumentsRequestHttp http = new StructuredArgumentsRequestHttp();
 
-    private Class<?> resourceClass;
-    private String resourceMethod;
+	private Class<?> resourceClass;
+	private String resourceMethod;
 
-    public StructuredArgumentsRequestHttp getHttp() {
-        return this.http;
-    }
+	public StructuredArgumentsRequestHttp getHttp() {
+		return this.http;
+	}
 
-    public Class<?> getResourceClass() {
-        return this.resourceClass;
-    }
+	public Class<?> getResourceClass() {
+		return this.resourceClass;
+	}
 
-    public void setResourceClass(@Nonnull Class<?> resourceClass) {
-        if (this.resourceClass != null) {
-            throw new AssertionError(this.resourceClass);
-        }
-        this.resourceClass = Objects.requireNonNull(resourceClass);
-    }
+	public void setResourceClass(@Nonnull Class<?> resourceClass) {
+		if (this.resourceClass != null) {
+			throw new AssertionError(this.resourceClass);
+		}
+		this.resourceClass = Objects.requireNonNull(resourceClass);
+	}
 
-    @JsonProperty
-    public String getResourceMethod() {
-        return this.resourceMethod;
-    }
+	@JsonProperty
+	public String getResourceMethod() {
+		return this.resourceMethod;
+	}
 
-    public void setResourceMethod(@Nonnull Method resourceMethod) {
-        if (this.resourceMethod != null) {
-            throw new AssertionError(this.resourceMethod);
-        }
-        this.resourceMethod = Objects.requireNonNull(resourceMethod.getName());
-    }
+	public void setResourceMethod(@Nonnull Method resourceMethod) {
+		if (this.resourceMethod != null) {
+			throw new AssertionError(this.resourceMethod);
+		}
+		this.resourceMethod = Objects.requireNonNull(resourceMethod.getName());
+	}
 }

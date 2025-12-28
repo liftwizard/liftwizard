@@ -60,10 +60,10 @@ In order to see the logging in action, we'll need to configure a log format that
 
 ```json5
 {
-  type: "console",
-  timeZone: "${LOGGING_TIMEZONE:-system}",
-  logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-  includeCallerData: true,
+	type: "console",
+	timeZone: "${LOGGING_TIMEZONE:-system}",
+	logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+	includeCallerData: true,
 }
 ```
 
@@ -117,33 +117,33 @@ Let's add the logstash-file appender to the list of configured appenders.
 
 ```json5
 {
-  // ...
-  logging: {
-    level: "DEBUG",
-    appenders: [
-      {
-        type: "console",
-        timeZone: "${LOGGING_TIMEZONE:-system}",
-        logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-        includeCallerData: true,
-      },
-      {
-        type: "file-logstash",
-        currentLogFilename: "./logs/logstash.jsonl",
-        archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
-        includeCallerData: true,
-        encoder: {
-          includeContext: true,
-          includeMdc: true,
-          includeStructuredArguments: true,
-          includedNonStructuredArguments: true,
-          includeTags: true,
-          prettyPrint: false,
-        },
-      },
-    ],
-  },
-  // ...
+	// ...
+	logging: {
+		level: "DEBUG",
+		appenders: [
+			{
+				type: "console",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				includeCallerData: true,
+			},
+			{
+				type: "file-logstash",
+				currentLogFilename: "./logs/logstash.jsonl",
+				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+				includeCallerData: true,
+				encoder: {
+					includeContext: true,
+					includeMdc: true,
+					includeStructuredArguments: true,
+					includedNonStructuredArguments: true,
+					includeTags: true,
+					prettyPrint: false,
+				},
+			},
+		],
+	},
+	// ...
 }
 ```
 
@@ -153,41 +153,41 @@ Let's add the logstash-file appender to the list of configured appenders.
 
 ```json
 {
-  "@timestamp": "1999-12-31T23:59:59.000-00:00",
-  "@version": "1",
-  "message": "Response sent",
-  "logger_name": "io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger",
-  "thread_name": "dw-249",
-  "level": "DEBUG",
-  "level_value": 10000,
-  "response.http.elapsedNanos": "1000000000",
-  "request.http.method": "GET",
-  "request.http.parameters.query.name": "Dr. IntegrationTest",
-  "request.http.path.full": "/hello-world",
-  "request.http.path.absolute": "http://localhost:63842/hello-world",
-  "request.http.client.port": "63855",
-  "request.http.headers.User-Agent": "Jersey/2.25.1 (HttpUrlConnection 17.0.2)",
-  "request.http.server.port": "63842",
-  "request.http.client.host": "127.0.0.1",
-  "request.resourceClass": "com.example.helloworld.resources.HelloWorldResource",
-  "request.http.path.template": "/hello-world",
-  "request.http.server.name": "localhost",
-  "request.http.headers.Host": "localhost:63842",
-  "response.http.headers.Content-Type": "application/json",
-  "response.http.contentType": "application/json",
-  "response.http.entityType": "com.example.helloworld.api.Saying",
-  "response.http.status.code": "200",
-  "request.http.client.address": "127.0.0.1",
-  "request.resourceMethod": "sayHello",
-  "response.http.status.phrase": "OK",
-  "response.http.body": "{\n  \"id\" : 1,\n  \"content\" : \"Hello, Dr. IntegrationTest!\"\n}",
-  "response.http.contentLength": "59",
-  "request.http.server.scheme": "http",
-  "response.http.status.status": "OK",
-  "response.http.status.family": "SUCCESSFUL",
-  "caller_class_name": "io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger",
-  "caller_method_name": "accept",
-  "caller_file_name": "StructuredArgumentsMDCLogger.java",
-  "caller_line_number": 56
+	"@timestamp": "1999-12-31T23:59:59.000-00:00",
+	"@version": "1",
+	"message": "Response sent",
+	"logger_name": "io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger",
+	"thread_name": "dw-249",
+	"level": "DEBUG",
+	"level_value": 10000,
+	"response.http.elapsedNanos": "1000000000",
+	"request.http.method": "GET",
+	"request.http.parameters.query.name": "Dr. IntegrationTest",
+	"request.http.path.full": "/hello-world",
+	"request.http.path.absolute": "http://localhost:63842/hello-world",
+	"request.http.client.port": "63855",
+	"request.http.headers.User-Agent": "Jersey/2.25.1 (HttpUrlConnection 17.0.2)",
+	"request.http.server.port": "63842",
+	"request.http.client.host": "127.0.0.1",
+	"request.resourceClass": "com.example.helloworld.resources.HelloWorldResource",
+	"request.http.path.template": "/hello-world",
+	"request.http.server.name": "localhost",
+	"request.http.headers.Host": "localhost:63842",
+	"response.http.headers.Content-Type": "application/json",
+	"response.http.contentType": "application/json",
+	"response.http.entityType": "com.example.helloworld.api.Saying",
+	"response.http.status.code": "200",
+	"request.http.client.address": "127.0.0.1",
+	"request.resourceMethod": "sayHello",
+	"response.http.status.phrase": "OK",
+	"response.http.body": "{\n  \"id\" : 1,\n  \"content\" : \"Hello, Dr. IntegrationTest!\"\n}",
+	"response.http.contentLength": "59",
+	"request.http.server.scheme": "http",
+	"response.http.status.status": "OK",
+	"response.http.status.family": "SUCCESSFUL",
+	"caller_class_name": "io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger",
+	"caller_method_name": "accept",
+	"caller_file_name": "StructuredArgumentsMDCLogger.java",
+	"caller_line_number": 56
 }
 ```

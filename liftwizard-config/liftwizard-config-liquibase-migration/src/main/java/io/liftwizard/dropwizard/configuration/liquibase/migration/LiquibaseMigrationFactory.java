@@ -25,39 +25,39 @@ import org.eclipse.collections.api.list.MutableList;
 
 public class LiquibaseMigrationFactory extends EnabledFactory {
 
-    private MutableList<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = Lists.mutable.empty();
+	private MutableList<LiquibaseDataSourceMigrationFactory> dataSourceMigrations = Lists.mutable.empty();
 
-    private boolean dropEntireSchemaOnStartupAndShutdown;
+	private boolean dropEntireSchemaOnStartupAndShutdown;
 
-    private boolean dryRun;
+	private boolean dryRun;
 
-    @JsonProperty
-    public List<LiquibaseDataSourceMigrationFactory> getDataSourceMigrations() {
-        return this.dataSourceMigrations;
-    }
+	@JsonProperty
+	public List<LiquibaseDataSourceMigrationFactory> getDataSourceMigrations() {
+		return this.dataSourceMigrations;
+	}
 
-    @JsonProperty
-    public void setDataSourceMigrations(List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations) {
-        this.dataSourceMigrations = Lists.mutable.withAll(dataSourceMigrations);
-    }
+	@JsonProperty
+	public void setDataSourceMigrations(List<LiquibaseDataSourceMigrationFactory> dataSourceMigrations) {
+		this.dataSourceMigrations = Lists.mutable.withAll(dataSourceMigrations);
+	}
 
-    @JsonProperty
-    public boolean isDropEntireSchemaOnStartupAndShutdown() {
-        return this.dropEntireSchemaOnStartupAndShutdown;
-    }
+	@JsonProperty
+	public boolean isDropEntireSchemaOnStartupAndShutdown() {
+		return this.dropEntireSchemaOnStartupAndShutdown;
+	}
 
-    @JsonProperty
-    public void setDropEntireSchemaOnStartupAndShutdown(boolean dropEntireSchemaOnStartupAndShutdown) {
-        this.dropEntireSchemaOnStartupAndShutdown = dropEntireSchemaOnStartupAndShutdown;
-    }
+	@JsonProperty
+	public void setDropEntireSchemaOnStartupAndShutdown(boolean dropEntireSchemaOnStartupAndShutdown) {
+		this.dropEntireSchemaOnStartupAndShutdown = dropEntireSchemaOnStartupAndShutdown;
+	}
 
-    @JsonProperty
-    public boolean isDryRun() {
-        return this.dryRun;
-    }
+	@JsonProperty
+	public boolean isDryRun() {
+		return this.dryRun;
+	}
 
-    @JsonProperty
-    public void setDryRun(boolean dryRun) {
-        this.dryRun = dryRun;
-    }
+	@JsonProperty
+	public void setDryRun(boolean dryRun) {
+		this.dryRun = dryRun;
+	}
 }

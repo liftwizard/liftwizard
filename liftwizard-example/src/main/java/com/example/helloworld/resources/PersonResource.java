@@ -18,38 +18,38 @@ import io.dropwizard.jersey.params.LongParam;
 @Produces(MediaType.APPLICATION_JSON)
 public class PersonResource {
 
-    private final PersonDAO peopleDAO;
+	private final PersonDAO peopleDAO;
 
-    public PersonResource(PersonDAO peopleDAO) {
-        this.peopleDAO = peopleDAO;
-    }
+	public PersonResource(PersonDAO peopleDAO) {
+		this.peopleDAO = peopleDAO;
+	}
 
-    @GET
-    @UnitOfWork
-    public PersonDTO getPerson(@PathParam("personId") LongParam personId) {
-        Person person = this.findSafely(personId.get());
-        PersonDTO personDTO = new PersonDTO(personId.get(), person.getFullName(), person.getJobTitle());
-        personDTO.setId(person.getId());
-        return personDTO;
-    }
+	@GET
+	@UnitOfWork
+	public PersonDTO getPerson(@PathParam("personId") LongParam personId) {
+		Person person = this.findSafely(personId.get());
+		PersonDTO personDTO = new PersonDTO(personId.get(), person.getFullName(), person.getJobTitle());
+		personDTO.setId(person.getId());
+		return personDTO;
+	}
 
-    @GET
-    @Path("/view_freemarker")
-    @UnitOfWork
-    @Produces(MediaType.TEXT_HTML)
-    public PersonView getPersonViewFreemarker(@PathParam("personId") LongParam personId) {
-        return new PersonView(PersonView.Template.FREEMARKER, this.findSafely(personId.get()));
-    }
+	@GET
+	@Path("/view_freemarker")
+	@UnitOfWork
+	@Produces(MediaType.TEXT_HTML)
+	public PersonView getPersonViewFreemarker(@PathParam("personId") LongParam personId) {
+		return new PersonView(PersonView.Template.FREEMARKER, this.findSafely(personId.get()));
+	}
 
-    @GET
-    @Path("/view_mustache")
-    @UnitOfWork
-    @Produces(MediaType.TEXT_HTML)
-    public PersonView getPersonViewMustache(@PathParam("personId") LongParam personId) {
-        return new PersonView(PersonView.Template.MUSTACHE, this.findSafely(personId.get()));
-    }
+	@GET
+	@Path("/view_mustache")
+	@UnitOfWork
+	@Produces(MediaType.TEXT_HTML)
+	public PersonView getPersonViewMustache(@PathParam("personId") LongParam personId) {
+		return new PersonView(PersonView.Template.MUSTACHE, this.findSafely(personId.get()));
+	}
 
-    private Person findSafely(long personId) {
-        return this.peopleDAO.findById(personId).orElseThrow(() -> new NotFoundException("No such user."));
-    }
+	private Person findSafely(long personId) {
+		return this.peopleDAO.findById(personId).orElseThrow(() -> new NotFoundException("No such user."));
+	}
 }

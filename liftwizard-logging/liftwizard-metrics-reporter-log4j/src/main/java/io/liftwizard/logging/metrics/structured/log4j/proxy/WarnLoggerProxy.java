@@ -21,17 +21,17 @@ import org.apache.log4j.Logger;
 
 public class WarnLoggerProxy extends AbstractLoggerProxy {
 
-    public WarnLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public WarnLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Object structuredObject) {
-        this.logger.warn(structuredObject);
-    }
+	@Override
+	public void log(Object structuredObject) {
+		this.logger.warn(structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.logger.isEnabledFor(Level.WARN);
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.logger.isEnabledFor(Level.WARN);
+	}
 }

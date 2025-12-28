@@ -27,31 +27,31 @@ import graphql.schema.DataFetchingEnvironment;
 
 public class ReladomoAttributeDataFetcher<Input, T> implements TrivialDataFetcher<T> {
 
-    private final Attribute<Input, T> attribute;
+	private final Attribute<Input, T> attribute;
 
-    public ReladomoAttributeDataFetcher(Attribute<Input, T> attribute) {
-        this.attribute = Objects.requireNonNull(attribute);
-    }
+	public ReladomoAttributeDataFetcher(Attribute<Input, T> attribute) {
+		this.attribute = Objects.requireNonNull(attribute);
+	}
 
-    @Nullable
-    @Override
-    public T get(@Nonnull DataFetchingEnvironment environment) {
-        Input persistentInstance = environment.getSource();
-        if (persistentInstance == null) {
-            return null;
-        }
+	@Nullable
+	@Override
+	public T get(@Nonnull DataFetchingEnvironment environment) {
+		Input persistentInstance = environment.getSource();
+		if (persistentInstance == null) {
+			return null;
+		}
 
-        if (this.attribute.isAttributeNull(persistentInstance)) {
-            return null;
-        }
+		if (this.attribute.isAttributeNull(persistentInstance)) {
+			return null;
+		}
 
-        String fullyQualifiedClassName = this.attribute.zGetTopOwnerClassName().replaceAll("/", ".");
-        String canonicalName = persistentInstance.getClass().getCanonicalName();
-        if (!fullyQualifiedClassName.equals(canonicalName)) {
-            String message = "Expected " + fullyQualifiedClassName + " but got " + canonicalName;
-            throw new AssertionError(message);
-        }
+		String fullyQualifiedClassName = this.attribute.zGetTopOwnerClassName().replaceAll("/", ".");
+		String canonicalName = persistentInstance.getClass().getCanonicalName();
+		if (!fullyQualifiedClassName.equals(canonicalName)) {
+			String message = "Expected " + fullyQualifiedClassName + " but got " + canonicalName;
+			throw new AssertionError(message);
+		}
 
-        return this.attribute.valueOf(persistentInstance);
-    }
+		return this.attribute.valueOf(persistentInstance);
+	}
 }

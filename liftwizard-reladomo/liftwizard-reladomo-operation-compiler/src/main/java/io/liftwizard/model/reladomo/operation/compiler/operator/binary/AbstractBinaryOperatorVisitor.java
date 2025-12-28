@@ -22,8 +22,8 @@ import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingV
 
 public abstract class AbstractBinaryOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation> {
 
-    @Override
-    public Operation visitBinaryOperator(BinaryOperatorContext ctx) {
-        return this.visitChildren(ctx);
-    }
+	@Override
+	public Operation visitBinaryOperator(BinaryOperatorContext ctx) {
+		return this.visitChildren(ctx);
+	}
 }

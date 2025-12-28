@@ -26,52 +26,52 @@ import org.eclipse.collections.api.stack.MutableStack;
 
 public final class GraphQLInstrumentationUtils {
 
-    private GraphQLInstrumentationUtils() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private GraphQLInstrumentationUtils() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 
-    public static String getPathWithIndex(ExecutionStepInfo executionStepInfo) {
-        return getPath(executionStepInfo, true);
-    }
+	public static String getPathWithIndex(ExecutionStepInfo executionStepInfo) {
+		return getPath(executionStepInfo, true);
+	}
 
-    public static String getPathWithoutIndex(ExecutionStepInfo executionStepInfo) {
-        return getPath(executionStepInfo, false);
-    }
+	public static String getPathWithoutIndex(ExecutionStepInfo executionStepInfo) {
+		return getPath(executionStepInfo, false);
+	}
 
-    public static String getPath(ExecutionStepInfo executionStepInfo, boolean withIndex) {
-        MutableStack<String> result = Stacks.mutable.empty();
-        getPath(executionStepInfo, result, withIndex);
-        return result.makeString("/", "/", "");
-    }
+	public static String getPath(ExecutionStepInfo executionStepInfo, boolean withIndex) {
+		MutableStack<String> result = Stacks.mutable.empty();
+		getPath(executionStepInfo, result, withIndex);
+		return result.makeString("/", "/", "");
+	}
 
-    public static void getPath(ExecutionStepInfo executionStepInfo, MutableStack<String> stack, boolean withIndex) {
-        ResultPath resultPath = executionStepInfo.getPath();
-        if (resultPath.isRootPath()) {
-            return;
-        }
+	public static void getPath(ExecutionStepInfo executionStepInfo, MutableStack<String> stack, boolean withIndex) {
+		ResultPath resultPath = executionStepInfo.getPath();
+		if (resultPath.isRootPath()) {
+			return;
+		}
 
-        if (resultPath.isListSegment()) {
-            String indexSuffix = withIndex ? "[%d]".formatted(resultPath.getSegmentIndex()) : "";
-            String name = executionStepInfo.getField().getName() + indexSuffix;
-            stack.push(name);
+		if (resultPath.isListSegment()) {
+			String indexSuffix = withIndex ? "[%d]".formatted(resultPath.getSegmentIndex()) : "";
+			String name = executionStepInfo.getField().getName() + indexSuffix;
+			stack.push(name);
 
-            getPath(executionStepInfo.getParent().getParent(), stack, withIndex);
-        } else {
-            stack.push(executionStepInfo.getField().getName());
-            getPath(executionStepInfo.getParent(), stack, withIndex);
-        }
-    }
+			getPath(executionStepInfo.getParent().getParent(), stack, withIndex);
+		} else {
+			stack.push(executionStepInfo.getField().getName());
+			getPath(executionStepInfo.getParent(), stack, withIndex);
+		}
+	}
 
-    public static String getTypeName(GraphQLType type) {
-        if (type instanceof GraphQLNamedSchemaElement namedSchemaElement) {
-            return namedSchemaElement.getName();
-        }
+	public static String getTypeName(GraphQLType type) {
+		if (type instanceof GraphQLNamedSchemaElement namedSchemaElement) {
+			return namedSchemaElement.getName();
+		}
 
-        if (type instanceof GraphQLModifiedType modifiedType) {
-            GraphQLType wrappedType = modifiedType.getWrappedType();
-            return getTypeName(wrappedType);
-        }
+		if (type instanceof GraphQLModifiedType modifiedType) {
+			GraphQLType wrappedType = modifiedType.getWrappedType();
+			return getTypeName(wrappedType);
+		}
 
-        throw new IllegalStateException(String.valueOf(type));
-    }
+		throw new IllegalStateException(String.valueOf(type));
+	}
 }

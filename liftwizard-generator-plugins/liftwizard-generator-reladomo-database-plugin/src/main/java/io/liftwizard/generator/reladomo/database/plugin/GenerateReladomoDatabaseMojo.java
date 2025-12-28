@@ -44,160 +44,160 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Mojo(
-    name = "generate-reladomo-database",
-    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    threadSafe = true,
-    requiresDependencyResolution = ResolutionScope.RUNTIME
+	name = "generate-reladomo-database",
+	defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+	threadSafe = true,
+	requiresDependencyResolution = ResolutionScope.RUNTIME
 )
 public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoDatabaseMojo.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoDatabaseMojo.class);
 
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
-    protected MavenProject mavenProject;
+	@Parameter(defaultValue = "${project}", required = true, readonly = true)
+	protected MavenProject mavenProject;
 
-    @Parameter(property = "definitionsAndClassListDirectory", defaultValue = "reladomo")
-    private String definitionsAndClassListDirectory;
+	@Parameter(property = "definitionsAndClassListDirectory", defaultValue = "reladomo")
+	private String definitionsAndClassListDirectory;
 
-    @Parameter(property = "classListFileName", defaultValue = "ReladomoClassList.xml")
-    private String classListFileName;
+	@Parameter(property = "classListFileName", defaultValue = "ReladomoClassList.xml")
+	private String classListFileName;
 
-    @Parameter(
-        property = "generatedResourcesDirectory",
-        defaultValue = "${project.build.directory}/generated-resources"
-    )
-    private File generatedResourcesDirectory;
+	@Parameter(
+		property = "generatedResourcesDirectory",
+		defaultValue = "${project.build.directory}/generated-resources"
+	)
+	private File generatedResourcesDirectory;
 
-    @Parameter(property = "outputDirectory", defaultValue = "sql")
-    private String outputDirectory;
+	@Parameter(property = "outputDirectory", defaultValue = "sql")
+	private String outputDirectory;
 
-    @Parameter(property = "databaseType", defaultValue = "postgres")
-    private String databaseType;
+	@Parameter(property = "databaseType", defaultValue = "postgres")
+	private String databaseType;
 
-    @Parameter(property = "ignoreNonGeneratedAbstractClasses", defaultValue = "false")
-    private boolean ignoreNonGeneratedAbstractClasses;
+	@Parameter(property = "ignoreNonGeneratedAbstractClasses", defaultValue = "false")
+	private boolean ignoreNonGeneratedAbstractClasses;
 
-    @Parameter(property = "ignoreTransactionalMethods", defaultValue = "false")
-    private boolean ignoreTransactionalMethods;
+	@Parameter(property = "ignoreTransactionalMethods", defaultValue = "false")
+	private boolean ignoreTransactionalMethods;
 
-    @Parameter(property = "ignorePackageNamingConvention", defaultValue = "false")
-    private boolean ignorePackageNamingConvention;
+	@Parameter(property = "ignorePackageNamingConvention", defaultValue = "false")
+	private boolean ignorePackageNamingConvention;
 
-    @Parameter(property = "defaultFinalGetters", defaultValue = "false")
-    private boolean defaultFinalGetters;
+	@Parameter(property = "defaultFinalGetters", defaultValue = "false")
+	private boolean defaultFinalGetters;
 
-    @Parameter(property = "forceOffHeap", defaultValue = "false")
-    private boolean forceOffHeap;
+	@Parameter(property = "forceOffHeap", defaultValue = "false")
+	private boolean forceOffHeap;
 
-    @Parameter(property = "generateFileHeaders", defaultValue = "false")
-    private boolean generateFileHeaders;
+	@Parameter(property = "generateFileHeaders", defaultValue = "false")
+	private boolean generateFileHeaders;
 
-    @Override
-    public void execute() {
-        File generatedOutputDirectory = new File(this.generatedResourcesDirectory, this.outputDirectory);
+	@Override
+	public void execute() {
+		File generatedOutputDirectory = new File(this.generatedResourcesDirectory, this.outputDirectory);
 
-        if (!generatedOutputDirectory.exists()) {
-            generatedOutputDirectory.mkdirs();
-        }
+		if (!generatedOutputDirectory.exists()) {
+			generatedOutputDirectory.mkdirs();
+		}
 
-        try (var tempFile = this.getTempFile()) {
-            CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(
-                tempFile.getPath(),
-                generatedOutputDirectory
-            );
-            coreGenerator.execute();
+		try (var tempFile = this.getTempFile()) {
+			CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(
+				tempFile.getPath(),
+				generatedOutputDirectory
+			);
+			coreGenerator.execute();
 
-            this.deleteLogFiles(generatedOutputDirectory);
+			this.deleteLogFiles(generatedOutputDirectory);
 
-            Resource resource = new Resource();
-            resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
+			Resource resource = new Resource();
+			resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
 
-            LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
-            this.mavenProject.addResource(resource);
-        }
-    }
+			LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
+			this.mavenProject.addResource(resource);
+		}
+	}
 
-    private void deleteLogFiles(File directory) {
-        try (Stream<Path> logFiles = Files.walk(directory.toPath())) {
-            logFiles
-                .filter(Files::isRegularFile)
-                .filter(path -> path.toString().endsWith(".log"))
-                .forEach(this::deleteLogFile);
-        } catch (IOException e) {
-            this.getLog().warn("Failed to clean up Reladomo log files", e);
-        }
-    }
+	private void deleteLogFiles(File directory) {
+		try (Stream<Path> logFiles = Files.walk(directory.toPath())) {
+			logFiles
+				.filter(Files::isRegularFile)
+				.filter((path) -> path.toString().endsWith(".log"))
+				.forEach(this::deleteLogFile);
+		} catch (IOException e) {
+			this.getLog().warn("Failed to clean up Reladomo log files", e);
+		}
+	}
 
-    private void deleteLogFile(Path path) {
-        try {
-            Files.delete(path);
-            this.getLog().debug("Deleted Reladomo log file: " + path);
-        } catch (IOException e) {
-            this.getLog().warn("Failed to delete Reladomo log file: " + path, e);
-        }
-    }
+	private void deleteLogFile(Path path) {
+		try {
+			Files.delete(path);
+			this.getLog().debug("Deleted Reladomo log file: " + path);
+		} catch (IOException e) {
+			this.getLog().warn("Failed to delete Reladomo log file: " + path, e);
+		}
+	}
 
-    @Nonnull
-    private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile, File generatedOutputDirectory) {
-        Path classListFile = tempFile.resolve(this.definitionsAndClassListDirectory).resolve(this.classListFileName);
-        var coreGenerator = new CoreMithraDbDefinitionGenerator();
-        coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
-        coreGenerator.setXml(classListFile.toString());
-        coreGenerator.setGeneratedDir(generatedOutputDirectory.getAbsolutePath());
-        coreGenerator.setDatabaseType(this.databaseType);
-        coreGenerator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
-        coreGenerator.setIgnoreTransactionalMethods(this.ignoreTransactionalMethods);
-        coreGenerator.setIgnorePackageNamingConvention(this.ignorePackageNamingConvention);
-        coreGenerator.setDefaultFinalGetters(this.defaultFinalGetters);
-        coreGenerator.setForceOffHeap(this.forceOffHeap);
-        coreGenerator.setGenerateFileHeaders(this.generateFileHeaders);
-        return coreGenerator;
-    }
+	@Nonnull
+	private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile, File generatedOutputDirectory) {
+		Path classListFile = tempFile.resolve(this.definitionsAndClassListDirectory).resolve(this.classListFileName);
+		var coreGenerator = new CoreMithraDbDefinitionGenerator();
+		coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
+		coreGenerator.setXml(classListFile.toString());
+		coreGenerator.setGeneratedDir(generatedOutputDirectory.getAbsolutePath());
+		coreGenerator.setDatabaseType(this.databaseType);
+		coreGenerator.setIgnoreNonGeneratedAbstractClasses(this.ignoreNonGeneratedAbstractClasses);
+		coreGenerator.setIgnoreTransactionalMethods(this.ignoreTransactionalMethods);
+		coreGenerator.setIgnorePackageNamingConvention(this.ignorePackageNamingConvention);
+		coreGenerator.setDefaultFinalGetters(this.defaultFinalGetters);
+		coreGenerator.setForceOffHeap(this.forceOffHeap);
+		coreGenerator.setGenerateFileHeaders(this.generateFileHeaders);
+		return coreGenerator;
+	}
 
-    @Nonnull
-    private ManagedTempDirectory getTempFile() {
-        if (this.definitionsAndClassListDirectory.startsWith("/")) {
-            throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
-        }
+	@Nonnull
+	private ManagedTempDirectory getTempFile() {
+		if (this.definitionsAndClassListDirectory.startsWith("/")) {
+			throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
+		}
 
-        try {
-            URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
-            Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
-            URI uri = resource.toURI();
-            Path from = ManagedFileSystem.get(uri);
-            ManagedTempDirectory managedTempDirectory = ManagedTempDirectory.create(this.getClass().getSimpleName());
-            Path to = managedTempDirectory.getPath();
+		try {
+			URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
+			Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
+			URI uri = resource.toURI();
+			Path from = ManagedFileSystem.get(uri);
+			ManagedTempDirectory managedTempDirectory = ManagedTempDirectory.create(this.getClass().getSimpleName());
+			Path to = managedTempDirectory.getPath();
 
-            this.copyDirectory(from, to);
-            return managedTempDirectory;
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+			this.copyDirectory(from, to);
+			return managedTempDirectory;
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    private void copyDirectory(Path from, Path to) throws IOException {
-        try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory))) {
-            sources.forEach(src -> GenerateReladomoDatabaseMojo.handleOneFile(from, src, to));
-        }
-    }
+	private void copyDirectory(Path from, Path to) throws IOException {
+		try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory))) {
+			sources.forEach((src) -> GenerateReladomoDatabaseMojo.handleOneFile(from, src, to));
+		}
+	}
 
-    // Based on https://stackoverflow.com/a/29659925/
-    private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target) {
-        Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
-        try {
-            if (Files.isDirectory(fileSystemSource)) {
-                if (Files.notExists(copyDestination)) {
-                    LOGGER.info("Creating directory {}", copyDestination);
-                    Files.createDirectories(copyDestination);
-                }
-            } else {
-                LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
-                Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed target unzip file.", e);
-        }
-    }
+	// Based on https://stackoverflow.com/a/29659925/
+	private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target) {
+		Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
+		try {
+			if (Files.isDirectory(fileSystemSource)) {
+				if (Files.notExists(copyDestination)) {
+					LOGGER.info("Creating directory {}", copyDestination);
+					Files.createDirectories(copyDestination);
+				}
+			} else {
+				LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
+				Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Failed target unzip file.", e);
+		}
+	}
 }

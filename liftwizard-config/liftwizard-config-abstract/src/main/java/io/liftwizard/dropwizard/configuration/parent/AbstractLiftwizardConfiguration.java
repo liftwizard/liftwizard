@@ -41,142 +41,142 @@ import io.liftwizard.dropwizard.configuration.system.properties.SystemProperties
 import io.liftwizard.dropwizard.configuration.system.properties.SystemPropertiesFactoryProvider;
 
 @JsonPropertyOrder(
-    {
-        "server",
-        "logging",
-        "metrics",
-        "klass",
-        "configLogging",
-        "objectMapper",
-        "cors",
-        "authFilters",
-        "jerseyHttpLogging",
-    }
+	{
+		"server",
+		"logging",
+		"metrics",
+		"klass",
+		"configLogging",
+		"objectMapper",
+		"cors",
+		"authFilters",
+		"jerseyHttpLogging",
+	}
 )
 public abstract class AbstractLiftwizardConfiguration
-    extends Configuration
-    implements
-        ConfigLoggingFactoryProvider,
-        CorsFactoryProvider,
-        AuthFilterFactoryProvider,
-        ObjectMapperFactoryProvider,
-        JerseyHttpLoggingFactoryProvider,
-        ClockFactoryProvider,
-        SystemPropertiesFactoryProvider {
+	extends Configuration
+	implements
+		ConfigLoggingFactoryProvider,
+		CorsFactoryProvider,
+		AuthFilterFactoryProvider,
+		ObjectMapperFactoryProvider,
+		JerseyHttpLoggingFactoryProvider,
+		ClockFactoryProvider,
+		SystemPropertiesFactoryProvider {
 
-    // region General
-    @Valid
-    @NotNull
-    private ClockFactory clockFactory = new SystemClockFactory();
+	// region General
+	@Valid
+	@NotNull
+	private ClockFactory clockFactory = new SystemClockFactory();
 
-    @Valid
-    @NotNull
-    private SystemPropertiesFactory systemPropertiesFactory = new SystemPropertiesFactory();
+	@Valid
+	@NotNull
+	private SystemPropertiesFactory systemPropertiesFactory = new SystemPropertiesFactory();
 
-    // endregion General
+	// endregion General
 
-    // region Services
-    @Valid
-    @NotNull
-    private EnabledFactory configLoggingFactory = new EnabledFactory();
+	// region Services
+	@Valid
+	@NotNull
+	private EnabledFactory configLoggingFactory = new EnabledFactory();
 
-    @Valid
-    @NotNull
-    private ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
+	@Valid
+	@NotNull
+	private ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
 
-    @Valid
-    @NotNull
-    private JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
+	@Valid
+	@NotNull
+	private JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
 
-    @Valid
-    @NotNull
-    private CorsFactory corsFactory = new CorsFactory();
+	@Valid
+	@NotNull
+	private CorsFactory corsFactory = new CorsFactory();
 
-    @Valid
-    @NotNull
-    private List<AuthFilterFactory> authFilterFactories = List.of();
+	@Valid
+	@NotNull
+	private List<AuthFilterFactory> authFilterFactories = List.of();
 
-    // endregion Services
+	// endregion Services
 
-    // region General
-    @Override
-    @JsonProperty("clock")
-    public ClockFactory getClockFactory() {
-        return this.clockFactory;
-    }
+	// region General
+	@Override
+	@JsonProperty("clock")
+	public ClockFactory getClockFactory() {
+		return this.clockFactory;
+	}
 
-    @JsonProperty("clock")
-    public void setClockFactory(ClockFactory clockFactory) {
-        this.clockFactory = clockFactory;
-    }
+	@JsonProperty("clock")
+	public void setClockFactory(ClockFactory clockFactory) {
+		this.clockFactory = clockFactory;
+	}
 
-    @Override
-    @JsonProperty("systemProperties")
-    public SystemPropertiesFactory getSystemPropertiesFactory() {
-        return this.systemPropertiesFactory;
-    }
+	@Override
+	@JsonProperty("systemProperties")
+	public SystemPropertiesFactory getSystemPropertiesFactory() {
+		return this.systemPropertiesFactory;
+	}
 
-    @JsonProperty("systemProperties")
-    public void setSystemPropertiesFactory(SystemPropertiesFactory systemPropertiesFactory) {
-        this.systemPropertiesFactory = systemPropertiesFactory;
-    }
+	@JsonProperty("systemProperties")
+	public void setSystemPropertiesFactory(SystemPropertiesFactory systemPropertiesFactory) {
+		this.systemPropertiesFactory = systemPropertiesFactory;
+	}
 
-    // endregion
+	// endregion
 
-    // region Services
-    @Override
-    @JsonProperty("configLogging")
-    public EnabledFactory getConfigLoggingFactory() {
-        return this.configLoggingFactory;
-    }
+	// region Services
+	@Override
+	@JsonProperty("configLogging")
+	public EnabledFactory getConfigLoggingFactory() {
+		return this.configLoggingFactory;
+	}
 
-    @JsonProperty("configLogging")
-    public void setConfigLoggingFactory(EnabledFactory configLoggingFactory) {
-        this.configLoggingFactory = configLoggingFactory;
-    }
+	@JsonProperty("configLogging")
+	public void setConfigLoggingFactory(EnabledFactory configLoggingFactory) {
+		this.configLoggingFactory = configLoggingFactory;
+	}
 
-    @Override
-    @JsonProperty("objectMapper")
-    public ObjectMapperFactory getObjectMapperFactory() {
-        return this.objectMapperFactory;
-    }
+	@Override
+	@JsonProperty("objectMapper")
+	public ObjectMapperFactory getObjectMapperFactory() {
+		return this.objectMapperFactory;
+	}
 
-    @JsonProperty("objectMapper")
-    public void setObjectMapperFactory(ObjectMapperFactory objectMapperFactory) {
-        this.objectMapperFactory = objectMapperFactory;
-    }
+	@JsonProperty("objectMapper")
+	public void setObjectMapperFactory(ObjectMapperFactory objectMapperFactory) {
+		this.objectMapperFactory = objectMapperFactory;
+	}
 
-    @Override
-    @JsonProperty("jerseyHttpLogging")
-    public JerseyHttpLoggingFactory getJerseyHttpLoggingFactory() {
-        return this.jerseyHttpLoggingFactory;
-    }
+	@Override
+	@JsonProperty("jerseyHttpLogging")
+	public JerseyHttpLoggingFactory getJerseyHttpLoggingFactory() {
+		return this.jerseyHttpLoggingFactory;
+	}
 
-    @JsonProperty("jerseyHttpLogging")
-    public void setJerseyHttpLoggingFactory(JerseyHttpLoggingFactory jerseyHttpLoggingFactory) {
-        this.jerseyHttpLoggingFactory = jerseyHttpLoggingFactory;
-    }
+	@JsonProperty("jerseyHttpLogging")
+	public void setJerseyHttpLoggingFactory(JerseyHttpLoggingFactory jerseyHttpLoggingFactory) {
+		this.jerseyHttpLoggingFactory = jerseyHttpLoggingFactory;
+	}
 
-    @Override
-    @JsonProperty("cors")
-    public CorsFactory getCorsFactory() {
-        return this.corsFactory;
-    }
+	@Override
+	@JsonProperty("cors")
+	public CorsFactory getCorsFactory() {
+		return this.corsFactory;
+	}
 
-    @JsonProperty("cors")
-    public void setCorsFactory(CorsFactory corsFactory) {
-        this.corsFactory = corsFactory;
-    }
+	@JsonProperty("cors")
+	public void setCorsFactory(CorsFactory corsFactory) {
+		this.corsFactory = corsFactory;
+	}
 
-    @Override
-    @JsonProperty("authFilters")
-    public List<AuthFilterFactory> getAuthFilterFactories() {
-        return this.authFilterFactories;
-    }
+	@Override
+	@JsonProperty("authFilters")
+	public List<AuthFilterFactory> getAuthFilterFactories() {
+		return this.authFilterFactories;
+	}
 
-    @JsonProperty("authFilters")
-    public void setAuthFilterFactories(List<AuthFilterFactory> authFilterFactories) {
-        this.authFilterFactories = authFilterFactories;
-    }
-    // endregion Services
+	@JsonProperty("authFilters")
+	public void setAuthFilterFactories(List<AuthFilterFactory> authFilterFactories) {
+		this.authFilterFactories = authFilterFactories;
+	}
+	// endregion Services
 }

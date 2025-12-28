@@ -53,112 +53,112 @@ import org.glassfish.jersey.uri.UriTemplate;
 @ConstrainedTo(RuntimeType.SERVER)
 public final class ServerLoggingRequestFilter implements ContainerRequestFilter {
 
-    @Context
-    private ResourceInfo resourceInfo;
+	@Context
+	private ResourceInfo resourceInfo;
 
-    private final Function<Principal, Map<String, Object>> principalBuilder;
+	private final Function<Principal, Map<String, Object>> principalBuilder;
 
-    public ServerLoggingRequestFilter(Function<Principal, Map<String, Object>> principalBuilder) {
-        this.principalBuilder = Objects.requireNonNull(principalBuilder);
-    }
+	public ServerLoggingRequestFilter(Function<Principal, Map<String, Object>> principalBuilder) {
+		this.principalBuilder = Objects.requireNonNull(principalBuilder);
+	}
 
-    @Override
-    public void filter(@Nonnull ContainerRequestContext requestContext) throws IOException {
-        StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty(
-            "structuredArguments"
-        );
-        UriInfo uriInfo = requestContext.getUriInfo();
+	@Override
+	public void filter(@Nonnull ContainerRequestContext requestContext) throws IOException {
+		StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty(
+			"structuredArguments"
+		);
+		UriInfo uriInfo = requestContext.getUriInfo();
 
-        StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
+		StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
 
-        this.addResourceInfo(structuredArguments.getRequest());
-        this.addParameters(uriInfo, http);
-        this.addPath(requestContext, uriInfo, http);
-        this.addSecurityContext(requestContext, http);
-    }
+		this.addResourceInfo(structuredArguments.getRequest());
+		this.addParameters(uriInfo, http);
+		this.addPath(requestContext, uriInfo, http);
+		this.addSecurityContext(requestContext, http);
+	}
 
-    private void addResourceInfo(@Nonnull StructuredArgumentsRequest request) {
-        Objects.requireNonNull(this.resourceInfo);
+	private void addResourceInfo(@Nonnull StructuredArgumentsRequest request) {
+		Objects.requireNonNull(this.resourceInfo);
 
-        Class<?> resourceClass = this.resourceInfo.getResourceClass();
-        Method resourceMethod = this.resourceInfo.getResourceMethod();
+		Class<?> resourceClass = this.resourceInfo.getResourceClass();
+		Method resourceMethod = this.resourceInfo.getResourceMethod();
 
-        // Could be null during error responses like 404 and 405
-        if (resourceClass != null) {
-            request.setResourceClass(resourceClass);
-        }
-        if (resourceMethod != null) {
-            request.setResourceMethod(resourceMethod);
-        }
-    }
+		// Could be null during error responses like 404 and 405
+		if (resourceClass != null) {
+			request.setResourceClass(resourceClass);
+		}
+		if (resourceMethod != null) {
+			request.setResourceMethod(resourceMethod);
+		}
+	}
 
-    private void addParameters(@Nonnull UriInfo uriInfo, @Nonnull StructuredArgumentsRequestHttp http) {
-        StructuredArgumentsParameters parameters = this.buildParameters(uriInfo);
-        http.setParameters(parameters);
-    }
+	private void addParameters(@Nonnull UriInfo uriInfo, @Nonnull StructuredArgumentsRequestHttp http) {
+		StructuredArgumentsParameters parameters = this.buildParameters(uriInfo);
+		http.setParameters(parameters);
+	}
 
-    @Nonnull
-    private StructuredArgumentsParameters buildParameters(@Nonnull UriInfo uriInfo) {
-        MapIterable<String, String> queryParameters = this.buildParameters(uriInfo.getQueryParameters());
-        MapIterable<String, String> pathParameters = this.buildParameters(uriInfo.getPathParameters());
-        return new StructuredArgumentsParameters(queryParameters, pathParameters);
-    }
+	@Nonnull
+	private StructuredArgumentsParameters buildParameters(@Nonnull UriInfo uriInfo) {
+		MapIterable<String, String> queryParameters = this.buildParameters(uriInfo.getQueryParameters());
+		MapIterable<String, String> pathParameters = this.buildParameters(uriInfo.getPathParameters());
+		return new StructuredArgumentsParameters(queryParameters, pathParameters);
+	}
 
-    private MutableMap<String, String> buildParameters(@Nonnull MultivaluedMap<String, String> inputParameters) {
-        MutableMap<String, String> outputParameters = MapAdapter.adapt(new LinkedHashMap<>());
+	private MutableMap<String, String> buildParameters(@Nonnull MultivaluedMap<String, String> inputParameters) {
+		MutableMap<String, String> outputParameters = MapAdapter.adapt(new LinkedHashMap<>());
 
-        inputParameters.forEach((parameterName, parameterValues) -> {
-            String value = ListAdapter.adapt(parameterValues).makeString();
-            String duplicate = outputParameters.put(parameterName, value);
-            if (duplicate != null) {
-                throw new IllegalStateException(duplicate);
-            }
-        });
+		inputParameters.forEach((parameterName, parameterValues) -> {
+			String value = ListAdapter.adapt(parameterValues).makeString();
+			String duplicate = outputParameters.put(parameterName, value);
+			if (duplicate != null) {
+				throw new IllegalStateException(duplicate);
+			}
+		});
 
-        return outputParameters.asUnmodifiable();
-    }
+		return outputParameters.asUnmodifiable();
+	}
 
-    private void addPath(
-        @Nonnull ContainerRequestContext requestContext,
-        @Nonnull UriInfo uriInfo,
-        @Nonnull StructuredArgumentsRequestHttp http
-    ) {
-        String baseUriPath = uriInfo.getBaseUri().getPath();
-        String pathTemplate = this.getPathTemplate(requestContext);
-        http.getPath().setBaseUriPath(baseUriPath);
-        http.getPath().setTemplate(pathTemplate);
-        URI absolutePath = uriInfo.getAbsolutePath();
-        if (!Objects.equals(http.getPath().getAbsolute(), absolutePath.toString())) {
-            throw new AssertionError();
-        }
-    }
+	private void addPath(
+		@Nonnull ContainerRequestContext requestContext,
+		@Nonnull UriInfo uriInfo,
+		@Nonnull StructuredArgumentsRequestHttp http
+	) {
+		String baseUriPath = uriInfo.getBaseUri().getPath();
+		String pathTemplate = this.getPathTemplate(requestContext);
+		http.getPath().setBaseUriPath(baseUriPath);
+		http.getPath().setTemplate(pathTemplate);
+		URI absolutePath = uriInfo.getAbsolutePath();
+		if (!Objects.equals(http.getPath().getAbsolute(), absolutePath.toString())) {
+			throw new AssertionError();
+		}
+	}
 
-    @Nullable
-    private String getPathTemplate(@Nonnull ContainerRequestContext requestContext) {
-        if (!(requestContext instanceof ContainerRequest containerRequest)) {
-            return null;
-        }
+	@Nullable
+	private String getPathTemplate(@Nonnull ContainerRequestContext requestContext) {
+		if (!(requestContext instanceof ContainerRequest containerRequest)) {
+			return null;
+		}
 
-        ExtendedUriInfo extendedUriInfo = containerRequest.getUriInfo();
-        List<UriTemplate> matchedTemplates = extendedUriInfo.getMatchedTemplates();
-        if (matchedTemplates.isEmpty()) {
-            return null;
-        }
+		ExtendedUriInfo extendedUriInfo = containerRequest.getUriInfo();
+		List<UriTemplate> matchedTemplates = extendedUriInfo.getMatchedTemplates();
+		if (matchedTemplates.isEmpty()) {
+			return null;
+		}
 
-        return ListAdapter.adapt(matchedTemplates).asReversed().collect(UriTemplate::getTemplate).makeString("");
-    }
+		return ListAdapter.adapt(matchedTemplates).asReversed().collect(UriTemplate::getTemplate).makeString("");
+	}
 
-    private void addSecurityContext(
-        @Nonnull ContainerRequestContext requestContext,
-        StructuredArgumentsRequestHttp http
-    ) {
-        SecurityContext securityContext = requestContext.getSecurityContext();
-        String authenticationScheme = securityContext.getAuthenticationScheme();
-        Principal userPrincipal = securityContext.getUserPrincipal();
+	private void addSecurityContext(
+		@Nonnull ContainerRequestContext requestContext,
+		StructuredArgumentsRequestHttp http
+	) {
+		SecurityContext securityContext = requestContext.getSecurityContext();
+		String authenticationScheme = securityContext.getAuthenticationScheme();
+		Principal userPrincipal = securityContext.getUserPrincipal();
 
-        http.setAuthenticationScheme(authenticationScheme);
-        if (userPrincipal != null) {
-            http.setPrincipal(this.principalBuilder.apply(userPrincipal));
-        }
-    }
+		http.setAuthenticationScheme(authenticationScheme);
+		if (userPrincipal != null) {
+			http.setPrincipal(this.principalBuilder.apply(userPrincipal));
+		}
+	}
 }

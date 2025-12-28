@@ -31,35 +31,35 @@ import org.fusesource.jansi.io.AnsiOutputStream;
  */
 public final class AnsiColorStrip {
 
-    private AnsiColorStrip() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private AnsiColorStrip() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 
-    public static String strip(String input) {
-        return strip(input, StandardCharsets.UTF_8);
-    }
+	public static String strip(String input) {
+		return strip(input, StandardCharsets.UTF_8);
+	}
 
-    public static String strip(String input, Charset charset) {
-        byte[] bytes = input.getBytes(charset);
-        try (
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            AnsiOutputStream ansiOutputStream = new AnsiOutputStream(
-                byteArrayOutputStream,
-                null,
-                AnsiMode.Strip,
-                null,
-                AnsiType.Emulation,
-                AnsiColors.TrueColor,
-                charset,
-                null,
-                null,
-                false
-            );
-        ) {
-            ansiOutputStream.write(bytes);
-            return byteArrayOutputStream.toString(charset);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static String strip(String input, Charset charset) {
+		byte[] bytes = input.getBytes(charset);
+		try (
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			AnsiOutputStream ansiOutputStream = new AnsiOutputStream(
+				byteArrayOutputStream,
+				null,
+				AnsiMode.Strip,
+				null,
+				AnsiType.Emulation,
+				AnsiColors.TrueColor,
+				charset,
+				null,
+				null,
+				false
+			);
+		) {
+			ansiOutputStream.write(bytes);
+			return byteArrayOutputStream.toString(charset);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

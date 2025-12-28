@@ -45,83 +45,83 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
 
-    public static void main(String... args) throws Exception {
-        new HelloWorldApplication().run(args);
-    }
+	public static void main(String... args) throws Exception {
+		new HelloWorldApplication().run(args);
+	}
 
-    @Override
-    public String getName() {
-        return "hello-world";
-    }
+	@Override
+	public String getName() {
+		return "hello-world";
+	}
 
-    @Override
-    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
-        bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
-        bootstrap.addBundle(new EnvironmentConfigBundle());
+	@Override
+	public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+		bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
+		bootstrap.addBundle(new EnvironmentConfigBundle());
 
-        bootstrap.addBundle(new ObjectMapperBundle());
-        bootstrap.addBundle(new ConfigLoggingBundle());
+		bootstrap.addBundle(new ObjectMapperBundle());
+		bootstrap.addBundle(new ConfigLoggingBundle());
 
-        StructuredArgumentsMDCLogger structuredLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
-        bootstrap.addBundle(new JerseyHttpLoggingBundle(structuredLogger));
+		StructuredArgumentsMDCLogger structuredLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
+		bootstrap.addBundle(new JerseyHttpLoggingBundle(structuredLogger));
 
-        bootstrap.addBundle(new ClockBundle());
-        bootstrap.addBundle(new UUIDBundle());
+		bootstrap.addBundle(new ClockBundle());
+		bootstrap.addBundle(new UUIDBundle());
 
-        bootstrap.addBundle(new H2Bundle());
-        bootstrap.addBundle(new ConnectionManagerHolderBundle());
-        bootstrap.addBundle(new ReladomoBundle());
+		bootstrap.addBundle(new H2Bundle());
+		bootstrap.addBundle(new ConnectionManagerHolderBundle());
+		bootstrap.addBundle(new ReladomoBundle());
 
-        bootstrap.addCommand(new RenderCommand());
-        bootstrap.addBundle(new AssetsBundle());
-        bootstrap.addBundle(
-            new MigrationsBundle<>() {
-                @Override
-                public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
-                    return configuration.getNamedDataSourcesFactory().getNamedDataSourceFactoryByName("h2-tcp");
-                }
-            }
-        );
-        bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());
-        bootstrap.addBundle(
-            new ViewBundle<>() {
-                @Override
-                public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
-                    return configuration.getViewRendererConfiguration();
-                }
-            }
-        );
-        bootstrap.addBundle(new Slf4jUncaughtExceptionHandlerBundle());
-        bootstrap.addBundle(new AuthFilterBundle());
-    }
+		bootstrap.addCommand(new RenderCommand());
+		bootstrap.addBundle(new AssetsBundle());
+		bootstrap.addBundle(
+			new MigrationsBundle<>() {
+				@Override
+				public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+					return configuration.getNamedDataSourcesFactory().getNamedDataSourceFactoryByName("h2-tcp");
+				}
+			}
+		);
+		bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());
+		bootstrap.addBundle(
+			new ViewBundle<>() {
+				@Override
+				public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
+					return configuration.getViewRendererConfiguration();
+				}
+			}
+		);
+		bootstrap.addBundle(new Slf4jUncaughtExceptionHandlerBundle());
+		bootstrap.addBundle(new AuthFilterBundle());
+	}
 
-    @Override
-    public void run(HelloWorldConfiguration configuration, Environment environment) {
-        Template template = configuration.buildTemplate();
+	@Override
+	public void run(HelloWorldConfiguration configuration, Environment environment) {
+		Template template = configuration.buildTemplate();
 
-        environment.healthChecks().register("template", new TemplateHealthCheck(template));
-        environment.admin().addTask(new EchoTask());
+		environment.healthChecks().register("template", new TemplateHealthCheck(template));
+		environment.admin().addTask(new EchoTask());
 
-        environment.jersey().register(DateRequiredFeature.class);
-        environment
-            .jersey()
-            .register(
-                new AuthDynamicFeature(
-                    new BasicCredentialAuthFilter.Builder<User>()
-                        .setAuthenticator(new ExampleAuthenticator())
-                        .setAuthorizer(new ExampleAuthorizer())
-                        .setRealm("SUPER SECRET STUFF")
-                        .buildAuthFilter()
-                )
-            );
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new HelloWorldResource(template));
-        environment.jersey().register(new ViewResource());
-        environment.jersey().register(new ProtectedResource());
-        PersonDAO dao = new PersonDAO();
-        environment.jersey().register(new PeopleResource(dao));
-        environment.jersey().register(new PersonResource(dao));
-        environment.jersey().register(new FilteredResource());
-    }
+		environment.jersey().register(DateRequiredFeature.class);
+		environment
+			.jersey()
+			.register(
+				new AuthDynamicFeature(
+					new BasicCredentialAuthFilter.Builder<User>()
+						.setAuthenticator(new ExampleAuthenticator())
+						.setAuthorizer(new ExampleAuthorizer())
+						.setRealm("SUPER SECRET STUFF")
+						.buildAuthFilter()
+				)
+			);
+		environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+		environment.jersey().register(RolesAllowedDynamicFeature.class);
+		environment.jersey().register(new HelloWorldResource(template));
+		environment.jersey().register(new ViewResource());
+		environment.jersey().register(new ProtectedResource());
+		PersonDAO dao = new PersonDAO();
+		environment.jersey().register(new PeopleResource(dao));
+		environment.jersey().register(new PersonResource(dao));
+		environment.jersey().register(new FilteredResource());
+	}
 }

@@ -32,62 +32,62 @@ import org.junit.runners.model.Statement;
 
 public class ReladomoInitializeTestRule implements TestRule {
 
-    @Nonnull
-    private final String runtimeConfigurationPath;
+	@Nonnull
+	private final String runtimeConfigurationPath;
 
-    public ReladomoInitializeTestRule(@Nonnull String runtimeConfigurationPath) {
-        this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
-    }
+	public ReladomoInitializeTestRule(@Nonnull String runtimeConfigurationPath) {
+		this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
+	}
 
-    @Nonnull
-    @Override
-    public Statement apply(@Nonnull Statement base, @Nonnull Description description) {
-        return new ReadRuntimeConfigurationStatement(base, this.runtimeConfigurationPath);
-    }
+	@Nonnull
+	@Override
+	public Statement apply(@Nonnull Statement base, @Nonnull Description description) {
+		return new ReadRuntimeConfigurationStatement(base, this.runtimeConfigurationPath);
+	}
 
-    public static class ReadRuntimeConfigurationStatement extends Statement {
+	public static class ReadRuntimeConfigurationStatement extends Statement {
 
-        private final Statement base;
-        private final String runtimeConfigurationPath;
+		private final Statement base;
+		private final String runtimeConfigurationPath;
 
-        public ReadRuntimeConfigurationStatement(@Nonnull Statement base, @Nonnull String runtimeConfigurationPath) {
-            this.base = Objects.requireNonNull(base);
-            this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
-        }
+		public ReadRuntimeConfigurationStatement(@Nonnull Statement base, @Nonnull String runtimeConfigurationPath) {
+			this.base = Objects.requireNonNull(base);
+			this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
+		}
 
-        private void before() {
-            try (
-                InputStream inputStream = ReladomoTestRuleBuilder.class.getClassLoader().getResourceAsStream(
-                    this.runtimeConfigurationPath
-                );
-            ) {
-                MithraConfigurationManager mithraConfigurationManager =
-                    MithraManagerProvider.getMithraManager().getConfigManager();
-                MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
-                mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
-                mithraConfigurationManager.fullyInitialize();
-            } catch (MithraBusinessException e) {
-                throw new RuntimeException(this.runtimeConfigurationPath, e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+		private void before() {
+			try (
+				InputStream inputStream = ReladomoTestRuleBuilder.class.getClassLoader().getResourceAsStream(
+					this.runtimeConfigurationPath
+				);
+			) {
+				MithraConfigurationManager mithraConfigurationManager =
+					MithraManagerProvider.getMithraManager().getConfigManager();
+				MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
+				mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
+				mithraConfigurationManager.fullyInitialize();
+			} catch (MithraBusinessException e) {
+				throw new RuntimeException(this.runtimeConfigurationPath, e);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
-        private void after() {
-            MithraManagerProvider.getMithraManager().clearAllQueryCaches();
-            MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
-            MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
-            MithraManagerProvider.getMithraManager().getConfigManager().resetAllInitializedClasses();
-        }
+		private void after() {
+			MithraManagerProvider.getMithraManager().clearAllQueryCaches();
+			MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
+			MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
+			MithraManagerProvider.getMithraManager().getConfigManager().resetAllInitializedClasses();
+		}
 
-        @Override
-        public void evaluate() throws Throwable {
-            this.before();
-            try {
-                this.base.evaluate();
-            } finally {
-                this.after();
-            }
-        }
-    }
+		@Override
+		public void evaluate() throws Throwable {
+			this.before();
+			try {
+				this.base.evaluate();
+			} finally {
+				this.after();
+			}
+		}
+	}
 }

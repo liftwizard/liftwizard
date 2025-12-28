@@ -31,42 +31,42 @@ import org.slf4j.MDC.MDCCloseable;
 
 public class DynamicBundlesBundle implements ConfiguredBundle<Object> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicBundlesBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DynamicBundlesBundle.class);
 
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
-            this.initializeWithMdc(bootstrap);
-        }
-    }
+	@Override
+	public void initialize(Bootstrap<?> bootstrap) {
+		try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
+			this.initializeWithMdc(bootstrap);
+		}
+	}
 
-    private void initializeWithMdc(Bootstrap<?> bootstrap) {
-        ServiceLoader<PrioritizedBundle> serviceLoader = ServiceLoader.load(PrioritizedBundle.class);
-        ImmutableList<PrioritizedBundle> prioritizedBundles = Lists.immutable
-            .withAll(serviceLoader)
-            .toSortedListBy(PrioritizedBundle::getPriority)
-            .toImmutable();
+	private void initializeWithMdc(Bootstrap<?> bootstrap) {
+		ServiceLoader<PrioritizedBundle> serviceLoader = ServiceLoader.load(PrioritizedBundle.class);
+		ImmutableList<PrioritizedBundle> prioritizedBundles = Lists.immutable
+			.withAll(serviceLoader)
+			.toSortedListBy(PrioritizedBundle::getPriority)
+			.toImmutable();
 
-        if (prioritizedBundles.isEmpty()) {
-            LOGGER.warn("Didn't find any implementations of PrioritizedBundle using ServiceLoader.");
-        }
+		if (prioritizedBundles.isEmpty()) {
+			LOGGER.warn("Didn't find any implementations of PrioritizedBundle using ServiceLoader.");
+		}
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(
-                "Found PrioritizedBundles using ServiceLoader:\n{}",
-                prioritizedBundles.collect(this::getBundleString).makeString("\n")
-            );
-        }
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info(
+				"Found PrioritizedBundles using ServiceLoader:\n{}",
+				prioritizedBundles.collect(this::getBundleString).makeString("\n")
+			);
+		}
 
-        for (PrioritizedBundle bundle : prioritizedBundles) {
-            bootstrap.addBundle(bundle);
-        }
-    }
+		for (PrioritizedBundle bundle : prioritizedBundles) {
+			bootstrap.addBundle(bundle);
+		}
+	}
 
-    private String getBundleString(PrioritizedBundle bundle) {
-        return "    %s: %d".formatted(bundle.getClass().getSimpleName(), bundle.getPriority());
-    }
+	private String getBundleString(PrioritizedBundle bundle) {
+		return "    %s: %d".formatted(bundle.getClass().getSimpleName(), bundle.getPriority());
+	}
 
-    @Override
-    public void run(Object configuration, Environment environment) {}
+	@Override
+	public void run(Object configuration, Environment environment) {}
 }

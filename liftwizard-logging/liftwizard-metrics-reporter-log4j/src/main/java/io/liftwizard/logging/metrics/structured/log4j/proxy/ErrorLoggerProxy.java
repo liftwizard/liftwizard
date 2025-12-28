@@ -21,17 +21,17 @@ import org.apache.log4j.Logger;
 
 public class ErrorLoggerProxy extends AbstractLoggerProxy {
 
-    public ErrorLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public ErrorLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Object structuredObject) {
-        this.logger.error(structuredObject);
-    }
+	@Override
+	public void log(Object structuredObject) {
+		this.logger.error(structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.logger.isEnabledFor(Level.ERROR);
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.logger.isEnabledFor(Level.ERROR);
+	}
 }

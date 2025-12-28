@@ -25,87 +25,87 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class PersonResourceTest {
 
-    private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
+	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
-    @RegisterExtension
-    @Order(1)
-    private final LiftwizardAppExtension<HelloWorldConfiguration> dropwizardAppExtension = new LiftwizardAppExtension<>(
-        HelloWorldApplication.class,
-        CONFIG_PATH
-    );
+	@RegisterExtension
+	@Order(1)
+	private final LiftwizardAppExtension<HelloWorldConfiguration> dropwizardAppExtension = new LiftwizardAppExtension<>(
+		HelloWorldApplication.class,
+		CONFIG_PATH
+	);
 
-    @RegisterExtension
-    @Order(2)
-    private final BeforeEachCallback dbMigrateRule = context ->
-        this.dropwizardAppExtension.getApplication().run("db", "migrate", CONFIG_PATH);
+	@RegisterExtension
+	@Order(2)
+	private final BeforeEachCallback dbMigrateRule = (context) ->
+		this.dropwizardAppExtension.getApplication().run("db", "migrate", CONFIG_PATH);
 
-    @RegisterExtension
-    @Order(3)
-    private final ReladomoInitializeExtension initializeExtension = new ReladomoInitializeExtension(
-        "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
-    );
+	@RegisterExtension
+	@Order(3)
+	private final ReladomoInitializeExtension initializeExtension = new ReladomoInitializeExtension(
+		"reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
+	);
 
-    @RegisterExtension
-    @Order(4)
-    private final ReladomoPurgeAllExtension purgeAllExtension = new ReladomoPurgeAllExtension();
+	@RegisterExtension
+	@Order(4)
+	private final ReladomoPurgeAllExtension purgeAllExtension = new ReladomoPurgeAllExtension();
 
-    @RegisterExtension
-    @Order(5)
-    private final ReladomoLoadDataExtension loadDataExtension = new ReladomoLoadDataExtension();
+	@RegisterExtension
+	@Order(5)
+	private final ReladomoLoadDataExtension loadDataExtension = new ReladomoLoadDataExtension();
 
-    @RegisterExtension
-    @Order(6)
-    private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
+	@RegisterExtension
+	@Order(6)
+	private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
-    @Test
-    @ReladomoTestFile("test-data/person.txt")
-    void getPersonSuccess() throws JSONException {
-        Response response = this.getPersonResponse(1);
-        this.assertResponseStatus(response, Status.OK);
-        String jsonResponse = response.readEntity(String.class);
+	@Test
+	@ReladomoTestFile("test-data/person.txt")
+	void getPersonSuccess() throws JSONException {
+		Response response = this.getPersonResponse(1);
+		this.assertResponseStatus(response, Status.OK);
+		String jsonResponse = response.readEntity(String.class);
 
-        // <editor-fold desc="Expected JSON">
-        // language=JSON
-        String expected = """
-            {
-              "id"      : 1,
-              "fullName": "Full Name",
-              "jobTitle": "Job Title"
-            }\s""";
-        // </editor-fold>
-        JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
-    }
+		// <editor-fold desc="Expected JSON">
+		// language=JSON
+		String expected = """
+			{
+			  "id"      : 1,
+			  "fullName": "Full Name",
+			  "jobTitle": "Job Title"
+			}\s""";
+		// </editor-fold>
+		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+	}
 
-    @Test
-    @ReladomoTestFile("test-data/person.txt")
-    void getPersonNotFound() throws JSONException {
-        Response response = this.getPersonResponse(2);
-        this.assertResponseStatus(response, Status.NOT_FOUND);
-        String jsonResponse = response.readEntity(String.class);
+	@Test
+	@ReladomoTestFile("test-data/person.txt")
+	void getPersonNotFound() throws JSONException {
+		Response response = this.getPersonResponse(2);
+		this.assertResponseStatus(response, Status.NOT_FOUND);
+		String jsonResponse = response.readEntity(String.class);
 
-        // <editor-fold desc="Expected JSON">
-        // language=JSON
-        String expected = """
-            {
-              "code"   : 404,
-              "message": "No such user."
-            }\s""";
-        // </editor-fold>
-        JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
-    }
+		// <editor-fold desc="Expected JSON">
+		// language=JSON
+		String expected = """
+			{
+			  "code"   : 404,
+			  "message": "No such user."
+			}\s""";
+		// </editor-fold>
+		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+	}
 
-    private Response getPersonResponse(int personId) {
-        return this.dropwizardAppExtension.client()
-            .target("http://localhost:{port}/people/{personId}")
-            .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
-            .resolveTemplate("personId", personId)
-            .request()
-            .get();
-    }
+	private Response getPersonResponse(int personId) {
+		return this.dropwizardAppExtension.client()
+			.target("http://localhost:{port}/people/{personId}")
+			.resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
+			.resolveTemplate("personId", personId)
+			.request()
+			.get();
+	}
 
-    private void assertResponseStatus(@Nonnull Response response, Status status) {
-        response.bufferEntity();
-        String entityAsString = response.readEntity(String.class);
-        assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
-    }
+	private void assertResponseStatus(@Nonnull Response response, Status status) {
+		response.bufferEntity();
+		String entityAsString = response.readEntity(String.class);
+		assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
+	}
 }

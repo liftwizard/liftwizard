@@ -32,50 +32,50 @@ import org.eclipse.collections.api.list.MutableList;
 
 public final class ReladomoTestResourceWriter {
 
-    private ReladomoTestResourceWriter() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private ReladomoTestResourceWriter() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 
-    public static String generate() {
-        return generate(Lists.immutable.empty());
-    }
+	public static String generate() {
+		return generate(Lists.immutable.empty());
+	}
 
-    public static String generate(ImmutableList<String> classNamesInOrder) {
-        Set<MithraRuntimeCacheController> runtimeCacheControllerSet =
-            MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet();
-        ImmutableList<MithraRuntimeCacheController> mithraRuntimeCacheControllers = Lists.immutable.withAll(
-            runtimeCacheControllerSet
-        );
+	public static String generate(ImmutableList<String> classNamesInOrder) {
+		Set<MithraRuntimeCacheController> runtimeCacheControllerSet =
+			MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet();
+		ImmutableList<MithraRuntimeCacheController> mithraRuntimeCacheControllers = Lists.immutable.withAll(
+			runtimeCacheControllerSet
+		);
 
-        // Sort runtimeCacheControllerSet by the order of their names in classNamesInOrder.
-        // If a name is not in classNamesInOrder, it is sorted to the end.
-        MutableList<MithraRuntimeCacheController> mithraRuntimeCacheControllersSorted =
-            mithraRuntimeCacheControllers.toSortedListBy(controller -> {
-                String businessClassName = controller.getMithraObjectPortal().getBusinessClassName();
-                int result = classNamesInOrder.indexOf(businessClassName);
-                return result == -1 ? Integer.MAX_VALUE : result;
-            });
+		// Sort runtimeCacheControllerSet by the order of their names in classNamesInOrder.
+		// If a name is not in classNamesInOrder, it is sorted to the end.
+		MutableList<MithraRuntimeCacheController> mithraRuntimeCacheControllersSorted =
+			mithraRuntimeCacheControllers.toSortedListBy((controller) -> {
+				String businessClassName = controller.getMithraObjectPortal().getBusinessClassName();
+				int result = classNamesInOrder.indexOf(businessClassName);
+				return result == -1 ? Integer.MAX_VALUE : result;
+			});
 
-        return mithraRuntimeCacheControllersSorted
-            .collect(ReladomoTestResourceWriter::getReladomoTestResourceGrid)
-            .reject(ReladomoTestResourceGrid::isEmpty)
-            .tap(ReladomoTestResourceGrid::freeze)
-            .collect(Objects::toString)
-            .makeString("\n");
-    }
+		return mithraRuntimeCacheControllersSorted
+			.collect(ReladomoTestResourceWriter::getReladomoTestResourceGrid)
+			.reject(ReladomoTestResourceGrid::isEmpty)
+			.tap(ReladomoTestResourceGrid::freeze)
+			.collect(Objects::toString)
+			.makeString("\n");
+	}
 
-    private static ReladomoTestResourceGrid getReladomoTestResourceGrid(MithraRuntimeCacheController eachController) {
-        RelatedFinder finderInstance = eachController.getFinderInstance();
-        AsOfAttribute[] asOfAttributes = finderInstance.getAsOfAttributes();
-        Operation operation = finderInstance.all();
-        if (asOfAttributes != null) {
-            for (AsOfAttribute asOfAttribute : asOfAttributes) {
-                Operation equalsEdgePoint = asOfAttribute.equalsEdgePoint();
-                operation = operation.and(equalsEdgePoint);
-            }
-        }
-        MithraList<?> mithraList = finderInstance.findMany(operation);
-        ReladomoClassMetaData metaData = eachController.getMetaData();
-        return new ReladomoTestResourceGrid(metaData, mithraList);
-    }
+	private static ReladomoTestResourceGrid getReladomoTestResourceGrid(MithraRuntimeCacheController eachController) {
+		RelatedFinder finderInstance = eachController.getFinderInstance();
+		AsOfAttribute[] asOfAttributes = finderInstance.getAsOfAttributes();
+		Operation operation = finderInstance.all();
+		if (asOfAttributes != null) {
+			for (AsOfAttribute asOfAttribute : asOfAttributes) {
+				Operation equalsEdgePoint = asOfAttribute.equalsEdgePoint();
+				operation = operation.and(equalsEdgePoint);
+			}
+		}
+		MithraList<?> mithraList = finderInstance.findMany(operation);
+		ReladomoClassMetaData metaData = eachController.getMetaData();
+		return new ReladomoTestResourceGrid(metaData, mithraList);
+	}
 }

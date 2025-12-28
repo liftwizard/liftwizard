@@ -22,42 +22,42 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArgumentsPath {
 
-    private final String absolute;
-    private final String full;
-    private String template;
-    private String baseUriPath;
+	private final String absolute;
+	private final String full;
+	private String template;
+	private String baseUriPath;
 
-    public StructuredArgumentsPath(String absolute, String full) {
-        this.absolute = Objects.requireNonNull(absolute);
-        this.full = Objects.requireNonNull(full);
-    }
+	public StructuredArgumentsPath(String absolute, String full) {
+		this.absolute = Objects.requireNonNull(absolute);
+		this.full = Objects.requireNonNull(full);
+	}
 
-    @JsonProperty
-    public String getAbsolute() {
-        return this.absolute;
-    }
+	@JsonProperty
+	public String getAbsolute() {
+		return this.absolute;
+	}
 
-    @JsonProperty
-    public String getFull() {
-        return this.full;
-    }
+	@JsonProperty
+	public String getFull() {
+		return this.full;
+	}
 
-    public void setTemplate(String template) {
-        if (this.template != null) {
-            throw new IllegalStateException(this.template);
-        }
-        this.template = Objects.requireNonNull(template);
-    }
+	public void setTemplate(String template) {
+		if (this.template != null) {
+			throw new IllegalStateException(this.template);
+		}
+		this.template = Objects.requireNonNull(template);
+	}
 
-    @JsonProperty
-    public String getTemplate() {
-        return this.template;
-    }
+	@JsonProperty
+	public String getTemplate() {
+		return this.template;
+	}
 
-    public void setBaseUriPath(String baseUriPath) {
-        if (this.baseUriPath != null) {
-            throw new IllegalStateException(this.baseUriPath);
-        }
-        this.baseUriPath = Objects.requireNonNull(baseUriPath);
-    }
+	public void setBaseUriPath(String baseUriPath) {
+		if (this.baseUriPath != null) {
+			throw new IllegalStateException(this.baseUriPath);
+		}
+		this.baseUriPath = Objects.requireNonNull(baseUriPath);
+	}
 }

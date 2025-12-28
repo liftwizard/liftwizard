@@ -32,41 +32,41 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractB
 
 public class InstantBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final TimestampAttribute attribute;
-    private final Timestamp timestamp;
+	private final TimestampAttribute attribute;
+	private final Timestamp timestamp;
 
-    public InstantBinaryOperatorVisitor(TimestampAttribute attribute, Instant parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.timestamp = Timestamp.from(parameter);
-    }
+	public InstantBinaryOperatorVisitor(TimestampAttribute attribute, Instant parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.timestamp = Timestamp.from(parameter);
+	}
 
-    @Override
-    public Operation visitOperatorEq(OperatorEqContext ctx) {
-        return this.attribute.eq(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorEq(OperatorEqContext ctx) {
+		return this.attribute.eq(this.timestamp);
+	}
 
-    @Override
-    public Operation visitOperatorNotEq(OperatorNotEqContext ctx) {
-        return this.attribute.notEq(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorNotEq(OperatorNotEqContext ctx) {
+		return this.attribute.notEq(this.timestamp);
+	}
 
-    @Override
-    public Operation visitOperatorGreaterThan(OperatorGreaterThanContext ctx) {
-        return this.attribute.greaterThan(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorGreaterThan(OperatorGreaterThanContext ctx) {
+		return this.attribute.greaterThan(this.timestamp);
+	}
 
-    @Override
-    public Operation visitOperatorGreaterThanEquals(OperatorGreaterThanEqualsContext ctx) {
-        return this.attribute.greaterThanEquals(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorGreaterThanEquals(OperatorGreaterThanEqualsContext ctx) {
+		return this.attribute.greaterThanEquals(this.timestamp);
+	}
 
-    @Override
-    public Operation visitOperatorLessThan(OperatorLessThanContext ctx) {
-        return this.attribute.lessThan(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorLessThan(OperatorLessThanContext ctx) {
+		return this.attribute.lessThan(this.timestamp);
+	}
 
-    @Override
-    public Operation visitOperatorLessThanEquals(OperatorLessThanEqualsContext ctx) {
-        return this.attribute.lessThanEquals(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorLessThanEquals(OperatorLessThanEqualsContext ctx) {
+		return this.attribute.lessThanEquals(this.timestamp);
+	}
 }

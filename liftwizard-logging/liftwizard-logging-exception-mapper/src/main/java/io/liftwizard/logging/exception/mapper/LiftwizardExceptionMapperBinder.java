@@ -35,24 +35,24 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
  */
 public class LiftwizardExceptionMapperBinder extends AbstractBinder {
 
-    private final boolean showDetails;
+	private final boolean showDetails;
 
-    public LiftwizardExceptionMapperBinder(boolean showDetails) {
-        this.showDetails = showDetails;
-    }
+	public LiftwizardExceptionMapperBinder(boolean showDetails) {
+		this.showDetails = showDetails;
+	}
 
-    @Override
-    protected void configure() {
-        this.bind(new LiftwizardLoggingExceptionMapper<Throwable>() {}).to(ExceptionMapper.class);
-        this.bind(JerseyViolationExceptionMapper.class).to(ExceptionMapper.class);
-        this.bind(new JsonProcessingExceptionMapper(this.isShowDetails())).to(ExceptionMapper.class);
-        this.bind(EarlyEofExceptionMapper.class).to(ExceptionMapper.class);
-        this.bind(EofExceptionWriterInterceptor.class).to(WriterInterceptor.class);
-        this.bind(EmptyOptionalExceptionMapper.class).to(ExceptionMapper.class);
-        this.bind(IllegalStateExceptionMapper.class).to(ExceptionMapper.class);
-    }
+	@Override
+	protected void configure() {
+		this.bind(new LiftwizardLoggingExceptionMapper<Throwable>() {}).to(ExceptionMapper.class);
+		this.bind(JerseyViolationExceptionMapper.class).to(ExceptionMapper.class);
+		this.bind(new JsonProcessingExceptionMapper(this.isShowDetails())).to(ExceptionMapper.class);
+		this.bind(EarlyEofExceptionMapper.class).to(ExceptionMapper.class);
+		this.bind(EofExceptionWriterInterceptor.class).to(WriterInterceptor.class);
+		this.bind(EmptyOptionalExceptionMapper.class).to(ExceptionMapper.class);
+		this.bind(IllegalStateExceptionMapper.class).to(ExceptionMapper.class);
+	}
 
-    public boolean isShowDetails() {
-        return this.showDetails;
-    }
+	public boolean isShowDetails() {
+		return this.showDetails;
+	}
 }

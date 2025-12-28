@@ -30,24 +30,24 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 public class ReladomoOperationCompiler {
 
-    private static final Pattern NEWLINE_PATTERN = Pattern.compile("\\r?\\n");
+	private static final Pattern NEWLINE_PATTERN = Pattern.compile("\\r?\\n");
 
-    public Operation compile(RelatedFinder<?> finder, String sourceCodeText) {
-        String[] lines = NEWLINE_PATTERN.split(sourceCodeText);
-        CodePointCharStream charStream = CharStreams.fromString(sourceCodeText);
+	public Operation compile(RelatedFinder<?> finder, String sourceCodeText) {
+		String[] lines = NEWLINE_PATTERN.split(sourceCodeText);
+		CodePointCharStream charStream = CharStreams.fromString(sourceCodeText);
 
-        var lexer = new ReladomoOperationLexer(charStream);
-        var errorListener = new ThrowingErrorListener(lines);
-        var tokenStream = new CommonTokenStream(lexer);
-        var parser = new ReladomoOperationParser(tokenStream);
+		var lexer = new ReladomoOperationLexer(charStream);
+		var errorListener = new ThrowingErrorListener(lines);
+		var tokenStream = new CommonTokenStream(lexer);
+		var parser = new ReladomoOperationParser(tokenStream);
 
-        lexer.addErrorListener(errorListener);
-        parser.removeErrorListeners();
-        parser.addErrorListener(errorListener);
+		lexer.addErrorListener(errorListener);
+		parser.removeErrorListeners();
+		parser.addErrorListener(errorListener);
 
-        ReladomoOperationVisitor<Operation> visitor = new ReladomoOperationBuilderVisitor<>(finder, tokenStream);
+		ReladomoOperationVisitor<Operation> visitor = new ReladomoOperationBuilderVisitor<>(finder, tokenStream);
 
-        CompilationUnitContext compilationUnitContext = parser.compilationUnit();
-        return compilationUnitContext.accept(visitor);
-    }
+		CompilationUnitContext compilationUnitContext = parser.compilationUnit();
+		return compilationUnitContext.accept(visitor);
+	}
 }

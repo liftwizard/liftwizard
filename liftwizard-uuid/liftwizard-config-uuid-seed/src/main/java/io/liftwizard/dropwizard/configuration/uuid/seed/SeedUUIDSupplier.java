@@ -25,19 +25,19 @@ import javax.annotation.Nonnull;
 
 public class SeedUUIDSupplier implements Supplier<UUID> {
 
-    private final String seed;
-    private int counter;
+	private final String seed;
+	private int counter;
 
-    public SeedUUIDSupplier(@Nonnull String seed) {
-        this.seed = Objects.requireNonNull(seed);
-    }
+	public SeedUUIDSupplier(@Nonnull String seed) {
+		this.seed = Objects.requireNonNull(seed);
+	}
 
-    @Nonnull
-    @Override
-    public UUID get() {
-        this.counter++;
-        String name = this.seed + this.counter;
-        byte[] bytes = name.getBytes(StandardCharsets.UTF_8);
-        return UUID.nameUUIDFromBytes(bytes);
-    }
+	@Nonnull
+	@Override
+	public UUID get() {
+		this.counter++;
+		String name = this.seed + this.counter;
+		byte[] bytes = name.getBytes(StandardCharsets.UTF_8);
+		return UUID.nameUUIDFromBytes(bytes);
+	}
 }

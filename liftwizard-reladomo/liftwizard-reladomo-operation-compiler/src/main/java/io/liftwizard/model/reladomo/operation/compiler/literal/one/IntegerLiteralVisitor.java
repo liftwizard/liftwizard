@@ -22,26 +22,26 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVi
 
 public class IntegerLiteralVisitor extends AbstractLiteralVisitor<Integer> {
 
-    public IntegerLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-    }
+	public IntegerLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "Integer";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "Integer";
+	}
 
-    @Override
-    public Integer visitIntegerLiteral(IntegerLiteralContext ctx) {
-        if (ctx.NullLiteral() != null) {
-            return null;
-        }
+	@Override
+	public Integer visitIntegerLiteral(IntegerLiteralContext ctx) {
+		if (ctx.NullLiteral() != null) {
+			return null;
+		}
 
-        String text = ctx.IntegerLiteral().getText().replaceAll("_", "");
-        try {
-            return Integer.valueOf(text);
-        } catch (NumberFormatException e) {
-            return this.throwTypeError(ctx);
-        }
-    }
+		String text = ctx.IntegerLiteral().getText().replaceAll("_", "");
+		try {
+			return Integer.valueOf(text);
+		} catch (NumberFormatException e) {
+			return this.throwTypeError(ctx);
+		}
+	}
 }

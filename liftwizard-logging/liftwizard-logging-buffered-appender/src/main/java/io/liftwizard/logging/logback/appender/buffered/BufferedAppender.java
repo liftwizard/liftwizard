@@ -35,91 +35,91 @@ import org.slf4j.Marker;
  * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappender">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappender</a>
  */
 public class BufferedAppender<E extends DeferredProcessingAware>
-    extends UnsynchronizedAppenderBase<E>
-    implements AppenderAttachable<E> {
+	extends UnsynchronizedAppenderBase<E>
+	implements AppenderAttachable<E> {
 
-    private final AppenderAttachableImpl<E> appenderAttachable = new AppenderAttachableImpl<>();
-    private final Queue<E> queue = new ArrayDeque<>();
+	private final AppenderAttachableImpl<E> appenderAttachable = new AppenderAttachableImpl<>();
+	private final Queue<E> queue = new ArrayDeque<>();
 
-    private int appenderCount;
+	private int appenderCount;
 
-    @Override
-    public void start() {
-        if (this.isStarted()) {
-            return;
-        }
+	@Override
+	public void start() {
+		if (this.isStarted()) {
+			return;
+		}
 
-        if (this.appenderCount == 0) {
-            this.addError("No attached appenders found.");
-            return;
-        }
+		if (this.appenderCount == 0) {
+			this.addError("No attached appenders found.");
+			return;
+		}
 
-        super.start();
-    }
+		super.start();
+	}
 
-    @Override
-    public void stop() {
-        this.appenderAttachable.detachAndStopAllAppenders();
-        super.stop();
-    }
+	@Override
+	public void stop() {
+		this.appenderAttachable.detachAndStopAllAppenders();
+		super.stop();
+	}
 
-    @Override
-    protected void append(E eventObject) {
-        // preprocess for async
-        eventObject.prepareForDeferredProcessing();
-        if (eventObject instanceof ILoggingEvent loggingEvent) {
-            loggingEvent.getCallerData();
-            this.queue.add(eventObject);
-            Marker marker = loggingEvent.getMarker();
-            if (marker != null && Objects.equals(marker.getName(), "CLEAR")) {
-                this.queue.clear();
-            } else if (marker != null && Objects.equals(marker.getName(), "FLUSH")) {
-                while (!this.queue.isEmpty()) {
-                    this.appenderAttachable.appendLoopOnAppenders(this.queue.remove());
-                }
-            }
-        }
-    }
+	@Override
+	protected void append(E eventObject) {
+		// preprocess for async
+		eventObject.prepareForDeferredProcessing();
+		if (eventObject instanceof ILoggingEvent loggingEvent) {
+			loggingEvent.getCallerData();
+			this.queue.add(eventObject);
+			Marker marker = loggingEvent.getMarker();
+			if (marker != null && Objects.equals(marker.getName(), "CLEAR")) {
+				this.queue.clear();
+			} else if (marker != null && Objects.equals(marker.getName(), "FLUSH")) {
+				while (!this.queue.isEmpty()) {
+					this.appenderAttachable.appendLoopOnAppenders(this.queue.remove());
+				}
+			}
+		}
+	}
 
-    @Override
-    public void addAppender(Appender<E> newAppender) {
-        if (this.appenderCount == 0) {
-            this.appenderCount++;
-            this.addInfo("Attaching appender named [" + newAppender.getName() + "] to BufferedAppender.");
-            this.appenderAttachable.addAppender(newAppender);
-        } else {
-            this.addWarn("One and only one appender may be attached to BufferedAppender.");
-            this.addWarn("Ignoring additional appender named [" + newAppender.getName() + "]");
-        }
-    }
+	@Override
+	public void addAppender(Appender<E> newAppender) {
+		if (this.appenderCount == 0) {
+			this.appenderCount++;
+			this.addInfo("Attaching appender named [" + newAppender.getName() + "] to BufferedAppender.");
+			this.appenderAttachable.addAppender(newAppender);
+		} else {
+			this.addWarn("One and only one appender may be attached to BufferedAppender.");
+			this.addWarn("Ignoring additional appender named [" + newAppender.getName() + "]");
+		}
+	}
 
-    @Override
-    public Iterator<Appender<E>> iteratorForAppenders() {
-        return this.appenderAttachable.iteratorForAppenders();
-    }
+	@Override
+	public Iterator<Appender<E>> iteratorForAppenders() {
+		return this.appenderAttachable.iteratorForAppenders();
+	}
 
-    @Override
-    public Appender<E> getAppender(String name) {
-        return this.appenderAttachable.getAppender(name);
-    }
+	@Override
+	public Appender<E> getAppender(String name) {
+		return this.appenderAttachable.getAppender(name);
+	}
 
-    @Override
-    public boolean isAttached(Appender<E> appender) {
-        return this.appenderAttachable.isAttached(appender);
-    }
+	@Override
+	public boolean isAttached(Appender<E> appender) {
+		return this.appenderAttachable.isAttached(appender);
+	}
 
-    @Override
-    public void detachAndStopAllAppenders() {
-        this.appenderAttachable.detachAndStopAllAppenders();
-    }
+	@Override
+	public void detachAndStopAllAppenders() {
+		this.appenderAttachable.detachAndStopAllAppenders();
+	}
 
-    @Override
-    public boolean detachAppender(Appender<E> appender) {
-        return this.appenderAttachable.detachAppender(appender);
-    }
+	@Override
+	public boolean detachAppender(Appender<E> appender) {
+		return this.appenderAttachable.detachAppender(appender);
+	}
 
-    @Override
-    public boolean detachAppender(String name) {
-        return this.appenderAttachable.detachAppender(name);
-    }
+	@Override
+	public boolean detachAppender(String name) {
+		return this.appenderAttachable.detachAppender(name);
+	}
 }

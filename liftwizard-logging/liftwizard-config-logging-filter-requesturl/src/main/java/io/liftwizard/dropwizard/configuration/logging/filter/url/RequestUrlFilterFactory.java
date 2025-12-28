@@ -38,54 +38,54 @@ import org.eclipse.collections.api.factory.Lists;
 @AutoService(FilterFactory.class)
 public class RequestUrlFilterFactory implements FilterFactory<IAccessEvent> {
 
-    @NotEmpty
-    private @Valid @NotNull List<String> urls = Lists.mutable.empty();
+	@NotEmpty
+	private @Valid @NotNull List<String> urls = Lists.mutable.empty();
 
-    private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
-    private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
+	private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
+	private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
-    @Override
-    public Filter<IAccessEvent> build() {
-        var evaluator = new URLEvaluator();
-        this.urls.forEach(evaluator::addURL);
-        evaluator.start();
+	@Override
+	public Filter<IAccessEvent> build() {
+		var evaluator = new URLEvaluator();
+		this.urls.forEach(evaluator::addURL);
+		evaluator.start();
 
-        var filter = new EvaluatorFilter<IAccessEvent>();
-        filter.setEvaluator(evaluator);
-        filter.setOnMatch(this.onMatch);
-        filter.setOnMismatch(this.onMismatch);
-        filter.start();
+		var filter = new EvaluatorFilter<IAccessEvent>();
+		filter.setEvaluator(evaluator);
+		filter.setOnMatch(this.onMatch);
+		filter.setOnMismatch(this.onMismatch);
+		filter.start();
 
-        return filter;
-    }
+		return filter;
+	}
 
-    @JsonProperty
-    public List<String> getUrls() {
-        return this.urls;
-    }
+	@JsonProperty
+	public List<String> getUrls() {
+		return this.urls;
+	}
 
-    @JsonProperty
-    public void setUrls(List<String> urls) {
-        this.urls = Objects.requireNonNull(urls);
-    }
+	@JsonProperty
+	public void setUrls(List<String> urls) {
+		this.urls = Objects.requireNonNull(urls);
+	}
 
-    @JsonProperty
-    public FilterReply getOnMatch() {
-        return this.onMatch;
-    }
+	@JsonProperty
+	public FilterReply getOnMatch() {
+		return this.onMatch;
+	}
 
-    @JsonProperty
-    public void setOnMatch(FilterReply onMatch) {
-        this.onMatch = onMatch;
-    }
+	@JsonProperty
+	public void setOnMatch(FilterReply onMatch) {
+		this.onMatch = onMatch;
+	}
 
-    @JsonProperty
-    public FilterReply getOnMismatch() {
-        return this.onMismatch;
-    }
+	@JsonProperty
+	public FilterReply getOnMismatch() {
+		return this.onMismatch;
+	}
 
-    @JsonProperty
-    public void setOnMismatch(FilterReply onMismatch) {
-        this.onMismatch = onMismatch;
-    }
+	@JsonProperty
+	public void setOnMismatch(FilterReply onMismatch) {
+		this.onMismatch = onMismatch;
+	}
 }

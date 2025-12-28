@@ -1,40 +1,40 @@
 {
-  // Number of spaces per indentation level
-  // Default: 2
-  tabWidth: 2,
+	// Number of spaces per indentation level
+	// Default: 2
+	tabWidth: 4,
 
-  // Indent with tabs instead of spaces
-  // Default: false
-  useTabs: false,
+	// Indent with tabs instead of spaces
+	// Default: false
+	useTabs: true,
 
-  // Add semicolons at the end of statements
-  // Default: true
-  semi: true,
+	// Add semicolons at the end of statements
+	// Default: true
+	semi: true,
 
-  // Use single quotes instead of double quotes
-  // Default: false
-  singleQuote: false,
+	// Use single quotes instead of double quotes
+	// Default: false
+	singleQuote: false,
 
-  // Print trailing commas wherever possible in multi-line comma-separated structures
-  // Default: "es5"
-  // Options: "none" | "es5" | "all"
-  trailingComma: "all",
+	// Print trailing commas wherever possible in multi-line comma-separated structures
+	// Default: "es5"
+	// Options: "none" | "es5" | "all"
+	trailingComma: "all",
 
-  // Print spaces between brackets in object literals
-  // Default: true
-  bracketSpacing: false,
+	// Print spaces between brackets in object literals
+	// Default: true
+	bracketSpacing: false,
 
-  // Include parentheses around a sole arrow function parameter
-  // Default: "always"
-  // Options: "avoid" | "always"
-  arrowParens: "always",
+	// Include parentheses around a sole arrow function parameter
+	// Default: "always"
+	// Options: "avoid" | "always"
+	arrowParens: "always",
 
-  // Line length where Prettier will try to wrap
-  // Default: 80
-  printWidth: 120,
+	// Line length where Prettier will try to wrap
+	// Default: 80
+	printWidth: 120,
 
-  // prettier-plugin-java: Position of binary operators in wrapped lines
-  // Default: "end"
-  // Options: "start" | "end"
-  experimentalOperatorPosition: "start",
+	// prettier-plugin-java: Position of binary operators in wrapped lines
+	// Default: "end"
+	// Options: "start" | "end"
+	experimentalOperatorPosition: "start",
 }

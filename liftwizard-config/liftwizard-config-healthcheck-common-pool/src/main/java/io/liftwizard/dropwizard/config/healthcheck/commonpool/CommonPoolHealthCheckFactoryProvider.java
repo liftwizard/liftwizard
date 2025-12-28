@@ -17,5 +17,5 @@
 package io.liftwizard.dropwizard.config.healthcheck.commonpool;
 
 public interface CommonPoolHealthCheckFactoryProvider {
-    CommonPoolHealthCheckFactory getCommonPoolHealthCheckFactory();
+	CommonPoolHealthCheckFactory getCommonPoolHealthCheckFactory();
 }

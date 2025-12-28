@@ -26,21 +26,21 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractB
 
 public class BooleanBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final BooleanAttribute attribute;
-    private final Boolean parameter;
+	private final BooleanAttribute attribute;
+	private final Boolean parameter;
 
-    public BooleanBinaryOperatorVisitor(BooleanAttribute attribute, Boolean parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.parameter = Objects.requireNonNull(parameter);
-    }
+	public BooleanBinaryOperatorVisitor(BooleanAttribute attribute, Boolean parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.parameter = Objects.requireNonNull(parameter);
+	}
 
-    @Override
-    public Operation visitOperatorEq(OperatorEqContext ctx) {
-        return this.attribute.eq(this.parameter);
-    }
+	@Override
+	public Operation visitOperatorEq(OperatorEqContext ctx) {
+		return this.attribute.eq(this.parameter);
+	}
 
-    @Override
-    public Operation visitOperatorNotEq(OperatorNotEqContext ctx) {
-        return this.attribute.notEq(this.parameter);
-    }
+	@Override
+	public Operation visitOperatorNotEq(OperatorNotEqContext ctx) {
+		return this.attribute.notEq(this.parameter);
+	}
 }

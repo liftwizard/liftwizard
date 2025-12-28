@@ -41,98 +41,98 @@ import org.junit.rules.ErrorCollector;
 
 public abstract class AbstractMatchRule extends ErrorCollector {
 
-    protected static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
-    protected final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
+	protected static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
+	protected final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
-    @Nonnull
-    protected final Class<?> callingClass;
+	@Nonnull
+	protected final Class<?> callingClass;
 
-    protected final boolean rerecordEnabled;
+	protected final boolean rerecordEnabled;
 
-    protected AbstractMatchRule(@Nonnull Class<?> callingClass) {
-        this.callingClass = Objects.requireNonNull(callingClass);
-        this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
-    }
+	protected AbstractMatchRule(@Nonnull Class<?> callingClass) {
+		this.callingClass = Objects.requireNonNull(callingClass);
+		this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
+	}
 
-    public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass) {
-        return AbstractMatchRule.slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
-    }
+	public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass) {
+		return AbstractMatchRule.slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
+	}
 
-    public static String slurp(
-        @Nonnull String resourceClassPathLocation,
-        @Nonnull Class<?> callingClass,
-        Charset charset
-    ) {
-        InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
-        Objects.requireNonNull(inputStream, resourceClassPathLocation);
-        return AbstractMatchRule.slurp(inputStream, charset);
-    }
+	public static String slurp(
+		@Nonnull String resourceClassPathLocation,
+		@Nonnull Class<?> callingClass,
+		Charset charset
+	) {
+		InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
+		Objects.requireNonNull(inputStream, resourceClassPathLocation);
+		return AbstractMatchRule.slurp(inputStream, charset);
+	}
 
-    public static String slurp(@Nonnull InputStream inputStream, Charset charset) {
-        try (Scanner scanner = new Scanner(inputStream, charset)) {
-            return scanner.useDelimiter("\\A").next();
-        }
-    }
+	public static String slurp(@Nonnull InputStream inputStream, Charset charset) {
+		try (Scanner scanner = new Scanner(inputStream, charset)) {
+			return scanner.useDelimiter("\\A").next();
+		}
+	}
 
-    public void assertFileContents(@Nonnull String resourceClassPathLocation, @Nonnull String actualString) {
-        try {
-            this.assertFileContentsOrThrow(resourceClassPathLocation, actualString);
-        } catch (Exception e) {
-            throw new RuntimeException(resourceClassPathLocation, e);
-        }
-    }
+	public void assertFileContents(@Nonnull String resourceClassPathLocation, @Nonnull String actualString) {
+		try {
+			this.assertFileContentsOrThrow(resourceClassPathLocation, actualString);
+		} catch (Exception e) {
+			throw new RuntimeException(resourceClassPathLocation, e);
+		}
+	}
 
-    protected abstract void assertFileContentsOrThrow(
-        @Nonnull String resourceClassPathLocation,
-        @Nonnull String actualString
-    ) throws Exception;
+	protected abstract void assertFileContentsOrThrow(
+		@Nonnull String resourceClassPathLocation,
+		@Nonnull String actualString
+	) throws Exception;
 
-    protected static void deleteDirectoryRecursively(@Nonnull Path directory) throws IOException {
-        if (!directory.toFile().exists()) {
-            return;
-        }
-        Files.walkFileTree(
-            directory,
-            new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs)
-                    throws IOException {
-                    Files.delete(file);
-                    return super.visitFile(file, attrs);
-                }
+	protected static void deleteDirectoryRecursively(@Nonnull Path directory) throws IOException {
+		if (!directory.toFile().exists()) {
+			return;
+		}
+		Files.walkFileTree(
+			directory,
+			new SimpleFileVisitor<>() {
+				@Override
+				public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs)
+					throws IOException {
+					Files.delete(file);
+					return super.visitFile(file, attrs);
+				}
 
-                @Override
-                public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc) throws IOException {
-                    Files.delete(dir);
-                    return super.postVisitDirectory(dir, exc);
-                }
-            }
-        );
-    }
+				@Override
+				public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc) throws IOException {
+					Files.delete(dir);
+					return super.postVisitDirectory(dir, exc);
+				}
+			}
+		);
+	}
 
-    protected static Path getPackagePath(@Nonnull Class<?> callingClass) {
-        String packageName = callingClass.getPackage().getName();
-        ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-        Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
-        return packageNameParts.injectInto(testResources, Path::resolve);
-    }
+	protected static Path getPackagePath(@Nonnull Class<?> callingClass) {
+		String packageName = callingClass.getPackage().getName();
+		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
+		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		return packageNameParts.injectInto(testResources, Path::resolve);
+	}
 
-    protected void writeStringToFile(
-        @Nonnull String resourceClassPathLocation,
-        @Nonnull String string,
-        @Nonnull File file
-    ) throws IOException {
-        this.rerecordedPaths.add(resourceClassPathLocation);
+	protected void writeStringToFile(
+		@Nonnull String resourceClassPathLocation,
+		@Nonnull String string,
+		@Nonnull File file
+	) throws IOException {
+		this.rerecordedPaths.add(resourceClassPathLocation);
 
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-        }
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+		}
 
-        try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
-            String prettyPrintedString = this.getPrettyPrintedString(string);
-            printWriter.print(prettyPrintedString);
-        }
-    }
+		try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
+			String prettyPrintedString = this.getPrettyPrintedString(string);
+			printWriter.print(prettyPrintedString);
+		}
+	}
 
-    protected abstract String getPrettyPrintedString(@Nonnull String string);
+	protected abstract String getPrettyPrintedString(@Nonnull String string);
 }

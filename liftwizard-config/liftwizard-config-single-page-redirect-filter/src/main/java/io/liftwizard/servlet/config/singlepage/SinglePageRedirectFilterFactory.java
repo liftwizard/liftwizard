@@ -22,46 +22,46 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SinglePageRedirectFilterFactory {
 
-    private boolean enabled = true;
-    private String redirectPage = "/index.html";
-    private String cacheControlHeader = "no-cache, max-age=0";
+	private boolean enabled = true;
+	private String redirectPage = "/index.html";
+	private String cacheControlHeader = "no-cache, max-age=0";
 
-    // Well known prefixes include /api/ for REST endpoints and /.well-known/ for OIDC callbacks.
-    private List<String> wellKnownPathPrefixes = List.of("/api/", "/.well-known/");
+	// Well known prefixes include /api/ for REST endpoints and /.well-known/ for OIDC callbacks.
+	private List<String> wellKnownPathPrefixes = List.of("/api/", "/.well-known/");
 
-    public String getRedirectPage() {
-        return this.redirectPage;
-    }
+	public String getRedirectPage() {
+		return this.redirectPage;
+	}
 
-    @JsonProperty
-    public void setRedirectPage(String redirectPage) {
-        this.redirectPage = redirectPage;
-    }
+	@JsonProperty
+	public void setRedirectPage(String redirectPage) {
+		this.redirectPage = redirectPage;
+	}
 
-    public String getCacheControlHeader() {
-        return this.cacheControlHeader;
-    }
+	public String getCacheControlHeader() {
+		return this.cacheControlHeader;
+	}
 
-    @JsonProperty
-    public void setCacheControlHeader(String cacheControlHeader) {
-        this.cacheControlHeader = cacheControlHeader;
-    }
+	@JsonProperty
+	public void setCacheControlHeader(String cacheControlHeader) {
+		this.cacheControlHeader = cacheControlHeader;
+	}
 
-    public List<String> getWellKnownPathPrefixes() {
-        return this.wellKnownPathPrefixes;
-    }
+	public List<String> getWellKnownPathPrefixes() {
+		return this.wellKnownPathPrefixes;
+	}
 
-    @JsonProperty
-    public void setWellKnownPathPrefixes(List<String> wellKnownPathPrefixes) {
-        this.wellKnownPathPrefixes = wellKnownPathPrefixes;
-    }
+	@JsonProperty
+	public void setWellKnownPathPrefixes(List<String> wellKnownPathPrefixes) {
+		this.wellKnownPathPrefixes = wellKnownPathPrefixes;
+	}
 
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 
-    @JsonProperty
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@JsonProperty
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 }

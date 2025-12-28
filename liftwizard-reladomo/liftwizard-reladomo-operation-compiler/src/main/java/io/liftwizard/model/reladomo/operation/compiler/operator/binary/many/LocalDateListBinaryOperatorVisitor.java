@@ -31,28 +31,28 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public class LocalDateListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final DateAttribute attribute;
-    private final Set<Timestamp> timestamps;
+	private final DateAttribute attribute;
+	private final Set<Timestamp> timestamps;
 
-    public LocalDateListBinaryOperatorVisitor(DateAttribute attribute, ImmutableList<LocalDate> parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.timestamps = new LinkedHashSet<>(parameter.collect(this::getTimestamp).castToList());
-    }
+	public LocalDateListBinaryOperatorVisitor(DateAttribute attribute, ImmutableList<LocalDate> parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.timestamps = new LinkedHashSet<>(parameter.collect(this::getTimestamp).castToList());
+	}
 
-    public Timestamp getTimestamp(LocalDate each) {
-        if (each == null) {
-            return null;
-        }
-        return Timestamp.valueOf(each.atStartOfDay());
-    }
+	public Timestamp getTimestamp(LocalDate each) {
+		if (each == null) {
+			return null;
+		}
+		return Timestamp.valueOf(each.atStartOfDay());
+	}
 
-    @Override
-    public Operation visitOperatorIn(OperatorInContext ctx) {
-        return this.attribute.in(this.timestamps);
-    }
+	@Override
+	public Operation visitOperatorIn(OperatorInContext ctx) {
+		return this.attribute.in(this.timestamps);
+	}
 
-    @Override
-    public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
-        return this.attribute.notIn(this.timestamps);
-    }
+	@Override
+	public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
+		return this.attribute.notIn(this.timestamps);
+	}
 }

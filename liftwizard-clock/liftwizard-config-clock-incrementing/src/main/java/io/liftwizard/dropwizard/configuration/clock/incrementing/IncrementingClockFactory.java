@@ -41,73 +41,73 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 @AutoService(ClockFactory.class)
 public class IncrementingClockFactory implements ClockFactory {
 
-    private @Valid @NotNull Instant instant = Instant.parse("2000-12-31T23:59:59Z");
-    private @Valid @NotNull String timeZoneName = "UTC";
+	private @Valid @NotNull Instant instant = Instant.parse("2000-12-31T23:59:59Z");
+	private @Valid @NotNull String timeZoneName = "UTC";
 
-    @NotNull
-    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private io.dropwizard.util.Duration incrementAmount = io.dropwizard.util.Duration.seconds(1);
+	@NotNull
+	@MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
+	private io.dropwizard.util.Duration incrementAmount = io.dropwizard.util.Duration.seconds(1);
 
-    private IncrementingClock incrementingClock;
+	private IncrementingClock incrementingClock;
 
-    @Nonnull
-    @Override
-    public Clock createClock() {
-        if (this.incrementingClock == null) {
-            this.incrementingClock = this.createIncrementingClock();
-        }
-        return this.incrementingClock;
-    }
+	@Nonnull
+	@Override
+	public Clock createClock() {
+		if (this.incrementingClock == null) {
+			this.incrementingClock = this.createIncrementingClock();
+		}
+		return this.incrementingClock;
+	}
 
-    private IncrementingClock createIncrementingClock() {
-        ZoneId zoneId = ZoneId.of(this.timeZoneName);
-        long nanoseconds = this.incrementAmount.toNanoseconds();
-        Duration duration = Duration.ofNanos(nanoseconds);
-        return new IncrementingClock(this.instant, zoneId, duration);
-    }
+	private IncrementingClock createIncrementingClock() {
+		ZoneId zoneId = ZoneId.of(this.timeZoneName);
+		long nanoseconds = this.incrementAmount.toNanoseconds();
+		Duration duration = Duration.ofNanos(nanoseconds);
+		return new IncrementingClock(this.instant, zoneId, duration);
+	}
 
-    @JsonProperty
-    public Instant getInstant() {
-        return this.instant;
-    }
+	@JsonProperty
+	public Instant getInstant() {
+		return this.instant;
+	}
 
-    @JsonProperty
-    public void setInstant(Instant instant) {
-        this.instant = instant;
-    }
+	@JsonProperty
+	public void setInstant(Instant instant) {
+		this.instant = instant;
+	}
 
-    @JsonProperty("timeZone")
-    public String getTimeZoneName() {
-        return this.timeZoneName;
-    }
+	@JsonProperty("timeZone")
+	public String getTimeZoneName() {
+		return this.timeZoneName;
+	}
 
-    @JsonProperty("timeZone")
-    public void setTimeZoneName(String timeZoneName) {
-        this.timeZoneName = timeZoneName;
-    }
+	@JsonProperty("timeZone")
+	public void setTimeZoneName(String timeZoneName) {
+		this.timeZoneName = timeZoneName;
+	}
 
-    @JsonProperty
-    public io.dropwizard.util.Duration getIncrementAmount() {
-        return this.incrementAmount;
-    }
+	@JsonProperty
+	public io.dropwizard.util.Duration getIncrementAmount() {
+		return this.incrementAmount;
+	}
 
-    @JsonProperty
-    public void setIncrementAmount(io.dropwizard.util.Duration incrementAmount) {
-        this.incrementAmount = incrementAmount;
-    }
+	@JsonProperty
+	public void setIncrementAmount(io.dropwizard.util.Duration incrementAmount) {
+		this.incrementAmount = incrementAmount;
+	}
 
-    @ValidationMethod(message = "Invalid timeZoneName")
-    @JsonIgnore
-    public boolean isValidTimezone() {
-        TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-        if (zoneInfo != null) {
-            return true;
-        }
+	@ValidationMethod(message = "Invalid timeZoneName")
+	@JsonIgnore
+	public boolean isValidTimezone() {
+		TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
+		if (zoneInfo != null) {
+			return true;
+		}
 
-        String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-            this.timeZoneName,
-            Arrays.toString(TimeZone.getAvailableIDs())
-        );
-        throw new IllegalStateException(message);
-    }
+		String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
+			this.timeZoneName,
+			Arrays.toString(TimeZone.getAvailableIDs())
+		);
+		throw new IllegalStateException(message);
+	}
 }

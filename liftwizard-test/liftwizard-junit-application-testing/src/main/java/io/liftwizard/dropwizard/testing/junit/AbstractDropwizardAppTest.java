@@ -37,51 +37,51 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public abstract class AbstractDropwizardAppTest {
 
-    @RegisterExtension
-    protected final JsonMatchExtension jsonMatchExtension = new JsonMatchExtension(this.getClass());
+	@RegisterExtension
+	protected final JsonMatchExtension jsonMatchExtension = new JsonMatchExtension(this.getClass());
 
-    @RegisterExtension
-    protected final LiftwizardAppExtension<?> appExtension = this.getDropwizardAppExtension();
+	@RegisterExtension
+	protected final LiftwizardAppExtension<?> appExtension = this.getDropwizardAppExtension();
 
-    @RegisterExtension
-    protected final ReladomoLoadDataExtension reladomoLoadDataExtension = new ReladomoLoadDataExtension();
+	@RegisterExtension
+	protected final ReladomoLoadDataExtension reladomoLoadDataExtension = new ReladomoLoadDataExtension();
 
-    @RegisterExtension
-    protected final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
+	@RegisterExtension
+	protected final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
-    @Nonnull
-    protected abstract LiftwizardAppExtension<?> getDropwizardAppExtension();
+	@Nonnull
+	protected abstract LiftwizardAppExtension<?> getDropwizardAppExtension();
 
-    protected Client getClient(@Nonnull String testName) {
-        var jerseyClientConfiguration = new JerseyClientConfiguration();
-        jerseyClientConfiguration.setTimeout(Duration.minutes(5));
+	protected Client getClient(@Nonnull String testName) {
+		var jerseyClientConfiguration = new JerseyClientConfiguration();
+		jerseyClientConfiguration.setTimeout(Duration.minutes(5));
 
-        String className = this.getClass().getCanonicalName();
-        String clientName = className + "." + testName;
+		String className = this.getClass().getCanonicalName();
+		String clientName = className + "." + testName;
 
-        return new JerseyClientBuilder(this.appExtension.getEnvironment())
-            .using(jerseyClientConfiguration)
-            .build(clientName);
-    }
+		return new JerseyClientBuilder(this.appExtension.getEnvironment())
+			.using(jerseyClientConfiguration)
+			.build(clientName);
+	}
 
-    protected void assertEmptyResponse(Status expectedStatus, Response actualResponse) {
-        assertThat(actualResponse.hasEntity()).isFalse();
-        assertThat(actualResponse.getStatusInfo()).isEqualTo(expectedStatus);
-    }
+	protected void assertEmptyResponse(Status expectedStatus, Response actualResponse) {
+		assertThat(actualResponse.hasEntity()).isFalse();
+		assertThat(actualResponse.getStatusInfo()).isEqualTo(expectedStatus);
+	}
 
-    protected void assertResponse(String testName, Status expectedStatus, Response actualResponse) {
-        this.assertResponseStatus(actualResponse, expectedStatus);
-        String actualJsonResponse = actualResponse.readEntity(String.class);
+	protected void assertResponse(String testName, Status expectedStatus, Response actualResponse) {
+		this.assertResponseStatus(actualResponse, expectedStatus);
+		String actualJsonResponse = actualResponse.readEntity(String.class);
 
-        String expectedResponseClassPathLocation = this.getClass().getSimpleName() + "." + testName + ".json";
+		String expectedResponseClassPathLocation = this.getClass().getSimpleName() + "." + testName + ".json";
 
-        this.jsonMatchExtension.assertFileContents(expectedResponseClassPathLocation, actualJsonResponse);
-    }
+		this.jsonMatchExtension.assertFileContents(expectedResponseClassPathLocation, actualJsonResponse);
+	}
 
-    protected void assertResponseStatus(@Nonnull Response response, Status status) {
-        assertThat(response.hasEntity()).isTrue();
-        response.bufferEntity();
-        String entityAsString = response.readEntity(String.class);
-        assertThat(response.getStatusInfo()).as(entityAsString).isEqualTo(status);
-    }
+	protected void assertResponseStatus(@Nonnull Response response, Status status) {
+		assertThat(response.hasEntity()).isTrue();
+		response.bufferEntity();
+		String entityAsString = response.readEntity(String.class);
+		assertThat(response.getStatusInfo()).as(entityAsString).isEqualTo(status);
+	}
 }

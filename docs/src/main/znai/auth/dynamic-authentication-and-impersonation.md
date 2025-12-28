@@ -2,13 +2,13 @@ Liftwizard supports the dynamic configuration of [dropwizard-auth](https://www.d
 
 ```json5
 {
-  authFilters: [
-    {
-      type: "header",
-      header: "Authorization",
-      prefix: "Impersonation",
-    },
-  ],
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+			prefix: "Impersonation",
+		},
+	],
 }
 ```
 
@@ -36,13 +36,13 @@ Add an `authFilters` list to `config-test.json5` containing just one filter, of 
 
 ```json5
 {
-  authFilters: [
-    {
-      type: "header",
-      header: "Authorization",
-      prefix: "Impersonation",
-    },
-  ],
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+			prefix: "Impersonation",
+		},
+	],
 }
 ```
 
@@ -81,12 +81,12 @@ The production authentication filter dependencies and configuration will depend 
 
 ```json5
 {
-  authFilters: [
-    {
-      type: "firebase",
-      databaseUrl: "https://example.firebaseio.com",
-      firebaseConfig: "${FIREBASE_CONFIG}",
-    },
-  ],
+	authFilters: [
+		{
+			type: "firebase",
+			databaseUrl: "https://example.firebaseio.com",
+			firebaseConfig: "${FIREBASE_CONFIG}",
+		},
+	],
 }
 ```

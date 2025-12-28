@@ -23,23 +23,23 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class StringLiteralVisitor extends AbstractLiteralVisitor<String> {
 
-    public StringLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-    }
+	public StringLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "String";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "String";
+	}
 
-    @Override
-    public String visitStringLiteral(StringLiteralContext ctx) {
-        if (ctx.NullLiteral() != null) {
-            return null;
-        }
-        String quotedText = ctx.StringLiteral().getText();
-        String unquotedText = quotedText.substring(1, quotedText.length() - 1);
-        String unescapedString = StringEscapeUtils.unescapeJava(unquotedText);
-        return unescapedString;
-    }
+	@Override
+	public String visitStringLiteral(StringLiteralContext ctx) {
+		if (ctx.NullLiteral() != null) {
+			return null;
+		}
+		String quotedText = ctx.StringLiteral().getText();
+		String unquotedText = quotedText.substring(1, quotedText.length() - 1);
+		String unescapedString = StringEscapeUtils.unescapeJava(unquotedText);
+		return unescapedString;
+	}
 }

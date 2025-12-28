@@ -29,60 +29,60 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseAuth {
 
-    private final String databaseUrl;
-    private final String firebaseConfig;
+	private final String databaseUrl;
+	private final String firebaseConfig;
 
-    private FirebaseApp firebaseApp;
-    private GoogleCredentials credentials;
+	private FirebaseApp firebaseApp;
+	private GoogleCredentials credentials;
 
-    public FirebaseAuth(String databaseUrl, String firebaseConfig) {
-        this.databaseUrl = Objects.requireNonNull(databaseUrl);
-        this.firebaseConfig = Objects.requireNonNull(firebaseConfig);
-    }
+	public FirebaseAuth(String databaseUrl, String firebaseConfig) {
+		this.databaseUrl = Objects.requireNonNull(databaseUrl);
+		this.firebaseConfig = Objects.requireNonNull(firebaseConfig);
+	}
 
-    public GoogleCredentials getCredentials() {
-        return this.credentials;
-    }
+	public GoogleCredentials getCredentials() {
+		return this.credentials;
+	}
 
-    public FirebaseApp getFirebaseApp() {
-        return this.firebaseApp;
-    }
+	public FirebaseApp getFirebaseApp() {
+		return this.firebaseApp;
+	}
 
-    public com.google.firebase.auth.FirebaseAuth getFirebaseAuth() {
-        this.initFirebaseApp();
-        return com.google.firebase.auth.FirebaseAuth.getInstance(this.firebaseApp);
-    }
+	public com.google.firebase.auth.FirebaseAuth getFirebaseAuth() {
+		this.initFirebaseApp();
+		return com.google.firebase.auth.FirebaseAuth.getInstance(this.firebaseApp);
+	}
 
-    public FirebaseDatabase getFirebaseDatabase() {
-        this.initFirebaseApp();
-        return FirebaseDatabase.getInstance(this.firebaseApp);
-    }
+	public FirebaseDatabase getFirebaseDatabase() {
+		this.initFirebaseApp();
+		return FirebaseDatabase.getInstance(this.firebaseApp);
+	}
 
-    private void initFirebaseApp() {
-        if (this.firebaseApp != null) {
-            return;
-        }
+	private void initFirebaseApp() {
+		if (this.firebaseApp != null) {
+			return;
+		}
 
-        this.initCredentials();
-        FirebaseOptions options = FirebaseOptions.builder()
-            .setCredentials(this.credentials)
-            .setDatabaseUrl(this.databaseUrl)
-            .build();
+		this.initCredentials();
+		FirebaseOptions options = FirebaseOptions.builder()
+			.setCredentials(this.credentials)
+			.setDatabaseUrl(this.databaseUrl)
+			.build();
 
-        this.firebaseApp = FirebaseApp.initializeApp(options);
-    }
+		this.firebaseApp = FirebaseApp.initializeApp(options);
+	}
 
-    private void initCredentials() {
-        if (this.credentials != null) {
-            return;
-        }
+	private void initCredentials() {
+		if (this.credentials != null) {
+			return;
+		}
 
-        byte[] bytes = this.firebaseConfig.getBytes(StandardCharsets.UTF_8);
-        InputStream firebaseCredentials = new ByteArrayInputStream(bytes);
-        try {
-            this.credentials = GoogleCredentials.fromStream(firebaseCredentials);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		byte[] bytes = this.firebaseConfig.getBytes(StandardCharsets.UTF_8);
+		InputStream firebaseCredentials = new ByteArrayInputStream(bytes);
+		try {
+			this.credentials = GoogleCredentials.fromStream(firebaseCredentials);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

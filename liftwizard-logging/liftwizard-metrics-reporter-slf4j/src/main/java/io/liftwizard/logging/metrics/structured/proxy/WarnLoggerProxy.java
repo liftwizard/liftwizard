@@ -21,17 +21,17 @@ import org.slf4j.Marker;
 
 public class WarnLoggerProxy extends AbstractLoggerProxy {
 
-    public WarnLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public WarnLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Marker marker, String message, Object structuredObject) {
-        this.logger.warn(marker, message, structuredObject);
-    }
+	@Override
+	public void log(Marker marker, String message, Object structuredObject) {
+		this.logger.warn(marker, message, structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled(Marker marker) {
-        return this.logger.isWarnEnabled(marker);
-    }
+	@Override
+	public boolean isEnabled(Marker marker) {
+		return this.logger.isWarnEnabled(marker);
+	}
 }

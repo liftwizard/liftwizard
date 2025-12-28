@@ -43,204 +43,204 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<Attribute> {
 
-    private final RelatedFinder finder;
-    private final String errorContext;
+	private final RelatedFinder finder;
+	private final String errorContext;
 
-    public ReladomoAttributeVisitor(RelatedFinder finder, String errorContext) {
-        this.finder = Objects.requireNonNull(finder);
-        this.errorContext = Objects.requireNonNull(errorContext);
-    }
+	public ReladomoAttributeVisitor(RelatedFinder finder, String errorContext) {
+		this.finder = Objects.requireNonNull(finder);
+		this.errorContext = Objects.requireNonNull(errorContext);
+	}
 
-    @Override
-    public Attribute visitAttribute(AttributeContext ctx) {
-        return this.visitChildren(ctx);
-    }
+	@Override
+	public Attribute visitAttribute(AttributeContext ctx) {
+		return this.visitChildren(ctx);
+	}
 
-    @Override
-    public Attribute visitFunctionToLowerCase(FunctionToLowerCaseContext ctx) {
-        Attribute attribute = ctx.attribute().accept(this);
+	@Override
+	public Attribute visitFunctionToLowerCase(FunctionToLowerCaseContext ctx) {
+		Attribute attribute = ctx.attribute().accept(this);
 
-        if (!(attribute instanceof StringAttribute)) {
-            String error = "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
-                ctx.functionName.getText(),
-                attribute.getAttributeName(),
-                attribute.getClass().getSuperclass().getSimpleName(),
-                this.errorContext
-            );
+		if (!(attribute instanceof StringAttribute)) {
+			String error = "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
+				ctx.functionName.getText(),
+				attribute.getAttributeName(),
+				attribute.getClass().getSuperclass().getSimpleName(),
+				this.errorContext
+			);
 
-            throw new IllegalArgumentException(error);
-        }
+			throw new IllegalArgumentException(error);
+		}
 
-        return ((StringAttribute) attribute).toLowerCase();
-    }
+		return ((StringAttribute) attribute).toLowerCase();
+	}
 
-    @Override
-    public Attribute visitFunctionToSubstring(FunctionToSubstringContext ctx) {
-        Attribute attribute = ctx.attribute().accept(this);
+	@Override
+	public Attribute visitFunctionToSubstring(FunctionToSubstringContext ctx) {
+		Attribute attribute = ctx.attribute().accept(this);
 
-        if (!(attribute instanceof StringAttribute)) {
-            String error =
-                "Function 'substring' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
-                    attribute.getAttributeName(),
-                    attribute.getClass().getSuperclass().getSimpleName(),
-                    this.errorContext
-                );
+		if (!(attribute instanceof StringAttribute)) {
+			String error =
+				"Function 'substring' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
+					attribute.getAttributeName(),
+					attribute.getClass().getSuperclass().getSimpleName(),
+					this.errorContext
+				);
 
-            throw new IllegalArgumentException(error);
-        }
+			throw new IllegalArgumentException(error);
+		}
 
-        String startString = ctx.IntegerLiteral(0).getText();
-        String endString = ctx.IntegerLiteral(1).getText();
-        int start = Integer.parseInt(startString);
-        int end = Integer.parseInt(endString);
-        return ((StringAttribute) attribute).substring(start, end);
-    }
+		String startString = ctx.IntegerLiteral(0).getText();
+		String endString = ctx.IntegerLiteral(1).getText();
+		int start = Integer.parseInt(startString);
+		int end = Integer.parseInt(endString);
+		return ((StringAttribute) attribute).substring(start, end);
+	}
 
-    @Override
-    public Attribute visitFunctionAbsoluteValue(FunctionAbsoluteValueContext ctx) {
-        Attribute attribute = ctx.attribute().accept(this);
+	@Override
+	public Attribute visitFunctionAbsoluteValue(FunctionAbsoluteValueContext ctx) {
+		Attribute attribute = ctx.attribute().accept(this);
 
-        if (!(attribute instanceof NumericAttribute)) {
-            String error = "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s".formatted(
-                ctx.functionName.getText(),
-                attribute.getAttributeName(),
-                attribute.getClass().getSuperclass().getSimpleName(),
-                this.errorContext
-            );
+		if (!(attribute instanceof NumericAttribute)) {
+			String error = "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s".formatted(
+				ctx.functionName.getText(),
+				attribute.getAttributeName(),
+				attribute.getClass().getSuperclass().getSimpleName(),
+				this.errorContext
+			);
 
-            throw new IllegalArgumentException(error);
-        }
+			throw new IllegalArgumentException(error);
+		}
 
-        return (Attribute) ((NumericAttribute) attribute).absoluteValue();
-    }
+		return (Attribute) ((NumericAttribute) attribute).absoluteValue();
+	}
 
-    @Override
-    public Attribute visitFunctionYear(FunctionYearContext ctx) {
-        Attribute attribute = ctx.attribute().accept(this);
+	@Override
+	public Attribute visitFunctionYear(FunctionYearContext ctx) {
+		Attribute attribute = ctx.attribute().accept(this);
 
-        if (attribute instanceof TimestampAttribute timestampAttribute) {
-            return timestampAttribute.year();
-        }
-        if (attribute instanceof DateAttribute dateAttribute) {
-            return dateAttribute.year();
-        }
+		if (attribute instanceof TimestampAttribute timestampAttribute) {
+			return timestampAttribute.year();
+		}
+		if (attribute instanceof DateAttribute dateAttribute) {
+			return dateAttribute.year();
+		}
 
-        String error =
-            "Function 'year' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
-                attribute.getAttributeName(),
-                attribute.getClass().getSuperclass().getSimpleName(),
-                this.errorContext
-            );
+		String error =
+			"Function 'year' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
+				attribute.getAttributeName(),
+				attribute.getClass().getSuperclass().getSimpleName(),
+				this.errorContext
+			);
 
-        throw new IllegalArgumentException(error);
-    }
+		throw new IllegalArgumentException(error);
+	}
 
-    @Override
-    public Attribute visitFunctionMonth(FunctionMonthContext ctx) {
-        Attribute attribute = ctx.attribute().accept(this);
+	@Override
+	public Attribute visitFunctionMonth(FunctionMonthContext ctx) {
+		Attribute attribute = ctx.attribute().accept(this);
 
-        if (attribute instanceof TimestampAttribute timestampAttribute) {
-            return timestampAttribute.month();
-        }
-        if (attribute instanceof DateAttribute dateAttribute) {
-            return dateAttribute.month();
-        }
+		if (attribute instanceof TimestampAttribute timestampAttribute) {
+			return timestampAttribute.month();
+		}
+		if (attribute instanceof DateAttribute dateAttribute) {
+			return dateAttribute.month();
+		}
 
-        String error =
-            "Function 'month' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
-                attribute.getAttributeName(),
-                attribute.getClass().getSuperclass().getSimpleName(),
-                this.errorContext
-            );
+		String error =
+			"Function 'month' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
+				attribute.getAttributeName(),
+				attribute.getClass().getSuperclass().getSimpleName(),
+				this.errorContext
+			);
 
-        throw new IllegalArgumentException(error);
-    }
+		throw new IllegalArgumentException(error);
+	}
 
-    @Override
-    public Attribute visitFunctionDayOfMonth(FunctionDayOfMonthContext ctx) {
-        Attribute attribute = ctx.attribute().accept(this);
+	@Override
+	public Attribute visitFunctionDayOfMonth(FunctionDayOfMonthContext ctx) {
+		Attribute attribute = ctx.attribute().accept(this);
 
-        if (attribute instanceof TimestampAttribute timestampAttribute) {
-            return timestampAttribute.dayOfMonth();
-        }
-        if (attribute instanceof DateAttribute dateAttribute) {
-            return dateAttribute.dayOfMonth();
-        }
+		if (attribute instanceof TimestampAttribute timestampAttribute) {
+			return timestampAttribute.dayOfMonth();
+		}
+		if (attribute instanceof DateAttribute dateAttribute) {
+			return dateAttribute.dayOfMonth();
+		}
 
-        String error =
-            "Function 'dayOfMonth' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
-                attribute.getAttributeName(),
-                attribute.getClass().getSuperclass().getSimpleName(),
-                this.errorContext
-            );
+		String error =
+			"Function 'dayOfMonth' applies to TimestampAttributes and DateAttributes but attribute '%s' is a %s in %s".formatted(
+				attribute.getAttributeName(),
+				attribute.getClass().getSuperclass().getSimpleName(),
+				this.errorContext
+			);
 
-        throw new IllegalArgumentException(error);
-    }
+		throw new IllegalArgumentException(error);
+	}
 
-    @Override
-    public Attribute visitFunctionUnknown(FunctionUnknownContext ctx) {
-        String error = "Unknown function '%s' in %s".formatted(ctx.functionName.getText(), this.errorContext);
+	@Override
+	public Attribute visitFunctionUnknown(FunctionUnknownContext ctx) {
+		String error = "Unknown function '%s' in %s".formatted(ctx.functionName.getText(), this.errorContext);
 
-        throw new IllegalArgumentException(error);
-    }
+		throw new IllegalArgumentException(error);
+	}
 
-    @Override
-    public Attribute visitSimpleAttribute(SimpleAttributeContext ctx) {
-        if (
-            ctx.className() != null
-            && !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
-        ) {
-            String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
-                this.getExpectedClassName(this.finder),
-                ctx.className().getText(),
-                this.errorContext
-            );
-            throw new IllegalArgumentException(error);
-        }
+	@Override
+	public Attribute visitSimpleAttribute(SimpleAttributeContext ctx) {
+		if (
+			ctx.className() != null
+			&& !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
+		) {
+			String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
+				this.getExpectedClassName(this.finder),
+				ctx.className().getText(),
+				this.errorContext
+			);
+			throw new IllegalArgumentException(error);
+		}
 
-        RelatedFinder currentFinder = this.finder;
-        MutableList<String> relationshipNames = ListAdapter.adapt(ctx.relationshipName()).collect(RuleContext::getText);
-        for (String relationshipName : relationshipNames) {
-            RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
-            if (nextFinder == null) {
-                List<RelatedFinder> relationshipFinders = currentFinder.getRelationshipFinders();
-                MutableList<String> validRelationshipNames = ListAdapter.adapt(relationshipFinders)
-                    .selectInstancesOf(AbstractRelatedFinder.class)
-                    .collect(AbstractRelatedFinder::getRelationshipName);
+		RelatedFinder currentFinder = this.finder;
+		MutableList<String> relationshipNames = ListAdapter.adapt(ctx.relationshipName()).collect(RuleContext::getText);
+		for (String relationshipName : relationshipNames) {
+			RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
+			if (nextFinder == null) {
+				List<RelatedFinder> relationshipFinders = currentFinder.getRelationshipFinders();
+				MutableList<String> validRelationshipNames = ListAdapter.adapt(relationshipFinders)
+					.selectInstancesOf(AbstractRelatedFinder.class)
+					.collect(AbstractRelatedFinder::getRelationshipName);
 
-                String error = "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s".formatted(
-                    relationshipName,
-                    this.getExpectedClassName(currentFinder),
-                    this.errorContext,
-                    validRelationshipNames
-                );
-                throw new IllegalArgumentException(error);
-            }
-            currentFinder = nextFinder;
-        }
+				String error = "Could not find relationship '%s' on type '%s' in %s. Valid relationships: %s".formatted(
+					relationshipName,
+					this.getExpectedClassName(currentFinder),
+					this.errorContext,
+					validRelationshipNames
+				);
+				throw new IllegalArgumentException(error);
+			}
+			currentFinder = nextFinder;
+		}
 
-        String attributeName = ctx.attributeName().getText();
-        Attribute attribute = currentFinder.getAttributeByName(attributeName);
-        if (attribute == null) {
-            Attribute[] persistentAttributes = currentFinder
-                .getMithraObjectPortal()
-                .getFinder()
-                .getPersistentAttributes();
-            MutableList<String> validAttributeNames = ArrayAdapter.adapt(persistentAttributes).collect(
-                Attribute::getAttributeName
-            );
-            String error = "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s".formatted(
-                attributeName,
-                this.getExpectedClassName(currentFinder),
-                this.errorContext,
-                validAttributeNames
-            );
-            throw new IllegalArgumentException(error);
-        }
-        return attribute;
-    }
+		String attributeName = ctx.attributeName().getText();
+		Attribute attribute = currentFinder.getAttributeByName(attributeName);
+		if (attribute == null) {
+			Attribute[] persistentAttributes = currentFinder
+				.getMithraObjectPortal()
+				.getFinder()
+				.getPersistentAttributes();
+			MutableList<String> validAttributeNames = ArrayAdapter.adapt(persistentAttributes).collect(
+				Attribute::getAttributeName
+			);
+			String error = "Could not find attribute '%s' on type '%s' in %s. Valid attributes: %s".formatted(
+				attributeName,
+				this.getExpectedClassName(currentFinder),
+				this.errorContext,
+				validAttributeNames
+			);
+			throw new IllegalArgumentException(error);
+		}
+		return attribute;
+	}
 
-    public String getExpectedClassName(RelatedFinder relatedFinder) {
-        return relatedFinder.getMithraObjectPortal().getClassMetaData().getBusinessOrInterfaceClass().getSimpleName();
-    }
+	public String getExpectedClassName(RelatedFinder relatedFinder) {
+		return relatedFinder.getMithraObjectPortal().getClassMetaData().getBusinessOrInterfaceClass().getSimpleName();
+	}
 }

@@ -23,40 +23,40 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVi
 
 public class DoubleLiteralVisitor extends AbstractLiteralVisitor<Double> {
 
-    public DoubleLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-    }
+	public DoubleLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "Double";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "Double";
+	}
 
-    @Override
-    public Double visitIntegerLiteral(IntegerLiteralContext ctx) {
-        if (ctx.NullLiteral() != null) {
-            return null;
-        }
+	@Override
+	public Double visitIntegerLiteral(IntegerLiteralContext ctx) {
+		if (ctx.NullLiteral() != null) {
+			return null;
+		}
 
-        String text = ctx.IntegerLiteral().getText();
-        try {
-            return Double.valueOf(text);
-        } catch (NumberFormatException e) {
-            return this.throwTypeError(ctx);
-        }
-    }
+		String text = ctx.IntegerLiteral().getText();
+		try {
+			return Double.valueOf(text);
+		} catch (NumberFormatException e) {
+			return this.throwTypeError(ctx);
+		}
+	}
 
-    @Override
-    public Double visitFloatingPointLiteral(FloatingPointLiteralContext ctx) {
-        if (ctx.NullLiteral() != null) {
-            return null;
-        }
+	@Override
+	public Double visitFloatingPointLiteral(FloatingPointLiteralContext ctx) {
+		if (ctx.NullLiteral() != null) {
+			return null;
+		}
 
-        String text = ctx.FloatingPointLiteral().getText();
-        try {
-            return Double.valueOf(text);
-        } catch (NumberFormatException e) {
-            return this.throwTypeError(ctx);
-        }
-    }
+		String text = ctx.FloatingPointLiteral().getText();
+		try {
+			return Double.valueOf(text);
+		} catch (NumberFormatException e) {
+			return this.throwTypeError(ctx);
+		}
+	}
 }

@@ -17,5 +17,5 @@
 package io.liftwizard.dropwizard.configuration.object.mapper;
 
 public interface ObjectMapperFactoryProvider {
-    ObjectMapperFactory getObjectMapperFactory();
+	ObjectMapperFactory getObjectMapperFactory();
 }

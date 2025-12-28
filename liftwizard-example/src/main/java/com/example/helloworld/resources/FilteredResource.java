@@ -8,10 +8,10 @@ import com.example.helloworld.filter.DateRequired;
 @Path("/filtered")
 public class FilteredResource {
 
-    @GET
-    @DateRequired
-    @Path("hello")
-    public String sayHello() {
-        return "hello";
-    }
+	@GET
+	@DateRequired
+	@Path("hello")
+	public String sayHello() {
+		return "hello";
+	}
 }

@@ -12,27 +12,27 @@ To use it, add a dependency on `liftwizard-config-logging-filter-requesturl`. Th
 
 ```json
 {
-  "requestLog": {
-    "appenders": [
-      {
-        "type": "console",
-        "filterFactories": [
-          {
-            "type": "url",
-            "onMatch": "DENY",
-            "urls": [
-              "/icons/",
-              "/static/",
-              "/manifest.json",
-              "/assets-manifest.json",
-              "/favicon.ico",
-              "/service-worker.js"
-            ]
-          }
-        ]
-      }
-    ]
-  }
+	"requestLog": {
+		"appenders": [
+			{
+				"type": "console",
+				"filterFactories": [
+					{
+						"type": "url",
+						"onMatch": "DENY",
+						"urls": [
+							"/icons/",
+							"/static/",
+							"/manifest.json",
+							"/assets-manifest.json",
+							"/favicon.ico",
+							"/service-worker.js"
+						]
+					}
+				]
+			}
+		]
+	}
 }
 ```
 
@@ -44,22 +44,22 @@ To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then a
 
 ```json5
 {
-  logging: {
-    level: "DEBUG",
-    appenders: [
-      {
-        type: "console",
-        timeZone: "${LOGGING_TIMEZONE:-system}",
-        logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
-        filterFactories: [
-          {
-            type: "janino",
-            javaExpression: 'logger.equals("io.liftwizard.logging.p6spy.P6SpySlf4jLogger") && mdc.get("liftwizard.bundle").equals("DdlExecutorBundle")',
-            onMatch: "DENY",
-          },
-        ],
-      },
-    ],
-  },
+	logging: {
+		level: "DEBUG",
+		appenders: [
+			{
+				type: "console",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				filterFactories: [
+					{
+						type: "janino",
+						javaExpression: 'logger.equals("io.liftwizard.logging.p6spy.P6SpySlf4jLogger") && mdc.get("liftwizard.bundle").equals("DdlExecutorBundle")',
+						onMatch: "DENY",
+					},
+				],
+			},
+		],
+	},
 }
 ```

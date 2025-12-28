@@ -34,37 +34,37 @@ import org.slf4j.MDC.MDCCloseable;
  */
 public class EnvironmentConfigBundle implements ConfiguredBundle<Object> {
 
-    private final boolean strict;
+	private final boolean strict;
 
-    public EnvironmentConfigBundle() {
-        this(false);
-    }
+	public EnvironmentConfigBundle() {
+		this(false);
+	}
 
-    public EnvironmentConfigBundle(boolean strict) {
-        this.strict = strict;
-    }
+	public EnvironmentConfigBundle(boolean strict) {
+		this.strict = strict;
+	}
 
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-        try (MDCCloseable ignored = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
-            this.initializeWithMdc(bootstrap);
-        }
-    }
+	@Override
+	public void initialize(Bootstrap<?> bootstrap) {
+		try (MDCCloseable ignored = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
+			this.initializeWithMdc(bootstrap);
+		}
+	}
 
-    private void initializeWithMdc(Bootstrap<?> bootstrap) {
-        ConfigurationSourceProvider configurationSourceProvider = bootstrap.getConfigurationSourceProvider();
+	private void initializeWithMdc(Bootstrap<?> bootstrap) {
+		ConfigurationSourceProvider configurationSourceProvider = bootstrap.getConfigurationSourceProvider();
 
-        EnvironmentVariableSubstitutor environmentVariableSubstitutor = new EnvironmentVariableSubstitutor(this.strict);
-        environmentVariableSubstitutor.setPreserveEscapes(true);
+		EnvironmentVariableSubstitutor environmentVariableSubstitutor = new EnvironmentVariableSubstitutor(this.strict);
+		environmentVariableSubstitutor.setPreserveEscapes(true);
 
-        ConfigurationSourceProvider wrapped = new SubstitutingSourceProvider(
-            configurationSourceProvider,
-            environmentVariableSubstitutor
-        );
+		ConfigurationSourceProvider wrapped = new SubstitutingSourceProvider(
+			configurationSourceProvider,
+			environmentVariableSubstitutor
+		);
 
-        bootstrap.setConfigurationSourceProvider(wrapped);
-    }
+		bootstrap.setConfigurationSourceProvider(wrapped);
+	}
 
-    @Override
-    public void run(Object configuration, Environment environment) {}
+	@Override
+	public void run(Object configuration, Environment environment) {}
 }

@@ -17,5 +17,5 @@
 package io.liftwizard.dropwizard.configuration.cors;
 
 public interface CorsFactoryProvider {
-    CorsFactory getCorsFactory();
+	CorsFactory getCorsFactory();
 }

@@ -31,33 +31,33 @@ import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 @AutoService(AuthFilterFactory.class)
 public class HeaderAuthFilterFactory implements AuthFilterFactory {
 
-    @NotNull
-    private final String header;
+	@NotNull
+	private final String header;
 
-    private final String prefix;
+	private final String prefix;
 
-    @JsonCreator
-    public HeaderAuthFilterFactory(@JsonProperty("header") String header, @JsonProperty("prefix") String prefix) {
-        this.header = header;
-        this.prefix = prefix;
-    }
+	@JsonCreator
+	public HeaderAuthFilterFactory(@JsonProperty("header") String header, @JsonProperty("prefix") String prefix) {
+		this.header = header;
+		this.prefix = prefix;
+	}
 
-    @NotNull
-    public String getHeader() {
-        return this.header;
-    }
+	@NotNull
+	public String getHeader() {
+		return this.header;
+	}
 
-    public String getPrefix() {
-        return this.prefix;
-    }
+	public String getPrefix() {
+		return this.prefix;
+	}
 
-    @Nonnull
-    @Override
-    public AuthFilter<?, HeaderPrincipal> createAuthFilter() {
-        return new HeaderAuthFilter.Builder(this.header, this.prefix)
-            .setAuthenticator(new HeaderAuthenticator(this.prefix))
-            .setUnauthorizedHandler(new JSONUnauthorizedHandler())
-            .setPrefix("Header")
-            .buildAuthFilter();
-    }
+	@Nonnull
+	@Override
+	public AuthFilter<?, HeaderPrincipal> createAuthFilter() {
+		return new HeaderAuthFilter.Builder(this.header, this.prefix)
+			.setAuthenticator(new HeaderAuthenticator(this.prefix))
+			.setUnauthorizedHandler(new JSONUnauthorizedHandler())
+			.setPrefix("Header")
+			.buildAuthFilter();
+	}
 }

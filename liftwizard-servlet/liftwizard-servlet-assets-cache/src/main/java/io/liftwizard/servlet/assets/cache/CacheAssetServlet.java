@@ -15,34 +15,34 @@ import io.dropwizard.servlets.assets.AssetServlet;
 
 public class CacheAssetServlet extends AssetServlet {
 
-    private final Clock clock;
-    private final long amountToAdd;
-    private final TemporalUnit temporalUnit;
+	private final Clock clock;
+	private final long amountToAdd;
+	private final TemporalUnit temporalUnit;
 
-    public CacheAssetServlet(
-        String resourcePath,
-        String uriPath,
-        String indexFile,
-        Charset charset,
-        long amountToAdd,
-        TemporalUnit temporalUnit,
-        Clock clock
-    ) {
-        super(resourcePath, uriPath, indexFile, charset);
-        this.amountToAdd = amountToAdd;
-        this.temporalUnit = temporalUnit;
-        this.clock = clock;
-    }
+	public CacheAssetServlet(
+		String resourcePath,
+		String uriPath,
+		String indexFile,
+		Charset charset,
+		long amountToAdd,
+		TemporalUnit temporalUnit,
+		Clock clock
+	) {
+		super(resourcePath, uriPath, indexFile, charset);
+		this.amountToAdd = amountToAdd;
+		this.temporalUnit = temporalUnit;
+		this.clock = clock;
+	}
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		super.doGet(req, resp);
 
-        Instant now = this.clock.instant();
-        Instant expires = now.plus(this.amountToAdd, this.temporalUnit);
+		Instant now = this.clock.instant();
+		Instant expires = now.plus(this.amountToAdd, this.temporalUnit);
 
-        long number = Duration.of(this.amountToAdd, this.temporalUnit).toSeconds();
-        resp.setHeader("Cache-Control", "public, max-age=" + number);
-        resp.setHeader("Expires", String.valueOf(expires.toEpochMilli()));
-    }
+		long number = Duration.of(this.amountToAdd, this.temporalUnit).toSeconds();
+		resp.setHeader("Cache-Control", "public, max-age=" + number);
+		resp.setHeader("Expires", String.valueOf(expires.toEpochMilli()));
+	}
 }

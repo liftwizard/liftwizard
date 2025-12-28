@@ -29,9 +29,9 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 @AutoService(UUIDSupplierFactory.class)
 public class SystemUUIDSupplierFactory implements UUIDSupplierFactory {
 
-    @Nonnull
-    @Override
-    public Supplier<UUID> createUUIDSupplier() {
-        return new SystemUUIDSupplier();
-    }
+	@Nonnull
+	@Override
+	public Supplier<UUID> createUUIDSupplier() {
+		return new SystemUUIDSupplier();
+	}
 }

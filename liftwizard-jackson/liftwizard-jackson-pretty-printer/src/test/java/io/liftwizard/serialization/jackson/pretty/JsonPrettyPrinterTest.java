@@ -32,48 +32,48 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JsonPrettyPrinterTest {
 
-    private final ObjectMapper mapper = JsonPrettyPrinterTest.getObjectMapper();
+	private final ObjectMapper mapper = JsonPrettyPrinterTest.getObjectMapper();
 
-    @Nonnull
-    private static ObjectMapper getObjectMapper() {
-        PrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
+	@Nonnull
+	private static ObjectMapper getObjectMapper() {
+		PrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setDefaultPrettyPrinter(jsonPrettyPrinter);
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        return objectMapper;
-    }
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDefaultPrettyPrinter(jsonPrettyPrinter);
+		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+		return objectMapper;
+	}
 
-    @Test
-    void smokeTest() throws JsonProcessingException {
-        Map<String, List<String>> map = new LinkedHashMap<>();
-        map.put("a", List.of("b", "c"));
-        map.put("d", List.of("e", "f"));
+	@Test
+	void smokeTest() throws JsonProcessingException {
+		Map<String, List<String>> map = new LinkedHashMap<>();
+		map.put("a", List.of("b", "c"));
+		map.put("d", List.of("e", "f"));
 
-        String actualJson = this.mapper.writeValueAsString(map);
+		String actualJson = this.mapper.writeValueAsString(map);
 
-        // language=JSON
-        String expectedJson = """
-            {
-              "a": [
-                "b",
-                "c"
-              ],
-              "d": [
-                "e",
-                "f"
-              ]
-            }
-            """;
+		// language=JSON
+		String expectedJson = """
+			{
+			  "a": [
+			    "b",
+			    "c"
+			  ],
+			  "d": [
+			    "e",
+			    "f"
+			  ]
+			}
+			""";
 
-        assertThat(actualJson).isEqualTo(expectedJson);
-    }
+		assertThat(actualJson).isEqualTo(expectedJson);
+	}
 
-    @Test
-    void emptyArray() throws JsonProcessingException {
-        List<String> emptyList = List.of();
-        String actualJson = this.mapper.writeValueAsString(emptyList);
-        String expectedJson = "[ ]\n";
-        assertThat(actualJson).isEqualTo(expectedJson);
-    }
+	@Test
+	void emptyArray() throws JsonProcessingException {
+		List<String> emptyList = List.of();
+		String actualJson = this.mapper.writeValueAsString(emptyList);
+		String expectedJson = "[ ]\n";
+		assertThat(actualJson).isEqualTo(expectedJson);
+	}
 }

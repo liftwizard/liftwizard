@@ -31,13 +31,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ExtendWith(LogMarkerTestExtension.class)
 class NetworkIsolationTest {
 
-    @Test
-    void shouldFailToConnectWhenNetworkIsDisabled() {
-        assertThatThrownBy(() -> {
-            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                HttpGet request = new HttpGet("https://www.google.com");
-                httpClient.execute(request, response -> EntityUtils.toString(response.getEntity()));
-            }
-        }).isInstanceOf(IOException.class);
-    }
+	@Test
+	void shouldFailToConnectWhenNetworkIsDisabled() {
+		assertThatThrownBy(() -> {
+			try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+				HttpGet request = new HttpGet("https://www.google.com");
+				httpClient.execute(request, (response) -> EntityUtils.toString(response.getEntity()));
+			}
+		}).isInstanceOf(IOException.class);
+	}
 }

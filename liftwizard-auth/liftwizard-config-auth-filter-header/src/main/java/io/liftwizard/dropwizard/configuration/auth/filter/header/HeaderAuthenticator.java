@@ -27,50 +27,50 @@ import org.slf4j.MDC;
 
 public class HeaderAuthenticator implements Authenticator<String, HeaderPrincipal> {
 
-    private static final String HEADER_PRINCIPAL_NAME = "liftwizard.auth.header.principalName";
+	private static final String HEADER_PRINCIPAL_NAME = "liftwizard.auth.header.principalName";
 
-    private static final ImmutableList<String> MDC_KEYS = Lists.immutable.with(HEADER_PRINCIPAL_NAME);
+	private static final ImmutableList<String> MDC_KEYS = Lists.immutable.with(HEADER_PRINCIPAL_NAME);
 
-    private final String headerPrefix;
+	private final String headerPrefix;
 
-    public HeaderAuthenticator(String headerPrefix) {
-        String prefix = headerPrefix;
-        if (prefix != null && !prefix.endsWith(" ")) {
-            prefix += " ";
-        }
-        this.headerPrefix = prefix;
-    }
+	public HeaderAuthenticator(String headerPrefix) {
+		String prefix = headerPrefix;
+		if (prefix != null && !prefix.endsWith(" ")) {
+			prefix += " ";
+		}
+		this.headerPrefix = prefix;
+	}
 
-    public static ImmutableList<String> getMDCKeys() {
-        return MDC_KEYS;
-    }
+	public static ImmutableList<String> getMDCKeys() {
+		return MDC_KEYS;
+	}
 
-    @Nonnull
-    @Override
-    public Optional<HeaderPrincipal> authenticate(String headerValue) {
-        if (headerValue == null) {
-            return Optional.empty();
-        }
+	@Nonnull
+	@Override
+	public Optional<HeaderPrincipal> authenticate(String headerValue) {
+		if (headerValue == null) {
+			return Optional.empty();
+		}
 
-        if (this.headerPrefix == null) {
-            MDC.put(HEADER_PRINCIPAL_NAME, headerValue);
-            HeaderPrincipal principal = new HeaderPrincipal(headerValue);
-            return Optional.of(principal);
-        }
+		if (this.headerPrefix == null) {
+			MDC.put(HEADER_PRINCIPAL_NAME, headerValue);
+			HeaderPrincipal principal = new HeaderPrincipal(headerValue);
+			return Optional.of(principal);
+		}
 
-        // Check that header value starts with the expected prefix.
-        if (!headerValue.startsWith(this.headerPrefix)) {
-            return Optional.empty();
-        }
+		// Check that header value starts with the expected prefix.
+		if (!headerValue.startsWith(this.headerPrefix)) {
+			return Optional.empty();
+		}
 
-        // Split off the prefix and use the remainder as the principal name.
-        String principalName = headerValue.substring(this.headerPrefix.length());
-        if (principalName.isEmpty()) {
-            return Optional.empty();
-        }
+		// Split off the prefix and use the remainder as the principal name.
+		String principalName = headerValue.substring(this.headerPrefix.length());
+		if (principalName.isEmpty()) {
+			return Optional.empty();
+		}
 
-        MDC.put(HEADER_PRINCIPAL_NAME, principalName);
-        HeaderPrincipal principal = new HeaderPrincipal(principalName);
-        return Optional.of(principal);
-    }
+		MDC.put(HEADER_PRINCIPAL_NAME, principalName);
+		HeaderPrincipal principal = new HeaderPrincipal(principalName);
+		return Optional.of(principal);
+	}
 }

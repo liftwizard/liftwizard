@@ -55,217 +55,217 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 public class ServerLoggingFilter implements Filter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerLoggingFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerLoggingFilter.class);
 
-    private final LoggingConfig loggingConfig;
-    private final Consumer<StructuredArguments> structuredLogger;
-    private final Clock clock;
+	private final LoggingConfig loggingConfig;
+	private final Consumer<StructuredArguments> structuredLogger;
+	private final Clock clock;
 
-    public ServerLoggingFilter(
-        LoggingConfig loggingConfig,
-        Consumer<StructuredArguments> structuredLogger,
-        Clock clock
-    ) {
-        this.loggingConfig = Objects.requireNonNull(loggingConfig);
-        this.structuredLogger = Objects.requireNonNull(structuredLogger);
-        this.clock = Objects.requireNonNull(clock);
-    }
+	public ServerLoggingFilter(
+		LoggingConfig loggingConfig,
+		Consumer<StructuredArguments> structuredLogger,
+		Clock clock
+	) {
+		this.loggingConfig = Objects.requireNonNull(loggingConfig);
+		this.structuredLogger = Objects.requireNonNull(structuredLogger);
+		this.clock = Objects.requireNonNull(clock);
+	}
 
-    @Override
-    public void init(FilterConfig filterConfig) {}
+	@Override
+	public void init(FilterConfig filterConfig) {}
 
-    @Override
-    public void destroy() {}
+	@Override
+	public void destroy() {}
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
-        if (
-            !(request instanceof HttpServletRequest httpServletRequest)
-            || !(response instanceof HttpServletResponse httpServletResponse)
-        ) {
-            chain.doFilter(request, response);
-            return;
-        }
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+		throws IOException, ServletException {
+		if (
+			!(request instanceof HttpServletRequest httpServletRequest)
+			|| !(response instanceof HttpServletResponse httpServletResponse)
+		) {
+			chain.doFilter(request, response);
+			return;
+		}
 
-        Instant startTime = this.clock.instant();
+		Instant startTime = this.clock.instant();
 
-        StructuredArguments structuredArguments = new StructuredArguments();
-        request.setAttribute("structuredArguments", structuredArguments);
+		StructuredArguments structuredArguments = new StructuredArguments();
+		request.setAttribute("structuredArguments", structuredArguments);
 
-        this.addInitialRequestAttributes(structuredArguments, httpServletRequest);
+		this.addInitialRequestAttributes(structuredArguments, httpServletRequest);
 
-        var requestWrapper = new ContentCachingRequestWrapper(httpServletRequest);
-        var responseWrapper = new ContentCachingResponseWrapper(httpServletResponse);
-        try {
-            chain.doFilter(requestWrapper, responseWrapper);
-        } finally {
-            Instant endTime = this.clock.instant();
-            Duration duration = Duration.between(startTime, endTime);
-            this.addFinalRequestAttributes(structuredArguments, requestWrapper);
-            this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse, duration);
-            this.structuredLogger.accept(structuredArguments);
-            MDC.clear();
-        }
-    }
+		var requestWrapper = new ContentCachingRequestWrapper(httpServletRequest);
+		var responseWrapper = new ContentCachingResponseWrapper(httpServletResponse);
+		try {
+			chain.doFilter(requestWrapper, responseWrapper);
+		} finally {
+			Instant endTime = this.clock.instant();
+			Duration duration = Duration.between(startTime, endTime);
+			this.addFinalRequestAttributes(structuredArguments, requestWrapper);
+			this.addFinalResponseAttributes(structuredArguments, responseWrapper, httpServletResponse, duration);
+			this.structuredLogger.accept(structuredArguments);
+			MDC.clear();
+		}
+	}
 
-    private void addInitialRequestAttributes(
-        StructuredArguments structuredArguments,
-        @Nonnull HttpServletRequest httpServletRequest
-    ) {
-        String authType = httpServletRequest.getAuthType();
-        if (authType != null) {
-            LOGGER.trace("authType: {}", authType);
-        }
+	private void addInitialRequestAttributes(
+		StructuredArguments structuredArguments,
+		@Nonnull HttpServletRequest httpServletRequest
+	) {
+		String authType = httpServletRequest.getAuthType();
+		if (authType != null) {
+			LOGGER.trace("authType: {}", authType);
+		}
 
-        StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
-        String method = httpServletRequest.getMethod();
-        http.setMethod(method);
+		StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();
+		String method = httpServletRequest.getMethod();
+		http.setMethod(method);
 
-        http.setContextPath(httpServletRequest.getContextPath());
-        http.setRemoteUser(httpServletRequest.getRemoteUser());
+		http.setContextPath(httpServletRequest.getContextPath());
+		http.setRemoteUser(httpServletRequest.getRemoteUser());
 
-        StructuredArgumentsPath path = new StructuredArgumentsPath(
-            httpServletRequest.getRequestURL().toString(),
-            httpServletRequest.getRequestURI()
-        );
-        http.setPath(path);
+		StructuredArgumentsPath path = new StructuredArgumentsPath(
+			httpServletRequest.getRequestURL().toString(),
+			httpServletRequest.getRequestURI()
+		);
+		http.setPath(path);
 
-        StructuredArgumentsClient client = new StructuredArgumentsClient(
-            httpServletRequest.getRemoteAddr(),
-            httpServletRequest.getRemoteHost(),
-            httpServletRequest.getRemotePort()
-        );
-        http.setClient(client);
-        StructuredArgumentsServer server = new StructuredArgumentsServer(
-            httpServletRequest.getScheme(),
-            httpServletRequest.getServerName(),
-            httpServletRequest.getServerPort()
-        );
-        http.setServer(server);
+		StructuredArgumentsClient client = new StructuredArgumentsClient(
+			httpServletRequest.getRemoteAddr(),
+			httpServletRequest.getRemoteHost(),
+			httpServletRequest.getRemotePort()
+		);
+		http.setClient(client);
+		StructuredArgumentsServer server = new StructuredArgumentsServer(
+			httpServletRequest.getScheme(),
+			httpServletRequest.getServerName(),
+			httpServletRequest.getServerPort()
+		);
+		http.setServer(server);
 
-        MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
-        boolean logExcludedRequestHeaderNames = this.loggingConfig.isLogExcludedRequestHeaderNames();
-        MutableList<String> newExcludedHeaders = logExcludedRequestHeaderNames ? Lists.mutable.empty() : null;
+		MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
+		boolean logExcludedRequestHeaderNames = this.loggingConfig.isLogExcludedRequestHeaderNames();
+		MutableList<String> newExcludedHeaders = logExcludedRequestHeaderNames ? Lists.mutable.empty() : null;
 
-        Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-        headerNames
-            .asIterator()
-            .forEachRemaining(headerName -> {
-                String headerValue = httpServletRequest.getHeader(headerName);
+		Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
+		headerNames
+			.asIterator()
+			.forEachRemaining((headerName) -> {
+				String headerValue = httpServletRequest.getHeader(headerName);
 
-                if (this.loggingConfig.getIncludedRequestHeaders().contains(headerName)) {
-                    newHeaders.put(headerName, headerValue);
-                } else if (logExcludedRequestHeaderNames) {
-                    newExcludedHeaders.add(headerName);
-                }
-            });
+				if (this.loggingConfig.getIncludedRequestHeaders().contains(headerName)) {
+					newHeaders.put(headerName, headerValue);
+				} else if (logExcludedRequestHeaderNames) {
+					newExcludedHeaders.add(headerName);
+				}
+			});
 
-        if (this.loggingConfig.isLogRequestHeaderNames()) {
-            http.setHeaders(newHeaders);
-        }
-        if (logExcludedRequestHeaderNames) {
-            http.setExcludedHeaders(newExcludedHeaders.toImmutable());
-        }
-    }
+		if (this.loggingConfig.isLogRequestHeaderNames()) {
+			http.setHeaders(newHeaders);
+		}
+		if (logExcludedRequestHeaderNames) {
+			http.setExcludedHeaders(newExcludedHeaders.toImmutable());
+		}
+	}
 
-    private void addFinalRequestAttributes(
-        StructuredArguments structuredArguments,
-        ContentCachingRequestWrapper requestWrapper
-    ) {
-        if (
-            !this.loggingConfig.isLogRequestBodies()
-            || requestWrapper == null
-            || requestWrapper.getContentLengthLong() <= 0
-        ) {
-            return;
-        }
+	private void addFinalRequestAttributes(
+		StructuredArguments structuredArguments,
+		ContentCachingRequestWrapper requestWrapper
+	) {
+		if (
+			!this.loggingConfig.isLogRequestBodies()
+			|| requestWrapper == null
+			|| requestWrapper.getContentLengthLong() <= 0
+		) {
+			return;
+		}
 
-        String payload = this.getPayloadFromByteArray(
-            requestWrapper.getContentAsByteArray(),
-            requestWrapper.getCharacterEncoding()
-        );
+		String payload = this.getPayloadFromByteArray(
+			requestWrapper.getContentAsByteArray(),
+			requestWrapper.getCharacterEncoding()
+		);
 
-        String truncatedPayload = this.getTruncatedPayload(payload);
-        structuredArguments.getRequest().getHttp().setBody(truncatedPayload);
-        structuredArguments.getRequest().getHttp().setContentLength(requestWrapper.getContentLengthLong());
-    }
+		String truncatedPayload = this.getTruncatedPayload(payload);
+		structuredArguments.getRequest().getHttp().setBody(truncatedPayload);
+		structuredArguments.getRequest().getHttp().setContentLength(requestWrapper.getContentLengthLong());
+	}
 
-    private void addFinalResponseAttributes(
-        @Nonnull StructuredArguments structuredArguments,
-        @Nonnull ContentCachingResponseWrapper responseWrapper,
-        @Nonnull HttpServletResponse httpServletResponse,
-        @Nonnull Duration elapsed
-    ) throws IOException {
-        StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
+	private void addFinalResponseAttributes(
+		@Nonnull StructuredArguments structuredArguments,
+		@Nonnull ContentCachingResponseWrapper responseWrapper,
+		@Nonnull HttpServletResponse httpServletResponse,
+		@Nonnull Duration elapsed
+	) throws IOException {
+		StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 
-        http.setElapsed(elapsed);
+		http.setElapsed(elapsed);
 
-        String contentType = httpServletResponse.getContentType();
-        if (contentType != null) {
-            http.setContentType(contentType);
-        }
+		String contentType = httpServletResponse.getContentType();
+		if (contentType != null) {
+			http.setContentType(contentType);
+		}
 
-        http.getStatus().setCode(httpServletResponse.getStatus());
+		http.getStatus().setCode(httpServletResponse.getStatus());
 
-        this.addResponseHeaders(httpServletResponse, http);
+		this.addResponseHeaders(httpServletResponse, http);
 
-        if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getContentAsByteArray().length > 0) {
-            String payload = this.getPayloadFromByteArray(
-                responseWrapper.getContentAsByteArray(),
-                responseWrapper.getCharacterEncoding()
-            );
+		if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getContentAsByteArray().length > 0) {
+			String payload = this.getPayloadFromByteArray(
+				responseWrapper.getContentAsByteArray(),
+				responseWrapper.getCharacterEncoding()
+			);
 
-            String truncatedPayload = this.getTruncatedPayload(payload);
-            http.setBody(truncatedPayload);
-            http.setContentLength(responseWrapper.getContentSize());
-        }
+			String truncatedPayload = this.getTruncatedPayload(payload);
+			http.setBody(truncatedPayload);
+			http.setContentLength(responseWrapper.getContentSize());
+		}
 
-        responseWrapper.copyBodyToResponse();
-    }
+		responseWrapper.copyBodyToResponse();
+	}
 
-    @Nonnull
-    private String getTruncatedPayload(@Nonnull String payload) {
-        int maxEntitySize = this.loggingConfig.getMaxEntitySize();
-        if (payload.length() <= maxEntitySize) {
-            return payload;
-        }
+	@Nonnull
+	private String getTruncatedPayload(@Nonnull String payload) {
+		int maxEntitySize = this.loggingConfig.getMaxEntitySize();
+		if (payload.length() <= maxEntitySize) {
+			return payload;
+		}
 
-        return payload.substring(0, maxEntitySize) + "...more...";
-    }
+		return payload.substring(0, maxEntitySize) + "...more...";
+	}
 
-    private void addResponseHeaders(
-        @Nonnull HttpServletResponse httpServletResponse,
-        StructuredArgumentsResponseHttp http
-    ) {
-        MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
-        boolean logExcludedResponseHeaderNames = this.loggingConfig.isLogExcludedResponseHeaderNames();
-        MutableList<String> newExcludedHeaders = logExcludedResponseHeaderNames ? Lists.mutable.empty() : null;
+	private void addResponseHeaders(
+		@Nonnull HttpServletResponse httpServletResponse,
+		StructuredArgumentsResponseHttp http
+	) {
+		MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
+		boolean logExcludedResponseHeaderNames = this.loggingConfig.isLogExcludedResponseHeaderNames();
+		MutableList<String> newExcludedHeaders = logExcludedResponseHeaderNames ? Lists.mutable.empty() : null;
 
-        for (String headerName : httpServletResponse.getHeaderNames()) {
-            String headerValue = httpServletResponse.getHeader(headerName);
+		for (String headerName : httpServletResponse.getHeaderNames()) {
+			String headerValue = httpServletResponse.getHeader(headerName);
 
-            if (this.loggingConfig.getIncludedResponseHeaders().contains(headerName)) {
-                newHeaders.put(headerName, headerValue);
-            } else if (logExcludedResponseHeaderNames) {
-                newExcludedHeaders.add(headerName);
-            }
-        }
+			if (this.loggingConfig.getIncludedResponseHeaders().contains(headerName)) {
+				newHeaders.put(headerName, headerValue);
+			} else if (logExcludedResponseHeaderNames) {
+				newExcludedHeaders.add(headerName);
+			}
+		}
 
-        if (this.loggingConfig.isLogResponseHeaderNames()) {
-            http.setHeaders(newHeaders);
-        }
-        if (logExcludedResponseHeaderNames) {
-            http.setExcludedHeaders(newExcludedHeaders.toImmutable());
-        }
-    }
+		if (this.loggingConfig.isLogResponseHeaderNames()) {
+			http.setHeaders(newHeaders);
+		}
+		if (logExcludedResponseHeaderNames) {
+			http.setExcludedHeaders(newExcludedHeaders.toImmutable());
+		}
+	}
 
-    @Nonnull
-    private String getPayloadFromByteArray(byte[] requestBuffer, String charEncoding) {
-        try {
-            return new String(requestBuffer, charEncoding);
-        } catch (UnsupportedEncodingException unsupportedEncodingException) {
-            return "Unsupported-Encoding";
-        }
-    }
+	@Nonnull
+	private String getPayloadFromByteArray(byte[] requestBuffer, String charEncoding) {
+		try {
+			return new String(requestBuffer, charEncoding);
+		} catch (UnsupportedEncodingException unsupportedEncodingException) {
+			return "Unsupported-Encoding";
+		}
+	}
 }

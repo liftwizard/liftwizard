@@ -25,22 +25,22 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 public class IntegerListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Integer>> {
 
-    private final IntegerLiteralVisitor integerLiteralVisitor;
+	private final IntegerLiteralVisitor integerLiteralVisitor;
 
-    public IntegerListLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-        this.integerLiteralVisitor = new IntegerLiteralVisitor(this.finder, this.errorContext);
-    }
+	public IntegerListLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+		this.integerLiteralVisitor = new IntegerLiteralVisitor(this.finder, this.errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "Integer list";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "Integer list";
+	}
 
-    @Override
-    public ImmutableList<Integer> visitIntegerListLiteral(IntegerListLiteralContext ctx) {
-        return ListAdapter.adapt(ctx.integerLiteral())
-            .collect(each -> each.accept(this.integerLiteralVisitor))
-            .toImmutable();
-    }
+	@Override
+	public ImmutableList<Integer> visitIntegerListLiteral(IntegerListLiteralContext ctx) {
+		return ListAdapter.adapt(ctx.integerLiteral())
+			.collect((each) -> each.accept(this.integerLiteralVisitor))
+			.toImmutable();
+	}
 }

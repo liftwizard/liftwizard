@@ -29,24 +29,24 @@ import org.apache.log4j.Logger;
 
 public class StructuredArgumentsLog4jMapLogger implements Consumer<StructuredArguments> {
 
-    private static final Logger LOGGER = Logger.getLogger(StructuredArgumentsLog4jMapLogger.class);
+	private static final Logger LOGGER = Logger.getLogger(StructuredArgumentsLog4jMapLogger.class);
 
-    @Nonnull
-    private final ObjectMapper objectMapper;
+	@Nonnull
+	private final ObjectMapper objectMapper;
 
-    public StructuredArgumentsLog4jMapLogger(@Nonnull ObjectMapper objectMapper) {
-        this.objectMapper = Objects.requireNonNull(objectMapper);
-    }
+	public StructuredArgumentsLog4jMapLogger(@Nonnull ObjectMapper objectMapper) {
+		this.objectMapper = Objects.requireNonNull(objectMapper);
+	}
 
-    @Override
-    public void accept(StructuredArguments structuredArguments) {
-        Map<?, ?> structuredArgumentsMap = this.objectMapper.convertValue(structuredArguments, Map.class);
-        Map<?, ?> mapWithToString = new HashMap<Object, Object>(structuredArgumentsMap) {
-            @Override
-            public String toString() {
-                return "Response sent";
-            }
-        };
-        LOGGER.debug(mapWithToString);
-    }
+	@Override
+	public void accept(StructuredArguments structuredArguments) {
+		Map<?, ?> structuredArgumentsMap = this.objectMapper.convertValue(structuredArguments, Map.class);
+		Map<?, ?> mapWithToString = new HashMap<Object, Object>(structuredArgumentsMap) {
+			@Override
+			public String toString() {
+				return "Response sent";
+			}
+		};
+		LOGGER.debug(mapWithToString);
+	}
 }

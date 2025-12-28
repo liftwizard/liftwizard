@@ -20,14 +20,14 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public class LiftwizardGraphQLContextException extends RuntimeException {
 
-    private final ImmutableList<String> context;
+	private final ImmutableList<String> context;
 
-    public LiftwizardGraphQLContextException(String message, ImmutableList<String> context) {
-        super(message);
-        this.context = context;
-    }
+	public LiftwizardGraphQLContextException(String message, ImmutableList<String> context) {
+		super(message);
+		this.context = context;
+	}
 
-    public ImmutableList<String> getContext() {
-        return this.context;
-    }
+	public ImmutableList<String> getContext() {
+		return this.context;
+	}
 }

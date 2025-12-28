@@ -48,87 +48,87 @@ import org.slf4j.LoggerFactory;
  */
 public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggingFactoryProvider> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
-    @Nonnull
-    private final Consumer<StructuredArguments> structuredLogger;
+	@Nonnull
+	private final Consumer<StructuredArguments> structuredLogger;
 
-    @Nonnull
-    private final Function<Principal, Map<String, Object>> principalBuilder;
+	@Nonnull
+	private final Function<Principal, Map<String, Object>> principalBuilder;
 
-    public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger) {
-        this(structuredLogger, principal -> Map.of("name", principal.getName()));
-    }
+	public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger) {
+		this(structuredLogger, (principal) -> Map.of("name", principal.getName()));
+	}
 
-    public JerseyHttpLoggingBundle(
-        @Nonnull Consumer<StructuredArguments> structuredLogger,
-        @Nonnull Function<Principal, Map<String, Object>> principalBuilder
-    ) {
-        this.structuredLogger = Objects.requireNonNull(structuredLogger);
-        this.principalBuilder = Objects.requireNonNull(principalBuilder);
-    }
+	public JerseyHttpLoggingBundle(
+		@Nonnull Consumer<StructuredArguments> structuredLogger,
+		@Nonnull Function<Principal, Map<String, Object>> principalBuilder
+	) {
+		this.structuredLogger = Objects.requireNonNull(structuredLogger);
+		this.principalBuilder = Objects.requireNonNull(principalBuilder);
+	}
 
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {}
+	@Override
+	public void initialize(Bootstrap<?> bootstrap) {}
 
-    @Override
-    public void run(JerseyHttpLoggingFactoryProvider configuration, Environment environment) throws Exception {
-        JerseyHttpLoggingFactory factory = configuration.getJerseyHttpLoggingFactory();
-        if (!factory.isEnabled()) {
-            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
-            return;
-        }
+	@Override
+	public void run(JerseyHttpLoggingFactoryProvider configuration, Environment environment) throws Exception {
+		JerseyHttpLoggingFactory factory = configuration.getJerseyHttpLoggingFactory();
+		if (!factory.isEnabled()) {
+			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			return;
+		}
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        Clock clock = getClock(configuration);
+		Clock clock = getClock(configuration);
 
-        int maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
+		int maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
 
-        LoggingConfig loggingConfig = new LoggingConfig(
-            factory.isLogRequests(),
-            factory.isLogRequestBodies(),
-            factory.isLogResponses(),
-            factory.isLogResponseBodies(),
-            factory.isLogRequestHeaderNames(),
-            factory.isLogExcludedRequestHeaderNames(),
-            factory.isLogResponseHeaderNames(),
-            factory.isLogExcludedResponseHeaderNames(),
-            Lists.immutable.withAll(factory.getIncludedRequestHeaders()),
-            Lists.immutable.withAll(factory.getIncludedResponseHeaders()),
-            maxEntitySize
-        );
+		LoggingConfig loggingConfig = new LoggingConfig(
+			factory.isLogRequests(),
+			factory.isLogRequestBodies(),
+			factory.isLogResponses(),
+			factory.isLogResponseBodies(),
+			factory.isLogRequestHeaderNames(),
+			factory.isLogExcludedRequestHeaderNames(),
+			factory.isLogResponseHeaderNames(),
+			factory.isLogExcludedResponseHeaderNames(),
+			Lists.immutable.withAll(factory.getIncludedRequestHeaders()),
+			Lists.immutable.withAll(factory.getIncludedResponseHeaders()),
+			maxEntitySize
+		);
 
-        if (loggingConfig.isLogRequests()) {
-            var loggingRequestFilter = new ServerLoggingRequestFilter(this.principalBuilder);
-            environment.jersey().register(loggingRequestFilter);
-        }
+		if (loggingConfig.isLogRequests()) {
+			var loggingRequestFilter = new ServerLoggingRequestFilter(this.principalBuilder);
+			environment.jersey().register(loggingRequestFilter);
+		}
 
-        if (loggingConfig.isLogResponses()) {
-            var loggingResponseFilter = new ServerLoggingResponseFilter();
-            environment.jersey().register(loggingResponseFilter);
-        }
+		if (loggingConfig.isLogResponses()) {
+			var loggingResponseFilter = new ServerLoggingResponseFilter();
+			environment.jersey().register(loggingResponseFilter);
+		}
 
-        var loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger, clock);
-        environment
-            .servlets()
-            .addFilter("ServerLoggingFilter", loggingFilter)
-            .addMappingForUrlPatterns(null, true, "/*");
+		var loggingFilter = new ServerLoggingFilter(loggingConfig, this.structuredLogger, clock);
+		environment
+			.servlets()
+			.addFilter("ServerLoggingFilter", loggingFilter)
+			.addMappingForUrlPatterns(null, true, "/*");
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 
-    private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration) {
-        if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
-            LOGGER.warn(
-                "Configuration {} does not implement {}. Using system clock.",
-                configuration.getClass().getSimpleName(),
-                ClockFactoryProvider.class.getSimpleName()
-            );
-            return Clock.systemUTC();
-        }
+	private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration) {
+		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
+			LOGGER.warn(
+				"Configuration {} does not implement {}. Using system clock.",
+				configuration.getClass().getSimpleName(),
+				ClockFactoryProvider.class.getSimpleName()
+			);
+			return Clock.systemUTC();
+		}
 
-        ClockFactory clockFactory = clockFactoryProvider.getClockFactory();
-        return clockFactory.createClock();
-    }
+		ClockFactory clockFactory = clockFactoryProvider.getClockFactory();
+		return clockFactory.createClock();
+	}
 }

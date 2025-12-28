@@ -31,96 +31,96 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class PeopleResourceTest {
 
-    private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
+	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
-    @RegisterExtension
-    @Order(1)
-    private final LiftwizardAppExtension<HelloWorldConfiguration> dropwizardAppExtension = new LiftwizardAppExtension<>(
-        HelloWorldApplication.class,
-        CONFIG_PATH
-    );
+	@RegisterExtension
+	@Order(1)
+	private final LiftwizardAppExtension<HelloWorldConfiguration> dropwizardAppExtension = new LiftwizardAppExtension<>(
+		HelloWorldApplication.class,
+		CONFIG_PATH
+	);
 
-    @RegisterExtension
-    @Order(2)
-    private final BeforeEachCallback dbMigrateRule = context ->
-        this.dropwizardAppExtension.getApplication().run("db", "migrate", CONFIG_PATH);
+	@RegisterExtension
+	@Order(2)
+	private final BeforeEachCallback dbMigrateRule = (context) ->
+		this.dropwizardAppExtension.getApplication().run("db", "migrate", CONFIG_PATH);
 
-    @RegisterExtension
-    @Order(3)
-    private final ReladomoInitializeExtension initializeExtension = new ReladomoInitializeExtension(
-        "reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
-    );
+	@RegisterExtension
+	@Order(3)
+	private final ReladomoInitializeExtension initializeExtension = new ReladomoInitializeExtension(
+		"reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"
+	);
 
-    @RegisterExtension
-    @Order(4)
-    private final ReladomoPurgeAllExtension purgeAllExtension = new ReladomoPurgeAllExtension();
+	@RegisterExtension
+	@Order(4)
+	private final ReladomoPurgeAllExtension purgeAllExtension = new ReladomoPurgeAllExtension();
 
-    @RegisterExtension
-    @Order(5)
-    private final ReladomoLoadDataExtension loadDataExtension = new ReladomoLoadDataExtension();
+	@RegisterExtension
+	@Order(5)
+	private final ReladomoLoadDataExtension loadDataExtension = new ReladomoLoadDataExtension();
 
-    @RegisterExtension
-    @Order(6)
-    private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
+	@RegisterExtension
+	@Order(6)
+	private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
-    private final PersonDTO personDTO = new PersonDTO("Full Name", "Job Title");
+	private final PersonDTO personDTO = new PersonDTO("Full Name", "Job Title");
 
-    @Test
-    void createPerson() throws JSONException {
-        Client client = this.dropwizardAppExtension.client();
+	@Test
+	void createPerson() throws JSONException {
+		Client client = this.dropwizardAppExtension.client();
 
-        {
-            Response response = client
-                .target("http://localhost:{port}/people/")
-                .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
-                .request()
-                .post(Entity.entity(this.personDTO, MediaType.APPLICATION_JSON_TYPE));
+		{
+			Response response = client
+				.target("http://localhost:{port}/people/")
+				.resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
+				.request()
+				.post(Entity.entity(this.personDTO, MediaType.APPLICATION_JSON_TYPE));
 
-            this.assertResponseStatus(response, Status.OK);
-            String jsonResponse = response.readEntity(String.class);
+			this.assertResponseStatus(response, Status.OK);
+			String jsonResponse = response.readEntity(String.class);
 
-            // <editor-fold desc="Expected JSON">
-            // language=JSON
-            String expected = """
-                {
-                  "id"      : 1,
-                  "fullName": "Full Name",
-                  "jobTitle": "Job Title"
-                }
-                """;
-            // </editor-fold>
-            JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
-        }
+			// <editor-fold desc="Expected JSON">
+			// language=JSON
+			String expected = """
+				{
+				  "id"      : 1,
+				  "fullName": "Full Name",
+				  "jobTitle": "Job Title"
+				}
+				""";
+			// </editor-fold>
+			JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+		}
 
-        {
-            Response response = client
-                .target("http://localhost:{port}/people/")
-                .resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
-                .request()
-                .get();
+		{
+			Response response = client
+				.target("http://localhost:{port}/people/")
+				.resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
+				.request()
+				.get();
 
-            this.assertResponseStatus(response, Status.OK);
-            String jsonResponse = response.readEntity(String.class);
+			this.assertResponseStatus(response, Status.OK);
+			String jsonResponse = response.readEntity(String.class);
 
-            // <editor-fold desc="Expected JSON">
-            // language=JSON
-            String expected = """
-                [
-                  {
-                    "id"      : 1,
-                    "fullName": "Full Name",
-                    "jobTitle": "Job Title"
-                  }
-                ]
-                """;
-            // </editor-fold>
-            JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
-        }
-    }
+			// <editor-fold desc="Expected JSON">
+			// language=JSON
+			String expected = """
+				[
+				  {
+				    "id"      : 1,
+				    "fullName": "Full Name",
+				    "jobTitle": "Job Title"
+				  }
+				]
+				""";
+			// </editor-fold>
+			JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
+		}
+	}
 
-    private void assertResponseStatus(@Nonnull Response response, Status status) {
-        response.bufferEntity();
-        String entityAsString = response.readEntity(String.class);
-        assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
-    }
+	private void assertResponseStatus(@Nonnull Response response, Status status) {
+		response.bufferEntity();
+		String entityAsString = response.readEntity(String.class);
+		assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
+	}
 }
