@@ -38,86 +38,86 @@ import io.dropwizard.validation.MinDuration;
 @AutoService(ScheduledExecutorServiceFactory.class)
 public class DefaultScheduledExecutorServiceFactory implements ScheduledExecutorServiceFactory {
 
-    @Valid
-    @NotNull
-    private String nameFormat;
+	@Valid
+	@NotNull
+	private String nameFormat;
 
-    private boolean useDaemonThreads = true;
+	private boolean useDaemonThreads = true;
 
-    @Min(0)
-    private int threads = 1;
+	@Min(0)
+	private int threads = 1;
 
-    @NotNull
-    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private Duration shutdownTime = Duration.seconds(5);
+	@NotNull
+	@MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
+	private Duration shutdownTime = Duration.seconds(5);
 
-    private boolean removeOnCancelPolicy;
+	private boolean removeOnCancelPolicy;
 
-    @Override
-    @JsonIgnore
-    public ScheduledExecutorService build(Environment environment) {
-        return this.build(environment.lifecycle(), environment.metrics());
-    }
+	@Override
+	@JsonIgnore
+	public ScheduledExecutorService build(Environment environment) {
+		return this.build(environment.lifecycle(), environment.metrics());
+	}
 
-    @Override
-    @JsonIgnore
-    public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
-        ScheduledExecutorService scheduledExecutorService = environment
-            .scheduledExecutorService(this.nameFormat, this.useDaemonThreads)
-            .threads(this.threads)
-            .shutdownTime(this.shutdownTime)
-            .removeOnCancelPolicy(this.removeOnCancelPolicy)
-            .build();
-        return new InstrumentedScheduledExecutorService(scheduledExecutorService, metricRegistry, this.nameFormat);
-    }
+	@Override
+	@JsonIgnore
+	public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
+		ScheduledExecutorService scheduledExecutorService = environment
+			.scheduledExecutorService(this.nameFormat, this.useDaemonThreads)
+			.threads(this.threads)
+			.shutdownTime(this.shutdownTime)
+			.removeOnCancelPolicy(this.removeOnCancelPolicy)
+			.build();
+		return new InstrumentedScheduledExecutorService(scheduledExecutorService, metricRegistry, this.nameFormat);
+	}
 
-    @JsonProperty
-    public String getNameFormat() {
-        return this.nameFormat;
-    }
+	@JsonProperty
+	public String getNameFormat() {
+		return this.nameFormat;
+	}
 
-    @JsonProperty
-    public void setNameFormat(String nameFormat) {
-        this.nameFormat = nameFormat;
-    }
+	@JsonProperty
+	public void setNameFormat(String nameFormat) {
+		this.nameFormat = nameFormat;
+	}
 
-    @JsonProperty
-    public boolean isUseDaemonThreads() {
-        return this.useDaemonThreads;
-    }
+	@JsonProperty
+	public boolean isUseDaemonThreads() {
+		return this.useDaemonThreads;
+	}
 
-    @JsonProperty
-    public void setUseDaemonThreads(boolean useDaemonThreads) {
-        this.useDaemonThreads = useDaemonThreads;
-    }
+	@JsonProperty
+	public void setUseDaemonThreads(boolean useDaemonThreads) {
+		this.useDaemonThreads = useDaemonThreads;
+	}
 
-    @JsonProperty
-    public int getThreads() {
-        return this.threads;
-    }
+	@JsonProperty
+	public int getThreads() {
+		return this.threads;
+	}
 
-    @JsonProperty
-    public void setThreads(int threads) {
-        this.threads = threads;
-    }
+	@JsonProperty
+	public void setThreads(int threads) {
+		this.threads = threads;
+	}
 
-    @JsonProperty
-    public Duration getShutdownTime() {
-        return this.shutdownTime;
-    }
+	@JsonProperty
+	public Duration getShutdownTime() {
+		return this.shutdownTime;
+	}
 
-    @JsonProperty
-    public void setShutdownTime(Duration shutdownTime) {
-        this.shutdownTime = shutdownTime;
-    }
+	@JsonProperty
+	public void setShutdownTime(Duration shutdownTime) {
+		this.shutdownTime = shutdownTime;
+	}
 
-    @JsonProperty
-    public boolean isRemoveOnCancelPolicy() {
-        return this.removeOnCancelPolicy;
-    }
+	@JsonProperty
+	public boolean isRemoveOnCancelPolicy() {
+		return this.removeOnCancelPolicy;
+	}
 
-    @JsonProperty
-    public void setRemoveOnCancelPolicy(boolean removeOnCancelPolicy) {
-        this.removeOnCancelPolicy = removeOnCancelPolicy;
-    }
+	@JsonProperty
+	public void setRemoveOnCancelPolicy(boolean removeOnCancelPolicy) {
+		this.removeOnCancelPolicy = removeOnCancelPolicy;
+	}
 }

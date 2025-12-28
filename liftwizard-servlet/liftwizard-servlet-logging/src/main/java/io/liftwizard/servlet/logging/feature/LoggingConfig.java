@@ -25,85 +25,85 @@ import org.eclipse.collections.api.list.ImmutableList;
  */
 public class LoggingConfig {
 
-    private final boolean logRequests;
-    private final boolean logRequestBodies;
-    private final boolean logResponses;
-    private final boolean logResponseBodies;
-    private final boolean logRequestHeaderNames;
-    private final boolean logExcludedRequestHeaderNames;
-    private final boolean logResponseHeaderNames;
-    private final boolean logExcludedResponseHeaderNames;
-    private final ImmutableList<String> includedRequestHeaders;
-    private final ImmutableList<String> includedResponseHeaders;
-    private final int maxEntitySize;
+	private final boolean logRequests;
+	private final boolean logRequestBodies;
+	private final boolean logResponses;
+	private final boolean logResponseBodies;
+	private final boolean logRequestHeaderNames;
+	private final boolean logExcludedRequestHeaderNames;
+	private final boolean logResponseHeaderNames;
+	private final boolean logExcludedResponseHeaderNames;
+	private final ImmutableList<String> includedRequestHeaders;
+	private final ImmutableList<String> includedResponseHeaders;
+	private final int maxEntitySize;
 
-    public LoggingConfig(
-        boolean logRequests,
-        boolean logRequestBodies,
-        boolean logResponses,
-        boolean logResponseBodies,
-        boolean logRequestHeaderNames,
-        boolean logExcludedRequestHeaderNames,
-        boolean logResponseHeaderNames,
-        boolean logExcludedResponseHeaderNames,
-        ImmutableList<String> includedRequestHeaders,
-        ImmutableList<String> includedResponseHeaders,
-        int maxEntitySize
-    ) {
-        this.logRequests = logRequests;
-        this.logRequestBodies = logRequestBodies;
-        this.logResponses = logResponses;
-        this.logResponseBodies = logResponseBodies;
-        this.logRequestHeaderNames = logRequestHeaderNames;
-        this.logExcludedRequestHeaderNames = logExcludedRequestHeaderNames;
-        this.logResponseHeaderNames = logResponseHeaderNames;
-        this.logExcludedResponseHeaderNames = logExcludedResponseHeaderNames;
-        this.includedRequestHeaders = Objects.requireNonNull(includedRequestHeaders);
-        this.includedResponseHeaders = Objects.requireNonNull(includedResponseHeaders);
-        this.maxEntitySize = maxEntitySize;
-    }
+	public LoggingConfig(
+		boolean logRequests,
+		boolean logRequestBodies,
+		boolean logResponses,
+		boolean logResponseBodies,
+		boolean logRequestHeaderNames,
+		boolean logExcludedRequestHeaderNames,
+		boolean logResponseHeaderNames,
+		boolean logExcludedResponseHeaderNames,
+		ImmutableList<String> includedRequestHeaders,
+		ImmutableList<String> includedResponseHeaders,
+		int maxEntitySize
+	) {
+		this.logRequests = logRequests;
+		this.logRequestBodies = logRequestBodies;
+		this.logResponses = logResponses;
+		this.logResponseBodies = logResponseBodies;
+		this.logRequestHeaderNames = logRequestHeaderNames;
+		this.logExcludedRequestHeaderNames = logExcludedRequestHeaderNames;
+		this.logResponseHeaderNames = logResponseHeaderNames;
+		this.logExcludedResponseHeaderNames = logExcludedResponseHeaderNames;
+		this.includedRequestHeaders = Objects.requireNonNull(includedRequestHeaders);
+		this.includedResponseHeaders = Objects.requireNonNull(includedResponseHeaders);
+		this.maxEntitySize = maxEntitySize;
+	}
 
-    public boolean isLogRequests() {
-        return this.logRequests;
-    }
+	public boolean isLogRequests() {
+		return this.logRequests;
+	}
 
-    public boolean isLogRequestBodies() {
-        return this.logRequestBodies;
-    }
+	public boolean isLogRequestBodies() {
+		return this.logRequestBodies;
+	}
 
-    public boolean isLogResponses() {
-        return this.logResponses;
-    }
+	public boolean isLogResponses() {
+		return this.logResponses;
+	}
 
-    public boolean isLogResponseBodies() {
-        return this.logResponseBodies;
-    }
+	public boolean isLogResponseBodies() {
+		return this.logResponseBodies;
+	}
 
-    public boolean isLogRequestHeaderNames() {
-        return this.logRequestHeaderNames;
-    }
+	public boolean isLogRequestHeaderNames() {
+		return this.logRequestHeaderNames;
+	}
 
-    public boolean isLogExcludedRequestHeaderNames() {
-        return this.logExcludedRequestHeaderNames;
-    }
+	public boolean isLogExcludedRequestHeaderNames() {
+		return this.logExcludedRequestHeaderNames;
+	}
 
-    public boolean isLogResponseHeaderNames() {
-        return this.logResponseHeaderNames;
-    }
+	public boolean isLogResponseHeaderNames() {
+		return this.logResponseHeaderNames;
+	}
 
-    public boolean isLogExcludedResponseHeaderNames() {
-        return this.logExcludedResponseHeaderNames;
-    }
+	public boolean isLogExcludedResponseHeaderNames() {
+		return this.logExcludedResponseHeaderNames;
+	}
 
-    public ImmutableList<String> getIncludedRequestHeaders() {
-        return this.includedRequestHeaders;
-    }
+	public ImmutableList<String> getIncludedRequestHeaders() {
+		return this.includedRequestHeaders;
+	}
 
-    public ImmutableList<String> getIncludedResponseHeaders() {
-        return this.includedResponseHeaders;
-    }
+	public ImmutableList<String> getIncludedResponseHeaders() {
+		return this.includedResponseHeaders;
+	}
 
-    public int getMaxEntitySize() {
-        return this.maxEntitySize;
-    }
+	public int getMaxEntitySize() {
+		return this.maxEntitySize;
+	}
 }

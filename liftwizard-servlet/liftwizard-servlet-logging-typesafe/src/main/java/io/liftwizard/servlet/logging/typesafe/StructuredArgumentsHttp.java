@@ -25,58 +25,58 @@ import org.eclipse.collections.api.map.MutableMap;
 
 public class StructuredArgumentsHttp {
 
-    private MapIterable<String, String> headers;
-    private ImmutableList<String> excludedHeaders;
-    private String body;
-    private Long contentLength;
+	private MapIterable<String, String> headers;
+	private ImmutableList<String> excludedHeaders;
+	private String body;
+	private Long contentLength;
 
-    @JsonProperty
-    public MapIterable<String, String> getHeaders() {
-        return this.headers;
-    }
+	@JsonProperty
+	public MapIterable<String, String> getHeaders() {
+		return this.headers;
+	}
 
-    @JsonProperty
-    public void setHeaders(MutableMap<String, String> headers) {
-        if (this.headers != null) {
-            throw new AssertionError(this.headers);
-        }
-        this.headers = headers.asUnmodifiable();
-    }
+	@JsonProperty
+	public void setHeaders(MutableMap<String, String> headers) {
+		if (this.headers != null) {
+			throw new AssertionError(this.headers);
+		}
+		this.headers = headers.asUnmodifiable();
+	}
 
-    @JsonProperty
-    public ImmutableList<String> getExcludedHeaders() {
-        return this.excludedHeaders;
-    }
+	@JsonProperty
+	public ImmutableList<String> getExcludedHeaders() {
+		return this.excludedHeaders;
+	}
 
-    @JsonProperty
-    public void setExcludedHeaders(ImmutableList<String> excludedHeaders) {
-        if (this.excludedHeaders != null) {
-            throw new AssertionError(this.excludedHeaders);
-        }
-        this.excludedHeaders = Objects.requireNonNull(excludedHeaders);
-    }
+	@JsonProperty
+	public void setExcludedHeaders(ImmutableList<String> excludedHeaders) {
+		if (this.excludedHeaders != null) {
+			throw new AssertionError(this.excludedHeaders);
+		}
+		this.excludedHeaders = Objects.requireNonNull(excludedHeaders);
+	}
 
-    @JsonProperty
-    public String getBody() {
-        return this.body;
-    }
+	@JsonProperty
+	public String getBody() {
+		return this.body;
+	}
 
-    public void setBody(String body) {
-        if (this.body != null) {
-            throw new AssertionError(this.body);
-        }
-        this.body = Objects.requireNonNull(body);
-    }
+	public void setBody(String body) {
+		if (this.body != null) {
+			throw new AssertionError(this.body);
+		}
+		this.body = Objects.requireNonNull(body);
+	}
 
-    @JsonProperty
-    public Long getContentLength() {
-        return this.contentLength;
-    }
+	@JsonProperty
+	public Long getContentLength() {
+		return this.contentLength;
+	}
 
-    public void setContentLength(long contentLength) {
-        if (this.contentLength != null) {
-            throw new AssertionError(this.contentLength);
-        }
-        this.contentLength = contentLength;
-    }
+	public void setContentLength(long contentLength) {
+		if (this.contentLength != null) {
+			throw new AssertionError(this.contentLength);
+		}
+		this.contentLength = contentLength;
+	}
 }

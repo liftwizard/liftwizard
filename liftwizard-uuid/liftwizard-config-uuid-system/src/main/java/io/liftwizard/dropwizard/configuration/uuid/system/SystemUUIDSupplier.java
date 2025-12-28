@@ -23,9 +23,9 @@ import javax.annotation.Nonnull;
 
 public class SystemUUIDSupplier implements Supplier<UUID> {
 
-    @Nonnull
-    @Override
-    public UUID get() {
-        return UUID.randomUUID();
-    }
+	@Nonnull
+	@Override
+	public UUID get() {
+		return UUID.randomUUID();
+	}
 }

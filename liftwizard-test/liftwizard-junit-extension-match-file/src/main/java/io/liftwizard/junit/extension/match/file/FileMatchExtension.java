@@ -31,46 +31,46 @@ import io.liftwizard.junit.extension.match.FileSlurper;
 
 public class FileMatchExtension extends AbstractMatchExtension {
 
-    public FileMatchExtension(@Nonnull Class<?> callingClass) {
-        super(callingClass);
-    }
+	public FileMatchExtension(@Nonnull Class<?> callingClass) {
+		super(callingClass);
+	}
 
-    @Override
-    protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
-        throws URISyntaxException, IOException {
-        if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation)) {
-            String prettyPrintedString = this.getPrettyPrintedString(actualString);
+	@Override
+	protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+		throws URISyntaxException, IOException {
+		if (this.resourceRerecorderExtension.mustRerecord(resourceClassPathLocation)) {
+			String prettyPrintedString = this.getPrettyPrintedString(actualString);
 
-            Path packagePath = this.resourceRerecorderExtension.getPackagePath();
-            File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
+			Path packagePath = this.resourceRerecorderExtension.getPackagePath();
+			File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.resourceRerecorderExtension.writeStringToFile(
-                resourceClassPathLocation,
-                prettyPrintedString,
-                resourceFile
-            );
-            if (!this.rerecordEnabled) {
-                String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
-                this.errorCollectorExtension.addError(new AssertionError(detailMessage));
-            }
-        } else {
-            InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-            Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-            String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
+			this.resourceRerecorderExtension.writeStringToFile(
+				resourceClassPathLocation,
+				prettyPrintedString,
+				resourceFile
+			);
+			if (!this.rerecordEnabled) {
+				String detailMessage = resourceClassPathLocation + " did not exist. Created it.";
+				this.errorCollectorExtension.addError(new AssertionError(detailMessage));
+			}
+		} else {
+			InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
 
-            if (!actualString.equals(expectedStringFromFile)) {
-                String detailMessage = this.resourceRerecorderExtension.handleMismatch(
-                    resourceClassPathLocation,
-                    actualString
-                );
-                var assertionError = new AssertionError(detailMessage);
-                this.errorCollectorExtension.addError(assertionError);
-            }
-        }
-    }
+			if (!actualString.equals(expectedStringFromFile)) {
+				String detailMessage = this.resourceRerecorderExtension.handleMismatch(
+					resourceClassPathLocation,
+					actualString
+				);
+				var assertionError = new AssertionError(detailMessage);
+				this.errorCollectorExtension.addError(assertionError);
+			}
+		}
+	}
 
-    @Override
-    protected String getPrettyPrintedString(@Nonnull String string) {
-        return string;
-    }
+	@Override
+	protected String getPrettyPrintedString(@Nonnull String string) {
+		return string;
+	}
 }

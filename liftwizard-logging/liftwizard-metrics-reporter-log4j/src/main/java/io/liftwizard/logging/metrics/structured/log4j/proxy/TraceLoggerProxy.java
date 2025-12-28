@@ -20,17 +20,17 @@ import org.apache.log4j.Logger;
 
 public class TraceLoggerProxy extends AbstractLoggerProxy {
 
-    public TraceLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public TraceLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Object structuredObject) {
-        this.logger.trace(structuredObject);
-    }
+	@Override
+	public void log(Object structuredObject) {
+		this.logger.trace(structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.logger.isTraceEnabled();
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.logger.isTraceEnabled();
+	}
 }

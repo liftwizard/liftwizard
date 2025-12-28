@@ -36,67 +36,67 @@ import io.liftwizard.firebase.principal.FirebasePrincipal;
 @AutoService(AuthFilterFactory.class)
 public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 
-    private @Valid @NotNull String databaseUrl;
-    private @Valid @NotNull String firebaseConfig;
+	private @Valid @NotNull String databaseUrl;
+	private @Valid @NotNull String firebaseConfig;
 
-    private FirebaseAuth firebaseAuthFactory;
+	private FirebaseAuth firebaseAuthFactory;
 
-    @Nonnull
-    @Override
-    public AuthFilter<?, FirebasePrincipal> createAuthFilter() {
-        com.google.firebase.auth.FirebaseAuth firebaseAuth = this.createFirebaseAuth();
+	@Nonnull
+	@Override
+	public AuthFilter<?, FirebasePrincipal> createAuthFilter() {
+		com.google.firebase.auth.FirebaseAuth firebaseAuth = this.createFirebaseAuth();
 
-        Authenticator<String, FirebasePrincipal> authenticator = new FirebaseOAuthAuthenticator(firebaseAuth);
+		Authenticator<String, FirebasePrincipal> authenticator = new FirebaseOAuthAuthenticator(firebaseAuth);
 
-        return new OAuthCredentialAuthFilter.Builder<FirebasePrincipal>()
-            .setAuthenticator(authenticator)
-            .setPrefix("Bearer")
-            .buildAuthFilter();
-    }
+		return new OAuthCredentialAuthFilter.Builder<FirebasePrincipal>()
+			.setAuthenticator(authenticator)
+			.setPrefix("Bearer")
+			.buildAuthFilter();
+	}
 
-    public GoogleCredentials createFirebaseCredentials() {
-        this.initFirebaseAuthFactory();
-        return this.firebaseAuthFactory.getCredentials();
-    }
+	public GoogleCredentials createFirebaseCredentials() {
+		this.initFirebaseAuthFactory();
+		return this.firebaseAuthFactory.getCredentials();
+	}
 
-    public FirebaseApp createFirebaseApp() {
-        this.initFirebaseAuthFactory();
-        return this.firebaseAuthFactory.getFirebaseApp();
-    }
+	public FirebaseApp createFirebaseApp() {
+		this.initFirebaseAuthFactory();
+		return this.firebaseAuthFactory.getFirebaseApp();
+	}
 
-    public com.google.firebase.auth.FirebaseAuth createFirebaseAuth() {
-        this.initFirebaseAuthFactory();
-        return this.firebaseAuthFactory.getFirebaseAuth();
-    }
+	public com.google.firebase.auth.FirebaseAuth createFirebaseAuth() {
+		this.initFirebaseAuthFactory();
+		return this.firebaseAuthFactory.getFirebaseAuth();
+	}
 
-    public FirebaseDatabase createFirebaseDatabase() {
-        this.initFirebaseAuthFactory();
-        return this.firebaseAuthFactory.getFirebaseDatabase();
-    }
+	public FirebaseDatabase createFirebaseDatabase() {
+		this.initFirebaseAuthFactory();
+		return this.firebaseAuthFactory.getFirebaseDatabase();
+	}
 
-    private void initFirebaseAuthFactory() {
-        if (this.firebaseAuthFactory == null) {
-            this.firebaseAuthFactory = new FirebaseAuth(this.databaseUrl, this.firebaseConfig);
-        }
-    }
+	private void initFirebaseAuthFactory() {
+		if (this.firebaseAuthFactory == null) {
+			this.firebaseAuthFactory = new FirebaseAuth(this.databaseUrl, this.firebaseConfig);
+		}
+	}
 
-    @JsonProperty
-    public String getDatabaseUrl() {
-        return this.databaseUrl;
-    }
+	@JsonProperty
+	public String getDatabaseUrl() {
+		return this.databaseUrl;
+	}
 
-    @JsonProperty
-    public void setDatabaseUrl(String databaseUrl) {
-        this.databaseUrl = databaseUrl;
-    }
+	@JsonProperty
+	public void setDatabaseUrl(String databaseUrl) {
+		this.databaseUrl = databaseUrl;
+	}
 
-    @JsonProperty
-    public String getFirebaseConfig() {
-        return this.firebaseConfig;
-    }
+	@JsonProperty
+	public String getFirebaseConfig() {
+		return this.firebaseConfig;
+	}
 
-    @JsonProperty
-    public void setFirebaseConfig(String firebaseConfig) {
-        this.firebaseConfig = firebaseConfig;
-    }
+	@JsonProperty
+	public void setFirebaseConfig(String firebaseConfig) {
+		this.firebaseConfig = firebaseConfig;
+	}
 }

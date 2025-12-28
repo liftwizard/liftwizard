@@ -35,43 +35,43 @@ import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
 @ConstrainedTo(RuntimeType.SERVER)
 public final class ServerLoggingResponseFilter implements ContainerResponseFilter {
 
-    @Override
-    public void filter(
-        @Nonnull ContainerRequestContext requestContext,
-        @Nonnull ContainerResponseContext responseContext
-    ) throws IOException {
-        StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty(
-            "structuredArguments"
-        );
+	@Override
+	public void filter(
+		@Nonnull ContainerRequestContext requestContext,
+		@Nonnull ContainerResponseContext responseContext
+	) throws IOException {
+		StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty(
+			"structuredArguments"
+		);
 
-        if (structuredArguments.getResponse() == null) {
-            throw new IllegalStateException();
-        }
+		if (structuredArguments.getResponse() == null) {
+			throw new IllegalStateException();
+		}
 
-        StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
+		StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 
-        StatusType statusInfo = responseContext.getStatusInfo();
-        http.getStatus().setStatus(statusInfo.toEnum());
-        http.getStatus().setFamily(statusInfo.getFamily());
-        http.getStatus().setPhrase(statusInfo.getReasonPhrase());
+		StatusType statusInfo = responseContext.getStatusInfo();
+		http.getStatus().setStatus(statusInfo.toEnum());
+		http.getStatus().setFamily(statusInfo.getFamily());
+		http.getStatus().setPhrase(statusInfo.getReasonPhrase());
 
-        this.getTypeName(responseContext).ifPresent(http::setEntityType);
-    }
+		this.getTypeName(responseContext).ifPresent(http::setEntityType);
+	}
 
-    private Optional<String> getTypeName(@Nonnull ContainerResponseContext responseContext) {
-        Type entityType = responseContext.getEntityType();
-        if (entityType == null) {
-            return Optional.empty();
-        }
+	private Optional<String> getTypeName(@Nonnull ContainerResponseContext responseContext) {
+		Type entityType = responseContext.getEntityType();
+		if (entityType == null) {
+			return Optional.empty();
+		}
 
-        if (entityType instanceof Class<?> aClass) {
-            return Optional.of(aClass.getCanonicalName());
-        }
+		if (entityType instanceof Class<?> aClass) {
+			return Optional.of(aClass.getCanonicalName());
+		}
 
-        if (entityType instanceof ParameterizedType parameterizedType) {
-            return Optional.ofNullable(parameterizedType.getTypeName());
-        }
+		if (entityType instanceof ParameterizedType parameterizedType) {
+			return Optional.ofNullable(parameterizedType.getTypeName());
+		}
 
-        throw new AssertionError(entityType.getTypeName());
-    }
+		throw new AssertionError(entityType.getTypeName());
+	}
 }

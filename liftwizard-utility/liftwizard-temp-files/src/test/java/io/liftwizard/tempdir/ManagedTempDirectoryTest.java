@@ -30,60 +30,60 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(LogMarkerTestExtension.class)
 class ManagedTempDirectoryTest {
 
-    @Test
-    void createTempDirectory_shouldCreateDirectoryThatExistsAndIsWritable() throws IOException {
-        Path tempDir = ManagedTempDirectory.createTempDirectory("test-prefix");
+	@Test
+	void createTempDirectory_shouldCreateDirectoryThatExistsAndIsWritable() throws IOException {
+		Path tempDir = ManagedTempDirectory.createTempDirectory("test-prefix");
 
-        assertThat(tempDir).exists().isDirectory();
-        assertThat(tempDir.toFile()).canWrite();
-        assertThat(tempDir.getFileName().toString()).startsWith("test-prefix");
+		assertThat(tempDir).exists().isDirectory();
+		assertThat(tempDir.toFile()).canWrite();
+		assertThat(tempDir.getFileName().toString()).startsWith("test-prefix");
 
-        RecursiveDirectoryDeleter.deleteRecursively(tempDir);
-    }
+		RecursiveDirectoryDeleter.deleteRecursively(tempDir);
+	}
 
-    @Test
-    void create_shouldReturnManagedInstanceWithAccessiblePath() throws IOException {
-        try (ManagedTempDirectory managedDir = ManagedTempDirectory.create("managed-test")) {
-            Path tempDir = managedDir.getPath();
+	@Test
+	void create_shouldReturnManagedInstanceWithAccessiblePath() throws IOException {
+		try (ManagedTempDirectory managedDir = ManagedTempDirectory.create("managed-test")) {
+			Path tempDir = managedDir.getPath();
 
-            assertThat(tempDir).exists().isDirectory();
-            assertThat(tempDir.getFileName().toString()).startsWith("managed-test");
+			assertThat(tempDir).exists().isDirectory();
+			assertThat(tempDir.getFileName().toString()).startsWith("managed-test");
 
-            Path testFile = tempDir.resolve("test-file.txt");
-            Files.write(testFile, "test content".getBytes(StandardCharsets.UTF_8));
-            assertThat(testFile).exists();
-        }
-    }
+			Path testFile = tempDir.resolve("test-file.txt");
+			Files.write(testFile, "test content".getBytes(StandardCharsets.UTF_8));
+			assertThat(testFile).exists();
+		}
+	}
 
-    @Test
-    void close_shouldDeleteDirectoryAndContents() throws IOException {
-        ManagedTempDirectory managedDir = ManagedTempDirectory.create("close-test");
-        Path tempDir = managedDir.getPath();
-        Path testFile = tempDir.resolve("test-file.txt");
-        Files.write(testFile, "test content".getBytes(StandardCharsets.UTF_8));
+	@Test
+	void close_shouldDeleteDirectoryAndContents() throws IOException {
+		ManagedTempDirectory managedDir = ManagedTempDirectory.create("close-test");
+		Path tempDir = managedDir.getPath();
+		Path testFile = tempDir.resolve("test-file.txt");
+		Files.write(testFile, "test content".getBytes(StandardCharsets.UTF_8));
 
-        managedDir.close();
+		managedDir.close();
 
-        assertThat(tempDir).doesNotExist();
-        assertThat(testFile).doesNotExist();
-    }
+		assertThat(tempDir).doesNotExist();
+		assertThat(testFile).doesNotExist();
+	}
 
-    @Test
-    void close_shouldBeIdempotent() throws IOException {
-        ManagedTempDirectory managedDir = ManagedTempDirectory.create("idempotent-test");
+	@Test
+	void close_shouldBeIdempotent() throws IOException {
+		ManagedTempDirectory managedDir = ManagedTempDirectory.create("idempotent-test");
 
-        managedDir.close();
-        // Second close should not throw
-        managedDir.close();
-    }
+		managedDir.close();
+		// Second close should not throw
+		managedDir.close();
+	}
 
-    @Test
-    void tryClose_shouldReturnTrueOnSuccess() throws IOException {
-        ManagedTempDirectory managedDir = ManagedTempDirectory.create("try-close-test");
+	@Test
+	void tryClose_shouldReturnTrueOnSuccess() throws IOException {
+		ManagedTempDirectory managedDir = ManagedTempDirectory.create("try-close-test");
 
-        boolean result = managedDir.tryClose();
+		boolean result = managedDir.tryClose();
 
-        assertThat(result).isTrue();
-        assertThat(managedDir.getPath()).doesNotExist();
-    }
+		assertThat(result).isTrue();
+		assertThat(managedDir.getPath()).doesNotExist();
+	}
 }

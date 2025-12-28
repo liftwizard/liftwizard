@@ -46,47 +46,47 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ObjectMapperBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ObjectMapperBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ObjectMapperBundle.class);
 
-    @Override
-    public int getPriority() {
-        return -10;
-    }
+	@Override
+	public int getPriority() {
+		return -10;
+	}
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        ObjectMapperFactoryProvider objectMapperFactoryProvider = this.safeCastConfiguration(
-            ObjectMapperFactoryProvider.class,
-            configuration
-        );
-        ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
-        ObjectMapper objectMapper = environment.getObjectMapper();
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		ObjectMapperFactoryProvider objectMapperFactoryProvider = this.safeCastConfiguration(
+			ObjectMapperFactoryProvider.class,
+			configuration
+		);
+		ObjectMapperFactory objectMapperFactory = objectMapperFactoryProvider.getObjectMapperFactory();
+		ObjectMapper objectMapper = environment.getObjectMapper();
 
-        this.configureObjectMapper(objectMapperFactory, objectMapper);
-    }
+		this.configureObjectMapper(objectMapperFactory, objectMapper);
+	}
 
-    public ObjectMapper configureObjectMapper() {
-        return this.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
-    }
+	public ObjectMapper configureObjectMapper() {
+		return this.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
+	}
 
-    public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper) {
-        if (!objectMapperFactory.isEnabled()) {
-            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
-            return objectMapper;
-        }
+	public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper) {
+		if (!objectMapperFactory.isEnabled()) {
+			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			return objectMapper;
+		}
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        ObjectMapperConfig.configure(
-            objectMapper,
-            objectMapperFactory.isPrettyPrint(),
-            objectMapperFactory.getFailOnUnknownProperties(),
-            objectMapperFactory.getSerializationInclusion(),
-            objectMapperFactory.getDefaultNullSetterInfo()
-        );
+		ObjectMapperConfig.configure(
+			objectMapper,
+			objectMapperFactory.isPrettyPrint(),
+			objectMapperFactory.getFailOnUnknownProperties(),
+			objectMapperFactory.getSerializationInclusion(),
+			objectMapperFactory.getDefaultNullSetterInfo()
+		);
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 
-        return objectMapper;
-    }
+		return objectMapper;
+	}
 }

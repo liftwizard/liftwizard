@@ -23,21 +23,21 @@ import org.eclipse.collections.api.map.MapIterable;
 
 public class StructuredArgumentsParameters {
 
-    private final MapIterable<String, String> query;
-    private final MapIterable<String, String> path;
+	private final MapIterable<String, String> query;
+	private final MapIterable<String, String> path;
 
-    public StructuredArgumentsParameters(MapIterable<String, String> query, MapIterable<String, String> path) {
-        this.query = Objects.requireNonNull(query);
-        this.path = Objects.requireNonNull(path);
-    }
+	public StructuredArgumentsParameters(MapIterable<String, String> query, MapIterable<String, String> path) {
+		this.query = Objects.requireNonNull(query);
+		this.path = Objects.requireNonNull(path);
+	}
 
-    @JsonProperty
-    public MapIterable<String, String> getQuery() {
-        return this.query;
-    }
+	@JsonProperty
+	public MapIterable<String, String> getQuery() {
+		return this.query;
+	}
 
-    @JsonProperty
-    public MapIterable<String, String> getPath() {
-        return this.path;
-    }
+	@JsonProperty
+	public MapIterable<String, String> getPath() {
+		return this.path;
+	}
 }

@@ -26,17 +26,17 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public class LiftwizardGraphQLException extends RuntimeException implements GraphQLError {
 
-    public LiftwizardGraphQLException(String message, ImmutableList<String> context, RuntimeException e) {
-        super("%s in %s".formatted(message, context.makeString(".")), e);
-    }
+	public LiftwizardGraphQLException(String message, ImmutableList<String> context, RuntimeException e) {
+		super("%s in %s".formatted(message, context.makeString(".")), e);
+	}
 
-    @Override
-    public List<SourceLocation> getLocations() {
-        return null;
-    }
+	@Override
+	public List<SourceLocation> getLocations() {
+		return null;
+	}
 
-    @Override
-    public ErrorClassification getErrorType() {
-        return ErrorType.DataFetchingException;
-    }
+	@Override
+	public ErrorClassification getErrorType() {
+		return ErrorType.DataFetchingException;
+	}
 }

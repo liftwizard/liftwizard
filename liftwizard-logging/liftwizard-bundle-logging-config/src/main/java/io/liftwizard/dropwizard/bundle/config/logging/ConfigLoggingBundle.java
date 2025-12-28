@@ -43,157 +43,157 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ConfigLoggingBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoggingBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoggingBundle.class);
 
-    @Override
-    public int getPriority() {
-        return -9;
-    }
+	@Override
+	public int getPriority() {
+		return -9;
+	}
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-        throws JsonProcessingException {
-        ConfigLoggingFactoryProvider configLoggingFactoryProvider = this.safeCastConfiguration(
-            ConfigLoggingFactoryProvider.class,
-            configuration
-        );
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+		throws JsonProcessingException {
+		ConfigLoggingFactoryProvider configLoggingFactoryProvider = this.safeCastConfiguration(
+			ConfigLoggingFactoryProvider.class,
+			configuration
+		);
 
-        EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
-        if (!configLoggingFactory.isEnabled()) {
-            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
-            return;
-        }
+		EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
+		if (!configLoggingFactory.isEnabled()) {
+			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			return;
+		}
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        ConfigLoggingBundle.logConfiguration(configuration, environment.getObjectMapper());
+		ConfigLoggingBundle.logConfiguration(configuration, environment.getObjectMapper());
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 
-    private static void logConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
-        throws JsonProcessingException {
-        String fullConfigurationString = objectMapper.writeValueAsString(configuration);
-        LOGGER.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
+	private static void logConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
+		throws JsonProcessingException {
+		String fullConfigurationString = objectMapper.writeValueAsString(configuration);
+		LOGGER.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
 
-        Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration).flatMap(
-            ConfigLoggingBundle::getDefaultConfiguration
-        );
-        if (maybeDefaultConfiguration.isEmpty()) {
-            return;
-        }
-        Object defaultConfiguration = maybeDefaultConfiguration.get();
+		Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration).flatMap(
+			ConfigLoggingBundle::getDefaultConfiguration
+		);
+		if (maybeDefaultConfiguration.isEmpty()) {
+			return;
+		}
+		Object defaultConfiguration = maybeDefaultConfiguration.get();
 
-        ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
-        nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
+		ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
+		nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
 
-        ObjectNode configurationJsonNode = nonDefaultObjectMapper.valueToTree(configuration);
-        ObjectNode defaultConfigurationJsonNode = nonDefaultObjectMapper.valueToTree(defaultConfiguration);
+		ObjectNode configurationJsonNode = nonDefaultObjectMapper.valueToTree(configuration);
+		ObjectNode defaultConfigurationJsonNode = nonDefaultObjectMapper.valueToTree(defaultConfiguration);
 
-        subtractObjectNode(configurationJsonNode, defaultConfigurationJsonNode);
-        removeEmptyNodes(configurationJsonNode);
+		subtractObjectNode(configurationJsonNode, defaultConfigurationJsonNode);
+		removeEmptyNodes(configurationJsonNode);
 
-        String configurationString = objectMapper.writeValueAsString(configurationJsonNode);
-        LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
-    }
+		String configurationString = objectMapper.writeValueAsString(configurationJsonNode);
+		LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
+	}
 
-    private static void removeEmptyNodes(@Nonnull ObjectNode node) {
-        node.forEach(property -> {
-            if (property.isObject()) {
-                removeEmptyNodes((ObjectNode) property);
-            } else if (property.isArray()) {
-                property
-                    .elements()
-                    .forEachRemaining(element -> {
-                        if (element.isObject()) {
-                            removeEmptyNodes((ObjectNode) element);
-                        }
-                    });
-            }
-        });
+	private static void removeEmptyNodes(@Nonnull ObjectNode node) {
+		node.forEach((property) -> {
+			if (property.isObject()) {
+				removeEmptyNodes((ObjectNode) property);
+			} else if (property.isArray()) {
+				property
+					.elements()
+					.forEachRemaining((element) -> {
+						if (element.isObject()) {
+							removeEmptyNodes((ObjectNode) element);
+						}
+					});
+			}
+		});
 
-        Iterator<Entry<String, JsonNode>> properties = node.fields();
-        properties.forEachRemaining(property -> {
-            if (property.getValue().isArray()) {
-                Iterator<JsonNode> elements = property.getValue().elements();
-                removeEmptyJsonNodes(elements);
-            }
-        });
+		Iterator<Entry<String, JsonNode>> properties = node.fields();
+		properties.forEachRemaining((property) -> {
+			if (property.getValue().isArray()) {
+				Iterator<JsonNode> elements = property.getValue().elements();
+				removeEmptyJsonNodes(elements);
+			}
+		});
 
-        Iterator<Entry<String, JsonNode>> fieldIterator = node.fields();
-        while (fieldIterator.hasNext()) {
-            Entry<String, JsonNode> property = fieldIterator.next();
-            if ((property.getValue().isObject() || property.getValue().isArray()) && property.getValue().isEmpty()) {
-                fieldIterator.remove();
-            }
-        }
-    }
+		Iterator<Entry<String, JsonNode>> fieldIterator = node.fields();
+		while (fieldIterator.hasNext()) {
+			Entry<String, JsonNode> property = fieldIterator.next();
+			if ((property.getValue().isObject() || property.getValue().isArray()) && property.getValue().isEmpty()) {
+				fieldIterator.remove();
+			}
+		}
+	}
 
-    private static void removeEmptyJsonNodes(Iterator<JsonNode> elements) {
-        while (elements.hasNext()) {
-            JsonNode element = elements.next();
-            if (element.isObject() && element.isEmpty()) {
-                elements.remove();
-            }
-        }
-    }
+	private static void removeEmptyJsonNodes(Iterator<JsonNode> elements) {
+		while (elements.hasNext()) {
+			JsonNode element = elements.next();
+			if (element.isObject() && element.isEmpty()) {
+				elements.remove();
+			}
+		}
+	}
 
-    private static void subtractObjectNode(ObjectNode mutableObjectNode, ObjectNode substractObjectNode) {
-        substractObjectNode
-            .fields()
-            .forEachRemaining(subtractProperty -> {
-                String key = subtractProperty.getKey();
-                JsonNode value = subtractProperty.getValue();
-                if (!mutableObjectNode.has(key)) {
-                    return;
-                }
+	private static void subtractObjectNode(ObjectNode mutableObjectNode, ObjectNode substractObjectNode) {
+		substractObjectNode
+			.fields()
+			.forEachRemaining((subtractProperty) -> {
+				String key = subtractProperty.getKey();
+				JsonNode value = subtractProperty.getValue();
+				if (!mutableObjectNode.has(key)) {
+					return;
+				}
 
-                subtractObjectNode(mutableObjectNode, key, value);
-            });
-    }
+				subtractObjectNode(mutableObjectNode, key, value);
+			});
+	}
 
-    private static void subtractObjectNode(ObjectNode mutableObjectNode, String key, JsonNode value) {
-        JsonNode mutableValue = mutableObjectNode.get(key);
-        if (mutableValue.isObject() && value.isObject()) {
-            subtractObjectNode((ObjectNode) mutableValue, (ObjectNode) value);
-        } else if (mutableValue.isArray() && value.isArray()) {
-            Iterator<JsonNode> mutableElements = mutableValue.elements();
-            Iterator<JsonNode> elements = value.elements();
-            while (mutableElements.hasNext() && elements.hasNext()) {
-                JsonNode mutableElement = mutableElements.next();
-                JsonNode element = elements.next();
-                if (mutableElement.isObject() && element.isObject()) {
-                    subtractObjectNode((ObjectNode) mutableElement, (ObjectNode) element);
-                }
-            }
-        } else if (mutableValue.equals(value)) {
-            mutableObjectNode.remove(key);
-        }
-    }
+	private static void subtractObjectNode(ObjectNode mutableObjectNode, String key, JsonNode value) {
+		JsonNode mutableValue = mutableObjectNode.get(key);
+		if (mutableValue.isObject() && value.isObject()) {
+			subtractObjectNode((ObjectNode) mutableValue, (ObjectNode) value);
+		} else if (mutableValue.isArray() && value.isArray()) {
+			Iterator<JsonNode> mutableElements = mutableValue.elements();
+			Iterator<JsonNode> elements = value.elements();
+			while (mutableElements.hasNext() && elements.hasNext()) {
+				JsonNode mutableElement = mutableElements.next();
+				JsonNode element = elements.next();
+				if (mutableElement.isObject() && element.isObject()) {
+					subtractObjectNode((ObjectNode) mutableElement, (ObjectNode) element);
+				}
+			}
+		} else if (mutableValue.equals(value)) {
+			mutableObjectNode.remove(key);
+		}
+	}
 
-    @Nonnull
-    private static Optional<Object> getDefaultConfiguration(@Nonnull Constructor<?> constructor) {
-        try {
-            return Optional.of(constructor.newInstance());
-        } catch (ReflectiveOperationException e) {
-            LOGGER.debug(
-                "Could not log Default Dropwizard configuration because {} is not instantiable through its no-arg constructor.",
-                constructor.getDeclaringClass().getCanonicalName()
-            );
-            return Optional.empty();
-        }
-    }
+	@Nonnull
+	private static Optional<Object> getDefaultConfiguration(@Nonnull Constructor<?> constructor) {
+		try {
+			return Optional.of(constructor.newInstance());
+		} catch (ReflectiveOperationException e) {
+			LOGGER.debug(
+				"Could not log Default Dropwizard configuration because {} is not instantiable through its no-arg constructor.",
+				constructor.getDeclaringClass().getCanonicalName()
+			);
+			return Optional.empty();
+		}
+	}
 
-    @Nonnull
-    private static Optional<Constructor<?>> getConstructor(@Nonnull Object configuration) {
-        try {
-            return Optional.of(configuration.getClass().getConstructor());
-        } catch (NoSuchMethodException e) {
-            LOGGER.debug(
-                "Could not log Default Dropwizard configuration because {} does not implement a no-arg constructor.",
-                configuration.getClass().getCanonicalName()
-            );
-            return Optional.empty();
-        }
-    }
+	@Nonnull
+	private static Optional<Constructor<?>> getConstructor(@Nonnull Object configuration) {
+		try {
+			return Optional.of(configuration.getClass().getConstructor());
+		} catch (NoSuchMethodException e) {
+			LOGGER.debug(
+				"Could not log Default Dropwizard configuration because {} does not implement a no-arg constructor.",
+				configuration.getClass().getCanonicalName()
+			);
+			return Optional.empty();
+		}
+	}
 }

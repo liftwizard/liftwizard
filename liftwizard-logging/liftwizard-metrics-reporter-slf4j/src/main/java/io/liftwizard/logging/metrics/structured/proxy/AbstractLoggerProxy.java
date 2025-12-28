@@ -23,13 +23,13 @@ import org.slf4j.Marker;
 
 public abstract class AbstractLoggerProxy {
 
-    protected final Logger logger;
+	protected final Logger logger;
 
-    protected AbstractLoggerProxy(Logger logger) {
-        this.logger = Objects.requireNonNull(logger);
-    }
+	protected AbstractLoggerProxy(Logger logger) {
+		this.logger = Objects.requireNonNull(logger);
+	}
 
-    public abstract void log(Marker marker, String message, Object structuredObject);
+	public abstract void log(Marker marker, String message, Object structuredObject);
 
-    public abstract boolean isEnabled(Marker marker);
+	public abstract boolean isEnabled(Marker marker);
 }

@@ -1,4 +1,4 @@
 {
-  type: "seed",
-  seed: "example seed",
+	type: "seed",
+	seed: "example seed",
 }

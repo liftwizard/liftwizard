@@ -17,5 +17,5 @@
 package io.liftwizard.dropwizard.configuration.datasource;
 
 public interface NamedDataSourceProvider {
-    NamedDataSourcesFactory getNamedDataSourcesFactory();
+	NamedDataSourcesFactory getNamedDataSourcesFactory();
 }

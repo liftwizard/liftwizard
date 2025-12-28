@@ -27,24 +27,24 @@ import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingV
 
 public class UnaryOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation> {
 
-    private final Attribute attribute;
+	private final Attribute attribute;
 
-    public UnaryOperatorVisitor(Attribute attribute) {
-        this.attribute = Objects.requireNonNull(attribute);
-    }
+	public UnaryOperatorVisitor(Attribute attribute) {
+		this.attribute = Objects.requireNonNull(attribute);
+	}
 
-    @Override
-    public Operation visitUnaryOperator(UnaryOperatorContext ctx) {
-        return this.visitChildren(ctx);
-    }
+	@Override
+	public Operation visitUnaryOperator(UnaryOperatorContext ctx) {
+		return this.visitChildren(ctx);
+	}
 
-    @Override
-    public Operation visitOperatorIsNull(OperatorIsNullContext ctx) {
-        return this.attribute.isNull();
-    }
+	@Override
+	public Operation visitOperatorIsNull(OperatorIsNullContext ctx) {
+		return this.attribute.isNull();
+	}
 
-    @Override
-    public Operation visitOperatorIsNotNull(OperatorIsNotNullContext ctx) {
-        return this.attribute.isNotNull();
-    }
+	@Override
+	public Operation visitOperatorIsNotNull(OperatorIsNotNullContext ctx) {
+		return this.attribute.isNotNull();
+	}
 }

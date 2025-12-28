@@ -35,31 +35,31 @@ import org.slf4j.MDC;
  */
 public class LiftwizardAsyncDataFetcher<T> implements DataFetcher<CompletableFuture<T>> {
 
-    private final DataFetcher<T> wrappedDataFetcher;
-    private final Executor executor;
+	private final DataFetcher<T> wrappedDataFetcher;
+	private final Executor executor;
 
-    public LiftwizardAsyncDataFetcher(DataFetcher<T> wrappedDataFetcher, Executor executor) {
-        this.wrappedDataFetcher = Objects.requireNonNull(wrappedDataFetcher);
-        this.executor = Objects.requireNonNull(executor);
-    }
+	public LiftwizardAsyncDataFetcher(DataFetcher<T> wrappedDataFetcher, Executor executor) {
+		this.wrappedDataFetcher = Objects.requireNonNull(wrappedDataFetcher);
+		this.executor = Objects.requireNonNull(executor);
+	}
 
-    public static <T> LiftwizardAsyncDataFetcher<T> async(DataFetcher<T> wrappedDataFetcher, Executor executor) {
-        return new LiftwizardAsyncDataFetcher<>(wrappedDataFetcher, executor);
-    }
+	public static <T> LiftwizardAsyncDataFetcher<T> async(DataFetcher<T> wrappedDataFetcher, Executor executor) {
+		return new LiftwizardAsyncDataFetcher<>(wrappedDataFetcher, executor);
+	}
 
-    public DataFetcher<T> getWrappedDataFetcher() {
-        return this.wrappedDataFetcher;
-    }
+	public DataFetcher<T> getWrappedDataFetcher() {
+		return this.wrappedDataFetcher;
+	}
 
-    public Executor getExecutor() {
-        return this.executor;
-    }
+	public Executor getExecutor() {
+		return this.executor;
+	}
 
-    @Override
-    public CompletableFuture<T> get(DataFetchingEnvironment environment) {
-        return CompletableFuture.supplyAsync(
-            new AsyncDataSupplier<>(this.wrappedDataFetcher, environment),
-            this.executor
-        );
-    }
+	@Override
+	public CompletableFuture<T> get(DataFetchingEnvironment environment) {
+		return CompletableFuture.supplyAsync(
+			new AsyncDataSupplier<>(this.wrappedDataFetcher, environment),
+			this.executor
+		);
+	}
 }

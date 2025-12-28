@@ -24,55 +24,55 @@ import com.fasterxml.jackson.annotation.Nulls;
 
 public class ObjectMapperFactory {
 
-    private boolean enabled = true;
-    // Should usually be false in production
-    private boolean prettyPrint = true;
-    private boolean failOnUnknownProperties = true;
-    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
-    private @NotNull Nulls defaultNullSetterInfo = Nulls.AS_EMPTY;
+	private boolean enabled = true;
+	// Should usually be false in production
+	private boolean prettyPrint = true;
+	private boolean failOnUnknownProperties = true;
+	private @NotNull Include serializationInclusion = Include.NON_ABSENT;
+	private @NotNull Nulls defaultNullSetterInfo = Nulls.AS_EMPTY;
 
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 
-    @JsonProperty
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@JsonProperty
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public boolean isPrettyPrint() {
-        return this.prettyPrint;
-    }
+	public boolean isPrettyPrint() {
+		return this.prettyPrint;
+	}
 
-    @JsonProperty
-    public void setPrettyPrint(boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
-    }
+	@JsonProperty
+	public void setPrettyPrint(boolean prettyPrint) {
+		this.prettyPrint = prettyPrint;
+	}
 
-    public boolean getFailOnUnknownProperties() {
-        return this.failOnUnknownProperties;
-    }
+	public boolean getFailOnUnknownProperties() {
+		return this.failOnUnknownProperties;
+	}
 
-    @JsonProperty
-    public void setFailOnUnknownProperties(boolean failOnUnknownProperties) {
-        this.failOnUnknownProperties = failOnUnknownProperties;
-    }
+	@JsonProperty
+	public void setFailOnUnknownProperties(boolean failOnUnknownProperties) {
+		this.failOnUnknownProperties = failOnUnknownProperties;
+	}
 
-    public Include getSerializationInclusion() {
-        return this.serializationInclusion;
-    }
+	public Include getSerializationInclusion() {
+		return this.serializationInclusion;
+	}
 
-    @JsonProperty
-    public void setSerializationInclusion(Include serializationInclusion) {
-        this.serializationInclusion = serializationInclusion;
-    }
+	@JsonProperty
+	public void setSerializationInclusion(Include serializationInclusion) {
+		this.serializationInclusion = serializationInclusion;
+	}
 
-    public Nulls getDefaultNullSetterInfo() {
-        return this.defaultNullSetterInfo;
-    }
+	public Nulls getDefaultNullSetterInfo() {
+		return this.defaultNullSetterInfo;
+	}
 
-    @JsonProperty
-    public void setDefaultNullSetterInfo(Nulls defaultNullSetterInfo) {
-        this.defaultNullSetterInfo = defaultNullSetterInfo;
-    }
+	@JsonProperty
+	public void setDefaultNullSetterInfo(Nulls defaultNullSetterInfo) {
+		this.defaultNullSetterInfo = defaultNullSetterInfo;
+	}
 }

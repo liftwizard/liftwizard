@@ -41,135 +41,135 @@ import org.slf4j.LoggerFactory;
 
 public class CommonPoolHealthCheck extends HealthCheck {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheck.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheck.class);
 
-    private static final int MAX_STACK_TRACE_DEPTH = 100;
+	private static final int MAX_STACK_TRACE_DEPTH = 100;
 
-    @Nonnull
-    private final ThreadMXBean threads;
+	@Nonnull
+	private final ThreadMXBean threads;
 
-    @Nonnull
-    private final String threadNamePrefix;
+	@Nonnull
+	private final String threadNamePrefix;
 
-    @Nonnull
-    private final Set<State> threadStates;
+	@Nonnull
+	private final Set<State> threadStates;
 
-    @Nonnull
-    private final ImmutableList<Pattern> alwaysAllowedPatterns;
+	@Nonnull
+	private final ImmutableList<Pattern> alwaysAllowedPatterns;
 
-    @Nonnull
-    private final ImmutableList<Pattern> bannedPatterns;
+	@Nonnull
+	private final ImmutableList<Pattern> bannedPatterns;
 
-    public CommonPoolHealthCheck() {
-        this(
-            "ForkJoinPool.commonPool-worker-",
-            Lists.immutable.with(State.RUNNABLE),
-            Lists.immutable.empty(),
-            Lists.immutable.empty()
-        );
-    }
+	public CommonPoolHealthCheck() {
+		this(
+			"ForkJoinPool.commonPool-worker-",
+			Lists.immutable.with(State.RUNNABLE),
+			Lists.immutable.empty(),
+			Lists.immutable.empty()
+		);
+	}
 
-    /**
-     * @param threadNamePrefix      Threads with a name matching this prefix will be checked further. Default is {@code "ForkJoinPool.commonPool-worker-"}
-     * @param threadStates          Unhealthy states. Default is {@code Set.of(State.RUNNABLE)}
-     * @param alwaysAllowedPatterns Patterns that match traces that are allowed to put background tasks into the common pool. For example: com\.github\.benmane\.caffeine\.cache\..*
-     * @param bannedPatterns        Patterns that match traces that are not allowed to put background tasks into the common pool. Can be used to limit the check to your own packages. For example: com\.example\.mycompany\..*  If alwaysAllowedPatterns and bannedPatterns both match, the stack trace is allowed/ignored.
-     */
-    public CommonPoolHealthCheck(
-        @Nonnull String threadNamePrefix,
-        @Nonnull ImmutableList<State> threadStates,
-        @Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
-        @Nonnull ImmutableList<Pattern> bannedPatterns
-    ) {
-        this(
-            ManagementFactory.getThreadMXBean(),
-            threadNamePrefix,
-            threadStates,
-            alwaysAllowedPatterns,
-            bannedPatterns
-        );
-    }
+	/**
+	 * @param threadNamePrefix      Threads with a name matching this prefix will be checked further. Default is {@code "ForkJoinPool.commonPool-worker-"}
+	 * @param threadStates          Unhealthy states. Default is {@code Set.of(State.RUNNABLE)}
+	 * @param alwaysAllowedPatterns Patterns that match traces that are allowed to put background tasks into the common pool. For example: com\.github\.benmane\.caffeine\.cache\..*
+	 * @param bannedPatterns        Patterns that match traces that are not allowed to put background tasks into the common pool. Can be used to limit the check to your own packages. For example: com\.example\.mycompany\..*  If alwaysAllowedPatterns and bannedPatterns both match, the stack trace is allowed/ignored.
+	 */
+	public CommonPoolHealthCheck(
+		@Nonnull String threadNamePrefix,
+		@Nonnull ImmutableList<State> threadStates,
+		@Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
+		@Nonnull ImmutableList<Pattern> bannedPatterns
+	) {
+		this(
+			ManagementFactory.getThreadMXBean(),
+			threadNamePrefix,
+			threadStates,
+			alwaysAllowedPatterns,
+			bannedPatterns
+		);
+	}
 
-    public CommonPoolHealthCheck(
-        @Nonnull ThreadMXBean threads,
-        @Nonnull String threadNamePrefix,
-        @Nonnull ImmutableList<State> threadStates,
-        @Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
-        @Nonnull ImmutableList<Pattern> bannedPatterns
-    ) {
-        this.threads = Objects.requireNonNull(threads);
-        this.threadNamePrefix = Objects.requireNonNull(threadNamePrefix);
-        this.threadStates = new LinkedHashSet<>(threadStates.castToList());
-        this.alwaysAllowedPatterns = Objects.requireNonNull(alwaysAllowedPatterns);
-        this.bannedPatterns = Objects.requireNonNull(bannedPatterns);
-    }
+	public CommonPoolHealthCheck(
+		@Nonnull ThreadMXBean threads,
+		@Nonnull String threadNamePrefix,
+		@Nonnull ImmutableList<State> threadStates,
+		@Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
+		@Nonnull ImmutableList<Pattern> bannedPatterns
+	) {
+		this.threads = Objects.requireNonNull(threads);
+		this.threadNamePrefix = Objects.requireNonNull(threadNamePrefix);
+		this.threadStates = new LinkedHashSet<>(threadStates.castToList());
+		this.alwaysAllowedPatterns = Objects.requireNonNull(alwaysAllowedPatterns);
+		this.bannedPatterns = Objects.requireNonNull(bannedPatterns);
+	}
 
-    @Nonnull
-    @Override
-    protected Result check() {
-        ThreadInfo[] threadInfos = this.threads.getThreadInfo(this.threads.getAllThreadIds(), MAX_STACK_TRACE_DEPTH);
-        List<ThreadInfo> badThreadInfos = Stream.of(threadInfos)
-            .filter(threadInfo -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
-            .filter(threadInfo -> this.threadStates.contains(threadInfo.getThreadState()))
-            .filter(
-                threadInfo ->
-                    this.bannedPatterns.isEmpty()
-                    || this.bannedPatterns.anySatisfy(bannedPattern ->
-                        ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
-                            this::traceMatchesPattern,
-                            bannedPattern
-                        )
-                    )
-            )
-            .filter(threadInfo ->
-                this.alwaysAllowedPatterns.noneSatisfy(alwaysAllowedPattern ->
-                    ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
-                        this::traceMatchesPattern,
-                        alwaysAllowedPattern
-                    )
-                )
-            )
-            .toList();
+	@Nonnull
+	@Override
+	protected Result check() {
+		ThreadInfo[] threadInfos = this.threads.getThreadInfo(this.threads.getAllThreadIds(), MAX_STACK_TRACE_DEPTH);
+		List<ThreadInfo> badThreadInfos = Stream.of(threadInfos)
+			.filter((threadInfo) -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
+			.filter((threadInfo) -> this.threadStates.contains(threadInfo.getThreadState()))
+			.filter(
+				(threadInfo) ->
+					this.bannedPatterns.isEmpty()
+					|| this.bannedPatterns.anySatisfy((bannedPattern) ->
+						ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
+							this::traceMatchesPattern,
+							bannedPattern
+						)
+					)
+			)
+			.filter((threadInfo) ->
+				this.alwaysAllowedPatterns.noneSatisfy((alwaysAllowedPattern) ->
+					ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
+						this::traceMatchesPattern,
+						alwaysAllowedPattern
+					)
+				)
+			)
+			.toList();
 
-        if (badThreadInfos.isEmpty()) {
-            return Result.healthy();
-        }
+		if (badThreadInfos.isEmpty()) {
+			return Result.healthy();
+		}
 
-        MutableList<String> badThreadInfoStrings = Lists.mutable.empty();
+		MutableList<String> badThreadInfoStrings = Lists.mutable.empty();
 
-        for (ThreadInfo badThreadInfo : badThreadInfos) {
-            State threadState = badThreadInfo.getThreadState();
-            String threadName = badThreadInfo.getThreadName();
-            String stackTraceString = this.getStackTraceString(badThreadInfo.getStackTrace());
+		for (ThreadInfo badThreadInfo : badThreadInfos) {
+			State threadState = badThreadInfo.getThreadState();
+			String threadName = badThreadInfo.getThreadName();
+			String stackTraceString = this.getStackTraceString(badThreadInfo.getStackTrace());
 
-            try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
-                mdc.put("threadState", threadState.name());
-                mdc.put("threadName", threadName);
-                mdc.put("stackTrace", stackTraceString);
+			try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
+				mdc.put("threadState", threadState.name());
+				mdc.put("threadName", threadName);
+				mdc.put("stackTrace", stackTraceString);
 
-                String message = "Found thread '%s' in state '%s'%n%s".formatted(
-                    threadName,
-                    threadState,
-                    stackTraceString
-                );
-                badThreadInfoStrings.add(message);
-                LOGGER.warn(message);
-            }
-        }
+				String message = "Found thread '%s' in state '%s'%n%s".formatted(
+					threadName,
+					threadState,
+					stackTraceString
+				);
+				badThreadInfoStrings.add(message);
+				LOGGER.warn(message);
+			}
+		}
 
-        String message = String.join("\n\n", badThreadInfoStrings);
+		String message = String.join("\n\n", badThreadInfoStrings);
 
-        return Result.unhealthy(message);
-    }
+		return Result.unhealthy(message);
+	}
 
-    private boolean traceMatchesPattern(StackTraceElement stackStrace, Pattern bannedPattern) {
-        return bannedPattern.matcher(stackStrace.getClassName() + "." + stackStrace.getMethodName()).matches();
-    }
+	private boolean traceMatchesPattern(StackTraceElement stackStrace, Pattern bannedPattern) {
+		return bannedPattern.matcher(stackStrace.getClassName() + "." + stackStrace.getMethodName()).matches();
+	}
 
-    @Nonnull
-    private String getStackTraceString(StackTraceElement[] stackTrace) {
-        return Stream.of(stackTrace)
-            .map(StackTraceElement::toString)
-            .collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));
-    }
+	@Nonnull
+	private String getStackTraceString(StackTraceElement[] stackTrace) {
+		return Stream.of(stackTrace)
+			.map(StackTraceElement::toString)
+			.collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));
+	}
 }

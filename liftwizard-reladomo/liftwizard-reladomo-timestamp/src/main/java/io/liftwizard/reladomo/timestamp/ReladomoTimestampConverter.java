@@ -25,12 +25,12 @@ import javax.annotation.Nonnull;
 
 public final class ReladomoTimestampConverter {
 
-    private ReladomoTimestampConverter() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private ReladomoTimestampConverter() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 
-    @Nonnull
-    public static Timestamp fromInstant(@Nonnull Instant instant) {
-        return Timestamp.valueOf(LocalDateTime.ofInstant(instant, ZoneOffset.UTC));
-    }
+	@Nonnull
+	public static Timestamp fromInstant(@Nonnull Instant instant) {
+		return Timestamp.valueOf(LocalDateTime.ofInstant(instant, ZoneOffset.UTC));
+	}
 }

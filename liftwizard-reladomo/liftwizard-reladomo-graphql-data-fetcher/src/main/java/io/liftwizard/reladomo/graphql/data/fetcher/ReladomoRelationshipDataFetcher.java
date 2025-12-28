@@ -27,20 +27,20 @@ import graphql.schema.DataFetchingEnvironment;
 
 public class ReladomoRelationshipDataFetcher<Input, T> implements DataFetcher<T> {
 
-    private final DeepRelationshipAttribute<Input, T> relationshipAttribute;
+	private final DeepRelationshipAttribute<Input, T> relationshipAttribute;
 
-    public ReladomoRelationshipDataFetcher(DeepRelationshipAttribute<Input, T> relationshipAttribute) {
-        this.relationshipAttribute = Objects.requireNonNull(relationshipAttribute);
-    }
+	public ReladomoRelationshipDataFetcher(DeepRelationshipAttribute<Input, T> relationshipAttribute) {
+		this.relationshipAttribute = Objects.requireNonNull(relationshipAttribute);
+	}
 
-    @Nullable
-    @Override
-    public T get(@Nonnull DataFetchingEnvironment environment) {
-        Input persistentInstance = environment.getSource();
-        if (persistentInstance == null) {
-            return null;
-        }
+	@Nullable
+	@Override
+	public T get(@Nonnull DataFetchingEnvironment environment) {
+		Input persistentInstance = environment.getSource();
+		if (persistentInstance == null) {
+			return null;
+		}
 
-        return this.relationshipAttribute.valueOf(persistentInstance);
-    }
+		return this.relationshipAttribute.valueOf(persistentInstance);
+	}
 }

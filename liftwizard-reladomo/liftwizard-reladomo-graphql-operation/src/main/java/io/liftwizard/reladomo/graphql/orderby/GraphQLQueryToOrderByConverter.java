@@ -33,71 +33,71 @@ import org.eclipse.collections.api.stack.MutableStack;
 
 public class GraphQLQueryToOrderByConverter {
 
-    private final MutableStack<String> context = Stacks.mutable.empty();
+	private final MutableStack<String> context = Stacks.mutable.empty();
 
-    private final MutableList<OrderBy> result = Lists.mutable.empty();
+	private final MutableList<OrderBy> result = Lists.mutable.empty();
 
-    public static Optional<OrderBy> convertOrderByList(RelatedFinder finder, List<Map<String, ?>> inputOrderBy) {
-        return inputOrderBy
-            .stream()
-            .map(map -> GraphQLQueryToOrderByConverter.convertOrderBy(finder, map))
-            .flatMap(Optional::stream)
-            .reduce(OrderBy::and);
-    }
+	public static Optional<OrderBy> convertOrderByList(RelatedFinder finder, List<Map<String, ?>> inputOrderBy) {
+		return inputOrderBy
+			.stream()
+			.map((map) -> GraphQLQueryToOrderByConverter.convertOrderBy(finder, map))
+			.flatMap(Optional::stream)
+			.reduce(OrderBy::and);
+	}
 
-    private static Optional<OrderBy> convertOrderBy(RelatedFinder finder, Map<String, ?> map) {
-        GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
-        Map<String, ?> attribute = (Map<String, ?>) map.get("attribute");
-        String direction = (String) map.get("direction");
+	private static Optional<OrderBy> convertOrderBy(RelatedFinder finder, Map<String, ?> map) {
+		GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
+		Map<String, ?> attribute = (Map<String, ?>) map.get("attribute");
+		String direction = (String) map.get("direction");
 
-        if (attribute == null) {
-            throw new LiftwizardGraphQLContextException(
-                "Missing attribute in orderBy",
-                converter.context.toImmutableList()
-            );
-        }
+		if (attribute == null) {
+			throw new LiftwizardGraphQLContextException(
+				"Missing attribute in orderBy",
+				converter.context.toImmutableList()
+			);
+		}
 
-        converter.convertAttribute(finder, attribute, direction);
-        return converter.getResult();
-    }
+		converter.convertAttribute(finder, attribute, direction);
+		return converter.getResult();
+	}
 
-    private void convertAttribute(RelatedFinder finder, Map<String, ?> attribute, String direction) {
-        attribute.forEach((key, value) -> {
-            this.context.push(key);
+	private void convertAttribute(RelatedFinder finder, Map<String, ?> attribute, String direction) {
+		attribute.forEach((key, value) -> {
+			this.context.push(key);
 
-            try {
-                this.convertOneAttribute(finder, direction, key, value);
-            } finally {
-                this.context.pop();
-            }
-        });
-    }
+			try {
+				this.convertOneAttribute(finder, direction, key, value);
+			} finally {
+				this.context.pop();
+			}
+		});
+	}
 
-    private void convertOneAttribute(RelatedFinder finder, String direction, String key, Object value) {
-        if (value.equals(Maps.immutable.empty())) {
-            Attribute attributeByName = finder.getAttributeByName(key);
-            if (direction == null || direction.equals("ASCENDING")) {
-                this.result.add(attributeByName.ascendingOrderBy());
-            } else if (direction.equals("DESCENDING")) {
-                this.result.add(attributeByName.descendingOrderBy());
-            } else {
-                throw new LiftwizardGraphQLContextException("Invalid direction: " + direction, this.getContext());
-            }
-            return;
-        }
+	private void convertOneAttribute(RelatedFinder finder, String direction, String key, Object value) {
+		if (value.equals(Maps.immutable.empty())) {
+			Attribute attributeByName = finder.getAttributeByName(key);
+			if (direction == null || direction.equals("ASCENDING")) {
+				this.result.add(attributeByName.ascendingOrderBy());
+			} else if (direction.equals("DESCENDING")) {
+				this.result.add(attributeByName.descendingOrderBy());
+			} else {
+				throw new LiftwizardGraphQLContextException("Invalid direction: " + direction, this.getContext());
+			}
+			return;
+		}
 
-        RelatedFinder relatedFinder = finder.getRelationshipFinderByName(key);
-        GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
-        converter.convertAttribute(relatedFinder, (Map<String, ?>) value, direction);
-        Optional<OrderBy> nestedResult = converter.getResult().stream().reduce(OrderBy::and);
-        nestedResult.ifPresent(this.result::add);
-    }
+		RelatedFinder relatedFinder = finder.getRelationshipFinderByName(key);
+		GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
+		converter.convertAttribute(relatedFinder, (Map<String, ?>) value, direction);
+		Optional<OrderBy> nestedResult = converter.getResult().stream().reduce(OrderBy::and);
+		nestedResult.ifPresent(this.result::add);
+	}
 
-    public Optional<OrderBy> getResult() {
-        return this.result.stream().reduce(OrderBy::and);
-    }
+	public Optional<OrderBy> getResult() {
+		return this.result.stream().reduce(OrderBy::and);
+	}
 
-    private ImmutableList<String> getContext() {
-        return this.context.toList().toReversed().toImmutable();
-    }
+	private ImmutableList<String> getContext() {
+		return this.context.toList().toReversed().toImmutable();
+	}
 }

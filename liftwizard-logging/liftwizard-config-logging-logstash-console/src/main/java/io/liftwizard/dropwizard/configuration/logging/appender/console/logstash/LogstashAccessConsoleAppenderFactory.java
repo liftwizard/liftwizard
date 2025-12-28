@@ -40,72 +40,72 @@ import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashAccessEnc
 @AutoService(AppenderFactory.class)
 public class LogstashAccessConsoleAppenderFactory extends AbstractAppenderFactory<IAccessEvent> {
 
-    @NotNull
-    private ConsoleStream target = ConsoleStream.STDOUT;
+	@NotNull
+	private ConsoleStream target = ConsoleStream.STDOUT;
 
-    @NotNull
-    private LogstashAccessEncoderFactory encoderFactory = new LogstashAccessEncoderFactory();
+	@NotNull
+	private LogstashAccessEncoderFactory encoderFactory = new LogstashAccessEncoderFactory();
 
-    @JsonProperty
-    public ConsoleStream getTarget() {
-        return this.target;
-    }
+	@JsonProperty
+	public ConsoleStream getTarget() {
+		return this.target;
+	}
 
-    @JsonProperty
-    public void setTarget(ConsoleStream target) {
-        this.target = target;
-    }
+	@JsonProperty
+	public void setTarget(ConsoleStream target) {
+		this.target = target;
+	}
 
-    @JsonProperty
-    public LogstashAccessEncoderFactory getEncoder() {
-        return this.encoderFactory;
-    }
+	@JsonProperty
+	public LogstashAccessEncoderFactory getEncoder() {
+		return this.encoderFactory;
+	}
 
-    @JsonProperty
-    public void setEncoder(LogstashAccessEncoderFactory newEncoderFactory) {
-        this.encoderFactory = newEncoderFactory;
-    }
+	@JsonProperty
+	public void setEncoder(LogstashAccessEncoderFactory newEncoderFactory) {
+		this.encoderFactory = newEncoderFactory;
+	}
 
-    @Override
-    public Appender<IAccessEvent> build(
-        LoggerContext context,
-        String applicationName,
-        LayoutFactory<IAccessEvent> layoutFactory,
-        LevelFilterFactory<IAccessEvent> levelFilterFactory,
-        AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory
-    ) {
-        Encoder<IAccessEvent> encoder = this.encoderFactory.build(this.getTimeZone());
-        OutputStreamAppender<IAccessEvent> appender = this.appender(context);
-        appender.setEncoder(encoder);
-        encoder.start();
+	@Override
+	public Appender<IAccessEvent> build(
+		LoggerContext context,
+		String applicationName,
+		LayoutFactory<IAccessEvent> layoutFactory,
+		LevelFilterFactory<IAccessEvent> levelFilterFactory,
+		AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory
+	) {
+		Encoder<IAccessEvent> encoder = this.encoderFactory.build(this.getTimeZone());
+		OutputStreamAppender<IAccessEvent> appender = this.appender(context);
+		appender.setEncoder(encoder);
+		encoder.start();
 
-        appender.addFilter(levelFilterFactory.build(this.threshold));
-        this.getFilterFactories().stream().map(FilterFactory::build).forEach(appender::addFilter);
-        appender.start();
-        return this.wrapAsync(appender, asyncAppenderFactory);
-    }
+		appender.addFilter(levelFilterFactory.build(this.threshold));
+		this.getFilterFactories().stream().map(FilterFactory::build).forEach(appender::addFilter);
+		appender.start();
+		return this.wrapAsync(appender, asyncAppenderFactory);
+	}
 
-    private OutputStreamAppender<IAccessEvent> appender(Context context) {
-        ConsoleAppender<IAccessEvent> appender = new ConsoleAppender<>();
-        appender.setName("console-access-logstash-appender");
-        appender.setContext(context);
-        appender.setTarget(this.target.get());
-        return appender;
-    }
+	private OutputStreamAppender<IAccessEvent> appender(Context context) {
+		ConsoleAppender<IAccessEvent> appender = new ConsoleAppender<>();
+		appender.setName("console-access-logstash-appender");
+		appender.setContext(context);
+		appender.setTarget(this.target.get());
+		return appender;
+	}
 
-    @SuppressWarnings("UnusedDeclaration")
-    public enum ConsoleStream {
-        STDOUT("System.out"),
-        STDERR("System.err");
+	@SuppressWarnings("UnusedDeclaration")
+	public enum ConsoleStream {
+		STDOUT("System.out"),
+		STDERR("System.err");
 
-        private final String value;
+		private final String value;
 
-        ConsoleStream(String value) {
-            this.value = value;
-        }
+		ConsoleStream(String value) {
+			this.value = value;
+		}
 
-        public String get() {
-            return this.value;
-        }
-    }
+		public String get() {
+			return this.value;
+		}
+	}
 }

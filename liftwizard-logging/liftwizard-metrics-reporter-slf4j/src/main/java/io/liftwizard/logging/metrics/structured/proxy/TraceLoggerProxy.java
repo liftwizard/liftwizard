@@ -21,17 +21,17 @@ import org.slf4j.Marker;
 
 public class TraceLoggerProxy extends AbstractLoggerProxy {
 
-    public TraceLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public TraceLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Marker marker, String message, Object structuredObject) {
-        this.logger.trace(marker, message, structuredObject);
-    }
+	@Override
+	public void log(Marker marker, String message, Object structuredObject) {
+		this.logger.trace(marker, message, structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled(Marker marker) {
-        return this.logger.isTraceEnabled(marker);
-    }
+	@Override
+	public boolean isEnabled(Marker marker) {
+		return this.logger.isTraceEnabled(marker);
+	}
 }

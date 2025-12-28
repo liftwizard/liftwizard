@@ -20,4 +20,4 @@ name: io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectio
 displayName: Eclipse Collections adoption recipes with potential semantic changes
 description: Collection of recipes that help adopt Eclipse Collections patterns but may change program semantics. These recipes should be applied with careful review as they may change behavior when collections contain null values.
 recipeList:
-  - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.ECDetectToSatisfiesRecipes
+    - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.ECDetectToSatisfiesRecipes

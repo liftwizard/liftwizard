@@ -40,42 +40,42 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ConnectionManagerFactoryTest {
 
-    @RegisterExtension
-    private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
+	@RegisterExtension
+	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
-    private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator validator = Validators.newValidator();
+	private final ObjectMapper objectMapper = newObjectMapper();
+	private final Validator validator = Validators.newValidator();
 
-    private final JsonConfigurationFactory<ConnectionManagerFactory> factory = new JsonConfigurationFactory<>(
-        ConnectionManagerFactory.class,
-        this.validator,
-        this.objectMapper,
-        "dw"
-    );
+	private final JsonConfigurationFactory<ConnectionManagerFactory> factory = new JsonConfigurationFactory<>(
+		ConnectionManagerFactory.class,
+		this.validator,
+		this.objectMapper,
+		"dw"
+	);
 
-    @Test
-    void createSourcelessConnectionManager() throws Exception {
-        ConnectionManagerFactory connectionManagerFactory = this.factory.build(
-            new ResourceConfigurationSourceProvider(),
-            "config-test.json5"
-        );
+	@Test
+	void createSourcelessConnectionManager() throws Exception {
+		ConnectionManagerFactory connectionManagerFactory = this.factory.build(
+			new ResourceConfigurationSourceProvider(),
+			"config-test.json5"
+		);
 
-        PooledDataSourceFactory dataSourceFactory = new DataSourceFactory();
-        ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
+		PooledDataSourceFactory dataSourceFactory = new DataSourceFactory();
+		ManagedDataSource managedDataSource = dataSourceFactory.build(new MetricRegistry(), "test");
 
-        SourcelessConnectionManager sourcelessConnectionManager =
-            connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);
+		SourcelessConnectionManager sourcelessConnectionManager =
+			connectionManagerFactory.createSourcelessConnectionManager(managedDataSource);
 
-        assertThat(sourcelessConnectionManager.getDatabaseIdentifier()).isEqualTo("schemaName");
-        assertThat(sourcelessConnectionManager.getDatabaseTimeZone()).isEqualTo(
-            TimeZone.getTimeZone("America/New_York")
-        );
-        assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(GenericDatabaseType.getInstance());
-    }
+		assertThat(sourcelessConnectionManager.getDatabaseIdentifier()).isEqualTo("schemaName");
+		assertThat(sourcelessConnectionManager.getDatabaseTimeZone()).isEqualTo(
+			TimeZone.getTimeZone("America/New_York")
+		);
+		assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(GenericDatabaseType.getInstance());
+	}
 
-    private static ObjectMapper newObjectMapper() {
-        ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper);
-        return objectMapper;
-    }
+	private static ObjectMapper newObjectMapper() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		ObjectMapperConfig.configure(objectMapper);
+		return objectMapper;
+	}
 }

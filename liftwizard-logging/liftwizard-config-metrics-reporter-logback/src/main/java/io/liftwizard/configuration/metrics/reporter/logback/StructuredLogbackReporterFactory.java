@@ -29,8 +29,8 @@ import net.logstash.logback.argument.StructuredArguments;
 @AutoService(ReporterFactory.class)
 public class StructuredLogbackReporterFactory extends StructuredSlf4jReporterFactory {
 
-    @Override
-    protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
-        return StructuredArguments::entries;
-    }
+	@Override
+	protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
+		return StructuredArguments::entries;
+	}
 }

@@ -36,70 +36,70 @@ import liquibase.resource.ResourceAccessor;
 
 public class LiquibaseDropAllManaged implements Managed {
 
-    private final ManagedDataSource dataSource;
+	private final ManagedDataSource dataSource;
 
-    @Nullable
-    private final String catalogName;
+	@Nullable
+	private final String catalogName;
 
-    @Nullable
-    private final String schemaName;
+	@Nullable
+	private final String schemaName;
 
-    private final String migrationFile;
-    private final MigrationFileLocation migrationFileLocation;
+	private final String migrationFile;
+	private final MigrationFileLocation migrationFileLocation;
 
-    public LiquibaseDropAllManaged(
-        ManagedDataSource dataSource,
-        String catalogName,
-        String schemaName,
-        String migrationFile,
-        MigrationFileLocation migrationFileLocation
-    ) {
-        this.dataSource = Objects.requireNonNull(dataSource);
-        this.catalogName = catalogName;
-        this.schemaName = schemaName;
-        this.migrationFile = Objects.requireNonNull(migrationFile);
-        this.migrationFileLocation = Objects.requireNonNull(migrationFileLocation);
-    }
+	public LiquibaseDropAllManaged(
+		ManagedDataSource dataSource,
+		String catalogName,
+		String schemaName,
+		String migrationFile,
+		MigrationFileLocation migrationFileLocation
+	) {
+		this.dataSource = Objects.requireNonNull(dataSource);
+		this.catalogName = catalogName;
+		this.schemaName = schemaName;
+		this.migrationFile = Objects.requireNonNull(migrationFile);
+		this.migrationFileLocation = Objects.requireNonNull(migrationFileLocation);
+	}
 
-    @Override
-    public void start() {}
+	@Override
+	public void start() {}
 
-    @Override
-    public void stop() {
-        try (CloseableLiquibase liquibase = this.openLiquibase()) {
-            liquibase.dropAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	public void stop() {
+		try (CloseableLiquibase liquibase = this.openLiquibase()) {
+			liquibase.dropAll();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    private CloseableLiquibase openLiquibase() throws SQLException, LiquibaseException {
-        Database database = this.createDatabase();
-        ResourceAccessor resourceAccessor = this.getResourceAccessor();
-        return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
-    }
+	private CloseableLiquibase openLiquibase() throws SQLException, LiquibaseException {
+		Database database = this.createDatabase();
+		ResourceAccessor resourceAccessor = this.getResourceAccessor();
+		return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
+	}
 
-    private Database createDatabase() throws SQLException, LiquibaseException {
-        DatabaseConnection connection = new JdbcConnection(this.dataSource.getConnection());
-        Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
+	private Database createDatabase() throws SQLException, LiquibaseException {
+		DatabaseConnection connection = new JdbcConnection(this.dataSource.getConnection());
+		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
-        if (database.supportsCatalogs() && this.catalogName != null) {
-            database.setDefaultCatalogName(this.catalogName);
-            database.setOutputDefaultCatalog(true);
-        }
-        if (database.supportsSchemas() && this.schemaName != null) {
-            database.setDefaultSchemaName(this.schemaName);
-            database.setOutputDefaultSchema(true);
-        }
+		if (database.supportsCatalogs() && this.catalogName != null) {
+			database.setDefaultCatalogName(this.catalogName);
+			database.setOutputDefaultCatalog(true);
+		}
+		if (database.supportsSchemas() && this.schemaName != null) {
+			database.setDefaultSchemaName(this.schemaName);
+			database.setOutputDefaultSchema(true);
+		}
 
-        return database;
-    }
+		return database;
+	}
 
-    @Nonnull
-    private ResourceAccessor getResourceAccessor() {
-        return switch (this.migrationFileLocation) {
-            case CLASSPATH -> new ClassLoaderResourceAccessor();
-            case FILESYSTEM -> new FileSystemResourceAccessor();
-        };
-    }
+	@Nonnull
+	private ResourceAccessor getResourceAccessor() {
+		return switch (this.migrationFileLocation) {
+			case CLASSPATH -> new ClassLoaderResourceAccessor();
+			case FILESYSTEM -> new FileSystemResourceAccessor();
+		};
+	}
 }

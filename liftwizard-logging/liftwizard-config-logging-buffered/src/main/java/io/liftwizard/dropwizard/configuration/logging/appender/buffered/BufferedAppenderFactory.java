@@ -39,43 +39,43 @@ import io.liftwizard.logging.logback.appender.buffered.BufferedAppender;
 @AutoService(AppenderFactory.class)
 public class BufferedAppenderFactory<E extends DeferredProcessingAware> extends AbstractAppenderFactory<E> {
 
-    private String appenderName = "buffered-appender";
+	private String appenderName = "buffered-appender";
 
-    @JsonProperty
-    public String getAppenderName() {
-        return this.appenderName;
-    }
+	@JsonProperty
+	public String getAppenderName() {
+		return this.appenderName;
+	}
 
-    @JsonProperty
-    public void setAppenderName(String appenderName) {
-        this.appenderName = appenderName;
-    }
+	@JsonProperty
+	public void setAppenderName(String appenderName) {
+		this.appenderName = appenderName;
+	}
 
-    @Override
-    public Appender<E> build(
-        LoggerContext loggerContext,
-        String applicationName,
-        LayoutFactory<E> layoutFactory,
-        LevelFilterFactory<E> levelFilterFactory,
-        AsyncAppenderFactory<E> asyncAppenderFactory
-    ) {
-        var consoleAppender = new ConsoleAppender<E>();
-        consoleAppender.setName(this.appenderName);
-        consoleAppender.setContext(loggerContext);
+	@Override
+	public Appender<E> build(
+		LoggerContext loggerContext,
+		String applicationName,
+		LayoutFactory<E> layoutFactory,
+		LevelFilterFactory<E> levelFilterFactory,
+		AsyncAppenderFactory<E> asyncAppenderFactory
+	) {
+		var consoleAppender = new ConsoleAppender<E>();
+		consoleAppender.setName(this.appenderName);
+		consoleAppender.setContext(loggerContext);
 
-        var layoutWrappingEncoder = new LayoutWrappingEncoder<E>();
-        layoutWrappingEncoder.setLayout(this.buildLayout(loggerContext, layoutFactory));
-        consoleAppender.setEncoder(layoutWrappingEncoder);
+		var layoutWrappingEncoder = new LayoutWrappingEncoder<E>();
+		layoutWrappingEncoder.setLayout(this.buildLayout(loggerContext, layoutFactory));
+		consoleAppender.setEncoder(layoutWrappingEncoder);
 
-        consoleAppender.addFilter(levelFilterFactory.build(this.threshold));
-        this.getFilterFactories().stream().map(FilterFactory::build).forEach(consoleAppender::addFilter);
-        consoleAppender.start();
+		consoleAppender.addFilter(levelFilterFactory.build(this.threshold));
+		this.getFilterFactories().stream().map(FilterFactory::build).forEach(consoleAppender::addFilter);
+		consoleAppender.start();
 
-        BufferedAppender<E> bufferedAppender = new BufferedAppender<>();
-        bufferedAppender.setContext(consoleAppender.getContext());
-        bufferedAppender.setName("buffered-" + this.appenderName);
-        bufferedAppender.addAppender(consoleAppender);
-        bufferedAppender.start();
-        return bufferedAppender;
-    }
+		BufferedAppender<E> bufferedAppender = new BufferedAppender<>();
+		bufferedAppender.setContext(consoleAppender.getContext());
+		bufferedAppender.setName("buffered-" + this.appenderName);
+		bufferedAppender.addAppender(consoleAppender);
+		bufferedAppender.start();
+		return bufferedAppender;
+	}
 }

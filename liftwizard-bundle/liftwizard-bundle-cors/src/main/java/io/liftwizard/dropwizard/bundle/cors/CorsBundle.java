@@ -34,32 +34,32 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class CorsBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CorsBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CorsBundle.class);
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        CorsFactoryProvider corsFactoryProvider = this.safeCastConfiguration(CorsFactoryProvider.class, configuration);
-        CorsFactory corsFactory = corsFactoryProvider.getCorsFactory();
-        if (!corsFactory.isEnabled()) {
-            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
-            return;
-        }
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		CorsFactoryProvider corsFactoryProvider = this.safeCastConfiguration(CorsFactoryProvider.class, configuration);
+		CorsFactory corsFactory = corsFactoryProvider.getCorsFactory();
+		if (!corsFactory.isEnabled()) {
+			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			return;
+		}
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        // https://stackoverflow.com/a/25801822
-        Dynamic cors = environment.servlets().addFilter(corsFactory.getFilterName(), CrossOriginFilter.class);
+		// https://stackoverflow.com/a/25801822
+		Dynamic cors = environment.servlets().addFilter(corsFactory.getFilterName(), CrossOriginFilter.class);
 
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, corsFactory.getAllowedOrigins());
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, corsFactory.getAllowedHeaders());
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, corsFactory.getAllowedMethods());
-        cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, corsFactory.getAllowCredentials());
-        cors.addMappingForUrlPatterns(
-            EnumSet.allOf(DispatcherType.class),
-            true,
-            corsFactory.getUrlPatterns().toArray(new String[] {})
-        );
+		cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, corsFactory.getAllowedOrigins());
+		cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, corsFactory.getAllowedHeaders());
+		cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, corsFactory.getAllowedMethods());
+		cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, corsFactory.getAllowCredentials());
+		cors.addMappingForUrlPatterns(
+			EnumSet.allOf(DispatcherType.class),
+			true,
+			corsFactory.getUrlPatterns().toArray(new String[] {})
+		);
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 }

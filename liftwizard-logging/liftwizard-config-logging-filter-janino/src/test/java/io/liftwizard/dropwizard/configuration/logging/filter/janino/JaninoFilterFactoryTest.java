@@ -40,45 +40,45 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JaninoFilterFactoryTest {
 
-    @RegisterExtension
-    private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
+	@RegisterExtension
+	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
-    private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator validator = Validators.newValidator();
+	private final ObjectMapper objectMapper = newObjectMapper();
+	private final Validator validator = Validators.newValidator();
 
-    private final JsonConfigurationFactory<JaninoFilterFactory> factory = new JsonConfigurationFactory<>(
-        JaninoFilterFactory.class,
-        this.validator,
-        this.objectMapper,
-        "dw"
-    );
+	private final JsonConfigurationFactory<JaninoFilterFactory> factory = new JsonConfigurationFactory<>(
+		JaninoFilterFactory.class,
+		this.validator,
+		this.objectMapper,
+		"dw"
+	);
 
-    @Test
-    void isDiscoverable() {
-        // Make sure the types we specified in META-INF gets picked up
-        var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes).contains(JaninoFilterFactory.class);
-    }
+	@Test
+	void isDiscoverable() {
+		// Make sure the types we specified in META-INF gets picked up
+		var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+		List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
+		assertThat(discoveredSubtypes).contains(JaninoFilterFactory.class);
+	}
 
-    @Test
-    void filterJanino() throws Exception {
-        JaninoFilterFactory janinoFilterFactory = this.factory.build(
-            new ResourceConfigurationSourceProvider(),
-            "config-test.json5"
-        );
-        Filter<ILoggingEvent> filter = janinoFilterFactory.build();
+	@Test
+	void filterJanino() throws Exception {
+		JaninoFilterFactory janinoFilterFactory = this.factory.build(
+			new ResourceConfigurationSourceProvider(),
+			"config-test.json5"
+		);
+		Filter<ILoggingEvent> filter = janinoFilterFactory.build();
 
-        assertThat(janinoFilterFactory).isInstanceOf(JaninoFilterFactory.class);
-        assertThat(filter).isInstanceOf(EvaluatorFilter.class);
+		assertThat(janinoFilterFactory).isInstanceOf(JaninoFilterFactory.class);
+		assertThat(filter).isInstanceOf(EvaluatorFilter.class);
 
-        EventEvaluator<?> evaluator = ((EvaluatorFilter<?>) filter).getEvaluator();
-        assertThat(evaluator).isInstanceOf(JaninoEventEvaluator.class);
-    }
+		EventEvaluator<?> evaluator = ((EvaluatorFilter<?>) filter).getEvaluator();
+		assertThat(evaluator).isInstanceOf(JaninoEventEvaluator.class);
+	}
 
-    private static ObjectMapper newObjectMapper() {
-        ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper);
-        return objectMapper;
-    }
+	private static ObjectMapper newObjectMapper() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		ObjectMapperConfig.configure(objectMapper);
+		return objectMapper;
+	}
 }

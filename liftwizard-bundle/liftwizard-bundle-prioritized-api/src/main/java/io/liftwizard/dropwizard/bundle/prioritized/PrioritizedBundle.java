@@ -32,64 +32,64 @@ import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
 public interface PrioritizedBundle extends ConfiguredBundle<Object> {
-    Logger LOGGER = LoggerFactory.getLogger(PrioritizedBundle.class);
+	Logger LOGGER = LoggerFactory.getLogger(PrioritizedBundle.class);
 
-    String MDC_BUNDLE = "liftwizard.bundle";
-    String MDC_PRIORITY = "liftwizard.priority";
+	String MDC_BUNDLE = "liftwizard.bundle";
+	String MDC_PRIORITY = "liftwizard.priority";
 
-    Pattern DURATION_PATTERN = Pattern.compile("(\\d[HMS])(?!$)");
+	Pattern DURATION_PATTERN = Pattern.compile("(\\d[HMS])(?!$)");
 
-    default int getPriority() {
-        return 0;
-    }
+	default int getPriority() {
+		return 0;
+	}
 
-    default <C> C safeCastConfiguration(Class<C> aClass, Object configuration) {
-        if (aClass.isInstance(configuration)) {
-            return aClass.cast(configuration);
-        }
+	default <C> C safeCastConfiguration(Class<C> aClass, Object configuration) {
+		if (aClass.isInstance(configuration)) {
+			return aClass.cast(configuration);
+		}
 
-        String message = "Expected configuration to implement %s but found %s".formatted(
-            aClass.getCanonicalName(),
-            configuration.getClass().getCanonicalName()
-        );
-        throw new IllegalStateException(message);
-    }
+		String message = "Expected configuration to implement %s but found %s".formatted(
+			aClass.getCanonicalName(),
+			configuration.getClass().getCanonicalName()
+		);
+		throw new IllegalStateException(message);
+	}
 
-    @Override
-    default void initialize(@Nonnull Bootstrap<?> bootstrap) {
-        Instant start = Instant.now();
-        try (
-            MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
-            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
-        ) {
-            this.initializeWithMdc(bootstrap);
-        }
-        Instant end = Instant.now();
-        Duration duration = Duration.between(start, end);
-        String durationPrettyString = DURATION_PATTERN.matcher(duration.toString().substring(2))
-            .replaceAll("$1 ")
-            .toLowerCase(Locale.ENGLISH);
-        LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
-    }
+	@Override
+	default void initialize(@Nonnull Bootstrap<?> bootstrap) {
+		Instant start = Instant.now();
+		try (
+			MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
+			MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
+		) {
+			this.initializeWithMdc(bootstrap);
+		}
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		String durationPrettyString = DURATION_PATTERN.matcher(duration.toString().substring(2))
+			.replaceAll("$1 ")
+			.toLowerCase(Locale.ENGLISH);
+		LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
+	}
 
-    default void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap) {}
+	default void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap) {}
 
-    @Override
-    default void run(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception {
-        Instant start = Instant.now();
-        try (
-            MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
-            MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
-        ) {
-            this.runWithMdc(configuration, environment);
-        }
-        Instant end = Instant.now();
-        Duration duration = Duration.between(start, end);
-        String durationPrettyString = DURATION_PATTERN.matcher(duration.toString().substring(2))
-            .replaceAll("$1 ")
-            .toLowerCase(Locale.ENGLISH);
-        LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
-    }
+	@Override
+	default void run(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception {
+		Instant start = Instant.now();
+		try (
+			MDCCloseable mdc1 = MDC.putCloseable(MDC_BUNDLE, this.getClass().getSimpleName());
+			MDCCloseable mdc2 = MDC.putCloseable(MDC_PRIORITY, String.valueOf(this.getPriority()));
+		) {
+			this.runWithMdc(configuration, environment);
+		}
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		String durationPrettyString = DURATION_PATTERN.matcher(duration.toString().substring(2))
+			.replaceAll("$1 ")
+			.toLowerCase(Locale.ENGLISH);
+		LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
+	}
 
-    void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception;
+	void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception;
 }

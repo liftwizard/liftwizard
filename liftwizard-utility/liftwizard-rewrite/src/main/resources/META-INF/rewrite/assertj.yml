@@ -20,9 +20,9 @@ name: io.liftwizard.rewrite.assertj.AssertJMigration
 displayName: AssertJ migration
 description: Migrate from various assertion libraries to AssertJ.
 recipeList:
-  - io.liftwizard.rewrite.assertj.VerifyAssertCountToAssertJRecipe
-  - io.liftwizard.rewrite.assertj.VerifyAssertEmptyToAssertJRecipes
-  - io.liftwizard.rewrite.assertj.VerifyAssertNotEmptyToAssertJRecipes
-  - io.liftwizard.rewrite.assertj.VerifyAssertSizeToAssertJRecipes
-  - io.liftwizard.rewrite.assertj.VerifyAssertThrowsToAssertJ
-  - io.liftwizard.rewrite.assertj.AssertionsStaticImport
+    - io.liftwizard.rewrite.assertj.VerifyAssertCountToAssertJRecipe
+    - io.liftwizard.rewrite.assertj.VerifyAssertEmptyToAssertJRecipes
+    - io.liftwizard.rewrite.assertj.VerifyAssertNotEmptyToAssertJRecipes
+    - io.liftwizard.rewrite.assertj.VerifyAssertSizeToAssertJRecipes
+    - io.liftwizard.rewrite.assertj.VerifyAssertThrowsToAssertJ
+    - io.liftwizard.rewrite.assertj.AssertionsStaticImport

@@ -21,19 +21,19 @@ import java.util.Objects;
 
 public class HeaderPrincipal implements Principal {
 
-    private final String name;
+	private final String name;
 
-    public HeaderPrincipal(String name) {
-        this.name = Objects.requireNonNull(name);
-    }
+	public HeaderPrincipal(String name) {
+		this.name = Objects.requireNonNull(name);
+	}
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
+	@Override
+	public String getName() {
+		return this.name;
+	}
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }

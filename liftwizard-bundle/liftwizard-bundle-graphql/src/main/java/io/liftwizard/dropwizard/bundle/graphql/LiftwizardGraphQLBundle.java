@@ -63,107 +63,107 @@ import org.slf4j.MDC.MDCCloseable;
  */
 public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryProvider> extends GraphQLBundle<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
 
-    @Nonnull
-    private final ImmutableList<Consumer<RuntimeWiring.Builder>> runtimeWiringBuilders;
+	@Nonnull
+	private final ImmutableList<Consumer<RuntimeWiring.Builder>> runtimeWiringBuilders;
 
-    private MetricRegistry metricRegistry;
+	private MetricRegistry metricRegistry;
 
-    @SafeVarargs
-    public LiftwizardGraphQLBundle(@Nonnull Consumer<RuntimeWiring.Builder>... runtimeWiringBuilders) {
-        this.runtimeWiringBuilders = Lists.immutable.with(runtimeWiringBuilders);
-    }
+	@SafeVarargs
+	public LiftwizardGraphQLBundle(@Nonnull Consumer<RuntimeWiring.Builder>... runtimeWiringBuilders) {
+		this.runtimeWiringBuilders = Lists.immutable.with(runtimeWiringBuilders);
+	}
 
-    @Override
-    public void initialize(@Nonnull Bootstrap<?> bootstrap) {
-        try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
-            this.initializeWithMdc(bootstrap);
-        }
+	@Override
+	public void initialize(@Nonnull Bootstrap<?> bootstrap) {
+		try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
+			this.initializeWithMdc(bootstrap);
+		}
 
-        this.metricRegistry = bootstrap.getMetricRegistry();
-    }
+		this.metricRegistry = bootstrap.getMetricRegistry();
+	}
 
-    private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/graphiql", "/graphiql", "index.htm", "graphiql"));
+	private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap) {
+		bootstrap.addBundle(new AssetsBundle("/graphiql", "/graphiql", "index.htm", "graphiql"));
 
-        bootstrap.addBundle(new AssetsBundle("/assets", "/graphql-playground", "index.htm", "graphql-playground"));
-    }
+		bootstrap.addBundle(new AssetsBundle("/assets", "/graphql-playground", "index.htm", "graphql-playground"));
+	}
 
-    @Override
-    public void run(T configuration, Environment environment) {
-        GraphQLFactory factory = this.getGraphQLFactory(configuration);
+	@Override
+	public void run(T configuration, Environment environment) {
+		GraphQLFactory factory = this.getGraphQLFactory(configuration);
 
-        PreparsedDocumentProvider provider = new CachingPreparsedDocumentProvider(
-            factory.getQueryCache(),
-            environment.metrics()
-        );
+		PreparsedDocumentProvider provider = new CachingPreparsedDocumentProvider(
+			factory.getQueryCache(),
+			environment.metrics()
+		);
 
-        GraphQLSchema schema = factory.build();
+		GraphQLSchema schema = factory.build();
 
-        GraphQLQueryInvoker queryInvoker = GraphQLQueryInvoker.newBuilder()
-            .withPreparsedDocumentProvider(provider)
-            .withInstrumentation(factory.getInstrumentations())
-            .build();
+		GraphQLQueryInvoker queryInvoker = GraphQLQueryInvoker.newBuilder()
+			.withPreparsedDocumentProvider(provider)
+			.withInstrumentation(factory.getInstrumentations())
+			.build();
 
-        GraphQLConfiguration config = GraphQLConfiguration.with(schema).with(queryInvoker).build();
+		GraphQLConfiguration config = GraphQLConfiguration.with(schema).with(queryInvoker).build();
 
-        GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
+		GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
 
-        Dynamic servletRegistration = environment.servlets().addServlet("graphql", servlet);
-        servletRegistration.setAsyncSupported(false);
-        servletRegistration.addMapping("/graphql", "/schema.json");
-    }
+		Dynamic servletRegistration = environment.servlets().addServlet("graphql", servlet);
+		servletRegistration.setAsyncSupported(false);
+		servletRegistration.addMapping("/graphql", "/schema.json");
+	}
 
-    @Nonnull
-    @Override
-    public GraphQLFactory getGraphQLFactory(@Nonnull T configuration) {
-        // the RuntimeWiring must be configured prior to the run()
-        // methods being called so the schema is connected properly.
-        GraphQLFactory factory = configuration.getGraphQLFactory();
+	@Nonnull
+	@Override
+	public GraphQLFactory getGraphQLFactory(@Nonnull T configuration) {
+		// the RuntimeWiring must be configured prior to the run()
+		// methods being called so the schema is connected properly.
+		GraphQLFactory factory = configuration.getGraphQLFactory();
 
-        List<Instrumentation> instrumentations = this.getInstrumentations(configuration);
-        factory.setInstrumentations(instrumentations);
+		List<Instrumentation> instrumentations = this.getInstrumentations(configuration);
+		factory.setInstrumentations(instrumentations);
 
-        RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
-        builder
-            .scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)
-            .scalar(GraphQLTemporalScalar.TEMPORAL_INSTANT_INSTANCE)
-            .scalar(GraphQLTemporalScalar.TEMPORAL_RANGE_INSTANCE)
-            .scalar(JavaPrimitives.GraphQLLong)
-            .scalar(GraphQLLocalDateScalar.INSTANCE);
+		RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
+		builder
+			.scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)
+			.scalar(GraphQLTemporalScalar.TEMPORAL_INSTANT_INSTANCE)
+			.scalar(GraphQLTemporalScalar.TEMPORAL_RANGE_INSTANCE)
+			.scalar(JavaPrimitives.GraphQLLong)
+			.scalar(GraphQLLocalDateScalar.INSTANCE);
 
-        for (Consumer<RuntimeWiring.Builder> runtimeWiringBuilder : this.runtimeWiringBuilders) {
-            runtimeWiringBuilder.accept(builder);
-        }
-        RuntimeWiring runtimeWiring = builder.build();
-        factory.setRuntimeWiring(runtimeWiring);
-        return factory;
-    }
+		for (Consumer<RuntimeWiring.Builder> runtimeWiringBuilder : this.runtimeWiringBuilders) {
+			runtimeWiringBuilder.accept(builder);
+		}
+		RuntimeWiring runtimeWiring = builder.build();
+		factory.setRuntimeWiring(runtimeWiring);
+		return factory;
+	}
 
-    @Nonnull
-    private List<Instrumentation> getInstrumentations(T configuration) {
-        Clock clock = this.getClock(configuration);
+	@Nonnull
+	private List<Instrumentation> getInstrumentations(T configuration) {
+		Clock clock = this.getClock(configuration);
 
-        var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
-        var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
+		var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
+		var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
 
-        List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
-        return instrumentations;
-    }
+		List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
+		return instrumentations;
+	}
 
-    @Nonnull
-    private Clock getClock(T configuration) {
-        if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
-            LOGGER.warn(
-                "Configuration {} does not implement {}. Using system clock.",
-                configuration.getClass().getSimpleName(),
-                ClockFactoryProvider.class.getSimpleName()
-            );
-            return Clock.systemUTC();
-        }
+	@Nonnull
+	private Clock getClock(T configuration) {
+		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
+			LOGGER.warn(
+				"Configuration {} does not implement {}. Using system clock.",
+				configuration.getClass().getSimpleName(),
+				ClockFactoryProvider.class.getSimpleName()
+			);
+			return Clock.systemUTC();
+		}
 
-        ClockFactory clockFactory = clockFactoryProvider.getClockFactory();
-        return clockFactory.createClock();
-    }
+		ClockFactory clockFactory = clockFactoryProvider.getClockFactory();
+		return clockFactory.createClock();
+	}
 }

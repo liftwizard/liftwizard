@@ -32,25 +32,25 @@ import org.slf4j.MDC;
  */
 public class LiftwizardGraphQLLoggingInstrumentation extends SimpleInstrumentation {
 
-    @Override
-    @Nonnull
-    public DataFetcher<?> instrumentDataFetcher(
-        DataFetcher<?> dataFetcher,
-        @Nonnull InstrumentationFieldFetchParameters parameters
-    ) {
-        if (parameters.isTrivialDataFetcher()) {
-            return super.instrumentDataFetcher(dataFetcher, parameters);
-        }
+	@Override
+	@Nonnull
+	public DataFetcher<?> instrumentDataFetcher(
+		DataFetcher<?> dataFetcher,
+		@Nonnull InstrumentationFieldFetchParameters parameters
+	) {
+		if (parameters.isTrivialDataFetcher()) {
+			return super.instrumentDataFetcher(dataFetcher, parameters);
+		}
 
-        var executionId = parameters.getExecutionContext().getExecutionId().toString();
-        var stepInfo = parameters.getExecutionStepInfo();
-        String path = GraphQLInstrumentationUtils.getPathWithIndex(stepInfo);
-        GraphQLType parentType = stepInfo.getParent().getType();
-        String parentTypeName = GraphQLInstrumentationUtils.getTypeName(parentType);
-        String fieldName = parameters.getField().getName();
-        GraphQLType fieldType = parameters.getField().getType();
-        String fieldTypeName = GraphQLInstrumentationUtils.getTypeName(fieldType);
+		var executionId = parameters.getExecutionContext().getExecutionId().toString();
+		var stepInfo = parameters.getExecutionStepInfo();
+		String path = GraphQLInstrumentationUtils.getPathWithIndex(stepInfo);
+		GraphQLType parentType = stepInfo.getParent().getType();
+		String parentTypeName = GraphQLInstrumentationUtils.getTypeName(parentType);
+		String fieldName = parameters.getField().getName();
+		GraphQLType fieldType = parameters.getField().getType();
+		String fieldTypeName = GraphQLInstrumentationUtils.getTypeName(fieldType);
 
-        return new MDCDataFetcher<>(dataFetcher, executionId, path, parentTypeName, fieldName, fieldTypeName);
-    }
+		return new MDCDataFetcher<>(dataFetcher, executionId, path, parentTypeName, fieldName, fieldTypeName);
+	}
 }

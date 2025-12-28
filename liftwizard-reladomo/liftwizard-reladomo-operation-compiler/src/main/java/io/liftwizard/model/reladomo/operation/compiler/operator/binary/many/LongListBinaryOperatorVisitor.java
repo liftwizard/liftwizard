@@ -29,21 +29,21 @@ import org.eclipse.collections.api.set.primitive.ImmutableLongSet;
 
 public class LongListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final LongAttribute<?> attribute;
-    private final ImmutableLongSet longSet;
+	private final LongAttribute<?> attribute;
+	private final ImmutableLongSet longSet;
 
-    public LongListBinaryOperatorVisitor(LongAttribute<?> attribute, ImmutableList<Long> parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.longSet = LongSets.immutable.withAll(parameter);
-    }
+	public LongListBinaryOperatorVisitor(LongAttribute<?> attribute, ImmutableList<Long> parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.longSet = LongSets.immutable.withAll(parameter);
+	}
 
-    @Override
-    public Operation visitOperatorIn(OperatorInContext ctx) {
-        return this.attribute.in(this.longSet);
-    }
+	@Override
+	public Operation visitOperatorIn(OperatorInContext ctx) {
+		return this.attribute.in(this.longSet);
+	}
 
-    @Override
-    public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
-        return this.attribute.notIn(this.longSet);
-    }
+	@Override
+	public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
+		return this.attribute.notIn(this.longSet);
+	}
 }

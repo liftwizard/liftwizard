@@ -26,5 +26,5 @@ import io.dropwizard.jackson.Discoverable;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @AutoService(Discoverable.class)
 public interface AuthFilterFactory extends Discoverable {
-    AuthFilter<?, ? extends Principal> createAuthFilter();
+	AuthFilter<?, ? extends Principal> createAuthFilter();
 }

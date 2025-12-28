@@ -30,52 +30,52 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowingVisitor<T> {
 
-    protected final RelatedFinder finder;
-    protected final String errorContext;
+	protected final RelatedFinder finder;
+	protected final String errorContext;
 
-    protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext) {
-        this.finder = Objects.requireNonNull(finder);
-        this.errorContext = Objects.requireNonNull(errorContext);
-    }
+	protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext) {
+		this.finder = Objects.requireNonNull(finder);
+		this.errorContext = Objects.requireNonNull(errorContext);
+	}
 
-    @Override
-    public T visitParameter(ParameterContext ctx) {
-        return this.visitChildren(ctx);
-    }
+	@Override
+	public T visitParameter(ParameterContext ctx) {
+		return this.visitChildren(ctx);
+	}
 
-    @Override
-    public T visitStringLiteral(StringLiteralContext ctx) {
-        return this.throwTypeError(ctx);
-    }
+	@Override
+	public T visitStringLiteral(StringLiteralContext ctx) {
+		return this.throwTypeError(ctx);
+	}
 
-    @Override
-    public T visitBooleanLiteral(BooleanLiteralContext ctx) {
-        return this.throwTypeError(ctx);
-    }
+	@Override
+	public T visitBooleanLiteral(BooleanLiteralContext ctx) {
+		return this.throwTypeError(ctx);
+	}
 
-    @Override
-    public T visitCharacterLiteral(CharacterLiteralContext ctx) {
-        return this.throwTypeError(ctx);
-    }
+	@Override
+	public T visitCharacterLiteral(CharacterLiteralContext ctx) {
+		return this.throwTypeError(ctx);
+	}
 
-    @Override
-    public T visitIntegerLiteral(IntegerLiteralContext ctx) {
-        return this.throwTypeError(ctx);
-    }
+	@Override
+	public T visitIntegerLiteral(IntegerLiteralContext ctx) {
+		return this.throwTypeError(ctx);
+	}
 
-    @Override
-    public T visitFloatingPointLiteral(FloatingPointLiteralContext ctx) {
-        return this.throwTypeError(ctx);
-    }
+	@Override
+	public T visitFloatingPointLiteral(FloatingPointLiteralContext ctx) {
+		return this.throwTypeError(ctx);
+	}
 
-    protected T throwTypeError(ParseTree ctx) {
-        String error = "Expected <%s> but found: <%s> in %s".formatted(
-            this.getExpectedType(),
-            ctx.getText(),
-            this.errorContext
-        );
-        throw new IllegalArgumentException(error);
-    }
+	protected T throwTypeError(ParseTree ctx) {
+		String error = "Expected <%s> but found: <%s> in %s".formatted(
+			this.getExpectedType(),
+			ctx.getText(),
+			this.errorContext
+		);
+		throw new IllegalArgumentException(error);
+	}
 
-    protected abstract String getExpectedType();
+	protected abstract String getExpectedType();
 }

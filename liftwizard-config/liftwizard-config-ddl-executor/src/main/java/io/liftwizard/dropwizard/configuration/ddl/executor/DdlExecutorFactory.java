@@ -28,81 +28,81 @@ import io.dropwizard.validation.ValidationMethod;
 
 public class DdlExecutorFactory {
 
-    private @Valid @NotNull String dataSourceName;
-    private @Valid @NotNull String ddlLocationPattern = ".*\\.ddl";
-    private @Valid @NotNull String idxLocationPattern = ".*\\.idx";
-    private @Valid @NotNull String fkLocationPattern = ".*\\.fk";
+	private @Valid @NotNull String dataSourceName;
+	private @Valid @NotNull String ddlLocationPattern = ".*\\.ddl";
+	private @Valid @NotNull String idxLocationPattern = ".*\\.idx";
+	private @Valid @NotNull String fkLocationPattern = ".*\\.fk";
 
-    @JsonProperty
-    public String getDataSourceName() {
-        return this.dataSourceName;
-    }
+	@JsonProperty
+	public String getDataSourceName() {
+		return this.dataSourceName;
+	}
 
-    @JsonProperty
-    public void setDataSourceName(String dataSourceName) {
-        this.dataSourceName = dataSourceName;
-    }
+	@JsonProperty
+	public void setDataSourceName(String dataSourceName) {
+		this.dataSourceName = dataSourceName;
+	}
 
-    @JsonProperty
-    public String getDdlLocationPattern() {
-        return this.ddlLocationPattern;
-    }
+	@JsonProperty
+	public String getDdlLocationPattern() {
+		return this.ddlLocationPattern;
+	}
 
-    @JsonProperty
-    public void setDdlLocationPattern(String ddlLocationPattern) {
-        this.ddlLocationPattern = ddlLocationPattern;
-    }
+	@JsonProperty
+	public void setDdlLocationPattern(String ddlLocationPattern) {
+		this.ddlLocationPattern = ddlLocationPattern;
+	}
 
-    @JsonProperty
-    public String getIdxLocationPattern() {
-        return this.idxLocationPattern;
-    }
+	@JsonProperty
+	public String getIdxLocationPattern() {
+		return this.idxLocationPattern;
+	}
 
-    @JsonProperty
-    public void setIdxLocationPattern(String idxLocationPattern) {
-        this.idxLocationPattern = idxLocationPattern;
-    }
+	@JsonProperty
+	public void setIdxLocationPattern(String idxLocationPattern) {
+		this.idxLocationPattern = idxLocationPattern;
+	}
 
-    @JsonProperty
-    public String getFkLocationPattern() {
-        return this.fkLocationPattern;
-    }
+	@JsonProperty
+	public String getFkLocationPattern() {
+		return this.fkLocationPattern;
+	}
 
-    @JsonProperty
-    public void setFkLocationPattern(String fkLocationPattern) {
-        this.fkLocationPattern = fkLocationPattern;
-    }
+	@JsonProperty
+	public void setFkLocationPattern(String fkLocationPattern) {
+		this.fkLocationPattern = fkLocationPattern;
+	}
 
-    @ValidationMethod(message = "ddlLocationPattern must be a valid regex")
-    @JsonIgnore
-    public boolean isDdlLocationPatternValid() {
-        try {
-            Pattern.compile(this.ddlLocationPattern);
-            return true;
-        } catch (PatternSyntaxException e) {
-            return false;
-        }
-    }
+	@ValidationMethod(message = "ddlLocationPattern must be a valid regex")
+	@JsonIgnore
+	public boolean isDdlLocationPatternValid() {
+		try {
+			Pattern.compile(this.ddlLocationPattern);
+			return true;
+		} catch (PatternSyntaxException e) {
+			return false;
+		}
+	}
 
-    @ValidationMethod(message = "idxLocationPattern must be a valid regex")
-    @JsonIgnore
-    public boolean isIdxLocationPatternValid() {
-        try {
-            Pattern.compile(this.idxLocationPattern);
-            return true;
-        } catch (PatternSyntaxException e) {
-            return false;
-        }
-    }
+	@ValidationMethod(message = "idxLocationPattern must be a valid regex")
+	@JsonIgnore
+	public boolean isIdxLocationPatternValid() {
+		try {
+			Pattern.compile(this.idxLocationPattern);
+			return true;
+		} catch (PatternSyntaxException e) {
+			return false;
+		}
+	}
 
-    @ValidationMethod(message = "fkLocationPattern must be a valid regex")
-    @JsonIgnore
-    public boolean isFkLocationPatternValid() {
-        try {
-            Pattern.compile(this.fkLocationPattern);
-            return true;
-        } catch (PatternSyntaxException e) {
-            return false;
-        }
-    }
+	@ValidationMethod(message = "fkLocationPattern must be a valid regex")
+	@JsonIgnore
+	public boolean isFkLocationPatternValid() {
+		try {
+			Pattern.compile(this.fkLocationPattern);
+			return true;
+		} catch (PatternSyntaxException e) {
+			return false;
+		}
+	}
 }

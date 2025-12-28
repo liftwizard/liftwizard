@@ -27,22 +27,22 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 public class InstantListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Instant>> {
 
-    private final InstantLiteralVisitor instantLiteralVisitor;
+	private final InstantLiteralVisitor instantLiteralVisitor;
 
-    public InstantListLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-        this.instantLiteralVisitor = new InstantLiteralVisitor(this.finder, this.errorContext);
-    }
+	public InstantListLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+		this.instantLiteralVisitor = new InstantLiteralVisitor(this.finder, this.errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "Instant list";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "Instant list";
+	}
 
-    @Override
-    public ImmutableList<Instant> visitStringListLiteral(StringListLiteralContext ctx) {
-        return ListAdapter.adapt(ctx.stringLiteral())
-            .collect(each -> each.accept(this.instantLiteralVisitor))
-            .toImmutable();
-    }
+	@Override
+	public ImmutableList<Instant> visitStringListLiteral(StringListLiteralContext ctx) {
+		return ListAdapter.adapt(ctx.stringLiteral())
+			.collect((each) -> each.accept(this.instantLiteralVisitor))
+			.toImmutable();
+	}
 }

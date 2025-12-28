@@ -37,68 +37,68 @@ import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsOpenTracingLogger implements Consumer<StructuredArguments> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsOpenTracingLogger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsOpenTracingLogger.class);
 
-    @Nonnull
-    private final ObjectMapper objectMapper;
+	@Nonnull
+	private final ObjectMapper objectMapper;
 
-    public StructuredArgumentsOpenTracingLogger(@Nonnull ObjectMapper objectMapper) {
-        this.objectMapper = Objects.requireNonNull(objectMapper);
-    }
+	public StructuredArgumentsOpenTracingLogger(@Nonnull ObjectMapper objectMapper) {
+		this.objectMapper = Objects.requireNonNull(objectMapper);
+	}
 
-    @Override
-    public void accept(StructuredArguments structuredArguments) {
-        ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
-        this.structuredArgumentsToSpans(objectNode);
-        LOGGER.info("Response sent");
-    }
+	@Override
+	public void accept(StructuredArguments structuredArguments) {
+		ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
+		this.structuredArgumentsToSpans(objectNode);
+		LOGGER.info("Response sent");
+	}
 
-    private void structuredArgumentsToSpans(@Nonnull ObjectNode objectNode) {
-        Span span = GlobalTracer.get().activeSpan();
-        if (span == null) {
-            return;
-        }
+	private void structuredArgumentsToSpans(@Nonnull ObjectNode objectNode) {
+		Span span = GlobalTracer.get().activeSpan();
+		if (span == null) {
+			return;
+		}
 
-        this.structuredArgumentsToSpans(span, Stacks.immutable.empty(), objectNode);
-    }
+		this.structuredArgumentsToSpans(span, Stacks.immutable.empty(), objectNode);
+	}
 
-    private void structuredArgumentsToSpans(
-        @Nonnull Span span,
-        @Nonnull ImmutableStack<String> stack,
-        @Nonnull ObjectNode objectNode
-    ) {
-        objectNode.fields().forEachRemaining(entry -> this.structuredArgumentToSpan(span, stack, entry));
-    }
+	private void structuredArgumentsToSpans(
+		@Nonnull Span span,
+		@Nonnull ImmutableStack<String> stack,
+		@Nonnull ObjectNode objectNode
+	) {
+		objectNode.fields().forEachRemaining((entry) -> this.structuredArgumentToSpan(span, stack, entry));
+	}
 
-    private void structuredArgumentToSpan(
-        @Nonnull Span span,
-        @Nonnull ImmutableStack<String> stack,
-        @Nonnull Entry<String, JsonNode> entry
-    ) {
-        String key = entry.getKey();
-        JsonNode value = entry.getValue();
+	private void structuredArgumentToSpan(
+		@Nonnull Span span,
+		@Nonnull ImmutableStack<String> stack,
+		@Nonnull Entry<String, JsonNode> entry
+	) {
+		String key = entry.getKey();
+		JsonNode value = entry.getValue();
 
-        if (value.isObject()) {
-            ImmutableStack<String> nextStack = stack.push(key);
-            ObjectNode nextObjectNode = (ObjectNode) value;
-            this.structuredArgumentsToSpans(span, nextStack, nextObjectNode);
-            return;
-        }
+		if (value.isObject()) {
+			ImmutableStack<String> nextStack = stack.push(key);
+			ObjectNode nextObjectNode = (ObjectNode) value;
+			this.structuredArgumentsToSpans(span, nextStack, nextObjectNode);
+			return;
+		}
 
-        String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
+		String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
 
-        if (value.isArray()) {
-            MutableList<String> list = Lists.mutable.empty();
-            value.iterator().forEachRemaining(each -> list.add(each.textValue()));
-            span.setTag(keyString, list.makeString());
-        } else if (value.isNumber()) {
-            span.setTag(keyString, value.numberValue());
-        } else if (value.isBoolean()) {
-            span.setTag(keyString, value.booleanValue());
-        } else if (value.isTextual()) {
-            span.setTag(keyString, value.textValue());
-        } else {
-            throw new AssertionError(value);
-        }
-    }
+		if (value.isArray()) {
+			MutableList<String> list = Lists.mutable.empty();
+			value.iterator().forEachRemaining((each) -> list.add(each.textValue()));
+			span.setTag(keyString, list.makeString());
+		} else if (value.isNumber()) {
+			span.setTag(keyString, value.numberValue());
+		} else if (value.isBoolean()) {
+			span.setTag(keyString, value.booleanValue());
+		} else if (value.isTextual()) {
+			span.setTag(keyString, value.textValue());
+		} else {
+			throw new AssertionError(value);
+		}
+	}
 }

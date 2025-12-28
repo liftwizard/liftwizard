@@ -27,60 +27,60 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CommonPoolHealthCheckFactory {
 
-    private boolean enabled = true;
+	private boolean enabled = true;
 
-    private @NotNull String threadNamePrefix = "ForkJoinPool.commonPool-worker-";
-    private @NotNull List<State> threadStates = List.of(State.RUNNABLE);
-    private @NotNull List<Pattern> alwaysAllowedPatterns = List.of();
-    private @NotNull List<Pattern> bannedPatterns = List.of();
+	private @NotNull String threadNamePrefix = "ForkJoinPool.commonPool-worker-";
+	private @NotNull List<State> threadStates = List.of(State.RUNNABLE);
+	private @NotNull List<Pattern> alwaysAllowedPatterns = List.of();
+	private @NotNull List<Pattern> bannedPatterns = List.of();
 
-    @JsonProperty
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+	@JsonProperty
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 
-    @JsonProperty
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@JsonProperty
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    @JsonProperty
-    public String getThreadNamePrefix() {
-        return this.threadNamePrefix;
-    }
+	@JsonProperty
+	public String getThreadNamePrefix() {
+		return this.threadNamePrefix;
+	}
 
-    @JsonProperty
-    public void setThreadNamePrefix(String threadNamePrefix) {
-        this.threadNamePrefix = threadNamePrefix;
-    }
+	@JsonProperty
+	public void setThreadNamePrefix(String threadNamePrefix) {
+		this.threadNamePrefix = threadNamePrefix;
+	}
 
-    @JsonProperty
-    public List<State> getThreadStates() {
-        return this.threadStates;
-    }
+	@JsonProperty
+	public List<State> getThreadStates() {
+		return this.threadStates;
+	}
 
-    @JsonProperty
-    public void setThreadStates(List<State> threadStates) {
-        this.threadStates = Collections.unmodifiableList(threadStates);
-    }
+	@JsonProperty
+	public void setThreadStates(List<State> threadStates) {
+		this.threadStates = Collections.unmodifiableList(threadStates);
+	}
 
-    @JsonProperty
-    public List<Pattern> getAlwaysAllowedPatterns() {
-        return this.alwaysAllowedPatterns;
-    }
+	@JsonProperty
+	public List<Pattern> getAlwaysAllowedPatterns() {
+		return this.alwaysAllowedPatterns;
+	}
 
-    @JsonProperty
-    public void setAlwaysAllowedPatterns(List<Pattern> alwaysAllowedPatterns) {
-        this.alwaysAllowedPatterns = Collections.unmodifiableList(alwaysAllowedPatterns);
-    }
+	@JsonProperty
+	public void setAlwaysAllowedPatterns(List<Pattern> alwaysAllowedPatterns) {
+		this.alwaysAllowedPatterns = Collections.unmodifiableList(alwaysAllowedPatterns);
+	}
 
-    @JsonProperty
-    public List<Pattern> getBannedPatterns() {
-        return this.bannedPatterns;
-    }
+	@JsonProperty
+	public List<Pattern> getBannedPatterns() {
+		return this.bannedPatterns;
+	}
 
-    @JsonProperty
-    public void setBannedPatterns(List<Pattern> bannedPatterns) {
-        this.bannedPatterns = Collections.unmodifiableList(bannedPatterns);
-    }
+	@JsonProperty
+	public void setBannedPatterns(List<Pattern> bannedPatterns) {
+		this.bannedPatterns = Collections.unmodifiableList(bannedPatterns);
+	}
 }

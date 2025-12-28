@@ -25,14 +25,14 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 public class UUIDBinder extends AbstractBinder {
 
-    private final Supplier<UUID> uuidSupplier;
+	private final Supplier<UUID> uuidSupplier;
 
-    public UUIDBinder(Supplier<UUID> uuidSupplier) {
-        this.uuidSupplier = Objects.requireNonNull(uuidSupplier);
-    }
+	public UUIDBinder(Supplier<UUID> uuidSupplier) {
+		this.uuidSupplier = Objects.requireNonNull(uuidSupplier);
+	}
 
-    @Override
-    protected void configure() {
-        this.bind(this.uuidSupplier).to(new TypeLiteral<Supplier<UUID>>() {});
-    }
+	@Override
+	protected void configure() {
+		this.bind(this.uuidSupplier).to(new TypeLiteral<Supplier<UUID>>() {});
+	}
 }

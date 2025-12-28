@@ -26,28 +26,28 @@ import liquibase.resource.ResourceAccessor;
 
 public class CloseableLiquibase extends Liquibase {
 
-    private final ManagedDataSource dataSource;
+	private final ManagedDataSource dataSource;
 
-    public CloseableLiquibase(
-        String changeLogFile,
-        ResourceAccessor resourceAccessor,
-        Database database,
-        ManagedDataSource dataSource
-    ) {
-        super(changeLogFile, resourceAccessor, database);
-        this.dataSource = Objects.requireNonNull(dataSource);
-    }
+	public CloseableLiquibase(
+		String changeLogFile,
+		ResourceAccessor resourceAccessor,
+		Database database,
+		ManagedDataSource dataSource
+	) {
+		super(changeLogFile, resourceAccessor, database);
+		this.dataSource = Objects.requireNonNull(dataSource);
+	}
 
-    @Override
-    public void close() throws LiquibaseException {
-        try {
-            this.database.close();
-        } finally {
-            try {
-                this.dataSource.stop();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+	@Override
+	public void close() throws LiquibaseException {
+		try {
+			this.database.close();
+		} finally {
+			try {
+				this.dataSource.stop();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 }

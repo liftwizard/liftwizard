@@ -28,9 +28,9 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 @AutoService(ClockFactory.class)
 public class SystemClockFactory implements ClockFactory {
 
-    @Nonnull
-    @Override
-    public Clock createClock() {
-        return Clock.systemUTC();
-    }
+	@Nonnull
+	@Override
+	public Clock createClock() {
+		return Clock.systemUTC();
+	}
 }

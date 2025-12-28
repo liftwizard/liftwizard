@@ -43,68 +43,68 @@ import org.slf4j.MarkerFactory;
 @AutoService(ReporterFactory.class)
 public class StructuredSlf4jReporterFactory extends BaseReporterFactory {
 
-    @NotEmpty
-    private String loggerName = "metrics";
+	@NotEmpty
+	private String loggerName = "metrics";
 
-    @Nullable
-    private String markerName;
+	@Nullable
+	private String markerName;
 
-    @NotEmpty
-    private String message = "metrics";
+	@NotEmpty
+	private String message = "metrics";
 
-    @JsonProperty("logger")
-    public String getLoggerName() {
-        return this.loggerName;
-    }
+	@JsonProperty("logger")
+	public String getLoggerName() {
+		return this.loggerName;
+	}
 
-    @JsonProperty("logger")
-    public void setLoggerName(String loggerName) {
-        this.loggerName = loggerName;
-    }
+	@JsonProperty("logger")
+	public void setLoggerName(String loggerName) {
+		this.loggerName = loggerName;
+	}
 
-    public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getLoggerName());
-    }
+	public Logger getLogger() {
+		return LoggerFactory.getLogger(this.getLoggerName());
+	}
 
-    @JsonProperty
-    @Nullable
-    public String getMarkerName() {
-        return this.markerName;
-    }
+	@JsonProperty
+	@Nullable
+	public String getMarkerName() {
+		return this.markerName;
+	}
 
-    @JsonProperty
-    public void setMarkerName(@Nullable String markerName) {
-        this.markerName = markerName;
-    }
+	@JsonProperty
+	public void setMarkerName(@Nullable String markerName) {
+		this.markerName = markerName;
+	}
 
-    @JsonProperty
-    public String getMessage() {
-        return this.message;
-    }
+	@JsonProperty
+	public String getMessage() {
+		return this.message;
+	}
 
-    @JsonProperty
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	@JsonProperty
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    @JsonIgnore
-    protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
-        return Function.identity();
-    }
+	@JsonIgnore
+	protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
+		return Function.identity();
+	}
 
-    @Override
-    public ScheduledReporter build(MetricRegistry registry) {
-        Builder builder = StructuredSlf4jReporter.forRegistry(registry)
-            .convertDurationsTo(this.getDurationUnit())
-            .convertRatesTo(this.getRateUnit())
-            .filter(this.getFilter())
-            .outputTo(this.getLogger())
-            .message(this.getMessage())
-            .mapToStructuredObjectFunction(this.getMapToStructuredObjectFunction());
-        if (this.markerName != null) {
-            builder.markWith(MarkerFactory.getMarker(this.markerName));
-        }
+	@Override
+	public ScheduledReporter build(MetricRegistry registry) {
+		Builder builder = StructuredSlf4jReporter.forRegistry(registry)
+			.convertDurationsTo(this.getDurationUnit())
+			.convertRatesTo(this.getRateUnit())
+			.filter(this.getFilter())
+			.outputTo(this.getLogger())
+			.message(this.getMessage())
+			.mapToStructuredObjectFunction(this.getMapToStructuredObjectFunction());
+		if (this.markerName != null) {
+			builder.markWith(MarkerFactory.getMarker(this.markerName));
+		}
 
-        return builder.build();
-    }
+		return builder.build();
+	}
 }

@@ -21,17 +21,17 @@ import org.h2.tools.Server;
 
 public class TcpServerShutdownHook implements Managed {
 
-    private final Server tcpServer;
+	private final Server tcpServer;
 
-    public TcpServerShutdownHook(Server tcpServer) {
-        this.tcpServer = tcpServer;
-    }
+	public TcpServerShutdownHook(Server tcpServer) {
+		this.tcpServer = tcpServer;
+	}
 
-    @Override
-    public void start() {}
+	@Override
+	public void start() {}
 
-    @Override
-    public void stop() {
-        this.tcpServer.stop();
-    }
+	@Override
+	public void stop() {
+		this.tcpServer.stop();
+	}
 }

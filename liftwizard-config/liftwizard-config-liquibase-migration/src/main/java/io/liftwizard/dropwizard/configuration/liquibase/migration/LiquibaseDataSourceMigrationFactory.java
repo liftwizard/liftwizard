@@ -24,70 +24,70 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LiquibaseDataSourceMigrationFactory {
 
-    private @NotNull String dataSourceName;
-    private String catalogName;
-    private String schemaName;
-    private String migrationFileName = "migrations.xml";
-    private @NotNull MigrationFileLocation migrationFileLocation = MigrationFileLocation.CLASSPATH;
-    private @NotNull List<String> contexts = List.of();
+	private @NotNull String dataSourceName;
+	private String catalogName;
+	private String schemaName;
+	private String migrationFileName = "migrations.xml";
+	private @NotNull MigrationFileLocation migrationFileLocation = MigrationFileLocation.CLASSPATH;
+	private @NotNull List<String> contexts = List.of();
 
-    @JsonProperty
-    public String getDataSourceName() {
-        return this.dataSourceName;
-    }
+	@JsonProperty
+	public String getDataSourceName() {
+		return this.dataSourceName;
+	}
 
-    @JsonProperty
-    public void setDataSourceName(String dataSourceName) {
-        this.dataSourceName = dataSourceName;
-    }
+	@JsonProperty
+	public void setDataSourceName(String dataSourceName) {
+		this.dataSourceName = dataSourceName;
+	}
 
-    @JsonProperty
-    public String getCatalogName() {
-        return this.catalogName;
-    }
+	@JsonProperty
+	public String getCatalogName() {
+		return this.catalogName;
+	}
 
-    @JsonProperty
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
+	@JsonProperty
+	public void setCatalogName(String catalogName) {
+		this.catalogName = catalogName;
+	}
 
-    @JsonProperty
-    public String getSchemaName() {
-        return this.schemaName;
-    }
+	@JsonProperty
+	public String getSchemaName() {
+		return this.schemaName;
+	}
 
-    @JsonProperty
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
+	@JsonProperty
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
+	}
 
-    @JsonProperty
-    public String getMigrationFileName() {
-        return this.migrationFileName;
-    }
+	@JsonProperty
+	public String getMigrationFileName() {
+		return this.migrationFileName;
+	}
 
-    @JsonProperty
-    public void setMigrationFileName(String migrationFileName) {
-        this.migrationFileName = migrationFileName;
-    }
+	@JsonProperty
+	public void setMigrationFileName(String migrationFileName) {
+		this.migrationFileName = migrationFileName;
+	}
 
-    @JsonProperty
-    public MigrationFileLocation getMigrationFileLocation() {
-        return this.migrationFileLocation;
-    }
+	@JsonProperty
+	public MigrationFileLocation getMigrationFileLocation() {
+		return this.migrationFileLocation;
+	}
 
-    @JsonProperty
-    public void setMigrationFileLocation(MigrationFileLocation migrationFileLocation) {
-        this.migrationFileLocation = migrationFileLocation;
-    }
+	@JsonProperty
+	public void setMigrationFileLocation(MigrationFileLocation migrationFileLocation) {
+		this.migrationFileLocation = migrationFileLocation;
+	}
 
-    @JsonProperty
-    public List<String> getContexts() {
-        return this.contexts;
-    }
+	@JsonProperty
+	public List<String> getContexts() {
+		return this.contexts;
+	}
 
-    @JsonProperty
-    public void setContexts(List<String> contexts) {
-        this.contexts = contexts;
-    }
+	@JsonProperty
+	public void setContexts(List<String> contexts) {
+		this.contexts = contexts;
+	}
 }

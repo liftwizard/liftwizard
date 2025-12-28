@@ -27,10 +27,10 @@ import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsLogstashEncoderLogger implements Consumer<StructuredArguments> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsLogstashEncoderLogger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsLogstashEncoderLogger.class);
 
-    @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments) {
-        LOGGER.debug(Markers.appendFields(structuredArguments), "Response sent");
-    }
+	@Override
+	public void accept(@Nonnull StructuredArguments structuredArguments) {
+		LOGGER.debug(Markers.appendFields(structuredArguments), "Response sent");
+	}
 }

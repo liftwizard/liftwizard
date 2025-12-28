@@ -61,259 +61,259 @@ import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashEncoderFa
 @AutoService(AppenderFactory.class)
 public class LogstashFileAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
 
-    @Nullable
-    private String currentLogFilename;
+	@Nullable
+	private String currentLogFilename;
 
-    private boolean archive = true;
+	private boolean archive = true;
 
-    @Nullable
-    private String archivedLogFilenamePattern;
+	@Nullable
+	private String archivedLogFilenamePattern;
 
-    private @Min(0) int archivedFileCount = 5;
+	private @Min(0) int archivedFileCount = 5;
 
-    @Nullable
-    private DataSize maxFileSize;
+	@Nullable
+	private DataSize maxFileSize;
 
-    private @MinDataSize(1) DataSize bufferSize = DataSize.bytes(FileAppender.DEFAULT_BUFFER_SIZE);
+	private @MinDataSize(1) DataSize bufferSize = DataSize.bytes(FileAppender.DEFAULT_BUFFER_SIZE);
 
-    private boolean immediateFlush = true;
+	private boolean immediateFlush = true;
 
-    @NotNull
-    private LogstashEncoderFactory encoderFactory = new LogstashEncoderFactory();
+	@NotNull
+	private LogstashEncoderFactory encoderFactory = new LogstashEncoderFactory();
 
-    @JsonProperty
-    @Nullable
-    public String getCurrentLogFilename() {
-        return this.currentLogFilename;
-    }
+	@JsonProperty
+	@Nullable
+	public String getCurrentLogFilename() {
+		return this.currentLogFilename;
+	}
 
-    @JsonProperty
-    public void setCurrentLogFilename(@Nullable String currentLogFilename) {
-        this.currentLogFilename = currentLogFilename;
-    }
+	@JsonProperty
+	public void setCurrentLogFilename(@Nullable String currentLogFilename) {
+		this.currentLogFilename = currentLogFilename;
+	}
 
-    @JsonProperty
-    public boolean isArchive() {
-        return this.archive;
-    }
+	@JsonProperty
+	public boolean isArchive() {
+		return this.archive;
+	}
 
-    @JsonProperty
-    public void setArchive(boolean archive) {
-        this.archive = archive;
-    }
+	@JsonProperty
+	public void setArchive(boolean archive) {
+		this.archive = archive;
+	}
 
-    @JsonProperty
-    @Nullable
-    public String getArchivedLogFilenamePattern() {
-        return this.archivedLogFilenamePattern;
-    }
+	@JsonProperty
+	@Nullable
+	public String getArchivedLogFilenamePattern() {
+		return this.archivedLogFilenamePattern;
+	}
 
-    @JsonProperty
-    public void setArchivedLogFilenamePattern(@Nullable String archivedLogFilenamePattern) {
-        this.archivedLogFilenamePattern = archivedLogFilenamePattern;
-    }
+	@JsonProperty
+	public void setArchivedLogFilenamePattern(@Nullable String archivedLogFilenamePattern) {
+		this.archivedLogFilenamePattern = archivedLogFilenamePattern;
+	}
 
-    @JsonProperty
-    public int getArchivedFileCount() {
-        return this.archivedFileCount;
-    }
+	@JsonProperty
+	public int getArchivedFileCount() {
+		return this.archivedFileCount;
+	}
 
-    @JsonProperty
-    public void setArchivedFileCount(int archivedFileCount) {
-        this.archivedFileCount = archivedFileCount;
-    }
+	@JsonProperty
+	public void setArchivedFileCount(int archivedFileCount) {
+		this.archivedFileCount = archivedFileCount;
+	}
 
-    @JsonProperty
-    @Nullable
-    public DataSize getMaxFileSize() {
-        return this.maxFileSize;
-    }
+	@JsonProperty
+	@Nullable
+	public DataSize getMaxFileSize() {
+		return this.maxFileSize;
+	}
 
-    @JsonProperty
-    public void setMaxFileSize(DataSize maxFileSize) {
-        this.maxFileSize = maxFileSize;
-    }
+	@JsonProperty
+	public void setMaxFileSize(DataSize maxFileSize) {
+		this.maxFileSize = maxFileSize;
+	}
 
-    @JsonProperty
-    public DataSize getBufferSize() {
-        return this.bufferSize;
-    }
+	@JsonProperty
+	public DataSize getBufferSize() {
+		return this.bufferSize;
+	}
 
-    @JsonProperty
-    public void setBufferSize(DataSize bufferSize) {
-        this.bufferSize = bufferSize;
-    }
+	@JsonProperty
+	public void setBufferSize(DataSize bufferSize) {
+		this.bufferSize = bufferSize;
+	}
 
-    public boolean isImmediateFlush() {
-        return this.immediateFlush;
-    }
+	public boolean isImmediateFlush() {
+		return this.immediateFlush;
+	}
 
-    @JsonProperty
-    public void setImmediateFlush(boolean immediateFlush) {
-        this.immediateFlush = immediateFlush;
-    }
+	@JsonProperty
+	public void setImmediateFlush(boolean immediateFlush) {
+		this.immediateFlush = immediateFlush;
+	}
 
-    @JsonProperty
-    public LogstashEncoderFactory getEncoder() {
-        return this.encoderFactory;
-    }
+	@JsonProperty
+	public LogstashEncoderFactory getEncoder() {
+		return this.encoderFactory;
+	}
 
-    @JsonProperty
-    public void setEncoder(LogstashEncoderFactory newEncoderFactory) {
-        this.encoderFactory = newEncoderFactory;
-    }
+	@JsonProperty
+	public void setEncoder(LogstashEncoderFactory newEncoderFactory) {
+		this.encoderFactory = newEncoderFactory;
+	}
 
-    @JsonIgnore
-    @ValidationMethod(message = "must have archivedLogFilenamePattern if archive is true")
-    public boolean isValidArchiveConfiguration() {
-        return !this.archive || this.archivedLogFilenamePattern != null;
-    }
+	@JsonIgnore
+	@ValidationMethod(message = "must have archivedLogFilenamePattern if archive is true")
+	public boolean isValidArchiveConfiguration() {
+		return !this.archive || this.archivedLogFilenamePattern != null;
+	}
 
-    @JsonIgnore
-    @ValidationMethod(message = "when specifying maxFileSize, archivedLogFilenamePattern must contain %i")
-    public boolean isValidForMaxFileSizeSetting() {
-        return !this.archive || this.maxFileSize == null || this.isValidMaxFileSizePattern();
-    }
+	@JsonIgnore
+	@ValidationMethod(message = "when specifying maxFileSize, archivedLogFilenamePattern must contain %i")
+	public boolean isValidForMaxFileSizeSetting() {
+		return !this.archive || this.maxFileSize == null || this.isValidMaxFileSizePattern();
+	}
 
-    @JsonIgnore
-    @ValidationMethod(message = "when archivedLogFilenamePattern contains %i, maxFileSize must be specified")
-    public boolean isMaxFileSizeSettingSpecified() {
-        return !this.archive || !this.isValidMaxFileSizePattern() || this.maxFileSize != null;
-    }
+	@JsonIgnore
+	@ValidationMethod(message = "when archivedLogFilenamePattern contains %i, maxFileSize must be specified")
+	public boolean isMaxFileSizeSettingSpecified() {
+		return !this.archive || !this.isValidMaxFileSizePattern() || this.maxFileSize != null;
+	}
 
-    private boolean isValidMaxFileSizePattern() {
-        return this.archivedLogFilenamePattern != null && this.archivedLogFilenamePattern.contains("%i");
-    }
+	private boolean isValidMaxFileSizePattern() {
+		return this.archivedLogFilenamePattern != null && this.archivedLogFilenamePattern.contains("%i");
+	}
 
-    @JsonIgnore
-    @ValidationMethod(message = "currentLogFilename can only be null when archiving is enabled")
-    public boolean isValidFileConfiguration() {
-        return this.archive || this.currentLogFilename != null;
-    }
+	@JsonIgnore
+	@ValidationMethod(message = "currentLogFilename can only be null when archiving is enabled")
+	public boolean isValidFileConfiguration() {
+		return this.archive || this.currentLogFilename != null;
+	}
 
-    @Override
-    public Appender<ILoggingEvent> build(
-        LoggerContext context,
-        String applicationName,
-        LayoutFactory<ILoggingEvent> layoutFactory,
-        LevelFilterFactory<ILoggingEvent> levelFilterFactory,
-        AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory
-    ) {
-        Encoder<ILoggingEvent> encoder = this.encoderFactory.build(this.isIncludeCallerData(), this.getTimeZone());
-        OutputStreamAppender<ILoggingEvent> appender = this.appender(context);
-        appender.setEncoder(encoder);
-        encoder.start();
+	@Override
+	public Appender<ILoggingEvent> build(
+		LoggerContext context,
+		String applicationName,
+		LayoutFactory<ILoggingEvent> layoutFactory,
+		LevelFilterFactory<ILoggingEvent> levelFilterFactory,
+		AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory
+	) {
+		Encoder<ILoggingEvent> encoder = this.encoderFactory.build(this.isIncludeCallerData(), this.getTimeZone());
+		OutputStreamAppender<ILoggingEvent> appender = this.appender(context);
+		appender.setEncoder(encoder);
+		encoder.start();
 
-        appender.addFilter(levelFilterFactory.build(this.threshold));
-        this.getFilterFactories().stream().map(FilterFactory::build).forEach(appender::addFilter);
-        appender.start();
-        return this.wrapAsync(appender, asyncAppenderFactory);
-    }
+		appender.addFilter(levelFilterFactory.build(this.threshold));
+		this.getFilterFactories().stream().map(FilterFactory::build).forEach(appender::addFilter);
+		appender.start();
+		return this.wrapAsync(appender, asyncAppenderFactory);
+	}
 
-    private OutputStreamAppender<ILoggingEvent> appender(LoggerContext context) {
-        FileAppender<ILoggingEvent> appender = this.buildAppender(context);
-        appender.setName("file-logstash-appender");
-        appender.setAppend(true);
-        appender.setContext(context);
-        appender.setImmediateFlush(this.immediateFlush);
-        appender.setPrudent(false);
-        return appender;
-    }
+	private OutputStreamAppender<ILoggingEvent> appender(LoggerContext context) {
+		FileAppender<ILoggingEvent> appender = this.buildAppender(context);
+		appender.setName("file-logstash-appender");
+		appender.setAppend(true);
+		appender.setContext(context);
+		appender.setImmediateFlush(this.immediateFlush);
+		appender.setPrudent(false);
+		return appender;
+	}
 
-    private FileAppender<ILoggingEvent> buildAppender(LoggerContext context) {
-        if (!this.archive) {
-            var appender = new FileAppender<ILoggingEvent>();
-            this.configureAppender(appender, context);
-            return appender;
-        }
+	private FileAppender<ILoggingEvent> buildAppender(LoggerContext context) {
+		if (!this.archive) {
+			var appender = new FileAppender<ILoggingEvent>();
+			this.configureAppender(appender, context);
+			return appender;
+		}
 
-        var appender = new RollingFileAppender<ILoggingEvent>();
-        this.configureAppender(appender, context);
+		var appender = new RollingFileAppender<ILoggingEvent>();
+		this.configureAppender(appender, context);
 
-        return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d")
-            ? this.configurePolicyWithDefaults(appender, context)
-            : this.dateAndSizeSpecifiedPolicy(appender, context);
-    }
+		return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d")
+			? this.configurePolicyWithDefaults(appender, context)
+			: this.dateAndSizeSpecifiedPolicy(appender, context);
+	}
 
-    private RollingFileAppender<ILoggingEvent> configurePolicyWithDefaults(
-        RollingFileAppender<ILoggingEvent> appender,
-        Context context
-    ) {
-        TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = this.maxFileSize == null
-            ? this.getTimeBasedRollingPolicy(appender, context)
-            : this.getSizeAndTimeBasedRollingPolicy();
+	private RollingFileAppender<ILoggingEvent> configurePolicyWithDefaults(
+		RollingFileAppender<ILoggingEvent> appender,
+		Context context
+	) {
+		TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = this.maxFileSize == null
+			? this.getTimeBasedRollingPolicy(appender, context)
+			: this.getSizeAndTimeBasedRollingPolicy();
 
-        rollingPolicy.setContext(context);
-        rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
-        rollingPolicy.setMaxHistory(this.archivedFileCount);
-        rollingPolicy.setParent(appender);
-        rollingPolicy.start();
-        appender.setRollingPolicy(rollingPolicy);
-        return appender;
-    }
+		rollingPolicy.setContext(context);
+		rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
+		rollingPolicy.setMaxHistory(this.archivedFileCount);
+		rollingPolicy.setParent(appender);
+		rollingPolicy.start();
+		appender.setRollingPolicy(rollingPolicy);
+		return appender;
+	}
 
-    @Nonnull
-    private TimeBasedRollingPolicy<ILoggingEvent> getSizeAndTimeBasedRollingPolicy() {
-        // Creating a size and time policy does not need a separate triggering policy set on the appender
-        // because this policy registers the trigger policy
-        if (this.maxFileSize == null) {
-            throw new AssertionError();
-        }
-        var fileSize = new FileSize(this.maxFileSize.toBytes());
-        var sizeAndTimeBasedRollingPolicy = new SizeAndTimeBasedRollingPolicy<ILoggingEvent>();
-        sizeAndTimeBasedRollingPolicy.setMaxFileSize(fileSize);
-        return sizeAndTimeBasedRollingPolicy;
-    }
+	@Nonnull
+	private TimeBasedRollingPolicy<ILoggingEvent> getSizeAndTimeBasedRollingPolicy() {
+		// Creating a size and time policy does not need a separate triggering policy set on the appender
+		// because this policy registers the trigger policy
+		if (this.maxFileSize == null) {
+			throw new AssertionError();
+		}
+		var fileSize = new FileSize(this.maxFileSize.toBytes());
+		var sizeAndTimeBasedRollingPolicy = new SizeAndTimeBasedRollingPolicy<ILoggingEvent>();
+		sizeAndTimeBasedRollingPolicy.setMaxFileSize(fileSize);
+		return sizeAndTimeBasedRollingPolicy;
+	}
 
-    @Nonnull
-    private TimeBasedRollingPolicy<ILoggingEvent> getTimeBasedRollingPolicy(
-        RollingFileAppender<ILoggingEvent> appender,
-        Context context
-    ) {
-        var triggeringPolicy = new DefaultTimeBasedFileNamingAndTriggeringPolicy<ILoggingEvent>();
-        triggeringPolicy.setContext(context);
+	@Nonnull
+	private TimeBasedRollingPolicy<ILoggingEvent> getTimeBasedRollingPolicy(
+		RollingFileAppender<ILoggingEvent> appender,
+		Context context
+	) {
+		var triggeringPolicy = new DefaultTimeBasedFileNamingAndTriggeringPolicy<ILoggingEvent>();
+		triggeringPolicy.setContext(context);
 
-        var rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
-        triggeringPolicy.setTimeBasedRollingPolicy(rollingPolicy);
-        appender.setTriggeringPolicy(triggeringPolicy);
-        return rollingPolicy;
-    }
+		var rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
+		triggeringPolicy.setTimeBasedRollingPolicy(rollingPolicy);
+		appender.setTriggeringPolicy(triggeringPolicy);
+		return rollingPolicy;
+	}
 
-    private RollingFileAppender<ILoggingEvent> dateAndSizeSpecifiedPolicy(
-        RollingFileAppender<ILoggingEvent> appender,
-        Context context
-    ) {
-        FixedWindowRollingPolicy rollingPolicy = this.getRollingPolicy(appender, context);
-        appender.setRollingPolicy(rollingPolicy);
+	private RollingFileAppender<ILoggingEvent> dateAndSizeSpecifiedPolicy(
+		RollingFileAppender<ILoggingEvent> appender,
+		Context context
+	) {
+		FixedWindowRollingPolicy rollingPolicy = this.getRollingPolicy(appender, context);
+		appender.setRollingPolicy(rollingPolicy);
 
-        if (this.maxFileSize == null) {
-            throw new AssertionError();
-        }
-        var fileSize = new FileSize(this.maxFileSize.toBytes());
-        var triggeringPolicy = new SizeBasedTriggeringPolicy<ILoggingEvent>();
-        triggeringPolicy.setMaxFileSize(fileSize);
-        triggeringPolicy.setContext(context);
-        triggeringPolicy.start();
-        appender.setTriggeringPolicy(triggeringPolicy);
-        return appender;
-    }
+		if (this.maxFileSize == null) {
+			throw new AssertionError();
+		}
+		var fileSize = new FileSize(this.maxFileSize.toBytes());
+		var triggeringPolicy = new SizeBasedTriggeringPolicy<ILoggingEvent>();
+		triggeringPolicy.setMaxFileSize(fileSize);
+		triggeringPolicy.setContext(context);
+		triggeringPolicy.start();
+		appender.setTriggeringPolicy(triggeringPolicy);
+		return appender;
+	}
 
-    @Nonnull
-    private FixedWindowRollingPolicy getRollingPolicy(RollingFileAppender<ILoggingEvent> appender, Context context) {
-        var rollingPolicy = new FixedWindowRollingPolicy();
-        rollingPolicy.setContext(context);
-        rollingPolicy.setMaxIndex(this.archivedFileCount);
-        rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
-        rollingPolicy.setParent(appender);
-        rollingPolicy.start();
-        return rollingPolicy;
-    }
+	@Nonnull
+	private FixedWindowRollingPolicy getRollingPolicy(RollingFileAppender<ILoggingEvent> appender, Context context) {
+		var rollingPolicy = new FixedWindowRollingPolicy();
+		rollingPolicy.setContext(context);
+		rollingPolicy.setMaxIndex(this.archivedFileCount);
+		rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
+		rollingPolicy.setParent(appender);
+		rollingPolicy.start();
+		return rollingPolicy;
+	}
 
-    private void configureAppender(FileAppender<ILoggingEvent> appender, Context context) {
-        var fileSize = new FileSize(this.bufferSize.toBytes());
+	private void configureAppender(FileAppender<ILoggingEvent> appender, Context context) {
+		var fileSize = new FileSize(this.bufferSize.toBytes());
 
-        appender.setContext(context);
-        appender.setFile(this.currentLogFilename);
-        appender.setBufferSize(fileSize);
-    }
+		appender.setContext(context);
+		appender.setFile(this.currentLogFilename);
+		appender.setBufferSize(fileSize);
+	}
 }

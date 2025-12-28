@@ -33,57 +33,57 @@ import org.reflections.Reflections;
 
 public class ExecuteSqlExtension implements BeforeEachCallback, AfterEachCallback {
 
-    /**
-     * The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
-     */
-    // language=RegExp
-    private String ddlLocationPattern = "^(?!META-INF\\.).*\\.ddl$";
-    // language=RegExp
-    private String idxLocationPattern = "^(?!META-INF\\.).*\\.idx$";
-    // language=RegExp
-    private String fkLocationPattern = "^(?!META-INF\\.).*\\.fk$";
+	/**
+	 * The reason for the dots instead of slashes is that {@link Reflections#scan(URL)} calls {@code file.getRelativePath().replace('/', '.')} before matching any patterns.
+	 */
+	// language=RegExp
+	private String ddlLocationPattern = "^(?!META-INF\\.).*\\.ddl$";
+	// language=RegExp
+	private String idxLocationPattern = "^(?!META-INF\\.).*\\.idx$";
+	// language=RegExp
+	private String fkLocationPattern = "^(?!META-INF\\.).*\\.fk$";
 
-    @Nonnull
-    private Supplier<? extends Connection> connectionSupplier = () ->
-        H2InMemoryConnectionManager.getInstance().getConnection();
+	@Nonnull
+	private Supplier<? extends Connection> connectionSupplier = () ->
+		H2InMemoryConnectionManager.getInstance().getConnection();
 
-    public ExecuteSqlExtension setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
-        this.ddlLocationPattern = Objects.requireNonNull(ddlLocationPattern);
-        return this;
-    }
+	public ExecuteSqlExtension setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
+		this.ddlLocationPattern = Objects.requireNonNull(ddlLocationPattern);
+		return this;
+	}
 
-    public ExecuteSqlExtension setIdxLocationPattern(@Nonnull String idxLocationPattern) {
-        this.idxLocationPattern = Objects.requireNonNull(idxLocationPattern);
-        return this;
-    }
+	public ExecuteSqlExtension setIdxLocationPattern(@Nonnull String idxLocationPattern) {
+		this.idxLocationPattern = Objects.requireNonNull(idxLocationPattern);
+		return this;
+	}
 
-    public ExecuteSqlExtension setFkLocationPattern(@Nonnull String fkLocationPattern) {
-        this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
-        return this;
-    }
+	public ExecuteSqlExtension setFkLocationPattern(@Nonnull String fkLocationPattern) {
+		this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
+		return this;
+	}
 
-    public ExecuteSqlExtension setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
-        this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
-        return this;
-    }
+	public ExecuteSqlExtension setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
+		this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
+		return this;
+	}
 
-    @Override
-    public void beforeEach(ExtensionContext context) throws SQLException {
-        try (Connection connection = this.connectionSupplier.get()) {
-            DatabaseDdlExecutor.dropAllObjects(connection);
-            DatabaseDdlExecutor.executeSql(
-                connection,
-                this.ddlLocationPattern,
-                this.idxLocationPattern,
-                this.fkLocationPattern
-            );
-        }
-    }
+	@Override
+	public void beforeEach(ExtensionContext context) throws SQLException {
+		try (Connection connection = this.connectionSupplier.get()) {
+			DatabaseDdlExecutor.dropAllObjects(connection);
+			DatabaseDdlExecutor.executeSql(
+				connection,
+				this.ddlLocationPattern,
+				this.idxLocationPattern,
+				this.fkLocationPattern
+			);
+		}
+	}
 
-    @Override
-    public void afterEach(ExtensionContext context) throws SQLException {
-        try (Connection connection = this.connectionSupplier.get()) {
-            DatabaseDdlExecutor.dropAllObjects(connection);
-        }
-    }
+	@Override
+	public void afterEach(ExtensionContext context) throws SQLException {
+		try (Connection connection = this.connectionSupplier.get()) {
+			DatabaseDdlExecutor.dropAllObjects(connection);
+		}
+	}
 }

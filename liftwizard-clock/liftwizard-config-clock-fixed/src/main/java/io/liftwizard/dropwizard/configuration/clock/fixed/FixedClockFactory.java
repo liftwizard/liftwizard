@@ -37,48 +37,48 @@ import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
 @AutoService(ClockFactory.class)
 public class FixedClockFactory implements ClockFactory {
 
-    private @Valid @NotNull Instant instant = Instant.parse("2000-12-31T23:59:59Z");
-    private @Valid @NotNull String timeZoneName = "UTC";
+	private @Valid @NotNull Instant instant = Instant.parse("2000-12-31T23:59:59Z");
+	private @Valid @NotNull String timeZoneName = "UTC";
 
-    @Nonnull
-    @Override
-    public Clock createClock() {
-        ZoneId zoneId = ZoneId.of(this.timeZoneName);
-        return Clock.fixed(this.instant, zoneId);
-    }
+	@Nonnull
+	@Override
+	public Clock createClock() {
+		ZoneId zoneId = ZoneId.of(this.timeZoneName);
+		return Clock.fixed(this.instant, zoneId);
+	}
 
-    @JsonProperty
-    public Instant getInstant() {
-        return this.instant;
-    }
+	@JsonProperty
+	public Instant getInstant() {
+		return this.instant;
+	}
 
-    @JsonProperty
-    public void setInstant(Instant instant) {
-        this.instant = instant;
-    }
+	@JsonProperty
+	public void setInstant(Instant instant) {
+		this.instant = instant;
+	}
 
-    @JsonProperty("timeZone")
-    public String getTimeZoneName() {
-        return this.timeZoneName;
-    }
+	@JsonProperty("timeZone")
+	public String getTimeZoneName() {
+		return this.timeZoneName;
+	}
 
-    @JsonProperty("timeZone")
-    public void setTimeZoneName(String timeZoneName) {
-        this.timeZoneName = timeZoneName;
-    }
+	@JsonProperty("timeZone")
+	public void setTimeZoneName(String timeZoneName) {
+		this.timeZoneName = timeZoneName;
+	}
 
-    @ValidationMethod(message = "Invalid timeZoneName")
-    @JsonIgnore
-    public boolean isValidTimezone() {
-        TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-        if (zoneInfo != null) {
-            return true;
-        }
+	@ValidationMethod(message = "Invalid timeZoneName")
+	@JsonIgnore
+	public boolean isValidTimezone() {
+		TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
+		if (zoneInfo != null) {
+			return true;
+		}
 
-        String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-            this.timeZoneName,
-            Arrays.toString(TimeZone.getAvailableIDs())
-        );
-        throw new IllegalStateException(message);
-    }
+		String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
+			this.timeZoneName,
+			Arrays.toString(TimeZone.getAvailableIDs())
+		);
+		throw new IllegalStateException(message);
+	}
 }
