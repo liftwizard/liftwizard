@@ -25,22 +25,22 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 public class FloatListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Float>> {
 
-    private final FloatLiteralVisitor floatLiteralVisitor;
+	private final FloatLiteralVisitor floatLiteralVisitor;
 
-    public FloatListLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-        this.floatLiteralVisitor = new FloatLiteralVisitor(this.finder, this.errorContext);
-    }
+	public FloatListLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+		this.floatLiteralVisitor = new FloatLiteralVisitor(this.finder, this.errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "Float list";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "Float list";
+	}
 
-    @Override
-    public ImmutableList<Float> visitFloatingPointListLiteral(FloatingPointListLiteralContext ctx) {
-        return ListAdapter.adapt(ctx.floatingPointLiteral())
-            .collect(each -> each.accept(this.floatLiteralVisitor))
-            .toImmutable();
-    }
+	@Override
+	public ImmutableList<Float> visitFloatingPointListLiteral(FloatingPointListLiteralContext ctx) {
+		return ListAdapter.adapt(ctx.floatingPointLiteral())
+			.collect((each) -> each.accept(this.floatLiteralVisitor))
+			.toImmutable();
+	}
 }

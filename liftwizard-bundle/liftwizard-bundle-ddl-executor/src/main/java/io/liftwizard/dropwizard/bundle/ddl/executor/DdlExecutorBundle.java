@@ -38,54 +38,54 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class DdlExecutorBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DdlExecutorBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DdlExecutorBundle.class);
 
-    @Override
-    public int getPriority() {
-        return -6;
-    }
+	@Override
+	public int getPriority() {
+		return -6;
+	}
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws SQLException {
-        DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
-            DdlExecutorFactoryProvider.class,
-            configuration
-        );
-        NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
-            NamedDataSourceProvider.class,
-            configuration
-        );
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws SQLException {
+		DdlExecutorFactoryProvider ddlExecutorFactoryProvider = this.safeCastConfiguration(
+			DdlExecutorFactoryProvider.class,
+			configuration
+		);
+		NamedDataSourceProvider dataSourceProvider = this.safeCastConfiguration(
+			NamedDataSourceProvider.class,
+			configuration
+		);
 
-        List<DdlExecutorFactory> ddlExecutorFactories = ddlExecutorFactoryProvider.getDdlExecutorFactories();
+		List<DdlExecutorFactory> ddlExecutorFactories = ddlExecutorFactoryProvider.getDdlExecutorFactories();
 
-        NamedDataSourcesFactory namedDataSourcesFactory = dataSourceProvider.getNamedDataSourcesFactory();
+		NamedDataSourcesFactory namedDataSourcesFactory = dataSourceProvider.getNamedDataSourcesFactory();
 
-        if (ddlExecutorFactories.isEmpty()) {
-            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
-            return;
-        }
+		if (ddlExecutorFactories.isEmpty()) {
+			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			return;
+		}
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories) {
-            String dataSourceName = ddlExecutorFactory.getDataSourceName();
-            String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
-            String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
-            String fkLocationPattern = ddlExecutorFactory.getFkLocationPattern();
+		for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories) {
+			String dataSourceName = ddlExecutorFactory.getDataSourceName();
+			String ddlLocationPattern = ddlExecutorFactory.getDdlLocationPattern();
+			String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
+			String fkLocationPattern = ddlExecutorFactory.getFkLocationPattern();
 
-            LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
+			LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 
-            DataSource dataSource = namedDataSourcesFactory.getDataSourceByName(
-                dataSourceName,
-                environment.metrics(),
-                environment.lifecycle()
-            );
-            Objects.requireNonNull(dataSource, dataSourceName);
-            try (Connection connection = dataSource.getConnection()) {
-                DatabaseDdlExecutor.executeSql(connection, ddlLocationPattern, idxLocationPattern, fkLocationPattern);
-            }
-        }
+			DataSource dataSource = namedDataSourcesFactory.getDataSourceByName(
+				dataSourceName,
+				environment.metrics(),
+				environment.lifecycle()
+			);
+			Objects.requireNonNull(dataSource, dataSourceName);
+			try (Connection connection = dataSource.getConnection()) {
+				DatabaseDdlExecutor.executeSql(connection, ddlLocationPattern, idxLocationPattern, fkLocationPattern);
+			}
+		}
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 }

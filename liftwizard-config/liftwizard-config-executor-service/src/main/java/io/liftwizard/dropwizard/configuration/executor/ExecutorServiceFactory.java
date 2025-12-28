@@ -35,107 +35,107 @@ import io.dropwizard.validation.ValidationMethod;
 
 public class ExecutorServiceFactory {
 
-    @Valid
-    @NotNull
-    private String nameFormat;
+	@Valid
+	@NotNull
+	private String nameFormat;
 
-    @Min(0)
-    private int minThreads;
+	@Min(0)
+	private int minThreads;
 
-    @Min(1)
-    private int maxThreads = 1;
+	@Min(1)
+	private int maxThreads = 1;
 
-    private boolean allowCoreThreadTimeOut;
+	private boolean allowCoreThreadTimeOut;
 
-    @NotNull
-    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private Duration keepAliveTime = Duration.seconds(60);
+	@NotNull
+	@MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
+	private Duration keepAliveTime = Duration.seconds(60);
 
-    @NotNull
-    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
-    private Duration shutdownTime = Duration.seconds(5);
+	@NotNull
+	@MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
+	private Duration shutdownTime = Duration.seconds(5);
 
-    @ValidationMethod(message = "maxThreads < minThreads")
-    @JsonIgnore
-    public boolean isValidPoolSize() {
-        return this.minThreads <= this.maxThreads;
-    }
+	@ValidationMethod(message = "maxThreads < minThreads")
+	@JsonIgnore
+	public boolean isValidPoolSize() {
+		return this.minThreads <= this.maxThreads;
+	}
 
-    @JsonIgnore
-    public ExecutorService build(Environment environment) {
-        return this.build(environment.lifecycle(), environment.metrics());
-    }
+	@JsonIgnore
+	public ExecutorService build(Environment environment) {
+		return this.build(environment.lifecycle(), environment.metrics());
+	}
 
-    @JsonIgnore
-    public ExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
-        ExecutorService executorService = environment
-            .executorService(this.nameFormat)
-            .minThreads(this.minThreads)
-            .maxThreads(this.maxThreads)
-            .allowCoreThreadTimeOut(this.allowCoreThreadTimeOut)
-            .keepAliveTime(this.keepAliveTime)
-            .shutdownTime(this.shutdownTime)
-            .build();
-        return new InstrumentedExecutorService(executorService, metricRegistry, this.nameFormat);
-    }
+	@JsonIgnore
+	public ExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
+		ExecutorService executorService = environment
+			.executorService(this.nameFormat)
+			.minThreads(this.minThreads)
+			.maxThreads(this.maxThreads)
+			.allowCoreThreadTimeOut(this.allowCoreThreadTimeOut)
+			.keepAliveTime(this.keepAliveTime)
+			.shutdownTime(this.shutdownTime)
+			.build();
+		return new InstrumentedExecutorService(executorService, metricRegistry, this.nameFormat);
+	}
 
-    @JsonProperty
-    public String getNameFormat() {
-        return this.nameFormat;
-    }
+	@JsonProperty
+	public String getNameFormat() {
+		return this.nameFormat;
+	}
 
-    @JsonProperty
-    public void setNameFormat(String nameFormat) {
-        this.nameFormat = nameFormat;
-    }
+	@JsonProperty
+	public void setNameFormat(String nameFormat) {
+		this.nameFormat = nameFormat;
+	}
 
-    @JsonProperty
-    public int getMinThreads() {
-        return this.minThreads;
-    }
+	@JsonProperty
+	public int getMinThreads() {
+		return this.minThreads;
+	}
 
-    @JsonProperty
-    public void setMinThreads(int minThreads) {
-        this.minThreads = minThreads;
-    }
+	@JsonProperty
+	public void setMinThreads(int minThreads) {
+		this.minThreads = minThreads;
+	}
 
-    @JsonProperty
-    public int getMaxThreads() {
-        return this.maxThreads;
-    }
+	@JsonProperty
+	public int getMaxThreads() {
+		return this.maxThreads;
+	}
 
-    @JsonProperty
-    public void setMaxThreads(int maxThreads) {
-        this.maxThreads = maxThreads;
-    }
+	@JsonProperty
+	public void setMaxThreads(int maxThreads) {
+		this.maxThreads = maxThreads;
+	}
 
-    @JsonProperty
-    public boolean isAllowCoreThreadTimeOut() {
-        return this.allowCoreThreadTimeOut;
-    }
+	@JsonProperty
+	public boolean isAllowCoreThreadTimeOut() {
+		return this.allowCoreThreadTimeOut;
+	}
 
-    @JsonProperty
-    public void setAllowCoreThreadTimeOut(boolean allowCoreThreadTimeOut) {
-        this.allowCoreThreadTimeOut = allowCoreThreadTimeOut;
-    }
+	@JsonProperty
+	public void setAllowCoreThreadTimeOut(boolean allowCoreThreadTimeOut) {
+		this.allowCoreThreadTimeOut = allowCoreThreadTimeOut;
+	}
 
-    @JsonProperty
-    public Duration getKeepAliveTime() {
-        return this.keepAliveTime;
-    }
+	@JsonProperty
+	public Duration getKeepAliveTime() {
+		return this.keepAliveTime;
+	}
 
-    @JsonProperty
-    public void setKeepAliveTime(Duration keepAliveTime) {
-        this.keepAliveTime = keepAliveTime;
-    }
+	@JsonProperty
+	public void setKeepAliveTime(Duration keepAliveTime) {
+		this.keepAliveTime = keepAliveTime;
+	}
 
-    @JsonProperty
-    public Duration getShutdownTime() {
-        return this.shutdownTime;
-    }
+	@JsonProperty
+	public Duration getShutdownTime() {
+		return this.shutdownTime;
+	}
 
-    @JsonProperty
-    public void setShutdownTime(Duration shutdownTime) {
-        this.shutdownTime = shutdownTime;
-    }
+	@JsonProperty
+	public void setShutdownTime(Duration shutdownTime) {
+		this.shutdownTime = shutdownTime;
+	}
 }

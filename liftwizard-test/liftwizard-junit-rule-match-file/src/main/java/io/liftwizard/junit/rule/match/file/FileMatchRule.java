@@ -34,60 +34,60 @@ import static org.junit.Assert.assertEquals;
 
 public class FileMatchRule extends AbstractMatchRule {
 
-    public FileMatchRule(@Nonnull Class<?> callingClass) {
-        super(callingClass);
-    }
+	public FileMatchRule(@Nonnull Class<?> callingClass) {
+		super(callingClass);
+	}
 
-    @Override
-    protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
-        throws URISyntaxException, IOException {
-        Path packagePath = getPackagePath(this.callingClass);
-        if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath)) {
-            deleteDirectoryRecursively(packagePath);
-            CLEANED_PATHS.add(packagePath);
-        }
+	@Override
+	protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+		throws URISyntaxException, IOException {
+		Path packagePath = getPackagePath(this.callingClass);
+		if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath)) {
+			deleteDirectoryRecursively(packagePath);
+			CLEANED_PATHS.add(packagePath);
+		}
 
-        InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-        if (
-            (this.rerecordEnabled || inputStream == null) && !this.rerecordedPaths.contains(resourceClassPathLocation)
-        ) {
-            File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
+		InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+		if (
+			(this.rerecordEnabled || inputStream == null) && !this.rerecordedPaths.contains(resourceClassPathLocation)
+		) {
+			File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.writeStringToFile(resourceClassPathLocation, actualString, resourceFile);
-            if (!this.rerecordEnabled) {
-                this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
-            }
-        } else {
-            Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-            String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
+			this.writeStringToFile(resourceClassPathLocation, actualString, resourceFile);
+			if (!this.rerecordEnabled) {
+				this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
+			}
+		} else {
+			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
 
-            URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-            URI uri = resource.toURI();
+			URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+			URI uri = resource.toURI();
 
-            if (!actualString.equals(expectedStringFromFile)) {
-                if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
-                    String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
-                        uri,
-                        actualString
-                    );
-                    AssertionError assertionError = new AssertionError(detailMessage);
-                    this.addError(assertionError);
-                    return;
-                }
+			if (!actualString.equals(expectedStringFromFile)) {
+				if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
+					String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
+						uri,
+						actualString
+					);
+					AssertionError assertionError = new AssertionError(detailMessage);
+					this.addError(assertionError);
+					return;
+				}
 
-                File file = new File(uri);
-                this.writeStringToFile(resourceClassPathLocation, actualString, file);
-            }
+				File file = new File(uri);
+				this.writeStringToFile(resourceClassPathLocation, actualString, file);
+			}
 
-            this.checkSucceeds(() -> {
-                    assertEquals("Writing expected file to: " + uri, expectedStringFromFile, actualString);
-                    return null;
-                });
-        }
-    }
+			this.checkSucceeds(() -> {
+					assertEquals("Writing expected file to: " + uri, expectedStringFromFile, actualString);
+					return null;
+				});
+		}
+	}
 
-    @Override
-    protected String getPrettyPrintedString(@Nonnull String string) {
-        return string;
-    }
+	@Override
+	protected String getPrettyPrintedString(@Nonnull String string) {
+		return string;
+	}
 }

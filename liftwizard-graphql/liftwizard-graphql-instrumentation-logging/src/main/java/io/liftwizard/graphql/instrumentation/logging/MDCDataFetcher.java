@@ -25,49 +25,49 @@ import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 
 public class MDCDataFetcher<T> implements DataFetcher<T> {
 
-    private final DataFetcher<T> dataFetcher;
-    private final String executionId;
-    private final String path;
-    private final String parentTypeName;
-    private final String fieldName;
-    private final String fieldTypeName;
+	private final DataFetcher<T> dataFetcher;
+	private final String executionId;
+	private final String path;
+	private final String parentTypeName;
+	private final String fieldName;
+	private final String fieldTypeName;
 
-    public MDCDataFetcher(
-        DataFetcher<T> dataFetcher,
-        String executionId,
-        String path,
-        String parentTypeName,
-        String fieldName,
-        String fieldTypeName
-    ) {
-        this.dataFetcher = Objects.requireNonNull(dataFetcher);
-        this.executionId = executionId;
-        this.path = path;
-        this.parentTypeName = parentTypeName;
-        this.fieldName = fieldName;
-        this.fieldTypeName = fieldTypeName;
-    }
+	public MDCDataFetcher(
+		DataFetcher<T> dataFetcher,
+		String executionId,
+		String path,
+		String parentTypeName,
+		String fieldName,
+		String fieldTypeName
+	) {
+		this.dataFetcher = Objects.requireNonNull(dataFetcher);
+		this.executionId = executionId;
+		this.path = path;
+		this.parentTypeName = parentTypeName;
+		this.fieldName = fieldName;
+		this.fieldTypeName = fieldTypeName;
+	}
 
-    @Override
-    public T get(DataFetchingEnvironment environment) throws Exception {
-        String dataFetcherName = this.getDataFetcherName();
+	@Override
+	public T get(DataFetchingEnvironment environment) throws Exception {
+		String dataFetcherName = this.getDataFetcherName();
 
-        try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
-            mdc.put("liftwizard.graphql.executionId", this.executionId);
-            mdc.put("liftwizard.graphql.field.path", this.path);
-            mdc.put("liftwizard.graphql.field.parentType", this.parentTypeName);
-            mdc.put("liftwizard.graphql.field.name", this.fieldName);
-            mdc.put("liftwizard.graphql.field.type", this.fieldTypeName);
-            mdc.put("liftwizard.graphql.fetcher.type", dataFetcherName);
-            return this.dataFetcher.get(environment);
-        }
-    }
+		try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
+			mdc.put("liftwizard.graphql.executionId", this.executionId);
+			mdc.put("liftwizard.graphql.field.path", this.path);
+			mdc.put("liftwizard.graphql.field.parentType", this.parentTypeName);
+			mdc.put("liftwizard.graphql.field.name", this.fieldName);
+			mdc.put("liftwizard.graphql.field.type", this.fieldTypeName);
+			mdc.put("liftwizard.graphql.fetcher.type", dataFetcherName);
+			return this.dataFetcher.get(environment);
+		}
+	}
 
-    private String getDataFetcherName() {
-        DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
-            ? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
-            : this.dataFetcher;
-        String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
-        return dataFetcherName;
-    }
+	private String getDataFetcherName() {
+		DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
+			? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
+			: this.dataFetcher;
+		String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
+		return dataFetcherName;
+	}
 }

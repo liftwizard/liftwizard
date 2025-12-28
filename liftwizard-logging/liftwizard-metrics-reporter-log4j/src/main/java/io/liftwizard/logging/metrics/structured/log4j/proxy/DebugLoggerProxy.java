@@ -20,17 +20,17 @@ import org.apache.log4j.Logger;
 
 public class DebugLoggerProxy extends AbstractLoggerProxy {
 
-    public DebugLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public DebugLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Object structuredObject) {
-        this.logger.debug(structuredObject);
-    }
+	@Override
+	public void log(Object structuredObject) {
+		this.logger.debug(structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.logger.isDebugEnabled();
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.logger.isDebugEnabled();
+	}
 }

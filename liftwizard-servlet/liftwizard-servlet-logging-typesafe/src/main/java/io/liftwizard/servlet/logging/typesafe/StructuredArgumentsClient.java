@@ -22,28 +22,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArgumentsClient {
 
-    private final String address;
-    private final String host;
-    private final int port;
+	private final String address;
+	private final String host;
+	private final int port;
 
-    public StructuredArgumentsClient(String address, String host, int port) {
-        this.address = Objects.requireNonNull(address);
-        this.host = Objects.requireNonNull(host);
-        this.port = port;
-    }
+	public StructuredArgumentsClient(String address, String host, int port) {
+		this.address = Objects.requireNonNull(address);
+		this.host = Objects.requireNonNull(host);
+		this.port = port;
+	}
 
-    @JsonProperty
-    public String getAddress() {
-        return this.address;
-    }
+	@JsonProperty
+	public String getAddress() {
+		return this.address;
+	}
 
-    @JsonProperty
-    public String getHost() {
-        return this.host;
-    }
+	@JsonProperty
+	public String getHost() {
+		return this.host;
+	}
 
-    @JsonProperty
-    public int getPort() {
-        return this.port;
-    }
+	@JsonProperty
+	public int getPort() {
+		return this.port;
+	}
 }

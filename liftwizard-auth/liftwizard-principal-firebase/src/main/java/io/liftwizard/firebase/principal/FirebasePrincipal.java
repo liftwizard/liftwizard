@@ -23,75 +23,75 @@ import org.eclipse.collections.api.factory.Maps;
 
 public class FirebasePrincipal implements Principal {
 
-    private final String name;
-    private final String displayName;
-    private final String email;
-    private final Boolean emailVerified;
-    private final String issuer;
-    private final String picture;
-    private final String signInProvider;
+	private final String name;
+	private final String displayName;
+	private final String email;
+	private final Boolean emailVerified;
+	private final String issuer;
+	private final String picture;
+	private final String signInProvider;
 
-    public FirebasePrincipal(
-        String name,
-        String displayName,
-        String email,
-        Boolean emailVerified,
-        String issuer,
-        String picture,
-        String signInProvider
-    ) {
-        this.name = name;
-        this.displayName = displayName;
-        this.email = email;
-        this.emailVerified = emailVerified;
-        this.issuer = issuer;
-        this.picture = picture;
-        this.signInProvider = signInProvider;
-    }
+	public FirebasePrincipal(
+		String name,
+		String displayName,
+		String email,
+		Boolean emailVerified,
+		String issuer,
+		String picture,
+		String signInProvider
+	) {
+		this.name = name;
+		this.displayName = displayName;
+		this.email = email;
+		this.emailVerified = emailVerified;
+		this.issuer = issuer;
+		this.picture = picture;
+		this.signInProvider = signInProvider;
+	}
 
-    public Map<String, Object> toMap() {
-        return Maps.mutable
-            .<String, Object>empty()
-            .withKeyValue("name", this.name)
-            .withKeyValue("displayName", this.displayName)
-            .withKeyValue("email", this.email)
-            .withKeyValue("emailVerified", this.emailVerified)
-            .withKeyValue("issuer", this.issuer)
-            .withKeyValue("picture", this.picture)
-            .withKeyValue("signInProvider", this.signInProvider);
-    }
+	public Map<String, Object> toMap() {
+		return Maps.mutable
+			.<String, Object>empty()
+			.withKeyValue("name", this.name)
+			.withKeyValue("displayName", this.displayName)
+			.withKeyValue("email", this.email)
+			.withKeyValue("emailVerified", this.emailVerified)
+			.withKeyValue("issuer", this.issuer)
+			.withKeyValue("picture", this.picture)
+			.withKeyValue("signInProvider", this.signInProvider);
+	}
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
+	@Override
+	public String getName() {
+		return this.name;
+	}
 
-    public String getDisplayName() {
-        return this.displayName;
-    }
+	public String getDisplayName() {
+		return this.displayName;
+	}
 
-    public String getEmail() {
-        return this.email;
-    }
+	public String getEmail() {
+		return this.email;
+	}
 
-    public Boolean getEmailVerified() {
-        return this.emailVerified;
-    }
+	public Boolean getEmailVerified() {
+		return this.emailVerified;
+	}
 
-    public String getIssuer() {
-        return this.issuer;
-    }
+	public String getIssuer() {
+		return this.issuer;
+	}
 
-    public String getPicture() {
-        return this.picture;
-    }
+	public String getPicture() {
+		return this.picture;
+	}
 
-    public String getSignInProvider() {
-        return this.signInProvider;
-    }
+	public String getSignInProvider() {
+		return this.signInProvider;
+	}
 
-    @Override
-    public String toString() {
-        return "{name=" + this.name + ", displayName=" + this.displayName + "}";
-    }
+	@Override
+	public String toString() {
+		return "{name=" + this.name + ", displayName=" + this.displayName + "}";
+	}
 }

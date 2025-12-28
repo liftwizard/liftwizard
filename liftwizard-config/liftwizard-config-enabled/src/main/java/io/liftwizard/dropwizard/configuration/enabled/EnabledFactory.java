@@ -20,23 +20,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class EnabledFactory {
 
-    private boolean enabled;
+	private boolean enabled;
 
-    public EnabledFactory() {
-        this(false);
-    }
+	public EnabledFactory() {
+		this(false);
+	}
 
-    public EnabledFactory(boolean enabled) {
-        this.enabled = enabled;
-    }
+	public EnabledFactory(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    @JsonProperty
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+	@JsonProperty
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 
-    @JsonProperty
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@JsonProperty
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 }

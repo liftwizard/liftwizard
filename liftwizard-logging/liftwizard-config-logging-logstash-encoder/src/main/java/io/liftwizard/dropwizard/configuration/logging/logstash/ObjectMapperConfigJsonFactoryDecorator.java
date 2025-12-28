@@ -26,18 +26,18 @@ import net.logstash.logback.decorate.JsonFactoryDecorator;
 
 public class ObjectMapperConfigJsonFactoryDecorator implements JsonFactoryDecorator {
 
-    private final boolean prettyPrint;
-    private final Include serializationInclusion;
+	private final boolean prettyPrint;
+	private final Include serializationInclusion;
 
-    public ObjectMapperConfigJsonFactoryDecorator(boolean prettyPrint, Include serializationInclusion) {
-        this.prettyPrint = prettyPrint;
-        this.serializationInclusion = Objects.requireNonNull(serializationInclusion);
-    }
+	public ObjectMapperConfigJsonFactoryDecorator(boolean prettyPrint, Include serializationInclusion) {
+		this.prettyPrint = prettyPrint;
+		this.serializationInclusion = Objects.requireNonNull(serializationInclusion);
+	}
 
-    @Override
-    public JsonFactory decorate(JsonFactory factory) {
-        ObjectMapper objectMapper = (ObjectMapper) factory.getCodec();
-        ObjectMapperConfig.configure(objectMapper, this.prettyPrint, true, this.serializationInclusion);
-        return factory;
-    }
+	@Override
+	public JsonFactory decorate(JsonFactory factory) {
+		ObjectMapper objectMapper = (ObjectMapper) factory.getCodec();
+		ObjectMapperConfig.configure(objectMapper, this.prettyPrint, true, this.serializationInclusion);
+		return factory;
+	}
 }

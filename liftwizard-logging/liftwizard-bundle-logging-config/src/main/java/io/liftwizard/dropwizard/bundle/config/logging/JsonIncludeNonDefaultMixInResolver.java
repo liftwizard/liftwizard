@@ -20,13 +20,13 @@ import com.fasterxml.jackson.databind.introspect.ClassIntrospector.MixInResolver
 
 public class JsonIncludeNonDefaultMixInResolver implements MixInResolver {
 
-    @Override
-    public Class<?> findMixInClassFor(Class<?> cls) {
-        return JsonIncludeNonDefaultMixIn.class;
-    }
+	@Override
+	public Class<?> findMixInClassFor(Class<?> cls) {
+		return JsonIncludeNonDefaultMixIn.class;
+	}
 
-    @Override
-    public MixInResolver copy() {
-        return this;
-    }
+	@Override
+	public MixInResolver copy() {
+		return this;
+	}
 }

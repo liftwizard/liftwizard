@@ -31,30 +31,30 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheckBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheckBundle.class);
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        CommonPoolHealthCheckFactoryProvider factoryProvider = this.safeCastConfiguration(
-            CommonPoolHealthCheckFactoryProvider.class,
-            configuration
-        );
-        CommonPoolHealthCheckFactory factory = factoryProvider.getCommonPoolHealthCheckFactory();
-        if (!factory.isEnabled()) {
-            LOGGER.info("{} disabled.", this.getClass().getSimpleName());
-            return;
-        }
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		CommonPoolHealthCheckFactoryProvider factoryProvider = this.safeCastConfiguration(
+			CommonPoolHealthCheckFactoryProvider.class,
+			configuration
+		);
+		CommonPoolHealthCheckFactory factory = factoryProvider.getCommonPoolHealthCheckFactory();
+		if (!factory.isEnabled()) {
+			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			return;
+		}
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        CommonPoolHealthCheck healthCheck = new CommonPoolHealthCheck(
-            factory.getThreadNamePrefix(),
-            Lists.immutable.withAll(factory.getThreadStates()),
-            Lists.immutable.withAll(factory.getAlwaysAllowedPatterns()),
-            Lists.immutable.withAll(factory.getBannedPatterns())
-        );
-        environment.healthChecks().register("common-pool", healthCheck);
+		CommonPoolHealthCheck healthCheck = new CommonPoolHealthCheck(
+			factory.getThreadNamePrefix(),
+			Lists.immutable.withAll(factory.getThreadStates()),
+			Lists.immutable.withAll(factory.getAlwaysAllowedPatterns()),
+			Lists.immutable.withAll(factory.getBannedPatterns())
+		);
+		environment.healthChecks().register("common-pool", healthCheck);
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 }

@@ -35,14 +35,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class JUnitVersionCompatibilityTest {
 
-    private static Stream<Arguments> testDataProvider() {
-        return Stream.of(Arguments.of("first", 1), Arguments.of("second", 2), Arguments.of("third", 3));
-    }
+	private static Stream<Arguments> testDataProvider() {
+		return Stream.of(Arguments.of("first", 1), Arguments.of("second", 2), Arguments.of("third", 3));
+	}
 
-    @ParameterizedTest
-    @MethodSource("testDataProvider")
-    void parameterizedMethodSourceCompatibility(String name, int value) {
-        assertThat(name).isNotBlank();
-        assertThat(value).isPositive();
-    }
+	@ParameterizedTest
+	@MethodSource("testDataProvider")
+	void parameterizedMethodSourceCompatibility(String name, int value) {
+		assertThat(name).isNotBlank();
+		assertThat(value).isPositive();
+	}
 }

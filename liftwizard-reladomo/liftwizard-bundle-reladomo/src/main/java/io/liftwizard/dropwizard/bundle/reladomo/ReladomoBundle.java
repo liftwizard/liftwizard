@@ -42,112 +42,112 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ReladomoBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoBundle.class);
 
-    @Override
-    public int getPriority() {
-        return -3;
-    }
+	@Override
+	public int getPriority() {
+		return -3;
+	}
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        ReladomoFactoryProvider reladomoFactoryProvider = this.safeCastConfiguration(
-            ReladomoFactoryProvider.class,
-            configuration
-        );
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		ReladomoFactoryProvider reladomoFactoryProvider = this.safeCastConfiguration(
+			ReladomoFactoryProvider.class,
+			configuration
+		);
 
-        LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-        ReladomoBundle.assertTimezoneUTC();
+		ReladomoBundle.assertTimezoneUTC();
 
-        ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
+		ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
-        int defaultMinQueriesToKeep = reladomoFactory.getDefaultMinQueriesToKeep();
-        ReladomoBundle.setDefaultMinQueriesToKeep(defaultMinQueriesToKeep);
-        int defaultRelationshipCacheSize = reladomoFactory.getDefaultRelationshipCacheSize();
-        ReladomoBundle.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
+		int defaultMinQueriesToKeep = reladomoFactory.getDefaultMinQueriesToKeep();
+		ReladomoBundle.setDefaultMinQueriesToKeep(defaultMinQueriesToKeep);
+		int defaultRelationshipCacheSize = reladomoFactory.getDefaultRelationshipCacheSize();
+		ReladomoBundle.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
 
-        Duration transactionTimeout = reladomoFactory.getTransactionTimeout();
-        int transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
-        ReladomoBundle.setTransactionTimeout(transactionTimeoutSeconds);
-        // Notification should be configured here. Refer to notification/Notification.html under reladomo-javadoc.jar.
+		Duration transactionTimeout = reladomoFactory.getTransactionTimeout();
+		int transactionTimeoutSeconds = Math.toIntExact(transactionTimeout.toSeconds());
+		ReladomoBundle.setTransactionTimeout(transactionTimeoutSeconds);
+		// Notification should be configured here. Refer to notification/Notification.html under reladomo-javadoc.jar.
 
-        List<String> runtimeConfigurationPaths = reladomoFactory.getRuntimeConfigurationPaths();
-        runtimeConfigurationPaths.forEach(this::loadRuntimeConfiguration);
+		List<String> runtimeConfigurationPaths = reladomoFactory.getRuntimeConfigurationPaths();
+		runtimeConfigurationPaths.forEach(this::loadRuntimeConfiguration);
 
-        boolean captureTransactionLevelPerformanceData = reladomoFactory.isCaptureTransactionLevelPerformanceData();
-        ReladomoBundle.setCaptureTransactionLevelPerformanceData(captureTransactionLevelPerformanceData);
+		boolean captureTransactionLevelPerformanceData = reladomoFactory.isCaptureTransactionLevelPerformanceData();
+		ReladomoBundle.setCaptureTransactionLevelPerformanceData(captureTransactionLevelPerformanceData);
 
-        boolean enableRetrieveCountMetrics = reladomoFactory.isEnableRetrieveCountMetrics();
-        if (enableRetrieveCountMetrics) {
-            this.registerRetrieveCountMetrics(environment.metrics());
-        }
-        MithraManagerProvider.getMithraManager().fullyInitialize();
+		boolean enableRetrieveCountMetrics = reladomoFactory.isEnableRetrieveCountMetrics();
+		if (enableRetrieveCountMetrics) {
+			this.registerRetrieveCountMetrics(environment.metrics());
+		}
+		MithraManagerProvider.getMithraManager().fullyInitialize();
 
-        environment.lifecycle().manage(new ManagedReladomoCleanup());
+		environment.lifecycle().manage(new ManagedReladomoCleanup());
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 
-    private static void assertTimezoneUTC() {
-        TimeZone defaultTimeZone = TimeZone.getDefault();
-        if (!defaultTimeZone.equals(TimeZone.getTimeZone("UTC"))) {
-            LOGGER.warn("Expected default TimeZone to be UTC, but was: {}.", defaultTimeZone);
-        }
+	private static void assertTimezoneUTC() {
+		TimeZone defaultTimeZone = TimeZone.getDefault();
+		if (!defaultTimeZone.equals(TimeZone.getTimeZone("UTC"))) {
+			LOGGER.warn("Expected default TimeZone to be UTC, but was: {}.", defaultTimeZone);
+		}
 
-        long expectedInfinityMilli = LocalDateTime.of(9999, 12, 1, 23, 59, 0).toInstant(ZoneOffset.UTC).toEpochMilli();
-        long actualInfinityMilli = DefaultInfinityTimestamp.getDefaultInfinity().getTime();
+		long expectedInfinityMilli = LocalDateTime.of(9999, 12, 1, 23, 59, 0).toInstant(ZoneOffset.UTC).toEpochMilli();
+		long actualInfinityMilli = DefaultInfinityTimestamp.getDefaultInfinity().getTime();
 
-        if (actualInfinityMilli != expectedInfinityMilli) {
-            long difference = actualInfinityMilli - expectedInfinityMilli;
-            long offset = difference / (1000 * 60 * 60);
+		if (actualInfinityMilli != expectedInfinityMilli) {
+			long difference = actualInfinityMilli - expectedInfinityMilli;
+			long offset = difference / (1000 * 60 * 60);
 
-            LOGGER.warn(
-                "Expected default Infinity to be {}, but was: {}. Offset: {} hours.",
-                expectedInfinityMilli,
-                actualInfinityMilli,
-                offset
-            );
-        }
-    }
+			LOGGER.warn(
+				"Expected default Infinity to be {}, but was: {}. Offset: {} hours.",
+				expectedInfinityMilli,
+				actualInfinityMilli,
+				offset
+			);
+		}
+	}
 
-    private void registerRetrieveCountMetrics(MetricRegistry metricRegistry) {
-        metricRegistry.gauge(MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"), () ->
-            MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount
-        );
-        metricRegistry.gauge(MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"), () ->
-            MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount
-        );
-    }
+	private void registerRetrieveCountMetrics(MetricRegistry metricRegistry) {
+		metricRegistry.gauge(MetricRegistry.name(this.getClass(), "DatabaseRetrieveCount"), () ->
+			MithraManagerProvider.getMithraManager()::getDatabaseRetrieveCount
+		);
+		metricRegistry.gauge(MetricRegistry.name(this.getClass(), "RemoteRetrieveCount"), () ->
+			MithraManagerProvider.getMithraManager()::getRemoteRetrieveCount
+		);
+	}
 
-    private static void setDefaultRelationshipCacheSize(int defaultRelationshipCacheSize) {
-        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
-        mithraManager.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
-    }
+	private static void setDefaultRelationshipCacheSize(int defaultRelationshipCacheSize) {
+		MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+		mithraManager.setDefaultRelationshipCacheSize(defaultRelationshipCacheSize);
+	}
 
-    private static void setDefaultMinQueriesToKeep(int defaultMinQueriesToKeep) {
-        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
-        mithraManager.setDefaultMinQueriesToKeep(defaultMinQueriesToKeep);
-    }
+	private static void setDefaultMinQueriesToKeep(int defaultMinQueriesToKeep) {
+		MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+		mithraManager.setDefaultMinQueriesToKeep(defaultMinQueriesToKeep);
+	}
 
-    private static void setTransactionTimeout(int transactionTimeoutSeconds) {
-        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
-        mithraManager.setTransactionTimeout(transactionTimeoutSeconds);
-    }
+	private static void setTransactionTimeout(int transactionTimeoutSeconds) {
+		MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+		mithraManager.setTransactionTimeout(transactionTimeoutSeconds);
+	}
 
-    private static void setCaptureTransactionLevelPerformanceData(boolean captureTransactionLevelPerformanceData) {
-        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
-        mithraManager.setCaptureTransactionLevelPerformanceData(captureTransactionLevelPerformanceData);
-    }
+	private static void setCaptureTransactionLevelPerformanceData(boolean captureTransactionLevelPerformanceData) {
+		MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+		mithraManager.setCaptureTransactionLevelPerformanceData(captureTransactionLevelPerformanceData);
+	}
 
-    private void loadRuntimeConfiguration(String runtimeConfigurationPath) {
-        LOGGER.info("Loading Reladomo configuration XML: {}", runtimeConfigurationPath);
-        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(runtimeConfigurationPath)) {
-            MithraManagerProvider.getMithraManager().readConfiguration(inputStream);
-        } catch (MithraBusinessException e) {
-            throw new RuntimeException(runtimeConfigurationPath, e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	private void loadRuntimeConfiguration(String runtimeConfigurationPath) {
+		LOGGER.info("Loading Reladomo configuration XML: {}", runtimeConfigurationPath);
+		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(runtimeConfigurationPath)) {
+			MithraManagerProvider.getMithraManager().readConfiguration(inputStream);
+		} catch (MithraBusinessException e) {
+			throw new RuntimeException(runtimeConfigurationPath, e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

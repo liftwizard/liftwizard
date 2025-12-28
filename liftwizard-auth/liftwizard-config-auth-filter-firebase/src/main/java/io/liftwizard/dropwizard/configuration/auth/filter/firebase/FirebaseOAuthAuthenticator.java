@@ -33,48 +33,48 @@ import org.slf4j.LoggerFactory;
 
 public class FirebaseOAuthAuthenticator implements Authenticator<String, FirebasePrincipal> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FirebaseOAuthAuthenticator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FirebaseOAuthAuthenticator.class);
 
-    private final FirebaseAuth firebaseAuth;
+	private final FirebaseAuth firebaseAuth;
 
-    public FirebaseOAuthAuthenticator(FirebaseAuth firebaseAuth) {
-        this.firebaseAuth = firebaseAuth;
-    }
+	public FirebaseOAuthAuthenticator(FirebaseAuth firebaseAuth) {
+		this.firebaseAuth = firebaseAuth;
+	}
 
-    @Override
-    public Optional<FirebasePrincipal> authenticate(String credentials) {
-        try {
-            FirebaseToken firebaseToken = this.firebaseAuth.verifyIdToken(credentials);
-            FirebasePrincipal firebasePrincipal = getFirebasePrincipal(firebaseToken);
+	@Override
+	public Optional<FirebasePrincipal> authenticate(String credentials) {
+		try {
+			FirebaseToken firebaseToken = this.firebaseAuth.verifyIdToken(credentials);
+			FirebasePrincipal firebasePrincipal = getFirebasePrincipal(firebaseToken);
 
-            return Optional.of(firebasePrincipal);
-        } catch (FirebaseAuthException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof UnknownHostException) {
-                throw new RuntimeException(e);
-            }
-            if (cause instanceof SocketTimeoutException) {
-                throw new RuntimeException(e);
-            }
-            LOGGER.warn(credentials, e.getMessage());
-            return Optional.empty();
-        }
-    }
+			return Optional.of(firebasePrincipal);
+		} catch (FirebaseAuthException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof UnknownHostException) {
+				throw new RuntimeException(e);
+			}
+			if (cause instanceof SocketTimeoutException) {
+				throw new RuntimeException(e);
+			}
+			LOGGER.warn(credentials, e.getMessage());
+			return Optional.empty();
+		}
+	}
 
-    @Nonnull
-    private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken) {
-        Map<String, Object> claims = firebaseToken.getClaims();
+	@Nonnull
+	private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken) {
+		Map<String, Object> claims = firebaseToken.getClaims();
 
-        Map<String, Object> firebase = (Map<String, Object>) claims.get("firebase");
-        String signInProvider = (String) firebase.get("sign_in_provider");
+		Map<String, Object> firebase = (Map<String, Object>) claims.get("firebase");
+		String signInProvider = (String) firebase.get("sign_in_provider");
 
-        String uid = firebaseToken.getUid();
-        String name = firebaseToken.getName();
-        String email = firebaseToken.getEmail();
-        boolean emailVerified = firebaseToken.isEmailVerified();
-        String issuer = firebaseToken.getIssuer();
-        String picture = firebaseToken.getPicture();
+		String uid = firebaseToken.getUid();
+		String name = firebaseToken.getName();
+		String email = firebaseToken.getEmail();
+		boolean emailVerified = firebaseToken.isEmailVerified();
+		String issuer = firebaseToken.getIssuer();
+		String picture = firebaseToken.getPicture();
 
-        return new FirebasePrincipal(uid, name, email, emailVerified, issuer, picture, signInProvider);
-    }
+		return new FirebasePrincipal(uid, name, email, emailVerified, issuer, picture, signInProvider);
+	}
 }

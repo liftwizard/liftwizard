@@ -29,21 +29,21 @@ import org.eclipse.collections.api.set.primitive.ImmutableBooleanSet;
 
 public class BooleanListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final BooleanAttribute<?> attribute;
-    private final ImmutableBooleanSet booleanSet;
+	private final BooleanAttribute<?> attribute;
+	private final ImmutableBooleanSet booleanSet;
 
-    public BooleanListBinaryOperatorVisitor(BooleanAttribute<?> attribute, ImmutableList<Boolean> parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.booleanSet = BooleanSets.immutable.withAll(parameter);
-    }
+	public BooleanListBinaryOperatorVisitor(BooleanAttribute<?> attribute, ImmutableList<Boolean> parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.booleanSet = BooleanSets.immutable.withAll(parameter);
+	}
 
-    @Override
-    public Operation visitOperatorIn(OperatorInContext ctx) {
-        return this.attribute.in(this.booleanSet);
-    }
+	@Override
+	public Operation visitOperatorIn(OperatorInContext ctx) {
+		return this.attribute.in(this.booleanSet);
+	}
 
-    @Override
-    public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
-        return this.attribute.notIn(this.booleanSet);
-    }
+	@Override
+	public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
+		return this.attribute.notIn(this.booleanSet);
+	}
 }

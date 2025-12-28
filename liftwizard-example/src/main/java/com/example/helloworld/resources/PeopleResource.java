@@ -18,27 +18,27 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 @Produces(MediaType.APPLICATION_JSON)
 public class PeopleResource {
 
-    private final PersonDAO peopleDAO;
+	private final PersonDAO peopleDAO;
 
-    public PeopleResource(PersonDAO peopleDAO) {
-        this.peopleDAO = peopleDAO;
-    }
+	public PeopleResource(PersonDAO peopleDAO) {
+		this.peopleDAO = peopleDAO;
+	}
 
-    @POST
-    @UnitOfWork
-    public PersonDTO createPerson(PersonDTO personDTO) {
-        Person person = new Person();
-        person.setFullName(personDTO.getFullName());
-        person.setJobTitle(personDTO.getJobTitle());
-        Person result = this.peopleDAO.create(person);
-        return new PersonDTO(result.getId(), result.getFullName(), result.getJobTitle());
-    }
+	@POST
+	@UnitOfWork
+	public PersonDTO createPerson(PersonDTO personDTO) {
+		Person person = new Person();
+		person.setFullName(personDTO.getFullName());
+		person.setJobTitle(personDTO.getJobTitle());
+		Person result = this.peopleDAO.create(person);
+		return new PersonDTO(result.getId(), result.getFullName(), result.getJobTitle());
+	}
 
-    @GET
-    @UnitOfWork
-    public List<PersonDTO> listPeople() {
-        return ListAdapter.adapt(this.peopleDAO.findAll()).collect(each ->
-            new PersonDTO(each.getId(), each.getFullName(), each.getJobTitle())
-        );
-    }
+	@GET
+	@UnitOfWork
+	public List<PersonDTO> listPeople() {
+		return ListAdapter.adapt(this.peopleDAO.findAll()).collect((each) ->
+			new PersonDTO(each.getId(), each.getFullName(), each.getJobTitle())
+		);
+	}
 }

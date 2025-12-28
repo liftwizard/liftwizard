@@ -26,27 +26,27 @@ import org.slf4j.LoggerFactory;
 
 public class Slf4jUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jUncaughtExceptionHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jUncaughtExceptionHandler.class);
 
-    @Override
-    public void uncaughtException(Thread thread, Throwable throwable) {
-        try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
-            mdc.put("threadName", thread.getName());
-            mdc.put("exceptionClass", throwable.getClass().getCanonicalName());
-            mdc.put("exceptionMessage", throwable.getMessage());
+	@Override
+	public void uncaughtException(Thread thread, Throwable throwable) {
+		try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
+			mdc.put("threadName", thread.getName());
+			mdc.put("exceptionClass", throwable.getClass().getCanonicalName());
+			mdc.put("exceptionMessage", throwable.getMessage());
 
-            mdc.put("liftwizard.error.thread", thread.getName());
-            mdc.put("liftwizard.error.kind", throwable.getClass().getCanonicalName());
-            mdc.put("liftwizard.error.message", throwable.getMessage());
+			mdc.put("liftwizard.error.thread", thread.getName());
+			mdc.put("liftwizard.error.kind", throwable.getClass().getCanonicalName());
+			mdc.put("liftwizard.error.message", throwable.getMessage());
 
-            String message = "Exception in thread \"" + thread.getName() + "\"";
-            LOGGER.warn(message, throwable);
+			String message = "Exception in thread \"" + thread.getName() + "\"";
+			LOGGER.warn(message, throwable);
 
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(stringWriter, true);
-            throwable.printStackTrace(printWriter);
+			StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(stringWriter, true);
+			throwable.printStackTrace(printWriter);
 
-            System.err.print(message + " " + stringWriter);
-        }
-    }
+			System.err.print(message + " " + stringWriter);
+		}
+	}
 }

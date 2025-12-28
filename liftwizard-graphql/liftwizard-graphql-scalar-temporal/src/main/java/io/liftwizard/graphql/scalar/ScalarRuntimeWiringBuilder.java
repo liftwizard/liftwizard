@@ -9,13 +9,13 @@ import io.liftwizard.graphql.scalar.temporal.GraphQLTemporalScalar;
 
 public class ScalarRuntimeWiringBuilder implements Consumer<RuntimeWiring.Builder> {
 
-    @Override
-    public void accept(RuntimeWiring.Builder builder) {
-        builder
-            .scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)
-            .scalar(GraphQLTemporalScalar.TEMPORAL_INSTANT_INSTANCE)
-            .scalar(GraphQLTemporalScalar.TEMPORAL_RANGE_INSTANCE)
-            .scalar(JavaPrimitives.GraphQLLong)
-            .scalar(GraphQLLocalDateScalar.INSTANCE);
-    }
+	@Override
+	public void accept(RuntimeWiring.Builder builder) {
+		builder
+			.scalar(GraphQLTemporalScalar.INSTANT_INSTANCE)
+			.scalar(GraphQLTemporalScalar.TEMPORAL_INSTANT_INSTANCE)
+			.scalar(GraphQLTemporalScalar.TEMPORAL_RANGE_INSTANCE)
+			.scalar(JavaPrimitives.GraphQLLong)
+			.scalar(GraphQLLocalDateScalar.INSTANCE);
+	}
 }

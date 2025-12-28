@@ -41,98 +41,98 @@ import org.slf4j.LoggerFactory;
 
 public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachCallback {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataExtension.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataExtension.class);
 
-    private static final Class<?>[] NO_PARAMS = {};
-    private static final Object[] NO_ARGS = {};
+	private static final Class<?>[] NO_PARAMS = {};
+	private static final Object[] NO_ARGS = {};
 
-    @Nonnull
-    private final ImmutableList<String> testDataFileNames;
+	@Nonnull
+	private final ImmutableList<String> testDataFileNames;
 
-    public ReladomoLoadDataExtension(@Nonnull String... testDataFileNames) {
-        this(Lists.immutable.with(testDataFileNames));
-    }
+	public ReladomoLoadDataExtension(@Nonnull String... testDataFileNames) {
+		this(Lists.immutable.with(testDataFileNames));
+	}
 
-    public ReladomoLoadDataExtension(@Nonnull ImmutableList<String> testDataFileNames) {
-        this.testDataFileNames = testDataFileNames;
-    }
+	public ReladomoLoadDataExtension(@Nonnull ImmutableList<String> testDataFileNames) {
+		this.testDataFileNames = testDataFileNames;
+	}
 
-    @Override
-    public void beforeEach(ExtensionContext context) {
-        ImmutableList<String> configuredTestDataFileNames = this.getConfiguredTestDataFileNames(context);
+	@Override
+	public void beforeEach(ExtensionContext context) {
+		ImmutableList<String> configuredTestDataFileNames = this.getConfiguredTestDataFileNames(context);
 
-        for (String testDataFileName : configuredTestDataFileNames) {
-            try {
-                this.loadTestData(testDataFileName);
-            } catch (ReflectiveOperationException e) {
-                throw new RuntimeException("Error while loading test data file: " + testDataFileName, e);
-            }
-        }
-    }
+		for (String testDataFileName : configuredTestDataFileNames) {
+			try {
+				this.loadTestData(testDataFileName);
+			} catch (ReflectiveOperationException e) {
+				throw new RuntimeException("Error while loading test data file: " + testDataFileName, e);
+			}
+		}
+	}
 
-    private ImmutableList<String> getConfiguredTestDataFileNames(@Nonnull ExtensionContext context) {
-        Optional<AnnotatedElement> element = context.getElement();
-        if (element.isEmpty()) {
-            return this.testDataFileNames;
-        }
+	private ImmutableList<String> getConfiguredTestDataFileNames(@Nonnull ExtensionContext context) {
+		Optional<AnnotatedElement> element = context.getElement();
+		if (element.isEmpty()) {
+			return this.testDataFileNames;
+		}
 
-        ReladomoTestFile reladomoTestFileAnnotation = element.get().getAnnotation(ReladomoTestFile.class);
-        if (reladomoTestFileAnnotation == null) {
-            return this.testDataFileNames;
-        }
-        return Lists.immutable.with(reladomoTestFileAnnotation.value());
-    }
+		ReladomoTestFile reladomoTestFileAnnotation = element.get().getAnnotation(ReladomoTestFile.class);
+		if (reladomoTestFileAnnotation == null) {
+			return this.testDataFileNames;
+		}
+		return Lists.immutable.with(reladomoTestFileAnnotation.value());
+	}
 
-    private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
-        LOGGER.debug("Loading test data from file: {}", testDataFileName);
-        MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
-        List<MithraParsedData> parsedDataList = parser.getResults();
+	private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
+		LOGGER.debug("Loading test data from file: {}", testDataFileName);
+		MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
+		List<MithraParsedData> parsedDataList = parser.getResults();
 
-        for (MithraParsedData mithraParsedData : parsedDataList) {
-            this.handleMithraParsedData(mithraParsedData);
-        }
-    }
+		for (MithraParsedData mithraParsedData : parsedDataList) {
+			this.handleMithraParsedData(mithraParsedData);
+		}
+	}
 
-    private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
-        throws ReflectiveOperationException {
-        List<Attribute<?, ?>> attributes = mithraParsedData.getAttributes();
-        List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
-        String parsedClassName = mithraParsedData.getParsedClassName();
+	private void handleMithraParsedData(@Nonnull MithraParsedData mithraParsedData)
+		throws ReflectiveOperationException {
+		List<Attribute<?, ?>> attributes = mithraParsedData.getAttributes();
+		List<MithraDataObject> dataObjects = mithraParsedData.getDataObjects();
+		String parsedClassName = mithraParsedData.getParsedClassName();
 
-        if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName)) {
-            throw new RuntimeException(
-                "Class "
-                + parsedClassName
-                + " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?"
-            );
-        }
+		if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(parsedClassName)) {
+			throw new RuntimeException(
+				"Class "
+				+ parsedClassName
+				+ " is not configured. Did you remember to run ReladomoReadRuntimeConfigurationTestRule?"
+			);
+		}
 
-        String finderClassName = parsedClassName + "Finder";
-        Class<?> finderClass = Class.forName(finderClassName);
-        Method method = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
-        MithraObjectPortal mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
+		String finderClassName = parsedClassName + "Finder";
+		Class<?> finderClass = Class.forName(finderClassName);
+		Method method = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
+		MithraObjectPortal mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
 
-        MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
-        SourcelessConnectionManager databaseObjectConnectionManager =
-            (SourcelessConnectionManager) databaseObject.getConnectionManager();
+		MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
+		SourcelessConnectionManager databaseObjectConnectionManager =
+			(SourcelessConnectionManager) databaseObject.getConnectionManager();
 
-        LOGGER.debug(
-            "Loading test data for class {} using connection manager: {}",
-            parsedClassName,
-            databaseObjectConnectionManager
-        );
+		LOGGER.debug(
+			"Loading test data for class {} using connection manager: {}",
+			parsedClassName,
+			databaseObjectConnectionManager
+		);
 
-        Class<? extends MithraDatabaseObject> databaseObjectClass = databaseObject.getClass();
+		Class<? extends MithraDatabaseObject> databaseObjectClass = databaseObject.getClass();
 
-        Method insertDataMethod = databaseObjectClass.getMethod("insertData", List.class, List.class, Object.class);
-        insertDataMethod.invoke(databaseObject, attributes, dataObjects, null);
-    }
+		Method insertDataMethod = databaseObjectClass.getMethod("insertData", List.class, List.class, Object.class);
+		insertDataMethod.invoke(databaseObject, attributes, dataObjects, null);
+	}
 
-    @Override
-    public void afterEach(ExtensionContext context) {
-        MithraManagerProvider.getMithraManager().clearAllQueryCaches();
-        MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
-        MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
-        MithraManagerProvider.getMithraManager().getConfigManager().resetAllInitializedClasses();
-    }
+	@Override
+	public void afterEach(ExtensionContext context) {
+		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
+		MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
+		MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
+		MithraManagerProvider.getMithraManager().getConfigManager().resetAllInitializedClasses();
+	}
 }

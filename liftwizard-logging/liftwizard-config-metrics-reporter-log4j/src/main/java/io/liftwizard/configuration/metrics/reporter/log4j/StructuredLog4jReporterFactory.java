@@ -35,30 +35,30 @@ import org.apache.log4j.Logger;
 @AutoService(ReporterFactory.class)
 public class StructuredLog4jReporterFactory extends BaseReporterFactory {
 
-    @NotEmpty
-    private String loggerName = "metrics";
+	@NotEmpty
+	private String loggerName = "metrics";
 
-    @JsonProperty("logger")
-    public String getLoggerName() {
-        return this.loggerName;
-    }
+	@JsonProperty("logger")
+	public String getLoggerName() {
+		return this.loggerName;
+	}
 
-    @JsonProperty("logger")
-    public void setLoggerName(String loggerName) {
-        this.loggerName = loggerName;
-    }
+	@JsonProperty("logger")
+	public void setLoggerName(String loggerName) {
+		this.loggerName = loggerName;
+	}
 
-    public Logger getLogger() {
-        return Logger.getLogger(this.getLoggerName());
-    }
+	public Logger getLogger() {
+		return Logger.getLogger(this.getLoggerName());
+	}
 
-    @Override
-    public ScheduledReporter build(MetricRegistry registry) {
-        return StructuredLog4jReporter.forRegistry(registry)
-            .convertDurationsTo(this.getDurationUnit())
-            .convertRatesTo(this.getRateUnit())
-            .filter(this.getFilter())
-            .outputTo(this.getLogger())
-            .build();
-    }
+	@Override
+	public ScheduledReporter build(MetricRegistry registry) {
+		return StructuredLog4jReporter.forRegistry(registry)
+			.convertDurationsTo(this.getDurationUnit())
+			.convertRatesTo(this.getRateUnit())
+			.filter(this.getFilter())
+			.outputTo(this.getLogger())
+			.build();
+	}
 }

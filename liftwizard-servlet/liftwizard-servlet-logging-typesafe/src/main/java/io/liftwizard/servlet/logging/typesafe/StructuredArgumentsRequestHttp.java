@@ -23,123 +23,123 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 
-    private String method;
-    private String contextPath;
-    private String remoteUser;
-    private String authenticationScheme;
-    private Map<String, Object> principal;
-    private StructuredArgumentsPath path;
-    private StructuredArgumentsParameters parameters;
-    private StructuredArgumentsClient client;
-    private StructuredArgumentsServer server;
+	private String method;
+	private String contextPath;
+	private String remoteUser;
+	private String authenticationScheme;
+	private Map<String, Object> principal;
+	private StructuredArgumentsPath path;
+	private StructuredArgumentsParameters parameters;
+	private StructuredArgumentsClient client;
+	private StructuredArgumentsServer server;
 
-    @JsonProperty
-    public String getMethod() {
-        return this.method;
-    }
+	@JsonProperty
+	public String getMethod() {
+		return this.method;
+	}
 
-    public void setMethod(String method) {
-        if (this.method != null) {
-            throw new AssertionError(this.method);
-        }
-        this.method = Objects.requireNonNull(method);
-    }
+	public void setMethod(String method) {
+		if (this.method != null) {
+			throw new AssertionError(this.method);
+		}
+		this.method = Objects.requireNonNull(method);
+	}
 
-    @JsonProperty
-    public String getContextPath() {
-        return this.contextPath;
-    }
+	@JsonProperty
+	public String getContextPath() {
+		return this.contextPath;
+	}
 
-    public void setContextPath(String contextPath) {
-        if (this.contextPath != null) {
-            throw new AssertionError(this.contextPath);
-        }
-        if (!contextPath.isEmpty()) {
-            this.contextPath = contextPath;
-        }
-    }
+	public void setContextPath(String contextPath) {
+		if (this.contextPath != null) {
+			throw new AssertionError(this.contextPath);
+		}
+		if (!contextPath.isEmpty()) {
+			this.contextPath = contextPath;
+		}
+	}
 
-    @JsonProperty
-    public String getRemoteUser() {
-        return this.remoteUser;
-    }
+	@JsonProperty
+	public String getRemoteUser() {
+		return this.remoteUser;
+	}
 
-    public void setRemoteUser(String remoteUser) {
-        if (this.remoteUser != null) {
-            throw new AssertionError(this.remoteUser);
-        }
-        this.remoteUser = remoteUser;
-    }
+	public void setRemoteUser(String remoteUser) {
+		if (this.remoteUser != null) {
+			throw new AssertionError(this.remoteUser);
+		}
+		this.remoteUser = remoteUser;
+	}
 
-    @JsonProperty
-    public Map<String, Object> getPrincipal() {
-        return this.principal;
-    }
+	@JsonProperty
+	public Map<String, Object> getPrincipal() {
+		return this.principal;
+	}
 
-    public void setPrincipal(Map<String, Object> principal) {
-        if (this.principal != null) {
-            throw new AssertionError(this.principal);
-        }
-        this.principal = Objects.requireNonNull(principal);
-    }
+	public void setPrincipal(Map<String, Object> principal) {
+		if (this.principal != null) {
+			throw new AssertionError(this.principal);
+		}
+		this.principal = Objects.requireNonNull(principal);
+	}
 
-    @JsonProperty
-    public String getAuthenticationScheme() {
-        return this.authenticationScheme;
-    }
+	@JsonProperty
+	public String getAuthenticationScheme() {
+		return this.authenticationScheme;
+	}
 
-    public void setAuthenticationScheme(String authenticationScheme) {
-        if (this.authenticationScheme != null) {
-            throw new AssertionError(this.authenticationScheme);
-        }
-        this.authenticationScheme = authenticationScheme;
-    }
+	public void setAuthenticationScheme(String authenticationScheme) {
+		if (this.authenticationScheme != null) {
+			throw new AssertionError(this.authenticationScheme);
+		}
+		this.authenticationScheme = authenticationScheme;
+	}
 
-    @JsonProperty
-    public StructuredArgumentsPath getPath() {
-        return this.path;
-    }
+	@JsonProperty
+	public StructuredArgumentsPath getPath() {
+		return this.path;
+	}
 
-    public void setPath(StructuredArgumentsPath path) {
-        if (this.path != null) {
-            throw new AssertionError(this.path);
-        }
-        this.path = Objects.requireNonNull(path);
-    }
+	public void setPath(StructuredArgumentsPath path) {
+		if (this.path != null) {
+			throw new AssertionError(this.path);
+		}
+		this.path = Objects.requireNonNull(path);
+	}
 
-    @JsonProperty
-    public StructuredArgumentsParameters getParameters() {
-        return this.parameters;
-    }
+	@JsonProperty
+	public StructuredArgumentsParameters getParameters() {
+		return this.parameters;
+	}
 
-    public void setParameters(StructuredArgumentsParameters parameters) {
-        if (this.parameters != null) {
-            throw new AssertionError(this.parameters);
-        }
-        this.parameters = Objects.requireNonNull(parameters);
-    }
+	public void setParameters(StructuredArgumentsParameters parameters) {
+		if (this.parameters != null) {
+			throw new AssertionError(this.parameters);
+		}
+		this.parameters = Objects.requireNonNull(parameters);
+	}
 
-    @JsonProperty
-    public StructuredArgumentsClient getClient() {
-        return this.client;
-    }
+	@JsonProperty
+	public StructuredArgumentsClient getClient() {
+		return this.client;
+	}
 
-    public void setClient(StructuredArgumentsClient client) {
-        if (this.client != null) {
-            throw new AssertionError(this.client);
-        }
-        this.client = Objects.requireNonNull(client);
-    }
+	public void setClient(StructuredArgumentsClient client) {
+		if (this.client != null) {
+			throw new AssertionError(this.client);
+		}
+		this.client = Objects.requireNonNull(client);
+	}
 
-    @JsonProperty
-    public StructuredArgumentsServer getServer() {
-        return this.server;
-    }
+	@JsonProperty
+	public StructuredArgumentsServer getServer() {
+		return this.server;
+	}
 
-    public void setServer(StructuredArgumentsServer server) {
-        if (this.server != null) {
-            throw new AssertionError(this.server);
-        }
-        this.server = Objects.requireNonNull(server);
-    }
+	public void setServer(StructuredArgumentsServer server) {
+		if (this.server != null) {
+			throw new AssertionError(this.server);
+		}
+		this.server = Objects.requireNonNull(server);
+	}
 }

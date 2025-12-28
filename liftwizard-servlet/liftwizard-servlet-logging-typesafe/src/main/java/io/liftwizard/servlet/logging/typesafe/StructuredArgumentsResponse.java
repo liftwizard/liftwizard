@@ -18,9 +18,9 @@ package io.liftwizard.servlet.logging.typesafe;
 
 public class StructuredArgumentsResponse {
 
-    private final StructuredArgumentsResponseHttp http = new StructuredArgumentsResponseHttp();
+	private final StructuredArgumentsResponseHttp http = new StructuredArgumentsResponseHttp();
 
-    public StructuredArgumentsResponseHttp getHttp() {
-        return this.http;
-    }
+	public StructuredArgumentsResponseHttp getHttp() {
+		return this.http;
+	}
 }

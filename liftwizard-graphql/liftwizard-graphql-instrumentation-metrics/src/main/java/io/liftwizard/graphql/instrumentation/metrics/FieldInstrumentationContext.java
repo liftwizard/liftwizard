@@ -28,33 +28,33 @@ import graphql.execution.instrumentation.InstrumentationContext;
 
 public class FieldInstrumentationContext implements InstrumentationContext<Object> {
 
-    private final Meter allFieldsExceptionsMeter;
+	private final Meter allFieldsExceptionsMeter;
 
-    private final Context allFieldsSyncClock;
-    private final Context allFieldsAsyncClock;
+	private final Context allFieldsSyncClock;
+	private final Context allFieldsAsyncClock;
 
-    public FieldInstrumentationContext(
-        @Nonnull Timer allFieldsSyncTimer,
-        @Nonnull Timer allFieldsAsyncTimer,
-        @Nonnull Meter allFieldsExceptionsMeter
-    ) {
-        this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
+	public FieldInstrumentationContext(
+		@Nonnull Timer allFieldsSyncTimer,
+		@Nonnull Timer allFieldsAsyncTimer,
+		@Nonnull Meter allFieldsExceptionsMeter
+	) {
+		this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
 
-        this.allFieldsSyncClock = allFieldsSyncTimer.time();
-        this.allFieldsAsyncClock = allFieldsAsyncTimer.time();
-    }
+		this.allFieldsSyncClock = allFieldsSyncTimer.time();
+		this.allFieldsAsyncClock = allFieldsAsyncTimer.time();
+	}
 
-    @Override
-    public void onDispatched(CompletableFuture<Object> result) {
-        this.allFieldsSyncClock.stop();
-    }
+	@Override
+	public void onDispatched(CompletableFuture<Object> result) {
+		this.allFieldsSyncClock.stop();
+	}
 
-    @Override
-    public void onCompleted(Object result, Throwable throwable) {
-        if (throwable != null) {
-            this.allFieldsExceptionsMeter.mark();
-        }
+	@Override
+	public void onCompleted(Object result, Throwable throwable) {
+		if (throwable != null) {
+			this.allFieldsExceptionsMeter.mark();
+		}
 
-        this.allFieldsAsyncClock.stop();
-    }
+		this.allFieldsAsyncClock.stop();
+	}
 }

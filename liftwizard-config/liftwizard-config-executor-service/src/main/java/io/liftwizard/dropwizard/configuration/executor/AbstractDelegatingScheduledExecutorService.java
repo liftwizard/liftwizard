@@ -32,118 +32,118 @@ import javax.annotation.Nonnull;
 
 public abstract class AbstractDelegatingScheduledExecutorService implements ScheduledExecutorService {
 
-    protected final ScheduledExecutorService delegate;
+	protected final ScheduledExecutorService delegate;
 
-    protected AbstractDelegatingScheduledExecutorService(ScheduledExecutorService delegate) {
-        this.delegate = Objects.requireNonNull(delegate);
-    }
+	protected AbstractDelegatingScheduledExecutorService(ScheduledExecutorService delegate) {
+		this.delegate = Objects.requireNonNull(delegate);
+	}
 
-    protected abstract Runnable wrapTask(Runnable command);
+	protected abstract Runnable wrapTask(Runnable command);
 
-    protected abstract <V> Callable<V> wrapTask(Callable<V> callable);
+	protected abstract <V> Callable<V> wrapTask(Callable<V> callable);
 
-    protected <T> Collection<? extends Callable<T>> wrapTasks(Collection<? extends Callable<T>> tasks) {
-        return tasks.stream().map(this::wrapTask).collect(Collectors.toList());
-    }
+	protected <T> Collection<? extends Callable<T>> wrapTasks(Collection<? extends Callable<T>> tasks) {
+		return tasks.stream().map(this::wrapTask).collect(Collectors.toList());
+	}
 
-    @Override
-    public ScheduledFuture<?> schedule(@Nonnull Runnable command, long delay, @Nonnull TimeUnit unit) {
-        return this.delegate.schedule(this.wrapTask(command), delay, unit);
-    }
+	@Override
+	public ScheduledFuture<?> schedule(@Nonnull Runnable command, long delay, @Nonnull TimeUnit unit) {
+		return this.delegate.schedule(this.wrapTask(command), delay, unit);
+	}
 
-    @Override
-    public <V> ScheduledFuture<V> schedule(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit) {
-        return this.delegate.schedule(this.wrapTask(callable), delay, unit);
-    }
+	@Override
+	public <V> ScheduledFuture<V> schedule(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit) {
+		return this.delegate.schedule(this.wrapTask(callable), delay, unit);
+	}
 
-    @Override
-    public ScheduledFuture<?> scheduleAtFixedRate(
-        @Nonnull Runnable command,
-        long initialDelay,
-        long period,
-        @Nonnull TimeUnit unit
-    ) {
-        return this.delegate.scheduleAtFixedRate(this.wrapTask(command), initialDelay, period, unit);
-    }
+	@Override
+	public ScheduledFuture<?> scheduleAtFixedRate(
+		@Nonnull Runnable command,
+		long initialDelay,
+		long period,
+		@Nonnull TimeUnit unit
+	) {
+		return this.delegate.scheduleAtFixedRate(this.wrapTask(command), initialDelay, period, unit);
+	}
 
-    @Override
-    public ScheduledFuture<?> scheduleWithFixedDelay(
-        @Nonnull Runnable command,
-        long initialDelay,
-        long delay,
-        @Nonnull TimeUnit unit
-    ) {
-        return this.delegate.scheduleWithFixedDelay(this.wrapTask(command), initialDelay, delay, unit);
-    }
+	@Override
+	public ScheduledFuture<?> scheduleWithFixedDelay(
+		@Nonnull Runnable command,
+		long initialDelay,
+		long delay,
+		@Nonnull TimeUnit unit
+	) {
+		return this.delegate.scheduleWithFixedDelay(this.wrapTask(command), initialDelay, delay, unit);
+	}
 
-    @Override
-    public void shutdown() {
-        this.delegate.shutdown();
-    }
+	@Override
+	public void shutdown() {
+		this.delegate.shutdown();
+	}
 
-    @Override
-    public List<Runnable> shutdownNow() {
-        return this.delegate.shutdownNow();
-    }
+	@Override
+	public List<Runnable> shutdownNow() {
+		return this.delegate.shutdownNow();
+	}
 
-    @Override
-    public boolean isShutdown() {
-        return this.delegate.isShutdown();
-    }
+	@Override
+	public boolean isShutdown() {
+		return this.delegate.isShutdown();
+	}
 
-    @Override
-    public boolean isTerminated() {
-        return this.delegate.isTerminated();
-    }
+	@Override
+	public boolean isTerminated() {
+		return this.delegate.isTerminated();
+	}
 
-    @Override
-    public boolean awaitTermination(long timeout, @Nonnull TimeUnit unit) throws InterruptedException {
-        return this.delegate.awaitTermination(timeout, unit);
-    }
+	@Override
+	public boolean awaitTermination(long timeout, @Nonnull TimeUnit unit) throws InterruptedException {
+		return this.delegate.awaitTermination(timeout, unit);
+	}
 
-    @Override
-    public <T> Future<T> submit(@Nonnull Callable<T> task) {
-        return this.delegate.submit(this.wrapTask(task));
-    }
+	@Override
+	public <T> Future<T> submit(@Nonnull Callable<T> task) {
+		return this.delegate.submit(this.wrapTask(task));
+	}
 
-    @Override
-    public <T> Future<T> submit(@Nonnull Runnable task, T result) {
-        return this.delegate.submit(this.wrapTask(task), result);
-    }
+	@Override
+	public <T> Future<T> submit(@Nonnull Runnable task, T result) {
+		return this.delegate.submit(this.wrapTask(task), result);
+	}
 
-    @Override
-    public Future<?> submit(@Nonnull Runnable task) {
-        return this.delegate.submit(this.wrapTask(task));
-    }
+	@Override
+	public Future<?> submit(@Nonnull Runnable task) {
+		return this.delegate.submit(this.wrapTask(task));
+	}
 
-    @Override
-    public <T> List<Future<T>> invokeAll(@Nonnull Collection<? extends Callable<T>> tasks) throws InterruptedException {
-        return this.delegate.invokeAll(this.wrapTasks(tasks));
-    }
+	@Override
+	public <T> List<Future<T>> invokeAll(@Nonnull Collection<? extends Callable<T>> tasks) throws InterruptedException {
+		return this.delegate.invokeAll(this.wrapTasks(tasks));
+	}
 
-    @Override
-    public <T> List<Future<T>> invokeAll(
-        @Nonnull Collection<? extends Callable<T>> tasks,
-        long timeout,
-        @Nonnull TimeUnit unit
-    ) throws InterruptedException {
-        return this.delegate.invokeAll(this.wrapTasks(tasks), timeout, unit);
-    }
+	@Override
+	public <T> List<Future<T>> invokeAll(
+		@Nonnull Collection<? extends Callable<T>> tasks,
+		long timeout,
+		@Nonnull TimeUnit unit
+	) throws InterruptedException {
+		return this.delegate.invokeAll(this.wrapTasks(tasks), timeout, unit);
+	}
 
-    @Override
-    public <T> T invokeAny(@Nonnull Collection<? extends Callable<T>> tasks)
-        throws InterruptedException, ExecutionException {
-        return this.delegate.invokeAny(this.wrapTasks(tasks));
-    }
+	@Override
+	public <T> T invokeAny(@Nonnull Collection<? extends Callable<T>> tasks)
+		throws InterruptedException, ExecutionException {
+		return this.delegate.invokeAny(this.wrapTasks(tasks));
+	}
 
-    @Override
-    public <T> T invokeAny(@Nonnull Collection<? extends Callable<T>> tasks, long timeout, @Nonnull TimeUnit unit)
-        throws InterruptedException, ExecutionException, TimeoutException {
-        return this.delegate.invokeAny(this.wrapTasks(tasks), timeout, unit);
-    }
+	@Override
+	public <T> T invokeAny(@Nonnull Collection<? extends Callable<T>> tasks, long timeout, @Nonnull TimeUnit unit)
+		throws InterruptedException, ExecutionException, TimeoutException {
+		return this.delegate.invokeAny(this.wrapTasks(tasks), timeout, unit);
+	}
 
-    @Override
-    public void execute(@Nonnull Runnable command) {
-        this.delegate.execute(this.wrapTask(command));
-    }
+	@Override
+	public void execute(@Nonnull Runnable command) {
+		this.delegate.execute(this.wrapTask(command));
+	}
 }

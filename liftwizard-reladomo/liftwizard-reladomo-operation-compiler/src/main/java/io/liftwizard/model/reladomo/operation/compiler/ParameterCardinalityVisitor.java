@@ -38,93 +38,93 @@ import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingV
 
 public class ParameterCardinalityVisitor extends ReladomoOperationThrowingVisitor<ParameterCardinality> {
 
-    @Override
-    public ParameterCardinality visitBinaryOperator(BinaryOperatorContext ctx) {
-        return this.visitChildren(ctx);
-    }
+	@Override
+	public ParameterCardinality visitBinaryOperator(BinaryOperatorContext ctx) {
+		return this.visitChildren(ctx);
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorEq(OperatorEqContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorEq(OperatorEqContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorNotEq(OperatorNotEqContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorNotEq(OperatorNotEqContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorGreaterThan(OperatorGreaterThanContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorGreaterThan(OperatorGreaterThanContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorGreaterThanEquals(OperatorGreaterThanEqualsContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorGreaterThanEquals(OperatorGreaterThanEqualsContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorLessThan(OperatorLessThanContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorLessThan(OperatorLessThanContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorLessThanEquals(OperatorLessThanEqualsContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorLessThanEquals(OperatorLessThanEqualsContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorIn(OperatorInContext ctx) {
-        return ParameterCardinality.MANY;
-    }
+	@Override
+	public ParameterCardinality visitOperatorIn(OperatorInContext ctx) {
+		return ParameterCardinality.MANY;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorNotIn(OperatorNotInContext ctx) {
-        return ParameterCardinality.MANY;
-    }
+	@Override
+	public ParameterCardinality visitOperatorNotIn(OperatorNotInContext ctx) {
+		return ParameterCardinality.MANY;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorStartsWith(OperatorStartsWithContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorStartsWith(OperatorStartsWithContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorNotStartsWith(OperatorNotStartsWithContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorNotStartsWith(OperatorNotStartsWithContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorEndsWith(OperatorEndsWithContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorEndsWith(OperatorEndsWithContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorNotEndsWith(OperatorNotEndsWithContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorNotEndsWith(OperatorNotEndsWithContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorContains(OperatorContainsContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorContains(OperatorContainsContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorNotContains(OperatorNotContainsContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorNotContains(OperatorNotContainsContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorWildCardEquals(OperatorWildCardEqualsContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorWildCardEquals(OperatorWildCardEqualsContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorWildCardNotEquals(OperatorWildCardNotEqualsContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorWildCardNotEquals(OperatorWildCardNotEqualsContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 
-    @Override
-    public ParameterCardinality visitOperatorWildCardIn(OperatorWildCardInContext ctx) {
-        return ParameterCardinality.ONE;
-    }
+	@Override
+	public ParameterCardinality visitOperatorWildCardIn(OperatorWildCardInContext ctx) {
+		return ParameterCardinality.ONE;
+	}
 }

@@ -27,16 +27,16 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractB
 
 public class TemporalRangeBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
-    private final AsOfAttribute attribute;
-    private final Timestamp timestamp;
+	private final AsOfAttribute attribute;
+	private final Timestamp timestamp;
 
-    public TemporalRangeBinaryOperatorVisitor(AsOfAttribute attribute, Instant parameter) {
-        this.attribute = Objects.requireNonNull(attribute);
-        this.timestamp = Timestamp.from(parameter);
-    }
+	public TemporalRangeBinaryOperatorVisitor(AsOfAttribute attribute, Instant parameter) {
+		this.attribute = Objects.requireNonNull(attribute);
+		this.timestamp = Timestamp.from(parameter);
+	}
 
-    @Override
-    public Operation visitOperatorEq(OperatorEqContext ctx) {
-        return this.attribute.eq(this.timestamp);
-    }
+	@Override
+	public Operation visitOperatorEq(OperatorEqContext ctx) {
+		return this.attribute.eq(this.timestamp);
+	}
 }

@@ -26,13 +26,13 @@ import io.dropwizard.servlets.tasks.Task;
 
 public class ReladomoClearCacheTask extends Task {
 
-    public ReladomoClearCacheTask() {
-        super("reladomo-clear-cache");
-    }
+	public ReladomoClearCacheTask() {
+		super("reladomo-clear-cache");
+	}
 
-    @Override
-    public void execute(Map<String, List<String>> parameters, PrintWriter output) {
-        MithraManager mithraManager = MithraManagerProvider.getMithraManager();
-        mithraManager.clearAllQueryCaches();
-    }
+	@Override
+	public void execute(Map<String, List<String>> parameters, PrintWriter output) {
+		MithraManager mithraManager = MithraManagerProvider.getMithraManager();
+		mithraManager.clearAllQueryCaches();
+	}
 }

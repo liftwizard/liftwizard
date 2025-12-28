@@ -20,17 +20,17 @@ import org.apache.log4j.Logger;
 
 public class InfoLoggerProxy extends AbstractLoggerProxy {
 
-    public InfoLoggerProxy(Logger logger) {
-        super(logger);
-    }
+	public InfoLoggerProxy(Logger logger) {
+		super(logger);
+	}
 
-    @Override
-    public void log(Object structuredObject) {
-        this.logger.info(structuredObject);
-    }
+	@Override
+	public void log(Object structuredObject) {
+		this.logger.info(structuredObject);
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.logger.isInfoEnabled();
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.logger.isInfoEnabled();
+	}
 }

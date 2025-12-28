@@ -25,26 +25,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SystemPropertiesFactory {
 
-    private final Map<String, String> systemProperties = new LinkedHashMap<>();
-    private boolean strict;
+	private final Map<String, String> systemProperties = new LinkedHashMap<>();
+	private boolean strict;
 
-    @JsonAnyGetter
-    public Map<String, String> getSystemProperties() {
-        return this.systemProperties;
-    }
+	@JsonAnyGetter
+	public Map<String, String> getSystemProperties() {
+		return this.systemProperties;
+	}
 
-    @JsonAnySetter
-    public void setSystemProperties(String name, String value) {
-        this.systemProperties.put(name, value);
-    }
+	@JsonAnySetter
+	public void setSystemProperties(String name, String value) {
+		this.systemProperties.put(name, value);
+	}
 
-    @JsonProperty
-    public boolean isStrict() {
-        return this.strict;
-    }
+	@JsonProperty
+	public boolean isStrict() {
+		return this.strict;
+	}
 
-    @JsonProperty
-    public void setStrict(boolean strict) {
-        this.strict = strict;
-    }
+	@JsonProperty
+	public void setStrict(boolean strict) {
+		this.strict = strict;
+	}
 }

@@ -36,62 +36,62 @@ import io.dropwizard.logging.filter.FilterFactory;
 @AutoService(FilterFactory.class)
 public class JaninoFilterFactory implements FilterFactory<ILoggingEvent> {
 
-    @NotEmpty
-    private @Valid @NotNull String javaExpression;
+	@NotEmpty
+	private @Valid @NotNull String javaExpression;
 
-    private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
-    private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
+	private @Valid @NotNull FilterReply onMatch = FilterReply.DENY;
+	private @Valid @NotNull FilterReply onMismatch = FilterReply.NEUTRAL;
 
-    @Override
-    public Filter<ILoggingEvent> build() {
-        JaninoEventEvaluator evaluator = this.getJaninoEventEvaluator();
+	@Override
+	public Filter<ILoggingEvent> build() {
+		JaninoEventEvaluator evaluator = this.getJaninoEventEvaluator();
 
-        var filter = new EvaluatorFilter<ILoggingEvent>();
-        filter.setEvaluator(evaluator);
-        filter.setOnMatch(this.onMatch);
-        filter.setOnMismatch(this.onMismatch);
-        filter.start();
+		var filter = new EvaluatorFilter<ILoggingEvent>();
+		filter.setEvaluator(evaluator);
+		filter.setOnMatch(this.onMatch);
+		filter.setOnMismatch(this.onMismatch);
+		filter.start();
 
-        return filter;
-    }
+		return filter;
+	}
 
-    @Nonnull
-    private JaninoEventEvaluator getJaninoEventEvaluator() {
-        var evaluator = new JaninoEventEvaluator();
-        evaluator.setExpression(this.javaExpression);
-        evaluator.setContext(LoggingUtil.getLoggerContext());
-        evaluator.setName(JaninoFilterFactory.class.getSimpleName() + ": '" + this.javaExpression + "'");
-        evaluator.start();
-        return evaluator;
-    }
+	@Nonnull
+	private JaninoEventEvaluator getJaninoEventEvaluator() {
+		var evaluator = new JaninoEventEvaluator();
+		evaluator.setExpression(this.javaExpression);
+		evaluator.setContext(LoggingUtil.getLoggerContext());
+		evaluator.setName(JaninoFilterFactory.class.getSimpleName() + ": '" + this.javaExpression + "'");
+		evaluator.start();
+		return evaluator;
+	}
 
-    @JsonProperty
-    public String getJavaExpression() {
-        return this.javaExpression;
-    }
+	@JsonProperty
+	public String getJavaExpression() {
+		return this.javaExpression;
+	}
 
-    @JsonProperty
-    public void setJavaExpression(String javaExpression) {
-        this.javaExpression = javaExpression;
-    }
+	@JsonProperty
+	public void setJavaExpression(String javaExpression) {
+		this.javaExpression = javaExpression;
+	}
 
-    @JsonProperty
-    public FilterReply getOnMatch() {
-        return this.onMatch;
-    }
+	@JsonProperty
+	public FilterReply getOnMatch() {
+		return this.onMatch;
+	}
 
-    @JsonProperty
-    public void setOnMatch(FilterReply onMatch) {
-        this.onMatch = onMatch;
-    }
+	@JsonProperty
+	public void setOnMatch(FilterReply onMatch) {
+		this.onMatch = onMatch;
+	}
 
-    @JsonProperty
-    public FilterReply getOnMismatch() {
-        return this.onMismatch;
-    }
+	@JsonProperty
+	public FilterReply getOnMismatch() {
+		return this.onMismatch;
+	}
 
-    @JsonProperty
-    public void setOnMismatch(FilterReply onMismatch) {
-        this.onMismatch = onMismatch;
-    }
+	@JsonProperty
+	public void setOnMismatch(FilterReply onMismatch) {
+		this.onMismatch = onMismatch;
+	}
 }

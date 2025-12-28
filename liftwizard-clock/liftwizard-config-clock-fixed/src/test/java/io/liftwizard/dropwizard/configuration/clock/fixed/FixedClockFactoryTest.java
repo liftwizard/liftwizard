@@ -39,41 +39,41 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FixedClockFactoryTest {
 
-    @RegisterExtension
-    private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
+	@RegisterExtension
+	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
-    private final ObjectMapper objectMapper = newObjectMapper();
-    private final Validator validator = Validators.newValidator();
+	private final ObjectMapper objectMapper = newObjectMapper();
+	private final Validator validator = Validators.newValidator();
 
-    private final JsonConfigurationFactory<ClockFactory> factory = new JsonConfigurationFactory<>(
-        ClockFactory.class,
-        this.validator,
-        this.objectMapper,
-        "dw"
-    );
+	private final JsonConfigurationFactory<ClockFactory> factory = new JsonConfigurationFactory<>(
+		ClockFactory.class,
+		this.validator,
+		this.objectMapper,
+		"dw"
+	);
 
-    @Test
-    void isDiscoverable() {
-        // Make sure the types we specified in META-INF gets picked up
-        var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
-        List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
-        assertThat(discoveredSubtypes).contains(FixedClockFactory.class);
-    }
+	@Test
+	void isDiscoverable() {
+		// Make sure the types we specified in META-INF gets picked up
+		var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
+		List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
+		assertThat(discoveredSubtypes).contains(FixedClockFactory.class);
+	}
 
-    @Test
-    void fixedClock() throws Exception {
-        ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
-        assertThat(clockFactory).isInstanceOf(FixedClockFactory.class);
-        Clock clock = clockFactory.createClock();
-        assertThat(clock.getZone()).isEqualTo(ZoneId.of("America/New_York"));
-        Instant actualInstant = clock.instant();
-        Instant expectedInstant = Instant.parse("2000-12-31T23:59:59Z");
-        assertThat(actualInstant).isEqualTo(expectedInstant);
-    }
+	@Test
+	void fixedClock() throws Exception {
+		ClockFactory clockFactory = this.factory.build(new ResourceConfigurationSourceProvider(), "config-test.json5");
+		assertThat(clockFactory).isInstanceOf(FixedClockFactory.class);
+		Clock clock = clockFactory.createClock();
+		assertThat(clock.getZone()).isEqualTo(ZoneId.of("America/New_York"));
+		Instant actualInstant = clock.instant();
+		Instant expectedInstant = Instant.parse("2000-12-31T23:59:59Z");
+		assertThat(actualInstant).isEqualTo(expectedInstant);
+	}
 
-    private static ObjectMapper newObjectMapper() {
-        ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper);
-        return objectMapper;
-    }
+	private static ObjectMapper newObjectMapper() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		ObjectMapperConfig.configure(objectMapper);
+		return objectMapper;
+	}
 }

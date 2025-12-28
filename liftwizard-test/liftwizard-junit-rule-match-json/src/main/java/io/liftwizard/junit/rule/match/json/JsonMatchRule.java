@@ -43,113 +43,113 @@ import org.skyscreamer.jsonassert.JSONCompareResult;
 
 public class JsonMatchRule extends AbstractMatchRule {
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    public JsonMatchRule(@Nonnull Class<?> callingClass) {
-        super(callingClass);
-        this.objectMapper = JsonMatchRule.newObjectMapper();
-    }
+	public JsonMatchRule(@Nonnull Class<?> callingClass) {
+		super(callingClass);
+		this.objectMapper = JsonMatchRule.newObjectMapper();
+	}
 
-    private static ObjectMapper newObjectMapper() {
-        ObjectMapper objectMapper = Jackson.newObjectMapper();
-        ObjectMapperConfig.configure(objectMapper);
-        return objectMapper;
-    }
+	private static ObjectMapper newObjectMapper() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		ObjectMapperConfig.configure(objectMapper);
+		return objectMapper;
+	}
 
-    @Override
-    protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
-        throws URISyntaxException, IOException {
-        Path packagePath = getPackagePath(this.callingClass);
-        if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath)) {
-            deleteDirectoryRecursively(packagePath);
-            CLEANED_PATHS.add(packagePath);
-        }
+	@Override
+	protected void assertFileContentsOrThrow(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+		throws URISyntaxException, IOException {
+		Path packagePath = getPackagePath(this.callingClass);
+		if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath)) {
+			deleteDirectoryRecursively(packagePath);
+			CLEANED_PATHS.add(packagePath);
+		}
 
-        InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-        if (
-            (this.rerecordEnabled || inputStream == null) && !this.rerecordedPaths.contains(resourceClassPathLocation)
-        ) {
-            File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
+		InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
+		if (
+			(this.rerecordEnabled || inputStream == null) && !this.rerecordedPaths.contains(resourceClassPathLocation)
+		) {
+			File resourceFile = packagePath.resolve(resourceClassPathLocation).toFile();
 
-            this.writeStringToFile(resourceClassPathLocation, actualString, resourceFile);
-            if (!this.rerecordEnabled) {
-                this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
-            }
-        } else {
-            Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-            String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
+			this.writeStringToFile(resourceClassPathLocation, actualString, resourceFile);
+			if (!this.rerecordEnabled) {
+				this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
+			}
+		} else {
+			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
 
-            URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
-            URI uri = resource.toURI();
+			URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+			URI uri = resource.toURI();
 
-            if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
-                return;
-            }
+			if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
+				return;
+			}
 
-            Optional<String> message = this.compareAndGetDiff(actualString, expectedStringFromFile);
-            if (message.isPresent()) {
-                if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
-                    String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
-                        uri,
-                        actualString
-                    );
-                    AssertionError assertionError = new AssertionError(detailMessage);
-                    this.addError(assertionError);
-                    return;
-                }
+			Optional<String> message = this.compareAndGetDiff(actualString, expectedStringFromFile);
+			if (message.isPresent()) {
+				if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
+					String detailMessage = "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(
+						uri,
+						actualString
+					);
+					AssertionError assertionError = new AssertionError(detailMessage);
+					this.addError(assertionError);
+					return;
+				}
 
-                File file = new File(uri);
-                this.writeStringToFile(resourceClassPathLocation, actualString, file);
+				File file = new File(uri);
+				this.writeStringToFile(resourceClassPathLocation, actualString, file);
 
-                String detailMessage = "Writing expected file to: %s%n%s".formatted(uri, message);
-                AssertionError assertionError = new AssertionError(detailMessage);
-                this.addError(assertionError);
-            }
-        }
-    }
+				String detailMessage = "Writing expected file to: %s%n%s".formatted(uri, message);
+				AssertionError assertionError = new AssertionError(detailMessage);
+				this.addError(assertionError);
+			}
+		}
+	}
 
-    protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile) {
-        try {
-            JSONCompareResult result = JSONCompare.compareJSON(
-                expectedStringFromFile,
-                actualString,
-                JSONCompareMode.STRICT
-            );
-            if (result.passed()) {
-                return Optional.empty();
-            }
+	protected Optional<String> compareAndGetDiff(@Nonnull String actualString, String expectedStringFromFile) {
+		try {
+			JSONCompareResult result = JSONCompare.compareJSON(
+				expectedStringFromFile,
+				actualString,
+				JSONCompareMode.STRICT
+			);
+			if (result.passed()) {
+				return Optional.empty();
+			}
 
-            if (result.failed()) {
-                String message = result.getMessage();
-                return Optional.of(message);
-            }
+			if (result.failed()) {
+				String message = result.getMessage();
+				return Optional.of(message);
+			}
 
-            throw new AssertionError(result);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
+			throw new AssertionError(result);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    private boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri) {
-        try {
-            this.objectMapper.readTree(expectedStringFromFile);
-            return true;
-        } catch (JacksonException e) {
-            String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
-            AssertionError assertionError = new AssertionError(detailMessage, e);
-            this.addError(assertionError);
-            return false;
-        }
-    }
+	private boolean validateExpectedStringFromFile(String expectedStringFromFile, URI uri) {
+		try {
+			this.objectMapper.readTree(expectedStringFromFile);
+			return true;
+		} catch (JacksonException e) {
+			String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
+			AssertionError assertionError = new AssertionError(detailMessage, e);
+			this.addError(assertionError);
+			return false;
+		}
+	}
 
-    @Override
-    protected String getPrettyPrintedString(@Nonnull String string) {
-        try {
-            JsonNode jsonNode = this.objectMapper.readTree(string);
-            String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
-            return prettyPrintedString;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	protected String getPrettyPrintedString(@Nonnull String string) {
+		try {
+			JsonNode jsonNode = this.objectMapper.readTree(string);
+			String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
+			return prettyPrintedString;
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

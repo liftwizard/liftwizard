@@ -22,29 +22,29 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVi
 
 public class BooleanLiteralVisitor extends AbstractLiteralVisitor<Boolean> {
 
-    public BooleanLiteralVisitor(RelatedFinder finder, String errorContext) {
-        super(finder, errorContext);
-    }
+	public BooleanLiteralVisitor(RelatedFinder finder, String errorContext) {
+		super(finder, errorContext);
+	}
 
-    @Override
-    protected String getExpectedType() {
-        return "Boolean";
-    }
+	@Override
+	protected String getExpectedType() {
+		return "Boolean";
+	}
 
-    @Override
-    public Boolean visitBooleanLiteral(BooleanLiteralContext ctx) {
-        if (ctx.NullLiteral() != null) {
-            return null;
-        }
+	@Override
+	public Boolean visitBooleanLiteral(BooleanLiteralContext ctx) {
+		if (ctx.NullLiteral() != null) {
+			return null;
+		}
 
-        if (ctx.BooleanLiteral().getText().equals("true")) {
-            return true;
-        }
+		if (ctx.BooleanLiteral().getText().equals("true")) {
+			return true;
+		}
 
-        if (ctx.BooleanLiteral().getText().equals("false")) {
-            return false;
-        }
+		if (ctx.BooleanLiteral().getText().equals("false")) {
+			return false;
+		}
 
-        return this.throwTypeError(ctx);
-    }
+		return this.throwTypeError(ctx);
+	}
 }

@@ -20,6 +20,6 @@ name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval
 displayName: Eclipse Collections removal
 description: Remove or replace Eclipse Collections APIs with standard Java alternatives where appropriate.
 recipeList:
-  - io.liftwizard.rewrite.eclipse.collections.removal.ComparatorsNullSafeEqualsToObjectsEqualsRecipes
-  - io.liftwizard.rewrite.eclipse.collections.removal.CollectionAddProcedureOnToMethodReferenceRecipes
-  - io.liftwizard.rewrite.eclipse.collections.removal.CollectionRemoveProcedureOnToMethodReferenceRecipes
+    - io.liftwizard.rewrite.eclipse.collections.removal.ComparatorsNullSafeEqualsToObjectsEqualsRecipes
+    - io.liftwizard.rewrite.eclipse.collections.removal.CollectionAddProcedureOnToMethodReferenceRecipes
+    - io.liftwizard.rewrite.eclipse.collections.removal.CollectionRemoveProcedureOnToMethodReferenceRecipes

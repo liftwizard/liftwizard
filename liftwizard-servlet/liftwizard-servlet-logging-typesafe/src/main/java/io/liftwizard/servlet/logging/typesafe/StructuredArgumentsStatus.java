@@ -27,60 +27,60 @@ import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsStatus {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
 
-    private Status status;
-    private Integer code;
-    private Family family;
-    private String phrase;
+	private Status status;
+	private Integer code;
+	private Family family;
+	private String phrase;
 
-    @JsonProperty
-    public Status getStatus() {
-        return this.status;
-    }
+	@JsonProperty
+	public Status getStatus() {
+		return this.status;
+	}
 
-    public void setStatus(Status status) {
-        // It's possible to overwrite a non-null status with another non-null status due to the try-catch block in org.glassfish.jersey.server.ServerRuntime.process().
-        // It happens when there is an error while processing an otherwise successful response.
-        // For example, we try to return a successful response, but there is an error serializing the response body, because Jackson calls a getter which throws.
+	public void setStatus(Status status) {
+		// It's possible to overwrite a non-null status with another non-null status due to the try-catch block in org.glassfish.jersey.server.ServerRuntime.process().
+		// It happens when there is an error while processing an otherwise successful response.
+		// For example, we try to return a successful response, but there is an error serializing the response body, because Jackson calls a getter which throws.
 
-        // Name can occasionally be null, for http codes like 422 which are used by Dropwizard but don't appear in the Status enumeration
-        this.status = status;
-    }
+		// Name can occasionally be null, for http codes like 422 which are used by Dropwizard but don't appear in the Status enumeration
+		this.status = status;
+	}
 
-    @JsonProperty
-    public Integer getCode() {
-        return this.code;
-    }
+	@JsonProperty
+	public Integer getCode() {
+		return this.code;
+	}
 
-    public void setCode(int code) {
-        if (this.code != null) {
-            LOGGER.warn("Overwriting code '{}' with '{}'.", this.code, code);
-        }
-        this.code = code;
-    }
+	public void setCode(int code) {
+		if (this.code != null) {
+			LOGGER.warn("Overwriting code '{}' with '{}'.", this.code, code);
+		}
+		this.code = code;
+	}
 
-    @JsonProperty
-    public Family getFamily() {
-        return this.family;
-    }
+	@JsonProperty
+	public Family getFamily() {
+		return this.family;
+	}
 
-    public void setFamily(Family family) {
-        if (this.family != null) {
-            LOGGER.warn("Overwriting family '{}' with '{}'.", this.family, family);
-        }
-        this.family = Objects.requireNonNull(family);
-    }
+	public void setFamily(Family family) {
+		if (this.family != null) {
+			LOGGER.warn("Overwriting family '{}' with '{}'.", this.family, family);
+		}
+		this.family = Objects.requireNonNull(family);
+	}
 
-    @JsonProperty
-    public String getPhrase() {
-        return this.phrase;
-    }
+	@JsonProperty
+	public String getPhrase() {
+		return this.phrase;
+	}
 
-    public void setPhrase(String phrase) {
-        if (this.phrase != null) {
-            LOGGER.warn("Overwriting phrase '{}' with '{}'.", this.phrase, phrase);
-        }
-        this.phrase = Objects.requireNonNull(phrase);
-    }
+	public void setPhrase(String phrase) {
+		if (this.phrase != null) {
+			LOGGER.warn("Overwriting phrase '{}' with '{}'.", this.phrase, phrase);
+		}
+		this.phrase = Objects.requireNonNull(phrase);
+	}
 }

@@ -32,70 +32,70 @@ import org.eclipse.collections.impl.set.mutable.SetAdapter;
 
 public class ReladomoTestResourceGrid {
 
-    private final ReladomoClassMetaData metaData;
-    private final ImmutableList<ReladomoTestResourceColumn> columns;
-    private final MithraList<?> mithraList;
+	private final ReladomoClassMetaData metaData;
+	private final ImmutableList<ReladomoTestResourceColumn> columns;
+	private final MithraList<?> mithraList;
 
-    private boolean frozen;
+	private boolean frozen;
 
-    public ReladomoTestResourceGrid(ReladomoClassMetaData metaData, MithraList<?> mithraList) {
-        this.metaData = Objects.requireNonNull(metaData);
-        this.mithraList = Objects.requireNonNull(mithraList);
+	public ReladomoTestResourceGrid(ReladomoClassMetaData metaData, MithraList<?> mithraList) {
+		this.metaData = Objects.requireNonNull(metaData);
+		this.mithraList = Objects.requireNonNull(mithraList);
 
-        MutableSet<Attribute> attributes = SetAdapter.adapt(new LinkedHashSet<>());
-        if (metaData.getAsOfAttributes() != null) {
-            for (AsOfAttribute asOfAttribute : metaData.getAsOfAttributes()) {
-                attributes.add(asOfAttribute.getFromAttribute());
-                attributes.add(asOfAttribute.getToAttribute());
-            }
-        }
-        attributes.addAll(Arrays.asList(metaData.getPrimaryKeyAttributes()));
-        attributes.addAll(Arrays.asList(metaData.getPersistentAttributes()));
+		MutableSet<Attribute> attributes = SetAdapter.adapt(new LinkedHashSet<>());
+		if (metaData.getAsOfAttributes() != null) {
+			for (AsOfAttribute asOfAttribute : metaData.getAsOfAttributes()) {
+				attributes.add(asOfAttribute.getFromAttribute());
+				attributes.add(asOfAttribute.getToAttribute());
+			}
+		}
+		attributes.addAll(Arrays.asList(metaData.getPrimaryKeyAttributes()));
+		attributes.addAll(Arrays.asList(metaData.getPersistentAttributes()));
 
-        this.columns = attributes.toList().collect(ReladomoTestResourceColumn::new).toImmutable();
+		this.columns = attributes.toList().collect(ReladomoTestResourceColumn::new).toImmutable();
 
-        Class<?> aClass = metaData.getBusinessOrInterfaceClass();
-        for (Object mithraObject : mithraList) {
-            for (ReladomoTestResourceColumn column : this.columns) {
-                Object cast = aClass.cast(mithraObject);
-                column.addMithraObject(cast);
-            }
-        }
-    }
+		Class<?> aClass = metaData.getBusinessOrInterfaceClass();
+		for (Object mithraObject : mithraList) {
+			for (ReladomoTestResourceColumn column : this.columns) {
+				Object cast = aClass.cast(mithraObject);
+				column.addMithraObject(cast);
+			}
+		}
+	}
 
-    public boolean isEmpty() {
-        return this.mithraList.isEmpty();
-    }
+	public boolean isEmpty() {
+		return this.mithraList.isEmpty();
+	}
 
-    public void freeze() {
-        if (this.frozen) {
-            throw new IllegalStateException();
-        }
+	public void freeze() {
+		if (this.frozen) {
+			throw new IllegalStateException();
+		}
 
-        this.columns.each(ReladomoTestResourceColumn::freeze);
-        this.frozen = true;
-    }
+		this.columns.each(ReladomoTestResourceColumn::freeze);
+		this.frozen = true;
+	}
 
-    @Override
-    public String toString() {
-        if (!this.frozen) {
-            return "";
-        }
+	@Override
+	public String toString() {
+		if (!this.frozen) {
+			return "";
+		}
 
-        String classString = "class " + this.metaData.getBusinessOrInterfaceClassName() + "\n";
-        String headerRowString =
-            this.columns.collect(ReladomoTestResourceColumn::getPaddedHeader).makeString().stripTrailing() + "\n";
-        LazyIterable<String> rowStrings = Interval.zeroTo(this.mithraList.size() - 1).collect(this::getRowString);
-        String bodyString = rowStrings.makeString("");
-        return classString + headerRowString + bodyString;
-    }
+		String classString = "class " + this.metaData.getBusinessOrInterfaceClassName() + "\n";
+		String headerRowString =
+			this.columns.collect(ReladomoTestResourceColumn::getPaddedHeader).makeString().stripTrailing() + "\n";
+		LazyIterable<String> rowStrings = Interval.zeroTo(this.mithraList.size() - 1).collect(this::getRowString);
+		String bodyString = rowStrings.makeString("");
+		return classString + headerRowString + bodyString;
+	}
 
-    private String getRowString(int index) {
-        return (
-            this.columns.collect(each -> each.getPaddedValueString(index))
-                .makeString()
-                .stripTrailing()
-            + "\n"
-        );
-    }
+	private String getRowString(int index) {
+		return (
+			this.columns.collect((each) -> each.getPaddedValueString(index))
+				.makeString()
+				.stripTrailing()
+			+ "\n"
+		);
+	}
 }

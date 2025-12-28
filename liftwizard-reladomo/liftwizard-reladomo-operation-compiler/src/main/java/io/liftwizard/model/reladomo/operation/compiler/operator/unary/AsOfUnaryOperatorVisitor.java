@@ -28,29 +28,29 @@ import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingV
 
 public class AsOfUnaryOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation> {
 
-    private final AsOfAttribute attribute;
+	private final AsOfAttribute attribute;
 
-    public AsOfUnaryOperatorVisitor(AsOfAttribute attribute) {
-        this.attribute = Objects.requireNonNull(attribute);
-    }
+	public AsOfUnaryOperatorVisitor(AsOfAttribute attribute) {
+		this.attribute = Objects.requireNonNull(attribute);
+	}
 
-    @Override
-    public Operation visitUnaryOperator(UnaryOperatorContext ctx) {
-        return this.visitChildren(ctx);
-    }
+	@Override
+	public Operation visitUnaryOperator(UnaryOperatorContext ctx) {
+		return this.visitChildren(ctx);
+	}
 
-    @Override
-    public Operation visitEqualsEdgePoint(EqualsEdgePointContext ctx) {
-        return this.attribute.equalsEdgePoint();
-    }
+	@Override
+	public Operation visitEqualsEdgePoint(EqualsEdgePointContext ctx) {
+		return this.attribute.equalsEdgePoint();
+	}
 
-    @Override
-    public Operation visitOperatorIsNull(OperatorIsNullContext ctx) {
-        return this.attribute.isNull();
-    }
+	@Override
+	public Operation visitOperatorIsNull(OperatorIsNullContext ctx) {
+		return this.attribute.isNull();
+	}
 
-    @Override
-    public Operation visitOperatorIsNotNull(OperatorIsNotNullContext ctx) {
-        return this.attribute.isNotNull();
-    }
+	@Override
+	public Operation visitOperatorIsNotNull(OperatorIsNotNullContext ctx) {
+		return this.attribute.isNotNull();
+	}
 }

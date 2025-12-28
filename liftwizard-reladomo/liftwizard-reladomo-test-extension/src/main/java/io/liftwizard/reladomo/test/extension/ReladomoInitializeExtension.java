@@ -32,35 +32,35 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class ReladomoInitializeExtension implements BeforeEachCallback, AfterEachCallback {
 
-    @Nonnull
-    private final String runtimeConfigurationPath;
+	@Nonnull
+	private final String runtimeConfigurationPath;
 
-    public ReladomoInitializeExtension(@Nonnull String runtimeConfigurationPath) {
-        this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
-    }
+	public ReladomoInitializeExtension(@Nonnull String runtimeConfigurationPath) {
+		this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
+	}
 
-    @Override
-    public void beforeEach(ExtensionContext context) {
-        try (
-            InputStream inputStream = this.getClass()
-                .getClassLoader()
-                .getResourceAsStream(this.runtimeConfigurationPath);
-        ) {
-            MithraConfigurationManager mithraConfigurationManager =
-                MithraManagerProvider.getMithraManager().getConfigManager();
-            MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
-            mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
-            mithraConfigurationManager.fullyInitialize();
-        } catch (MithraBusinessException | IOException e) {
-            throw new RuntimeException(this.runtimeConfigurationPath, e);
-        }
-    }
+	@Override
+	public void beforeEach(ExtensionContext context) {
+		try (
+			InputStream inputStream = this.getClass()
+				.getClassLoader()
+				.getResourceAsStream(this.runtimeConfigurationPath);
+		) {
+			MithraConfigurationManager mithraConfigurationManager =
+				MithraManagerProvider.getMithraManager().getConfigManager();
+			MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
+			mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
+			mithraConfigurationManager.fullyInitialize();
+		} catch (MithraBusinessException | IOException e) {
+			throw new RuntimeException(this.runtimeConfigurationPath, e);
+		}
+	}
 
-    @Override
-    public void afterEach(ExtensionContext context) {
-        MithraManagerProvider.getMithraManager().clearAllQueryCaches();
-        MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
-        MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
-        MithraManagerProvider.getMithraManager().getConfigManager().resetAllInitializedClasses();
-    }
+	@Override
+	public void afterEach(ExtensionContext context) {
+		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
+		MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
+		MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();
+		MithraManagerProvider.getMithraManager().getConfigManager().resetAllInitializedClasses();
+	}
 }

@@ -31,48 +31,48 @@ import org.eclipse.jetty.util.security.Constraint;
 
 public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 
-    public static final String ADMIN_ROLE = "admin";
+	public static final String ADMIN_ROLE = "admin";
 
-    public AdminConstraintSecurityHandler(String userName, String password) {
-        this.setAuthenticator(new BasicAuthenticator());
+	public AdminConstraintSecurityHandler(String userName, String password) {
+		this.setAuthenticator(new BasicAuthenticator());
 
-        Constraint constraint = this.getConstraint();
-        ConstraintMapping constraintMapping = this.getConstraintMapping(constraint);
-        this.addConstraintMapping(constraintMapping);
+		Constraint constraint = this.getConstraint();
+		ConstraintMapping constraintMapping = this.getConstraintMapping(constraint);
+		this.addConstraintMapping(constraintMapping);
 
-        AdminLoginService adminLoginService = this.getAdminLoginService(userName, password);
-        this.setLoginService(adminLoginService);
-    }
+		AdminLoginService adminLoginService = this.getAdminLoginService(userName, password);
+		this.setLoginService(adminLoginService);
+	}
 
-    @Nonnull
-    private Constraint getConstraint() {
-        Constraint constraint = new Constraint(Constraint.__BASIC_AUTH, ADMIN_ROLE);
-        constraint.setAuthenticate(true);
-        constraint.setRoles(new String[] { ADMIN_ROLE });
-        return constraint;
-    }
+	@Nonnull
+	private Constraint getConstraint() {
+		Constraint constraint = new Constraint(Constraint.__BASIC_AUTH, ADMIN_ROLE);
+		constraint.setAuthenticate(true);
+		constraint.setRoles(new String[] { ADMIN_ROLE });
+		return constraint;
+	}
 
-    @Nonnull
-    private ConstraintMapping getConstraintMapping(Constraint constraint) {
-        ConstraintMapping constraintMapping = new ConstraintMapping();
-        constraintMapping.setConstraint(constraint);
-        constraintMapping.setPathSpec("/*");
-        return constraintMapping;
-    }
+	@Nonnull
+	private ConstraintMapping getConstraintMapping(Constraint constraint) {
+		ConstraintMapping constraintMapping = new ConstraintMapping();
+		constraintMapping.setConstraint(constraint);
+		constraintMapping.setPathSpec("/*");
+		return constraintMapping;
+	}
 
-    @Nonnull
-    private AdminLoginService getAdminLoginService(String userName, String password) {
-        return new AdminLoginService(userName, password);
-    }
+	@Nonnull
+	private AdminLoginService getAdminLoginService(String userName, String password) {
+		return new AdminLoginService(userName, password);
+	}
 
-    // Adding this method is a hack to get maven-dependency-plugin to recognize jakarta.servlet-api as a dependency
-    @Override
-    public void handle(
-        String pathInContext,
-        Request baseRequest,
-        HttpServletRequest request,
-        HttpServletResponse response
-    ) throws IOException, ServletException {
-        super.handle(pathInContext, baseRequest, request, response);
-    }
+	// Adding this method is a hack to get maven-dependency-plugin to recognize jakarta.servlet-api as a dependency
+	@Override
+	public void handle(
+		String pathInContext,
+		Request baseRequest,
+		HttpServletRequest request,
+		HttpServletResponse response
+	) throws IOException, ServletException {
+		super.handle(pathInContext, baseRequest, request, response);
+	}
 }

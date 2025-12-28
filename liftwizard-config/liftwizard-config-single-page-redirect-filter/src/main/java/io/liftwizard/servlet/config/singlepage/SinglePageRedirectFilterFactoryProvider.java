@@ -17,5 +17,5 @@
 package io.liftwizard.servlet.config.singlepage;
 
 public interface SinglePageRedirectFilterFactoryProvider {
-    SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory();
+	SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory();
 }

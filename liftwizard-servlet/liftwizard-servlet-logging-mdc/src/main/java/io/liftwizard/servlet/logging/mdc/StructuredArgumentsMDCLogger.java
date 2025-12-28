@@ -36,60 +36,60 @@ import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsMDCLogger implements Consumer<StructuredArguments> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
 
-    @Nonnull
-    private final ObjectMapper objectMapper;
+	@Nonnull
+	private final ObjectMapper objectMapper;
 
-    public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper) {
-        this.objectMapper = Objects.requireNonNull(objectMapper);
-    }
+	public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper) {
+		this.objectMapper = Objects.requireNonNull(objectMapper);
+	}
 
-    @Override
-    public void accept(@Nonnull StructuredArguments structuredArguments) {
-        ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
-        try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode)) {
-            LOGGER.debug("Response sent");
-        }
-    }
+	@Override
+	public void accept(@Nonnull StructuredArguments structuredArguments) {
+		ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
+		try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode)) {
+			LOGGER.debug("Response sent");
+		}
+	}
 
-    private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode) {
-        MultiMDCCloseable result = new MultiMDCCloseable();
-        this.structuredArgumentsToMDC(result, Stacks.immutable.empty(), objectNode);
-        return result;
-    }
+	private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode) {
+		MultiMDCCloseable result = new MultiMDCCloseable();
+		this.structuredArgumentsToMDC(result, Stacks.immutable.empty(), objectNode);
+		return result;
+	}
 
-    private void structuredArgumentsToMDC(
-        @Nonnull MultiMDCCloseable mdc,
-        @Nonnull ImmutableStack<String> stack,
-        @Nonnull ObjectNode objectNode
-    ) {
-        objectNode.fields().forEachRemaining(entry -> this.structuredArgumentToMDC(mdc, stack, entry));
-    }
+	private void structuredArgumentsToMDC(
+		@Nonnull MultiMDCCloseable mdc,
+		@Nonnull ImmutableStack<String> stack,
+		@Nonnull ObjectNode objectNode
+	) {
+		objectNode.fields().forEachRemaining((entry) -> this.structuredArgumentToMDC(mdc, stack, entry));
+	}
 
-    private void structuredArgumentToMDC(
-        @Nonnull MultiMDCCloseable mdc,
-        @Nonnull ImmutableStack<String> stack,
-        @Nonnull Entry<String, JsonNode> entry
-    ) {
-        String key = entry.getKey();
-        JsonNode value = entry.getValue();
+	private void structuredArgumentToMDC(
+		@Nonnull MultiMDCCloseable mdc,
+		@Nonnull ImmutableStack<String> stack,
+		@Nonnull Entry<String, JsonNode> entry
+	) {
+		String key = entry.getKey();
+		JsonNode value = entry.getValue();
 
-        if (value.isObject()) {
-            ImmutableStack<String> nextStack = stack.push(key);
-            ObjectNode nextObjectNode = (ObjectNode) value;
-            this.structuredArgumentsToMDC(mdc, nextStack, nextObjectNode);
-            return;
-        }
+		if (value.isObject()) {
+			ImmutableStack<String> nextStack = stack.push(key);
+			ObjectNode nextObjectNode = (ObjectNode) value;
+			this.structuredArgumentsToMDC(mdc, nextStack, nextObjectNode);
+			return;
+		}
 
-        String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
+		String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
 
-        if (value.isArray()) {
-            MutableList<String> list = Lists.mutable.empty();
-            value.iterator().forEachRemaining(each -> list.add(each.textValue()));
-            mdc.put(keyString, list.makeString());
-        } else {
-            mdc.put(keyString, value.asText());
-        }
-    }
+		if (value.isArray()) {
+			MutableList<String> list = Lists.mutable.empty();
+			value.iterator().forEachRemaining((each) -> list.add(each.textValue()));
+			mdc.put(keyString, list.makeString());
+		} else {
+			mdc.put(keyString, value.asText());
+		}
+	}
 }

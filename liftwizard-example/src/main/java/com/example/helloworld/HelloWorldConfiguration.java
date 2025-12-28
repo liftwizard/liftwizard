@@ -46,245 +46,245 @@ import org.eclipse.collections.api.map.MutableMap;
 
 @JsonPropertyOrder({ "template", "defaultName", "viewRendererConfiguration" })
 public class HelloWorldConfiguration
-    extends Configuration
-    implements
-        ConfigLoggingFactoryProvider,
-        ClockFactoryProvider,
-        UUIDSupplierFactoryProvider,
-        ObjectMapperFactoryProvider,
-        JerseyHttpLoggingFactoryProvider,
-        H2FactoryProvider,
-        DdlExecutorFactoryProvider,
-        ReladomoFactoryProvider,
-        NamedDataSourceProvider,
-        ConnectionManagerProvider,
-        GraphQLFactoryProvider,
-        LiquibaseMigrationFactoryProvider,
-        AuthFilterFactoryProvider {
+	extends Configuration
+	implements
+		ConfigLoggingFactoryProvider,
+		ClockFactoryProvider,
+		UUIDSupplierFactoryProvider,
+		ObjectMapperFactoryProvider,
+		JerseyHttpLoggingFactoryProvider,
+		H2FactoryProvider,
+		DdlExecutorFactoryProvider,
+		ReladomoFactoryProvider,
+		NamedDataSourceProvider,
+		ConnectionManagerProvider,
+		GraphQLFactoryProvider,
+		LiquibaseMigrationFactoryProvider,
+		AuthFilterFactoryProvider {
 
-    @NotEmpty
-    private String template;
+	@NotEmpty
+	private String template;
 
-    @NotEmpty
-    private String defaultName = "Stranger";
+	@NotEmpty
+	private String defaultName = "Stranger";
 
-    @NotNull
-    private MutableMap<String, Map<String, String>> viewRendererConfiguration = Maps.fixedSize.empty();
+	@NotNull
+	private MutableMap<String, Map<String, String>> viewRendererConfiguration = Maps.fixedSize.empty();
 
-    private @NotNull @Valid EnabledFactory configLoggingFactory = new EnabledFactory(true);
-    private @NotNull @Valid ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
-    private @NotNull @Valid ClockFactory clockFactory = new SystemClockFactory();
-    private @NotNull @Valid UUIDSupplierFactory uuidFactory = new SystemUUIDSupplierFactory();
-    private @Valid @NotNull JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
-    private @Valid @NotNull H2Factory h2Factory = new H2Factory();
-    private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories = List.of();
-    private @Valid @NotNull ReladomoFactory reladomoFactory = new ReladomoFactory();
-    private @Valid @NotNull GraphQLFactory graphQLFactory = new GraphQLFactory();
+	private @NotNull @Valid EnabledFactory configLoggingFactory = new EnabledFactory(true);
+	private @NotNull @Valid ObjectMapperFactory objectMapperFactory = new ObjectMapperFactory();
+	private @NotNull @Valid ClockFactory clockFactory = new SystemClockFactory();
+	private @NotNull @Valid UUIDSupplierFactory uuidFactory = new SystemUUIDSupplierFactory();
+	private @Valid @NotNull JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
+	private @Valid @NotNull H2Factory h2Factory = new H2Factory();
+	private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories = List.of();
+	private @Valid @NotNull ReladomoFactory reladomoFactory = new ReladomoFactory();
+	private @Valid @NotNull GraphQLFactory graphQLFactory = new GraphQLFactory();
 
-    // include-namedDataSourcesFactory
-    @JsonUnwrapped
-    private @Valid @NotNull NamedDataSourcesFactory namedDataSourcesFactory = new NamedDataSourcesFactory();
+	// include-namedDataSourcesFactory
+	@JsonUnwrapped
+	private @Valid @NotNull NamedDataSourcesFactory namedDataSourcesFactory = new NamedDataSourcesFactory();
 
-    // include-namedDataSourcesFactory
+	// include-namedDataSourcesFactory
 
-    // include-connectionManagersFactory
-    @JsonUnwrapped
-    private @Valid @NotNull ConnectionManagersFactory connectionManagersFactory = new ConnectionManagersFactory();
+	// include-connectionManagersFactory
+	@JsonUnwrapped
+	private @Valid @NotNull ConnectionManagersFactory connectionManagersFactory = new ConnectionManagersFactory();
 
-    // include-connectionManagersFactory
+	// include-connectionManagersFactory
 
-    // include-liquibaseMigrationFactory
-    private @Valid @NotNull LiquibaseMigrationFactory liquibaseMigrationFactory = new LiquibaseMigrationFactory();
-    // include-liquibaseMigrationFactory
+	// include-liquibaseMigrationFactory
+	private @Valid @NotNull LiquibaseMigrationFactory liquibaseMigrationFactory = new LiquibaseMigrationFactory();
+	// include-liquibaseMigrationFactory
 
-    // include-authFilterFactory
-    private @Valid @NotNull List<AuthFilterFactory> authFilterFactories = List.of();
+	// include-authFilterFactory
+	private @Valid @NotNull List<AuthFilterFactory> authFilterFactories = List.of();
 
-    // include-authFilterFactory
+	// include-authFilterFactory
 
-    @JsonProperty
-    public String getTemplate() {
-        return this.template;
-    }
+	@JsonProperty
+	public String getTemplate() {
+		return this.template;
+	}
 
-    @JsonProperty
-    public void setTemplate(String template) {
-        this.template = template;
-    }
+	@JsonProperty
+	public void setTemplate(String template) {
+		this.template = template;
+	}
 
-    @JsonProperty
-    public String getDefaultName() {
-        return this.defaultName;
-    }
+	@JsonProperty
+	public String getDefaultName() {
+		return this.defaultName;
+	}
 
-    @JsonProperty
-    public void setDefaultName(String defaultName) {
-        this.defaultName = defaultName;
-    }
+	@JsonProperty
+	public void setDefaultName(String defaultName) {
+		this.defaultName = defaultName;
+	}
 
-    public Template buildTemplate() {
-        return new Template(this.template, this.defaultName);
-    }
+	public Template buildTemplate() {
+		return new Template(this.template, this.defaultName);
+	}
 
-    @JsonProperty("viewRendererConfiguration")
-    public Map<String, Map<String, String>> getViewRendererConfiguration() {
-        return this.viewRendererConfiguration;
-    }
+	@JsonProperty("viewRendererConfiguration")
+	public Map<String, Map<String, String>> getViewRendererConfiguration() {
+		return this.viewRendererConfiguration;
+	}
 
-    @JsonProperty("viewRendererConfiguration")
-    public void setViewRendererConfiguration(Map<String, Map<String, String>> viewRendererConfiguration) {
-        MutableMap<String, Map<String, String>> mutableMap = Maps.mutable.empty();
-        for (Map.Entry<String, Map<String, String>> entry : viewRendererConfiguration.entrySet()) {
-            mutableMap.put(entry.getKey(), entry.getValue());
-        }
-        this.viewRendererConfiguration = mutableMap;
-    }
+	@JsonProperty("viewRendererConfiguration")
+	public void setViewRendererConfiguration(Map<String, Map<String, String>> viewRendererConfiguration) {
+		MutableMap<String, Map<String, String>> mutableMap = Maps.mutable.empty();
+		for (Map.Entry<String, Map<String, String>> entry : viewRendererConfiguration.entrySet()) {
+			mutableMap.put(entry.getKey(), entry.getValue());
+		}
+		this.viewRendererConfiguration = mutableMap;
+	}
 
-    @Override
-    @JsonProperty("configLogging")
-    public EnabledFactory getConfigLoggingFactory() {
-        return this.configLoggingFactory;
-    }
+	@Override
+	@JsonProperty("configLogging")
+	public EnabledFactory getConfigLoggingFactory() {
+		return this.configLoggingFactory;
+	}
 
-    @JsonProperty("configLogging")
-    public void setConfigLoggingFactory(EnabledFactory configLoggingFactory) {
-        this.configLoggingFactory = configLoggingFactory;
-    }
+	@JsonProperty("configLogging")
+	public void setConfigLoggingFactory(EnabledFactory configLoggingFactory) {
+		this.configLoggingFactory = configLoggingFactory;
+	}
 
-    @Override
-    @JsonProperty("objectMapper")
-    public ObjectMapperFactory getObjectMapperFactory() {
-        return this.objectMapperFactory;
-    }
+	@Override
+	@JsonProperty("objectMapper")
+	public ObjectMapperFactory getObjectMapperFactory() {
+		return this.objectMapperFactory;
+	}
 
-    @JsonProperty("objectMapper")
-    public void setObjectMapperFactory(ObjectMapperFactory objectMapperFactory) {
-        this.objectMapperFactory = objectMapperFactory;
-    }
+	@JsonProperty("objectMapper")
+	public void setObjectMapperFactory(ObjectMapperFactory objectMapperFactory) {
+		this.objectMapperFactory = objectMapperFactory;
+	}
 
-    @Override
-    @JsonProperty("clock")
-    public ClockFactory getClockFactory() {
-        return this.clockFactory;
-    }
+	@Override
+	@JsonProperty("clock")
+	public ClockFactory getClockFactory() {
+		return this.clockFactory;
+	}
 
-    @JsonProperty("clock")
-    public void setClockFactory(ClockFactory clockFactory) {
-        this.clockFactory = clockFactory;
-    }
+	@JsonProperty("clock")
+	public void setClockFactory(ClockFactory clockFactory) {
+		this.clockFactory = clockFactory;
+	}
 
-    @Override
-    @JsonProperty("uuid")
-    public UUIDSupplierFactory getUuidSupplierFactory() {
-        return this.uuidFactory;
-    }
+	@Override
+	@JsonProperty("uuid")
+	public UUIDSupplierFactory getUuidSupplierFactory() {
+		return this.uuidFactory;
+	}
 
-    @JsonProperty("uuid")
-    public void setUuidFactory(UUIDSupplierFactory uuidFactory) {
-        this.uuidFactory = uuidFactory;
-    }
+	@JsonProperty("uuid")
+	public void setUuidFactory(UUIDSupplierFactory uuidFactory) {
+		this.uuidFactory = uuidFactory;
+	}
 
-    @Override
-    @JsonProperty("jerseyHttpLogging")
-    public JerseyHttpLoggingFactory getJerseyHttpLoggingFactory() {
-        return this.jerseyHttpLoggingFactory;
-    }
+	@Override
+	@JsonProperty("jerseyHttpLogging")
+	public JerseyHttpLoggingFactory getJerseyHttpLoggingFactory() {
+		return this.jerseyHttpLoggingFactory;
+	}
 
-    @JsonProperty("jerseyHttpLogging")
-    public void setJerseyHttpLoggingFactory(JerseyHttpLoggingFactory jerseyHttpLoggingFactory) {
-        this.jerseyHttpLoggingFactory = jerseyHttpLoggingFactory;
-    }
+	@JsonProperty("jerseyHttpLogging")
+	public void setJerseyHttpLoggingFactory(JerseyHttpLoggingFactory jerseyHttpLoggingFactory) {
+		this.jerseyHttpLoggingFactory = jerseyHttpLoggingFactory;
+	}
 
-    @Override
-    @JsonProperty("h2")
-    public H2Factory getH2Factory() {
-        return this.h2Factory;
-    }
+	@Override
+	@JsonProperty("h2")
+	public H2Factory getH2Factory() {
+		return this.h2Factory;
+	}
 
-    @JsonProperty("h2")
-    public void setH2(H2Factory h2Factory) {
-        this.h2Factory = h2Factory;
-    }
+	@JsonProperty("h2")
+	public void setH2(H2Factory h2Factory) {
+		this.h2Factory = h2Factory;
+	}
 
-    @Override
-    @JsonProperty("reladomo")
-    public ReladomoFactory getReladomoFactory() {
-        return this.reladomoFactory;
-    }
+	@Override
+	@JsonProperty("reladomo")
+	public ReladomoFactory getReladomoFactory() {
+		return this.reladomoFactory;
+	}
 
-    @JsonProperty("reladomo")
-    public void setReladomoFactory(ReladomoFactory reladomoFactory) {
-        this.reladomoFactory = reladomoFactory;
-    }
+	@JsonProperty("reladomo")
+	public void setReladomoFactory(ReladomoFactory reladomoFactory) {
+		this.reladomoFactory = reladomoFactory;
+	}
 
-    @Override
-    @JsonProperty("dataSources")
-    @JsonUnwrapped
-    public NamedDataSourcesFactory getNamedDataSourcesFactory() {
-        return this.namedDataSourcesFactory;
-    }
+	@Override
+	@JsonProperty("dataSources")
+	@JsonUnwrapped
+	public NamedDataSourcesFactory getNamedDataSourcesFactory() {
+		return this.namedDataSourcesFactory;
+	}
 
-    @JsonProperty("dataSources")
-    @JsonUnwrapped
-    public void setNamedDataSourcesFactory(NamedDataSourcesFactory namedDataSourcesFactory) {
-        this.namedDataSourcesFactory = namedDataSourcesFactory;
-    }
+	@JsonProperty("dataSources")
+	@JsonUnwrapped
+	public void setNamedDataSourcesFactory(NamedDataSourcesFactory namedDataSourcesFactory) {
+		this.namedDataSourcesFactory = namedDataSourcesFactory;
+	}
 
-    @JsonProperty("connectionManagers")
-    @JsonUnwrapped
-    @Override
-    public ConnectionManagersFactory getConnectionManagersFactory() {
-        return this.connectionManagersFactory;
-    }
+	@JsonProperty("connectionManagers")
+	@JsonUnwrapped
+	@Override
+	public ConnectionManagersFactory getConnectionManagersFactory() {
+		return this.connectionManagersFactory;
+	}
 
-    @JsonProperty("connectionManagers")
-    @JsonUnwrapped
-    public void setConnectionManagersFactory(ConnectionManagersFactory connectionManagersFactory) {
-        this.connectionManagersFactory = connectionManagersFactory;
-    }
+	@JsonProperty("connectionManagers")
+	@JsonUnwrapped
+	public void setConnectionManagersFactory(ConnectionManagersFactory connectionManagersFactory) {
+		this.connectionManagersFactory = connectionManagersFactory;
+	}
 
-    @Override
-    @JsonProperty("ddlExecutors")
-    public List<DdlExecutorFactory> getDdlExecutorFactories() {
-        return this.ddlExecutorFactories;
-    }
+	@Override
+	@JsonProperty("ddlExecutors")
+	public List<DdlExecutorFactory> getDdlExecutorFactories() {
+		return this.ddlExecutorFactories;
+	}
 
-    @JsonProperty("ddlExecutors")
-    public void setDdlExecutorFactories(List<DdlExecutorFactory> ddlExecutorFactories) {
-        this.ddlExecutorFactories = ddlExecutorFactories;
-    }
+	@JsonProperty("ddlExecutors")
+	public void setDdlExecutorFactories(List<DdlExecutorFactory> ddlExecutorFactories) {
+		this.ddlExecutorFactories = ddlExecutorFactories;
+	}
 
-    @Override
-    @Nonnull
-    @JsonProperty("graphQL")
-    public GraphQLFactory getGraphQLFactory() {
-        return this.graphQLFactory;
-    }
+	@Override
+	@Nonnull
+	@JsonProperty("graphQL")
+	public GraphQLFactory getGraphQLFactory() {
+		return this.graphQLFactory;
+	}
 
-    @JsonProperty("graphQL")
-    public void setGraphQLFactory(@Nonnull GraphQLFactory graphQLFactory) {
-        this.graphQLFactory = graphQLFactory;
-    }
+	@JsonProperty("graphQL")
+	public void setGraphQLFactory(@Nonnull GraphQLFactory graphQLFactory) {
+		this.graphQLFactory = graphQLFactory;
+	}
 
-    @JsonProperty("liquibase")
-    @Override
-    public LiquibaseMigrationFactory getLiquibaseMigrationFactory() {
-        return this.liquibaseMigrationFactory;
-    }
+	@JsonProperty("liquibase")
+	@Override
+	public LiquibaseMigrationFactory getLiquibaseMigrationFactory() {
+		return this.liquibaseMigrationFactory;
+	}
 
-    @JsonProperty("liquibase")
-    public void setLiquibaseMigrationFactory(LiquibaseMigrationFactory liquibaseMigrationFactory) {
-        this.liquibaseMigrationFactory = liquibaseMigrationFactory;
-    }
+	@JsonProperty("liquibase")
+	public void setLiquibaseMigrationFactory(LiquibaseMigrationFactory liquibaseMigrationFactory) {
+		this.liquibaseMigrationFactory = liquibaseMigrationFactory;
+	}
 
-    @JsonProperty("authFilters")
-    @Override
-    public List<AuthFilterFactory> getAuthFilterFactories() {
-        return this.authFilterFactories;
-    }
+	@JsonProperty("authFilters")
+	@Override
+	public List<AuthFilterFactory> getAuthFilterFactories() {
+		return this.authFilterFactories;
+	}
 
-    @JsonProperty("authFilters")
-    public void setAuthFilterFactories(List<AuthFilterFactory> authFilterFactories) {
-        this.authFilterFactories = authFilterFactories;
-    }
+	@JsonProperty("authFilters")
+	public void setAuthFilterFactories(List<AuthFilterFactory> authFilterFactories) {
+		this.authFilterFactories = authFilterFactories;
+	}
 }

@@ -25,13 +25,13 @@ import graphql.schema.GraphQLScalarType;
 @Internal
 public final class GraphQLLocalDateScalar {
 
-    public static final GraphQLScalarType INSTANCE = GraphQLScalarType.newScalar()
-        .name("LocalDate")
-        .description("An RFC-3339 compliant LocalDate Scalar")
-        .coercing(new LocalDateCoercing())
-        .build();
+	public static final GraphQLScalarType INSTANCE = GraphQLScalarType.newScalar()
+		.name("LocalDate")
+		.description("An RFC-3339 compliant LocalDate Scalar")
+		.coercing(new LocalDateCoercing())
+		.build();
 
-    private GraphQLLocalDateScalar() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private GraphQLLocalDateScalar() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 }

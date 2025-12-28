@@ -31,74 +31,74 @@ import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 public final class H2InMemoryConnectionManager implements SourcelessConnectionManager {
 
-    private static final H2InMemoryConnectionManager INSTANCE = new H2InMemoryConnectionManager();
+	private static final H2InMemoryConnectionManager INSTANCE = new H2InMemoryConnectionManager();
 
-    private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("UTC");
-    private static final String SCHEMA_NAME = "liftwizard-app-h2";
-    private static final DataSource DATA_SOURCE = H2InMemoryConnectionManager.createDataSource();
+	private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("UTC");
+	private static final String SCHEMA_NAME = "liftwizard-app-h2";
+	private static final DataSource DATA_SOURCE = H2InMemoryConnectionManager.createDataSource();
 
-    private H2InMemoryConnectionManager() {
-        // singleton
-    }
+	private H2InMemoryConnectionManager() {
+		// singleton
+	}
 
-    @Nonnull
-    private static DataSource createDataSource() {
-        PoolProperties poolProperties = new PoolProperties();
-        poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
-        poolProperties.setUrl("jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER");
-        poolProperties.setUsername("sa");
-        poolProperties.setPassword("");
-        poolProperties.setInitialSize(1);
-        poolProperties.setMaxActive(10);
-        poolProperties.setMaxWait(500);
-        poolProperties.setTestOnBorrow(true);
-        poolProperties.setTestOnReturn(false);
-        poolProperties.setTestWhileIdle(true);
-        poolProperties.setValidationQuery("SELECT 1");
-        poolProperties.setValidationInterval(30000);
-        poolProperties.setTimeBetweenEvictionRunsMillis(30000);
-        poolProperties.setMinEvictableIdleTimeMillis(60000);
-        poolProperties.setName("Reladomo default connection pool");
+	@Nonnull
+	private static DataSource createDataSource() {
+		PoolProperties poolProperties = new PoolProperties();
+		poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
+		poolProperties.setUrl("jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER");
+		poolProperties.setUsername("sa");
+		poolProperties.setPassword("");
+		poolProperties.setInitialSize(1);
+		poolProperties.setMaxActive(10);
+		poolProperties.setMaxWait(500);
+		poolProperties.setTestOnBorrow(true);
+		poolProperties.setTestOnReturn(false);
+		poolProperties.setTestWhileIdle(true);
+		poolProperties.setValidationQuery("SELECT 1");
+		poolProperties.setValidationInterval(30000);
+		poolProperties.setTimeBetweenEvictionRunsMillis(30000);
+		poolProperties.setMinEvictableIdleTimeMillis(60000);
+		poolProperties.setName("Reladomo default connection pool");
 
-        DataSource dataSource = new DataSource();
-        dataSource.setPoolProperties(poolProperties);
+		DataSource dataSource = new DataSource();
+		dataSource.setPoolProperties(poolProperties);
 
-        return dataSource;
-    }
+		return dataSource;
+	}
 
-    @Nonnull
-    @SuppressWarnings("unused")
-    public static H2InMemoryConnectionManager getInstance() {
-        return INSTANCE;
-    }
+	@Nonnull
+	@SuppressWarnings("unused")
+	public static H2InMemoryConnectionManager getInstance() {
+		return INSTANCE;
+	}
 
-    @Nonnull
-    @Override
-    public BulkLoader createBulkLoader() {
-        throw new RuntimeException("BulkLoader is not supported");
-    }
+	@Nonnull
+	@Override
+	public BulkLoader createBulkLoader() {
+		throw new RuntimeException("BulkLoader is not supported");
+	}
 
-    @Override
-    public Connection getConnection() {
-        try {
-            return DATA_SOURCE.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not obtain database connection", e);
-        }
-    }
+	@Override
+	public Connection getConnection() {
+		try {
+			return DATA_SOURCE.getConnection();
+		} catch (SQLException e) {
+			throw new RuntimeException("Could not obtain database connection", e);
+		}
+	}
 
-    @Override
-    public DatabaseType getDatabaseType() {
-        return H2DatabaseType.getInstance();
-    }
+	@Override
+	public DatabaseType getDatabaseType() {
+		return H2DatabaseType.getInstance();
+	}
 
-    @Override
-    public TimeZone getDatabaseTimeZone() {
-        return TIME_ZONE;
-    }
+	@Override
+	public TimeZone getDatabaseTimeZone() {
+		return TIME_ZONE;
+	}
 
-    @Override
-    public String getDatabaseIdentifier() {
-        return SCHEMA_NAME;
-    }
+	@Override
+	public String getDatabaseIdentifier() {
+		return SCHEMA_NAME;
+	}
 }

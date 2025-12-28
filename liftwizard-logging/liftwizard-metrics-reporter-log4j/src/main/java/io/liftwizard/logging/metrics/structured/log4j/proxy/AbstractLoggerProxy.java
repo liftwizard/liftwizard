@@ -22,13 +22,13 @@ import org.apache.log4j.Logger;
 
 public abstract class AbstractLoggerProxy {
 
-    protected final Logger logger;
+	protected final Logger logger;
 
-    protected AbstractLoggerProxy(Logger logger) {
-        this.logger = Objects.requireNonNull(logger);
-    }
+	protected AbstractLoggerProxy(Logger logger) {
+		this.logger = Objects.requireNonNull(logger);
+	}
 
-    public abstract void log(Object structuredObject);
+	public abstract void log(Object structuredObject);
 
-    public abstract boolean isEnabled();
+	public abstract boolean isEnabled();
 }

@@ -37,34 +37,34 @@ import org.slf4j.LoggerFactory;
 
 public class ReladomoOperationDataFetcher<T> implements DataFetcher<List<T>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoOperationDataFetcher.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoOperationDataFetcher.class);
 
-    private final RelatedFinder<T> finder;
+	private final RelatedFinder<T> finder;
 
-    public ReladomoOperationDataFetcher(RelatedFinder<T> finder) {
-        this.finder = Objects.requireNonNull(finder);
-    }
+	public ReladomoOperationDataFetcher(RelatedFinder<T> finder) {
+		this.finder = Objects.requireNonNull(finder);
+	}
 
-    @Timed
-    @Metered
-    @ExceptionMetered
-    @Override
-    public List<T> get(DataFetchingEnvironment environment) {
-        Map<String, Object> arguments = environment.getArguments();
-        String inputOperation = (String) arguments.get("operation");
-        Operation operation = this.compileOperation(this.finder, inputOperation);
-        LOGGER.debug("Executing operation: {}", operation);
-        DomainList<T> result = (DomainList<T>) this.finder.findMany(operation);
-        GraphQLDeepFetcher.deepFetch(result, this.finder, environment.getSelectionSet());
-        return result;
-    }
+	@Timed
+	@Metered
+	@ExceptionMetered
+	@Override
+	public List<T> get(DataFetchingEnvironment environment) {
+		Map<String, Object> arguments = environment.getArguments();
+		String inputOperation = (String) arguments.get("operation");
+		Operation operation = this.compileOperation(this.finder, inputOperation);
+		LOGGER.debug("Executing operation: {}", operation);
+		DomainList<T> result = (DomainList<T>) this.finder.findMany(operation);
+		GraphQLDeepFetcher.deepFetch(result, this.finder, environment.getSelectionSet());
+		return result;
+	}
 
-    private Operation compileOperation(RelatedFinder<T> relatedFinder, String inputOperation) {
-        try {
-            var compiler = new ReladomoOperationCompiler();
-            return compiler.compile(relatedFinder, inputOperation);
-        } catch (RuntimeException e) {
-            throw new LiftwizardGraphQLException(e.getMessage(), Lists.immutable.with(inputOperation), e);
-        }
-    }
+	private Operation compileOperation(RelatedFinder<T> relatedFinder, String inputOperation) {
+		try {
+			var compiler = new ReladomoOperationCompiler();
+			return compiler.compile(relatedFinder, inputOperation);
+		} catch (RuntimeException e) {
+			throw new LiftwizardGraphQLException(e.getMessage(), Lists.immutable.with(inputOperation), e);
+		}
+	}
 }

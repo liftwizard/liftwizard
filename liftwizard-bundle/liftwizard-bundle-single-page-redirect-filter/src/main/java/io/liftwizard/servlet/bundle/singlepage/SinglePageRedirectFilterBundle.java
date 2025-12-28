@@ -31,41 +31,41 @@ import org.slf4j.LoggerFactory;
 
 public abstract class SinglePageRedirectFilterBundle<T> implements ConfiguredBundle<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SinglePageRedirectFilterBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SinglePageRedirectFilterBundle.class);
 
-    public abstract SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory(T configuration);
+	public abstract SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory(T configuration);
 
-    @Override
-    public void run(T configuration, Environment environment) {
-        SinglePageRedirectFilterFactory factory = this.getSinglePageRedirectFilterFactory(configuration);
-        handleRegistration(this, environment, factory);
-    }
+	@Override
+	public void run(T configuration, Environment environment) {
+		SinglePageRedirectFilterFactory factory = this.getSinglePageRedirectFilterFactory(configuration);
+		handleRegistration(this, environment, factory);
+	}
 
-    public static void handleRegistration(
-        Object bundle,
-        Environment environment,
-        SinglePageRedirectFilterFactory factory
-    ) {
-        if (factory == null || !factory.isEnabled()) {
-            LOGGER.info("{} disabled.", bundle.getClass().getSimpleName());
-            return;
-        }
+	public static void handleRegistration(
+		Object bundle,
+		Environment environment,
+		SinglePageRedirectFilterFactory factory
+	) {
+		if (factory == null || !factory.isEnabled()) {
+			LOGGER.info("{} disabled.", bundle.getClass().getSimpleName());
+			return;
+		}
 
-        LOGGER.info("Running {}.", bundle.getClass().getSimpleName());
+		LOGGER.info("Running {}.", bundle.getClass().getSimpleName());
 
-        String redirectPage = factory.getRedirectPage();
-        String cacheControlHeader = factory.getCacheControlHeader();
-        ImmutableList<String> wellKnownPathPrefixes = Lists.immutable.withAll(factory.getWellKnownPathPrefixes());
+		String redirectPage = factory.getRedirectPage();
+		String cacheControlHeader = factory.getCacheControlHeader();
+		ImmutableList<String> wellKnownPathPrefixes = Lists.immutable.withAll(factory.getWellKnownPathPrefixes());
 
-        var singlePageRedirectFilter = new SinglePageRedirectFilter(
-            redirectPage,
-            cacheControlHeader,
-            wellKnownPathPrefixes
-        );
+		var singlePageRedirectFilter = new SinglePageRedirectFilter(
+			redirectPage,
+			cacheControlHeader,
+			wellKnownPathPrefixes
+		);
 
-        environment
-            .servlets()
-            .addFilter("singlePageRedirectFilter", singlePageRedirectFilter)
-            .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-    }
+		environment
+			.servlets()
+			.addFilter("singlePageRedirectFilter", singlePageRedirectFilter)
+			.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+	}
 }

@@ -4,9 +4,9 @@ name: io.liftwizard.UpdateCopyrightYear
 displayName: Update copyright year to 2025
 description: Updates copyright year to 2025 in existing license headers.
 tags:
-  - license
+    - license
 recipeList:
-  - org.openrewrite.text.FindAndReplace:
-      find: 'Copyright (20\d{2}) Craig Motlin'
-      replace: "Copyright 2025 Craig Motlin"
-      regex: true
+    - org.openrewrite.text.FindAndReplace:
+          find: 'Copyright (20\d{2}) Craig Motlin'
+          replace: "Copyright 2025 Craig Motlin"
+          regex: true

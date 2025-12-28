@@ -34,88 +34,88 @@ import io.liftwizard.reladomo.connectionmanager.LiftwizardConnectionManager;
 
 public class ConnectionManagerFactory {
 
-    private @Valid @NotNull String connectionManagerName;
-    private @Valid @NotNull String dataSourceName;
-    private @Valid @NotNull DatabaseTypeEnum databaseType = DatabaseTypeEnum.GENERIC;
-    private @Valid @NotNull String timeZoneName = "UTC";
-    private @Valid @NotNull String schemaName;
+	private @Valid @NotNull String connectionManagerName;
+	private @Valid @NotNull String dataSourceName;
+	private @Valid @NotNull DatabaseTypeEnum databaseType = DatabaseTypeEnum.GENERIC;
+	private @Valid @NotNull String timeZoneName = "UTC";
+	private @Valid @NotNull String schemaName;
 
-    public SourcelessConnectionManager createSourcelessConnectionManager(@Nonnull DataSource dataSource) {
-        Objects.requireNonNull(dataSource);
+	public SourcelessConnectionManager createSourcelessConnectionManager(@Nonnull DataSource dataSource) {
+		Objects.requireNonNull(dataSource);
 
-        DatabaseType reladomoDatabaseType = this.databaseType.getDatabaseType();
-        TimeZone timeZone = TimeZone.getTimeZone(this.timeZoneName);
-        return new LiftwizardConnectionManager(
-            this.connectionManagerName,
-            this.dataSourceName,
-            dataSource,
-            reladomoDatabaseType,
-            timeZone,
-            this.schemaName
-        );
-    }
+		DatabaseType reladomoDatabaseType = this.databaseType.getDatabaseType();
+		TimeZone timeZone = TimeZone.getTimeZone(this.timeZoneName);
+		return new LiftwizardConnectionManager(
+			this.connectionManagerName,
+			this.dataSourceName,
+			dataSource,
+			reladomoDatabaseType,
+			timeZone,
+			this.schemaName
+		);
+	}
 
-    @JsonProperty
-    public String getConnectionManagerName() {
-        return this.connectionManagerName;
-    }
+	@JsonProperty
+	public String getConnectionManagerName() {
+		return this.connectionManagerName;
+	}
 
-    @JsonProperty
-    public void setConnectionManagerName(String connectionManagerName) {
-        this.connectionManagerName = connectionManagerName;
-    }
+	@JsonProperty
+	public void setConnectionManagerName(String connectionManagerName) {
+		this.connectionManagerName = connectionManagerName;
+	}
 
-    @JsonProperty
-    public String getDataSourceName() {
-        return this.dataSourceName;
-    }
+	@JsonProperty
+	public String getDataSourceName() {
+		return this.dataSourceName;
+	}
 
-    @JsonProperty
-    public void setDataSourceName(String dataSourceName) {
-        this.dataSourceName = dataSourceName;
-    }
+	@JsonProperty
+	public void setDataSourceName(String dataSourceName) {
+		this.dataSourceName = dataSourceName;
+	}
 
-    @JsonProperty
-    public DatabaseTypeEnum getDatabaseType() {
-        return this.databaseType;
-    }
+	@JsonProperty
+	public DatabaseTypeEnum getDatabaseType() {
+		return this.databaseType;
+	}
 
-    @JsonProperty
-    public void setDatabaseType(DatabaseTypeEnum databaseType) {
-        this.databaseType = databaseType;
-    }
+	@JsonProperty
+	public void setDatabaseType(DatabaseTypeEnum databaseType) {
+		this.databaseType = databaseType;
+	}
 
-    @JsonProperty("timeZone")
-    public String getTimeZoneName() {
-        return this.timeZoneName;
-    }
+	@JsonProperty("timeZone")
+	public String getTimeZoneName() {
+		return this.timeZoneName;
+	}
 
-    @JsonProperty("timeZone")
-    public void setTimeZoneName(String timeZoneName) {
-        this.timeZoneName = timeZoneName;
-    }
+	@JsonProperty("timeZone")
+	public void setTimeZoneName(String timeZoneName) {
+		this.timeZoneName = timeZoneName;
+	}
 
-    @JsonProperty
-    public String getSchemaName() {
-        return this.schemaName;
-    }
+	@JsonProperty
+	public String getSchemaName() {
+		return this.schemaName;
+	}
 
-    @JsonProperty
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
+	@JsonProperty
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
+	}
 
-    @ValidationMethod(message = "Invalid timeZoneName")
-    @JsonIgnore
-    public boolean isValidTimezone() {
-        TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-        if (zoneInfo == null) {
-            String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-                this.timeZoneName,
-                Arrays.toString(TimeZone.getAvailableIDs())
-            );
-            throw new IllegalStateException(message);
-        }
-        return true;
-    }
+	@ValidationMethod(message = "Invalid timeZoneName")
+	@JsonIgnore
+	public boolean isValidTimezone() {
+		TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
+		if (zoneInfo == null) {
+			String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
+				this.timeZoneName,
+				Arrays.toString(TimeZone.getAvailableIDs())
+			);
+			throw new IllegalStateException(message);
+		}
+		return true;
+	}
 }

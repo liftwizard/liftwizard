@@ -5,29 +5,29 @@ import io.dropwizard.views.View;
 
 public class PersonView extends View {
 
-    private final Person person;
+	private final Person person;
 
-    public enum Template {
-        FREEMARKER("freemarker/person.ftl"),
-        MUSTACHE("mustache/person.mustache");
+	public enum Template {
+		FREEMARKER("freemarker/person.ftl"),
+		MUSTACHE("mustache/person.mustache");
 
-        private final String templateName;
+		private final String templateName;
 
-        Template(String templateName) {
-            this.templateName = templateName;
-        }
+		Template(String templateName) {
+			this.templateName = templateName;
+		}
 
-        public String getTemplateName() {
-            return this.templateName;
-        }
-    }
+		public String getTemplateName() {
+			return this.templateName;
+		}
+	}
 
-    public PersonView(PersonView.Template template, Person person) {
-        super(template.getTemplateName());
-        this.person = person;
-    }
+	public PersonView(PersonView.Template template, Person person) {
+		super(template.getTemplateName());
+		this.person = person;
+	}
 
-    public Person getPerson() {
-        return this.person;
-    }
+	public Person getPerson() {
+		return this.person;
+	}
 }

@@ -19,5 +19,5 @@ package io.liftwizard.dropwizard.configuration.config.logging;
 import io.liftwizard.dropwizard.configuration.enabled.EnabledFactory;
 
 public interface ConfigLoggingFactoryProvider {
-    EnabledFactory getConfigLoggingFactory();
+	EnabledFactory getConfigLoggingFactory();
 }

@@ -26,34 +26,34 @@ import org.slf4j.MDC;
 
 public class AsyncDataSupplier<T> implements Supplier<T> {
 
-    private final DataFetcher<T> dataFetcher;
-    private final DataFetchingEnvironment environment;
-    private final Map<String, String> copyOfContextMap;
+	private final DataFetcher<T> dataFetcher;
+	private final DataFetchingEnvironment environment;
+	private final Map<String, String> copyOfContextMap;
 
-    AsyncDataSupplier(DataFetcher<T> dataFetcher, DataFetchingEnvironment environment) {
-        this.dataFetcher = Objects.requireNonNull(dataFetcher);
-        this.environment = Objects.requireNonNull(environment);
-        this.copyOfContextMap = AsyncDataSupplier.getCopyOfContextMap();
-    }
+	AsyncDataSupplier(DataFetcher<T> dataFetcher, DataFetchingEnvironment environment) {
+		this.dataFetcher = Objects.requireNonNull(dataFetcher);
+		this.environment = Objects.requireNonNull(environment);
+		this.copyOfContextMap = AsyncDataSupplier.getCopyOfContextMap();
+	}
 
-    @Override
-    public T get() {
-        Map<String, String> oldContextMap = AsyncDataSupplier.getCopyOfContextMap();
-        MDC.setContextMap(this.copyOfContextMap);
-        try {
-            return this.dataFetcher.get(this.environment);
-        } catch (Exception e) {
-            if (e instanceof RuntimeException runtimeException) {
-                throw runtimeException;
-            }
-            throw new RuntimeException(e);
-        } finally {
-            MDC.setContextMap(oldContextMap);
-        }
-    }
+	@Override
+	public T get() {
+		Map<String, String> oldContextMap = AsyncDataSupplier.getCopyOfContextMap();
+		MDC.setContextMap(this.copyOfContextMap);
+		try {
+			return this.dataFetcher.get(this.environment);
+		} catch (Exception e) {
+			if (e instanceof RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			throw new RuntimeException(e);
+		} finally {
+			MDC.setContextMap(oldContextMap);
+		}
+	}
 
-    private static Map<String, String> getCopyOfContextMap() {
-        Map<String, String> result = MDC.getCopyOfContextMap();
-        return result == null ? Map.of() : result;
-    }
+	private static Map<String, String> getCopyOfContextMap() {
+		Map<String, String> result = MDC.getCopyOfContextMap();
+		return result == null ? Map.of() : result;
+	}
 }

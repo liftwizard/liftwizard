@@ -28,85 +28,85 @@ import org.junit.rules.TestRule;
 
 public class ReladomoTestRuleBuilder {
 
-    private Optional<ExecuteSqlTestRule> executeSqlTestRule = Optional.empty();
-    private Optional<ReladomoInitializeTestRule> initializeTestRule = Optional.empty();
-    private Optional<ReladomoPurgeAllTestRule> purgeAllTestRule = Optional.empty();
-    private ReladomoLoadDataTestRule loadDataTestRule = new ReladomoLoadDataTestRule();
+	private Optional<ExecuteSqlTestRule> executeSqlTestRule = Optional.empty();
+	private Optional<ReladomoInitializeTestRule> initializeTestRule = Optional.empty();
+	private Optional<ReladomoPurgeAllTestRule> purgeAllTestRule = Optional.empty();
+	private ReladomoLoadDataTestRule loadDataTestRule = new ReladomoLoadDataTestRule();
 
-    public ReladomoTestRuleBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath) {
-        this.initializeTestRule = Optional.of(new ReladomoInitializeTestRule(runtimeConfigurationPath));
-        return this;
-    }
+	public ReladomoTestRuleBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath) {
+		this.initializeTestRule = Optional.of(new ReladomoInitializeTestRule(runtimeConfigurationPath));
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder setTestDataFileNames(@Nonnull String... testDataFileNames) {
-        this.loadDataTestRule = new ReladomoLoadDataTestRule(testDataFileNames);
-        return this;
-    }
+	public ReladomoTestRuleBuilder setTestDataFileNames(@Nonnull String... testDataFileNames) {
+		this.loadDataTestRule = new ReladomoLoadDataTestRule(testDataFileNames);
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder setTestDataFileNames(@Nonnull ImmutableList<String> testDataFileNames) {
-        this.loadDataTestRule = new ReladomoLoadDataTestRule(testDataFileNames);
-        return this;
-    }
+	public ReladomoTestRuleBuilder setTestDataFileNames(@Nonnull ImmutableList<String> testDataFileNames) {
+		this.loadDataTestRule = new ReladomoLoadDataTestRule(testDataFileNames);
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder enableDropCreateTables() {
-        if (this.executeSqlTestRule.isEmpty()) {
-            this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
-        }
-        return this;
-    }
+	public ReladomoTestRuleBuilder enableDropCreateTables() {
+		if (this.executeSqlTestRule.isEmpty()) {
+			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
+		}
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder disableDropCreateTables() {
-        this.executeSqlTestRule = Optional.empty();
-        return this;
-    }
+	public ReladomoTestRuleBuilder disableDropCreateTables() {
+		this.executeSqlTestRule = Optional.empty();
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
-        if (this.executeSqlTestRule.isEmpty()) {
-            this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
-        }
-        this.executeSqlTestRule.get().setDdlLocationPattern(ddlLocationPattern);
-        return this;
-    }
+	public ReladomoTestRuleBuilder setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
+		if (this.executeSqlTestRule.isEmpty()) {
+			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
+		}
+		this.executeSqlTestRule.get().setDdlLocationPattern(ddlLocationPattern);
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder setIdxLocationPattern(@Nonnull String idxLocationPattern) {
-        if (this.executeSqlTestRule.isEmpty()) {
-            this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
-        }
-        this.executeSqlTestRule.get().setIdxLocationPattern(idxLocationPattern);
-        return this;
-    }
+	public ReladomoTestRuleBuilder setIdxLocationPattern(@Nonnull String idxLocationPattern) {
+		if (this.executeSqlTestRule.isEmpty()) {
+			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
+		}
+		this.executeSqlTestRule.get().setIdxLocationPattern(idxLocationPattern);
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder setFkLocationPattern(@Nonnull String fkLocationPattern) {
-        if (this.executeSqlTestRule.isEmpty()) {
-            this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
-        }
-        this.executeSqlTestRule.get().setFkLocationPattern(fkLocationPattern);
-        return this;
-    }
+	public ReladomoTestRuleBuilder setFkLocationPattern(@Nonnull String fkLocationPattern) {
+		if (this.executeSqlTestRule.isEmpty()) {
+			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
+		}
+		this.executeSqlTestRule.get().setFkLocationPattern(fkLocationPattern);
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
-        if (this.executeSqlTestRule.isEmpty()) {
-            this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
-        }
-        this.executeSqlTestRule.get().setConnectionSupplier(connectionSupplier);
-        return this;
-    }
+	public ReladomoTestRuleBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
+		if (this.executeSqlTestRule.isEmpty()) {
+			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
+		}
+		this.executeSqlTestRule.get().setConnectionSupplier(connectionSupplier);
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder withPurgeAllTestRule() {
-        this.purgeAllTestRule = Optional.of(new ReladomoPurgeAllTestRule());
-        return this;
-    }
+	public ReladomoTestRuleBuilder withPurgeAllTestRule() {
+		this.purgeAllTestRule = Optional.of(new ReladomoPurgeAllTestRule());
+		return this;
+	}
 
-    public ReladomoTestRuleBuilder withoutPurgeAllTestRule() {
-        this.purgeAllTestRule = Optional.empty();
-        return this;
-    }
+	public ReladomoTestRuleBuilder withoutPurgeAllTestRule() {
+		this.purgeAllTestRule = Optional.empty();
+		return this;
+	}
 
-    public TestRule build() {
-        return RuleChain.emptyRuleChain()
-            .around(this.executeSqlTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
-            .around(this.initializeTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
-            .around(this.purgeAllTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
-            .around(this.loadDataTestRule);
-    }
+	public TestRule build() {
+		return RuleChain.emptyRuleChain()
+			.around(this.executeSqlTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
+			.around(this.initializeTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
+			.around(this.purgeAllTestRule.map(RuleChain::outerRule).orElseGet(RuleChain::emptyRuleChain))
+			.around(this.loadDataTestRule);
+	}
 }

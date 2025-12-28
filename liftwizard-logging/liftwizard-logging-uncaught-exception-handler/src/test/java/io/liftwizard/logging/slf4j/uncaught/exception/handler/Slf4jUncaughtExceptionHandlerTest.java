@@ -20,28 +20,28 @@ import org.junit.jupiter.api.Test;
 
 class Slf4jUncaughtExceptionHandlerTest {
 
-    @Test
-    void uncaughtException() {
-        CauseException causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
-        RootException rootException = new RootException(
-            "Slf4jUncaughtExceptionHandlerTest root exception",
-            causeException
-        );
+	@Test
+	void uncaughtException() {
+		CauseException causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
+		RootException rootException = new RootException(
+			"Slf4jUncaughtExceptionHandlerTest root exception",
+			causeException
+		);
 
-        new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
-    }
+		new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
+	}
 
-    private static class CauseException extends RuntimeException {
+	private static class CauseException extends RuntimeException {
 
-        CauseException(String message) {
-            super(message);
-        }
-    }
+		CauseException(String message) {
+			super(message);
+		}
+	}
 
-    private static class RootException extends RuntimeException {
+	private static class RootException extends RuntimeException {
 
-        RootException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
+		RootException(String message, Throwable cause) {
+			super(message, cause);
+		}
+	}
 }

@@ -26,8 +26,8 @@ import io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExcep
 @AutoService(PrioritizedBundle.class)
 public class Slf4jUncaughtExceptionHandlerBundle implements PrioritizedBundle {
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        Thread.setDefaultUncaughtExceptionHandler(new Slf4jUncaughtExceptionHandler());
-    }
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		Thread.setDefaultUncaughtExceptionHandler(new Slf4jUncaughtExceptionHandler());
+	}
 }

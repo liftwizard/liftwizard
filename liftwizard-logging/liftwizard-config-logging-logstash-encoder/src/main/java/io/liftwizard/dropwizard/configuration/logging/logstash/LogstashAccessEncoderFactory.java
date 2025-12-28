@@ -31,71 +31,71 @@ import net.logstash.logback.encoder.LogstashAccessEncoder;
 
 public class LogstashAccessEncoderFactory {
 
-    private boolean includeContext = true;
-    private ObjectNode customFields;
-    private boolean prettyPrint;
-    private @NotNull Include serializationInclusion = Include.NON_ABSENT;
+	private boolean includeContext = true;
+	private ObjectNode customFields;
+	private boolean prettyPrint;
+	private @NotNull Include serializationInclusion = Include.NON_ABSENT;
 
-    @JsonProperty
-    public boolean isIncludeContext() {
-        return this.includeContext;
-    }
+	@JsonProperty
+	public boolean isIncludeContext() {
+		return this.includeContext;
+	}
 
-    @JsonProperty
-    public void setIncludeContext(boolean includeContext) {
-        this.includeContext = includeContext;
-    }
+	@JsonProperty
+	public void setIncludeContext(boolean includeContext) {
+		this.includeContext = includeContext;
+	}
 
-    @JsonProperty
-    public ObjectNode getCustomFields() {
-        return this.customFields;
-    }
+	@JsonProperty
+	public ObjectNode getCustomFields() {
+		return this.customFields;
+	}
 
-    @JsonProperty
-    public void setCustomFields(ObjectNode customFields) {
-        this.customFields = customFields;
-    }
+	@JsonProperty
+	public void setCustomFields(ObjectNode customFields) {
+		this.customFields = customFields;
+	}
 
-    @JsonProperty
-    public boolean isPrettyPrint() {
-        return this.prettyPrint;
-    }
+	@JsonProperty
+	public boolean isPrettyPrint() {
+		return this.prettyPrint;
+	}
 
-    @JsonProperty
-    public void setPrettyPrint(boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
-    }
+	@JsonProperty
+	public void setPrettyPrint(boolean prettyPrint) {
+		this.prettyPrint = prettyPrint;
+	}
 
-    @JsonProperty
-    public Include getSerializationInclusion() {
-        return this.serializationInclusion;
-    }
+	@JsonProperty
+	public Include getSerializationInclusion() {
+		return this.serializationInclusion;
+	}
 
-    @JsonProperty
-    public void setSerializationInclusion(Include serializationInclusion) {
-        this.serializationInclusion = serializationInclusion;
-    }
+	@JsonProperty
+	public void setSerializationInclusion(Include serializationInclusion) {
+		this.serializationInclusion = serializationInclusion;
+	}
 
-    public Encoder<IAccessEvent> build(TimeZone timeZone) {
-        LogstashAccessEncoder encoder = new LogstashAccessEncoder();
-        encoder.setIncludeContext(this.includeContext);
+	public Encoder<IAccessEvent> build(TimeZone timeZone) {
+		LogstashAccessEncoder encoder = new LogstashAccessEncoder();
+		encoder.setIncludeContext(this.includeContext);
 
-        if (this.customFields != null && !this.customFields.isEmpty()) {
-            GlobalCustomFieldsJsonProvider<IAccessEvent> globalCustomFieldsProvider =
-                new GlobalCustomFieldsJsonProvider<>();
-            globalCustomFieldsProvider.setCustomFieldsNode(this.customFields);
-            encoder.getProviders().addProvider(globalCustomFieldsProvider);
-        }
+		if (this.customFields != null && !this.customFields.isEmpty()) {
+			GlobalCustomFieldsJsonProvider<IAccessEvent> globalCustomFieldsProvider =
+				new GlobalCustomFieldsJsonProvider<>();
+			globalCustomFieldsProvider.setCustomFieldsNode(this.customFields);
+			encoder.getProviders().addProvider(globalCustomFieldsProvider);
+		}
 
-        encoder.setTimeZone(timeZone.getID());
-        if (this.prettyPrint) {
-            encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
-        }
-        JsonFactoryDecorator decorator = new ObjectMapperConfigJsonFactoryDecorator(
-            this.prettyPrint,
-            this.serializationInclusion
-        );
-        encoder.setJsonFactoryDecorator(decorator);
-        return encoder;
-    }
+		encoder.setTimeZone(timeZone.getID());
+		if (this.prettyPrint) {
+			encoder.setJsonGeneratorDecorator(new PrettyPrintingJsonGeneratorDecorator());
+		}
+		JsonFactoryDecorator decorator = new ObjectMapperConfigJsonFactoryDecorator(
+			this.prettyPrint,
+			this.serializationInclusion
+		);
+		encoder.setJsonFactoryDecorator(decorator);
+		return encoder;
+	}
 }

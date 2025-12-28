@@ -38,47 +38,47 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class AuthFilterBundle implements PrioritizedBundle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        AuthFilterFactoryProvider authFilterFactoryProvider = this.safeCastConfiguration(
-            AuthFilterFactoryProvider.class,
-            configuration
-        );
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		AuthFilterFactoryProvider authFilterFactoryProvider = this.safeCastConfiguration(
+			AuthFilterFactoryProvider.class,
+			configuration
+		);
 
-        List<AuthFilterFactory> authFilterFactories = authFilterFactoryProvider.getAuthFilterFactories();
+		List<AuthFilterFactory> authFilterFactories = authFilterFactoryProvider.getAuthFilterFactories();
 
-        List<AuthFilter<?, ? extends Principal>> authFilters = this.getAuthFilters(authFilterFactories);
+		List<AuthFilter<?, ? extends Principal>> authFilters = this.getAuthFilters(authFilterFactories);
 
-        if (authFilters.isEmpty()) {
-            LOGGER.warn("{} disabled.", this.getClass().getSimpleName());
-            return;
-        }
+		if (authFilters.isEmpty()) {
+			LOGGER.warn("{} disabled.", this.getClass().getSimpleName());
+			return;
+		}
 
-        List<String> authFilterNames = authFilters
-            .stream()
-            .map(Object::getClass)
-            .map(Class::getSimpleName)
-            .collect(Collectors.toList());
+		List<String> authFilterNames = authFilters
+			.stream()
+			.map(Object::getClass)
+			.map(Class::getSimpleName)
+			.collect(Collectors.toList());
 
-        LOGGER.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
+		LOGGER.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
 
-        environment.jersey().register(this.getAuthDynamicFeature(authFilters));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new Binder<>(Principal.class));
+		environment.jersey().register(this.getAuthDynamicFeature(authFilters));
+		environment.jersey().register(RolesAllowedDynamicFeature.class);
+		environment.jersey().register(new Binder<>(Principal.class));
 
-        LOGGER.info("Completing {}.", this.getClass().getSimpleName());
-    }
+		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+	}
 
-    @Nonnull
-    private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories) {
-        return authFilterFactories.stream().map(AuthFilterFactory::createAuthFilter).collect(Collectors.toList());
-    }
+	@Nonnull
+	private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories) {
+		return authFilterFactories.stream().map(AuthFilterFactory::createAuthFilter).collect(Collectors.toList());
+	}
 
-    @Nonnull
-    private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters) {
-        ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(authFilters);
-        return new AuthDynamicFeature(chainedAuthFilter);
-    }
+	@Nonnull
+	private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters) {
+		ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(authFilters);
+		return new AuthDynamicFeature(chainedAuthFilter);
+	}
 }

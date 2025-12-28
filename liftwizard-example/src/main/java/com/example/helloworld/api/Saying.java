@@ -6,32 +6,32 @@ import org.hibernate.validator.constraints.Length;
 
 public class Saying {
 
-    private long id;
+	private long id;
 
-    @Length(max = 3)
-    private String content;
+	@Length(max = 3)
+	private String content;
 
-    public Saying() {
-        // Jackson deserialization
-    }
+	public Saying() {
+		// Jackson deserialization
+	}
 
-    public Saying(long id, String content) {
-        this.id = id;
-        this.content = content;
-    }
+	public Saying(long id, String content) {
+		this.id = id;
+		this.content = content;
+	}
 
-    @JsonProperty
-    public long getId() {
-        return this.id;
-    }
+	@JsonProperty
+	public long getId() {
+		return this.id;
+	}
 
-    @JsonProperty
-    public String getContent() {
-        return this.content;
-    }
+	@JsonProperty
+	public String getContent() {
+		return this.content;
+	}
 
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", this.id).add("content", this.content).toString();
-    }
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("id", this.id).add("content", this.content).toString();
+	}
 }

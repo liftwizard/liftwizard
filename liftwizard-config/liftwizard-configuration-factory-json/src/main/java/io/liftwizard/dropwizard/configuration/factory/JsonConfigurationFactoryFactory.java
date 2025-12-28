@@ -36,36 +36,36 @@ import io.dropwizard.configuration.JsonConfigurationFactory;
  */
 public class JsonConfigurationFactoryFactory<T> implements ConfigurationFactoryFactory<T> {
 
-    @Override
-    public ConfigurationFactory<T> create(
-        Class<T> aClass,
-        Validator validator,
-        ObjectMapper objectMapper,
-        String propertyPrefix
-    ) {
-        ObjectMapper strictObjectMapper = this.getStrictObjectMapper(objectMapper);
-        return new JsonConfigurationFactory<>(aClass, validator, strictObjectMapper, propertyPrefix);
-    }
+	@Override
+	public ConfigurationFactory<T> create(
+		Class<T> aClass,
+		Validator validator,
+		ObjectMapper objectMapper,
+		String propertyPrefix
+	) {
+		ObjectMapper strictObjectMapper = this.getStrictObjectMapper(objectMapper);
+		return new JsonConfigurationFactory<>(aClass, validator, strictObjectMapper, propertyPrefix);
+	}
 
-    private ObjectMapper getStrictObjectMapper(ObjectMapper objectMapper) {
-        ObjectMapper strictObjectMapper = objectMapper.copy();
-        strictObjectMapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        // strictObjectMapper.enable(Feature.STRICT_DUPLICATE_DETECTION);
+	private ObjectMapper getStrictObjectMapper(ObjectMapper objectMapper) {
+		ObjectMapper strictObjectMapper = objectMapper.copy();
+		strictObjectMapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		// strictObjectMapper.enable(Feature.STRICT_DUPLICATE_DETECTION);
 
-        strictObjectMapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
+		strictObjectMapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
 
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS.mappedFeature());
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_YAML_COMMENTS.mappedFeature());
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature());
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_TRAILING_COMMA.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_YAML_COMMENTS.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_TRAILING_COMMA.mappedFeature());
 
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_UNQUOTED_FIELD_NAMES.mappedFeature());
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_SINGLE_QUOTES.mappedFeature());
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature());
-        strictObjectMapper.enable(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_UNQUOTED_FIELD_NAMES.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_SINGLE_QUOTES.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature());
+		strictObjectMapper.enable(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS.mappedFeature());
 
-        strictObjectMapper.setDateFormat(new StdDateFormat());
+		strictObjectMapper.setDateFormat(new StdDateFormat());
 
-        return strictObjectMapper;
-    }
+		return strictObjectMapper;
+	}
 }

@@ -20,13 +20,13 @@ name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
 displayName: Eclipse Collections adoption
 description: Migrate from Java Collections Framework to Eclipse Collections with idiomatic patterns and factory methods.
 recipeList:
-  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFListConstructorToFactory
-  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFHashMapConstructorToFactory
-  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFTreeMapConstructorToFactory
-  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFHashSetConstructorToFactory
-  - io.liftwizard.rewrite.eclipse.collections.adoption.JCFTreeSetConstructorToFactory
-  - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsEmptyToFactory
-  - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsSingletonToFactoryRecipes
-  - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsSynchronizedToAsSynchronizedRecipes
-  - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsUnmodifiableToAsUnmodifiableRecipes
-  - io.liftwizard.rewrite.eclipse.collections.adoption.IterateGetFirstRecipes
+    - io.liftwizard.rewrite.eclipse.collections.adoption.JCFListConstructorToFactory
+    - io.liftwizard.rewrite.eclipse.collections.adoption.JCFHashMapConstructorToFactory
+    - io.liftwizard.rewrite.eclipse.collections.adoption.JCFTreeMapConstructorToFactory
+    - io.liftwizard.rewrite.eclipse.collections.adoption.JCFHashSetConstructorToFactory
+    - io.liftwizard.rewrite.eclipse.collections.adoption.JCFTreeSetConstructorToFactory
+    - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsEmptyToFactory
+    - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsSingletonToFactoryRecipes
+    - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsSynchronizedToAsSynchronizedRecipes
+    - io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsUnmodifiableToAsUnmodifiableRecipes
+    - io.liftwizard.rewrite.eclipse.collections.adoption.IterateGetFirstRecipes

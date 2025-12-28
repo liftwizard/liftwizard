@@ -7,124 +7,124 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class PersonDTO {
 
-    private Long id;
-    private String fullName;
-    private String jobTitle;
-    private Instant system;
-    private Instant systemFrom;
-    private Instant systemTo;
+	private Long id;
+	private String fullName;
+	private String jobTitle;
+	private Instant system;
+	private Instant systemFrom;
+	private Instant systemTo;
 
-    @JsonCreator
-    public PersonDTO() {}
+	@JsonCreator
+	public PersonDTO() {}
 
-    public PersonDTO(String fullName, String jobTitle) {
-        this.fullName = Objects.requireNonNull(fullName);
-        this.jobTitle = Objects.requireNonNull(jobTitle);
-    }
+	public PersonDTO(String fullName, String jobTitle) {
+		this.fullName = Objects.requireNonNull(fullName);
+		this.jobTitle = Objects.requireNonNull(jobTitle);
+	}
 
-    public PersonDTO(long id, String fullName, String jobTitle) {
-        this.id = id;
-        this.fullName = fullName;
-        this.jobTitle = jobTitle;
-    }
+	public PersonDTO(long id, String fullName, String jobTitle) {
+		this.id = id;
+		this.fullName = fullName;
+		this.jobTitle = jobTitle;
+	}
 
-    public Long getId() {
-        return this.id;
-    }
+	public Long getId() {
+		return this.id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getFullName() {
-        return this.fullName;
-    }
+	public String getFullName() {
+		return this.fullName;
+	}
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-    public String getJobTitle() {
-        return this.jobTitle;
-    }
+	public String getJobTitle() {
+		return this.jobTitle;
+	}
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
 
-    public Instant getSystem() {
-        return this.system;
-    }
+	public Instant getSystem() {
+		return this.system;
+	}
 
-    public void setSystem(Instant system) {
-        this.system = system;
-    }
+	public void setSystem(Instant system) {
+		this.system = system;
+	}
 
-    public Instant getSystemFrom() {
-        return this.systemFrom;
-    }
+	public Instant getSystemFrom() {
+		return this.systemFrom;
+	}
 
-    public void setSystemFrom(Instant systemFrom) {
-        this.systemFrom = systemFrom;
-    }
+	public void setSystemFrom(Instant systemFrom) {
+		this.systemFrom = systemFrom;
+	}
 
-    public Instant getSystemTo() {
-        return this.systemTo;
-    }
+	public Instant getSystemTo() {
+		return this.systemTo;
+	}
 
-    public void setSystemTo(Instant systemTo) {
-        this.systemTo = systemTo;
-    }
+	public void setSystemTo(Instant systemTo) {
+		this.systemTo = systemTo;
+	}
 
-    @Override
-    public String toString() {
-        return "PersonDTO{id=%d, fullName='%s', jobTitle='%s', system=%s, systemFrom=%s, systemTo=%s}".formatted(
-            this.id,
-            this.fullName,
-            this.jobTitle,
-            this.system,
-            this.systemFrom,
-            this.systemTo
-        );
-    }
+	@Override
+	public String toString() {
+		return "PersonDTO{id=%d, fullName='%s', jobTitle='%s', system=%s, systemFrom=%s, systemTo=%s}".formatted(
+			this.id,
+			this.fullName,
+			this.jobTitle,
+			this.system,
+			this.systemFrom,
+			this.systemTo
+		);
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || this.getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || this.getClass() != o.getClass()) {
+			return false;
+		}
 
-        PersonDTO personDTO = (PersonDTO) o;
+		PersonDTO personDTO = (PersonDTO) o;
 
-        if (!Objects.equals(this.id, personDTO.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.fullName, personDTO.fullName)) {
-            return false;
-        }
-        if (!Objects.equals(this.jobTitle, personDTO.jobTitle)) {
-            return false;
-        }
-        if (!Objects.equals(this.system, personDTO.system)) {
-            return false;
-        }
-        if (!Objects.equals(this.systemFrom, personDTO.systemFrom)) {
-            return false;
-        }
-        return Objects.equals(this.systemTo, personDTO.systemTo);
-    }
+		if (!Objects.equals(this.id, personDTO.id)) {
+			return false;
+		}
+		if (!Objects.equals(this.fullName, personDTO.fullName)) {
+			return false;
+		}
+		if (!Objects.equals(this.jobTitle, personDTO.jobTitle)) {
+			return false;
+		}
+		if (!Objects.equals(this.system, personDTO.system)) {
+			return false;
+		}
+		if (!Objects.equals(this.systemFrom, personDTO.systemFrom)) {
+			return false;
+		}
+		return Objects.equals(this.systemTo, personDTO.systemTo);
+	}
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hashCode(this.id);
-        result = 31 * result + Objects.hashCode(this.fullName);
-        result = 31 * result + Objects.hashCode(this.jobTitle);
-        result = 31 * result + Objects.hashCode(this.system);
-        result = 31 * result + Objects.hashCode(this.systemFrom);
-        result = 31 * result + Objects.hashCode(this.systemTo);
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = Objects.hashCode(this.id);
+		result = 31 * result + Objects.hashCode(this.fullName);
+		result = 31 * result + Objects.hashCode(this.jobTitle);
+		result = 31 * result + Objects.hashCode(this.system);
+		result = 31 * result + Objects.hashCode(this.systemFrom);
+		result = 31 * result + Objects.hashCode(this.systemTo);
+		return result;
+	}
 }

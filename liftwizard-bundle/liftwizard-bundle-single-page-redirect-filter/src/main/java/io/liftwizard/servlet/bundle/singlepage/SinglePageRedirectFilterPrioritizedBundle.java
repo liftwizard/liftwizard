@@ -27,14 +27,14 @@ import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactoryPr
 @AutoService(PrioritizedBundle.class)
 public class SinglePageRedirectFilterPrioritizedBundle implements PrioritizedBundle {
 
-    @Override
-    public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
-        SinglePageRedirectFilterFactoryProvider factoryProvider = this.safeCastConfiguration(
-            SinglePageRedirectFilterFactoryProvider.class,
-            configuration
-        );
+	@Override
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+		SinglePageRedirectFilterFactoryProvider factoryProvider = this.safeCastConfiguration(
+			SinglePageRedirectFilterFactoryProvider.class,
+			configuration
+		);
 
-        SinglePageRedirectFilterFactory factory = factoryProvider.getSinglePageRedirectFilterFactory();
-        SinglePageRedirectFilterBundle.handleRegistration(this, environment, factory);
-    }
+		SinglePageRedirectFilterFactory factory = factoryProvider.getSinglePageRedirectFilterFactory();
+		SinglePageRedirectFilterBundle.handleRegistration(this, environment, factory);
+	}
 }

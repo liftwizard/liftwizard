@@ -26,18 +26,18 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
 public class JsonLinesPrettyPrinter extends DefaultPrettyPrinter {
 
-    public JsonLinesPrettyPrinter() {
-        this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
-    }
+	public JsonLinesPrettyPrinter() {
+		this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
+	}
 
-    @Nonnull
-    @Override
-    public DefaultPrettyPrinter createInstance() {
-        return this;
-    }
+	@Nonnull
+	@Override
+	public DefaultPrettyPrinter createInstance() {
+		return this;
+	}
 
-    @Override
-    public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
-    }
+	@Override
+	public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException {
+		jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
+	}
 }

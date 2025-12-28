@@ -36,77 +36,77 @@ import org.slf4j.LoggerFactory;
 
 public final class ManagedFileSystem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedFileSystem.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ManagedFileSystem.class);
 
-    private static final LoadingCache<URI, FileSystem> MANAGED_FILE_SYSTEMS = Caffeine.newBuilder()
-        .weakValues()
-        .evictionListener(ManagedFileSystem::close)
-        .build(ManagedFileSystem::getFileSystem);
+	private static final LoadingCache<URI, FileSystem> MANAGED_FILE_SYSTEMS = Caffeine.newBuilder()
+		.weakValues()
+		.evictionListener(ManagedFileSystem::close)
+		.build(ManagedFileSystem::getFileSystem);
 
-    private ManagedFileSystem() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private ManagedFileSystem() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 
-    private static void close(URI uri, FileSystem fileSystem, RemovalCause cause) {
-        if (fileSystem == null) {
-            return;
-        }
+	private static void close(URI uri, FileSystem fileSystem, RemovalCause cause) {
+		if (fileSystem == null) {
+			return;
+		}
 
-        LOGGER.debug("Closing file system for {} due to {}", uri, cause);
-        try {
-            fileSystem.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException("Failed to close file system for " + uri, e);
-        }
-    }
+		LOGGER.debug("Closing file system for {} due to {}", uri, cause);
+		try {
+			fileSystem.close();
+		} catch (IOException e) {
+			throw new UncheckedIOException("Failed to close file system for " + uri, e);
+		}
+	}
 
-    public static Path get(URI uri) {
-        String scheme = uri.getScheme();
-        return switch (scheme) {
-            case "file" -> getFile(uri);
-            case "jar" -> getJar(uri);
-            default -> throw new IllegalArgumentException("Unsupported scheme: " + scheme);
-        };
-    }
+	public static Path get(URI uri) {
+		String scheme = uri.getScheme();
+		return switch (scheme) {
+			case "file" -> getFile(uri);
+			case "jar" -> getJar(uri);
+			default -> throw new IllegalArgumentException("Unsupported scheme: " + scheme);
+		};
+	}
 
-    private static Path getFile(URI uri) {
-        File file = new File(uri);
-        return file.toPath();
-    }
+	private static Path getFile(URI uri) {
+		File file = new File(uri);
+		return file.toPath();
+	}
 
-    private static Path getJar(URI uri) {
-        String schemeSpecificPart = uri.getSchemeSpecificPart();
-        int separatorIndex = schemeSpecificPart.indexOf("!/");
-        String jarPath = schemeSpecificPart.substring(0, separatorIndex);
-        String pathWithinJar = schemeSpecificPart.substring(separatorIndex + 1);
-        URI jarUri = URI.create("jar:" + jarPath);
-        FileSystem fileSystem = getOrCreate(jarUri);
-        Path result = fileSystem.getPath(pathWithinJar);
-        return result;
-    }
+	private static Path getJar(URI uri) {
+		String schemeSpecificPart = uri.getSchemeSpecificPart();
+		int separatorIndex = schemeSpecificPart.indexOf("!/");
+		String jarPath = schemeSpecificPart.substring(0, separatorIndex);
+		String pathWithinJar = schemeSpecificPart.substring(separatorIndex + 1);
+		URI jarUri = URI.create("jar:" + jarPath);
+		FileSystem fileSystem = getOrCreate(jarUri);
+		Path result = fileSystem.getPath(pathWithinJar);
+		return result;
+	}
 
-    private static FileSystem getOrCreate(URI uri) {
-        FileSystem fileSystem = MANAGED_FILE_SYSTEMS.get(uri);
-        Objects.requireNonNull(fileSystem, () -> "Failed to get file system for " + uri);
-        if (fileSystem.isOpen()) {
-            return fileSystem;
-        }
+	private static FileSystem getOrCreate(URI uri) {
+		FileSystem fileSystem = MANAGED_FILE_SYSTEMS.get(uri);
+		Objects.requireNonNull(fileSystem, () -> "Failed to get file system for " + uri);
+		if (fileSystem.isOpen()) {
+			return fileSystem;
+		}
 
-        MANAGED_FILE_SYSTEMS.invalidate(uri);
-        return MANAGED_FILE_SYSTEMS.get(uri);
-    }
+		MANAGED_FILE_SYSTEMS.invalidate(uri);
+		return MANAGED_FILE_SYSTEMS.get(uri);
+	}
 
-    private static FileSystem getFileSystem(URI uri) throws IOException {
-        try {
-            return FileSystems.getFileSystem(uri);
-        } catch (FileSystemNotFoundException notFoundException) {
-            try {
-                return FileSystems.newFileSystem(uri, Map.of());
-            } catch (FileSystemAlreadyExistsException alreadyExistsException) {
-                return FileSystems.getFileSystem(uri);
-            }
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new IllegalArgumentException("Failed to get file system for " + uri, illegalArgumentException);
-        }
-    }
+	private static FileSystem getFileSystem(URI uri) throws IOException {
+		try {
+			return FileSystems.getFileSystem(uri);
+		} catch (FileSystemNotFoundException notFoundException) {
+			try {
+				return FileSystems.newFileSystem(uri, Map.of());
+			} catch (FileSystemAlreadyExistsException alreadyExistsException) {
+				return FileSystems.getFileSystem(uri);
+			}
+		} catch (IllegalArgumentException illegalArgumentException) {
+			throw new IllegalArgumentException("Failed to get file system for " + uri, illegalArgumentException);
+		}
+	}
 }

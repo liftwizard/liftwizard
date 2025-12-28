@@ -28,39 +28,39 @@ import org.slf4j.LoggerFactory;
 
 public final class RecursiveDirectoryDeleter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecursiveDirectoryDeleter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecursiveDirectoryDeleter.class);
 
-    private RecursiveDirectoryDeleter() {
-        throw new AssertionError("Suppress default constructor for noninstantiability");
-    }
+	private RecursiveDirectoryDeleter() {
+		throw new AssertionError("Suppress default constructor for noninstantiability");
+	}
 
-    public static void deleteRecursively(@Nonnull Path directory) throws IOException {
-        Objects.requireNonNull(directory, "directory cannot be null");
+	public static void deleteRecursively(@Nonnull Path directory) throws IOException {
+		Objects.requireNonNull(directory, "directory cannot be null");
 
-        if (!Files.exists(directory)) {
-            LOGGER.debug("Directory {} does not exist, skipping deletion", directory);
-            return;
-        }
+		if (!Files.exists(directory)) {
+			LOGGER.debug("Directory {} does not exist, skipping deletion", directory);
+			return;
+		}
 
-        LOGGER.debug("Deleting directory recursively: {}", directory);
-        Files.walkFileTree(directory, new DeleteAllFilesVisitor());
-    }
+		LOGGER.debug("Deleting directory recursively: {}", directory);
+		Files.walkFileTree(directory, new DeleteAllFilesVisitor());
+	}
 
-    public static boolean tryDeleteRecursively(@Nonnull Path directory) {
-        Objects.requireNonNull(directory, "directory cannot be null");
+	public static boolean tryDeleteRecursively(@Nonnull Path directory) {
+		Objects.requireNonNull(directory, "directory cannot be null");
 
-        if (!Files.exists(directory)) {
-            LOGGER.debug("Directory {} does not exist, skipping deletion", directory);
-            return true;
-        }
+		if (!Files.exists(directory)) {
+			LOGGER.debug("Directory {} does not exist, skipping deletion", directory);
+			return true;
+		}
 
-        try {
-            deleteRecursively(directory);
-            return true;
-        } catch (IOException e) {
-            LOGGER.warn("Failed to delete directory {}: {}", directory, e.getMessage());
-            LOGGER.debug("Exception details:", e);
-            return false;
-        }
-    }
+		try {
+			deleteRecursively(directory);
+			return true;
+		} catch (IOException e) {
+			LOGGER.warn("Failed to delete directory {}: {}", directory, e.getMessage());
+			LOGGER.debug("Exception details:", e);
+			return false;
+		}
+	}
 }
