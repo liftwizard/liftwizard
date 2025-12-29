@@ -1,594 +1,594 @@
 # Jobs that run on merge_group, meaning they must pass before changes land. They also run on pull_request.
 
 on:
-  pull_request:
-  merge_group:
+    pull_request:
+    merge_group:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 env:
-  GROUP_ID: "io/liftwizard"
+    GROUP_ID: "io/liftwizard"
 
 jobs:
-  maven-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    maven-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - run: just test
+            - run: just test
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  maven-spotbugs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    maven-spotbugs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - run: just spotbugs
+            - run: just spotbugs
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  maven-errorprone:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    maven-errorprone:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - name: Add Error Prone problem matcher
-        run: echo "::add-matcher::.github/errorprone.json"
+            - name: Add Error Prone problem matcher
+              run: echo "::add-matcher::.github/errorprone.json"
 
-      - run: just errorprone
+            - run: just errorprone
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  maven-errorprone-strict:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    maven-errorprone-strict:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - name: Add Error Prone problem matcher
-        run: echo "::add-matcher::.github/errorprone.json"
+            - name: Add Error Prone problem matcher
+              run: echo "::add-matcher::.github/errorprone.json"
 
-      - run: just errorprone-strict
+            - run: just errorprone-strict
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  maven-enforcer:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    maven-enforcer:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: Run maven-enforcer-plugin
-        run: just enforcer
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  maven-dependency:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: Run maven-dependency-plugin
-        run: just dependency
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  maven-javadoc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: Run maven-javadoc-plugin
-        run: just javadoc
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  checkstyle-semantics:
-    name: checkstyle xml (semantics)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-checkstyle-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Produce Checkstyle XML: Semantics"
-        run: just checkstyle-profile checkstyle-semantics false
-
-      - uses: motlin/checkstyle-results@v1
-        with:
-          checkstyle_files: "**/checkstyle-result.xml"
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  checkstyle-semantics-strict:
-    name: checkstyle xml (semantics strict)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-checkstyle-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Produce Checkstyle XML: Strict Semantics"
-        run: just checkstyle-profile checkstyle-semantics-strict false
-
-      - uses: motlin/checkstyle-results@v1
-        with:
-          checkstyle_files: "**/checkstyle-result.xml"
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  checkstyle-formatting:
-    name: checkstyle xml (formatting)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-checkstyle-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Produce Checkstyle XML: Formatting"
-        run: just checkstyle-profile checkstyle-formatting false
-
-      - uses: motlin/checkstyle-results@v1
-        with:
-          checkstyle_files: "**/checkstyle-result.xml"
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  maven-rewrite:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-rewrite-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: Run rewrite-maven-plugin (dry run)
-        run: just rewrite-dry-run
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  # Check for reproducible builds with artifact:check-buildplan
-  maven-reproducible:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: Run artifact:check-buildplan
-        run: just reproducible
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-formats:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Spotless Check: Formats"
-        run: just spotless formats
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-java-cleanthat:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Spotless Check: Java cleanthat"
-        run: just spotless java-cleanthat
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-java:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Spotless Check: Java"
-        run: just spotless java
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-prettier-java-sort-imports:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-spotless-prettier-java-sort-imports-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Spotless Check: Prettier Java (with sorted imports)"
-        run: just spotless prettier-java-sort-imports
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-sql:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Spotless Check: Sql"
-        run: just spotless sql
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  spotless-pom:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@v5
-        with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@v1
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Spotless Check: Pom"
-        run: just spotless pom
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
-  prettier:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Prettier Format Check"
-        run: npx prettier --check .
-
-  biome:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: jdx/mise-action@v3
-
-      - name: "Biome Format Check"
-        run: npx @biomejs/biome ci
-
-  reviewdog-markdownlint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: reviewdog/action-markdownlint@v0.26.2
-        with:
-          reporter: github-pr-check
-          fail_on_error: true
-          filter_mode: nofilter
-
-  reviewdog-yamllint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: reviewdog/action-yamllint@v1.21.0
-        with:
-          reporter: github-pr-check
-          fail_on_error: true
-          filter_mode: nofilter
-
-  reviewdog-actionlint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: reviewdog/action-actionlint@v1.69.1
-        with:
-          reporter: github-pr-check
-          fail_on_error: true
-          filter_mode: nofilter
-
-  reviewdog-shellcheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: reviewdog/action-shellcheck@v1.32.0
-        with:
-          reporter: github-pr-check
-          filter_mode: nofilter
-
-  all-checks:
-    name: All checks
-    if: ${{ !cancelled() }}
-    needs:
-      [
-        maven-test,
-        maven-spotbugs,
-        maven-errorprone-strict,
-        maven-errorprone,
-        maven-enforcer,
-        maven-dependency,
-        maven-javadoc,
-        checkstyle-semantics,
-        checkstyle-semantics-strict,
-        checkstyle-formatting,
-        maven-rewrite,
-        maven-reproducible,
-        spotless-formats,
-        spotless-java,
-        spotless-prettier-java-sort-imports,
-        spotless-java-cleanthat,
-        spotless-sql,
-        spotless-pom,
-        prettier,
-        biome,
-        reviewdog-markdownlint,
-        reviewdog-yamllint,
-        reviewdog-actionlint,
-        reviewdog-shellcheck,
-      ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: re-actors/alls-green@release/v1
-        with:
-          jobs: ${{ toJSON(needs) }}
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: Run maven-enforcer-plugin
+              run: just enforcer
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    maven-dependency:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: Run maven-dependency-plugin
+              run: just dependency
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    maven-javadoc:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: Run maven-javadoc-plugin
+              run: just javadoc
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    checkstyle-semantics:
+        name: checkstyle xml (semantics)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-checkstyle-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Produce Checkstyle XML: Semantics"
+              run: just checkstyle-profile checkstyle-semantics false
+
+            - uses: motlin/checkstyle-results@v1
+              with:
+                  checkstyle_files: "**/checkstyle-result.xml"
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    checkstyle-semantics-strict:
+        name: checkstyle xml (semantics strict)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-checkstyle-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Produce Checkstyle XML: Strict Semantics"
+              run: just checkstyle-profile checkstyle-semantics-strict false
+
+            - uses: motlin/checkstyle-results@v1
+              with:
+                  checkstyle_files: "**/checkstyle-result.xml"
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    checkstyle-formatting:
+        name: checkstyle xml (formatting)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-checkstyle-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Produce Checkstyle XML: Formatting"
+              run: just checkstyle-profile checkstyle-formatting false
+
+            - uses: motlin/checkstyle-results@v1
+              with:
+                  checkstyle_files: "**/checkstyle-result.xml"
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    maven-rewrite:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-rewrite-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: Run rewrite-maven-plugin (dry run)
+              run: just rewrite-dry-run
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    # Check for reproducible builds with artifact:check-buildplan
+    maven-reproducible:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: Run artifact:check-buildplan
+              run: just reproducible
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    spotless-formats:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-spotless-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Spotless Check: Formats"
+              run: just spotless formats
+
+            - name: "Check for local modifications"
+              run: just _check-local-modifications
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    spotless-java-cleanthat:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-spotless-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Spotless Check: Java cleanthat"
+              run: just spotless java-cleanthat
+
+            - name: "Check for local modifications"
+              run: just _check-local-modifications
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    spotless-java:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-spotless-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Spotless Check: Java"
+              run: just spotless java
+
+            - name: "Check for local modifications"
+              run: just _check-local-modifications
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    spotless-prettier-java-sort-imports:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-spotless-prettier-java-sort-imports-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-spotless-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Spotless Check: Prettier Java (with sorted imports)"
+              run: just spotless prettier-java-sort-imports
+
+            - name: "Check for local modifications"
+              run: just _check-local-modifications
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    spotless-sql:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-spotless-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Spotless Check: Sql"
+              run: just spotless sql
+
+            - name: "Check for local modifications"
+              run: just _check-local-modifications
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    spotless-pom:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: actions/cache@v5
+              with:
+                  key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-spotless-
+                      maven-
+
+            - uses: twosigma/maven-cache-cleaner@v1
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Spotless Check: Pom"
+              run: just spotless pom
+
+            - name: "Check for local modifications"
+              run: just _check-local-modifications
+
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+
+    prettier:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Prettier Format Check"
+              run: npx prettier --check .
+
+    biome:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - uses: jdx/mise-action@v3
+
+            - name: "Biome Format Check"
+              run: npx @biomejs/biome ci
+
+    reviewdog-markdownlint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: reviewdog/action-markdownlint@v0.26.2
+              with:
+                  reporter: github-pr-check
+                  fail_on_error: true
+                  filter_mode: nofilter
+
+    reviewdog-yamllint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: reviewdog/action-yamllint@v1.21.0
+              with:
+                  reporter: github-pr-check
+                  fail_on_error: true
+                  filter_mode: nofilter
+
+    reviewdog-actionlint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: reviewdog/action-actionlint@v1.69.1
+              with:
+                  reporter: github-pr-check
+                  fail_on_error: true
+                  filter_mode: nofilter
+
+    reviewdog-shellcheck:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: reviewdog/action-shellcheck@v1.32.0
+              with:
+                  reporter: github-pr-check
+                  filter_mode: nofilter
+
+    all-checks:
+        name: All checks
+        if: ${{ !cancelled() }}
+        needs:
+            [
+                maven-test,
+                maven-spotbugs,
+                maven-errorprone-strict,
+                maven-errorprone,
+                maven-enforcer,
+                maven-dependency,
+                maven-javadoc,
+                checkstyle-semantics,
+                checkstyle-semantics-strict,
+                checkstyle-formatting,
+                maven-rewrite,
+                maven-reproducible,
+                spotless-formats,
+                spotless-java,
+                spotless-prettier-java-sort-imports,
+                spotless-java-cleanthat,
+                spotless-sql,
+                spotless-pom,
+                prettier,
+                biome,
+                reviewdog-markdownlint,
+                reviewdog-yamllint,
+                reviewdog-actionlint,
+                reviewdog-shellcheck,
+            ]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: re-actors/alls-green@release/v1
+              with:
+                  jobs: ${{ toJSON(needs) }}
