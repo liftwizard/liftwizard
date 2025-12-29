@@ -46,14 +46,7 @@
 	},
 
 	// MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md010.md
-	"MD010": {
-		// Include code blocks
-		"code_blocks": true,
-		// Fenced code languages to ignore
-		"ignore_code_languages": ["console"],
-		// Number of spaces for each hard tab
-		"spaces_per_tab": 1,
-	},
+	"MD010": false,
 
 	// MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md011.md
 	"MD011": true,
