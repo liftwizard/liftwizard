@@ -7,7 +7,7 @@ node = "24.4.1"
 "npm:markdownlint-cli" = "0.45.0"
 "npm:strip-ansi-cli" = "4.0.0"
 
-[alias]
+[tool_alias]
 mvnd = "asdf:https://github.com/joschi/asdf-mvnd"
 
 [env]
