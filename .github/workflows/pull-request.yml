@@ -101,7 +101,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply OpenRewrite recipe changes"
+            git commit --message "Apply OpenRewrite changes."
             git push --force origin $FIX_BRANCH
 
             echo "OpenRewrite fixes have been pushed to the $FIX_BRANCH branch."
@@ -152,7 +152,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Spotless POM formatting"
+            git commit --message "Apply Spotless POM formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Spotless POM fixes have been pushed to the $FIX_BRANCH branch."
@@ -193,7 +193,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Prettier formatting"
+            git commit --message "Apply Prettier formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Prettier formatting fixes have been pushed to the $FIX_BRANCH branch."
@@ -230,7 +230,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Biome formatting"
+            git commit --message "Apply Biome formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Biome formatting fixes have been pushed to the $FIX_BRANCH branch."
@@ -277,7 +277,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Spotless formats"
+            git commit --message "Apply Spotless formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Spotless formats fixes have been pushed to the $FIX_BRANCH branch."
@@ -328,7 +328,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Spotless Java"
+            git commit --message "Apply Spotless Java formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Spotless Java fixes have been pushed to the $FIX_BRANCH branch."
@@ -379,7 +379,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Spotless Prettier Java with Sorted Imports"
+            git commit --message "Apply Spotless Prettier Java with Sorted Imports auto-formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Spotless Prettier Java with Sorted Imports fixes have been pushed to the $FIX_BRANCH branch."
@@ -430,7 +430,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Spotless Java Cleanthat formatting"
+            git commit --message "Apply Spotless Java Cleanthat formatting."
             git push --force origin $FIX_BRANCH
 
             echo "Spotless Java Cleanthat fixes have been pushed to the $FIX_BRANCH branch."
@@ -486,7 +486,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Apply Error Prone fixes"
+            git commit --message "Apply Error Prone fixes."
             git push --force origin $FIX_BRANCH
 
             echo "Error Prone fixes have been pushed to the $FIX_BRANCH branch."
@@ -542,7 +542,7 @@ jobs:
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Auto-fix: Update file match test expectations"
+            git commit --message "Update file match test expectations."
             git push --force origin $FIX_BRANCH
 
             echo "Updated Liftwizard test expectations have been pushed to the $FIX_BRANCH branch."
