@@ -1,55 +1,55 @@
 # Workflow to run one-off OpenRewrite recipes and create fix branches for review
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 env:
-  GROUP_ID: "io/liftwizard"
+    GROUP_ID: "io/liftwizard"
 
 jobs:
-  openrewrite-one-off:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    openrewrite-one-off:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-rewrite-
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-rewrite-
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - name: Build liftwizard-rewrite module
-        run: mvn install --projects liftwizard-utility/liftwizard-rewrite -DskipTests -Dspotless.skip -Dspotbugs.skip -Djacoco.skip -Dcheckstyle.skip -Denforcer.skip
+            - name: Build liftwizard-rewrite module
+              run: mvn install --projects liftwizard-utility/liftwizard-rewrite -DskipTests -Dspotless.skip -Dspotbugs.skip -Djacoco.skip -Dcheckstyle.skip -Denforcer.skip
 
-      - name: Run OpenRewrite one-off recipes
-        run: mvn rewrite:run -Prewrite-maven-plugin-one-off
+            - name: Run OpenRewrite one-off recipes
+              run: mvn rewrite:run -Prewrite-maven-plugin-one-off
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "has_changes=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_changes=false" >> "$GITHUB_OUTPUT"
-          fi
+            - name: Check for changes
+              id: check_changes
+              run: |
+                  if [[ -n "$(git status --porcelain)" ]]; then
+                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                  fi
 
-      - name: Create branch and commit changes
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          BRANCH_NAME="openrewrite-fixes-$(date +%Y-%m-%d)"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH_NAME"
-          git add .
-          git commit -m "Apply OpenRewrite one-off recipes."
-          git push origin "$BRANCH_NAME"
+            - name: Create branch and commit changes
+              if: steps.check_changes.outputs.has_changes == 'true'
+              run: |
+                  BRANCH_NAME="openrewrite-fixes-$(date +%Y-%m-%d)"
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git checkout -b "$BRANCH_NAME"
+                  git add .
+                  git commit -m "Apply OpenRewrite one-off recipes."
+                  git push origin "$BRANCH_NAME"
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}

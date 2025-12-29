@@ -1,58 +1,58 @@
 # Based on https://github.com/testingisdocumenting/znai/blob/master/.github/workflows/documentation-deploy.yaml
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+    push:
+        branches:
+            - main
+    pull_request:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 env:
-  GROUP_ID: "io/liftwizard"
+    GROUP_ID: "io/liftwizard"
 
 jobs:
-  deploy-github-pages:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    deploy-github-pages:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-znai-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-znai-
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-znai-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-znai-
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - name: Set up grahpviz
-        run: sudo apt-get install graphviz
+            - name: Set up grahpviz
+              run: sudo apt-get install graphviz
 
-      - name: Generate Znai docs
-        run: mvn package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
+            - name: Generate Znai docs
+              run: mvn package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
-      - name: Create deploy directory
-        if: github.event_name == 'push'
-        run: |
-          mkdir ./deploy
-          mv ./docs/target/docs/ ./deploy/
-          cp ./docs/index.html   ./deploy/
+            - name: Create deploy directory
+              if: github.event_name == 'push'
+              run: |
+                  mkdir ./deploy
+                  mv ./docs/target/docs/ ./deploy/
+                  cp ./docs/index.html   ./deploy/
 
-      - name: Push to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        if: github.event_name == 'push'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./deploy
-          cname: liftwizard.io
-          force_orphan: true
-          commit_message: "[skip ci] deploy to gh-pages"
+            - name: Push to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v4
+              if: github.event_name == 'push'
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./deploy
+                  cname: liftwizard.io
+                  force_orphan: true
+                  commit_message: "[skip ci] deploy to gh-pages"
 
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
