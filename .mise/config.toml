@@ -1,6 +1,6 @@
 [tools]
 java = "oracle-17.0.10"
-just = "1.40.0"
+just = "1.45.0"
 maven = "3.9.11"
 mvnd = "1.0.2"
 node = "24.4.1"
