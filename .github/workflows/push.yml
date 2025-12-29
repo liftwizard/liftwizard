@@ -1,36 +1,36 @@
 # Jobs that run on push to main, after pull requests are merged. Jobs here can be a subset of the jobs that run on merge_group. These jobs should never fail since the jobs in merge_group already passed.
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 env:
-  GROUP_ID: "io/liftwizard"
+    GROUP_ID: "io/liftwizard"
 
 jobs:
-  maven:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    maven:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
+            - uses: actions/cache@v5
+              with:
+                  key: maven-${{ hashFiles('**/pom.xml') }}
+                  path: ~/.m2/repository
+                  restore-keys: |
+                      maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+            - uses: twosigma/maven-cache-cleaner@v1
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - run: just mvn
+            - run: just mvn
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
+            # Remove any jars we may have created before actions/cache caches .m2
+            - name: "Clean Maven cache"
+              run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}

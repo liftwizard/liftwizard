@@ -1,48 +1,48 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      next-version:
-        description: "Next development version (e.g., 2.1.35-SNAPSHOT)"
-        required: false
-        type: string
+    workflow_dispatch:
+        inputs:
+            next-version:
+                description: "Next development version (e.g., 2.1.35-SNAPSHOT)"
+                required: false
+                type: string
 
 jobs:
-  release:
-    permissions:
-      contents: write
+    release:
+        permissions:
+            contents: write
 
-    name: Create Release Tag
-    runs-on: ubuntu-latest
+        name: Create Release Tag
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+                  token: ${{ secrets.RELEASE_TOKEN }}
 
-      - uses: actions/setup-java@v5
-        with:
-          java-version: 17.0.10
-          distribution: oracle
+            - uses: actions/setup-java@v5
+              with:
+                  java-version: 17.0.10
+                  distribution: oracle
 
-      - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v3
 
-      - name: Configure Git
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
+            - name: Configure Git
+              run: |
+                  git config user.email "actions@github.com"
+                  git config user.name "GitHub Actions"
 
-      - name: Prepare Release
-        run: |
-          mvn --batch-mode clean release:clean release:prepare \
-            ${NEXT_VERSION:+-DdevelopmentVersion=$NEXT_VERSION} \
-            -Darguments="-DskipTests"
-        env:
-          NEXT_VERSION: ${{ inputs.next-version }}
+            - name: Prepare Release
+              run: |
+                  mvn --batch-mode clean release:clean release:prepare \
+                    ${NEXT_VERSION:+-DdevelopmentVersion=$NEXT_VERSION} \
+                    -Darguments="-DskipTests"
+              env:
+                  NEXT_VERSION: ${{ inputs.next-version }}
 
-      - name: Push changes
-        run: |
-          git push origin HEAD:main
-          git push origin --tags
+            - name: Push changes
+              run: |
+                  git push origin HEAD:main
+                  git push origin --tags
