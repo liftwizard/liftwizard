@@ -25,59 +25,59 @@ import static org.openrewrite.java.Assertions.java;
 
 class JCFSortedSetToMutableSortedSetTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new JCFSortedSetToMutableSortedSet());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new JCFSortedSetToMutableSortedSet());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.SortedSet;
-                    import java.util.List;
-                    import org.eclipse.collections.api.factory.SortedSets;
-                    import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.SortedSet;
+					import java.util.List;
+					import org.eclipse.collections.api.factory.SortedSets;
+					import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
 
-                    class Test {
-                        private final SortedSet<String> fieldSortedSet = SortedSets.mutable.empty();
+					class Test {
+					    private final SortedSet<String> fieldSortedSet = SortedSets.mutable.empty();
 
-                        void test() {
-                            SortedSet<String> simpleSortedSet = SortedSets.mutable.empty();
-                            java.util.SortedSet<String> fullyQualifiedSortedSet = SortedSets.mutable.empty();
-                            SortedSet rawSortedSet = SortedSets.mutable.empty();
-                            java.util.SortedSet rawSortedSetFullyQualified = SortedSets.mutable.empty();
-                            SortedSet<List<Integer>> nestedGenerics = SortedSets.mutable.empty();
-                            SortedSet<String> treeSortedSet = TreeSortedSet.newSet();
-                            SortedSet<String> set1 = SortedSets.mutable.empty(), set2 = SortedSets.mutable.with("a");
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.SortedSet;
-                    import java.util.List;
-                    import org.eclipse.collections.api.factory.SortedSets;
-                    import org.eclipse.collections.api.set.sorted.MutableSortedSet;
-                    import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
+					    void test() {
+					        SortedSet<String> simpleSortedSet = SortedSets.mutable.empty();
+					        java.util.SortedSet<String> fullyQualifiedSortedSet = SortedSets.mutable.empty();
+					        SortedSet rawSortedSet = SortedSets.mutable.empty();
+					        java.util.SortedSet rawSortedSetFullyQualified = SortedSets.mutable.empty();
+					        SortedSet<List<Integer>> nestedGenerics = SortedSets.mutable.empty();
+					        SortedSet<String> treeSortedSet = TreeSortedSet.newSet();
+					        SortedSet<String> set1 = SortedSets.mutable.empty(), set2 = SortedSets.mutable.with("a");
+					    }
+					}
+					""",
+					"""
+					import java.util.SortedSet;
+					import java.util.List;
+					import org.eclipse.collections.api.factory.SortedSets;
+					import org.eclipse.collections.api.set.sorted.MutableSortedSet;
+					import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
 
-                    class Test {
-                        private final MutableSortedSet<String> fieldSortedSet = SortedSets.mutable.empty();
+					class Test {
+					    private final MutableSortedSet<String> fieldSortedSet = SortedSets.mutable.empty();
 
-                        void test() {
-                            MutableSortedSet<String> simpleSortedSet = SortedSets.mutable.empty();
-                            MutableSortedSet<String> fullyQualifiedSortedSet = SortedSets.mutable.empty();
-                            MutableSortedSet rawSortedSet = SortedSets.mutable.empty();
-                            MutableSortedSet rawSortedSetFullyQualified = SortedSets.mutable.empty();
-                            MutableSortedSet<List<Integer>> nestedGenerics = SortedSets.mutable.empty();
-                            MutableSortedSet<String> treeSortedSet = TreeSortedSet.newSet();
-                            MutableSortedSet<String> set1 = SortedSets.mutable.empty(), set2 = SortedSets.mutable.with("a");
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					    void test() {
+					        MutableSortedSet<String> simpleSortedSet = SortedSets.mutable.empty();
+					        MutableSortedSet<String> fullyQualifiedSortedSet = SortedSets.mutable.empty();
+					        MutableSortedSet rawSortedSet = SortedSets.mutable.empty();
+					        MutableSortedSet rawSortedSetFullyQualified = SortedSets.mutable.empty();
+					        MutableSortedSet<List<Integer>> nestedGenerics = SortedSets.mutable.empty();
+					        MutableSortedSet<String> treeSortedSet = TreeSortedSet.newSet();
+					        MutableSortedSet<String> set1 = SortedSets.mutable.empty(), set2 = SortedSets.mutable.with("a");
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

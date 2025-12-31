@@ -25,30 +25,30 @@ import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Replace `CollectionAddProcedure.on()` with method reference",
-    description = "Replace `CollectionAddProcedure.on(collection)` with `collection::add` method reference."
+	name = "Replace `CollectionAddProcedure.on()` with method reference",
+	description = "Replace `CollectionAddProcedure.on(collection)` with `collection::add` method reference."
 )
 public class CollectionAddProcedureOnToMethodReference {
 
-    @RecipeDescriptor(
-        name = "`CollectionAddProcedure.on()` → method reference",
-        description = "Replace `CollectionAddProcedure.on(collection)` with `collection::add`."
-    )
-    public static class CollectionAddProcedureOnToMethodReferenceRecipe<T> {
+	@RecipeDescriptor(
+		name = "`CollectionAddProcedure.on()` → method reference",
+		description = "Replace `CollectionAddProcedure.on(collection)` with `collection::add`."
+	)
+	public static class CollectionAddProcedureOnToMethodReferenceRecipe<T> {
 
-        @BeforeTemplate
-        Procedure<T> collectionAddProcedureOn(Collection<T> collection) {
-            return CollectionAddProcedure.on(collection);
-        }
+		@BeforeTemplate
+		Procedure<T> collectionAddProcedureOn(Collection<T> collection) {
+			return CollectionAddProcedure.on(collection);
+		}
 
-        @BeforeTemplate
-        Procedure<T> collectionAddProcedureConstructor(Collection<T> collection) {
-            return new CollectionAddProcedure<>(collection);
-        }
+		@BeforeTemplate
+		Procedure<T> collectionAddProcedureConstructor(Collection<T> collection) {
+			return new CollectionAddProcedure<>(collection);
+		}
 
-        @AfterTemplate
-        Procedure<T> methodReference(Collection<T> collection) {
-            return collection::add;
-        }
-    }
+		@AfterTemplate
+		Procedure<T> methodReference(Collection<T> collection) {
+			return collection::add;
+		}
+	}
 }

@@ -25,192 +25,192 @@ import static org.openrewrite.java.Assertions.java;
 
 class ExplicitThisTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.recipe(new ExplicitThis());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec.recipe(new ExplicitThis());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.function.Consumer;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.function.Consumer;
 
-                    class Parent {
-                        private String parentField;
+					class Parent {
+					    private String parentField;
 
-                        Parent(String value) {
-                            parentField = value;
-                        }
-                    }
+					    Parent(String value) {
+					        parentField = value;
+					    }
+					}
 
-                    class Test extends Parent {
-                        private String field;
-                        private String field1;
-                        private String field2;
-                        private static String staticField;
-                        private String alreadyPrefixed;
+					class Test extends Parent {
+					    private String field;
+					    private String field1;
+					    private String field2;
+					    private static String staticField;
+					    private String alreadyPrefixed;
 
-                        private String fieldInit1 = "initial";
-                        private String fieldInit2 = field1;
-                        private String fieldInit3 = field1 + field2;
+					    private String fieldInit1 = "initial";
+					    private String fieldInit2 = field1;
+					    private String fieldInit3 = field1 + field2;
 
-                        private static String staticFieldInit = staticField;
+					    private static String staticFieldInit = staticField;
 
-                        static {
-                            staticField = "static initializer";
-                            staticHelper();
-                        }
+					    static {
+					        staticField = "static initializer";
+					        staticHelper();
+					    }
 
-                        {
-                            field = "instance initializer";
-                            field1 = field2;
-                        }
+					    {
+					        field = "instance initializer";
+					        field1 = field2;
+					    }
 
-                        Test(String value) {
-                            super(value);
-                            field = "constructor";
-                            field1 = field2;
-                        }
+					    Test(String value) {
+					        super(value);
+					        field = "constructor";
+					        field1 = field2;
+					    }
 
-                        Test() {
-                            this("default");
-                        }
+					    Test() {
+					        this("default");
+					    }
 
-                        void instanceMethod(String parameter) {
-                            field = "value";
-                            field1 = field2;
-                            helper();
-                            staticField = "static context";
-                            staticMethod();
+					    void instanceMethod(String parameter) {
+					        field = "value";
+					        field1 = field2;
+					        helper();
+					        staticField = "static context";
+					        staticMethod();
 
-                            String localVariable = parameter;
-                            String result = parameter + localVariable;
+					        String localVariable = parameter;
+					        String result = parameter + localVariable;
 
-                            this.alreadyPrefixed = "already has this";
-                            this.alreadyPrefixedMethod();
-                            super.toString();
+					        this.alreadyPrefixed = "already has this";
+					        this.alreadyPrefixedMethod();
+					        super.toString();
 
-                            Consumer<String> lambda = s -> {
-                                field = s;
-                                field1 = field2;
-                            };
+					        Consumer<String> lambda = s -> {
+					            field = s;
+					            field1 = field2;
+					        };
 
-                            Runnable runnable = () -> field = "lambda";
-                        }
+					        Runnable runnable = () -> field = "lambda";
+					    }
 
-                        static void staticMethod() {
-                            staticField = "static context";
-                            staticHelper();
-                        }
+					    static void staticMethod() {
+					        staticField = "static context";
+					        staticHelper();
+					    }
 
-                        void helper() {}
-                        void alreadyPrefixedMethod() {}
-                        static void staticHelper() {}
-                    }""",
-                    """
-                    import java.util.function.Consumer;
+					    void helper() {}
+					    void alreadyPrefixedMethod() {}
+					    static void staticHelper() {}
+					}""",
+					"""
+					import java.util.function.Consumer;
 
-                    class Parent {
-                        private String parentField;
+					class Parent {
+					    private String parentField;
 
-                        Parent(String value) {
-                            this.parentField = value;
-                        }
-                    }
+					    Parent(String value) {
+					        this.parentField = value;
+					    }
+					}
 
-                    class Test extends Parent {
-                        private String field;
-                        private String field1;
-                        private String field2;
-                        private static String staticField;
-                        private String alreadyPrefixed;
+					class Test extends Parent {
+					    private String field;
+					    private String field1;
+					    private String field2;
+					    private static String staticField;
+					    private String alreadyPrefixed;
 
-                        private String fieldInit1 = "initial";
-                        private String fieldInit2 = this.field1;
-                        private String fieldInit3 = this.field1 + this.field2;
+					    private String fieldInit1 = "initial";
+					    private String fieldInit2 = this.field1;
+					    private String fieldInit3 = this.field1 + this.field2;
 
-                        private static String staticFieldInit = staticField;
+					    private static String staticFieldInit = staticField;
 
-                        static {
-                            staticField = "static initializer";
-                            staticHelper();
-                        }
+					    static {
+					        staticField = "static initializer";
+					        staticHelper();
+					    }
 
-                        {
-                            this.field = "instance initializer";
-                            this.field1 = this.field2;
-                        }
+					    {
+					        this.field = "instance initializer";
+					        this.field1 = this.field2;
+					    }
 
-                        Test(String value) {
-                            super(value);
-                            this.field = "constructor";
-                            this.field1 = this.field2;
-                        }
+					    Test(String value) {
+					        super(value);
+					        this.field = "constructor";
+					        this.field1 = this.field2;
+					    }
 
-                        Test() {
-                            this("default");
-                        }
+					    Test() {
+					        this("default");
+					    }
 
-                        void instanceMethod(String parameter) {
-                            this.field = "value";
-                            this.field1 = this.field2;
-                            this.helper();
-                            staticField = "static context";
-                            staticMethod();
+					    void instanceMethod(String parameter) {
+					        this.field = "value";
+					        this.field1 = this.field2;
+					        this.helper();
+					        staticField = "static context";
+					        staticMethod();
 
-                            String localVariable = parameter;
-                            String result = parameter + localVariable;
+					        String localVariable = parameter;
+					        String result = parameter + localVariable;
 
-                            this.alreadyPrefixed = "already has this";
-                            this.alreadyPrefixedMethod();
-                            super.toString();
+					        this.alreadyPrefixed = "already has this";
+					        this.alreadyPrefixedMethod();
+					        super.toString();
 
-                            Consumer<String> lambda = s -> {
-                                this.field = s;
-                                this.field1 = this.field2;
-                            };
+					        Consumer<String> lambda = s -> {
+					            this.field = s;
+					            this.field1 = this.field2;
+					        };
 
-                            Runnable runnable = () -> this.field = "lambda";
-                        }
+					        Runnable runnable = () -> this.field = "lambda";
+					    }
 
-                        static void staticMethod() {
-                            staticField = "static context";
-                            staticHelper();
-                        }
+					    static void staticMethod() {
+					        staticField = "static context";
+					        staticHelper();
+					    }
 
-                        void helper() {}
-                        void alreadyPrefixedMethod() {}
-                        static void staticHelper() {}
-                    }"""
-                )
-            );
-    }
+					    void helper() {}
+					    void alreadyPrefixedMethod() {}
+					    static void staticHelper() {}
+					}"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.function.Consumer;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.function.Consumer;
 
-                    class Test {
-                        private String field;
-                        private static String staticField;
+					class Test {
+					    private String field;
+					    private static String staticField;
 
-                        void instanceMethod(String parameter) {
-                            this.field = "already has this";
-                            String localVariable = parameter;
-                            String result = parameter + localVariable;
-                        }
+					    void instanceMethod(String parameter) {
+					        this.field = "already has this";
+					        String localVariable = parameter;
+					        String result = parameter + localVariable;
+					    }
 
-                        static void staticMethod() {
-                            staticField = "static context";
-                        }
-                    }"""
-                )
-            );
-    }
+					    static void staticMethod() {
+					        staticField = "static context";
+					    }
+					}"""
+				)
+			);
+	}
 }

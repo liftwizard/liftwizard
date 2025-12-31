@@ -25,111 +25,111 @@ import static org.openrewrite.java.Assertions.java;
 
 class IterateEmptyTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new IterateEmptyRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new IterateEmptyRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.List;
-                    import java.util.Set;
-                    import org.eclipse.collections.impl.utility.Iterate;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.List;
+					import java.util.Set;
+					import org.eclipse.collections.impl.utility.Iterate;
 
-                    class Test {
-                        boolean testIsEmpty(List<String> list) {
-                            return list == null || list.isEmpty();
-                        }
+					class Test {
+					    boolean testIsEmpty(List<String> list) {
+					        return list == null || list.isEmpty();
+					    }
 
-                        boolean testNotEmpty(Set<Integer> set) {
-                            return set != null && !set.isEmpty();
-                        }
+					    boolean testNotEmpty(Set<Integer> set) {
+					        return set != null && !set.isEmpty();
+					    }
 
-                        boolean testNegatedIterateIsEmpty(List<String> list) {
-                            return !Iterate.isEmpty(list);
-                        }
+					    boolean testNegatedIterateIsEmpty(List<String> list) {
+					        return !Iterate.isEmpty(list);
+					    }
 
-                        boolean testNegatedIterateNotEmpty(List<String> list) {
-                            return !Iterate.notEmpty(list);
-                        }
+					    boolean testNegatedIterateNotEmpty(List<String> list) {
+					        return !Iterate.notEmpty(list);
+					    }
 
-                        void testMultiple(List<String> strings, Set<Object> objects) {
-                            if (strings == null || strings.isEmpty()) {
-                            }
+					    void testMultiple(List<String> strings, Set<Object> objects) {
+					        if (strings == null || strings.isEmpty()) {
+					        }
 
-                            if (objects != null && !objects.isEmpty()) {
-                            }
+					        if (objects != null && !objects.isEmpty()) {
+					        }
 
-                            if (!Iterate.isEmpty(strings)) {
-                            }
+					        if (!Iterate.isEmpty(strings)) {
+					        }
 
-                            if (!Iterate.notEmpty(objects)) {
-                            }
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.List;
-                    import java.util.Set;
-                    import org.eclipse.collections.impl.utility.Iterate;
+					        if (!Iterate.notEmpty(objects)) {
+					        }
+					    }
+					}
+					""",
+					"""
+					import java.util.List;
+					import java.util.Set;
+					import org.eclipse.collections.impl.utility.Iterate;
 
-                    class Test {
-                        boolean testIsEmpty(List<String> list) {
-                            return Iterate.isEmpty(list);
-                        }
+					class Test {
+					    boolean testIsEmpty(List<String> list) {
+					        return Iterate.isEmpty(list);
+					    }
 
-                        boolean testNotEmpty(Set<Integer> set) {
-                            return Iterate.notEmpty(set);
-                        }
+					    boolean testNotEmpty(Set<Integer> set) {
+					        return Iterate.notEmpty(set);
+					    }
 
-                        boolean testNegatedIterateIsEmpty(List<String> list) {
-                            return Iterate.notEmpty(list);
-                        }
+					    boolean testNegatedIterateIsEmpty(List<String> list) {
+					        return Iterate.notEmpty(list);
+					    }
 
-                        boolean testNegatedIterateNotEmpty(List<String> list) {
-                            return Iterate.isEmpty(list);
-                        }
+					    boolean testNegatedIterateNotEmpty(List<String> list) {
+					        return Iterate.isEmpty(list);
+					    }
 
-                        void testMultiple(List<String> strings, Set<Object> objects) {
-                            if (Iterate.isEmpty(strings)) {
-                            }
+					    void testMultiple(List<String> strings, Set<Object> objects) {
+					        if (Iterate.isEmpty(strings)) {
+					        }
 
-                            if (Iterate.notEmpty(objects)) {
-                            }
+					        if (Iterate.notEmpty(objects)) {
+					        }
 
-                            if (Iterate.notEmpty(strings)) {
-                            }
+					        if (Iterate.notEmpty(strings)) {
+					        }
 
-                            if (Iterate.isEmpty(objects)) {
-                            }
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        if (Iterate.isEmpty(objects)) {
+					        }
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.List;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.List;
 
-                    class Test {
-                        void test(List<String> list) {
-                            boolean simpleNullCheck = list == null;
-                            boolean simpleIsEmptyCheck = list.isEmpty();
-                            boolean wrongOperator = list != null || !list.isEmpty();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test(List<String> list) {
+					        boolean simpleNullCheck = list == null;
+					        boolean simpleIsEmptyCheck = list.isEmpty();
+					        boolean wrongOperator = list != null || !list.isEmpty();
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

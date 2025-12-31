@@ -26,74 +26,74 @@ import static org.openrewrite.java.Assertions.java;
 
 class VerifyAssertEmptyToAssertJTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec
-            .recipe(new VerifyAssertEmptyToAssertJRecipes())
-            .parser(
-                JavaParser.fromJavaVersion()
-                    .dependsOn(
-                        """
-                        package org.eclipse.collections.impl.test;
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec
+			.recipe(new VerifyAssertEmptyToAssertJRecipes())
+			.parser(
+				JavaParser.fromJavaVersion()
+					.dependsOn(
+						"""
+						package org.eclipse.collections.impl.test;
 
-                        import java.util.Map;
+						import java.util.Map;
 
-                        public final class Verify {
-                            public static void assertEmpty(String message, Iterable<?> iterable) {}
-                            public static void assertEmpty(Iterable<?> iterable) {}
-                            public static void assertEmpty(String message, Map<?, ?> map) {}
-                            public static void assertEmpty(Map<?, ?> map) {}
-                        }
-                        """
-                    )
-                    .classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-            );
-    }
+						public final class Verify {
+						    public static void assertEmpty(String message, Iterable<?> iterable) {}
+						    public static void assertEmpty(Iterable<?> iterable) {}
+						    public static void assertEmpty(String message, Map<?, ?> map) {}
+						    public static void assertEmpty(Map<?, ?> map) {}
+						}
+						"""
+					)
+					.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
+			);
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.impl.test.Verify;
-                    import org.eclipse.collections.api.list.MutableList;
-                    import org.eclipse.collections.impl.factory.Lists;
-                    import java.util.Map;
-                    import java.util.HashMap;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.impl.test.Verify;
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.impl.factory.Lists;
+					import java.util.Map;
+					import java.util.HashMap;
 
-                    class Test {
-                        void test() {
-                            MutableList<String> list = Lists.mutable.empty();
-                            Verify.assertEmpty("list should be empty", list);
-                            Verify.assertEmpty(list);
+					class Test {
+					    void test() {
+					        MutableList<String> list = Lists.mutable.empty();
+					        Verify.assertEmpty("list should be empty", list);
+					        Verify.assertEmpty(list);
 
-                            Map<String, Integer> map = new HashMap<>();
-                            Verify.assertEmpty("map should be empty", map);
-                            Verify.assertEmpty(map);
-                        }
-                    }
-                    """,
-                    """
-                    import org.assertj.core.api.Assertions;
-                    import org.eclipse.collections.api.list.MutableList;
-                    import org.eclipse.collections.impl.factory.Lists;
-                    import java.util.Map;
-                    import java.util.HashMap;
+					        Map<String, Integer> map = new HashMap<>();
+					        Verify.assertEmpty("map should be empty", map);
+					        Verify.assertEmpty(map);
+					    }
+					}
+					""",
+					"""
+					import org.assertj.core.api.Assertions;
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.impl.factory.Lists;
+					import java.util.Map;
+					import java.util.HashMap;
 
-                    class Test {
-                        void test() {
-                            MutableList<String> list = Lists.mutable.empty();
-                            Assertions.assertThat(list).as("list should be empty").isEmpty();
-                            Assertions.assertThat(list).isEmpty();
+					class Test {
+					    void test() {
+					        MutableList<String> list = Lists.mutable.empty();
+					        Assertions.assertThat(list).as("list should be empty").isEmpty();
+					        Assertions.assertThat(list).isEmpty();
 
-                            Map<String, Integer> map = new HashMap<>();
-                            Assertions.assertThat(map).as("map should be empty").isEmpty();
-                            Assertions.assertThat(map).isEmpty();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        Map<String, Integer> map = new HashMap<>();
+					        Assertions.assertThat(map).as("map should be empty").isEmpty();
+					        Assertions.assertThat(map).isEmpty();
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

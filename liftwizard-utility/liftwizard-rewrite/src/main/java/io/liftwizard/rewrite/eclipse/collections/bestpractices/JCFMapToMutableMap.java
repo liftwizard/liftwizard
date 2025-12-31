@@ -18,7 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class JCFMapToMutableMap extends AbstractJCFTypeToMutableTypeRecipe {
 
-    public JCFMapToMutableMap() {
-        super("java.util.Map", "org.eclipse.collections.api.map", "MutableMap");
-    }
+	public JCFMapToMutableMap() {
+		super("java.util.Map", "org.eclipse.collections.api.map", "MutableMap");
+	}
 }

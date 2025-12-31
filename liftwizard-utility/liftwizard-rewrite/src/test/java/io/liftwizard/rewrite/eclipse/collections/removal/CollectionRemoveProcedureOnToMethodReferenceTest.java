@@ -26,108 +26,108 @@ import static org.openrewrite.java.Assertions.java;
 
 class CollectionRemoveProcedureOnToMethodReferenceTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec
-            .recipe(new CollectionRemoveProcedureOnToMethodReferenceRecipes())
-            .typeValidationOptions(TypeValidation.none());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec
+			.recipe(new CollectionRemoveProcedureOnToMethodReferenceRecipes())
+			.typeValidationOptions(TypeValidation.none());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
-                    import org.eclipse.collections.api.block.procedure.Procedure;
-                    import org.eclipse.collections.api.set.MutableSet;
-                    import org.eclipse.collections.impl.set.mutable.UnifiedSet;
-                    import java.util.List;
-                    import java.util.ArrayList;
-                    import java.util.Set;
-                    import java.util.HashSet;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
+					import org.eclipse.collections.api.block.procedure.Procedure;
+					import org.eclipse.collections.api.set.MutableSet;
+					import org.eclipse.collections.impl.set.mutable.UnifiedSet;
+					import java.util.List;
+					import java.util.ArrayList;
+					import java.util.Set;
+					import java.util.HashSet;
 
-                    class Test {
-                        void test() {
-                            MutableSet<String> set1 = UnifiedSet.newSet();
-                            Set<String> toRemove1 = new HashSet<>();
-                            set1.forEach(CollectionRemoveProcedure.on(toRemove1));
+					class Test {
+					    void test() {
+					        MutableSet<String> set1 = UnifiedSet.newSet();
+					        Set<String> toRemove1 = new HashSet<>();
+					        set1.forEach(CollectionRemoveProcedure.on(toRemove1));
 
-                            MutableSet<String> set2 = UnifiedSet.newSet();
-                            Set<String> toRemove2 = new HashSet<>();
-                            var procedure = CollectionRemoveProcedure.on(toRemove2);
-                            set2.forEach(procedure);
+					        MutableSet<String> set2 = UnifiedSet.newSet();
+					        Set<String> toRemove2 = new HashSet<>();
+					        var procedure = CollectionRemoveProcedure.on(toRemove2);
+					        set2.forEach(procedure);
 
-                            List<String> list1 = new ArrayList<>();
-                            Procedure<String> removeProcedure1 = new CollectionRemoveProcedure<String>(list1);
+					        List<String> list1 = new ArrayList<>();
+					        Procedure<String> removeProcedure1 = new CollectionRemoveProcedure<String>(list1);
 
-                            List<String> list2 = new ArrayList<>();
-                            Procedure<String> removeProcedure2 = new CollectionRemoveProcedure<>(list2);
+					        List<String> list2 = new ArrayList<>();
+					        Procedure<String> removeProcedure2 = new CollectionRemoveProcedure<>(list2);
 
-                            MutableSet<String> set3 = UnifiedSet.newSet();
-                            List<String> toRemove3 = new ArrayList<>();
-                            set3.forEach(new CollectionRemoveProcedure<>(toRemove3));
-                        }
-                    }
-                    """,
-                    """
-                    import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
-                    import org.eclipse.collections.api.block.procedure.Procedure;
-                    import org.eclipse.collections.api.set.MutableSet;
-                    import org.eclipse.collections.impl.set.mutable.UnifiedSet;
-                    import java.util.List;
-                    import java.util.ArrayList;
-                    import java.util.Set;
-                    import java.util.HashSet;
+					        MutableSet<String> set3 = UnifiedSet.newSet();
+					        List<String> toRemove3 = new ArrayList<>();
+					        set3.forEach(new CollectionRemoveProcedure<>(toRemove3));
+					    }
+					}
+					""",
+					"""
+					import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
+					import org.eclipse.collections.api.block.procedure.Procedure;
+					import org.eclipse.collections.api.set.MutableSet;
+					import org.eclipse.collections.impl.set.mutable.UnifiedSet;
+					import java.util.List;
+					import java.util.ArrayList;
+					import java.util.Set;
+					import java.util.HashSet;
 
-                    class Test {
-                        void test() {
-                            MutableSet<String> set1 = UnifiedSet.newSet();
-                            Set<String> toRemove1 = new HashSet<>();
-                            set1.forEach(toRemove1::remove);
+					class Test {
+					    void test() {
+					        MutableSet<String> set1 = UnifiedSet.newSet();
+					        Set<String> toRemove1 = new HashSet<>();
+					        set1.forEach(toRemove1::remove);
 
-                            MutableSet<String> set2 = UnifiedSet.newSet();
-                            Set<String> toRemove2 = new HashSet<>();
-                            var procedure = toRemove2::remove;
-                            set2.forEach(procedure);
+					        MutableSet<String> set2 = UnifiedSet.newSet();
+					        Set<String> toRemove2 = new HashSet<>();
+					        var procedure = toRemove2::remove;
+					        set2.forEach(procedure);
 
-                            List<String> list1 = new ArrayList<>();
-                            Procedure<String> removeProcedure1 = list1::remove;
+					        List<String> list1 = new ArrayList<>();
+					        Procedure<String> removeProcedure1 = list1::remove;
 
-                            List<String> list2 = new ArrayList<>();
-                            Procedure<String> removeProcedure2 = list2::remove;
+					        List<String> list2 = new ArrayList<>();
+					        Procedure<String> removeProcedure2 = list2::remove;
 
-                            MutableSet<String> set3 = UnifiedSet.newSet();
-                            List<String> toRemove3 = new ArrayList<>();
-                            set3.forEach(toRemove3::remove);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        MutableSet<String> set3 = UnifiedSet.newSet();
+					        List<String> toRemove3 = new ArrayList<>();
+					        set3.forEach(toRemove3::remove);
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.set.MutableSet;
-                    import org.eclipse.collections.impl.set.mutable.UnifiedSet;
-                    import java.util.Set;
-                    import java.util.HashSet;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.set.MutableSet;
+					import org.eclipse.collections.impl.set.mutable.UnifiedSet;
+					import java.util.Set;
+					import java.util.HashSet;
 
-                    class Test {
-                        void test() {
-                            MutableSet<String> set = UnifiedSet.newSet();
-                            Set<String> toRemove = new HashSet<>();
-                            set.forEach(toRemove::remove);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test() {
+					        MutableSet<String> set = UnifiedSet.newSet();
+					        Set<String> toRemove = new HashSet<>();
+					        set.forEach(toRemove::remove);
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

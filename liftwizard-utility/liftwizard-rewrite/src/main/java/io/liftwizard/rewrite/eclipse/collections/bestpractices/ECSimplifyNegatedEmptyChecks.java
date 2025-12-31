@@ -22,42 +22,42 @@ import org.eclipse.collections.api.RichIterable;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "`!isEmpty()` → `notEmpty()`",
-    description = "Simplifies negated empty checks: `!iterable.isEmpty()` to `iterable.notEmpty()` and `!iterable.notEmpty()` to `iterable.isEmpty()` for Eclipse Collections types. Note: This Refaster version does not prevent transformations inside isEmpty() or notEmpty() method implementations, which could cause infinite recursion if those methods are implemented using negated empty checks."
+	name = "`!isEmpty()` → `notEmpty()`",
+	description = "Simplifies negated empty checks: `!iterable.isEmpty()` to `iterable.notEmpty()` and `!iterable.notEmpty()` to `iterable.isEmpty()` for Eclipse Collections types. Note: This Refaster version does not prevent transformations inside isEmpty() or notEmpty() method implementations, which could cause infinite recursion if those methods are implemented using negated empty checks."
 )
 public class ECSimplifyNegatedEmptyChecks {
 
-    @RecipeDescriptor(
-        name = "`!isEmpty()` → `notEmpty()`",
-        description = "Converts `!iterable.isEmpty()` to `iterable.notEmpty()`."
-    )
-    public static final class NegatedIsEmptyToNotEmpty<T> {
+	@RecipeDescriptor(
+		name = "`!isEmpty()` → `notEmpty()`",
+		description = "Converts `!iterable.isEmpty()` to `iterable.notEmpty()`."
+	)
+	public static final class NegatedIsEmptyToNotEmpty<T> {
 
-        @BeforeTemplate
-        boolean before(RichIterable<T> iterable) {
-            return !iterable.isEmpty();
-        }
+		@BeforeTemplate
+		boolean before(RichIterable<T> iterable) {
+			return !iterable.isEmpty();
+		}
 
-        @AfterTemplate
-        boolean after(RichIterable<T> iterable) {
-            return iterable.notEmpty();
-        }
-    }
+		@AfterTemplate
+		boolean after(RichIterable<T> iterable) {
+			return iterable.notEmpty();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`!notEmpty()` → `isEmpty()`",
-        description = "Converts `!iterable.notEmpty()` to `iterable.isEmpty()`."
-    )
-    public static final class NegatedNotEmptyToIsEmpty<T> {
+	@RecipeDescriptor(
+		name = "`!notEmpty()` → `isEmpty()`",
+		description = "Converts `!iterable.notEmpty()` to `iterable.isEmpty()`."
+	)
+	public static final class NegatedNotEmptyToIsEmpty<T> {
 
-        @BeforeTemplate
-        boolean before(RichIterable<T> iterable) {
-            return !iterable.notEmpty();
-        }
+		@BeforeTemplate
+		boolean before(RichIterable<T> iterable) {
+			return !iterable.notEmpty();
+		}
 
-        @AfterTemplate
-        boolean after(RichIterable<T> iterable) {
-            return iterable.isEmpty();
-        }
-    }
+		@AfterTemplate
+		boolean after(RichIterable<T> iterable) {
+			return iterable.isEmpty();
+		}
+	}
 }

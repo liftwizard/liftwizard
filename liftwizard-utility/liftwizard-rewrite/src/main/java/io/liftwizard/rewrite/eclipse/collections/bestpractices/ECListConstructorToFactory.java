@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class ECListConstructorToFactory extends AbstractECConstructorToFactoryRecipe {
 
-    public ECListConstructorToFactory() {
-        super("FastList", "list", "Lists", "", "mutable");
-    }
+	public ECListConstructorToFactory() {
+		super("FastList", "list", "Lists", "", "mutable");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new FastList<>()` → `Lists.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new FastList<>()` → `Lists.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new FastList()` constructor calls with `Lists.mutable.empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new FastList()` constructor calls with `Lists.mutable.empty()`.";
+	}
 }

@@ -26,75 +26,75 @@ import static org.openrewrite.java.Assertions.java;
 
 class NullSafeEqualsTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.recipe(new NullSafeEqualsRecipes()).parser(JavaParser.fromJavaVersion());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec.recipe(new NullSafeEqualsRecipes()).parser(JavaParser.fromJavaVersion());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    class Test {
-                        void test(String left, String right, Integer a, Integer b) {
-                            boolean notEqualsPattern1 = left == null ? right != null : !left.equals(right);
-                            boolean notEqualsPattern2 = right == null ? left != null : !right.equals(left);
-                            boolean equalsPattern1 = left == null ? right == null : left.equals(right);
-                            boolean equalsPattern2 = right == null ? left == null : right.equals(left);
-                            boolean equalsPattern3 = left == null ? right == null : left == right || left.equals(right);
-                            boolean equalsPattern4 = left == right || left != null && left.equals(right);
-                            boolean equalsPattern5 = right == left || left != null && left.equals(right);
-                            boolean equalsPattern6 = left == null || right == null ? left == right : left.equals(right);
-                            boolean differentTypes = a == null ? b == null : a.equals(b);
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.Objects;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					class Test {
+					    void test(String left, String right, Integer a, Integer b) {
+					        boolean notEqualsPattern1 = left == null ? right != null : !left.equals(right);
+					        boolean notEqualsPattern2 = right == null ? left != null : !right.equals(left);
+					        boolean equalsPattern1 = left == null ? right == null : left.equals(right);
+					        boolean equalsPattern2 = right == null ? left == null : right.equals(left);
+					        boolean equalsPattern3 = left == null ? right == null : left == right || left.equals(right);
+					        boolean equalsPattern4 = left == right || left != null && left.equals(right);
+					        boolean equalsPattern5 = right == left || left != null && left.equals(right);
+					        boolean equalsPattern6 = left == null || right == null ? left == right : left.equals(right);
+					        boolean differentTypes = a == null ? b == null : a.equals(b);
+					    }
+					}
+					""",
+					"""
+					import java.util.Objects;
 
-                    class Test {
-                        void test(String left, String right, Integer a, Integer b) {
-                            boolean notEqualsPattern1 = !Objects.equals(left, right);
-                            boolean notEqualsPattern2 = !Objects.equals(right, left);
-                            boolean equalsPattern1 = Objects.equals(left, right);
-                            boolean equalsPattern2 = Objects.equals(right, left);
-                            boolean equalsPattern3 = Objects.equals(left, right);
-                            boolean equalsPattern4 = Objects.equals(left, right);
-                            boolean equalsPattern5 = Objects.equals(left, right);
-                            boolean equalsPattern6 = Objects.equals(left, right);
-                            boolean differentTypes = Objects.equals(a, b);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test(String left, String right, Integer a, Integer b) {
+					        boolean notEqualsPattern1 = !Objects.equals(left, right);
+					        boolean notEqualsPattern2 = !Objects.equals(right, left);
+					        boolean equalsPattern1 = Objects.equals(left, right);
+					        boolean equalsPattern2 = Objects.equals(right, left);
+					        boolean equalsPattern3 = Objects.equals(left, right);
+					        boolean equalsPattern4 = Objects.equals(left, right);
+					        boolean equalsPattern5 = Objects.equals(left, right);
+					        boolean equalsPattern6 = Objects.equals(left, right);
+					        boolean differentTypes = Objects.equals(a, b);
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    class Test {
-                        void test(String left, String right, String other, MyClass obj) {
-                            boolean simpleEquals = left.equals(right);
-                            boolean simpleNullCheck = left == null;
-                            boolean differentTernary = left == null ? false : left.equals(right);
-                            boolean variablesMismatch = left == null ? right == null : left.equals(other);
-                            boolean notEqualsMethod = left == null ? right == null : left.compareTo(right) == 0;
-                            boolean multipleArgs = obj == null ? right == null : obj.equals(right, true);
-                        }
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					class Test {
+					    void test(String left, String right, String other, MyClass obj) {
+					        boolean simpleEquals = left.equals(right);
+					        boolean simpleNullCheck = left == null;
+					        boolean differentTernary = left == null ? false : left.equals(right);
+					        boolean variablesMismatch = left == null ? right == null : left.equals(other);
+					        boolean notEqualsMethod = left == null ? right == null : left.compareTo(right) == 0;
+					        boolean multipleArgs = obj == null ? right == null : obj.equals(right, true);
+					    }
 
-                        class MyClass {
-                            boolean equals(String other, boolean ignoreCase) {
-                                return false;
-                            }
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					    class MyClass {
+					        boolean equals(String other, boolean ignoreCase) {
+					            return false;
+					        }
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

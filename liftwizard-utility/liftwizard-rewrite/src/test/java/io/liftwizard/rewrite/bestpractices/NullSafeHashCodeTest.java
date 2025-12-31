@@ -26,61 +26,61 @@ import static org.openrewrite.java.Assertions.java;
 
 class NullSafeHashCodeTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.recipe(new NullSafeHashCodeRecipes()).parser(JavaParser.fromJavaVersion());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec.recipe(new NullSafeHashCodeRecipes()).parser(JavaParser.fromJavaVersion());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    class Test {
-                        int test(String str, Integer num) {
-                            int hash1 = str == null ? 0 : str.hashCode();
-                            int hash2 = num == null ? 0 : num.hashCode();
-                            int hash3 = str != null ? str.hashCode() : 0;
-                            int hash4 = num != null ? num.hashCode() : 0;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					class Test {
+					    int test(String str, Integer num) {
+					        int hash1 = str == null ? 0 : str.hashCode();
+					        int hash2 = num == null ? 0 : num.hashCode();
+					        int hash3 = str != null ? str.hashCode() : 0;
+					        int hash4 = num != null ? num.hashCode() : 0;
 
-                            return str == null ? 0 : str.hashCode();
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.Objects;
+					        return str == null ? 0 : str.hashCode();
+					    }
+					}
+					""",
+					"""
+					import java.util.Objects;
 
-                    class Test {
-                        int test(String str, Integer num) {
-                            int hash1 = Objects.hashCode(str);
-                            int hash2 = Objects.hashCode(num);
-                            int hash3 = Objects.hashCode(str);
-                            int hash4 = Objects.hashCode(num);
+					class Test {
+					    int test(String str, Integer num) {
+					        int hash1 = Objects.hashCode(str);
+					        int hash2 = Objects.hashCode(num);
+					        int hash3 = Objects.hashCode(str);
+					        int hash4 = Objects.hashCode(num);
 
-                            return Objects.hashCode(str);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        return Objects.hashCode(str);
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    class Test {
-                        void test(String str) {
-                            int simpleHashCode = str.hashCode();
-                            int simpleNullCheck = str == null ? 0 : 1;
-                            int differentValue = str == null ? 1 : str.hashCode();
-                            int invertedDifferentValue = str != null ? str.hashCode() : 1;
-                        }
-                    }
-                    """
-                )
-            );
-    }
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					class Test {
+					    void test(String str) {
+					        int simpleHashCode = str.hashCode();
+					        int simpleNullCheck = str == null ? 0 : 1;
+					        int differentValue = str == null ? 1 : str.hashCode();
+					        int invertedDifferentValue = str != null ? str.hashCode() : 1;
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

@@ -18,7 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class JCFSortedSetToMutableSortedSet extends AbstractJCFTypeToMutableTypeRecipe {
 
-    public JCFSortedSetToMutableSortedSet() {
-        super("java.util.SortedSet", "org.eclipse.collections.api.set.sorted", "MutableSortedSet");
-    }
+	public JCFSortedSetToMutableSortedSet() {
+		super("java.util.SortedSet", "org.eclipse.collections.api.set.sorted", "MutableSortedSet");
+	}
 }

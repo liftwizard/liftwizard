@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 public class JCFTreeSetConstructorToFactory extends AbstractJCFConstructorToFactoryRecipe {
 
-    public JCFTreeSetConstructorToFactory() {
-        super("TreeSet", "SortedSets");
-    }
+	public JCFTreeSetConstructorToFactory() {
+		super("TreeSet", "SortedSets");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new TreeSet<>()` → `SortedSets.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new TreeSet<>()` → `SortedSets.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new TreeSet()` with `SortedSets.mutable.empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new TreeSet()` with `SortedSets.mutable.empty()`.";
+	}
 }

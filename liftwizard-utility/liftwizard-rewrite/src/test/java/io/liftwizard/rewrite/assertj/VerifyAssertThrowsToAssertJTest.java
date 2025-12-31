@@ -27,103 +27,103 @@ import static org.openrewrite.java.Assertions.java;
 
 class VerifyAssertThrowsToAssertJTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec
-            .recipe(new VerifyAssertThrowsToAssertJ())
-            .parser(
-                JavaParser.fromJavaVersion()
-                    .dependsOn(
-                        """
-                        package org.eclipse.collections.impl.test;
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec
+			.recipe(new VerifyAssertThrowsToAssertJ())
+			.parser(
+				JavaParser.fromJavaVersion()
+					.dependsOn(
+						"""
+						package org.eclipse.collections.impl.test;
 
-                        import java.util.concurrent.Callable;
+						import java.util.concurrent.Callable;
 
-                        public final class Verify {
-                            public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
-                            public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
-                        }
-                        """
-                    )
-                    .classpath("assertj-core")
-            );
-    }
+						public final class Verify {
+						    public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
+						    public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
+						}
+						"""
+					)
+					.classpath("assertj-core")
+			);
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                spec ->
-                    spec.typeValidationOptions(
-                        TypeValidation.builder().identifiers(false).methodInvocations(false).build()
-                    ),
-                java(
-                    """
-                    import org.eclipse.collections.impl.test.Verify;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				(spec) ->
+					spec.typeValidationOptions(
+						TypeValidation.builder().identifiers(false).methodInvocations(false).build()
+					),
+				java(
+					"""
+					import org.eclipse.collections.impl.test.Verify;
 
-                    import java.util.concurrent.Callable;
+					import java.util.concurrent.Callable;
 
-                    class Test {
-                        void test() {
-                            Verify.assertThrows(IllegalArgumentException.class, () -> {
-                                throw new IllegalArgumentException("error");
-                            });
+					class Test {
+					    void test() {
+					        Verify.assertThrows(IllegalArgumentException.class, () -> {
+					            throw new IllegalArgumentException("error");
+					        });
 
-                            Verify.assertThrows(NullPointerException.class, () -> {
-                                throw new NullPointerException();
-                            });
+					        Verify.assertThrows(NullPointerException.class, () -> {
+					            throw new NullPointerException();
+					        });
 
-                            Callable<Object> failingCallable = () -> {
-                                throw new RuntimeException("error");
-                            };
-                            Verify.assertThrows(RuntimeException.class, failingCallable);
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.concurrent.Callable;
+					        Callable<Object> failingCallable = () -> {
+					            throw new RuntimeException("error");
+					        };
+					        Verify.assertThrows(RuntimeException.class, failingCallable);
+					    }
+					}
+					""",
+					"""
+					import java.util.concurrent.Callable;
 
-                    import static org.assertj.core.api.Assertions.assertThatThrownBy;
+					import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-                    class Test {
-                        void test() {
-                            assertThatThrownBy(() -> {
-                                throw new IllegalArgumentException("error");
-                            }).isInstanceOf(IllegalArgumentException.class);
+					class Test {
+					    void test() {
+					        assertThatThrownBy(() -> {
+					            throw new IllegalArgumentException("error");
+					        }).isInstanceOf(IllegalArgumentException.class);
 
-                            assertThatThrownBy(() -> {
-                                throw new NullPointerException();
-                            }).isInstanceOf(NullPointerException.class);
+					        assertThatThrownBy(() -> {
+					            throw new NullPointerException();
+					        }).isInstanceOf(NullPointerException.class);
 
-                            Callable<Object> failingCallable = () -> {
-                                throw new RuntimeException("error");
-                            };
-                            assertThatThrownBy(failingCallable::call).isInstanceOf(RuntimeException.class);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        Callable<Object> failingCallable = () -> {
+					            throw new RuntimeException("error");
+					        };
+					        assertThatThrownBy(failingCallable::call).isInstanceOf(RuntimeException.class);
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.concurrent.Callable;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.concurrent.Callable;
 
-                    import static org.assertj.core.api.Assertions.assertThatThrownBy;
+					import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-                    class Test {
-                        void test() {
-                            assertThatThrownBy(() -> {
-                                throw new IllegalArgumentException("error");
-                            }).isInstanceOf(IllegalArgumentException.class);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test() {
+					        assertThatThrownBy(() -> {
+					            throw new IllegalArgumentException("error");
+					        }).isInstanceOf(IllegalArgumentException.class);
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

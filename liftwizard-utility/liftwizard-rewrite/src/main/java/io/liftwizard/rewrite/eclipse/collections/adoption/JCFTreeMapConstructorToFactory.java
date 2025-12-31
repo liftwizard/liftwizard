@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 public class JCFTreeMapConstructorToFactory extends AbstractJCFConstructorToFactoryRecipe {
 
-    public JCFTreeMapConstructorToFactory() {
-        super("TreeMap", "SortedMaps");
-    }
+	public JCFTreeMapConstructorToFactory() {
+		super("TreeMap", "SortedMaps");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new TreeMap<>()` → `SortedMaps.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new TreeMap<>()` → `SortedMaps.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new TreeMap()` with `SortedMaps.mutable.empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new TreeMap()` with `SortedMaps.mutable.empty()`.";
+	}
 }

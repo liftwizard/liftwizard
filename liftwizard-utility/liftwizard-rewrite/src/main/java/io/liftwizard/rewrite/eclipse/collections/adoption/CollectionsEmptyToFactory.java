@@ -32,116 +32,116 @@ import org.openrewrite.java.tree.J;
 
 public class CollectionsEmptyToFactory extends Recipe {
 
-    @Override
-    public String getDisplayName() {
-        return "Replace Collections.empty*() with Eclipse Collections factories";
-    }
+	@Override
+	public String getDisplayName() {
+		return "Replace Collections.empty*() with Eclipse Collections factories";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `Collections.emptyList()`, `Collections.emptySet()`, `Collections.emptyMap()`, `Collections.emptySortedSet()`, and `Collections.emptySortedMap()` with Eclipse Collections factory methods.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `Collections.emptyList()`, `Collections.emptySet()`, `Collections.emptyMap()`, `Collections.emptySortedSet()`, and `Collections.emptySortedMap()` with Eclipse Collections factory methods.";
+	}
 
-    @Override
-    public Set<String> getTags() {
-        return Collections.singleton("eclipse-collections");
-    }
+	@Override
+	public Set<String> getTags() {
+		return Collections.singleton("eclipse-collections");
+	}
 
-    @Override
-    public Duration getEstimatedEffortPerOccurrence() {
-        return Duration.ofSeconds(15);
-    }
+	@Override
+	public Duration getEstimatedEffortPerOccurrence() {
+		return Duration.ofSeconds(15);
+	}
 
-    @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor() {
-        return new CollectionsEmptyToFactoryVisitor();
-    }
+	@Override
+	public TreeVisitor<?, ExecutionContext> getVisitor() {
+		return new CollectionsEmptyToFactoryVisitor();
+	}
 
-    private static final class CollectionsEmptyToFactoryVisitor extends JavaIsoVisitor<ExecutionContext> {
+	private static final class CollectionsEmptyToFactoryVisitor extends JavaIsoVisitor<ExecutionContext> {
 
-        private static final MethodMatcher EMPTY_LIST = new MethodMatcher("java.util.Collections emptyList()");
-        private static final MethodMatcher EMPTY_SET = new MethodMatcher("java.util.Collections emptySet()");
-        private static final MethodMatcher EMPTY_MAP = new MethodMatcher("java.util.Collections emptyMap()");
-        private static final MethodMatcher EMPTY_SORTED_SET = new MethodMatcher(
-            "java.util.Collections emptySortedSet()"
-        );
-        private static final MethodMatcher EMPTY_SORTED_MAP = new MethodMatcher(
-            "java.util.Collections emptySortedMap()"
-        );
+		private static final MethodMatcher EMPTY_LIST = new MethodMatcher("java.util.Collections emptyList()");
+		private static final MethodMatcher EMPTY_SET = new MethodMatcher("java.util.Collections emptySet()");
+		private static final MethodMatcher EMPTY_MAP = new MethodMatcher("java.util.Collections emptyMap()");
+		private static final MethodMatcher EMPTY_SORTED_SET = new MethodMatcher(
+			"java.util.Collections emptySortedSet()"
+		);
+		private static final MethodMatcher EMPTY_SORTED_MAP = new MethodMatcher(
+			"java.util.Collections emptySortedMap()"
+		);
 
-        @Override
-        public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-            J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
+		@Override
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
-            String factoryClass = null;
-            String factoryMethod = null;
+			String factoryClass = null;
+			String factoryMethod = null;
 
-            if (EMPTY_LIST.matches(mi)) {
-                factoryClass = "Lists";
-                factoryMethod = "fixedSize";
-            } else if (EMPTY_SET.matches(mi)) {
-                factoryClass = "Sets";
-                factoryMethod = "fixedSize";
-            } else if (EMPTY_MAP.matches(mi)) {
-                factoryClass = "Maps";
-                factoryMethod = "fixedSize";
-            } else if (EMPTY_SORTED_SET.matches(mi)) {
-                factoryClass = "SortedSets";
-                factoryMethod = "mutable";
-            } else if (EMPTY_SORTED_MAP.matches(mi)) {
-                factoryClass = "SortedMaps";
-                factoryMethod = "mutable";
-            }
+			if (EMPTY_LIST.matches(mi)) {
+				factoryClass = "Lists";
+				factoryMethod = "fixedSize";
+			} else if (EMPTY_SET.matches(mi)) {
+				factoryClass = "Sets";
+				factoryMethod = "fixedSize";
+			} else if (EMPTY_MAP.matches(mi)) {
+				factoryClass = "Maps";
+				factoryMethod = "fixedSize";
+			} else if (EMPTY_SORTED_SET.matches(mi)) {
+				factoryClass = "SortedSets";
+				factoryMethod = "mutable";
+			} else if (EMPTY_SORTED_MAP.matches(mi)) {
+				factoryClass = "SortedMaps";
+				factoryMethod = "mutable";
+			}
 
-            if (factoryClass == null) {
-                return mi;
-            }
+			if (factoryClass == null) {
+				return mi;
+			}
 
-            String typeParams = this.extractTypeParameters(mi);
-            String factoryImport = "org.eclipse.collections.api.factory." + factoryClass;
-            this.maybeAddImport(factoryImport);
-            this.maybeRemoveImport("java.util.Collections");
+			String typeParams = this.extractTypeParameters(mi);
+			String factoryImport = "org.eclipse.collections.api.factory." + factoryClass;
+			this.maybeAddImport(factoryImport);
+			this.maybeRemoveImport("java.util.Collections");
 
-            String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
-            String templateSource = factoryClass + "." + factoryMethod + "." + typeParamsTemplate + "empty()";
+			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
+			String templateSource = factoryClass + "." + factoryMethod + "." + typeParamsTemplate + "empty()";
 
-            JavaTemplate template = JavaTemplate.builder(templateSource)
-                .imports(factoryImport)
-                .contextSensitive()
-                .javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api"))
-                .build();
+			JavaTemplate template = JavaTemplate.builder(templateSource)
+				.imports(factoryImport)
+				.contextSensitive()
+				.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api"))
+				.build();
 
-            return template.apply(this.getCursor(), mi.getCoordinates().replace());
-        }
+			return template.apply(this.getCursor(), mi.getCoordinates().replace());
+		}
 
-        private String extractTypeParameters(J.MethodInvocation mi) {
-            if (mi.getTypeParameters() != null && !mi.getTypeParameters().isEmpty()) {
-                return mi
-                    .getTypeParameters()
-                    .stream()
-                    .map(tp -> this.formatTypeTree(tp))
-                    .collect(Collectors.joining(", "));
-            }
-            return "";
-        }
+		private String extractTypeParameters(J.MethodInvocation mi) {
+			if (mi.getTypeParameters() != null && !mi.getTypeParameters().isEmpty()) {
+				return mi
+					.getTypeParameters()
+					.stream()
+					.map((tp) -> this.formatTypeTree(tp))
+					.collect(Collectors.joining(", "));
+			}
+			return "";
+		}
 
-        private String formatTypeTree(Object tree) {
-            if (tree instanceof J.Identifier identifier) {
-                return identifier.getSimpleName();
-            }
-            if (tree instanceof J.ParameterizedType paramType) {
-                String base = this.formatTypeTree(paramType.getClazz());
-                if (paramType.getTypeParameters() != null && !paramType.getTypeParameters().isEmpty()) {
-                    String params = paramType
-                        .getTypeParameters()
-                        .stream()
-                        .map(tp -> this.formatTypeTree(tp))
-                        .collect(Collectors.joining(", "));
-                    return base + "<" + params + ">";
-                }
-                return base;
-            }
-            return tree.toString();
-        }
-    }
+		private String formatTypeTree(Object tree) {
+			if (tree instanceof J.Identifier identifier) {
+				return identifier.getSimpleName();
+			}
+			if (tree instanceof J.ParameterizedType paramType) {
+				String base = this.formatTypeTree(paramType.getClazz());
+				if (paramType.getTypeParameters() != null && !paramType.getTypeParameters().isEmpty()) {
+					String params = paramType
+						.getTypeParameters()
+						.stream()
+						.map((tp) -> this.formatTypeTree(tp))
+						.collect(Collectors.joining(", "));
+					return base + "<" + params + ">";
+				}
+				return base;
+			}
+			return tree.toString();
+		}
+	}
 }

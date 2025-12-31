@@ -24,77 +24,77 @@ import org.eclipse.collections.impl.utility.MapIterate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Map empty checks → `MapIterate`",
-    description = "Replace manual map null and isEmpty checks with "
-    + "`MapIterate.isEmpty()` and `MapIterate.notEmpty()`."
+	name = "Map empty checks → `MapIterate`",
+	description = "Replace manual map null and isEmpty checks with "
+	+ "`MapIterate.isEmpty()` and `MapIterate.notEmpty()`."
 )
 public class MapIterateEmpty {
 
-    @RecipeDescriptor(
-        name = "`map == null || map.isEmpty()` → " + "`MapIterate.isEmpty(map)`",
-        description = "Replace manual null or empty check with " + "`MapIterate.isEmpty(map)`."
-    )
-    public static final class IsEmptyPattern<K, V> {
+	@RecipeDescriptor(
+		name = "`map == null || map.isEmpty()` → " + "`MapIterate.isEmpty(map)`",
+		description = "Replace manual null or empty check with " + "`MapIterate.isEmpty(map)`."
+	)
+	public static final class IsEmptyPattern<K, V> {
 
-        @BeforeTemplate
-        boolean before(Map<K, V> map) {
-            return map == null || map.isEmpty();
-        }
+		@BeforeTemplate
+		boolean before(Map<K, V> map) {
+			return map == null || map.isEmpty();
+		}
 
-        @AfterTemplate
-        boolean after(Map<K, V> map) {
-            return MapIterate.isEmpty(map);
-        }
-    }
+		@AfterTemplate
+		boolean after(Map<K, V> map) {
+			return MapIterate.isEmpty(map);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`map != null && !map.isEmpty()` → " + "`MapIterate.notEmpty(map)`",
-        description = "Replace manual not-null and not-empty check with " + "`MapIterate.notEmpty(map)`."
-    )
-    public static final class NotEmptyPattern<K, V> {
+	@RecipeDescriptor(
+		name = "`map != null && !map.isEmpty()` → " + "`MapIterate.notEmpty(map)`",
+		description = "Replace manual not-null and not-empty check with " + "`MapIterate.notEmpty(map)`."
+	)
+	public static final class NotEmptyPattern<K, V> {
 
-        @BeforeTemplate
-        boolean before(Map<K, V> map) {
-            return map != null && !map.isEmpty();
-        }
+		@BeforeTemplate
+		boolean before(Map<K, V> map) {
+			return map != null && !map.isEmpty();
+		}
 
-        @AfterTemplate
-        boolean after(Map<K, V> map) {
-            return MapIterate.notEmpty(map);
-        }
-    }
+		@AfterTemplate
+		boolean after(Map<K, V> map) {
+			return MapIterate.notEmpty(map);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`!MapIterate.isEmpty()` → `MapIterate.notEmpty()`",
-        description = "Converts `!MapIterate.isEmpty(map)` to `MapIterate.notEmpty(map)`."
-    )
-    public static final class NegatedMapIterateIsEmptyToNotEmpty<K, V> {
+	@RecipeDescriptor(
+		name = "`!MapIterate.isEmpty()` → `MapIterate.notEmpty()`",
+		description = "Converts `!MapIterate.isEmpty(map)` to `MapIterate.notEmpty(map)`."
+	)
+	public static final class NegatedMapIterateIsEmptyToNotEmpty<K, V> {
 
-        @BeforeTemplate
-        boolean before(Map<K, V> map) {
-            return !MapIterate.isEmpty(map);
-        }
+		@BeforeTemplate
+		boolean before(Map<K, V> map) {
+			return !MapIterate.isEmpty(map);
+		}
 
-        @AfterTemplate
-        boolean after(Map<K, V> map) {
-            return MapIterate.notEmpty(map);
-        }
-    }
+		@AfterTemplate
+		boolean after(Map<K, V> map) {
+			return MapIterate.notEmpty(map);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`!MapIterate.notEmpty()` → `MapIterate.isEmpty()`",
-        description = "Converts `!MapIterate.notEmpty(map)` to `MapIterate.isEmpty(map)`."
-    )
-    public static final class NegatedMapIterateNotEmptyToIsEmpty<K, V> {
+	@RecipeDescriptor(
+		name = "`!MapIterate.notEmpty()` → `MapIterate.isEmpty()`",
+		description = "Converts `!MapIterate.notEmpty(map)` to `MapIterate.isEmpty(map)`."
+	)
+	public static final class NegatedMapIterateNotEmptyToIsEmpty<K, V> {
 
-        @BeforeTemplate
-        boolean before(Map<K, V> map) {
-            return !MapIterate.notEmpty(map);
-        }
+		@BeforeTemplate
+		boolean before(Map<K, V> map) {
+			return !MapIterate.notEmpty(map);
+		}
 
-        @AfterTemplate
-        boolean after(Map<K, V> map) {
-            return MapIterate.isEmpty(map);
-        }
-    }
+		@AfterTemplate
+		boolean after(Map<K, V> map) {
+			return MapIterate.isEmpty(map);
+		}
+	}
 }

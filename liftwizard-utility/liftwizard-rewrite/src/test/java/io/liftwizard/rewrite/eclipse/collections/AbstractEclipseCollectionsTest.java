@@ -28,31 +28,31 @@ import static org.openrewrite.Tree.randomId;
 
 public abstract class AbstractEclipseCollectionsTest implements RewriteTest {
 
-    protected static final NamedStyles NO_STAR_IMPORT_STYLE = new NamedStyles(
-        randomId(),
-        "no-star-imports",
-        "No star imports style",
-        "Prevents OpenRewrite from collapsing imports into star imports",
-        Collections.emptySet(),
-        Collections.singletonList(
-            ImportLayoutStyle.builder()
-                .classCountToUseStarImport(9999)
-                .nameCountToUseStarImport(9999)
-                .importPackage("org.eclipse.collections.*")
-                .blankLine()
-                .importAllOthers()
-                .blankLine()
-                .importStaticAllOthers()
-                .build()
-        )
-    );
+	protected static final NamedStyles NO_STAR_IMPORT_STYLE = new NamedStyles(
+		randomId(),
+		"no-star-imports",
+		"No star imports style",
+		"Prevents OpenRewrite from collapsing imports into star imports",
+		Collections.emptySet(),
+		Collections.singletonList(
+			ImportLayoutStyle.builder()
+				.classCountToUseStarImport(9999)
+				.nameCountToUseStarImport(9999)
+				.importPackage("org.eclipse.collections.*")
+				.blankLine()
+				.importAllOthers()
+				.blankLine()
+				.importStaticAllOthers()
+				.build()
+		)
+	);
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.parser(
-            JavaParser.fromJavaVersion()
-                .classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-                .styles(Collections.singletonList(NO_STAR_IMPORT_STYLE))
-        );
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec.parser(
+			JavaParser.fromJavaVersion()
+				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
+				.styles(Collections.singletonList(NO_STAR_IMPORT_STYLE))
+		);
+	}
 }

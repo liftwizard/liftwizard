@@ -25,30 +25,30 @@ import org.eclipse.collections.impl.block.procedure.CollectionRemoveProcedure;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Replace `CollectionRemoveProcedure.on()` with method reference",
-    description = "Replace `CollectionRemoveProcedure.on(collection)` with `collection::remove` method reference."
+	name = "Replace `CollectionRemoveProcedure.on()` with method reference",
+	description = "Replace `CollectionRemoveProcedure.on(collection)` with `collection::remove` method reference."
 )
 public class CollectionRemoveProcedureOnToMethodReference {
 
-    @RecipeDescriptor(
-        name = "`CollectionRemoveProcedure.on()` → method reference",
-        description = "Replace `CollectionRemoveProcedure.on(collection)` with `collection::remove`."
-    )
-    public static class CollectionRemoveProcedureOnToMethodReferenceRecipe<T> {
+	@RecipeDescriptor(
+		name = "`CollectionRemoveProcedure.on()` → method reference",
+		description = "Replace `CollectionRemoveProcedure.on(collection)` with `collection::remove`."
+	)
+	public static class CollectionRemoveProcedureOnToMethodReferenceRecipe<T> {
 
-        @BeforeTemplate
-        Procedure<T> collectionRemoveProcedureOn(Collection<T> collection) {
-            return CollectionRemoveProcedure.on(collection);
-        }
+		@BeforeTemplate
+		Procedure<T> collectionRemoveProcedureOn(Collection<T> collection) {
+			return CollectionRemoveProcedure.on(collection);
+		}
 
-        @BeforeTemplate
-        Procedure<T> collectionRemoveProcedureConstructor(Collection<T> collection) {
-            return new CollectionRemoveProcedure<>(collection);
-        }
+		@BeforeTemplate
+		Procedure<T> collectionRemoveProcedureConstructor(Collection<T> collection) {
+			return new CollectionRemoveProcedure<>(collection);
+		}
 
-        @AfterTemplate
-        Procedure<T> methodReference(Collection<T> collection) {
-            return collection::remove;
-        }
-    }
+		@AfterTemplate
+		Procedure<T> methodReference(Collection<T> collection) {
+			return collection::remove;
+		}
+	}
 }

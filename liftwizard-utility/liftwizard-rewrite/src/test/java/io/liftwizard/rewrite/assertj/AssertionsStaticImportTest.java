@@ -26,109 +26,109 @@ import static org.openrewrite.java.Assertions.java;
 
 class AssertionsStaticImportTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.recipe(new AssertionsStaticImport()).parser(JavaParser.fromJavaVersion().classpath("assertj-core"));
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		spec.recipe(new AssertionsStaticImport()).parser(JavaParser.fromJavaVersion().classpath("assertj-core"));
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.assertj.core.api.Assertions;
-                    import java.util.List;
-                    import java.util.ArrayList;
-                    import java.util.Map;
-                    import java.util.HashMap;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.assertj.core.api.Assertions;
+					import java.util.List;
+					import java.util.ArrayList;
+					import java.util.Map;
+					import java.util.HashMap;
 
-                    class Test {
-                        void test() {
-                            List<String> list = new ArrayList<>();
-                            Assertions.assertThat(list).isEmpty();
-                            Assertions.assertThat(list).isNotEmpty();
-                            Assertions.assertThat(list).hasSize(0);
-                            Assertions.assertThat("text").isEqualTo("text");
-                            Assertions.assertThat(42).isGreaterThan(0);
-                            Assertions.assertThat(true).isTrue();
+					class Test {
+					    void test() {
+					        List<String> list = new ArrayList<>();
+					        Assertions.assertThat(list).isEmpty();
+					        Assertions.assertThat(list).isNotEmpty();
+					        Assertions.assertThat(list).hasSize(0);
+					        Assertions.assertThat("text").isEqualTo("text");
+					        Assertions.assertThat(42).isGreaterThan(0);
+					        Assertions.assertThat(true).isTrue();
 
-                            Assertions.assertThatThrownBy(() -> {
-                                throw new IllegalArgumentException("error");
-                            }).isInstanceOf(IllegalArgumentException.class);
+					        Assertions.assertThatThrownBy(() -> {
+					            throw new IllegalArgumentException("error");
+					        }).isInstanceOf(IllegalArgumentException.class);
 
-                            Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                                .isThrownBy(() -> {
-                                    throw new IllegalArgumentException("error");
-                                });
+					        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+					            .isThrownBy(() -> {
+					                throw new IllegalArgumentException("error");
+					            });
 
-                            Map<String, String> map = new HashMap<>();
-                            Assertions.assertThat(map).containsKey("key");
+					        Map<String, String> map = new HashMap<>();
+					        Assertions.assertThat(map).containsKey("key");
 
-                            Assertions.fail("Should not reach here");
+					        Assertions.fail("Should not reach here");
 
-                            Assertions.useDefaultDateFormatsOnly();
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.List;
-                    import java.util.ArrayList;
-                    import java.util.Map;
-                    import java.util.HashMap;
+					        Assertions.useDefaultDateFormatsOnly();
+					    }
+					}
+					""",
+					"""
+					import java.util.List;
+					import java.util.ArrayList;
+					import java.util.Map;
+					import java.util.HashMap;
 
-                    import static org.assertj.core.api.Assertions.*;
+					import static org.assertj.core.api.Assertions.*;
 
-                    class Test {
-                        void test() {
-                            List<String> list = new ArrayList<>();
-                            assertThat(list).isEmpty();
-                            assertThat(list).isNotEmpty();
-                            assertThat(list).hasSize(0);
-                            assertThat("text").isEqualTo("text");
-                            assertThat(42).isGreaterThan(0);
-                            assertThat(true).isTrue();
+					class Test {
+					    void test() {
+					        List<String> list = new ArrayList<>();
+					        assertThat(list).isEmpty();
+					        assertThat(list).isNotEmpty();
+					        assertThat(list).hasSize(0);
+					        assertThat("text").isEqualTo("text");
+					        assertThat(42).isGreaterThan(0);
+					        assertThat(true).isTrue();
 
-                            assertThatThrownBy(() -> {
-                                throw new IllegalArgumentException("error");
-                            }).isInstanceOf(IllegalArgumentException.class);
+					        assertThatThrownBy(() -> {
+					            throw new IllegalArgumentException("error");
+					        }).isInstanceOf(IllegalArgumentException.class);
 
-                            assertThatExceptionOfType(IllegalArgumentException.class)
-                                .isThrownBy(() -> {
-                                    throw new IllegalArgumentException("error");
-                                });
+					        assertThatExceptionOfType(IllegalArgumentException.class)
+					            .isThrownBy(() -> {
+					                throw new IllegalArgumentException("error");
+					            });
 
-                            Map<String, String> map = new HashMap<>();
-                            assertThat(map).containsKey("key");
+					        Map<String, String> map = new HashMap<>();
+					        assertThat(map).containsKey("key");
 
-                            fail("Should not reach here");
+					        fail("Should not reach here");
 
-                            useDefaultDateFormatsOnly();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        useDefaultDateFormatsOnly();
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.List;
-                    import java.util.ArrayList;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.List;
+					import java.util.ArrayList;
 
-                    import static org.assertj.core.api.Assertions.assertThat;
+					import static org.assertj.core.api.Assertions.assertThat;
 
-                    class Test {
-                        void test() {
-                            List<String> list = new ArrayList<>();
-                            assertThat(list).isEmpty();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test() {
+					        List<String> list = new ArrayList<>();
+					        assertThat(list).isEmpty();
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

@@ -25,109 +25,109 @@ import static org.openrewrite.java.Assertions.java;
 
 class MapIterateEmptyTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new MapIterateEmptyRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new MapIterateEmptyRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.Map;
-                    import org.eclipse.collections.impl.utility.MapIterate;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Map;
+					import org.eclipse.collections.impl.utility.MapIterate;
 
-                    class Test {
-                        boolean testIsEmpty(Map<String, Integer> map) {
-                            return map == null || map.isEmpty();
-                        }
+					class Test {
+					    boolean testIsEmpty(Map<String, Integer> map) {
+					        return map == null || map.isEmpty();
+					    }
 
-                        boolean testNotEmpty(Map<String, Integer> map) {
-                            return map != null && !map.isEmpty();
-                        }
+					    boolean testNotEmpty(Map<String, Integer> map) {
+					        return map != null && !map.isEmpty();
+					    }
 
-                        boolean testNegatedMapIterateIsEmpty(Map<String, Integer> map) {
-                            return !MapIterate.isEmpty(map);
-                        }
+					    boolean testNegatedMapIterateIsEmpty(Map<String, Integer> map) {
+					        return !MapIterate.isEmpty(map);
+					    }
 
-                        boolean testNegatedMapIterateNotEmpty(Map<String, Integer> map) {
-                            return !MapIterate.notEmpty(map);
-                        }
+					    boolean testNegatedMapIterateNotEmpty(Map<String, Integer> map) {
+					        return !MapIterate.notEmpty(map);
+					    }
 
-                        void testMultiple(Map<String, Integer> map1, Map<String, Object> map2) {
-                            if (map1 == null || map1.isEmpty()) {
-                            }
+					    void testMultiple(Map<String, Integer> map1, Map<String, Object> map2) {
+					        if (map1 == null || map1.isEmpty()) {
+					        }
 
-                            if (map2 != null && !map2.isEmpty()) {
-                            }
+					        if (map2 != null && !map2.isEmpty()) {
+					        }
 
-                            if (!MapIterate.isEmpty(map1)) {
-                            }
+					        if (!MapIterate.isEmpty(map1)) {
+					        }
 
-                            if (!MapIterate.notEmpty(map2)) {
-                            }
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.Map;
-                    import org.eclipse.collections.impl.utility.MapIterate;
+					        if (!MapIterate.notEmpty(map2)) {
+					        }
+					    }
+					}
+					""",
+					"""
+					import java.util.Map;
+					import org.eclipse.collections.impl.utility.MapIterate;
 
-                    class Test {
-                        boolean testIsEmpty(Map<String, Integer> map) {
-                            return MapIterate.isEmpty(map);
-                        }
+					class Test {
+					    boolean testIsEmpty(Map<String, Integer> map) {
+					        return MapIterate.isEmpty(map);
+					    }
 
-                        boolean testNotEmpty(Map<String, Integer> map) {
-                            return MapIterate.notEmpty(map);
-                        }
+					    boolean testNotEmpty(Map<String, Integer> map) {
+					        return MapIterate.notEmpty(map);
+					    }
 
-                        boolean testNegatedMapIterateIsEmpty(Map<String, Integer> map) {
-                            return MapIterate.notEmpty(map);
-                        }
+					    boolean testNegatedMapIterateIsEmpty(Map<String, Integer> map) {
+					        return MapIterate.notEmpty(map);
+					    }
 
-                        boolean testNegatedMapIterateNotEmpty(Map<String, Integer> map) {
-                            return MapIterate.isEmpty(map);
-                        }
+					    boolean testNegatedMapIterateNotEmpty(Map<String, Integer> map) {
+					        return MapIterate.isEmpty(map);
+					    }
 
-                        void testMultiple(Map<String, Integer> map1, Map<String, Object> map2) {
-                            if (MapIterate.isEmpty(map1)) {
-                            }
+					    void testMultiple(Map<String, Integer> map1, Map<String, Object> map2) {
+					        if (MapIterate.isEmpty(map1)) {
+					        }
 
-                            if (MapIterate.notEmpty(map2)) {
-                            }
+					        if (MapIterate.notEmpty(map2)) {
+					        }
 
-                            if (MapIterate.notEmpty(map1)) {
-                            }
+					        if (MapIterate.notEmpty(map1)) {
+					        }
 
-                            if (MapIterate.isEmpty(map2)) {
-                            }
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        if (MapIterate.isEmpty(map2)) {
+					        }
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.Map;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Map;
 
-                    class Test {
-                        void test(Map<String, Integer> map) {
-                            boolean simpleNullCheck = map == null;
-                            boolean simpleIsEmptyCheck = map.isEmpty();
-                            boolean wrongOperator = map != null || !map.isEmpty();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test(Map<String, Integer> map) {
+					        boolean simpleNullCheck = map == null;
+					        boolean simpleIsEmptyCheck = map.isEmpty();
+					        boolean wrongOperator = map != null || !map.isEmpty();
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

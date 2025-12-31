@@ -26,110 +26,110 @@ import org.openrewrite.java.template.RecipeDescriptor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RecipeDescriptor(
-    name = "Replace `Verify.assertSize()` with AssertJ",
-    description = "Replace Eclipse Collections `Verify.assertSize()` with AssertJ `assertThat().hasSize()`."
+	name = "Replace `Verify.assertSize()` with AssertJ",
+	description = "Replace Eclipse Collections `Verify.assertSize()` with AssertJ `assertThat().hasSize()`."
 )
 public class VerifyAssertSizeToAssertJ {
 
-    @RecipeDescriptor(
-        name = "`Verify.assertSize(message, expectedSize, iterable)` → `assertThat(iterable).as(message).hasSize(expectedSize)`",
-        description = "Replace `Verify.assertSize(message, expectedSize, iterable)` with `assertThat(iterable).as(message).hasSize(expectedSize)`."
-    )
-    public static class VerifyAssertSizeIterableWithMessage {
+	@RecipeDescriptor(
+		name = "`Verify.assertSize(message, expectedSize, iterable)` → `assertThat(iterable).as(message).hasSize(expectedSize)`",
+		description = "Replace `Verify.assertSize(message, expectedSize, iterable)` with `assertThat(iterable).as(message).hasSize(expectedSize)`."
+	)
+	public static class VerifyAssertSizeIterableWithMessage {
 
-        @BeforeTemplate
-        void before(String message, int expectedSize, Iterable<?> iterable) {
-            Verify.assertSize(message, expectedSize, iterable);
-        }
+		@BeforeTemplate
+		void before(String message, int expectedSize, Iterable<?> iterable) {
+			Verify.assertSize(message, expectedSize, iterable);
+		}
 
-        @AfterTemplate
-        void after(String message, int expectedSize, Iterable<?> iterable) {
-            assertThat(iterable).as(message).hasSize(expectedSize);
-        }
-    }
+		@AfterTemplate
+		void after(String message, int expectedSize, Iterable<?> iterable) {
+			assertThat(iterable).as(message).hasSize(expectedSize);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertSize(expectedSize, iterable)` → `assertThat(iterable).hasSize(expectedSize)`",
-        description = "Replace `Verify.assertSize(expectedSize, iterable)` with `assertThat(iterable).hasSize(expectedSize)`."
-    )
-    public static class VerifyAssertSizeIterable {
+	@RecipeDescriptor(
+		name = "`Verify.assertSize(expectedSize, iterable)` → `assertThat(iterable).hasSize(expectedSize)`",
+		description = "Replace `Verify.assertSize(expectedSize, iterable)` with `assertThat(iterable).hasSize(expectedSize)`."
+	)
+	public static class VerifyAssertSizeIterable {
 
-        @BeforeTemplate
-        void before(int expectedSize, Iterable<?> iterable) {
-            Verify.assertSize(expectedSize, iterable);
-        }
+		@BeforeTemplate
+		void before(int expectedSize, Iterable<?> iterable) {
+			Verify.assertSize(expectedSize, iterable);
+		}
 
-        @AfterTemplate
-        void after(int expectedSize, Iterable<?> iterable) {
-            assertThat(iterable).hasSize(expectedSize);
-        }
-    }
+		@AfterTemplate
+		void after(int expectedSize, Iterable<?> iterable) {
+			assertThat(iterable).hasSize(expectedSize);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertSize(arrayName, expectedSize, array)` → `assertThat(array).as(arrayName).hasSize(expectedSize)`",
-        description = "Replace `Verify.assertSize(arrayName, expectedSize, array)` with `assertThat(array).as(arrayName).hasSize(expectedSize)`."
-    )
-    public static class VerifyAssertSizeArrayWithMessage {
+	@RecipeDescriptor(
+		name = "`Verify.assertSize(arrayName, expectedSize, array)` → `assertThat(array).as(arrayName).hasSize(expectedSize)`",
+		description = "Replace `Verify.assertSize(arrayName, expectedSize, array)` with `assertThat(array).as(arrayName).hasSize(expectedSize)`."
+	)
+	public static class VerifyAssertSizeArrayWithMessage {
 
-        @BeforeTemplate
-        void before(String arrayName, int expectedSize, Object[] array) {
-            Verify.assertSize(arrayName, expectedSize, array);
-        }
+		@BeforeTemplate
+		void before(String arrayName, int expectedSize, Object[] array) {
+			Verify.assertSize(arrayName, expectedSize, array);
+		}
 
-        @AfterTemplate
-        void after(String arrayName, int expectedSize, Object[] array) {
-            assertThat(array).as(arrayName).hasSize(expectedSize);
-        }
-    }
+		@AfterTemplate
+		void after(String arrayName, int expectedSize, Object[] array) {
+			assertThat(array).as(arrayName).hasSize(expectedSize);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertSize(expectedSize, array)` → `assertThat(array).hasSize(expectedSize)`",
-        description = "Replace `Verify.assertSize(expectedSize, array)` with `assertThat(array).hasSize(expectedSize)`."
-    )
-    public static class VerifyAssertSizeArray {
+	@RecipeDescriptor(
+		name = "`Verify.assertSize(expectedSize, array)` → `assertThat(array).hasSize(expectedSize)`",
+		description = "Replace `Verify.assertSize(expectedSize, array)` with `assertThat(array).hasSize(expectedSize)`."
+	)
+	public static class VerifyAssertSizeArray {
 
-        @BeforeTemplate
-        void before(int expectedSize, Object[] array) {
-            Verify.assertSize(expectedSize, array);
-        }
+		@BeforeTemplate
+		void before(int expectedSize, Object[] array) {
+			Verify.assertSize(expectedSize, array);
+		}
 
-        @AfterTemplate
-        void after(int expectedSize, Object[] array) {
-            assertThat(array).hasSize(expectedSize);
-        }
-    }
+		@AfterTemplate
+		void after(int expectedSize, Object[] array) {
+			assertThat(array).hasSize(expectedSize);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertSize(mapName, expectedSize, map)` → `assertThat(map).as(mapName).hasSize(expectedSize)`",
-        description = "Replace `Verify.assertSize(mapName, expectedSize, map)` with `assertThat(map).as(mapName).hasSize(expectedSize)`."
-    )
-    public static class VerifyAssertSizeMapWithMessage {
+	@RecipeDescriptor(
+		name = "`Verify.assertSize(mapName, expectedSize, map)` → `assertThat(map).as(mapName).hasSize(expectedSize)`",
+		description = "Replace `Verify.assertSize(mapName, expectedSize, map)` with `assertThat(map).as(mapName).hasSize(expectedSize)`."
+	)
+	public static class VerifyAssertSizeMapWithMessage {
 
-        @BeforeTemplate
-        void before(String mapName, int expectedSize, Map<?, ?> map) {
-            Verify.assertSize(mapName, expectedSize, map);
-        }
+		@BeforeTemplate
+		void before(String mapName, int expectedSize, Map<?, ?> map) {
+			Verify.assertSize(mapName, expectedSize, map);
+		}
 
-        @AfterTemplate
-        void after(String mapName, int expectedSize, Map<?, ?> map) {
-            assertThat(map).as(mapName).hasSize(expectedSize);
-        }
-    }
+		@AfterTemplate
+		void after(String mapName, int expectedSize, Map<?, ?> map) {
+			assertThat(map).as(mapName).hasSize(expectedSize);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertSize(expectedSize, map)` → `assertThat(map).hasSize(expectedSize)`",
-        description = "Replace `Verify.assertSize(expectedSize, map)` with `assertThat(map).hasSize(expectedSize)`."
-    )
-    public static class VerifyAssertSizeMap {
+	@RecipeDescriptor(
+		name = "`Verify.assertSize(expectedSize, map)` → `assertThat(map).hasSize(expectedSize)`",
+		description = "Replace `Verify.assertSize(expectedSize, map)` with `assertThat(map).hasSize(expectedSize)`."
+	)
+	public static class VerifyAssertSizeMap {
 
-        @BeforeTemplate
-        void before(int expectedSize, Map<?, ?> map) {
-            Verify.assertSize(expectedSize, map);
-        }
+		@BeforeTemplate
+		void before(int expectedSize, Map<?, ?> map) {
+			Verify.assertSize(expectedSize, map);
+		}
 
-        @AfterTemplate
-        void after(int expectedSize, Map<?, ?> map) {
-            assertThat(map).hasSize(expectedSize);
-        }
-    }
+		@AfterTemplate
+		void after(int expectedSize, Map<?, ?> map) {
+			assertThat(map).hasSize(expectedSize);
+		}
+	}
 }

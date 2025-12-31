@@ -18,7 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class JCFListToMutableList extends AbstractJCFTypeToMutableTypeRecipe {
 
-    public JCFListToMutableList() {
-        super("java.util.List", "org.eclipse.collections.api.list", "MutableList");
-    }
+	public JCFListToMutableList() {
+		super("java.util.List", "org.eclipse.collections.api.list", "MutableList");
+	}
 }

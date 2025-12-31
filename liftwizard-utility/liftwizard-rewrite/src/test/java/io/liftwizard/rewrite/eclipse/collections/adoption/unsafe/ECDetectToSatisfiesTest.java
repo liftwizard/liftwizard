@@ -25,62 +25,62 @@ import static org.openrewrite.java.Assertions.java;
 
 class ECDetectToSatisfiesTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new ECDetectToSatisfiesRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new ECDetectToSatisfiesRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        void testMultiplePatterns(MutableList<String> list) {
-                            boolean detectNotNull = list.detect(s -> s.length() > 5) != null;
-                            boolean detectEqualsNull = list.detect(s -> s.length() > 5) == null;
-                            boolean nullNotEqualsDetect = null != list.detect(s -> s.length() > 5);
-                            boolean nullEqualsDetect = null == list.detect(s -> s.length() > 5);
-                        }
-                    }""",
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+					class Test {
+					    void testMultiplePatterns(MutableList<String> list) {
+					        boolean detectNotNull = list.detect(s -> s.length() > 5) != null;
+					        boolean detectEqualsNull = list.detect(s -> s.length() > 5) == null;
+					        boolean nullNotEqualsDetect = null != list.detect(s -> s.length() > 5);
+					        boolean nullEqualsDetect = null == list.detect(s -> s.length() > 5);
+					    }
+					}""",
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        void testMultiplePatterns(MutableList<String> list) {
-                            boolean detectNotNull = list.anySatisfy(s -> s.length() > 5);
-                            boolean detectEqualsNull = list.noneSatisfy(s -> s.length() > 5);
-                            boolean nullNotEqualsDetect = list.anySatisfy(s -> s.length() > 5);
-                            boolean nullEqualsDetect = list.noneSatisfy(s -> s.length() > 5);
-                        }
-                    }"""
-                )
-            );
-    }
+					class Test {
+					    void testMultiplePatterns(MutableList<String> list) {
+					        boolean detectNotNull = list.anySatisfy(s -> s.length() > 5);
+					        boolean detectEqualsNull = list.noneSatisfy(s -> s.length() > 5);
+					        boolean nullNotEqualsDetect = list.anySatisfy(s -> s.length() > 5);
+					        boolean nullEqualsDetect = list.noneSatisfy(s -> s.length() > 5);
+					    }
+					}"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
-                    import org.eclipse.collections.api.list.primitive.IntList;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.list.primitive.IntList;
 
-                    class Test {
-                        String testOtherDetectCalls(MutableList<String> list) {
-                            String result = list.detect(s -> s.length() > 5);
-                            return result != null ? result : "default";
-                        }
+					class Test {
+					    String testOtherDetectCalls(MutableList<String> list) {
+					        String result = list.detect(s -> s.length() > 5);
+					        return result != null ? result : "default";
+					    }
 
-                        boolean testPrimitiveLists(IntList list) {
-                            return list.detectIfNone(i -> i > 5, -1) != -1;
-                        }
-                    }"""
-                )
-            );
-    }
+					    boolean testPrimitiveLists(IntList list) {
+					        return list.detectIfNone(i -> i > 5, -1) != -1;
+					    }
+					}"""
+				)
+			);
+	}
 }
