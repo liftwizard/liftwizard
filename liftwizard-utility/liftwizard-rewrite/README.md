@@ -23,7 +23,7 @@ Add the rewrite-maven-plugin with the liftwizard-rewrite dependency:
 
 ```xml
 <properties>
-    <liftwizard.version>2.1.37</liftwizard.version>
+    <liftwizard.version>2.1.38</liftwizard.version>
     <rewrite-maven-plugin.version>6.25.0</rewrite-maven-plugin.version>
 </properties>
 
