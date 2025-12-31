@@ -55,14 +55,14 @@ class JsonPrettyPrinterTest {
 		// language=JSON
 		String expectedJson = """
 			{
-			  "a": [
-			    "b",
-			    "c"
-			  ],
-			  "d": [
-			    "e",
-			    "f"
-			  ]
+				"a": [
+					"b",
+					"c"
+				],
+				"d": [
+					"e",
+					"f"
+				]
 			}
 			""";
 

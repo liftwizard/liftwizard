@@ -26,8 +26,11 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
 public class JsonPrettyPrinter extends DefaultPrettyPrinter {
 
+	private static final DefaultIndenter TAB_INDENTER = new DefaultIndenter("\t", DefaultIndenter.SYS_LF);
+
 	public JsonPrettyPrinter() {
-		this._arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
+		this._arrayIndenter = TAB_INDENTER;
+		this._objectIndenter = TAB_INDENTER;
 	}
 
 	@Nonnull
