@@ -215,6 +215,38 @@
         </profile>
         <!-- /profile:rewrite-maven-plugin-one-off -->
 
+        <!-- profile:rewrite-maven-plugin-experimental -->
+        <profile>
+            <!--Experimental recipes that are more aggressive and may require manual review.-->
+            <id>rewrite-maven-plugin-experimental</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.openrewrite.maven</groupId>
+                            <artifactId>rewrite-maven-plugin</artifactId>
+                            <configuration>
+                                <exclusions>
+                                    <exclusion>**/liftwizard-utility/liftwizard-rewrite/**</exclusion>
+                                </exclusions>
+                                <activeRecipes>
+                                    <recipe>io.liftwizard.rewrite.eclipse.collections.ECExperimentalRecipes</recipe>
+                                </activeRecipes>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>io.liftwizard</groupId>
+                                    <artifactId>liftwizard-rewrite</artifactId>
+                                    <version>2.1.39-SNAPSHOT</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <!-- /profile:rewrite-maven-plugin-experimental -->
+
         <!-- profile:rewrite-maven-plugin-dryRun -->
         <profile>
             <id>rewrite-maven-plugin-dryRun</id>
