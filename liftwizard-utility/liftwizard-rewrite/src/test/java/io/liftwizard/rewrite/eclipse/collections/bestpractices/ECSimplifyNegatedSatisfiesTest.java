@@ -25,119 +25,119 @@ import static org.openrewrite.java.Assertions.java;
 
 class ECSimplifyNegatedSatisfiesTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new ECSimplifyNegatedSatisfiesRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new ECSimplifyNegatedSatisfiesRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        void test(MutableList<String> list) {
-                            boolean negatedNoneSatisfy = !list.noneSatisfy(s -> s.length() > 5);
-                            boolean negatedAnySatisfy = !list.anySatisfy(s -> s.length() > 5);
-                            boolean negatedNoneSatisfyMethodRef = !list.noneSatisfy(String::isEmpty);
-                            boolean negatedAnySatisfyMethodRef = !list.anySatisfy(String::isEmpty);
+					class Test {
+					    void test(MutableList<String> list) {
+					        boolean negatedNoneSatisfy = !list.noneSatisfy(s -> s.length() > 5);
+					        boolean negatedAnySatisfy = !list.anySatisfy(s -> s.length() > 5);
+					        boolean negatedNoneSatisfyMethodRef = !list.noneSatisfy(String::isEmpty);
+					        boolean negatedAnySatisfyMethodRef = !list.anySatisfy(String::isEmpty);
 
-                            if (!list.noneSatisfy(s -> s.isEmpty())) {
-                                this.doWork();
-                            }
+					        if (!list.noneSatisfy(s -> s.isEmpty())) {
+					            this.doWork();
+					        }
 
-                            if (!list.anySatisfy(s -> s.startsWith("a"))) {
-                                this.doWork();
-                            }
-                        }
+					        if (!list.anySatisfy(s -> s.startsWith("a"))) {
+					            this.doWork();
+					        }
+					    }
 
-                        void doWork() {}
-                    }
-                    """,
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+					    void doWork() {}
+					}
+					""",
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        void test(MutableList<String> list) {
-                            boolean negatedNoneSatisfy = list.anySatisfy(s -> s.length() > 5);
-                            boolean negatedAnySatisfy = list.noneSatisfy(s -> s.length() > 5);
-                            boolean negatedNoneSatisfyMethodRef = list.anySatisfy(String::isEmpty);
-                            boolean negatedAnySatisfyMethodRef = list.noneSatisfy(String::isEmpty);
+					class Test {
+					    void test(MutableList<String> list) {
+					        boolean negatedNoneSatisfy = list.anySatisfy(s -> s.length() > 5);
+					        boolean negatedAnySatisfy = list.noneSatisfy(s -> s.length() > 5);
+					        boolean negatedNoneSatisfyMethodRef = list.anySatisfy(String::isEmpty);
+					        boolean negatedAnySatisfyMethodRef = list.noneSatisfy(String::isEmpty);
 
-                            if (list.anySatisfy(s -> s.isEmpty())) {
-                                this.doWork();
-                            }
+					        if (list.anySatisfy(s -> s.isEmpty())) {
+					            this.doWork();
+					        }
 
-                            if (list.noneSatisfy(s -> s.startsWith("a"))) {
-                                this.doWork();
-                            }
-                        }
+					        if (list.noneSatisfy(s -> s.startsWith("a"))) {
+					            this.doWork();
+					        }
+					    }
 
-                        void doWork() {}
-                    }
-                    """
-                )
-            );
-    }
+					    void doWork() {}
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.RichIterable;
-                    import org.eclipse.collections.api.list.MutableList;
-                    import java.util.function.Predicate;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.RichIterable;
+					import org.eclipse.collections.api.list.MutableList;
+					import java.util.function.Predicate;
 
-                    class Test {
-                        void nonNegatedCalls(MutableList<String> list) {
-                            boolean nonNegatedAnySatisfy = list.anySatisfy(s -> s.length() > 5);
-                            boolean nonNegatedNoneSatisfy = list.noneSatisfy(s -> s.isEmpty());
-                            boolean combined = list.anySatisfy(s -> s.length() > 5) || list.noneSatisfy(s -> s.isEmpty());
-                        }
+					class Test {
+					    void nonNegatedCalls(MutableList<String> list) {
+					        boolean nonNegatedAnySatisfy = list.anySatisfy(s -> s.length() > 5);
+					        boolean nonNegatedNoneSatisfy = list.noneSatisfy(s -> s.isEmpty());
+					        boolean combined = list.anySatisfy(s -> s.length() > 5) || list.noneSatisfy(s -> s.isEmpty());
+					    }
 
-                        class NoneSatisfyImplementation implements RichIterable<String> {
-                            @Override
-                            public boolean noneSatisfy(Predicate<? super String> predicate) {
-                                return !this.anySatisfy(predicate);
-                            }
+					    class NoneSatisfyImplementation implements RichIterable<String> {
+					        @Override
+					        public boolean noneSatisfy(Predicate<? super String> predicate) {
+					            return !this.anySatisfy(predicate);
+					        }
 
-                            @Override
-                            public boolean anySatisfy(Predicate<? super String> predicate) {
-                                return false;
-                            }
-                        }
+					        @Override
+					        public boolean anySatisfy(Predicate<? super String> predicate) {
+					            return false;
+					        }
+					    }
 
-                        class AnySatisfyImplementation implements RichIterable<String> {
-                            @Override
-                            public boolean anySatisfy(Predicate<? super String> predicate) {
-                                return !this.noneSatisfy(predicate);
-                            }
+					    class AnySatisfyImplementation implements RichIterable<String> {
+					        @Override
+					        public boolean anySatisfy(Predicate<? super String> predicate) {
+					            return !this.noneSatisfy(predicate);
+					        }
 
-                            @Override
-                            public boolean noneSatisfy(Predicate<? super String> predicate) {
-                                return true;
-                            }
-                        }
+					        @Override
+					        public boolean noneSatisfy(Predicate<? super String> predicate) {
+					            return true;
+					        }
+					    }
 
-                        class CircularImplementation implements RichIterable<String> {
-                            @Override
-                            public boolean noneSatisfy(Predicate<? super String> predicate) {
-                                return !this.anySatisfy(predicate);
-                            }
+					    class CircularImplementation implements RichIterable<String> {
+					        @Override
+					        public boolean noneSatisfy(Predicate<? super String> predicate) {
+					            return !this.anySatisfy(predicate);
+					        }
 
-                            @Override
-                            public boolean anySatisfy(Predicate<? super String> predicate) {
-                                return !this.noneSatisfy(predicate);
-                            }
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        @Override
+					        public boolean anySatisfy(Predicate<? super String> predicate) {
+					            return !this.noneSatisfy(predicate);
+					        }
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class ECSortedSetConstructorToFactory extends AbstractECConstructorToFactoryRecipe {
 
-    public ECSortedSetConstructorToFactory() {
-        super("TreeSortedSet", "set.sorted", "SortedSets", "", "mutable");
-    }
+	public ECSortedSetConstructorToFactory() {
+		super("TreeSortedSet", "set.sorted", "SortedSets", "", "mutable");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new TreeSortedSet<>()` → `SortedSets.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new TreeSortedSet<>()` → `SortedSets.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new TreeSortedSet()` constructor calls with `SortedSets.mutable.empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new TreeSortedSet()` constructor calls with `SortedSets.mutable.empty()`.";
+	}
 }

@@ -23,67 +23,67 @@ import com.google.errorprone.refaster.annotation.BeforeTemplate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Null-safe equality checks → `Objects.equals()`",
-    description = "Replace complex null-safe equality checks with `Objects.equals()`."
+	name = "Null-safe equality checks → `Objects.equals()`",
+	description = "Replace complex null-safe equality checks with `Objects.equals()`."
 )
 public class NullSafeEquals {
 
-    @RecipeDescriptor(
-        name = "Null-safe not-equals patterns → `!Objects.equals(left, right)`",
-        description = "Replace null-safe not-equals patterns with `!Objects.equals(left, right)`."
-    )
-    public static class NotEqualsPatterns<T> {
+	@RecipeDescriptor(
+		name = "Null-safe not-equals patterns → `!Objects.equals(left, right)`",
+		description = "Replace null-safe not-equals patterns with `!Objects.equals(left, right)`."
+	)
+	public static class NotEqualsPatterns<T> {
 
-        @BeforeTemplate
-        boolean pattern1(T left, T right) {
-            return left == null ? right != null : !left.equals(right);
-        }
+		@BeforeTemplate
+		boolean pattern1(T left, T right) {
+			return left == null ? right != null : !left.equals(right);
+		}
 
-        @BeforeTemplate
-        boolean pattern2(T left, T right) {
-            return right == null ? left != null : !right.equals(left);
-        }
+		@BeforeTemplate
+		boolean pattern2(T left, T right) {
+			return right == null ? left != null : !right.equals(left);
+		}
 
-        @AfterTemplate
-        boolean after(T left, T right) {
-            return !Objects.equals(left, right);
-        }
-    }
+		@AfterTemplate
+		boolean after(T left, T right) {
+			return !Objects.equals(left, right);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "Null-safe equality patterns → `Objects.equals(left, right)`",
-        description = "Replace null-safe equality patterns with `Objects.equals(left, right)`."
-    )
-    public static class EqualsPatterns<T> {
+	@RecipeDescriptor(
+		name = "Null-safe equality patterns → `Objects.equals(left, right)`",
+		description = "Replace null-safe equality patterns with `Objects.equals(left, right)`."
+	)
+	public static class EqualsPatterns<T> {
 
-        @BeforeTemplate
-        boolean pattern2(T left, T right) {
-            return left == null ? right == null : left.equals(right);
-        }
+		@BeforeTemplate
+		boolean pattern2(T left, T right) {
+			return left == null ? right == null : left.equals(right);
+		}
 
-        @BeforeTemplate
-        boolean pattern3(T left, T right) {
-            return left == null ? right == null : left == right || left.equals(right);
-        }
+		@BeforeTemplate
+		boolean pattern3(T left, T right) {
+			return left == null ? right == null : left == right || left.equals(right);
+		}
 
-        @BeforeTemplate
-        boolean pattern4(T left, T right) {
-            return left == right || (left != null && left.equals(right));
-        }
+		@BeforeTemplate
+		boolean pattern4(T left, T right) {
+			return left == right || (left != null && left.equals(right));
+		}
 
-        @BeforeTemplate
-        boolean pattern5(T left, T right) {
-            return right == left || (left != null && left.equals(right));
-        }
+		@BeforeTemplate
+		boolean pattern5(T left, T right) {
+			return right == left || (left != null && left.equals(right));
+		}
 
-        @BeforeTemplate
-        boolean pattern6(T left, T right) {
-            return left == null || right == null ? left == right : left.equals(right);
-        }
+		@BeforeTemplate
+		boolean pattern6(T left, T right) {
+			return left == null || right == null ? left == right : left.equals(right);
+		}
 
-        @AfterTemplate
-        boolean after(T left, T right) {
-            return Objects.equals(left, right);
-        }
-    }
+		@AfterTemplate
+		boolean after(T left, T right) {
+			return Objects.equals(left, right);
+		}
+	}
 }

@@ -26,91 +26,91 @@ import static org.openrewrite.java.Assertions.java;
 
 class CollectionAddProcedureOnToMethodReferenceTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec
-            .recipe(new CollectionAddProcedureOnToMethodReferenceRecipes())
-            .typeValidationOptions(TypeValidation.none());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec
+			.recipe(new CollectionAddProcedureOnToMethodReferenceRecipes())
+			.typeValidationOptions(TypeValidation.none());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
-                    import org.eclipse.collections.api.block.procedure.Procedure;
-                    import java.util.List;
-                    import java.util.ArrayList;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
+					import org.eclipse.collections.api.block.procedure.Procedure;
+					import java.util.List;
+					import java.util.ArrayList;
 
-                    class Test {
-                        void test() {
-                            List<String> list1 = new ArrayList<>();
-                            list1.forEach(CollectionAddProcedure.on(list1));
+					class Test {
+					    void test() {
+					        List<String> list1 = new ArrayList<>();
+					        list1.forEach(CollectionAddProcedure.on(list1));
 
-                            List<String> list2 = new ArrayList<>();
-                            var procedure = CollectionAddProcedure.on(list2);
-                            list2.forEach(procedure);
+					        List<String> list2 = new ArrayList<>();
+					        var procedure = CollectionAddProcedure.on(list2);
+					        list2.forEach(procedure);
 
-                            List<String> list3 = new ArrayList<>();
-                            Procedure<String> addProcedure1 = new CollectionAddProcedure<String>(list3);
+					        List<String> list3 = new ArrayList<>();
+					        Procedure<String> addProcedure1 = new CollectionAddProcedure<String>(list3);
 
-                            List<String> list4 = new ArrayList<>();
-                            Procedure<String> addProcedure2 = new CollectionAddProcedure<>(list4);
+					        List<String> list4 = new ArrayList<>();
+					        Procedure<String> addProcedure2 = new CollectionAddProcedure<>(list4);
 
-                            List<String> list5 = new ArrayList<>();
-                            list5.forEach(new CollectionAddProcedure<>(list5));
-                        }
-                    }
-                    """,
-                    """
-                    import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
-                    import org.eclipse.collections.api.block.procedure.Procedure;
-                    import java.util.List;
-                    import java.util.ArrayList;
+					        List<String> list5 = new ArrayList<>();
+					        list5.forEach(new CollectionAddProcedure<>(list5));
+					    }
+					}
+					""",
+					"""
+					import org.eclipse.collections.impl.block.procedure.CollectionAddProcedure;
+					import org.eclipse.collections.api.block.procedure.Procedure;
+					import java.util.List;
+					import java.util.ArrayList;
 
-                    class Test {
-                        void test() {
-                            List<String> list1 = new ArrayList<>();
-                            list1.forEach(list1::add);
+					class Test {
+					    void test() {
+					        List<String> list1 = new ArrayList<>();
+					        list1.forEach(list1::add);
 
-                            List<String> list2 = new ArrayList<>();
-                            var procedure = list2::add;
-                            list2.forEach(procedure);
+					        List<String> list2 = new ArrayList<>();
+					        var procedure = list2::add;
+					        list2.forEach(procedure);
 
-                            List<String> list3 = new ArrayList<>();
-                            Procedure<String> addProcedure1 = list3::add;
+					        List<String> list3 = new ArrayList<>();
+					        Procedure<String> addProcedure1 = list3::add;
 
-                            List<String> list4 = new ArrayList<>();
-                            Procedure<String> addProcedure2 = list4::add;
+					        List<String> list4 = new ArrayList<>();
+					        Procedure<String> addProcedure2 = list4::add;
 
-                            List<String> list5 = new ArrayList<>();
-                            list5.forEach(list5::add);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        List<String> list5 = new ArrayList<>();
+					        list5.forEach(list5::add);
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.List;
-                    import java.util.ArrayList;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.List;
+					import java.util.ArrayList;
 
-                    class Test {
-                        void test() {
-                            List<String> keys = new ArrayList<>();
-                            keys.forEach(keys::add);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test() {
+					        List<String> keys = new ArrayList<>();
+					        keys.forEach(keys::add);
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

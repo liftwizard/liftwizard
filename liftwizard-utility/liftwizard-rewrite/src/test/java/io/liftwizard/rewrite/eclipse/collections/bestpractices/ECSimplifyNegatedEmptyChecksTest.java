@@ -25,77 +25,77 @@ import static org.openrewrite.java.Assertions.java;
 
 class ECSimplifyNegatedEmptyChecksTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new ECSimplifyNegatedEmptyChecksRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new ECSimplifyNegatedEmptyChecksRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        boolean testNegatedIsEmpty(MutableList<String> list) {
-                            return !list.isEmpty();
-                        }
+					class Test {
+					    boolean testNegatedIsEmpty(MutableList<String> list) {
+					        return !list.isEmpty();
+					    }
 
-                        boolean testNegatedNotEmpty(MutableList<String> list) {
-                            return !list.notEmpty();
-                        }
+					    boolean testNegatedNotEmpty(MutableList<String> list) {
+					        return !list.notEmpty();
+					    }
 
-                        void testInIfStatement(MutableList<String> list) {
-                            if (!list.isEmpty()) {
-                                this.doWork();
-                            }
-                        }
+					    void testInIfStatement(MutableList<String> list) {
+					        if (!list.isEmpty()) {
+					            this.doWork();
+					        }
+					    }
 
-                        void doWork() {}
-                    }
-                    """,
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+					    void doWork() {}
+					}
+					""",
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        boolean testNegatedIsEmpty(MutableList<String> list) {
-                            return list.notEmpty();
-                        }
+					class Test {
+					    boolean testNegatedIsEmpty(MutableList<String> list) {
+					        return list.notEmpty();
+					    }
 
-                        boolean testNegatedNotEmpty(MutableList<String> list) {
-                            return list.isEmpty();
-                        }
+					    boolean testNegatedNotEmpty(MutableList<String> list) {
+					        return list.isEmpty();
+					    }
 
-                        void testInIfStatement(MutableList<String> list) {
-                            if (list.notEmpty()) {
-                                this.doWork();
-                            }
-                        }
+					    void testInIfStatement(MutableList<String> list) {
+					        if (list.notEmpty()) {
+					            this.doWork();
+					        }
+					    }
 
-                        void doWork() {}
-                    }
-                    """
-                )
-            );
-    }
+					    void doWork() {}
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.api.list.MutableList;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
 
-                    class Test {
-                        boolean nonNegatedCalls(MutableList<String> list) {
-                            return list.isEmpty() || list.notEmpty();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    boolean nonNegatedCalls(MutableList<String> list) {
+					        return list.isEmpty() || list.notEmpty();
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

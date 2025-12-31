@@ -25,44 +25,44 @@ import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Collection first element access → `Iterate.getFirst()`",
-    description = "Replace iterator().next() and listIterator().next() calls with "
-    + "`Iterate.getFirst()` for safer and more expressive first element access."
+	name = "Collection first element access → `Iterate.getFirst()`",
+	description = "Replace iterator().next() and listIterator().next() calls with "
+	+ "`Iterate.getFirst()` for safer and more expressive first element access."
 )
 public class IterateGetFirst {
 
-    @RecipeDescriptor(
-        name = "`collection.iterator().next()` → " + "`Iterate.getFirst(collection)`",
-        description = "Replace iterator().next() with "
-        + "`Iterate.getFirst(collection)` for safer first element access."
-    )
-    public static final class IteratorNextPattern<T, C extends Collection<T>> {
+	@RecipeDescriptor(
+		name = "`collection.iterator().next()` → " + "`Iterate.getFirst(collection)`",
+		description = "Replace iterator().next() with "
+		+ "`Iterate.getFirst(collection)` for safer first element access."
+	)
+	public static final class IteratorNextPattern<T, C extends Collection<T>> {
 
-        @BeforeTemplate
-        T before(C collection) {
-            return collection.iterator().next();
-        }
+		@BeforeTemplate
+		T before(C collection) {
+			return collection.iterator().next();
+		}
 
-        @AfterTemplate
-        T after(C collection) {
-            return Iterate.getFirst(collection);
-        }
-    }
+		@AfterTemplate
+		T after(C collection) {
+			return Iterate.getFirst(collection);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`list.listIterator().next()` → " + "`Iterate.getFirst(list)`",
-        description = "Replace listIterator().next() with " + "`Iterate.getFirst(list)` for safer first element access."
-    )
-    public static final class ListIteratorNextPattern<T, L extends List<T>> {
+	@RecipeDescriptor(
+		name = "`list.listIterator().next()` → " + "`Iterate.getFirst(list)`",
+		description = "Replace listIterator().next() with " + "`Iterate.getFirst(list)` for safer first element access."
+	)
+	public static final class ListIteratorNextPattern<T, L extends List<T>> {
 
-        @BeforeTemplate
-        T before(L list) {
-            return list.listIterator().next();
-        }
+		@BeforeTemplate
+		T before(L list) {
+			return list.listIterator().next();
+		}
 
-        @AfterTemplate
-        T after(L list) {
-            return Iterate.getFirst(list);
-        }
-    }
+		@AfterTemplate
+		T after(L list) {
+			return Iterate.getFirst(list);
+		}
+	}
 }

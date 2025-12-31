@@ -23,42 +23,42 @@ import org.eclipse.collections.api.block.predicate.Predicate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "`!noneSatisfy()` → `anySatisfy()`",
-    description = "Simplifies negated satisfies checks: `!iterable.noneSatisfy(predicate)` to `iterable.anySatisfy(predicate)` and `!iterable.anySatisfy(predicate)` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types."
+	name = "`!noneSatisfy()` → `anySatisfy()`",
+	description = "Simplifies negated satisfies checks: `!iterable.noneSatisfy(predicate)` to `iterable.anySatisfy(predicate)` and `!iterable.anySatisfy(predicate)` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types."
 )
 public class ECSimplifyNegatedSatisfies {
 
-    @RecipeDescriptor(
-        name = "`!noneSatisfy()` → `anySatisfy()`",
-        description = "Converts `!iterable.noneSatisfy(predicate)` to `iterable.anySatisfy(predicate)`."
-    )
-    public static final class NegatedNoneSatisfyToAnySatisfy<T> {
+	@RecipeDescriptor(
+		name = "`!noneSatisfy()` → `anySatisfy()`",
+		description = "Converts `!iterable.noneSatisfy(predicate)` to `iterable.anySatisfy(predicate)`."
+	)
+	public static final class NegatedNoneSatisfyToAnySatisfy<T> {
 
-        @BeforeTemplate
-        boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
-            return !iterable.noneSatisfy(predicate);
-        }
+		@BeforeTemplate
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+			return !iterable.noneSatisfy(predicate);
+		}
 
-        @AfterTemplate
-        boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
-            return iterable.anySatisfy(predicate);
-        }
-    }
+		@AfterTemplate
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+			return iterable.anySatisfy(predicate);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`!anySatisfy()` → `noneSatisfy()`",
-        description = "Converts `!iterable.anySatisfy(predicate)` to `iterable.noneSatisfy(predicate)`."
-    )
-    public static final class NegatedAnySatisfyToNoneSatisfy<T> {
+	@RecipeDescriptor(
+		name = "`!anySatisfy()` → `noneSatisfy()`",
+		description = "Converts `!iterable.anySatisfy(predicate)` to `iterable.noneSatisfy(predicate)`."
+	)
+	public static final class NegatedAnySatisfyToNoneSatisfy<T> {
 
-        @BeforeTemplate
-        boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
-            return !iterable.anySatisfy(predicate);
-        }
+		@BeforeTemplate
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+			return !iterable.anySatisfy(predicate);
+		}
 
-        @AfterTemplate
-        boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
-            return iterable.noneSatisfy(predicate);
-        }
-    }
+		@AfterTemplate
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+			return iterable.noneSatisfy(predicate);
+		}
+	}
 }

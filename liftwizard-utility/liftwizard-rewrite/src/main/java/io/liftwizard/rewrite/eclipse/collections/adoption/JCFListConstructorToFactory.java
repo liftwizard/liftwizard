@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 public class JCFListConstructorToFactory extends AbstractJCFConstructorToFactoryRecipe {
 
-    public JCFListConstructorToFactory() {
-        super("ArrayList", "Lists");
-    }
+	public JCFListConstructorToFactory() {
+		super("ArrayList", "Lists");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new ArrayList<>()` → `Lists.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new ArrayList<>()` → `Lists.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new ArrayList()` with `Lists.mutable.empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new ArrayList()` with `Lists.mutable.empty()`.";
+	}
 }

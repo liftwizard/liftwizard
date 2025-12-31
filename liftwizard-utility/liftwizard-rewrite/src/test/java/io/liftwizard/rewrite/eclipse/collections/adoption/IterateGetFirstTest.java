@@ -25,72 +25,72 @@ import static org.openrewrite.java.Assertions.java;
 
 class IterateGetFirstTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new IterateGetFirstRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new IterateGetFirstRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.ArrayList;
-                    import java.util.List;
-                    import java.util.Set;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.ArrayList;
+					import java.util.List;
+					import java.util.Set;
 
-                    class Test {
-                        void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
-                            String listFirst = list.iterator().next();
-                            Integer arrayListFirst = numbers.listIterator().next();
-                            Object setFirst = set.iterator().next();
-                        }
-                    }
-                    """,
-                    """
-                    import org.eclipse.collections.impl.utility.Iterate;
+					class Test {
+					    void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
+					        String listFirst = list.iterator().next();
+					        Integer arrayListFirst = numbers.listIterator().next();
+					        Object setFirst = set.iterator().next();
+					    }
+					}
+					""",
+					"""
+					import org.eclipse.collections.impl.utility.Iterate;
 
-                    import java.util.ArrayList;
-                    import java.util.List;
-                    import java.util.Set;
+					import java.util.ArrayList;
+					import java.util.List;
+					import java.util.Set;
 
-                    class Test {
-                        void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
-                            String listFirst = Iterate.getFirst(list);
-                            Integer arrayListFirst = Iterate.getFirst(numbers);
-                            Object setFirst = Iterate.getFirst(set);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
+					        String listFirst = Iterate.getFirst(list);
+					        Integer arrayListFirst = Iterate.getFirst(numbers);
+					        Object setFirst = Iterate.getFirst(set);
+					    }
+					}
+					"""
+				)
+			);
+	}
 
-    @Test
-    void doNotReplaceInvalidPatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import java.util.Iterator;
-                    import java.util.List;
-                    import java.util.ListIterator;
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Iterator;
+					import java.util.List;
+					import java.util.ListIterator;
 
-                    class Test {
-                        void test(List<String> list) {
-                            Iterator<String> iter = list.iterator();
-                            String first = iter.next();
+					class Test {
+					    void test(List<String> list) {
+					        Iterator<String> iter = list.iterator();
+					        String first = iter.next();
 
-                            ListIterator<String> listIter = list.listIterator();
-                            String second = listIter.next();
+					        ListIterator<String> listIter = list.listIterator();
+					        String second = listIter.next();
 
-                            iter.hasNext();
-                            listIter.hasPrevious();
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					        iter.hasNext();
+					        listIter.hasPrevious();
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class ECSetConstructorToFactory extends AbstractECConstructorToFactoryRecipe {
 
-    public ECSetConstructorToFactory() {
-        super("UnifiedSet", "set", "Sets", "", "mutable");
-    }
+	public ECSetConstructorToFactory() {
+		super("UnifiedSet", "set", "Sets", "", "mutable");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new UnifiedSet<>()` → `Sets.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new UnifiedSet<>()` → `Sets.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new UnifiedSet<>()` with `Sets.mutable.<T>empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new UnifiedSet<>()` with `Sets.mutable.<T>empty()`.";
+	}
 }

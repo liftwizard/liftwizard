@@ -29,59 +29,59 @@ import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Replace Collections.singleton*() with Eclipse Collections factories",
-    description = "Replace `Collections.singletonList()`, `Collections.singleton()`, and `Collections.singletonMap()` with Eclipse Collections factory methods."
+	name = "Replace Collections.singleton*() with Eclipse Collections factories",
+	description = "Replace `Collections.singletonList()`, `Collections.singleton()`, and `Collections.singletonMap()` with Eclipse Collections factory methods."
 )
 public class CollectionsSingletonToFactory {
 
-    @RecipeDescriptor(
-        name = "`Collections.singletonList()` → `Lists.fixedSize.with()`",
-        description = "Replace `Collections.singletonList(x)` with `Lists.fixedSize.with(x)`."
-    )
-    public static class CollectionsSingletonListToFactory<T> {
+	@RecipeDescriptor(
+		name = "`Collections.singletonList()` → `Lists.fixedSize.with()`",
+		description = "Replace `Collections.singletonList(x)` with `Lists.fixedSize.with(x)`."
+	)
+	public static class CollectionsSingletonListToFactory<T> {
 
-        @BeforeTemplate
-        List<T> singletonList(T element) {
-            return Collections.singletonList(element);
-        }
+		@BeforeTemplate
+		List<T> singletonList(T element) {
+			return Collections.singletonList(element);
+		}
 
-        @AfterTemplate
-        List<T> listsFixedSizeOf(T element) {
-            return Lists.fixedSize.with(element);
-        }
-    }
+		@AfterTemplate
+		List<T> listsFixedSizeOf(T element) {
+			return Lists.fixedSize.with(element);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.singleton()` → `Sets.fixedSize.with()`",
-        description = "Replace `Collections.singleton(x)` with `Sets.fixedSize.with(x)`."
-    )
-    public static class CollectionsSingletonSetToFactory<T> {
+	@RecipeDescriptor(
+		name = "`Collections.singleton()` → `Sets.fixedSize.with()`",
+		description = "Replace `Collections.singleton(x)` with `Sets.fixedSize.with(x)`."
+	)
+	public static class CollectionsSingletonSetToFactory<T> {
 
-        @BeforeTemplate
-        Set<T> singleton(T element) {
-            return Collections.singleton(element);
-        }
+		@BeforeTemplate
+		Set<T> singleton(T element) {
+			return Collections.singleton(element);
+		}
 
-        @AfterTemplate
-        Set<T> setsFixedSizeOf(T element) {
-            return Sets.fixedSize.with(element);
-        }
-    }
+		@AfterTemplate
+		Set<T> setsFixedSizeOf(T element) {
+			return Sets.fixedSize.with(element);
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.singletonMap()` → `Maps.fixedSize.with()`",
-        description = "Replace `Collections.singletonMap(k, v)` with `Maps.fixedSize.with(k, v)`."
-    )
-    public static class CollectionsSingletonMapToFactory<K, V> {
+	@RecipeDescriptor(
+		name = "`Collections.singletonMap()` → `Maps.fixedSize.with()`",
+		description = "Replace `Collections.singletonMap(k, v)` with `Maps.fixedSize.with(k, v)`."
+	)
+	public static class CollectionsSingletonMapToFactory<K, V> {
 
-        @BeforeTemplate
-        Map<K, V> singletonMap(K key, V value) {
-            return Collections.singletonMap(key, value);
-        }
+		@BeforeTemplate
+		Map<K, V> singletonMap(K key, V value) {
+			return Collections.singletonMap(key, value);
+		}
 
-        @AfterTemplate
-        Map<K, V> mapsFixedSizeOf(K key, V value) {
-            return Maps.fixedSize.with(key, value);
-        }
-    }
+		@AfterTemplate
+		Map<K, V> mapsFixedSizeOf(K key, V value) {
+			return Maps.fixedSize.with(key, value);
+		}
+	}
 }

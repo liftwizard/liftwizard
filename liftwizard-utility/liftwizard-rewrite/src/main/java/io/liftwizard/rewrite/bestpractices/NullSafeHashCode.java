@@ -23,30 +23,30 @@ import com.google.errorprone.refaster.annotation.BeforeTemplate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Null-safe hashCode → `Objects.hashCode()`",
-    description = "Replace null-safe hashCode patterns with `Objects.hashCode()`."
+	name = "Null-safe hashCode → `Objects.hashCode()`",
+	description = "Replace null-safe hashCode patterns with `Objects.hashCode()`."
 )
 public class NullSafeHashCode {
 
-    @RecipeDescriptor(
-        name = "`object == null ? 0 : object.hashCode()` → `Objects.hashCode(object)`",
-        description = "Replace ternary null check with hashCode with `Objects.hashCode(object)`."
-    )
-    public static class TernaryHashCode<T> {
+	@RecipeDescriptor(
+		name = "`object == null ? 0 : object.hashCode()` → `Objects.hashCode(object)`",
+		description = "Replace ternary null check with hashCode with `Objects.hashCode(object)`."
+	)
+	public static class TernaryHashCode<T> {
 
-        @BeforeTemplate
-        int before(T object) {
-            return object == null ? 0 : object.hashCode();
-        }
+		@BeforeTemplate
+		int before(T object) {
+			return object == null ? 0 : object.hashCode();
+		}
 
-        @BeforeTemplate
-        int beforeInverted(T object) {
-            return object != null ? object.hashCode() : 0;
-        }
+		@BeforeTemplate
+		int beforeInverted(T object) {
+			return object != null ? object.hashCode() : 0;
+		}
 
-        @AfterTemplate
-        int after(T object) {
-            return Objects.hashCode(object);
-        }
-    }
+		@AfterTemplate
+		int after(T object) {
+			return Objects.hashCode(object);
+		}
+	}
 }

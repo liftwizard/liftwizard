@@ -35,110 +35,110 @@ import org.eclipse.collections.api.set.sorted.MutableSortedSet;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-    name = "Replace Collections.unmodifiable*() with Eclipse Collections asUnmodifiable()",
-    description = "Replace `Collections.unmodifiableCollection()`, `Collections.unmodifiableList()`, `Collections.unmodifiableMap()`, `Collections.unmodifiableSet()`, `Collections.unmodifiableSortedMap()`, and `Collections.unmodifiableSortedSet()` with Eclipse Collections `asUnmodifiable()` method."
+	name = "Replace Collections.unmodifiable*() with Eclipse Collections asUnmodifiable()",
+	description = "Replace `Collections.unmodifiableCollection()`, `Collections.unmodifiableList()`, `Collections.unmodifiableMap()`, `Collections.unmodifiableSet()`, `Collections.unmodifiableSortedMap()`, and `Collections.unmodifiableSortedSet()` with Eclipse Collections `asUnmodifiable()` method."
 )
 public class CollectionsUnmodifiableToAsUnmodifiable {
 
-    @RecipeDescriptor(
-        name = "`Collections.unmodifiableCollection()` → `asUnmodifiable()`",
-        description = "Replace `Collections.unmodifiableCollection(collection)` with `collection.asUnmodifiable()`."
-    )
-    public static class CollectionsUnmodifiableCollectionToAsUnmodifiable<T> {
+	@RecipeDescriptor(
+		name = "`Collections.unmodifiableCollection()` → `asUnmodifiable()`",
+		description = "Replace `Collections.unmodifiableCollection(collection)` with `collection.asUnmodifiable()`."
+	)
+	public static class CollectionsUnmodifiableCollectionToAsUnmodifiable<T> {
 
-        @BeforeTemplate
-        Collection<T> unmodifiableCollection(MutableCollection<T> collection) {
-            return Collections.unmodifiableCollection(collection);
-        }
+		@BeforeTemplate
+		Collection<T> unmodifiableCollection(MutableCollection<T> collection) {
+			return Collections.unmodifiableCollection(collection);
+		}
 
-        @AfterTemplate
-        MutableCollection<T> asUnmodifiable(MutableCollection<T> collection) {
-            return collection.asUnmodifiable();
-        }
-    }
+		@AfterTemplate
+		MutableCollection<T> asUnmodifiable(MutableCollection<T> collection) {
+			return collection.asUnmodifiable();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.unmodifiableList()` → `asUnmodifiable()`",
-        description = "Replace `Collections.unmodifiableList(list)` with `list.asUnmodifiable()`."
-    )
-    public static class CollectionsUnmodifiableListToAsUnmodifiable<T> {
+	@RecipeDescriptor(
+		name = "`Collections.unmodifiableList()` → `asUnmodifiable()`",
+		description = "Replace `Collections.unmodifiableList(list)` with `list.asUnmodifiable()`."
+	)
+	public static class CollectionsUnmodifiableListToAsUnmodifiable<T> {
 
-        @BeforeTemplate
-        List<T> unmodifiableList(MutableList<T> list) {
-            return Collections.unmodifiableList(list);
-        }
+		@BeforeTemplate
+		List<T> unmodifiableList(MutableList<T> list) {
+			return Collections.unmodifiableList(list);
+		}
 
-        @AfterTemplate
-        MutableList<T> asUnmodifiable(MutableList<T> list) {
-            return list.asUnmodifiable();
-        }
-    }
+		@AfterTemplate
+		MutableList<T> asUnmodifiable(MutableList<T> list) {
+			return list.asUnmodifiable();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.unmodifiableMap()` → `asUnmodifiable()`",
-        description = "Replace `Collections.unmodifiableMap(map)` with `map.asUnmodifiable()`."
-    )
-    public static class CollectionsUnmodifiableMapToAsUnmodifiable<K, V> {
+	@RecipeDescriptor(
+		name = "`Collections.unmodifiableMap()` → `asUnmodifiable()`",
+		description = "Replace `Collections.unmodifiableMap(map)` with `map.asUnmodifiable()`."
+	)
+	public static class CollectionsUnmodifiableMapToAsUnmodifiable<K, V> {
 
-        @BeforeTemplate
-        Map<K, V> unmodifiableMap(MutableMap<K, V> map) {
-            return Collections.unmodifiableMap(map);
-        }
+		@BeforeTemplate
+		Map<K, V> unmodifiableMap(MutableMap<K, V> map) {
+			return Collections.unmodifiableMap(map);
+		}
 
-        @AfterTemplate
-        MutableMap<K, V> asUnmodifiable(MutableMap<K, V> map) {
-            return map.asUnmodifiable();
-        }
-    }
+		@AfterTemplate
+		MutableMap<K, V> asUnmodifiable(MutableMap<K, V> map) {
+			return map.asUnmodifiable();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.unmodifiableSet()` → `asUnmodifiable()`",
-        description = "Replace `Collections.unmodifiableSet(set)` with `set.asUnmodifiable()`."
-    )
-    public static class CollectionsUnmodifiableSetToAsUnmodifiable<T> {
+	@RecipeDescriptor(
+		name = "`Collections.unmodifiableSet()` → `asUnmodifiable()`",
+		description = "Replace `Collections.unmodifiableSet(set)` with `set.asUnmodifiable()`."
+	)
+	public static class CollectionsUnmodifiableSetToAsUnmodifiable<T> {
 
-        @BeforeTemplate
-        Set<T> unmodifiableSet(MutableSet<T> set) {
-            return Collections.unmodifiableSet(set);
-        }
+		@BeforeTemplate
+		Set<T> unmodifiableSet(MutableSet<T> set) {
+			return Collections.unmodifiableSet(set);
+		}
 
-        @AfterTemplate
-        MutableSet<T> asUnmodifiable(MutableSet<T> set) {
-            return set.asUnmodifiable();
-        }
-    }
+		@AfterTemplate
+		MutableSet<T> asUnmodifiable(MutableSet<T> set) {
+			return set.asUnmodifiable();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.unmodifiableSortedMap()` → `asUnmodifiable()`",
-        description = "Replace `Collections.unmodifiableSortedMap(sortedMap)` with `sortedMap.asUnmodifiable()`."
-    )
-    public static class CollectionsUnmodifiableSortedMapToAsUnmodifiable<K, V> {
+	@RecipeDescriptor(
+		name = "`Collections.unmodifiableSortedMap()` → `asUnmodifiable()`",
+		description = "Replace `Collections.unmodifiableSortedMap(sortedMap)` with `sortedMap.asUnmodifiable()`."
+	)
+	public static class CollectionsUnmodifiableSortedMapToAsUnmodifiable<K, V> {
 
-        @BeforeTemplate
-        SortedMap<K, V> unmodifiableSortedMap(MutableSortedMap<K, V> sortedMap) {
-            return Collections.unmodifiableSortedMap(sortedMap);
-        }
+		@BeforeTemplate
+		SortedMap<K, V> unmodifiableSortedMap(MutableSortedMap<K, V> sortedMap) {
+			return Collections.unmodifiableSortedMap(sortedMap);
+		}
 
-        @AfterTemplate
-        MutableSortedMap<K, V> asUnmodifiable(MutableSortedMap<K, V> sortedMap) {
-            return sortedMap.asUnmodifiable();
-        }
-    }
+		@AfterTemplate
+		MutableSortedMap<K, V> asUnmodifiable(MutableSortedMap<K, V> sortedMap) {
+			return sortedMap.asUnmodifiable();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Collections.unmodifiableSortedSet()` → `asUnmodifiable()`",
-        description = "Replace `Collections.unmodifiableSortedSet(sortedSet)` with `sortedSet.asUnmodifiable()`."
-    )
-    public static class CollectionsUnmodifiableSortedSetToAsUnmodifiable<T> {
+	@RecipeDescriptor(
+		name = "`Collections.unmodifiableSortedSet()` → `asUnmodifiable()`",
+		description = "Replace `Collections.unmodifiableSortedSet(sortedSet)` with `sortedSet.asUnmodifiable()`."
+	)
+	public static class CollectionsUnmodifiableSortedSetToAsUnmodifiable<T> {
 
-        @BeforeTemplate
-        SortedSet<T> unmodifiableSortedSet(MutableSortedSet<T> sortedSet) {
-            return Collections.unmodifiableSortedSet(sortedSet);
-        }
+		@BeforeTemplate
+		SortedSet<T> unmodifiableSortedSet(MutableSortedSet<T> sortedSet) {
+			return Collections.unmodifiableSortedSet(sortedSet);
+		}
 
-        @AfterTemplate
-        MutableSortedSet<T> asUnmodifiable(MutableSortedSet<T> sortedSet) {
-            return sortedSet.asUnmodifiable();
-        }
-    }
+		@AfterTemplate
+		MutableSortedSet<T> asUnmodifiable(MutableSortedSet<T> sortedSet) {
+			return sortedSet.asUnmodifiable();
+		}
+	}
 }

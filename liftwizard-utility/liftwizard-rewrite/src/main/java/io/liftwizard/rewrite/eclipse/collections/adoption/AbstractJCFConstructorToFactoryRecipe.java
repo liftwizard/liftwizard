@@ -38,193 +38,193 @@ import org.openrewrite.java.tree.TypeUtils;
 
 public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
-    private final String sourceTypeSimpleName;
-    private final String targetFactorySimpleName;
+	private final String sourceTypeSimpleName;
+	private final String targetFactorySimpleName;
 
-    protected AbstractJCFConstructorToFactoryRecipe(String sourceTypeSimpleName, String targetFactorySimpleName) {
-        this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
-        this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
-    }
+	protected AbstractJCFConstructorToFactoryRecipe(String sourceTypeSimpleName, String targetFactorySimpleName) {
+		this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
+		this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
+	}
 
-    @Override
-    public final Set<String> getTags() {
-        return Collections.singleton("eclipse-collections");
-    }
+	@Override
+	public final Set<String> getTags() {
+		return Collections.singleton("eclipse-collections");
+	}
 
-    @Override
-    public final Duration getEstimatedEffortPerOccurrence() {
-        return Duration.ofSeconds(10);
-    }
+	@Override
+	public final Duration getEstimatedEffortPerOccurrence() {
+		return Duration.ofSeconds(10);
+	}
 
-    @Override
-    public final TreeVisitor<?, ExecutionContext> getVisitor() {
-        return new ConstructorToFactoryVisitor(this.sourceTypeSimpleName, this.targetFactorySimpleName);
-    }
+	@Override
+	public final TreeVisitor<?, ExecutionContext> getVisitor() {
+		return new ConstructorToFactoryVisitor(this.sourceTypeSimpleName, this.targetFactorySimpleName);
+	}
 
-    private static final class ConstructorToFactoryVisitor extends JavaVisitor<ExecutionContext> {
+	private static final class ConstructorToFactoryVisitor extends JavaVisitor<ExecutionContext> {
 
-        private final String sourceTypeSimpleName;
-        private final String targetFactorySimpleName;
+		private final String sourceTypeSimpleName;
+		private final String targetFactorySimpleName;
 
-        private ConstructorToFactoryVisitor(String sourceTypeSimpleName, String targetFactorySimpleName) {
-            this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
-            this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
-        }
+		private ConstructorToFactoryVisitor(String sourceTypeSimpleName, String targetFactorySimpleName) {
+			this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
+			this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
+		}
 
-        @Override
-        public J visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
-            J.NewClass nc = (J.NewClass) super.visitNewClass(newClass, ctx);
+		@Override
+		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
+			J.NewClass nc = (J.NewClass) super.visitNewClass(newClass, ctx);
 
-            JavaType.FullyQualified type = TypeUtils.asFullyQualified(nc.getType());
-            if (type == null || !("java.util." + this.sourceTypeSimpleName).equals(type.getFullyQualifiedName())) {
-                return nc;
-            }
+			JavaType.FullyQualified type = TypeUtils.asFullyQualified(nc.getType());
+			if (type == null || !("java.util." + this.sourceTypeSimpleName).equals(type.getFullyQualifiedName())) {
+				return nc;
+			}
 
-            List<Expression> arguments = nc.getArguments();
+			List<Expression> arguments = nc.getArguments();
 
-            boolean isEmptyConstructor =
-                arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
-            boolean isInitialCapacityConstructor =
-                arguments.size() == 1
-                && !(arguments.get(0) instanceof J.Empty)
-                && isNumericType(arguments.get(0).getType());
-            boolean isComparatorConstructor =
-                arguments.size() == 1
-                && !(arguments.get(0) instanceof J.Empty)
-                && isComparatorType(arguments.get(0).getType());
-            boolean isCollectionConstructor =
-                arguments.size() == 1
-                && !(arguments.get(0) instanceof J.Empty)
-                && !isNumericType(arguments.get(0).getType())
-                && !isComparatorType(arguments.get(0).getType());
+			boolean isEmptyConstructor =
+				arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
+			boolean isInitialCapacityConstructor =
+				arguments.size() == 1
+				&& !(arguments.get(0) instanceof J.Empty)
+				&& isNumericType(arguments.get(0).getType());
+			boolean isComparatorConstructor =
+				arguments.size() == 1
+				&& !(arguments.get(0) instanceof J.Empty)
+				&& isComparatorType(arguments.get(0).getType());
+			boolean isCollectionConstructor =
+				arguments.size() == 1
+				&& !(arguments.get(0) instanceof J.Empty)
+				&& !isNumericType(arguments.get(0).getType())
+				&& !isComparatorType(arguments.get(0).getType());
 
-            if (
-                !isEmptyConstructor
-                && !isInitialCapacityConstructor
-                && !isComparatorConstructor
-                && !isCollectionConstructor
-            ) {
-                return nc;
-            }
+			if (
+				!isEmptyConstructor
+				&& !isInitialCapacityConstructor
+				&& !isComparatorConstructor
+				&& !isCollectionConstructor
+			) {
+				return nc;
+			}
 
-            if (this.isVariableTypeConcreteClass()) {
-                return nc;
-            }
+			if (this.isVariableTypeConcreteClass()) {
+				return nc;
+			}
 
-            String typeParams = this.extractTypeParameterString(nc);
+			String typeParams = this.extractTypeParameterString(nc);
 
-            this.maybeRemoveImport("java.util." + this.sourceTypeSimpleName);
-            this.maybeAddImport("org.eclipse.collections.api.factory." + this.targetFactorySimpleName);
-            this.doAfterVisit(new OrderImports(false).getVisitor());
+			this.maybeRemoveImport("java.util." + this.sourceTypeSimpleName);
+			this.maybeAddImport("org.eclipse.collections.api.factory." + this.targetFactorySimpleName);
+			this.doAfterVisit(new OrderImports(false).getVisitor());
 
-            String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
-            String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
-            String templateSource =
-                prefix
-                + this.getTemplateSource(
-                    isInitialCapacityConstructor,
-                    isComparatorConstructor,
-                    isCollectionConstructor
-                );
-            JavaTemplate template = JavaTemplate.builder(templateSource)
-                .imports("org.eclipse.collections.api.factory." + this.targetFactorySimpleName)
-                .contextSensitive()
-                .javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api", "eclipse-collections"))
-                .build();
+			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
+			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
+			String templateSource =
+				prefix
+				+ this.getTemplateSource(
+					isInitialCapacityConstructor,
+					isComparatorConstructor,
+					isCollectionConstructor
+				);
+			JavaTemplate template = JavaTemplate.builder(templateSource)
+				.imports("org.eclipse.collections.api.factory." + this.targetFactorySimpleName)
+				.contextSensitive()
+				.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api", "eclipse-collections"))
+				.build();
 
-            if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
-                return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
-            } else {
-                return template.apply(this.getCursor(), nc.getCoordinates().replace());
-            }
-        }
+			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
+				return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
+			} else {
+				return template.apply(this.getCursor(), nc.getCoordinates().replace());
+			}
+		}
 
-        private String getTemplateSource(
-            boolean isInitialCapacityConstructor,
-            boolean isComparatorConstructor,
-            boolean isCollectionConstructor
-        ) {
-            if (isInitialCapacityConstructor) {
-                return "withInitialCapacity(#{any(int)})";
-            }
+		private String getTemplateSource(
+			boolean isInitialCapacityConstructor,
+			boolean isComparatorConstructor,
+			boolean isCollectionConstructor
+		) {
+			if (isInitialCapacityConstructor) {
+				return "withInitialCapacity(#{any(int)})";
+			}
 
-            if (isComparatorConstructor) {
-                return "with(#{any(java.util.Comparator)})";
-            }
+			if (isComparatorConstructor) {
+				return "with(#{any(java.util.Comparator)})";
+			}
 
-            if (!isCollectionConstructor) {
-                return "empty()";
-            }
+			if (!isCollectionConstructor) {
+				return "empty()";
+			}
 
-            return this.getMethodName() + "(#{any(" + this.getParamType() + ")})";
-        }
+			return this.getMethodName() + "(#{any(" + this.getParamType() + ")})";
+		}
 
-        private String getMethodName() {
-            if (this.sourceTypeSimpleName.equals("TreeMap")) {
-                return "withSortedMap";
-            }
-            if (this.sourceTypeSimpleName.contains("Map")) {
-                return "withMap";
-            }
-            return "withAll";
-        }
+		private String getMethodName() {
+			if (this.sourceTypeSimpleName.equals("TreeMap")) {
+				return "withSortedMap";
+			}
+			if (this.sourceTypeSimpleName.contains("Map")) {
+				return "withMap";
+			}
+			return "withAll";
+		}
 
-        private String getParamType() {
-            return this.sourceTypeSimpleName.equals("TreeMap") || this.sourceTypeSimpleName.contains("Map")
-                ? "java.util.Map"
-                : "java.lang.Iterable";
-        }
+		private String getParamType() {
+			return this.sourceTypeSimpleName.equals("TreeMap") || this.sourceTypeSimpleName.contains("Map")
+				? "java.util.Map"
+				: "java.lang.Iterable";
+		}
 
-        private static boolean isNumericType(JavaType type) {
-            if (!(type instanceof JavaType.Primitive primitive)) {
-                return false;
-            }
-            return switch (primitive) {
-                case Int, Long, Short, Byte -> true;
-                default -> false;
-            };
-        }
+		private static boolean isNumericType(JavaType type) {
+			if (!(type instanceof JavaType.Primitive primitive)) {
+				return false;
+			}
+			return switch (primitive) {
+				case Int, Long, Short, Byte -> true;
+				default -> false;
+			};
+		}
 
-        private static boolean isComparatorType(JavaType type) {
-            JavaType.FullyQualified fullyQualified = TypeUtils.asFullyQualified(type);
-            return fullyQualified != null && "java.util.Comparator".equals(fullyQualified.getFullyQualifiedName());
-        }
+		private static boolean isComparatorType(JavaType type) {
+			JavaType.FullyQualified fullyQualified = TypeUtils.asFullyQualified(type);
+			return fullyQualified != null && "java.util.Comparator".equals(fullyQualified.getFullyQualifiedName());
+		}
 
-        private String extractTypeParameterString(J.NewClass nc) {
-            if (!(nc.getClazz() instanceof J.ParameterizedType parameterizedType)) {
-                return "";
-            }
+		private String extractTypeParameterString(J.NewClass nc) {
+			if (!(nc.getClazz() instanceof J.ParameterizedType parameterizedType)) {
+				return "";
+			}
 
-            List<Expression> typeParameters = parameterizedType.getTypeParameters();
-            if (typeParameters == null || typeParameters.isEmpty()) {
-                return "";
-            }
+			List<Expression> typeParameters = parameterizedType.getTypeParameters();
+			if (typeParameters == null || typeParameters.isEmpty()) {
+				return "";
+			}
 
-            boolean hasActualTypeParams = typeParameters.stream().anyMatch(tp -> !(tp instanceof J.Empty));
-            if (!hasActualTypeParams) {
-                return "";
-            }
+			boolean hasActualTypeParams = typeParameters.stream().anyMatch((tp) -> !(tp instanceof J.Empty));
+			if (!hasActualTypeParams) {
+				return "";
+			}
 
-            return typeParameters.stream().map(Expression::toString).collect(Collectors.joining(", "));
-        }
+			return typeParameters.stream().map(Expression::toString).collect(Collectors.joining(", "));
+		}
 
-        private boolean isVariableTypeConcreteClass() {
-            Cursor parentTreeCursor = this.getCursor().getParentTreeCursor();
-            if (!(parentTreeCursor.getValue() instanceof J.VariableDeclarations.NamedVariable)) {
-                return false;
-            }
+		private boolean isVariableTypeConcreteClass() {
+			Cursor parentTreeCursor = this.getCursor().getParentTreeCursor();
+			if (!(parentTreeCursor.getValue() instanceof J.VariableDeclarations.NamedVariable)) {
+				return false;
+			}
 
-            if (!(parentTreeCursor.getParentTreeCursor().getValue() instanceof J.VariableDeclarations variableDecls)) {
-                return false;
-            }
+			if (!(parentTreeCursor.getParentTreeCursor().getValue() instanceof J.VariableDeclarations variableDecls)) {
+				return false;
+			}
 
-            JavaType.FullyQualified variableType = TypeUtils.asFullyQualified(variableDecls.getType());
-            if (variableType == null) {
-                return false;
-            }
+			JavaType.FullyQualified variableType = TypeUtils.asFullyQualified(variableDecls.getType());
+			if (variableType == null) {
+				return false;
+			}
 
-            String variableTypeName = variableType.getFullyQualifiedName();
-            return ("java.util." + this.sourceTypeSimpleName).equals(variableTypeName);
-        }
-    }
+			String variableTypeName = variableType.getFullyQualifiedName();
+			return ("java.util." + this.sourceTypeSimpleName).equals(variableTypeName);
+		}
+	}
 }

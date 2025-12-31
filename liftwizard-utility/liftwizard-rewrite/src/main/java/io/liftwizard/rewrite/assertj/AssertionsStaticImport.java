@@ -29,71 +29,71 @@ import org.openrewrite.java.tree.J;
 
 public class AssertionsStaticImport extends Recipe {
 
-    private static final MethodMatcher ASSERTIONS_STATIC_METHOD_MATCHER = new MethodMatcher(
-        "org.assertj.core.api.Assertions *(..)"
-    );
+	private static final MethodMatcher ASSERTIONS_STATIC_METHOD_MATCHER = new MethodMatcher(
+		"org.assertj.core.api.Assertions *(..)"
+	);
 
-    @Override
-    public String getDisplayName() {
-        return "Convert `Assertions.*()` to static import";
-    }
+	@Override
+	public String getDisplayName() {
+		return "Convert `Assertions.*()` to static import";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Convert `org.assertj.core.api.Assertions.*()` calls to use static import.";
-    }
+	@Override
+	public String getDescription() {
+		return "Convert `org.assertj.core.api.Assertions.*()` calls to use static import.";
+	}
 
-    @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor() {
-        return Preconditions.check(
-            new UsesType<>("org.assertj.core.api.Assertions", false),
-            new AssertionsStaticImportVisitor()
-        );
-    }
+	@Override
+	public TreeVisitor<?, ExecutionContext> getVisitor() {
+		return Preconditions.check(
+			new UsesType<>("org.assertj.core.api.Assertions", false),
+			new AssertionsStaticImportVisitor()
+		);
+	}
 
-    private static final class AssertionsStaticImportVisitor extends JavaIsoVisitor<ExecutionContext> {
+	private static final class AssertionsStaticImportVisitor extends JavaIsoVisitor<ExecutionContext> {
 
-        @Override
-        public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-            J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
+		@Override
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-            if (!ASSERTIONS_STATIC_METHOD_MATCHER.matches(methodInvocation)) {
-                return methodInvocation;
-            }
+			if (!ASSERTIONS_STATIC_METHOD_MATCHER.matches(methodInvocation)) {
+				return methodInvocation;
+			}
 
-            if (!(methodInvocation.getSelect() instanceof J.Identifier identifier)) {
-                return methodInvocation;
-            }
+			if (!(methodInvocation.getSelect() instanceof J.Identifier identifier)) {
+				return methodInvocation;
+			}
 
-            if (!"Assertions".equals(identifier.getSimpleName())) {
-                return methodInvocation;
-            }
+			if (!"Assertions".equals(identifier.getSimpleName())) {
+				return methodInvocation;
+			}
 
-            String methodName = methodInvocation.getSimpleName();
-            int argumentCount = methodInvocation.getArguments().size();
+			String methodName = methodInvocation.getSimpleName();
+			int argumentCount = methodInvocation.getArguments().size();
 
-            StringBuilder templatePattern = new StringBuilder(methodName).append('(');
-            for (int i = 0; i < argumentCount; i++) {
-                if (i > 0) {
-                    templatePattern.append(", ");
-                }
-                templatePattern.append("#{any()}");
-            }
-            templatePattern.append(')');
+			StringBuilder templatePattern = new StringBuilder(methodName).append('(');
+			for (int i = 0; i < argumentCount; i++) {
+				if (i > 0) {
+					templatePattern.append(", ");
+				}
+				templatePattern.append("#{any()}");
+			}
+			templatePattern.append(')');
 
-            JavaTemplate template = JavaTemplate.builder(templatePattern.toString())
-                .staticImports("org.assertj.core.api.Assertions." + methodName)
-                .javaParser(JavaParser.fromJavaVersion().classpath("assertj-core"))
-                .build();
+			JavaTemplate template = JavaTemplate.builder(templatePattern.toString())
+				.staticImports("org.assertj.core.api.Assertions." + methodName)
+				.javaParser(JavaParser.fromJavaVersion().classpath("assertj-core"))
+				.build();
 
-            this.maybeAddImport("org.assertj.core.api.Assertions", methodName, false);
-            this.maybeRemoveImport("org.assertj.core.api.Assertions");
+			this.maybeAddImport("org.assertj.core.api.Assertions", methodName, false);
+			this.maybeRemoveImport("org.assertj.core.api.Assertions");
 
-            return template.apply(
-                this.getCursor(),
-                methodInvocation.getCoordinates().replace(),
-                methodInvocation.getArguments().toArray()
-            );
-        }
-    }
+			return template.apply(
+				this.getCursor(),
+				methodInvocation.getCoordinates().replace(),
+				methodInvocation.getArguments().toArray()
+			);
+		}
+	}
 }

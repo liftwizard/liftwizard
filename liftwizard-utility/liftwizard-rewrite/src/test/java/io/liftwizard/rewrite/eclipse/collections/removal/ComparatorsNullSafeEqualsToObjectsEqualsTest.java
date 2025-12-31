@@ -25,42 +25,42 @@ import static org.openrewrite.java.Assertions.java;
 
 class ComparatorsNullSafeEqualsToObjectsEqualsTest extends AbstractEclipseCollectionsTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        super.defaults(spec);
-        spec.recipe(new ComparatorsNullSafeEqualsToObjectsEqualsRecipes());
-    }
+	@Override
+	public void defaults(RecipeSpec spec) {
+		super.defaults(spec);
+		spec.recipe(new ComparatorsNullSafeEqualsToObjectsEqualsRecipes());
+	}
 
-    @Test
-    @DocumentExample
-    void replacePatterns() {
-        this.rewriteRun(
-                java(
-                    """
-                    import org.eclipse.collections.impl.block.factory.Comparators;
+	@Test
+	@DocumentExample
+	void replacePatterns() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.impl.block.factory.Comparators;
 
-                    class Test {
-                        void test() {
-                            String left = "foo";
-                            String right = "bar";
-                            boolean equal = Comparators.nullSafeEquals(left, right);
-                            boolean notEqual = !Comparators.nullSafeEquals(left, right);
-                        }
-                    }
-                    """,
-                    """
-                    import java.util.Objects;
+					class Test {
+					    void test() {
+					        String left = "foo";
+					        String right = "bar";
+					        boolean equal = Comparators.nullSafeEquals(left, right);
+					        boolean notEqual = !Comparators.nullSafeEquals(left, right);
+					    }
+					}
+					""",
+					"""
+					import java.util.Objects;
 
-                    class Test {
-                        void test() {
-                            String left = "foo";
-                            String right = "bar";
-                            boolean equal = Objects.equals(left, right);
-                            boolean notEqual = !Objects.equals(left, right);
-                        }
-                    }
-                    """
-                )
-            );
-    }
+					class Test {
+					    void test() {
+					        String left = "foo";
+					        String right = "bar";
+					        boolean equal = Objects.equals(left, right);
+					        boolean notEqual = !Objects.equals(left, right);
+					    }
+					}
+					"""
+				)
+			);
+	}
 }

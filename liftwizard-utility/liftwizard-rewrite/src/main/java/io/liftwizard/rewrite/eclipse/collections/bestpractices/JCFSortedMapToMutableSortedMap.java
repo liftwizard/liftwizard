@@ -18,7 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class JCFSortedMapToMutableSortedMap extends AbstractJCFTypeToMutableTypeRecipe {
 
-    public JCFSortedMapToMutableSortedMap() {
-        super("java.util.SortedMap", "org.eclipse.collections.api.map.sorted", "MutableSortedMap");
-    }
+	public JCFSortedMapToMutableSortedMap() {
+		super("java.util.SortedMap", "org.eclipse.collections.api.map.sorted", "MutableSortedMap");
+	}
 }

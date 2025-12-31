@@ -26,76 +26,76 @@ import org.openrewrite.java.template.RecipeDescriptor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RecipeDescriptor(
-    name = "Replace `Verify.assertEmpty()` with AssertJ",
-    description = "Replace Eclipse Collections `Verify.assertEmpty()` with AssertJ `assertThat().isEmpty()`."
+	name = "Replace `Verify.assertEmpty()` with AssertJ",
+	description = "Replace Eclipse Collections `Verify.assertEmpty()` with AssertJ `assertThat().isEmpty()`."
 )
 public class VerifyAssertEmptyToAssertJ {
 
-    @RecipeDescriptor(
-        name = "`Verify.assertEmpty(message, iterable)` → `assertThat(iterable).as(message).isEmpty()`",
-        description = "Replace `Verify.assertEmpty(message, iterable)` with `assertThat(iterable).as(message).isEmpty()`."
-    )
-    public static class VerifyAssertEmptyIterableWithMessage {
+	@RecipeDescriptor(
+		name = "`Verify.assertEmpty(message, iterable)` → `assertThat(iterable).as(message).isEmpty()`",
+		description = "Replace `Verify.assertEmpty(message, iterable)` with `assertThat(iterable).as(message).isEmpty()`."
+	)
+	public static class VerifyAssertEmptyIterableWithMessage {
 
-        @BeforeTemplate
-        void before(String message, Iterable<?> iterable) {
-            Verify.assertEmpty(message, iterable);
-        }
+		@BeforeTemplate
+		void before(String message, Iterable<?> iterable) {
+			Verify.assertEmpty(message, iterable);
+		}
 
-        @AfterTemplate
-        void after(String message, Iterable<?> iterable) {
-            assertThat(iterable).as(message).isEmpty();
-        }
-    }
+		@AfterTemplate
+		void after(String message, Iterable<?> iterable) {
+			assertThat(iterable).as(message).isEmpty();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertEmpty(iterable)` → `assertThat(iterable).isEmpty()`",
-        description = "Replace `Verify.assertEmpty(iterable)` with `assertThat(iterable).isEmpty()`."
-    )
-    public static class VerifyAssertEmptyIterable {
+	@RecipeDescriptor(
+		name = "`Verify.assertEmpty(iterable)` → `assertThat(iterable).isEmpty()`",
+		description = "Replace `Verify.assertEmpty(iterable)` with `assertThat(iterable).isEmpty()`."
+	)
+	public static class VerifyAssertEmptyIterable {
 
-        @BeforeTemplate
-        void before(Iterable<?> iterable) {
-            Verify.assertEmpty(iterable);
-        }
+		@BeforeTemplate
+		void before(Iterable<?> iterable) {
+			Verify.assertEmpty(iterable);
+		}
 
-        @AfterTemplate
-        void after(Iterable<?> iterable) {
-            assertThat(iterable).isEmpty();
-        }
-    }
+		@AfterTemplate
+		void after(Iterable<?> iterable) {
+			assertThat(iterable).isEmpty();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertEmpty(message, map)` → `assertThat(map).as(message).isEmpty()`",
-        description = "Replace `Verify.assertEmpty(message, map)` with `assertThat(map).as(message).isEmpty()`."
-    )
-    public static class VerifyAssertEmptyMapWithMessage {
+	@RecipeDescriptor(
+		name = "`Verify.assertEmpty(message, map)` → `assertThat(map).as(message).isEmpty()`",
+		description = "Replace `Verify.assertEmpty(message, map)` with `assertThat(map).as(message).isEmpty()`."
+	)
+	public static class VerifyAssertEmptyMapWithMessage {
 
-        @BeforeTemplate
-        void before(String message, Map<?, ?> map) {
-            Verify.assertEmpty(message, map);
-        }
+		@BeforeTemplate
+		void before(String message, Map<?, ?> map) {
+			Verify.assertEmpty(message, map);
+		}
 
-        @AfterTemplate
-        void after(String message, Map<?, ?> map) {
-            assertThat(map).as(message).isEmpty();
-        }
-    }
+		@AfterTemplate
+		void after(String message, Map<?, ?> map) {
+			assertThat(map).as(message).isEmpty();
+		}
+	}
 
-    @RecipeDescriptor(
-        name = "`Verify.assertEmpty(map)` → `assertThat(map).isEmpty()`",
-        description = "Replace `Verify.assertEmpty(map)` with `assertThat(map).isEmpty()`."
-    )
-    public static class VerifyAssertEmptyMap {
+	@RecipeDescriptor(
+		name = "`Verify.assertEmpty(map)` → `assertThat(map).isEmpty()`",
+		description = "Replace `Verify.assertEmpty(map)` with `assertThat(map).isEmpty()`."
+	)
+	public static class VerifyAssertEmptyMap {
 
-        @BeforeTemplate
-        void before(Map<?, ?> map) {
-            Verify.assertEmpty(map);
-        }
+		@BeforeTemplate
+		void before(Map<?, ?> map) {
+			Verify.assertEmpty(map);
+		}
 
-        @AfterTemplate
-        void after(Map<?, ?> map) {
-            assertThat(map).isEmpty();
-        }
-    }
+		@AfterTemplate
+		void after(Map<?, ?> map) {
+			assertThat(map).isEmpty();
+		}
+	}
 }

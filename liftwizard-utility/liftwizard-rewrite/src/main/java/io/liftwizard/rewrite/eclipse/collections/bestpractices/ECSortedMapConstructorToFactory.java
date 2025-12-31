@@ -18,17 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 public class ECSortedMapConstructorToFactory extends AbstractECConstructorToFactoryRecipe {
 
-    public ECSortedMapConstructorToFactory() {
-        super("TreeSortedMap", "map.sorted", "SortedMaps", "", "mutable");
-    }
+	public ECSortedMapConstructorToFactory() {
+		super("TreeSortedMap", "map.sorted", "SortedMaps", "", "mutable");
+	}
 
-    @Override
-    public String getDisplayName() {
-        return "`new TreeSortedMap<>()` → `SortedMaps.mutable.empty()`";
-    }
+	@Override
+	public String getDisplayName() {
+		return "`new TreeSortedMap<>()` → `SortedMaps.mutable.empty()`";
+	}
 
-    @Override
-    public String getDescription() {
-        return "Replace `new TreeSortedMap()` constructor calls with `SortedMaps.mutable.empty()`.";
-    }
+	@Override
+	public String getDescription() {
+		return "Replace `new TreeSortedMap()` constructor calls with `SortedMaps.mutable.empty()`.";
+	}
 }
