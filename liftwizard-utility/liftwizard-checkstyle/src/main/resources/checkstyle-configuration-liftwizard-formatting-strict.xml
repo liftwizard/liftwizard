@@ -120,6 +120,8 @@
             <property name="tokens" value="METHOD_REF" />
         </module>
 
+        <module name="GenericWhitespace" />
+
         <module name="OperatorWrap">
             <property name="tokens" value="QUESTION" />
             <property name="tokens" value="COLON" />
