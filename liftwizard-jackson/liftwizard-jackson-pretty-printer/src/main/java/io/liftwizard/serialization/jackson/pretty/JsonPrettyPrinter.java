@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.core.util.Separators;
 
 public class JsonPrettyPrinter extends DefaultPrettyPrinter {
 
@@ -31,6 +32,7 @@ public class JsonPrettyPrinter extends DefaultPrettyPrinter {
 	public JsonPrettyPrinter() {
 		this._arrayIndenter = TAB_INDENTER;
 		this._objectIndenter = TAB_INDENTER;
+		this._separators = Separators.createDefaultInstance().withObjectEmptySeparator("").withArrayEmptySeparator("");
 	}
 
 	@Nonnull
