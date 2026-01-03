@@ -31,6 +31,7 @@ import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,6 +59,7 @@ class FirebaseAuthFilterFactoryTest {
 	}
 
 	@Test
+	@SetEnvironmentVariable(key = "FIREBASE_CONFIG", value = "{\"type\":\"service_account\"}")
 	void firebaseAuthFilter() throws Exception {
 		AuthFilterFactory authFilterFactory = this.factory.build(
 			new ResourceConfigurationSourceProvider(),
