@@ -87,8 +87,7 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 	private String getFirebaseConfigFromEnv() {
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
 		if (envValue == null || envValue.isEmpty()) {
-			throw new IllegalStateException(
-				FIREBASE_CONFIG_ENV_VAR + " environment variable is not set");
+			throw new IllegalStateException(FIREBASE_CONFIG_ENV_VAR + " environment variable is not set");
 		}
 		return envValue;
 	}
