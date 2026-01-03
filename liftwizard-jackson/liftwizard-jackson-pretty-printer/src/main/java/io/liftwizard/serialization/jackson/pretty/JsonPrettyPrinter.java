@@ -32,9 +32,7 @@ public class JsonPrettyPrinter extends DefaultPrettyPrinter {
 	public JsonPrettyPrinter() {
 		this._arrayIndenter = TAB_INDENTER;
 		this._objectIndenter = TAB_INDENTER;
-		this._separators = Separators.createDefaultInstance()
-			.withObjectEmptySeparator("")
-			.withArrayEmptySeparator("");
+		this._separators = Separators.createDefaultInstance().withObjectEmptySeparator("").withArrayEmptySeparator("");
 	}
 
 	@Nonnull
