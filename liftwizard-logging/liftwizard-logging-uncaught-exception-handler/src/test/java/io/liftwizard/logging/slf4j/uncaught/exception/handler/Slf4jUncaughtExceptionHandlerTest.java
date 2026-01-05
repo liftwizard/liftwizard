@@ -16,9 +16,32 @@
 
 package io.liftwizard.logging.slf4j.uncaught.exception.handler;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class Slf4jUncaughtExceptionHandlerTest {
+
+	private PrintStream originalStderr;
+	private ByteArrayOutputStream stderrCapture;
+
+	@BeforeEach
+	void setUp() {
+		this.originalStderr = System.err;
+		this.stderrCapture = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(this.stderrCapture, true, StandardCharsets.UTF_8));
+	}
+
+	@AfterEach
+	void tearDown() {
+		System.setErr(this.originalStderr);
+	}
 
 	@Test
 	void uncaughtException() {
@@ -29,6 +52,14 @@ class Slf4jUncaughtExceptionHandlerTest {
 		);
 
 		new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
+
+		String stderrOutput = this.stderrCapture.toString(StandardCharsets.UTF_8);
+		assertThat(stderrOutput)
+			.startsWith("Exception in thread \"")
+			.contains("Slf4jUncaughtExceptionHandlerTest root exception")
+			.contains("Slf4jUncaughtExceptionHandlerTest cause exception")
+			.contains("RootException")
+			.contains("CauseException");
 	}
 
 	private static class CauseException extends RuntimeException {
