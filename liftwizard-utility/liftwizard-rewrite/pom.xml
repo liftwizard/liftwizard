@@ -163,7 +163,7 @@
         <dependency>
             <groupId>org.openrewrite</groupId>
             <artifactId>rewrite-templating</artifactId>
-            <version>1.38.3</version>
+            <version>1.38.4</version>
         </dependency>
 
         <dependency>
@@ -232,7 +232,7 @@
                         <path>
                             <groupId>org.openrewrite</groupId>
                             <artifactId>rewrite-templating</artifactId>
-                            <version>1.38.3</version>
+                            <version>1.38.4</version>
                         </path>
                         <path>
                             <groupId>jakarta.annotation</groupId>
