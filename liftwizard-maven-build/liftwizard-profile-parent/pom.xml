@@ -874,7 +874,7 @@
                                 <path>
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
-                                    <version>2.36.0</version>
+                                    <version>2.46.0</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
@@ -924,7 +924,7 @@
                                 <path>
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
-                                    <version>2.36.0</version>
+                                    <version>2.46.0</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
@@ -976,7 +976,7 @@
                                 <path>
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
-                                    <version>2.36.0</version>
+                                    <version>2.46.0</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
