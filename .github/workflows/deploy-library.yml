@@ -19,7 +19,7 @@ jobs:
 
             - uses: actions/setup-java@v5
               with:
-                  java-version: 17.0.10
+                  java-version: 21
                   distribution: oracle
                   server-id: central
                   server-username: MAVEN_USERNAME
