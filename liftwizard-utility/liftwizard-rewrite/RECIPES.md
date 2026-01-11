@@ -163,6 +163,17 @@ Replace `collect<primitive>().sum()` with `sumOf<primitive>()` to avoid intermed
 
 The sumOfLong() method is more efficient because it avoids creating an intermediate primitive collection.
 
+### Operation Ordering Optimizations
+
+#### ECSelectBeforeSortThis
+
+Reorder sortThis() and select()/reject() operations to filter before sorting for better performance:
+
+- `list.sortThis().select(predicate)` -> `list.select(predicate).sortThis()`
+- `list.sortThis(comparator).select(predicate)` -> `list.select(predicate).sortThis(comparator)`
+- `list.sortThis().reject(predicate)` -> `list.reject(predicate).sortThis()`
+- `list.sortThis(comparator).reject(predicate)` -> `list.reject(predicate).sortThis(comparator)`
+
 ### Constructor to Factory
 
 #### ECListConstructorToFactory
