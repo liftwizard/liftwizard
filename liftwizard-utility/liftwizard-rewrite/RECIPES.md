@@ -152,6 +152,16 @@ Simplify negated satisfies calls on Iterate utility:
 - `!Iterate.anySatisfy(iterable, predicate)` → `Iterate.noneSatisfy(iterable, predicate)`
 - `!Iterate.noneSatisfy(iterable, predicate)` → `Iterate.anySatisfy(iterable, predicate)`
 
+### Primitive Sum Optimizations
+
+#### ECCollectIntSum and ECCollectLongSum
+
+Replace `collect<primitive>().sum()` with `sumOf<primitive>()` to avoid intermediate primitive collection allocation:
+
+- `iterable.collectInt(function).sum()` → `iterable.sumOfInt(function)`
+
+The sumOfInt() method is more efficient because it avoids creating an intermediate primitive collection.
+
 ### Constructor to Factory
 
 #### ECListConstructorToFactory
