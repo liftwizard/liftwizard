@@ -122,6 +122,15 @@ Replace count comparisons with anySatisfy/noneSatisfy:
 - `list.count(predicate) <= 0` → `list.noneSatisfy(predicate)`
 - `list.count(predicate) >= 1` → `list.anySatisfy(predicate)`
 
+#### ECCountEqualsSize
+
+Replace count(predicate) == size() with allSatisfy(predicate):
+
+- `list.count(predicate) == list.size()` → `list.allSatisfy(predicate)`
+- `list.size() == list.count(predicate)` → `list.allSatisfy(predicate)`
+
+The allSatisfy() can short-circuit on the first non-matching element, while count() == size() must scan the entire collection.
+
 #### ECDetectOptionalToSatisfies
 
 Replace detectOptional().isPresent() with anySatisfy/noneSatisfy:
