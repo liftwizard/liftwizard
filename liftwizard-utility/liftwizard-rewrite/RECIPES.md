@@ -159,8 +159,9 @@ Simplify negated satisfies calls on Iterate utility:
 Replace `collect<primitive>().sum()` with `sumOf<primitive>()` to avoid intermediate primitive collection allocation:
 
 - `iterable.collectInt(function).sum()` → `iterable.sumOfInt(function)`
+- `iterable.collectLong(function).sum()` → `iterable.sumOfLong(function)`
 
-The sumOfInt() method is more efficient because it avoids creating an intermediate primitive collection.
+The sumOfLong() method is more efficient because it avoids creating an intermediate primitive collection.
 
 ### Constructor to Factory
 
