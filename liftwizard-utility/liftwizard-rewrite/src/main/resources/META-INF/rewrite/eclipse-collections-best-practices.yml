@@ -32,6 +32,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECAnySatisfyEqualsToContainsRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSizeToEmptyRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECCollectIntSumRecipes
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECCollectLongSumRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECListConstructorToFactory
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECMapConstructorToFactory
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSortedMapConstructorToFactory
