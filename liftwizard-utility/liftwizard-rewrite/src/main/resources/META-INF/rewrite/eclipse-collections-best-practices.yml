@@ -23,6 +23,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECImplFactoryToApiFactoryRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedEmptyChecksRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedSatisfiesRecipes
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECAnySatisfyPredicatesNotToNoneSatisfyRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECDetectOptionalToSatisfiesRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECCountToSatisfiesRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSizeToEmptyRecipes
