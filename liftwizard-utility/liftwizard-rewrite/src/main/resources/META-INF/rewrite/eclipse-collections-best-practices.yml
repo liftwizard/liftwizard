@@ -47,6 +47,9 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.MapIterateEmptyRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.IterateEmptyRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.IterateToArrayIterate
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.IterateSelectRedundantRecipes
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.IterateRejectRedundantRecipes
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.IterateCollectRedundantRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFCollectionToMutableCollection
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFListToMutableList
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFMapToMutableMap
