@@ -187,6 +187,7 @@
             <groupId>org.jspecify</groupId>
             <artifactId>jspecify</artifactId>
             <version>1.0.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -321,6 +322,7 @@
                                 <ignoreClass>com.github.benmanes.caffeine.cache.*</ignoreClass>
                                 <ignoreClass>com.github.difflib.*</ignoreClass>
                                 <ignoreClass>com.google.*</ignoreClass>
+                                <ignoreClass>org.jspecify.*</ignoreClass>
                                 <ignoreClass>org.pcollections.*</ignoreClass>
                             </ignoreClasses>
                         </banDuplicateClasses>
