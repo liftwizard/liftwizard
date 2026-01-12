@@ -23,6 +23,7 @@
              so that dropwizard-example doesn't get deployed as a library. -->
         <maven.deploy.skip>true</maven.deploy.skip>
         <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+        <skipPublishing>true</skipPublishing>
 
         <!-- You'll probably want to remove this for your project. We're just using it here
              so that dropwizard-example site doesn't get staged and deployed. -->
