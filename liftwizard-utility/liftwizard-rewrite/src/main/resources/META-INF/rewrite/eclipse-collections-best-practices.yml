@@ -37,6 +37,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECCollectLongSumRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECCollectDoubleSumRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamForEachRecipes
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCountToCount
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamMatchToSatisfy
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamFindFirstToDetectOptional
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamReduceToInjectInto

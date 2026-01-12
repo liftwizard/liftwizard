@@ -161,7 +161,58 @@ Replace `collect<primitive>().sum()` with `sumOf<primitive>()` to avoid intermed
 - `iterable.collectInt(function).sum()` → `iterable.sumOfInt(function)`
 - `iterable.collectLong(function).sum()` → `iterable.sumOfLong(function)`
 
-The sumOfLong() method is more efficient because it avoids creating an intermediate primitive collection.
+### Stream to Native Method Conversions
+
+These recipes replace Java Stream operations with native Eclipse Collections methods for better performance and readability.
+
+#### ECStreamCountToCount
+
+Replace stream().filter().count() with count() on Eclipse Collections types:
+
+- `collection.stream().filter(predicate).count()` -> `collection.count(predicate)`
+
+This transformation eliminates the unnecessary Stream intermediary since Eclipse Collections has the count method directly on RichIterable.
+
+**Note**: Eclipse Collections `count()` returns `int`, while `stream().filter().count()` returns `long`. This transformation is safe when the count value fits in an int (up to 2^31-1 elements).
+
+#### ECStreamMatchToSatisfy
+
+Replace stream match operations with Eclipse Collections satisfy operations:
+
+- `collection.stream().anyMatch(pred)` -> `collection.anySatisfy(pred)`
+- `collection.stream().allMatch(pred)` -> `collection.allSatisfy(pred)`
+- `collection.stream().noneMatch(pred)` -> `collection.noneSatisfy(pred)`
+
+#### ECStreamForEach
+
+Replace stream().forEach() with forEach() on Eclipse Collections types:
+
+- `collection.stream().forEach(action)` -> `collection.forEach(action)`
+
+#### ECStreamFindFirstToDetectOptional
+
+Replace stream().filter().findFirst() with detectOptional() on Eclipse Collections types:
+
+- `collection.stream().filter(predicate).findFirst()` -> `collection.detectOptional(predicate)`
+
+#### ECStreamReduceToInjectInto
+
+Replace stream().reduce() with injectInto() on Eclipse Collections types:
+
+- `collection.stream().reduce(identity, accumulator)` -> `collection.injectInto(identity, accumulator)`
+
+#### ECStreamMinMaxToMinMax
+
+Replace stream min/max operations with Eclipse Collections min/max:
+
+- `collection.stream().min(comparator)` -> `collection.minOptional(comparator)`
+- `collection.stream().max(comparator)` -> `collection.maxOptional(comparator)`
+
+#### ECStreamAnyMatchToContains
+
+Replace stream().anyMatch() with contains() when checking for value equality:
+
+- `collection.stream().anyMatch(value::equals)` -> `collection.contains(value)`
 
 ### Operation Ordering Optimizations
 
