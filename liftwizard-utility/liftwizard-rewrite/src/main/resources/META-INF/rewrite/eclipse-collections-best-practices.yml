@@ -39,6 +39,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamForEachRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamMatchToSatisfy
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamFindFirstToDetectOptional
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamReduceToInjectInto
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSelectBeforeSortThisRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECListConstructorToFactory
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECMapConstructorToFactory
