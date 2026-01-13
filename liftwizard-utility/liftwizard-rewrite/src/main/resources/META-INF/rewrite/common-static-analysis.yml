@@ -124,3 +124,4 @@ recipeList:
     - org.openrewrite.kotlin.cleanup.ImplicitParameterInLambda
     - org.openrewrite.kotlin.cleanup.ReplaceCharToIntWithCode
     - org.openrewrite.staticanalysis.CustomImportOrder
+    - io.liftwizard.rewrite.LoggingBestPractices

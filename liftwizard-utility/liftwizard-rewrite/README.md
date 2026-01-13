@@ -4,16 +4,19 @@
 
 ## Main Composite Recipes
 
-Most projects will use these two composite recipes:
+Most projects will use these composite recipes:
 
-| Composite Recipe   | Description                                                        |
-| ------------------ | ------------------------------------------------------------------ |
-| **Adoption**       | Migrate from Java Collections Framework to Eclipse Collections     |
-| **Best Practices** | Optimize existing Eclipse Collections code with idiomatic patterns |
+| Composite Recipe           | Description                                                        |
+| -------------------------- | ------------------------------------------------------------------ |
+| **Adoption**               | Migrate from Java Collections Framework to Eclipse Collections     |
+| **Best Practices**         | Optimize existing Eclipse Collections code with idiomatic patterns |
+| **Logging Best Practices** | Transform logging to SLF4J parameterized format                    |
 
 **Adoption** (`io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption`) transforms JCF code like `new ArrayList<>()` into Eclipse Collections equivalents like `Lists.mutable.empty()`.
 
 **Best Practices** (`io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices`) transforms verbose patterns into idiomatic Eclipse Collections code, such as replacing `richIterable.size() > 0` with `richIterable.notEmpty()`.
+
+**Logging Best Practices** (`io.liftwizard.rewrite.LoggingBestPractices`) transforms eager logging patterns to use SLF4J parameterized logging, combining Liftwizard recipes with OpenRewrite's [rewrite-logging-frameworks](https://docs.openrewrite.org/recipes/java/logging/slf4j) recipes.
 
 ## Getting Started
 
@@ -37,6 +40,7 @@ Add the rewrite-maven-plugin with the liftwizard-rewrite dependency:
                 <activeRecipes>
                     <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption</recipe>
                     <recipe>io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices</recipe>
+                    <recipe>io.liftwizard.rewrite.LoggingBestPractices</recipe>
                 </activeRecipes>
             </configuration>
             <dependencies>
