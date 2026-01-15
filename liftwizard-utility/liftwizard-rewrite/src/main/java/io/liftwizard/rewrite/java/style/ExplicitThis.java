@@ -16,8 +16,7 @@
 
 package io.liftwizard.rewrite.java.style;
 
-import java.util.Collections;
-
+import org.eclipse.collections.api.factory.Lists;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -56,19 +55,19 @@ public class ExplicitThis extends Recipe {
 		private boolean isInsideFieldAccess;
 
 		@Override
-		public J visitFieldAccess(FieldAccess fieldAccess, ExecutionContext executionContext) {
+		public J visitFieldAccess(FieldAccess fieldAccess, ExecutionContext ctx) {
 			boolean previousIsInsideFieldAccess = this.isInsideFieldAccess;
 			this.isInsideFieldAccess = true;
 
-			J result = super.visitFieldAccess(fieldAccess, executionContext);
+			J result = super.visitFieldAccess(fieldAccess, ctx);
 
 			this.isInsideFieldAccess = previousIsInsideFieldAccess;
 			return result;
 		}
 
 		@Override
-		public J visitIdentifier(J.Identifier identifier, ExecutionContext executionContext) {
-			J.Identifier id = (J.Identifier) super.visitIdentifier(identifier, executionContext);
+		public J visitIdentifier(J.Identifier identifier, ExecutionContext ctx) {
+			J.Identifier id = (J.Identifier) super.visitIdentifier(identifier, ctx);
 
 			// In static context, no "this." allowed
 			if (this.isStatic) {
@@ -112,22 +111,22 @@ public class ExplicitThis extends Recipe {
 		}
 
 		@Override
-		public J visitBlock(J.Block block, ExecutionContext executionContext) {
+		public J visitBlock(J.Block block, ExecutionContext ctx) {
 			if (!block.isStatic()) {
-				return super.visitBlock(block, executionContext);
+				return super.visitBlock(block, ctx);
 			}
 
 			boolean previousStatic = this.isStatic;
 			this.isStatic = true;
 
-			J.Block result = (J.Block) super.visitBlock(block, executionContext);
+			J.Block result = (J.Block) super.visitBlock(block, ctx);
 
 			this.isStatic = previousStatic;
 			return result;
 		}
 
 		@Override
-		public J visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext executionContext) {
+		public J visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
 			boolean previousStatic = this.isStatic;
 
 			// Check if method is static using flag bits (0x0008 is the static flag)
@@ -136,7 +135,7 @@ public class ExplicitThis extends Recipe {
 				this.isStatic = (methodType.getFlagsBitMap() & 0x0008L) != 0;
 			}
 
-			J.MethodDeclaration result = (J.MethodDeclaration) super.visitMethodDeclaration(method, executionContext);
+			J.MethodDeclaration result = (J.MethodDeclaration) super.visitMethodDeclaration(method, ctx);
 
 			// Restore previous state
 			this.isStatic = previousStatic;
@@ -145,8 +144,8 @@ public class ExplicitThis extends Recipe {
 		}
 
 		@Override
-		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext executionContext) {
-			J.MethodInvocation m = (J.MethodInvocation) super.visitMethodInvocation(method, executionContext);
+		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			J.MethodInvocation m = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
 			// Fast path: in static context, no "this." allowed
 			if (this.isStatic) {
@@ -182,7 +181,7 @@ public class ExplicitThis extends Recipe {
 				Tree.randomId(),
 				Space.EMPTY,
 				Markers.EMPTY,
-				Collections.emptyList(),
+				Lists.fixedSize.empty(),
 				"this",
 				classType,
 				null
@@ -214,7 +213,7 @@ public class ExplicitThis extends Recipe {
 				Tree.randomId(),
 				Space.EMPTY,
 				Markers.EMPTY,
-				Collections.emptyList(),
+				Lists.fixedSize.empty(),
 				"this",
 				classType,
 				null

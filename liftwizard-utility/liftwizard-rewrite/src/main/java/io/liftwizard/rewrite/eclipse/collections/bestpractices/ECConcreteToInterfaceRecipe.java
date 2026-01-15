@@ -18,16 +18,17 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
+import org.openrewrite.Tree;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.RemoveUnusedImports;
@@ -108,7 +109,7 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 
 	@Override
 	public Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -142,7 +143,7 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 			boolean isField = multiVariable
 				.getVariables()
 				.stream()
-				.anyMatch((namedVariable) -> namedVariable.isField(getCursor()));
+				.anyMatch((namedVariable) -> namedVariable.isField(this.getCursor()));
 			boolean isFinal = multiVariable.hasModifier(J.Modifier.Type.Final);
 
 			J.VariableDeclarations vd = super.visitVariableDeclarations(multiVariable, ctx);
@@ -185,10 +186,10 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 
 			if (typeExpr instanceof J.FieldAccess) {
 				return new J.Identifier(
-					UUID.randomUUID(),
+					Tree.randomId(),
 					typeExpr.getPrefix(),
 					typeExpr.getMarkers(),
-					Collections.emptyList(),
+					Lists.fixedSize.empty(),
 					this.interfaceSimpleName,
 					JavaType.buildType(this.interfaceTypeFqn),
 					null
@@ -210,10 +211,10 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 
 			if (clazz instanceof J.FieldAccess) {
 				J.Identifier interfaceTypeIdent = new J.Identifier(
-					UUID.randomUUID(),
+					Tree.randomId(),
 					clazz.getPrefix(),
 					clazz.getMarkers(),
-					Collections.emptyList(),
+					Lists.fixedSize.empty(),
 					this.interfaceSimpleName,
 					JavaType.buildType(this.interfaceTypeFqn),
 					null

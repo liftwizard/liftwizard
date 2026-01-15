@@ -69,8 +69,8 @@ public class VerifyAssertThrowsToAssertJ extends Recipe {
 				.javaParser(JavaParser.fromJavaVersion().classpath("assertj-core"))
 				.build();
 
-			this.maybeAddImport("org.assertj.core.api.Assertions", "assertThatThrownBy", false);
 			this.maybeRemoveImport("org.eclipse.collections.impl.test.Verify");
+			this.maybeAddImport("org.assertj.core.api.Assertions", "assertThatThrownBy", false);
 
 			Expression exceptionClass = methodInvocation.getArguments().get(0);
 			return template.apply(

@@ -18,13 +18,14 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
+import org.openrewrite.Tree;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.RemoveUnusedImports;
@@ -75,7 +76,7 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 
 	@Override
 	public final Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 			boolean isField = multiVariable
 				.getVariables()
 				.stream()
-				.anyMatch((namedVariable) -> namedVariable.isField(getCursor()));
+				.anyMatch((namedVariable) -> namedVariable.isField(this.getCursor()));
 			boolean isFinal = multiVariable.hasModifier(J.Modifier.Type.Final);
 
 			J.VariableDeclarations vd = super.visitVariableDeclarations(multiVariable, ctx);
@@ -155,10 +156,10 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 
 			if (typeExpr instanceof J.FieldAccess) {
 				return new J.Identifier(
-					UUID.randomUUID(),
+					Tree.randomId(),
 					typeExpr.getPrefix(),
 					typeExpr.getMarkers(),
-					Collections.emptyList(),
+					Lists.fixedSize.empty(),
 					this.ecInterface,
 					JavaType.buildType(fullyQualifiedName),
 					null
@@ -180,10 +181,10 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 
 			if (clazz instanceof J.FieldAccess) {
 				J.Identifier mutableTypeIdent = new J.Identifier(
-					UUID.randomUUID(),
+					Tree.randomId(),
 					clazz.getPrefix(),
 					clazz.getMarkers(),
-					Collections.emptyList(),
+					Lists.fixedSize.empty(),
 					this.ecInterface,
 					JavaType.buildType(fullyQualifiedName),
 					null
