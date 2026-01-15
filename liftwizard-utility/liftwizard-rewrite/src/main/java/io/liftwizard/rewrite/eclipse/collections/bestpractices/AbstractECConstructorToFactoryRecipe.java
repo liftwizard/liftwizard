@@ -18,12 +18,13 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -61,7 +62,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 
 	@Override
 	public final Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -163,8 +164,8 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			String factoryPackage = "org.eclipse.collections.api.factory" + prefixedFactoryPackageSuffix;
 			String factoryClass = factoryPackage + "." + this.factoryClassName;
 
-			this.maybeAddImport(factoryClass);
 			this.maybeRemoveImport(implementationClass);
+			this.maybeAddImport(factoryClass);
 			this.doAfterVisit(new OrderImports(false).getVisitor());
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
@@ -274,7 +275,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 
 		private String extractTypeParameters(J.NewClass nc) {
 			if (nc.getClazz() instanceof J.ParameterizedType paramType) {
-				if (paramType.getTypeParameters() != null && !paramType.getTypeParameters().isEmpty()) {
+				if (Iterate.notEmpty(paramType.getTypeParameters())) {
 					boolean hasActualTypeParams = paramType
 						.getTypeParameters()
 						.stream()

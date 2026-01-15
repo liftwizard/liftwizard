@@ -36,7 +36,7 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		rewriteRun(
+		this.rewriteRun(
 			java(
 				"""
 				import org.eclipse.collections.impl.factory.Lists;
@@ -101,7 +101,7 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 
 	@Test
 	void doNotReplaceAlreadyApiFactory() {
-		rewriteRun(
+		this.rewriteRun(
 			java(
 				"""
 				import org.eclipse.collections.api.factory.Lists;
@@ -122,7 +122,7 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 
 	@Test
 	void doNotTransformStaticUtilityMethods() {
-		rewriteRun(
+		this.rewriteRun(
 			java(
 				"""
 				import java.util.ArrayList;

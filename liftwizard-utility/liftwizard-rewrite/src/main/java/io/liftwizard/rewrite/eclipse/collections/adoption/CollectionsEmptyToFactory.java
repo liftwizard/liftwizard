@@ -17,10 +17,11 @@
 package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
@@ -44,7 +45,7 @@ public class CollectionsEmptyToFactory extends Recipe {
 
 	@Override
 	public Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -99,8 +100,8 @@ public class CollectionsEmptyToFactory extends Recipe {
 
 			String typeParams = this.extractTypeParameters(mi);
 			String factoryImport = "org.eclipse.collections.api.factory." + factoryClass;
-			this.maybeAddImport(factoryImport);
 			this.maybeRemoveImport("java.util.Collections");
+			this.maybeAddImport(factoryImport);
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String templateSource = factoryClass + "." + factoryMethod + "." + typeParamsTemplate + "empty()";
@@ -115,7 +116,7 @@ public class CollectionsEmptyToFactory extends Recipe {
 		}
 
 		private String extractTypeParameters(J.MethodInvocation mi) {
-			if (mi.getTypeParameters() != null && !mi.getTypeParameters().isEmpty()) {
+			if (Iterate.notEmpty(mi.getTypeParameters())) {
 				return mi
 					.getTypeParameters()
 					.stream()
@@ -131,7 +132,7 @@ public class CollectionsEmptyToFactory extends Recipe {
 			}
 			if (tree instanceof J.ParameterizedType paramType) {
 				String base = this.formatTypeTree(paramType.getClazz());
-				if (paramType.getTypeParameters() != null && !paramType.getTypeParameters().isEmpty()) {
+				if (Iterate.notEmpty(paramType.getTypeParameters())) {
 					String params = paramType
 						.getTypeParameters()
 						.stream()

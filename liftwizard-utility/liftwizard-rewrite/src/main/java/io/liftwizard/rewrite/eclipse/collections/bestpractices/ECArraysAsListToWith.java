@@ -17,11 +17,11 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
@@ -53,7 +53,7 @@ public class ECArraysAsListToWith extends Recipe {
 
 	@Override
 	public Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -155,8 +155,8 @@ public class ECArraysAsListToWith extends Recipe {
 			List<Expression> varargsElements = arraysAsListCall.getArguments();
 
 			String factoryImport = "org.eclipse.collections.api.factory." + factoryClass;
-			this.maybeAddImport(factoryImport);
 			this.maybeRemoveImport("java.util.Arrays");
+			this.maybeAddImport(factoryImport);
 
 			String templateSource;
 			if (hasComparator) {

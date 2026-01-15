@@ -86,8 +86,8 @@ public class AssertionsStaticImport extends Recipe {
 				.javaParser(JavaParser.fromJavaVersion().classpath("assertj-core"))
 				.build();
 
-			this.maybeAddImport("org.assertj.core.api.Assertions", methodName, false);
 			this.maybeRemoveImport("org.assertj.core.api.Assertions");
+			this.maybeAddImport("org.assertj.core.api.Assertions", methodName, false);
 
 			return template.apply(
 				this.getCursor(),

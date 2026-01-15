@@ -16,8 +16,8 @@
 
 package io.liftwizard.rewrite.eclipse.collections;
 
-import java.util.Collections;
-
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.style.ImportLayoutStyle;
 import org.openrewrite.style.NamedStyles;
@@ -33,18 +33,16 @@ public abstract class AbstractEclipseCollectionsTest implements RewriteTest {
 		"no-star-imports",
 		"No star imports style",
 		"Prevents OpenRewrite from collapsing imports into star imports",
-		Collections.emptySet(),
-		Collections.singletonList(
-			ImportLayoutStyle.builder()
-				.classCountToUseStarImport(9999)
-				.nameCountToUseStarImport(9999)
-				.importPackage("org.eclipse.collections.*")
-				.blankLine()
-				.importAllOthers()
-				.blankLine()
-				.importStaticAllOthers()
-				.build()
-		)
+		Sets.fixedSize.empty(),
+		Lists.fixedSize.with(ImportLayoutStyle.builder()
+			.classCountToUseStarImport(9999)
+			.nameCountToUseStarImport(9999)
+			.importPackage("org.eclipse.collections.*")
+			.blankLine()
+			.importAllOthers()
+			.blankLine()
+			.importStaticAllOthers()
+			.build())
 	);
 
 	@Override
@@ -52,7 +50,7 @@ public abstract class AbstractEclipseCollectionsTest implements RewriteTest {
 		spec.parser(
 			JavaParser.fromJavaVersion()
 				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-				.styles(Collections.singletonList(NO_STAR_IMPORT_STYLE))
+				.styles(Lists.fixedSize.with(NO_STAR_IMPORT_STYLE))
 		);
 	}
 }

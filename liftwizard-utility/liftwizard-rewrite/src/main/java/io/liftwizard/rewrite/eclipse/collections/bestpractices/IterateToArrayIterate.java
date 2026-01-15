@@ -17,10 +17,10 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
@@ -51,7 +51,7 @@ public class IterateToArrayIterate extends Recipe {
 
 	@Override
 	public Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public class IterateToArrayIterate extends Recipe {
 				}
 
 				final Expression arrayArgument = arraysAsListCall.getArguments().get(0);
-				this.maybeAddImport("org.eclipse.collections.impl.utility.ArrayIterate");
 				this.maybeRemoveImport("org.eclipse.collections.impl.utility.Iterate");
+				this.maybeAddImport("org.eclipse.collections.impl.utility.ArrayIterate");
 				this.maybeRemoveImport("java.util.Arrays");
 
 				String methodName = mi.getSimpleName();

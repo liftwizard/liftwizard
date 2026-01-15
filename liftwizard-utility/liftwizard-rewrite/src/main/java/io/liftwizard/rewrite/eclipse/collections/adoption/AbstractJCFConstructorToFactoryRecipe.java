@@ -17,12 +17,13 @@
 package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -48,7 +49,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
 	@Override
 	public final Set<String> getTags() {
-		return Collections.singleton("eclipse-collections");
+		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
@@ -196,7 +197,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 			}
 
 			List<Expression> typeParameters = parameterizedType.getTypeParameters();
-			if (typeParameters == null || typeParameters.isEmpty()) {
+			if (Iterate.isEmpty(typeParameters)) {
 				return "";
 			}
 
