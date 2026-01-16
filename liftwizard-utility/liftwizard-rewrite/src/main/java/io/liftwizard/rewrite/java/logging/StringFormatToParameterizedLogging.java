@@ -49,10 +49,10 @@ public class StringFormatToParameterizedLogging extends Recipe {
 
 	@Override
 	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new StringFormatLoggingVisitor();
+		return new StringFormatToParameterizedLoggingVisitor();
 	}
 
-	private static final class StringFormatLoggingVisitor extends JavaVisitor<ExecutionContext> {
+	private static final class StringFormatToParameterizedLoggingVisitor extends JavaVisitor<ExecutionContext> {
 
 		@Override
 		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {

@@ -44,8 +44,8 @@ The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eag
 
 | Order | Recipe                                | Source      |
 | ----- | ------------------------------------- | ----------- |
-| 1     | `StringFormatLoggingToParameterized`  | Liftwizard  |
-| 2     | `MessageFormatLoggingToParameterized` | Liftwizard  |
+| 1     | `StringFormatToParameterizedLogging`  | Liftwizard  |
+| 2     | `MessageFormatToParameterizedLogging` | Liftwizard  |
 | 3     | `ParameterizedLogging`                | OpenRewrite |
 | 4     | `StripToStringFromArguments`          | OpenRewrite |
 | 5     | `RemoveUnnecessaryLogLevelGuards`     | Liftwizard  |
@@ -58,7 +58,7 @@ The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eag
 
 ### Liftwizard Recipes
 
-#### StringFormatLoggingToParameterized
+#### StringFormatToParameterizedLogging
 
 Converts `String.format()` calls in SLF4J logging statements to parameterized logging.
 
@@ -71,7 +71,7 @@ Only handles simple format specifiers (`%s`, `%d`, `%x`, `%o`, `%f`, `%b`, `%c`)
 - `String.format("Width: %5d", number)` - unchanged (width)
 - `String.format("Order: %2$s %1$s", first, second)` - unchanged (argument index)
 
-#### MessageFormatLoggingToParameterized
+#### MessageFormatToParameterizedLogging
 
 Converts `MessageFormat.format()` calls in SLF4J logging statements to parameterized logging.
 
