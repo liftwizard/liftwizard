@@ -35,7 +35,7 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class MessageFormatLoggingToParameterized extends Recipe {
+public class MessageFormatToParameterizedLogging extends Recipe {
 
 	private static final Set<String> LOGGER_METHODS = Set.of("trace", "debug", "info", "warn", "error");
 	private static final Pattern SIMPLE_PLACEHOLDER = Pattern.compile("\\{(\\d+)}");

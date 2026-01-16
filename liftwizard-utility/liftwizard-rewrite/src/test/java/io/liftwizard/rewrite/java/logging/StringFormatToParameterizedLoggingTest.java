@@ -23,11 +23,11 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class StringFormatLoggingToParameterizedTest implements RewriteTest {
+class StringFormatToParameterizedLoggingTest implements RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new StringFormatLoggingToParameterized());
+		spec.recipe(new StringFormatToParameterizedLogging());
 	}
 
 	@Test
