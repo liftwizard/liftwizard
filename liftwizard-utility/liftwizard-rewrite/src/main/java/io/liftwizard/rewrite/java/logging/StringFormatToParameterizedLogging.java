@@ -31,7 +31,7 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class StringFormatLoggingToParameterized extends Recipe {
+public class StringFormatToParameterizedLogging extends Recipe {
 
 	private static final Set<String> LOGGER_METHODS = Set.of("trace", "debug", "info", "warn", "error");
 	private static final Pattern SIMPLE_FORMAT_SPECIFIER = Pattern.compile("%[sdxofbc]");
