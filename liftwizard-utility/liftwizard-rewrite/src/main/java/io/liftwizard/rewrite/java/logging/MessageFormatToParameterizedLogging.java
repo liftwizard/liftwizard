@@ -53,10 +53,10 @@ public class MessageFormatToParameterizedLogging extends Recipe {
 
 	@Override
 	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new MessageFormatLoggingVisitor();
+		return new MessageFormatToParameterizedLoggingVisitor();
 	}
 
-	private static final class MessageFormatLoggingVisitor extends JavaVisitor<ExecutionContext> {
+	private static final class MessageFormatToParameterizedLoggingVisitor extends JavaVisitor<ExecutionContext> {
 
 		@Override
 		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
