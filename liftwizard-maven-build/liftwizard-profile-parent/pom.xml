@@ -909,8 +909,7 @@
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
                                 <arg>-Xplugin:ErrorProne</arg>
-                                <arg>
-                                    -XepExcludedPaths:.*/generated-sources/.* \
+                                <arg>-XepExcludedPaths:.*/generated-sources/.* \
                                     -Xep:BadImport:ERROR \
                                     -Xep:DefaultCharset:ERROR \
                                     -Xep:InvalidInlineTag:ERROR \
@@ -919,8 +918,7 @@
                                     -Xep:ObjectToString:ERROR \
                                     -Xep:StringCaseLocaleUsage:ERROR \
                                     -Xep:StringSplitter:ERROR \
-                                    -Xep:UnnecessaryLambda:ERROR
-                                </arg>
+                                    -Xep:UnnecessaryLambda:ERROR</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
@@ -971,8 +969,7 @@
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
                                 <arg>-Xplugin:ErrorProne</arg>
-                                <arg>
-                                    -XepExcludedPaths:.*/generated-sources/.* \
+                                <arg>-XepExcludedPaths:.*/generated-sources/.* \
                                     -XepPatchChecks:ERROR \
                                     -XepPatchLocation:${project.build.directory}/errorprone \
                                     -Xep:BadImport:ERROR \
@@ -983,8 +980,7 @@
                                     -Xep:ObjectToString:ERROR \
                                     -Xep:StringCaseLocaleUsage:ERROR \
                                     -Xep:StringSplitter:ERROR \
-                                    -Xep:UnnecessaryLambda:ERROR
-                                </arg>
+                                    -Xep:UnnecessaryLambda:ERROR</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
