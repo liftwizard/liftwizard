@@ -849,8 +849,8 @@
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
+                                <arg>-Xplugin:ErrorProne</arg>
                                 <arg>
-                                    -Xplugin:ErrorProne \
                                     -XepExcludedPaths:.*/generated-sources/.* \
                                     -Xep:CanIgnoreReturnValueSuggester:OFF \
                                     -Xep:NullableOnContainingClass:OFF \
@@ -876,6 +876,16 @@
                                     <artifactId>error_prone_core</artifactId>
                                     <version>2.46.0</version>
                                 </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>error-prone-contrib</artifactId>
+                                    <version>0.28.0</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>refaster-runner</artifactId>
+                                    <version>0.28.0</version>
+                                </path>
                             </annotationProcessorPaths>
                         </configuration>
                     </plugin>
@@ -898,7 +908,8 @@
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
-                                <arg>-Xplugin:ErrorProne \
+                                <arg>-Xplugin:ErrorProne</arg>
+                                <arg>
                                     -XepExcludedPaths:.*/generated-sources/.* \
                                     -Xep:BadImport:ERROR \
                                     -Xep:DefaultCharset:ERROR \
@@ -908,7 +919,8 @@
                                     -Xep:ObjectToString:ERROR \
                                     -Xep:StringCaseLocaleUsage:ERROR \
                                     -Xep:StringSplitter:ERROR \
-                                    -Xep:UnnecessaryLambda:ERROR</arg>
+                                    -Xep:UnnecessaryLambda:ERROR
+                                </arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
@@ -925,6 +937,16 @@
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
                                     <version>2.46.0</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>error-prone-contrib</artifactId>
+                                    <version>0.28.0</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>refaster-runner</artifactId>
+                                    <version>0.28.0</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
@@ -948,7 +970,8 @@
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
-                                <arg>-Xplugin:ErrorProne \
+                                <arg>-Xplugin:ErrorProne</arg>
+                                <arg>
                                     -XepExcludedPaths:.*/generated-sources/.* \
                                     -XepPatchChecks:ERROR \
                                     -XepPatchLocation:${project.build.directory}/errorprone \
@@ -960,7 +983,8 @@
                                     -Xep:ObjectToString:ERROR \
                                     -Xep:StringCaseLocaleUsage:ERROR \
                                     -Xep:StringSplitter:ERROR \
-                                    -Xep:UnnecessaryLambda:ERROR</arg>
+                                    -Xep:UnnecessaryLambda:ERROR
+                                </arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
@@ -977,6 +1001,16 @@
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
                                     <version>2.46.0</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>error-prone-contrib</artifactId>
+                                    <version>0.28.0</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>refaster-runner</artifactId>
+                                    <version>0.28.0</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
