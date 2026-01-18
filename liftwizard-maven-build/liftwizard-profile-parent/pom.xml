@@ -912,10 +912,13 @@
                                     -XepExcludedPaths:.*/generated-sources/.* \
                                     -Xep:BadImport:ERROR \
                                     -Xep:DefaultCharset:ERROR \
+                                    -Xep:DirectReturn:ERROR \
+                                    -Xep:IdentityConversion:ERROR \
                                     -Xep:InvalidInlineTag:ERROR \
                                     -Xep:JavaDurationGetSecondsToToSeconds:ERROR \
                                     -Xep:MissingOverride:ERROR \
                                     -Xep:ObjectToString:ERROR \
+                                    -Xep:RedundantStringConversion:ERROR \
                                     -Xep:StringCaseLocaleUsage:ERROR \
                                     -Xep:StringSplitter:ERROR \
                                     -Xep:UnnecessaryLambda:ERROR</arg>
@@ -970,14 +973,18 @@
                                 <arg>--should-stop=ifError=FLOW</arg>
                                 <arg>-Xplugin:ErrorProne \
                                     -XepExcludedPaths:.*/generated-sources/.* \
-                                    -XepPatchChecks:ERROR \
-                                    -XepPatchLocation:${project.build.directory}/errorprone \
+                                    -XepPatchChecks:Refaster,DirectReturn,IdentityConversion \
+                                    -XepPatchLocation:IN_PLACE \
+                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$).* \
                                     -Xep:BadImport:ERROR \
                                     -Xep:DefaultCharset:ERROR \
+                                    -Xep:DirectReturn:ERROR \
+                                    -Xep:IdentityConversion:ERROR \
                                     -Xep:InvalidInlineTag:ERROR \
                                     -Xep:JavaDurationGetSecondsToToSeconds:ERROR \
                                     -Xep:MissingOverride:ERROR \
                                     -Xep:ObjectToString:ERROR \
+                                    -Xep:RedundantStringConversion:ERROR \
                                     -Xep:StringCaseLocaleUsage:ERROR \
                                     -Xep:StringSplitter:ERROR \
                                     -Xep:UnnecessaryLambda:ERROR</arg>
