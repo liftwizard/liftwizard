@@ -16,9 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.firebase;
 
-import javax.annotation.Nonnull;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auto.service.AutoService;
+import com.google.common.base.Strings;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 import io.dropwizard.auth.AuthFilter;
@@ -35,6 +34,9 @@ import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.firebase.principal.FirebasePrincipal;
+import javax.annotation.Nonnull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @JsonTypeName("firebase")
 @AutoService(AuthFilterFactory.class)
@@ -88,9 +90,7 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 
 	private String getFirebaseConfigFromEnv() {
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
-		if (envValue == null || envValue.isEmpty()) {
-			throw new IllegalStateException(FIREBASE_CONFIG_ENV_VAR + " environment variable is not set");
-		}
+		checkState(envValue != null && !envValue.isEmpty(), FIREBASE_CONFIG_ENV_VAR + " environment variable is not set");
 		return envValue;
 	}
 
@@ -98,14 +98,14 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 	@JsonIgnore
 	public boolean isFirebaseConfigEnvSet() {
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
-		return envValue != null && !envValue.isEmpty();
+		return !Strings.isNullOrEmpty(envValue);
 	}
 
 	@ValidationMethod(message = "FIREBASE_CONFIG environment variable does not contain valid JSON")
 	@JsonIgnore
 	public boolean isFirebaseConfigValidJson() {
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
-		if (envValue == null || envValue.isEmpty()) {
+		if (Strings.isNullOrEmpty(envValue)) {
 			return true;
 		}
 		try {

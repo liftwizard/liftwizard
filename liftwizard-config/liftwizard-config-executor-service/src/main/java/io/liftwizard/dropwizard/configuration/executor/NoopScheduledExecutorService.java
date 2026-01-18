@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class NoopScheduledExecutorService extends AbstractDelegatingScheduledExecutorService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NoopScheduledExecutorService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(NoopScheduledExecutorService.class);
 
 	public NoopScheduledExecutorService(ScheduledExecutorService delegate) {
 		super(delegate);
@@ -32,13 +32,13 @@ public class NoopScheduledExecutorService extends AbstractDelegatingScheduledExe
 
 	@Override
 	protected Runnable wrapTask(Runnable runnable) {
-		return () -> LOGGER.debug("Skip scheduled runnable: {}", runnable);
+		return () -> LOG.debug("Skip scheduled runnable: {}", runnable);
 	}
 
 	@Override
 	protected <V> Callable<V> wrapTask(Callable<V> callable) {
 		return () -> {
-			LOGGER.debug("Skip scheduled callable: {}", callable);
+			LOG.debug("Skip scheduled callable: {}", callable);
 			return null;
 		};
 	}

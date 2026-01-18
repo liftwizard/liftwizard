@@ -32,7 +32,7 @@ import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
 public interface PrioritizedBundle extends ConfiguredBundle<Object> {
-	Logger LOGGER = LoggerFactory.getLogger(PrioritizedBundle.class);
+	Logger LOG = LoggerFactory.getLogger(PrioritizedBundle.class);
 
 	String MDC_BUNDLE = "liftwizard.bundle";
 	String MDC_PRIORITY = "liftwizard.priority";
@@ -69,7 +69,7 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
 		String durationPrettyString = DURATION_PATTERN.matcher(duration.toString().substring(2))
 			.replaceAll("$1 ")
 			.toLowerCase(Locale.ENGLISH);
-		LOGGER.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
+		LOG.info("{} initialized in {}", this.getClass().getSimpleName(), durationPrettyString);
 	}
 
 	default void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap) {}
@@ -88,7 +88,7 @@ public interface PrioritizedBundle extends ConfiguredBundle<Object> {
 		String durationPrettyString = DURATION_PATTERN.matcher(duration.toString().substring(2))
 			.replaceAll("$1 ")
 			.toLowerCase(Locale.ENGLISH);
-		LOGGER.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
+		LOG.info("{} ran in {}", this.getClass().getSimpleName(), durationPrettyString);
 	}
 
 	void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) throws Exception;

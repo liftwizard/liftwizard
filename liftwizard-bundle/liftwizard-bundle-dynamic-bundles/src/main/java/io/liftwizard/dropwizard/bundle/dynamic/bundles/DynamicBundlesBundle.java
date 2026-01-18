@@ -31,7 +31,7 @@ import org.slf4j.MDC.MDCCloseable;
 
 public class DynamicBundlesBundle implements ConfiguredBundle<Object> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DynamicBundlesBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DynamicBundlesBundle.class);
 
 	@Override
 	public void initialize(Bootstrap<?> bootstrap) {
@@ -48,11 +48,11 @@ public class DynamicBundlesBundle implements ConfiguredBundle<Object> {
 			.toImmutable();
 
 		if (prioritizedBundles.isEmpty()) {
-			LOGGER.warn("Didn't find any implementations of PrioritizedBundle using ServiceLoader.");
+			LOG.warn("Didn't find any implementations of PrioritizedBundle using ServiceLoader.");
 		}
 
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info(
+		if (LOG.isInfoEnabled()) {
+			LOG.info(
 				"Found PrioritizedBundles using ServiceLoader:\n{}",
 				prioritizedBundles.collect(this::getBundleString).makeString("\n")
 			);

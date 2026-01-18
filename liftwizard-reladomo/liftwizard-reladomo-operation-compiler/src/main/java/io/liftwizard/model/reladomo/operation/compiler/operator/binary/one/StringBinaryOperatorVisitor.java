@@ -16,7 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.one;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.StringAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
@@ -35,6 +35,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorSt
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorWildCardEqualsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorWildCardNotEqualsContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.Objects;
 
 public class StringBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
@@ -42,8 +43,8 @@ public class StringBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 	private final String parameter;
 
 	public StringBinaryOperatorVisitor(StringAttribute attribute, String parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
-		this.parameter = Objects.requireNonNull(parameter);
+		this.attribute = requireNonNull(attribute);
+		this.parameter = requireNonNull(parameter);
 	}
 
 	@Override

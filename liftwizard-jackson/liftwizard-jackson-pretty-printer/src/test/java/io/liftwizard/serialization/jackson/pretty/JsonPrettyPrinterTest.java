@@ -16,19 +16,19 @@
 
 package io.liftwizard.serialization.jackson.pretty;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Nonnull;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class JsonPrettyPrinterTest {
 
@@ -47,8 +47,8 @@ class JsonPrettyPrinterTest {
 	@Test
 	void smokeTest() throws JsonProcessingException {
 		Map<String, List<String>> map = new LinkedHashMap<>();
-		map.put("a", List.of("b", "c"));
-		map.put("d", List.of("e", "f"));
+		map.put("a", ImmutableList.of("b", "c"));
+		map.put("d", ImmutableList.of("e", "f"));
 
 		String actualJson = this.mapper.writeValueAsString(map);
 
@@ -71,7 +71,7 @@ class JsonPrettyPrinterTest {
 
 	@Test
 	void emptyArray() throws JsonProcessingException {
-		List<String> emptyList = List.of();
+		List<String> emptyList = ImmutableList.of();
 		String actualJson = this.mapper.writeValueAsString(emptyList);
 		String expectedJson = "[]\n";
 		assertThat(actualJson).isEqualTo(expectedJson);
@@ -79,7 +79,7 @@ class JsonPrettyPrinterTest {
 
 	@Test
 	void emptyObject() throws JsonProcessingException {
-		Map<String, Object> emptyMap = Map.of();
+		Map<String, Object> emptyMap = ImmutableMap.of();
 		String actualJson = this.mapper.writeValueAsString(emptyMap);
 		String expectedJson = "{}\n";
 		assertThat(actualJson).isEqualTo(expectedJson);

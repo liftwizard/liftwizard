@@ -16,11 +16,7 @@
 
 package io.liftwizard.servlet.logging.opentracing;
 
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +24,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import io.opentracing.Span;
 import io.opentracing.util.GlobalTracer;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.factory.Stacks;
 import org.eclipse.collections.api.list.MutableList;
@@ -37,20 +37,20 @@ import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsOpenTracingLogger implements Consumer<StructuredArguments> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsOpenTracingLogger.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StructuredArgumentsOpenTracingLogger.class);
 
 	@Nonnull
 	private final ObjectMapper objectMapper;
 
 	public StructuredArgumentsOpenTracingLogger(@Nonnull ObjectMapper objectMapper) {
-		this.objectMapper = Objects.requireNonNull(objectMapper);
+		this.objectMapper = requireNonNull(objectMapper);
 	}
 
 	@Override
 	public void accept(StructuredArguments structuredArguments) {
 		ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
 		this.structuredArgumentsToSpans(objectNode);
-		LOGGER.info("Response sent");
+		LOG.info("Response sent");
 	}
 
 	private void structuredArgumentsToSpans(@Nonnull ObjectNode objectNode) {

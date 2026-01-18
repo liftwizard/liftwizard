@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 public class FirebaseOAuthAuthenticator implements Authenticator<String, FirebasePrincipal> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FirebaseOAuthAuthenticator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(FirebaseOAuthAuthenticator.class);
 
 	private final FirebaseAuth firebaseAuth;
 
@@ -56,7 +56,7 @@ public class FirebaseOAuthAuthenticator implements Authenticator<String, Firebas
 			if (cause instanceof SocketTimeoutException) {
 				throw new RuntimeException(e);
 			}
-			LOGGER.warn(credentials, e.getMessage());
+			LOG.warn(credentials, e.getMessage());
 			return Optional.empty();
 		}
 	}

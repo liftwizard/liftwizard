@@ -16,14 +16,15 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.one;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Objects;
 
 public class TemporalRangeBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
@@ -31,7 +32,7 @@ public class TemporalRangeBinaryOperatorVisitor extends AbstractBinaryOperatorVi
 	private final Timestamp timestamp;
 
 	public TemporalRangeBinaryOperatorVisitor(AsOfAttribute attribute, Instant parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 		this.timestamp = Timestamp.from(parameter);
 	}
 

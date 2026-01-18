@@ -16,8 +16,9 @@
 
 package io.liftwizard.reladomo.test.resource.writer;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
 import org.eclipse.collections.api.list.ImmutableList;
 
 public class FrozenReladomoTestResourceColumn {
@@ -26,8 +27,8 @@ public class FrozenReladomoTestResourceColumn {
 	private final ImmutableList<String> paddedValueStrings;
 
 	public FrozenReladomoTestResourceColumn(String paddedHeader, ImmutableList<String> paddedValueStrings) {
-		this.paddedHeader = Objects.requireNonNull(paddedHeader);
-		this.paddedValueStrings = Objects.requireNonNull(paddedValueStrings);
+		this.paddedHeader = requireNonNull(paddedHeader);
+		this.paddedValueStrings = requireNonNull(paddedValueStrings);
 
 		paddedValueStrings.forEachWithIndex((string, index) -> {
 			if (string.length() != paddedHeader.length()) {

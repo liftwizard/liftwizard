@@ -16,15 +16,15 @@
 
 package io.liftwizard.dropwizard.configuration.logging.logstash;
 
-import java.util.TimeZone;
-
-import javax.validation.constraints.NotNull;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.Encoder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.TimeZone;
+import javax.validation.constraints.NotNull;
 import net.logstash.logback.composite.ContextJsonProvider;
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider;
 import net.logstash.logback.composite.JsonProvider;
@@ -67,7 +67,7 @@ public class LogstashEncoderFactory {
     */
 	private ObjectNode customFields;
 	private boolean prettyPrint;
-	private @NotNull Include serializationInclusion = Include.NON_ABSENT;
+	private @NotNull Include serializationInclusion = NON_ABSENT;
 
 	@JsonProperty
 	public boolean isIncludeContext() {

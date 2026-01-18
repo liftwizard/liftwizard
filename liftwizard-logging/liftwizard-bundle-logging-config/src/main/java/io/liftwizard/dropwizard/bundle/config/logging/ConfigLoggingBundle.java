@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ConfigLoggingBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoggingBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigLoggingBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -60,21 +60,21 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 
 		EnabledFactory configLoggingFactory = configLoggingFactoryProvider.getConfigLoggingFactory();
 		if (!configLoggingFactory.isEnabled()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		ConfigLoggingBundle.logConfiguration(configuration, environment.getObjectMapper());
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
 	private static void logConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
 		throws JsonProcessingException {
 		String fullConfigurationString = objectMapper.writeValueAsString(configuration);
-		LOGGER.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
+		LOG.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
 
 		Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration).flatMap(
 			ConfigLoggingBundle::getDefaultConfiguration
@@ -82,7 +82,7 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 		if (maybeDefaultConfiguration.isEmpty()) {
 			return;
 		}
-		Object defaultConfiguration = maybeDefaultConfiguration.get();
+		Object defaultConfiguration = maybeDefaultConfiguration.orElseThrow();
 
 		ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
 		nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
@@ -94,7 +94,7 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 		removeEmptyNodes(configurationJsonNode);
 
 		String configurationString = objectMapper.writeValueAsString(configurationJsonNode);
-		LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
+		LOG.info("Dropwizard configuration (minimized):\n{}", configurationString);
 	}
 
 	private static void removeEmptyNodes(@Nonnull ObjectNode node) {
@@ -176,7 +176,7 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 		try {
 			return Optional.of(constructor.newInstance());
 		} catch (ReflectiveOperationException e) {
-			LOGGER.debug(
+			LOG.debug(
 				"Could not log Default Dropwizard configuration because {} is not instantiable through its no-arg constructor.",
 				constructor.getDeclaringClass().getCanonicalName()
 			);
@@ -189,7 +189,7 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 		try {
 			return Optional.of(configuration.getClass().getConstructor());
 		} catch (NoSuchMethodException e) {
-			LOGGER.debug(
+			LOG.debug(
 				"Could not log Default Dropwizard configuration because {} does not implement a no-arg constructor.",
 				configuration.getClass().getCanonicalName()
 			);

@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ObjectMapperBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ObjectMapperBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ObjectMapperBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -71,11 +71,11 @@ public class ObjectMapperBundle implements PrioritizedBundle {
 
 	public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper) {
 		if (!objectMapperFactory.isEnabled()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return objectMapper;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		ObjectMapperConfig.configure(
 			objectMapper,
@@ -85,7 +85,7 @@ public class ObjectMapperBundle implements PrioritizedBundle {
 			objectMapperFactory.getDefaultNullSetterInfo()
 		);
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 
 		return objectMapper;
 	}

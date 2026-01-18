@@ -16,23 +16,23 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.url;
 
+import static java.util.Objects.requireNonNull;
+
+import ch.qos.logback.access.spi.IAccessEvent;
+import ch.qos.logback.access.spi.ServerAdapter;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import ch.qos.logback.access.spi.IAccessEvent;
-import ch.qos.logback.access.spi.ServerAdapter;
 
 public class FakeAccessEvent implements IAccessEvent {
 
 	private final String requestURL;
 
 	public FakeAccessEvent(String requestURL) {
-		this.requestURL = Objects.requireNonNull(requestURL);
+		this.requestURL = requireNonNull(requestURL);
 	}
 
 	@Override

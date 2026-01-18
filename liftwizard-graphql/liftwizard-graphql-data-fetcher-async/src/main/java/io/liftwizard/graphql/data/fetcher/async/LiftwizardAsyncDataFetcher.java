@@ -16,13 +16,14 @@
 
 package io.liftwizard.graphql.data.fetcher.async;
 
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import static java.util.Objects.requireNonNull;
 
 import graphql.schema.AsyncDataFetcher;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import org.slf4j.MDC;
 
 /**
@@ -39,8 +40,8 @@ public class LiftwizardAsyncDataFetcher<T> implements DataFetcher<CompletableFut
 	private final Executor executor;
 
 	public LiftwizardAsyncDataFetcher(DataFetcher<T> wrappedDataFetcher, Executor executor) {
-		this.wrappedDataFetcher = Objects.requireNonNull(wrappedDataFetcher);
-		this.executor = Objects.requireNonNull(executor);
+		this.wrappedDataFetcher = requireNonNull(wrappedDataFetcher);
+		this.executor = requireNonNull(executor);
 	}
 
 	public static <T> LiftwizardAsyncDataFetcher<T> async(DataFetcher<T> wrappedDataFetcher, Executor executor) {

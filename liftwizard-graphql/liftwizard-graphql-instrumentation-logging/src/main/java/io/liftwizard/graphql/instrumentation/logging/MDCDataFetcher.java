@@ -16,12 +16,13 @@
 
 package io.liftwizard.graphql.instrumentation.logging;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
+import java.util.Objects;
 
 public class MDCDataFetcher<T> implements DataFetcher<T> {
 
@@ -40,7 +41,7 @@ public class MDCDataFetcher<T> implements DataFetcher<T> {
 		String fieldName,
 		String fieldTypeName
 	) {
-		this.dataFetcher = Objects.requireNonNull(dataFetcher);
+		this.dataFetcher = requireNonNull(dataFetcher);
 		this.executionId = executionId;
 		this.path = path;
 		this.parentTypeName = parentTypeName;
@@ -67,7 +68,7 @@ public class MDCDataFetcher<T> implements DataFetcher<T> {
 		DataFetcher<T> wrappedDataFetcher = this.dataFetcher instanceof LiftwizardAsyncDataFetcher
 			? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
 			: this.dataFetcher;
-		String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
-		return dataFetcherName;
+		return wrappedDataFetcher.getClass().getCanonicalName();
+		
 	}
 }

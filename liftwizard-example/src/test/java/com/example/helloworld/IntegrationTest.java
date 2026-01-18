@@ -1,16 +1,9 @@
 package com.example.helloworld;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import javax.annotation.Nonnull;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.throwable;
 
 import com.example.helloworld.dto.PersonDTO;
 import io.dropwizard.testing.ResourceHelpers;
@@ -18,6 +11,16 @@ import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoPurgeAllExtension;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.annotation.Nonnull;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -25,9 +28,6 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class IntegrationTest {
 
@@ -100,13 +100,12 @@ class IntegrationTest {
 
 	@Test
 	void invalidDateParameter() {
-		assertThatExceptionOfType(BadRequestException.class).isThrownBy(() ->
+		assertThatThrownBy(() ->
 			this.dropwizardAppExtension.client()
 				.target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
 				.queryParam("date", "abc")
 				.request()
-				.get(String.class)
-		);
+				.get(String.class)).asInstanceOf(throwable(BadRequestException.class));
 	}
 
 	@Test
@@ -162,7 +161,7 @@ class IntegrationTest {
 		// The log file is using a size and time based policy, which used to silently
 		// fail (and not write to a log file). This test ensures not only that the
 		// log file exists, but also contains the log line that jetty prints on startup
-		Path log = Paths.get("./logs/application.log");
+		Path log = Path.of("./logs/application.log");
 		assertThat(log).exists();
 		String actual = Files.readString(log);
 		assertThat(actual).contains("0.0.0.0:" + this.dropwizardAppExtension.getLocalPort());

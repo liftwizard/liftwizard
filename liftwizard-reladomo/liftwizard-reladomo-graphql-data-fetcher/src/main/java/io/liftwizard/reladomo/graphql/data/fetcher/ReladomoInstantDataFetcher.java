@@ -16,18 +16,18 @@
 
 package io.liftwizard.reladomo.graphql.data.fetcher;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import static java.time.ZoneOffset.UTC;
 
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import com.gs.fw.common.mithra.util.DefaultInfinityTimestamp;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ReladomoInstantDataFetcher<Input> implements TrivialDataFetcher<Instant> {
 
@@ -52,9 +52,9 @@ public class ReladomoInstantDataFetcher<Input> implements TrivialDataFetcher<Ins
 		Timestamp result = this.timestampAttribute.valueOf(persistentInstance);
 		if (result == DefaultInfinityTimestamp.getDefaultInfinity()) {
 			LocalDateTime localDateTime = result.toLocalDateTime();
-			return localDateTime.toInstant(ZoneOffset.UTC);
+			return localDateTime.toInstant(UTC);
 		}
-		Instant instant = result.toInstant();
-		return instant;
+		return result.toInstant();
+		
 	}
 }

@@ -57,10 +57,10 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 		if (exception instanceof WebApplicationException) {
 			final Response response = ((WebApplicationException) exception).getResponse();
 			Response.Status.Family family = response.getStatusInfo().getFamily();
-			if (family.equals(Response.Status.Family.REDIRECTION)) {
+			if (family == Response.Status.Family.REDIRECTION) {
 				return response;
 			}
-			if (family.equals(Response.Status.Family.SERVER_ERROR)) {
+			if (family == Response.Status.Family.SERVER_ERROR) {
 				// Forked from Dropwizard's LoggingExceptionMapper just to comment out this one line
 				// logException(exception);
 			}

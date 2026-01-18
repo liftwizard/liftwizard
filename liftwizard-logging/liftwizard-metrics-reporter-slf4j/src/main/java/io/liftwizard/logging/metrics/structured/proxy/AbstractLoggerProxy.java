@@ -16,8 +16,9 @@
 
 package io.liftwizard.logging.metrics.structured.proxy;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
@@ -26,7 +27,7 @@ public abstract class AbstractLoggerProxy {
 	protected final Logger logger;
 
 	protected AbstractLoggerProxy(Logger logger) {
-		this.logger = Objects.requireNonNull(logger);
+		this.logger = requireNonNull(logger);
 	}
 
 	public abstract void log(Marker marker, String message, Object structuredObject);

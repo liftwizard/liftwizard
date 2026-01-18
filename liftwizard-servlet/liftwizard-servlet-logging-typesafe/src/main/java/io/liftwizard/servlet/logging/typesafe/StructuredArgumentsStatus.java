@@ -16,18 +16,18 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Objects;
-
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Response.Status.Family;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.Status.Family;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsStatus {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StructuredArgumentsStatus.class);
 
 	private Status status;
 	private Integer code;
@@ -55,7 +55,7 @@ public class StructuredArgumentsStatus {
 
 	public void setCode(int code) {
 		if (this.code != null) {
-			LOGGER.warn("Overwriting code '{}' with '{}'.", this.code, code);
+			LOG.warn("Overwriting code '{}' with '{}'.", this.code, code);
 		}
 		this.code = code;
 	}
@@ -67,9 +67,9 @@ public class StructuredArgumentsStatus {
 
 	public void setFamily(Family family) {
 		if (this.family != null) {
-			LOGGER.warn("Overwriting family '{}' with '{}'.", this.family, family);
+			LOG.warn("Overwriting family '{}' with '{}'.", this.family, family);
 		}
-		this.family = Objects.requireNonNull(family);
+		this.family = requireNonNull(family);
 	}
 
 	@JsonProperty
@@ -79,8 +79,8 @@ public class StructuredArgumentsStatus {
 
 	public void setPhrase(String phrase) {
 		if (this.phrase != null) {
-			LOGGER.warn("Overwriting phrase '{}' with '{}'.", this.phrase, phrase);
+			LOG.warn("Overwriting phrase '{}' with '{}'.", this.phrase, phrase);
 		}
-		this.phrase = Objects.requireNonNull(phrase);
+		this.phrase = requireNonNull(phrase);
 	}
 }

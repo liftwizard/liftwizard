@@ -16,12 +16,8 @@
 
 package io.liftwizard.logging.metrics.structured;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
 
 import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.MetricFilter;
@@ -32,6 +28,12 @@ import io.liftwizard.logging.metrics.structured.proxy.ErrorLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.InfoLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.TraceLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.WarnLoggerProxy;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.set.MutableSet;
 import org.slf4j.Logger;
@@ -45,7 +47,7 @@ public class Builder {
 
 	private final MetricRegistry registry;
 
-	private Logger logger = LoggerFactory.getLogger("metrics");
+	private static final Logger LOG = LoggerFactory.getLogger("metrics");
 	private LoggingLevel loggingLevel = LoggingLevel.INFO;
 	private Marker marker;
 	private String prefix = "";
@@ -55,11 +57,11 @@ public class Builder {
 	private ScheduledExecutorService executor;
 	private boolean shutdownExecutorOnStop = true;
 	private MutableSet<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
-	private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = Function.identity();
+	private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = identity();
 	private String message = "metrics";
 
 	public Builder(MetricRegistry registry) {
-		this.registry = Objects.requireNonNull(registry);
+		this.registry = requireNonNull(registry);
 	}
 
 	/**
@@ -95,7 +97,7 @@ public class Builder {
 	 * @return {@code this}
 	 */
 	public Builder outputTo(Logger newLogger) {
-		this.logger = newLogger;
+		this.LOG = newLogger;
 		return this;
 	}
 
@@ -224,11 +226,11 @@ public class Builder {
 
 	private AbstractLoggerProxy getLoggerProxy() {
 		return switch (this.loggingLevel) {
-			case TRACE -> new TraceLoggerProxy(this.logger);
-			case DEBUG -> new DebugLoggerProxy(this.logger);
-			case INFO -> new InfoLoggerProxy(this.logger);
-			case WARN -> new WarnLoggerProxy(this.logger);
-			case ERROR -> new ErrorLoggerProxy(this.logger);
+			case TRACE -> new TraceLoggerProxy(this.LOG);
+			case DEBUG -> new DebugLoggerProxy(this.LOG);
+			case INFO -> new InfoLoggerProxy(this.LOG);
+			case WARN -> new WarnLoggerProxy(this.LOG);
+			case ERROR -> new ErrorLoggerProxy(this.LOG);
 		};
 	}
 }

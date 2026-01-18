@@ -16,6 +16,12 @@
 
 package io.liftwizard.filesystem;
 
+import static java.util.Objects.requireNonNull;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -27,16 +33,12 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Objects;
-
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.github.benmanes.caffeine.cache.RemovalCause;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class ManagedFileSystem {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManagedFileSystem.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ManagedFileSystem.class);
 
 	private static final LoadingCache<URI, FileSystem> MANAGED_FILE_SYSTEMS = Caffeine.newBuilder()
 		.weakValues()
@@ -52,7 +54,7 @@ public final class ManagedFileSystem {
 			return;
 		}
 
-		LOGGER.debug("Closing file system for {} due to {}", uri, cause);
+		LOG.debug("Closing file system for {} due to {}", uri, cause);
 		try {
 			fileSystem.close();
 		} catch (IOException e) {
@@ -81,13 +83,13 @@ public final class ManagedFileSystem {
 		String pathWithinJar = schemeSpecificPart.substring(separatorIndex + 1);
 		URI jarUri = URI.create("jar:" + jarPath);
 		FileSystem fileSystem = getOrCreate(jarUri);
-		Path result = fileSystem.getPath(pathWithinJar);
-		return result;
+		return fileSystem.getPath(pathWithinJar);
+		
 	}
 
 	private static FileSystem getOrCreate(URI uri) {
 		FileSystem fileSystem = MANAGED_FILE_SYSTEMS.get(uri);
-		Objects.requireNonNull(fileSystem, () -> "Failed to get file system for " + uri);
+		requireNonNull(fileSystem, () -> "Failed to get file system for " + uri);
 		if (fileSystem.isOpen()) {
 			return fileSystem;
 		}
@@ -101,7 +103,7 @@ public final class ManagedFileSystem {
 			return FileSystems.getFileSystem(uri);
 		} catch (FileSystemNotFoundException notFoundException) {
 			try {
-				return FileSystems.newFileSystem(uri, Map.of());
+				return FileSystems.newFileSystem(uri, ImmutableMap.of());
 			} catch (FileSystemAlreadyExistsException alreadyExistsException) {
 				return FileSystems.getFileSystem(uri);
 			}

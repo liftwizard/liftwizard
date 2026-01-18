@@ -16,16 +16,16 @@
 
 package io.liftwizard.reladomo.connectionmanager;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.TimeZone;
-
-import javax.sql.DataSource;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.bulkloader.BulkLoader;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Objects;
+import java.util.TimeZone;
+import javax.sql.DataSource;
 
 public class LiftwizardConnectionManager implements SourcelessConnectionManager {
 
@@ -44,12 +44,12 @@ public class LiftwizardConnectionManager implements SourcelessConnectionManager 
 		TimeZone databaseTimeZone,
 		String schemaName
 	) {
-		this.connectionManagerName = Objects.requireNonNull(connectionManagerName);
-		this.dataSourceName = Objects.requireNonNull(dataSourceName);
-		this.dataSource = Objects.requireNonNull(dataSource);
-		this.databaseType = Objects.requireNonNull(databaseType);
-		this.databaseTimeZone = Objects.requireNonNull(databaseTimeZone);
-		this.schemaName = Objects.requireNonNull(schemaName);
+		this.connectionManagerName = requireNonNull(connectionManagerName);
+		this.dataSourceName = requireNonNull(dataSourceName);
+		this.dataSource = requireNonNull(dataSource);
+		this.databaseType = requireNonNull(databaseType);
+		this.databaseTimeZone = requireNonNull(databaseTimeZone);
+		this.schemaName = requireNonNull(schemaName);
 	}
 
 	public String getConnectionManagerName() {

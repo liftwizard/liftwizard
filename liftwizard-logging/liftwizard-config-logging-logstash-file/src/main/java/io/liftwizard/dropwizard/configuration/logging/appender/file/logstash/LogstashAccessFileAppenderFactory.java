@@ -16,12 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.logging.appender.file.logstash;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import static java.util.Objects.requireNonNull;
 
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.classic.LoggerContext;
@@ -52,6 +47,11 @@ import io.dropwizard.util.DataSize;
 import io.dropwizard.validation.MinDataSize;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashAccessEncoderFactory;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @JsonTypeName("file-access-logstash")
 @AutoService(AppenderFactory.class)
@@ -226,7 +226,7 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 		var appender = new RollingFileAppender<IAccessEvent>();
 		this.configureAppender(appender, context);
 
-		return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d")
+		return this.maxFileSize == null || requireNonNull(this.archivedLogFilenamePattern).contains("%d")
 			? this.configurePolicyWithDefaults(appender, context)
 			: this.dateAndSizeSpecifiedPolicy(appender, context);
 	}

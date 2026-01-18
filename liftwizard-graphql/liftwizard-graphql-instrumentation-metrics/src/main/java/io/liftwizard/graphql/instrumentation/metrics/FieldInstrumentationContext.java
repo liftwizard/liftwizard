@@ -16,15 +16,15 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import graphql.execution.instrumentation.InstrumentationContext;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nonnull;
 
 public class FieldInstrumentationContext implements InstrumentationContext<Object> {
 
@@ -38,7 +38,7 @@ public class FieldInstrumentationContext implements InstrumentationContext<Objec
 		@Nonnull Timer allFieldsAsyncTimer,
 		@Nonnull Meter allFieldsExceptionsMeter
 	) {
-		this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
+		this.allFieldsExceptionsMeter = requireNonNull(allFieldsExceptionsMeter);
 
 		this.allFieldsSyncClock = allFieldsSyncTimer.time();
 		this.allFieldsAsyncClock = allFieldsAsyncTimer.time();

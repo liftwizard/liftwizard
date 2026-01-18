@@ -16,9 +16,7 @@
 
 package io.liftwizard.graphql.reladomo.operation.fetcher;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
@@ -31,18 +29,21 @@ import graphql.schema.DataFetchingEnvironment;
 import io.liftwizard.graphql.exception.LiftwizardGraphQLException;
 import io.liftwizard.model.reladomo.operation.compiler.ReladomoOperationCompiler;
 import io.liftwizard.reladomo.graphql.deep.fetcher.GraphQLDeepFetcher;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ReladomoOperationDataFetcher<T> implements DataFetcher<List<T>> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoOperationDataFetcher.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReladomoOperationDataFetcher.class);
 
 	private final RelatedFinder<T> finder;
 
 	public ReladomoOperationDataFetcher(RelatedFinder<T> finder) {
-		this.finder = Objects.requireNonNull(finder);
+		this.finder = requireNonNull(finder);
 	}
 
 	@Timed
@@ -53,7 +54,7 @@ public class ReladomoOperationDataFetcher<T> implements DataFetcher<List<T>> {
 		Map<String, Object> arguments = environment.getArguments();
 		String inputOperation = (String) arguments.get("operation");
 		Operation operation = this.compileOperation(this.finder, inputOperation);
-		LOGGER.debug("Executing operation: {}", operation);
+		LOG.debug("Executing operation: {}", operation);
 		DomainList<T> result = (DomainList<T>) this.finder.findMany(operation);
 		GraphQLDeepFetcher.deepFetch(result, this.finder, environment.getSelectionSet());
 		return result;

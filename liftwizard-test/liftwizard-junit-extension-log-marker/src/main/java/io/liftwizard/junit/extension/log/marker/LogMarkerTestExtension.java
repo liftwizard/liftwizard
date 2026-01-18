@@ -34,21 +34,21 @@ import org.slf4j.MarkerFactory;
  */
 public class LogMarkerTestExtension implements BeforeEachCallback, AfterEachCallback {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LogMarkerTestExtension.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LogMarkerTestExtension.class);
 	private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
 	private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 
 	@Override
 	public void beforeEach(ExtensionContext context) {
 		MDC.put("liftwizard.junit.test.name", context.getDisplayName());
-		LOGGER.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
+		LOG.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
 	}
 
 	@Override
 	public void afterEach(ExtensionContext context) {
 		Optional<Throwable> execution = context.getExecutionException();
 		execution.ifPresent((throwable) ->
-			LOGGER.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.")
+			LOG.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.")
 		);
 
 		MDC.remove("liftwizard.junit.test.name");

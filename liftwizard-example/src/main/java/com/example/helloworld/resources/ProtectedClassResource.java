@@ -23,20 +23,20 @@ public final class ProtectedClassResource {
 	@PermitAll
 	@Path("guest")
 	public String showSecret(@Auth User user) {
-		return String.format("Hey there, %s. You know the secret! %d", user.getName(), user.getId());
+		return ("Hey there, %s. You know the secret! %d").formatted(user.getName(), user.getId());
 	}
 
 	/* Access to this method is authorized by the class level annotation */
 	@GET
 	public String showBasicUserSecret(@Context SecurityContext context) {
 		User user = (User) context.getUserPrincipal();
-		return String.format("Hey there, %s. You seem to be a basic user. %d", user.getName(), user.getId());
+		return ("Hey there, %s. You seem to be a basic user. %d").formatted(user.getName(), user.getId());
 	}
 
 	@GET
 	@RolesAllowed("ADMIN")
 	@Path("admin")
 	public String showAdminSecret(@Auth User user) {
-		return String.format("Hey there, %s. It looks like you are an admin. %d", user.getName(), user.getId());
+		return ("Hey there, %s. It looks like you are an admin. %d").formatted(user.getName(), user.getId());
 	}
 }

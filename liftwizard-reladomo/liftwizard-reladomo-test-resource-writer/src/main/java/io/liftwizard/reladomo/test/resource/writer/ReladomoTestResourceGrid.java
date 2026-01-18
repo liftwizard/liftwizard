@@ -16,14 +16,16 @@
 
 package io.liftwizard.reladomo.test.resource.writer;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Objects;
+import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.MithraList;
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.reladomo.metadata.ReladomoClassMetaData;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Objects;
 import org.eclipse.collections.api.LazyIterable;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.MutableSet;
@@ -39,8 +41,8 @@ public class ReladomoTestResourceGrid {
 	private boolean frozen;
 
 	public ReladomoTestResourceGrid(ReladomoClassMetaData metaData, MithraList<?> mithraList) {
-		this.metaData = Objects.requireNonNull(metaData);
-		this.mithraList = Objects.requireNonNull(mithraList);
+		this.metaData = requireNonNull(metaData);
+		this.mithraList = requireNonNull(mithraList);
 
 		MutableSet<Attribute> attributes = SetAdapter.adapt(new LinkedHashSet<>());
 		if (metaData.getAsOfAttributes() != null) {
@@ -68,9 +70,7 @@ public class ReladomoTestResourceGrid {
 	}
 
 	public void freeze() {
-		if (this.frozen) {
-			throw new IllegalStateException();
-		}
+		checkState(!this.frozen);
 
 		this.columns.each(ReladomoTestResourceColumn::freeze);
 		this.frozen = true;

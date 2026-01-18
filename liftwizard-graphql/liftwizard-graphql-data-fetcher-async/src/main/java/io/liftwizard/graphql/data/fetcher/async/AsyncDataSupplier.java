@@ -16,12 +16,14 @@
 
 package io.liftwizard.graphql.data.fetcher.async;
 
+import static java.util.Objects.requireNonNull;
+
+import com.google.common.collect.ImmutableMap;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
-
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import org.slf4j.MDC;
 
 public class AsyncDataSupplier<T> implements Supplier<T> {
@@ -31,8 +33,8 @@ public class AsyncDataSupplier<T> implements Supplier<T> {
 	private final Map<String, String> copyOfContextMap;
 
 	AsyncDataSupplier(DataFetcher<T> dataFetcher, DataFetchingEnvironment environment) {
-		this.dataFetcher = Objects.requireNonNull(dataFetcher);
-		this.environment = Objects.requireNonNull(environment);
+		this.dataFetcher = requireNonNull(dataFetcher);
+		this.environment = requireNonNull(environment);
 		this.copyOfContextMap = AsyncDataSupplier.getCopyOfContextMap();
 	}
 
@@ -54,6 +56,6 @@ public class AsyncDataSupplier<T> implements Supplier<T> {
 
 	private static Map<String, String> getCopyOfContextMap() {
 		Map<String, String> result = MDC.getCopyOfContextMap();
-		return result == null ? Map.of() : result;
+		return result == null ? ImmutableMap.of() : result;
 	}
 }

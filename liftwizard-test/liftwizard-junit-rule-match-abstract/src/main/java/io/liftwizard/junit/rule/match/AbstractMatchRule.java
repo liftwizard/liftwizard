@@ -16,6 +16,9 @@
 
 package io.liftwizard.junit.rule.match;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +33,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.Scanner;
-
 import javax.annotation.Nonnull;
-
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.api.set.MutableSet;
@@ -50,12 +51,12 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 	protected final boolean rerecordEnabled;
 
 	protected AbstractMatchRule(@Nonnull Class<?> callingClass) {
-		this.callingClass = Objects.requireNonNull(callingClass);
+		this.callingClass = requireNonNull(callingClass);
 		this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
 	}
 
 	public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass) {
-		return AbstractMatchRule.slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
+		return AbstractMatchRule.slurp(resourceClassPathLocation, callingClass, UTF_8);
 	}
 
 	public static String slurp(
@@ -64,7 +65,7 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 		Charset charset
 	) {
 		InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
-		Objects.requireNonNull(inputStream, resourceClassPathLocation);
+		requireNonNull(inputStream, resourceClassPathLocation);
 		return AbstractMatchRule.slurp(inputStream, charset);
 	}
 
@@ -113,7 +114,7 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 	protected static Path getPackagePath(@Nonnull Class<?> callingClass) {
 		String packageName = callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 
@@ -128,7 +129,7 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 			file.getParentFile().mkdirs();
 		}
 
-		try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
+		try (PrintWriter printWriter = new PrintWriter(file, UTF_8)) {
 			String prettyPrintedString = this.getPrettyPrintedString(string);
 			printWriter.print(prettyPrintedString);
 		}

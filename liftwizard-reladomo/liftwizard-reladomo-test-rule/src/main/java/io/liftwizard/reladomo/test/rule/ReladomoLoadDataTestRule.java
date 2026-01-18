@@ -16,11 +16,7 @@
 
 package io.liftwizard.reladomo.test.rule;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.MithraDataObject;
 import com.gs.fw.common.mithra.MithraDatabaseObject;
@@ -30,6 +26,10 @@ import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.test.MithraTestDataParser;
 import com.gs.fw.common.mithra.util.fileparser.MithraParsedData;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.rules.TestRule;
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 public class ReladomoLoadDataTestRule implements TestRule {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataTestRule.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReladomoLoadDataTestRule.class);
 
 	@Nonnull
 	private final ImmutableList<String> testDataFileNames;
@@ -78,8 +78,8 @@ public class ReladomoLoadDataTestRule implements TestRule {
 		private final ImmutableList<String> configuredTestDataFileNames;
 
 		public LoadDataStatement(@Nonnull Statement base, @Nonnull ImmutableList<String> configuredTestDataFileNames) {
-			this.base = Objects.requireNonNull(base);
-			this.configuredTestDataFileNames = Objects.requireNonNull(configuredTestDataFileNames);
+			this.base = requireNonNull(base);
+			this.configuredTestDataFileNames = requireNonNull(configuredTestDataFileNames);
 		}
 
 		private void before() {
@@ -93,7 +93,7 @@ public class ReladomoLoadDataTestRule implements TestRule {
 		}
 
 		private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
-			LOGGER.debug("Loading test data from file: {}", testDataFileName);
+			LOG.debug("Loading test data from file: {}", testDataFileName);
 			MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
 			List<MithraParsedData> parsedDataList = parser.getResults();
 
@@ -125,7 +125,7 @@ public class ReladomoLoadDataTestRule implements TestRule {
 			SourcelessConnectionManager databaseObjectConnectionManager =
 				(SourcelessConnectionManager) databaseObject.getConnectionManager();
 
-			LOGGER.debug(
+			LOG.debug(
 				"Loading test data for class {} using connection manager: {}",
 				parsedClassName,
 				databaseObjectConnectionManager

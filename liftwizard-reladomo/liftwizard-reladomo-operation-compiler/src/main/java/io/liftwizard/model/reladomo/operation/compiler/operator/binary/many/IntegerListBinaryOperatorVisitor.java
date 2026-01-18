@@ -16,13 +16,14 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.many;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.IntegerAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.Objects;
 import org.eclipse.collections.api.factory.primitive.IntSets;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableIntSet;
@@ -33,7 +34,7 @@ public class IntegerListBinaryOperatorVisitor extends AbstractBinaryOperatorVisi
 	private final ImmutableIntSet intSet;
 
 	public IntegerListBinaryOperatorVisitor(IntegerAttribute<?> attribute, ImmutableList<Integer> parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 		this.intSet = IntSets.immutable.withAll(parameter);
 	}
 

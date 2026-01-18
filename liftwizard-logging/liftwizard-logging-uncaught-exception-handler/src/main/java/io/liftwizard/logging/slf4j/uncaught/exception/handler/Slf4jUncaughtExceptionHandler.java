@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 public class Slf4jUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jUncaughtExceptionHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Slf4jUncaughtExceptionHandler.class);
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable throwable) {
@@ -40,7 +40,7 @@ public class Slf4jUncaughtExceptionHandler implements UncaughtExceptionHandler {
 			mdc.put("liftwizard.error.message", throwable.getMessage());
 
 			String message = "Exception in thread \"" + thread.getName() + "\"";
-			LOGGER.warn(message, throwable);
+			LOG.warn(message, throwable);
 
 			StringWriter stringWriter = new StringWriter();
 			PrintWriter printWriter = new PrintWriter(stringWriter, true);

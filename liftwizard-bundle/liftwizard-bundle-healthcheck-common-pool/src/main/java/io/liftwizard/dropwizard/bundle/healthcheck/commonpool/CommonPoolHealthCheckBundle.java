@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheckBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommonPoolHealthCheckBundle.class);
 
 	@Override
 	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
@@ -41,11 +41,11 @@ public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
 		);
 		CommonPoolHealthCheckFactory factory = factoryProvider.getCommonPoolHealthCheckFactory();
 		if (!factory.isEnabled()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		CommonPoolHealthCheck healthCheck = new CommonPoolHealthCheck(
 			factory.getThreadNamePrefix(),
@@ -55,6 +55,6 @@ public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
 		);
 		environment.healthChecks().register("common-pool", healthCheck);
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 }

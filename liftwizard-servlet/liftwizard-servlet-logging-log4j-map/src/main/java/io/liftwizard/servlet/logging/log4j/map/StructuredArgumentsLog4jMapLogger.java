@@ -16,15 +16,15 @@
 
 package io.liftwizard.servlet.logging.log4j.map;
 
+import static java.util.Objects.requireNonNull;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-
 import javax.annotation.Nonnull;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
 import org.apache.log4j.Logger;
 
 public class StructuredArgumentsLog4jMapLogger implements Consumer<StructuredArguments> {
@@ -35,7 +35,7 @@ public class StructuredArgumentsLog4jMapLogger implements Consumer<StructuredArg
 	private final ObjectMapper objectMapper;
 
 	public StructuredArgumentsLog4jMapLogger(@Nonnull ObjectMapper objectMapper) {
-		this.objectMapper = Objects.requireNonNull(objectMapper);
+		this.objectMapper = requireNonNull(objectMapper);
 	}
 
 	@Override

@@ -16,10 +16,11 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.time.Duration;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Duration;
+import java.util.Objects;
 
 public class StructuredArgumentsResponseHttp extends StructuredArgumentsHttp {
 
@@ -40,7 +41,7 @@ public class StructuredArgumentsResponseHttp extends StructuredArgumentsHttp {
 	}
 
 	public void setEntityType(String entityType) {
-		this.entityType = Objects.requireNonNull(entityType);
+		this.entityType = requireNonNull(entityType);
 	}
 
 	@JsonProperty
@@ -52,7 +53,7 @@ public class StructuredArgumentsResponseHttp extends StructuredArgumentsHttp {
 		if (this.contentType != null) {
 			throw new AssertionError(this.contentType);
 		}
-		this.contentType = Objects.requireNonNull(contentType);
+		this.contentType = requireNonNull(contentType);
 	}
 
 	@JsonProperty

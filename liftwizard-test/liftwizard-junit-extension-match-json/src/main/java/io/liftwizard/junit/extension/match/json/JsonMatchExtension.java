@@ -16,6 +16,17 @@
 
 package io.liftwizard.junit.extension.match.json;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
+import io.liftwizard.junit.extension.match.AbstractMatchExtension;
+import io.liftwizard.junit.extension.match.FileSlurper;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,17 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-
 import javax.annotation.Nonnull;
-
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
-import io.liftwizard.junit.extension.match.AbstractMatchExtension;
-import io.liftwizard.junit.extension.match.FileSlurper;
-import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -52,7 +53,7 @@ public class JsonMatchExtension extends AbstractMatchExtension {
 
 	public JsonMatchExtension(@Nonnull Class<?> callingClass, ObjectMapper objectMapper) {
 		super(callingClass);
-		this.objectMapper = Objects.requireNonNull(objectMapper);
+		this.objectMapper = requireNonNull(objectMapper);
 	}
 
 	private static ObjectMapper newObjectMapper() {
@@ -81,10 +82,10 @@ public class JsonMatchExtension extends AbstractMatchExtension {
 			}
 		} else {
 			InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-			String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
+			requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = FileSlurper.slurp(inputStream, UTF_8);
 
-			URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+			URL resource = requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
 			URI uri = resource.toURI();
 
 			if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
@@ -142,8 +143,8 @@ public class JsonMatchExtension extends AbstractMatchExtension {
 	protected String getPrettyPrintedString(@Nonnull String string) {
 		try {
 			JsonNode jsonNode = this.objectMapper.readTree(string);
-			String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
-			return prettyPrintedString;
+			return this.objectMapper.writeValueAsString(jsonNode);
+			
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}

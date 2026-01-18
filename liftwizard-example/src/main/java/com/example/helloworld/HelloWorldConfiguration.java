@@ -1,17 +1,10 @@
 package com.example.helloworld;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import com.example.helloworld.core.Template;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.google.common.collect.ImmutableList;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.Configuration;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
@@ -41,6 +34,12 @@ import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactory;
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.configuration.uuid.system.SystemUUIDSupplierFactory;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import org.eclipse.collections.api.factory.Maps;
 import org.eclipse.collections.api.map.MutableMap;
 
@@ -77,7 +76,7 @@ public class HelloWorldConfiguration
 	private @NotNull @Valid UUIDSupplierFactory uuidFactory = new SystemUUIDSupplierFactory();
 	private @Valid @NotNull JerseyHttpLoggingFactory jerseyHttpLoggingFactory = new JerseyHttpLoggingFactory();
 	private @Valid @NotNull H2Factory h2Factory = new H2Factory();
-	private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories = List.of();
+	private @Valid @NotNull List<DdlExecutorFactory> ddlExecutorFactories = ImmutableList.of();
 	private @Valid @NotNull ReladomoFactory reladomoFactory = new ReladomoFactory();
 	private @Valid @NotNull GraphQLFactory graphQLFactory = new GraphQLFactory();
 
@@ -98,7 +97,7 @@ public class HelloWorldConfiguration
 	// include-liquibaseMigrationFactory
 
 	// include-authFilterFactory
-	private @Valid @NotNull List<AuthFilterFactory> authFilterFactories = List.of();
+	private @Valid @NotNull List<AuthFilterFactory> authFilterFactories = ImmutableList.of();
 
 	// include-authFilterFactory
 

@@ -16,6 +16,9 @@
 
 package io.liftwizard.dropwizard.configuration.executor;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +30,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-
 import javax.annotation.Nonnull;
 
 public abstract class AbstractDelegatingScheduledExecutorService implements ScheduledExecutorService {
@@ -35,7 +37,7 @@ public abstract class AbstractDelegatingScheduledExecutorService implements Sche
 	protected final ScheduledExecutorService delegate;
 
 	protected AbstractDelegatingScheduledExecutorService(ScheduledExecutorService delegate) {
-		this.delegate = Objects.requireNonNull(delegate);
+		this.delegate = requireNonNull(delegate);
 	}
 
 	protected abstract Runnable wrapTask(Runnable command);
@@ -43,7 +45,7 @@ public abstract class AbstractDelegatingScheduledExecutorService implements Sche
 	protected abstract <V> Callable<V> wrapTask(Callable<V> callable);
 
 	protected <T> Collection<? extends Callable<T>> wrapTasks(Collection<? extends Callable<T>> tasks) {
-		return tasks.stream().map(this::wrapTask).collect(Collectors.toList());
+		return tasks.stream().map(this::wrapTask).collect(toList());
 	}
 
 	@Override

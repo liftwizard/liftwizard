@@ -16,14 +16,7 @@
 
 package io.liftwizard.logging.metrics.structured.log4j;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Counting;
@@ -38,6 +31,14 @@ import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 import io.liftwizard.logging.metrics.structured.log4j.proxy.AbstractLoggerProxy;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * @see com.codahale.metrics.Slf4jReporter
@@ -68,8 +69,8 @@ public class StructuredLog4jReporter extends ScheduledReporter {
 			shutdownExecutorOnStop,
 			disabledMetricAttributes
 		);
-		this.loggerProxy = Objects.requireNonNull(loggerProxy);
-		this.prefix = Objects.requireNonNull(prefix);
+		this.loggerProxy = requireNonNull(loggerProxy);
+		this.prefix = requireNonNull(prefix);
 	}
 
 	/**

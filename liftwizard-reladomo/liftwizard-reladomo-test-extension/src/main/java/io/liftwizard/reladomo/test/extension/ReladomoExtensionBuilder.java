@@ -38,7 +38,7 @@ public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCa
 	@Override
 	public void beforeEach(ExtensionContext context) throws SQLException {
 		if (this.executeSqlExtension.isPresent()) {
-			this.executeSqlExtension.get().beforeEach(context);
+			this.executeSqlExtension.orElseThrow().beforeEach(context);
 		}
 		this.initializeExtension.ifPresent((extension) -> extension.beforeEach(context));
 		this.purgeAllExtension.ifPresent((extension) -> extension.beforeEach(context));
@@ -51,7 +51,7 @@ public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCa
 		this.purgeAllExtension.ifPresent((extension) -> extension.afterEach(context));
 		this.initializeExtension.ifPresent((extension) -> extension.afterEach(context));
 		if (this.executeSqlExtension.isPresent()) {
-			this.executeSqlExtension.get().afterEach(context);
+			this.executeSqlExtension.orElseThrow().afterEach(context);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCa
 		if (this.executeSqlExtension.isEmpty()) {
 			this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
 		}
-		this.executeSqlExtension.get().setDdlLocationPattern(ddlLocationPattern);
+		this.executeSqlExtension.orElseThrow().setDdlLocationPattern(ddlLocationPattern);
 		return this;
 	}
 
@@ -94,7 +94,7 @@ public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCa
 		if (this.executeSqlExtension.isEmpty()) {
 			this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
 		}
-		this.executeSqlExtension.get().setIdxLocationPattern(idxLocationPattern);
+		this.executeSqlExtension.orElseThrow().setIdxLocationPattern(idxLocationPattern);
 		return this;
 	}
 
@@ -102,7 +102,7 @@ public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCa
 		if (this.executeSqlExtension.isEmpty()) {
 			this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
 		}
-		this.executeSqlExtension.get().setFkLocationPattern(fkLocationPattern);
+		this.executeSqlExtension.orElseThrow().setFkLocationPattern(fkLocationPattern);
 		return this;
 	}
 
@@ -110,7 +110,7 @@ public class ReladomoExtensionBuilder implements BeforeEachCallback, AfterEachCa
 		if (this.executeSqlExtension.isEmpty()) {
 			this.executeSqlExtension = Optional.of(new ExecuteSqlExtension());
 		}
-		this.executeSqlExtension.get().setConnectionSupplier(connectionSupplier);
+		this.executeSqlExtension.orElseThrow().setConnectionSupplier(connectionSupplier);
 		return this;
 	}
 

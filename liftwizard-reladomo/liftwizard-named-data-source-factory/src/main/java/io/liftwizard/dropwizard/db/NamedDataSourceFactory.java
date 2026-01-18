@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 public class NamedDataSourceFactory extends DataSourceFactory {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NamedDataSourceFactory.class);
+	private static final Logger LOG = LoggerFactory.getLogger(NamedDataSourceFactory.class);
 
 	private @Valid @NotNull String name;
 
@@ -49,7 +49,7 @@ public class NamedDataSourceFactory extends DataSourceFactory {
 	@Override
 	public final ManagedDataSource build(MetricRegistry metricRegistry, String equalNameParameter) {
 		if (!Objects.equals(this.name, equalNameParameter)) {
-			LOGGER.warn(
+			LOG.warn(
 				"The name of the data source ({}) does not match the name parameter ({}).",
 				this.name,
 				equalNameParameter

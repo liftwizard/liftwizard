@@ -16,14 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.TimeZone;
-
-import javax.annotation.Nonnull;
-import javax.sql.DataSource;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,6 +24,13 @@ import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.reladomo.connectionmanager.LiftwizardConnectionManager;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.TimeZone;
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class ConnectionManagerFactory {
 
@@ -41,7 +41,7 @@ public class ConnectionManagerFactory {
 	private @Valid @NotNull String schemaName;
 
 	public SourcelessConnectionManager createSourcelessConnectionManager(@Nonnull DataSource dataSource) {
-		Objects.requireNonNull(dataSource);
+		requireNonNull(dataSource);
 
 		DatabaseType reladomoDatabaseType = this.databaseType.getDatabaseType();
 		TimeZone timeZone = TimeZone.getTimeZone(this.timeZoneName);

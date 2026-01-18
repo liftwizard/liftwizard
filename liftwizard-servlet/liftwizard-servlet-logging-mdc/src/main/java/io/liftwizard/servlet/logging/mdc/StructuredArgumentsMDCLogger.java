@@ -16,17 +16,17 @@
 
 package io.liftwizard.servlet.logging.mdc;
 
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.factory.Stacks;
 import org.eclipse.collections.api.list.MutableList;
@@ -36,20 +36,20 @@ import org.slf4j.LoggerFactory;
 
 public class StructuredArgumentsMDCLogger implements Consumer<StructuredArguments> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
 
 	@Nonnull
 	private final ObjectMapper objectMapper;
 
 	public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper) {
-		this.objectMapper = Objects.requireNonNull(objectMapper);
+		this.objectMapper = requireNonNull(objectMapper);
 	}
 
 	@Override
 	public void accept(@Nonnull StructuredArguments structuredArguments) {
 		ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
 		try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode)) {
-			LOGGER.debug("Response sent");
+			LOG.debug("Response sent");
 		}
 	}
 

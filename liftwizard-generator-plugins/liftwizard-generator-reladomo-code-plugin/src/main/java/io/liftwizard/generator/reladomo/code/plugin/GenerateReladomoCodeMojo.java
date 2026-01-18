@@ -16,6 +16,13 @@
 
 package io.liftwizard.generator.reladomo.code.plugin;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
+
+import com.gs.fw.common.mithra.generator.CoreMithraGenerator;
+import io.liftwizard.filesystem.ManagedFileSystem;
+import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
+import io.liftwizard.tempdir.ManagedTempDirectory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,13 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.stream.Stream;
-
 import javax.annotation.Nonnull;
-
-import com.gs.fw.common.mithra.generator.CoreMithraGenerator;
-import io.liftwizard.filesystem.ManagedFileSystem;
-import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
-import io.liftwizard.tempdir.ManagedTempDirectory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -124,13 +125,11 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
 
 	@Nonnull
 	private ManagedTempDirectory getTempFile() {
-		if (this.definitionsAndClassListDirectory.startsWith("/")) {
-			throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
-		}
+		checkArgument(!this.definitionsAndClassListDirectory.startsWith("/"), "definitionsAndClassListDirectory must not start with a /");
 
 		try {
 			URL resource = this.getClass().getResource('/' + this.definitionsAndClassListDirectory);
-			Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
+			requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
 			URI uri = resource.toURI();
 			Path from = ManagedFileSystem.get(uri);
 			ManagedTempDirectory managedTempDirectory = ManagedTempDirectory.create(this.getClass().getSimpleName());

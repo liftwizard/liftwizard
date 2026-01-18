@@ -16,10 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.attribute.Attribute;
@@ -86,6 +83,10 @@ import io.liftwizard.model.reladomo.operation.compiler.operator.binary.one.Tempo
 import io.liftwizard.model.reladomo.operation.compiler.operator.unary.AsOfUnaryOperatorVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.operator.unary.UnaryOperatorVisitor;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
@@ -101,8 +102,8 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
 	private final CommonTokenStream tokenStream;
 
 	public ReladomoOperationBuilderVisitor(RelatedFinder<T> finder, CommonTokenStream tokenStream) {
-		this.finder = Objects.requireNonNull(finder);
-		this.tokenStream = Objects.requireNonNull(tokenStream);
+		this.finder = requireNonNull(finder);
+		this.tokenStream = requireNonNull(tokenStream);
 	}
 
 	@Override

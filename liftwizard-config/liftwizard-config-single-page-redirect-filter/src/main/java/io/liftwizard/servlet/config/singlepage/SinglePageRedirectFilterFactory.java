@@ -16,9 +16,9 @@
 
 package io.liftwizard.servlet.config.singlepage;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
+import java.util.List;
 
 public class SinglePageRedirectFilterFactory {
 
@@ -27,7 +27,7 @@ public class SinglePageRedirectFilterFactory {
 	private String cacheControlHeader = "no-cache, max-age=0";
 
 	// Well known prefixes include /api/ for REST endpoints and /.well-known/ for OIDC callbacks.
-	private List<String> wellKnownPathPrefixes = List.of("/api/", "/.well-known/");
+	private List<String> wellKnownPathPrefixes = ImmutableList.of("/api/", "/.well-known/");
 
 	public String getRedirectPage() {
 		return this.redirectPage;

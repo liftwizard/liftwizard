@@ -16,14 +16,9 @@
 
 package io.liftwizard.dropwizard.bundle.httplogging;
 
-import java.security.Principal;
-import java.time.Clock;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Consumer;
+import static java.util.Objects.requireNonNull;
 
-import javax.annotation.Nonnull;
-
+import com.google.common.collect.ImmutableMap;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -36,6 +31,12 @@ import io.liftwizard.servlet.logging.filter.ServerLoggingFilter;
 import io.liftwizard.servlet.logging.filter.ServerLoggingRequestFilter;
 import io.liftwizard.servlet.logging.filter.ServerLoggingResponseFilter;
 import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import java.security.Principal;
+import java.time.Clock;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.block.function.Function;
 import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggingFactoryProvider> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
 	@Nonnull
 	private final Consumer<StructuredArguments> structuredLogger;
@@ -57,15 +58,15 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 	private final Function<Principal, Map<String, Object>> principalBuilder;
 
 	public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger) {
-		this(structuredLogger, (principal) -> Map.of("name", principal.getName()));
+		this(structuredLogger, (principal) -> ImmutableMap.of("name", principal.getName()));
 	}
 
 	public JerseyHttpLoggingBundle(
 		@Nonnull Consumer<StructuredArguments> structuredLogger,
 		@Nonnull Function<Principal, Map<String, Object>> principalBuilder
 	) {
-		this.structuredLogger = Objects.requireNonNull(structuredLogger);
-		this.principalBuilder = Objects.requireNonNull(principalBuilder);
+		this.structuredLogger = requireNonNull(structuredLogger);
+		this.principalBuilder = requireNonNull(principalBuilder);
 	}
 
 	@Override
@@ -75,11 +76,11 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 	public void run(JerseyHttpLoggingFactoryProvider configuration, Environment environment) throws Exception {
 		JerseyHttpLoggingFactory factory = configuration.getJerseyHttpLoggingFactory();
 		if (!factory.isEnabled()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		Clock clock = getClock(configuration);
 
@@ -115,12 +116,12 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 			.addFilter("ServerLoggingFilter", loggingFilter)
 			.addMappingForUrlPatterns(null, true, "/*");
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
 	private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration) {
 		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
-			LOGGER.warn(
+			LOG.warn(
 				"Configuration {} does not implement {}. Using system clock.",
 				configuration.getClass().getSimpleName(),
 				ClockFactoryProvider.class.getSimpleName()

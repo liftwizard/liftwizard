@@ -16,11 +16,10 @@
 
 package io.liftwizard.dropwizard.configuration.liquibase.migration;
 
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 
 public class LiquibaseDataSourceMigrationFactory {
 
@@ -29,7 +28,7 @@ public class LiquibaseDataSourceMigrationFactory {
 	private String schemaName;
 	private String migrationFileName = "migrations.xml";
 	private @NotNull MigrationFileLocation migrationFileLocation = MigrationFileLocation.CLASSPATH;
-	private @NotNull List<String> contexts = List.of();
+	private @NotNull List<String> contexts = ImmutableList.of();
 
 	@JsonProperty
 	public String getDataSourceName() {

@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class SystemPropertiesBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SystemPropertiesBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SystemPropertiesBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -44,11 +44,11 @@ public class SystemPropertiesBundle implements PrioritizedBundle {
 		);
 		SystemPropertiesFactory systemPropertiesFactory = systemPropertiesFactoryProvider.getSystemPropertiesFactory();
 		if (systemPropertiesFactory.getSystemProperties().isEmpty()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		boolean strict = systemPropertiesFactory.isStrict();
 		systemPropertiesFactory
@@ -61,6 +61,6 @@ public class SystemPropertiesBundle implements PrioritizedBundle {
 				}
 			});
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 }

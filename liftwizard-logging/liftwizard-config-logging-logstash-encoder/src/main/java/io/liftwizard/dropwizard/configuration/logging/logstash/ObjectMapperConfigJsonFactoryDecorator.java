@@ -16,12 +16,13 @@
 
 package io.liftwizard.dropwizard.configuration.logging.logstash;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
+import java.util.Objects;
 import net.logstash.logback.decorate.JsonFactoryDecorator;
 
 public class ObjectMapperConfigJsonFactoryDecorator implements JsonFactoryDecorator {
@@ -31,7 +32,7 @@ public class ObjectMapperConfigJsonFactoryDecorator implements JsonFactoryDecora
 
 	public ObjectMapperConfigJsonFactoryDecorator(boolean prettyPrint, Include serializationInclusion) {
 		this.prettyPrint = prettyPrint;
-		this.serializationInclusion = Objects.requireNonNull(serializationInclusion);
+		this.serializationInclusion = requireNonNull(serializationInclusion);
 	}
 
 	@Override

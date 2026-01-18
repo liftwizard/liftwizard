@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachCallback {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoLoadDataExtension.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReladomoLoadDataExtension.class);
 
 	private static final Class<?>[] NO_PARAMS = {};
 	private static final Object[] NO_ARGS = {};
@@ -76,7 +76,7 @@ public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachC
 			return this.testDataFileNames;
 		}
 
-		ReladomoTestFile reladomoTestFileAnnotation = element.get().getAnnotation(ReladomoTestFile.class);
+		ReladomoTestFile reladomoTestFileAnnotation = element.orElseThrow().getAnnotation(ReladomoTestFile.class);
 		if (reladomoTestFileAnnotation == null) {
 			return this.testDataFileNames;
 		}
@@ -84,7 +84,7 @@ public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachC
 	}
 
 	private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
-		LOGGER.debug("Loading test data from file: {}", testDataFileName);
+		LOG.debug("Loading test data from file: {}", testDataFileName);
 		MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
 		List<MithraParsedData> parsedDataList = parser.getResults();
 
@@ -116,7 +116,7 @@ public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachC
 		SourcelessConnectionManager databaseObjectConnectionManager =
 			(SourcelessConnectionManager) databaseObject.getConnectionManager();
 
-		LOGGER.debug(
+		LOG.debug(
 			"Loading test data for class {} using connection manager: {}",
 			parsedClassName,
 			databaseObjectConnectionManager

@@ -16,11 +16,12 @@
 
 package io.liftwizard.dropwizard.configuration.object.mapper;
 
-import javax.validation.constraints.NotNull;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.Nulls;
+import javax.validation.constraints.NotNull;
 
 public class ObjectMapperFactory {
 
@@ -28,7 +29,7 @@ public class ObjectMapperFactory {
 	// Should usually be false in production
 	private boolean prettyPrint = true;
 	private boolean failOnUnknownProperties = true;
-	private @NotNull Include serializationInclusion = Include.NON_ABSENT;
+	private @NotNull Include serializationInclusion = NON_ABSENT;
 	private @NotNull Nulls defaultNullSetterInfo = Nulls.AS_EMPTY;
 
 	public boolean isEnabled() {

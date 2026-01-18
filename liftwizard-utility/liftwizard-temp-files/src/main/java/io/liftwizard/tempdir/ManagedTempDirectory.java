@@ -16,6 +16,8 @@
 
 package io.liftwizard.tempdir;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,15 +26,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.annotation.Nonnull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class ManagedTempDirectory implements AutoCloseable {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManagedTempDirectory.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ManagedTempDirectory.class);
 
 	private static final Set<ManagedTempDirectory> SHUTDOWN_REGISTRY = ConcurrentHashMap.newKeySet();
 
@@ -49,23 +49,23 @@ public final class ManagedTempDirectory implements AutoCloseable {
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 
 	private ManagedTempDirectory(@Nonnull Path path) {
-		this.path = Objects.requireNonNull(path, "path cannot be null");
+		this.path = requireNonNull(path, "path cannot be null");
 	}
 
 	private static void shutdownCleanup() {
-		LOGGER.debug("Running shutdown hook to clean up {} temporary directories", SHUTDOWN_REGISTRY.size());
+		LOG.debug("Running shutdown hook to clean up {} temporary directories", SHUTDOWN_REGISTRY.size());
 		SHUTDOWN_REGISTRY.forEach(ManagedTempDirectory::close);
 	}
 
 	public static Path createTempDirectory(@Nonnull String prefix) {
-		Objects.requireNonNull(prefix, "prefix cannot be null");
+		requireNonNull(prefix, "prefix cannot be null");
 
 		try {
 			Path tempDir = Files.createTempDirectory(prefix);
 			var instance = new ManagedTempDirectory(tempDir);
 			SHUTDOWN_REGISTRY.add(instance);
 
-			LOGGER.debug("Created temporary directory (registered for JVM shutdown cleanup): {}", tempDir);
+			LOG.debug("Created temporary directory (registered for JVM shutdown cleanup): {}", tempDir);
 			return tempDir;
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to create temporary directory with prefix: " + prefix, e);
@@ -77,14 +77,14 @@ public final class ManagedTempDirectory implements AutoCloseable {
 	}
 
 	public static ManagedTempDirectory create(@Nonnull String prefix, FileAttribute<?>... attrs) {
-		Objects.requireNonNull(prefix, "prefix cannot be null");
+		requireNonNull(prefix, "prefix cannot be null");
 
 		try {
 			Path tempDir = Files.createTempDirectory(prefix, attrs);
 			var instance = new ManagedTempDirectory(tempDir);
 			SHUTDOWN_REGISTRY.add(instance);
 
-			LOGGER.debug("Created managed temporary directory: {}", tempDir);
+			LOG.debug("Created managed temporary directory: {}", tempDir);
 			return instance;
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to create temporary directory with prefix: " + prefix, e);
@@ -99,7 +99,7 @@ public final class ManagedTempDirectory implements AutoCloseable {
 	@Override
 	public void close() {
 		if (this.closed.compareAndSet(false, true)) {
-			LOGGER.debug("Closing managed temporary directory: {}", this.path);
+			LOG.debug("Closing managed temporary directory: {}", this.path);
 			SHUTDOWN_REGISTRY.remove(this);
 			try {
 				RecursiveDirectoryDeleter.deleteRecursively(this.path);
@@ -111,7 +111,7 @@ public final class ManagedTempDirectory implements AutoCloseable {
 
 	public boolean tryClose() {
 		if (this.closed.compareAndSet(false, true)) {
-			LOGGER.debug("Attempting to close managed temporary directory: {}", this.path);
+			LOG.debug("Attempting to close managed temporary directory: {}", this.path);
 			SHUTDOWN_REGISTRY.remove(this);
 			return RecursiveDirectoryDeleter.tryDeleteRecursively(this.path);
 		}

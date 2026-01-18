@@ -16,10 +16,7 @@
 
 package io.liftwizard.graphql.reladomo.finder.fetcher;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
@@ -35,13 +32,17 @@ import io.liftwizard.reladomo.graphql.deep.fetcher.GraphQLDeepFetcher;
 import io.liftwizard.reladomo.graphql.operation.GraphQLQueryToOperationConverter;
 import io.liftwizard.reladomo.graphql.operation.LiftwizardGraphQLContextException;
 import io.liftwizard.reladomo.graphql.orderby.GraphQLQueryToOrderByConverter;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ReladomoFinderDataFetcher<T> implements DataFetcher<List<T>> {
 
 	private final AbstractRelatedFinder<T, ?, ?, ?, ?> finder;
 
 	public ReladomoFinderDataFetcher(AbstractRelatedFinder<T, ?, ?, ?, ?> finder) {
-		this.finder = Objects.requireNonNull(finder);
+		this.finder = requireNonNull(finder);
 	}
 
 	@Timed

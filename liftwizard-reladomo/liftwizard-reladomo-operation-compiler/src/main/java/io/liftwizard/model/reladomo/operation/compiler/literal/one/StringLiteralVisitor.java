@@ -39,7 +39,7 @@ public class StringLiteralVisitor extends AbstractLiteralVisitor<String> {
 		}
 		String quotedText = ctx.StringLiteral().getText();
 		String unquotedText = quotedText.substring(1, quotedText.length() - 1);
-		String unescapedString = StringEscapeUtils.unescapeJava(unquotedText);
-		return unescapedString;
+		return StringEscapeUtils.unescapeJava(unquotedText);
+		
 	}
 }

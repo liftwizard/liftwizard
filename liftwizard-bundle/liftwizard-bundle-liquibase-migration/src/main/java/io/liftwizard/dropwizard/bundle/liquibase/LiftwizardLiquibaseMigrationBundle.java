@@ -16,13 +16,7 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.sql.DataSource;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.auto.service.AutoService;
 import io.dropwizard.db.ManagedDataSource;
@@ -33,6 +27,12 @@ import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseDataS
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactory;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactoryProvider;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 import liquibase.Scope;
 import liquibase.Scope.Attr;
 import liquibase.database.Database;
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardLiquibaseMigrationBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LiftwizardLiquibaseMigrationBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -64,13 +64,13 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
 			configuration
 		);
 		if (liquibaseFactoryProvider == null) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
 		LiquibaseMigrationFactory liquibaseMigrationFactory = liquibaseFactoryProvider.getLiquibaseMigrationFactory();
 		if (!liquibaseMigrationFactory.isEnabled()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
@@ -79,13 +79,13 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
 			configuration
 		);
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		Scope.child(Attr.ui, new LoggerUIService(), () ->
 			this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider)
 		);
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
 	private void runWithLogger(
@@ -120,7 +120,7 @@ public class LiftwizardLiquibaseMigrationBundle implements PrioritizedBundle {
 				);
 			) {
 				if (dryRun) {
-					liquibase.update(context, new OutputStreamWriter(System.out, StandardCharsets.UTF_8));
+					liquibase.update(context, new OutputStreamWriter(System.out, UTF_8));
 				} else {
 					if (dropEntireSchemaOnStartupAndShutdown) {
 						liquibase.dropAll();

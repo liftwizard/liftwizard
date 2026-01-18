@@ -16,12 +16,12 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.lang.reflect.Method;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.lang.reflect.Method;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 
 public class StructuredArgumentsRequest {
 
@@ -42,7 +42,7 @@ public class StructuredArgumentsRequest {
 		if (this.resourceClass != null) {
 			throw new AssertionError(this.resourceClass);
 		}
-		this.resourceClass = Objects.requireNonNull(resourceClass);
+		this.resourceClass = requireNonNull(resourceClass);
 	}
 
 	@JsonProperty
@@ -54,6 +54,6 @@ public class StructuredArgumentsRequest {
 		if (this.resourceMethod != null) {
 			throw new AssertionError(this.resourceMethod);
 		}
-		this.resourceMethod = Objects.requireNonNull(resourceMethod.getName());
+		this.resourceMethod = requireNonNull(resourceMethod.getName());
 	}
 }

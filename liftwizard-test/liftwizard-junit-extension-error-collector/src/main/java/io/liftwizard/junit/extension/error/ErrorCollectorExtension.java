@@ -16,8 +16,9 @@
 
 package io.liftwizard.junit.extension.error;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.MutableList;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -29,7 +30,7 @@ public class ErrorCollectorExtension implements AfterEachCallback {
 	private final MutableList<Throwable> errors = Lists.mutable.empty();
 
 	public void addError(AssertionError error) {
-		Objects.requireNonNull(error, "Error cannot be null");
+		requireNonNull(error, "Error cannot be null");
 		this.errors.add(error);
 	}
 

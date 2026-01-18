@@ -16,13 +16,14 @@
 
 package io.liftwizard.reladomo.graphql.deep.fetcher;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.finder.DomainList;
 import com.gs.fw.finder.Navigation;
 import graphql.schema.DataFetchingFieldSelectionSet;
 import graphql.schema.SelectedField;
+import java.util.Objects;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 
@@ -55,7 +56,7 @@ public final class GraphQLDeepFetcher {
 		RelatedFinder<T> currentFinder = finderInstance;
 		for (String navigationName : navigationNames) {
 			currentFinder = currentFinder.getRelationshipFinderByName(navigationName);
-			Objects.requireNonNull(currentFinder);
+			requireNonNull(currentFinder);
 		}
 		Navigation<T> navigation = (Navigation<T>) currentFinder;
 		result.deepFetch(navigation);
@@ -64,7 +65,7 @@ public final class GraphQLDeepFetcher {
 	private static MutableList<String> getNavigationNames(SelectedField selectedField) {
 		String qualifiedName = selectedField.getQualifiedName();
 		MutableList<String> fieldNamesNames = ArrayAdapter.adapt(qualifiedName.split("/"));
-		MutableList<String> navigationNames = fieldNamesNames.take(fieldNamesNames.size() - 1);
-		return navigationNames;
+		return fieldNamesNames.take(fieldNamesNames.size() - 1);
+		
 	}
 }

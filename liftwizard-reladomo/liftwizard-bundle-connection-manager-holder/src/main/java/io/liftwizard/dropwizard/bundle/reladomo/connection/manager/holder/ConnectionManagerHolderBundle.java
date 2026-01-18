@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class ConnectionManagerHolderBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManagerHolderBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConnectionManagerHolderBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -53,7 +53,7 @@ public class ConnectionManagerHolderBundle implements PrioritizedBundle {
 			configuration
 		);
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		Map<String, SourcelessConnectionManager> connectionManagersByName = connectionManagerFactoryProvider
 			.getConnectionManagersFactory()
@@ -61,6 +61,6 @@ public class ConnectionManagerHolderBundle implements PrioritizedBundle {
 
 		ConnectionManagerHolder.setConnectionManagersByName(Maps.immutable.withAll(connectionManagersByName));
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 }

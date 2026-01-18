@@ -16,12 +16,13 @@
 
 package io.liftwizard.junit.extension.liquibase.migrations;
 
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-
-import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import liquibase.Liquibase;
 import liquibase.Scope;
 import liquibase.Scope.Attr;
@@ -53,7 +54,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class LiquibaseRollbackVerifier {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseRollbackVerifier.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LiquibaseRollbackVerifier.class);
 
 	private LiquibaseRollbackVerifier() {
 		throw new AssertionError("Suppress default constructor for noninstantiability");
@@ -79,7 +80,7 @@ public final class LiquibaseRollbackVerifier {
 	 * @throws RuntimeException if any changeset fails to apply, rollback, or reapply
 	 */
 	public static void verifyAllChangesets(String migrationsFile) {
-		Objects.requireNonNull(migrationsFile, "migrationsFile is required");
+		requireNonNull(migrationsFile, "migrationsFile is required");
 
 		try {
 			Scope.child(Attr.ui, new LoggerUIService(), () -> runVerification(migrationsFile));
@@ -98,19 +99,19 @@ public final class LiquibaseRollbackVerifier {
 				DatabaseChangeLog databaseChangeLog = liquibase.getDatabaseChangeLog();
 				List<ChangeSet> changeSets = databaseChangeLog.getChangeSets();
 
-				LOGGER.info("Verifying {} changesets from {}", changeSets.size(), migrationsFile);
+				LOG.info("Verifying {} changesets from {}", changeSets.size(), migrationsFile);
 
 				for (int i = 0; i < changeSets.size(); i++) {
 					ChangeSet changeSet = changeSets.get(i);
 					String changeSetId = changeSet.getId();
 					String author = changeSet.getAuthor();
 
-					LOGGER.info("Verifying changeset {}/{}: {}::{}", i + 1, changeSets.size(), author, changeSetId);
+					LOG.info("Verifying changeset {}/{}: {}::{}", i + 1, changeSets.size(), author, changeSetId);
 
 					verifyChangeset(liquibase, changeSet);
 				}
 
-				LOGGER.info("Successfully verified all {} changesets", changeSets.size());
+				LOG.info("Successfully verified all {} changesets", changeSets.size());
 			}
 		}
 	}
@@ -119,13 +120,13 @@ public final class LiquibaseRollbackVerifier {
 		String changeSetId = changeSet.getId();
 		String author = changeSet.getAuthor();
 
-		LOGGER.debug("Applying changeset {}::{}", author, changeSetId);
+		LOG.debug("Applying changeset {}::{}", author, changeSetId);
 		liquibase.update(1, "");
 
-		LOGGER.debug("Rolling back changeset {}::{}", author, changeSetId);
+		LOG.debug("Rolling back changeset {}::{}", author, changeSetId);
 		liquibase.rollback(1, "");
 
-		LOGGER.debug("Re-applying changeset {}::{}", author, changeSetId);
+		LOG.debug("Re-applying changeset {}::{}", author, changeSetId);
 		liquibase.update(1, "");
 	}
 

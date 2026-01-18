@@ -16,9 +16,10 @@
 
 package io.liftwizard.servlet.filter.singlepage;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.util.Objects;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
@@ -27,7 +28,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.collections.api.list.ImmutableList;
 
 public class SinglePageRedirectFilter implements Filter {
@@ -41,9 +41,9 @@ public class SinglePageRedirectFilter implements Filter {
 		String cacheControlHeader,
 		ImmutableList<String> wellKnownPathPrefixes
 	) {
-		this.redirectPage = Objects.requireNonNull(redirectPage);
-		this.cacheControlHeader = Objects.requireNonNull(cacheControlHeader);
-		this.wellKnownPathPrefixes = Objects.requireNonNull(wellKnownPathPrefixes);
+		this.redirectPage = requireNonNull(redirectPage);
+		this.cacheControlHeader = requireNonNull(cacheControlHeader);
+		this.wellKnownPathPrefixes = requireNonNull(wellKnownPathPrefixes);
 	}
 
 	@Override

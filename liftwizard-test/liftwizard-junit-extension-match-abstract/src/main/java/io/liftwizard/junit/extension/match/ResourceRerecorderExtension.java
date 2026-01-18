@@ -16,6 +16,9 @@
 
 package io.liftwizard.junit.extension.match;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
-
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.api.set.MutableSet;
@@ -48,7 +49,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 	private final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
 	public ResourceRerecorderExtension(Class<?> callingClass, boolean rerecordEnabled) {
-		this.callingClass = Objects.requireNonNull(callingClass);
+		this.callingClass = requireNonNull(callingClass);
 		this.rerecordEnabled = rerecordEnabled;
 	}
 
@@ -64,7 +65,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 	public Path getPackagePath() {
 		String packageName = this.callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 
@@ -93,7 +94,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 
 	public String handleMismatch(String resourceClassPathLocation, String fileContents)
 		throws URISyntaxException, IOException {
-		URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+		URL resource = requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
 		URI uri = resource.toURI();
 
 		if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
@@ -117,7 +118,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 			destinationFile.getParentFile().mkdirs();
 		}
 
-		try (PrintWriter printWriter = new PrintWriter(destinationFile, StandardCharsets.UTF_8)) {
+		try (PrintWriter printWriter = new PrintWriter(destinationFile, UTF_8)) {
 			printWriter.print(fileContents);
 		}
 	}

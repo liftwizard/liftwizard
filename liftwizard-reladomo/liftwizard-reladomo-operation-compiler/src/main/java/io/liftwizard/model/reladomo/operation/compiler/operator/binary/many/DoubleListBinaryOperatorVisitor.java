@@ -16,13 +16,14 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.many;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.DoubleAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.Objects;
 import org.eclipse.collections.api.factory.primitive.DoubleSets;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableDoubleSet;
@@ -33,7 +34,7 @@ public class DoubleListBinaryOperatorVisitor extends AbstractBinaryOperatorVisit
 	private final ImmutableDoubleSet doubleSet;
 
 	public DoubleListBinaryOperatorVisitor(DoubleAttribute<?> attribute, ImmutableList<Double> parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 		this.doubleSet = DoubleSets.immutable.withAll(parameter);
 	}
 

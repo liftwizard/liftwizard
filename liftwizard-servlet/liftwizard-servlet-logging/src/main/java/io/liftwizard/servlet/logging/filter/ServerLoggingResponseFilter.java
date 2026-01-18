@@ -16,11 +16,14 @@
 
 package io.liftwizard.servlet.logging.filter;
 
+import static com.google.common.base.Preconditions.checkState;
+
+import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
-
 import javax.annotation.Nonnull;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
@@ -28,9 +31,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Response.StatusType;
-
-import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
 
 @ConstrainedTo(RuntimeType.SERVER)
 public final class ServerLoggingResponseFilter implements ContainerResponseFilter {
@@ -44,9 +44,7 @@ public final class ServerLoggingResponseFilter implements ContainerResponseFilte
 			"structuredArguments"
 		);
 
-		if (structuredArguments.getResponse() == null) {
-			throw new IllegalStateException();
-		}
+		checkState(structuredArguments.getResponse() != null);
 
 		StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 

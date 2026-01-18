@@ -16,9 +16,10 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import io.dropwizard.db.ManagedDataSource;
+import java.util.Objects;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.exception.LiquibaseException;
@@ -35,7 +36,7 @@ public class CloseableLiquibase extends Liquibase {
 		ManagedDataSource dataSource
 	) {
 		super(changeLogFile, resourceAccessor, database);
-		this.dataSource = Objects.requireNonNull(dataSource);
+		this.dataSource = requireNonNull(dataSource);
 	}
 
 	@Override

@@ -16,10 +16,16 @@
 
 package io.liftwizard.dropwizard.healthcheck.commonpool;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+
+import com.codahale.metrics.health.HealthCheck;
+import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -27,11 +33,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javax.annotation.Nonnull;
-
-import com.codahale.metrics.health.HealthCheck;
-import io.liftwizard.logging.slf4j.mdc.MultiMDCCloseable;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
@@ -41,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class CommonPoolHealthCheck extends HealthCheck {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheck.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommonPoolHealthCheck.class);
 
 	private static final int MAX_STACK_TRACE_DEPTH = 100;
 
@@ -97,18 +99,18 @@ public class CommonPoolHealthCheck extends HealthCheck {
 		@Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
 		@Nonnull ImmutableList<Pattern> bannedPatterns
 	) {
-		this.threads = Objects.requireNonNull(threads);
-		this.threadNamePrefix = Objects.requireNonNull(threadNamePrefix);
+		this.threads = requireNonNull(threads);
+		this.threadNamePrefix = requireNonNull(threadNamePrefix);
 		this.threadStates = new LinkedHashSet<>(threadStates.castToList());
-		this.alwaysAllowedPatterns = Objects.requireNonNull(alwaysAllowedPatterns);
-		this.bannedPatterns = Objects.requireNonNull(bannedPatterns);
+		this.alwaysAllowedPatterns = requireNonNull(alwaysAllowedPatterns);
+		this.bannedPatterns = requireNonNull(bannedPatterns);
 	}
 
 	@Nonnull
 	@Override
 	protected Result check() {
 		ThreadInfo[] threadInfos = this.threads.getThreadInfo(this.threads.getAllThreadIds(), MAX_STACK_TRACE_DEPTH);
-		List<ThreadInfo> badThreadInfos = Stream.of(threadInfos)
+		List<ThreadInfo> badThreadInfos = Arrays.stream(threadInfos)
 			.filter((threadInfo) -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
 			.filter((threadInfo) -> this.threadStates.contains(threadInfo.getThreadState()))
 			.filter(
@@ -153,7 +155,7 @@ public class CommonPoolHealthCheck extends HealthCheck {
 					stackTraceString
 				);
 				badThreadInfoStrings.add(message);
-				LOGGER.warn(message);
+				LOG.warn(message);
 			}
 		}
 
@@ -168,8 +170,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
 
 	@Nonnull
 	private String getStackTraceString(StackTraceElement[] stackTrace) {
-		return Stream.of(stackTrace)
+		return Arrays.stream(stackTrace)
 			.map(StackTraceElement::toString)
-			.collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));
+			.collect(joining("\n\t at ", "", System.lineSeparator()));
 	}
 }

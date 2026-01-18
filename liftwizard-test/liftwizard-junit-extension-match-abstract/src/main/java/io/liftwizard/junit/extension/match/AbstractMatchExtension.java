@@ -16,14 +16,14 @@
 
 package io.liftwizard.junit.extension.match;
 
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.junit.extension.error.ErrorCollectorExtension;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
-
-import io.liftwizard.junit.extension.error.ErrorCollectorExtension;
 import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -43,7 +43,7 @@ public abstract class AbstractMatchExtension implements BeforeEachCallback, Afte
 	}
 
 	protected AbstractMatchExtension(@Nonnull Class<?> callingClass, boolean rerecordEnabled) {
-		this.callingClass = Objects.requireNonNull(callingClass);
+		this.callingClass = requireNonNull(callingClass);
 		this.rerecordEnabled = rerecordEnabled;
 		this.resourceRerecorderExtension = new ResourceRerecorderExtension(callingClass, rerecordEnabled);
 	}
@@ -51,7 +51,7 @@ public abstract class AbstractMatchExtension implements BeforeEachCallback, Afte
 	protected Path getPackagePath() {
 		String packageName = this.callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 

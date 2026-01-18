@@ -16,12 +16,14 @@
 
 package io.liftwizard.junit.extension.match;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Scanner;
-
 import javax.annotation.Nonnull;
 
 public final class FileSlurper {
@@ -31,7 +33,7 @@ public final class FileSlurper {
 	}
 
 	public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass) {
-		return slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
+		return slurp(resourceClassPathLocation, callingClass, UTF_8);
 	}
 
 	public static String slurp(
@@ -40,7 +42,7 @@ public final class FileSlurper {
 		Charset charset
 	) {
 		InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
-		Objects.requireNonNull(inputStream, resourceClassPathLocation);
+		requireNonNull(inputStream, resourceClassPathLocation);
 		return slurp(inputStream, charset);
 	}
 

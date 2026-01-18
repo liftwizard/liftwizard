@@ -16,6 +16,13 @@
 
 package io.liftwizard.graphql.scalar.temporal;
 
+import static java.time.ZoneOffset.UTC;
+
+import graphql.language.StringValue;
+import graphql.schema.Coercing;
+import graphql.schema.CoercingParseLiteralException;
+import graphql.schema.CoercingParseValueException;
+import graphql.schema.CoercingSerializeException;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -25,15 +32,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.function.Function;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import graphql.language.StringValue;
-import graphql.schema.Coercing;
-import graphql.schema.CoercingParseLiteralException;
-import graphql.schema.CoercingParseValueException;
-import graphql.schema.CoercingSerializeException;
 
 public class InstantCoercing implements Coercing<Instant, String> {
 
@@ -52,7 +52,7 @@ public class InstantCoercing implements Coercing<Instant, String> {
 	public String serialize(@Nonnull Object input) {
 		Instant instant = InstantCoercing.getInstant(input);
 		try {
-			return DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneOffset.UTC).format(instant);
+			return DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(UTC).format(instant);
 		} catch (DateTimeException e) {
 			throw new CoercingSerializeException(
 				"Unable to turn TemporalAccessor into OffsetDateTime because of : '" + e.getMessage() + "'.",

@@ -16,10 +16,11 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Map;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
+import java.util.Objects;
 
 public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 
@@ -42,7 +43,7 @@ public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 		if (this.method != null) {
 			throw new AssertionError(this.method);
 		}
-		this.method = Objects.requireNonNull(method);
+		this.method = requireNonNull(method);
 	}
 
 	@JsonProperty
@@ -80,7 +81,7 @@ public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 		if (this.principal != null) {
 			throw new AssertionError(this.principal);
 		}
-		this.principal = Objects.requireNonNull(principal);
+		this.principal = requireNonNull(principal);
 	}
 
 	@JsonProperty
@@ -104,7 +105,7 @@ public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 		if (this.path != null) {
 			throw new AssertionError(this.path);
 		}
-		this.path = Objects.requireNonNull(path);
+		this.path = requireNonNull(path);
 	}
 
 	@JsonProperty
@@ -116,7 +117,7 @@ public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 		if (this.parameters != null) {
 			throw new AssertionError(this.parameters);
 		}
-		this.parameters = Objects.requireNonNull(parameters);
+		this.parameters = requireNonNull(parameters);
 	}
 
 	@JsonProperty
@@ -128,7 +129,7 @@ public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 		if (this.client != null) {
 			throw new AssertionError(this.client);
 		}
-		this.client = Objects.requireNonNull(client);
+		this.client = requireNonNull(client);
 	}
 
 	@JsonProperty
@@ -140,6 +141,6 @@ public class StructuredArgumentsRequestHttp extends StructuredArgumentsHttp {
 		if (this.server != null) {
 			throw new AssertionError(this.server);
 		}
-		this.server = Objects.requireNonNull(server);
+		this.server = requireNonNull(server);
 	}
 }

@@ -16,7 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.literal;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.BooleanLiteralContext;
@@ -26,6 +26,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLit
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ParameterContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLiteralContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
+import java.util.Objects;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowingVisitor<T> {
@@ -34,8 +35,8 @@ public abstract class AbstractLiteralVisitor<T> extends ReladomoOperationThrowin
 	protected final String errorContext;
 
 	protected AbstractLiteralVisitor(RelatedFinder finder, String errorContext) {
-		this.finder = Objects.requireNonNull(finder);
-		this.errorContext = Objects.requireNonNull(errorContext);
+		this.finder = requireNonNull(finder);
+		this.errorContext = requireNonNull(errorContext);
 	}
 
 	@Override

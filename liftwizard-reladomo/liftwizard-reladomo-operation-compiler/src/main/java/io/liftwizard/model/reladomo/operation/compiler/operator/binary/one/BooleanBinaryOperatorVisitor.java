@@ -16,13 +16,14 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.one;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.BooleanAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorEqContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.Objects;
 
 public class BooleanBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
@@ -30,8 +31,8 @@ public class BooleanBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor 
 	private final Boolean parameter;
 
 	public BooleanBinaryOperatorVisitor(BooleanAttribute attribute, Boolean parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
-		this.parameter = Objects.requireNonNull(parameter);
+		this.attribute = requireNonNull(attribute);
+		this.parameter = requireNonNull(parameter);
 	}
 
 	@Override

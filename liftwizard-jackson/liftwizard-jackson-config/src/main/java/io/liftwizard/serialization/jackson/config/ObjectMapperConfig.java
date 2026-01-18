@@ -16,11 +16,7 @@
 
 package io.liftwizard.serialization.jackson.config;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter.Value;
@@ -34,6 +30,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.annotation.Nonnull;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
@@ -62,7 +62,7 @@ public final class ObjectMapperConfig {
 		boolean prettyPrint,
 		boolean failOnUnknownProperties
 	) {
-		return configure(objectMapper, prettyPrint, failOnUnknownProperties, Include.NON_ABSENT);
+		return configure(objectMapper, prettyPrint, failOnUnknownProperties, NON_ABSENT);
 	}
 
 	public static ObjectMapper configure(

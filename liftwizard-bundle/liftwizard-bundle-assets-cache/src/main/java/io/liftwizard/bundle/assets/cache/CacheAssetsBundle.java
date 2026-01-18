@@ -1,12 +1,13 @@
 package io.liftwizard.bundle.assets.cache;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Clock;
-import java.time.temporal.TemporalUnit;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.servlets.assets.AssetServlet;
 import io.liftwizard.servlet.assets.cache.CacheAssetServlet;
+import java.nio.charset.StandardCharsets;
+import java.time.Clock;
+import java.time.temporal.TemporalUnit;
 
 public class CacheAssetsBundle extends AssetsBundle {
 
@@ -46,7 +47,7 @@ public class CacheAssetsBundle extends AssetsBundle {
 			this.getResourcePath(),
 			this.getUriPath(),
 			this.getIndexFile(),
-			StandardCharsets.UTF_8,
+			UTF_8,
 			this.amountToAdd,
 			this.temporalUnit,
 			this.clock

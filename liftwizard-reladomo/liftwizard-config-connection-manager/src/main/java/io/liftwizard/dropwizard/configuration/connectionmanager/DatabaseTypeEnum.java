@@ -16,7 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import com.gs.fw.common.mithra.databasetype.DerbyDatabaseType;
@@ -29,6 +29,7 @@ import com.gs.fw.common.mithra.databasetype.PostgresDatabaseType;
 import com.gs.fw.common.mithra.databasetype.SybaseDatabaseType;
 import com.gs.fw.common.mithra.databasetype.SybaseIqDatabaseType;
 import com.gs.fw.common.mithra.databasetype.Udb82DatabaseType;
+import java.util.Objects;
 
 public enum DatabaseTypeEnum {
 	DERBY(DerbyDatabaseType.getInstance()),
@@ -46,7 +47,7 @@ public enum DatabaseTypeEnum {
 	private final DatabaseType databaseType;
 
 	DatabaseTypeEnum(DatabaseType databaseType) {
-		this.databaseType = Objects.requireNonNull(databaseType);
+		this.databaseType = requireNonNull(databaseType);
 	}
 
 	public DatabaseType getDatabaseType() {

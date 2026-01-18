@@ -16,6 +16,8 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.header;
 
+import static java.util.Objects.requireNonNull;
+
 import java.security.Principal;
 import java.util.Objects;
 
@@ -24,7 +26,7 @@ public class HeaderPrincipal implements Principal {
 	private final String name;
 
 	public HeaderPrincipal(String name) {
-		this.name = Objects.requireNonNull(name);
+		this.name = requireNonNull(name);
 	}
 
 	@Override

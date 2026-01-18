@@ -16,6 +16,8 @@
 
 package io.liftwizard.reladomo.ddl.executor;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +28,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nonnull;
-
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.set.mutable.SetAdapter;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public final class DatabaseDdlExecutor {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseDdlExecutor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DatabaseDdlExecutor.class);
 
 	private DatabaseDdlExecutor() {
 		throw new AssertionError("Suppress default constructor for noninstantiability");
@@ -77,10 +77,10 @@ public final class DatabaseDdlExecutor {
 			reflections.getResources(Pattern.compile(idxLocationPattern))
 		);
 		MutableSet<String> fkLocations = SetAdapter.adapt(reflections.getResources(Pattern.compile(fkLocationPattern)));
-		LOGGER.info("Scanning urls: {}", urls.collect(URL::toString).toSortedList());
-		LOGGER.info("Found {} SQL ddl scripts.", ddlLocations.size());
-		LOGGER.info("Found {} SQL idx scripts.", idxLocations.size());
-		LOGGER.info("Found {} SQL fk scripts.", fkLocations.size());
+		LOG.info("Scanning urls: {}", urls.collect(URL::toString).toSortedList());
+		LOG.info("Found {} SQL ddl scripts.", ddlLocations.size());
+		LOG.info("Found {} SQL idx scripts.", idxLocations.size());
+		LOG.info("Found {} SQL fk scripts.", fkLocations.size());
 
 		ddlLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
 		idxLocations.forEachWith(DatabaseDdlExecutor::runScript, connection);
@@ -90,7 +90,7 @@ public final class DatabaseDdlExecutor {
 	public static void dropAllObjects(Connection connection) {
 		try (Statement statement = connection.createStatement()) {
 			String dropSql = "DROP ALL OBJECTS";
-			LOGGER.info("Executing SQL: {}", dropSql);
+			LOG.info("Executing SQL: {}", dropSql);
 			statement.execute(dropSql);
 		} catch (@Nonnull SQLException e) {
 			throw new RuntimeException(e);
@@ -98,7 +98,7 @@ public final class DatabaseDdlExecutor {
 	}
 
 	private static void runScript(String ddlLocation, @Nonnull Connection connection) {
-		LOGGER.debug("Running SQL script: {}", ddlLocation);
+		LOG.debug("Running SQL script: {}", ddlLocation);
 
 		InputStream inputStream = DatabaseDdlExecutor.class.getResourceAsStream("/" + ddlLocation);
 		if (inputStream == null) {
@@ -106,10 +106,10 @@ public final class DatabaseDdlExecutor {
 			throw new RuntimeException(message);
 		}
 
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8))) {
 			RunScript.execute(connection, reader);
 		} catch (@Nonnull IOException | SQLException e) {
-			LOGGER.error("Failed to run sql script {}.", ddlLocation, e);
+			LOG.error("Failed to run sql script {}.", ddlLocation, e);
 			throw new RuntimeException(e);
 		}
 	}

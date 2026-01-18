@@ -16,13 +16,14 @@
 
 package io.liftwizard.reladomo.graphql.deep.fetcher;
 
-import java.util.Objects;
-import java.util.function.Function;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.finder.DomainList;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.Objects;
+import java.util.function.Function;
 
 public class GraphQLPropertyDataDeepFetcher<Output> implements DataFetcher<DomainList<Output>> {
 
@@ -33,8 +34,8 @@ public class GraphQLPropertyDataDeepFetcher<Output> implements DataFetcher<Domai
 		Function<Input, DomainList<Output>> function,
 		RelatedFinder<Output> finderInstance
 	) {
-		this.function = (Function<Object, DomainList<Output>>) Objects.requireNonNull(function);
-		this.finderInstance = Objects.requireNonNull(finderInstance);
+		this.function = (Function<Object, DomainList<Output>>) requireNonNull(function);
+		this.finderInstance = requireNonNull(finderInstance);
 	}
 
 	@Override

@@ -16,12 +16,11 @@
 
 package io.liftwizard.dropwizard.configuration.cors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CorsFactory {
 
@@ -33,7 +32,7 @@ public class CorsFactory {
 	private @Valid @NotNull String allowedHeaders = "X-Requested-With,Content-Type,Accept,Origin,Authorization";
 	private @Valid @NotNull String allowedMethods = "OPTIONS,GET,PUT,POST,PATCH,DELETE,HEAD";
 	private @Valid @NotNull String allowCredentials = "true";
-	private @Valid @NotNull List<String> urlPatterns = List.of("/*");
+	private @Valid @NotNull List<String> urlPatterns = ImmutableList.of("/*");
 
 	public boolean isEnabled() {
 		return this.enabled;

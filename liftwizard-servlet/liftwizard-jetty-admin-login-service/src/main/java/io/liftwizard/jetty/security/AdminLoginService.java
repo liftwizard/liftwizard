@@ -16,8 +16,9 @@
 
 package io.liftwizard.jetty.security;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
 import org.eclipse.jetty.security.AbstractLoginService;
 import org.eclipse.jetty.util.security.Password;
 
@@ -27,8 +28,8 @@ public class AdminLoginService extends AbstractLoginService {
 	private final String adminUserName;
 
 	public AdminLoginService(String userName, String password) {
-		this.adminUserName = Objects.requireNonNull(userName);
-		Password credential = new Password(Objects.requireNonNull(password));
+		this.adminUserName = requireNonNull(userName);
+		Password credential = new Password(requireNonNull(password));
 		this.adminPrincipal = new UserPrincipal(userName, credential);
 	}
 

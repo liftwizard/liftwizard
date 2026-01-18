@@ -16,21 +16,21 @@
 
 package io.liftwizard.reladomo.graphql.data.fetcher;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.Attribute;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ReladomoAttributeDataFetcher<Input, T> implements TrivialDataFetcher<T> {
 
 	private final Attribute<Input, T> attribute;
 
 	public ReladomoAttributeDataFetcher(Attribute<Input, T> attribute) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 	}
 
 	@Nullable

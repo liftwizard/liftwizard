@@ -16,15 +16,15 @@
 
 package io.liftwizard.dropwizard.bundle.liquibase;
 
-import java.sql.SQLException;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import static java.util.Objects.requireNonNull;
 
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.Managed;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import java.sql.SQLException;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
@@ -54,11 +54,11 @@ public class LiquibaseDropAllManaged implements Managed {
 		String migrationFile,
 		MigrationFileLocation migrationFileLocation
 	) {
-		this.dataSource = Objects.requireNonNull(dataSource);
+		this.dataSource = requireNonNull(dataSource);
 		this.catalogName = catalogName;
 		this.schemaName = schemaName;
-		this.migrationFile = Objects.requireNonNull(migrationFile);
-		this.migrationFileLocation = Objects.requireNonNull(migrationFileLocation);
+		this.migrationFile = requireNonNull(migrationFile);
+		this.migrationFileLocation = requireNonNull(migrationFileLocation);
 	}
 
 	@Override

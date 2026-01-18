@@ -16,16 +16,16 @@
 
 package io.liftwizard.tempdir;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(LogMarkerTestExtension.class)
 class ManagedTempDirectoryTest {
@@ -50,7 +50,7 @@ class ManagedTempDirectoryTest {
 			assertThat(tempDir.getFileName().toString()).startsWith("managed-test");
 
 			Path testFile = tempDir.resolve("test-file.txt");
-			Files.write(testFile, "test content".getBytes(StandardCharsets.UTF_8));
+			Files.write(testFile, "test content".getBytes(UTF_8));
 			assertThat(testFile).exists();
 		}
 	}
@@ -60,7 +60,7 @@ class ManagedTempDirectoryTest {
 		ManagedTempDirectory managedDir = ManagedTempDirectory.create("close-test");
 		Path tempDir = managedDir.getPath();
 		Path testFile = tempDir.resolve("test-file.txt");
-		Files.write(testFile, "test content".getBytes(StandardCharsets.UTF_8));
+		Files.write(testFile, "test content".getBytes(UTF_8));
 
 		managedDir.close();
 

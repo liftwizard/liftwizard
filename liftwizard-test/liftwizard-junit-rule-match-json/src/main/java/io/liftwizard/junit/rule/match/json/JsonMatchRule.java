@@ -16,6 +16,16 @@
 
 package io.liftwizard.junit.rule.match.json;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
+import io.liftwizard.junit.rule.match.AbstractMatchRule;
+import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,16 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-
 import javax.annotation.Nonnull;
-
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
-import io.liftwizard.junit.rule.match.AbstractMatchRule;
-import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -76,10 +77,10 @@ public class JsonMatchRule extends AbstractMatchRule {
 				this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
 			}
 		} else {
-			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-			String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
+			requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = slurp(inputStream, UTF_8);
 
-			URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+			URL resource = requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
 			URI uri = resource.toURI();
 
 			if (!this.validateExpectedStringFromFile(expectedStringFromFile, uri)) {
@@ -146,8 +147,8 @@ public class JsonMatchRule extends AbstractMatchRule {
 	protected String getPrettyPrintedString(@Nonnull String string) {
 		try {
 			JsonNode jsonNode = this.objectMapper.readTree(string);
-			String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
-			return prettyPrintedString;
+			return this.objectMapper.writeValueAsString(jsonNode);
+			
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}

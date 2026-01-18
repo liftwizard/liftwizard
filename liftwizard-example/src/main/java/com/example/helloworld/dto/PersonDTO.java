@@ -1,9 +1,10 @@
 package com.example.helloworld.dto;
 
-import java.time.Instant;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import java.time.Instant;
+import java.util.Objects;
 
 public class PersonDTO {
 
@@ -18,8 +19,8 @@ public class PersonDTO {
 	public PersonDTO() {}
 
 	public PersonDTO(String fullName, String jobTitle) {
-		this.fullName = Objects.requireNonNull(fullName);
-		this.jobTitle = Objects.requireNonNull(jobTitle);
+		this.fullName = requireNonNull(fullName);
+		this.jobTitle = requireNonNull(jobTitle);
 	}
 
 	public PersonDTO(long id, String fullName, String jobTitle) {
@@ -124,7 +125,7 @@ public class PersonDTO {
 		result = 31 * result + Objects.hashCode(this.jobTitle);
 		result = 31 * result + Objects.hashCode(this.system);
 		result = 31 * result + Objects.hashCode(this.systemFrom);
-		result = 31 * result + Objects.hashCode(this.systemTo);
-		return result;
+		return 31 * result + Objects.hashCode(this.systemTo);
+		
 	}
 }

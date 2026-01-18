@@ -16,6 +16,11 @@
 
 package io.liftwizard.junit.extension.match.file;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.junit.extension.match.AbstractMatchExtension;
+import io.liftwizard.junit.extension.match.FileSlurper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,11 +28,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
-
-import io.liftwizard.junit.extension.match.AbstractMatchExtension;
-import io.liftwizard.junit.extension.match.FileSlurper;
 
 public class FileMatchExtension extends AbstractMatchExtension {
 
@@ -55,8 +56,8 @@ public class FileMatchExtension extends AbstractMatchExtension {
 			}
 		} else {
 			InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation);
-			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-			String expectedStringFromFile = FileSlurper.slurp(inputStream, StandardCharsets.UTF_8);
+			requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = FileSlurper.slurp(inputStream, UTF_8);
 
 			if (!actualString.equals(expectedStringFromFile)) {
 				String detailMessage = this.resourceRerecorderExtension.handleMismatch(

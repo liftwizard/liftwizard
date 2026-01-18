@@ -16,13 +16,9 @@
 
 package io.liftwizard.dropwizard.configuration.parent;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.common.collect.ImmutableList;
 import io.dropwizard.Configuration;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
@@ -39,6 +35,9 @@ import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;
 import io.liftwizard.dropwizard.configuration.system.properties.SystemPropertiesFactory;
 import io.liftwizard.dropwizard.configuration.system.properties.SystemPropertiesFactoryProvider;
+import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @JsonPropertyOrder(
 	{
@@ -94,7 +93,7 @@ public abstract class AbstractLiftwizardConfiguration
 
 	@Valid
 	@NotNull
-	private List<AuthFilterFactory> authFilterFactories = List.of();
+	private List<AuthFilterFactory> authFilterFactories = ImmutableList.of();
 
 	// endregion Services
 

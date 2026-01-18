@@ -16,11 +16,12 @@
 
 package io.liftwizard.reladomo.timestamp;
 
+import static java.time.ZoneOffset.UTC;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-
 import javax.annotation.Nonnull;
 
 public final class ReladomoTimestampConverter {
@@ -31,6 +32,6 @@ public final class ReladomoTimestampConverter {
 
 	@Nonnull
 	public static Timestamp fromInstant(@Nonnull Instant instant) {
-		return Timestamp.valueOf(LocalDateTime.ofInstant(instant, ZoneOffset.UTC));
+		return Timestamp.valueOf(LocalDateTime.ofInstant(instant, UTC));
 	}
 }

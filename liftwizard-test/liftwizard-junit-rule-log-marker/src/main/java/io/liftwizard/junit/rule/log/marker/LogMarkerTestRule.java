@@ -32,19 +32,19 @@ import org.slf4j.MarkerFactory;
  */
 public class LogMarkerTestRule extends TestWatcher {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LogMarkerTestRule.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LogMarkerTestRule.class);
 	private static final Marker MARKER_CLEAR = MarkerFactory.getMarker("CLEAR");
 	private static final Marker MARKER_FLUSH = MarkerFactory.getMarker("FLUSH");
 
 	@Override
 	protected void starting(Description description) {
 		MDC.put("liftwizard.junit.test.name", description.getDisplayName());
-		LOGGER.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
+		LOG.info(MARKER_CLEAR, "Test starting. Logging the CLEAR marker to clear the buffer in BufferedAppender.");
 	}
 
 	@Override
 	protected void failed(Throwable e, Description description) {
-		LOGGER.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.");
+		LOG.info(MARKER_FLUSH, "Test failed. Logging the FLUSH marker to flush the buffer in BufferedAppender.");
 	}
 
 	@Override

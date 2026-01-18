@@ -16,9 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.many;
 
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.StringAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
@@ -26,6 +24,9 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorIn
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorWildCardInContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 import org.eclipse.collections.api.list.ImmutableList;
 
 public class StringListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
@@ -34,7 +35,7 @@ public class StringListBinaryOperatorVisitor extends AbstractBinaryOperatorVisit
 	private final Set<String> stringSet;
 
 	public StringListBinaryOperatorVisitor(StringAttribute<?> attribute, ImmutableList<String> parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 		this.stringSet = new LinkedHashSet<>(parameter.castToList());
 	}
 

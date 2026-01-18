@@ -16,6 +16,11 @@
 
 package io.liftwizard.junit.rule.match.file;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+import static org.junit.Assert.assertEquals;
+
+import io.liftwizard.junit.rule.match.AbstractMatchRule;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,12 +30,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
-
-import io.liftwizard.junit.rule.match.AbstractMatchRule;
-
-import static org.junit.Assert.assertEquals;
 
 public class FileMatchRule extends AbstractMatchRule {
 
@@ -58,10 +58,10 @@ public class FileMatchRule extends AbstractMatchRule {
 				this.addError(new AssertionError(resourceClassPathLocation + " did not exist. Created it."));
 			}
 		} else {
-			Objects.requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
-			String expectedStringFromFile = slurp(inputStream, StandardCharsets.UTF_8);
+			requireNonNull(inputStream, () -> resourceClassPathLocation + " not found.");
+			String expectedStringFromFile = slurp(inputStream, UTF_8);
 
-			URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
+			URL resource = requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
 			URI uri = resource.toURI();
 
 			if (!actualString.equals(expectedStringFromFile)) {

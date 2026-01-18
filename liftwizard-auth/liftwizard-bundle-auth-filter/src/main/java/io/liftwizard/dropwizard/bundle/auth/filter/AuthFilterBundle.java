@@ -16,11 +16,7 @@
 
 package io.liftwizard.dropwizard.bundle.auth.filter;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
+import static java.util.stream.Collectors.toList;
 
 import com.google.auto.service.AutoService;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -31,6 +27,10 @@ import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
+import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class AuthFilterBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AuthFilterBundle.class);
 
 	@Override
 	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
@@ -52,7 +52,7 @@ public class AuthFilterBundle implements PrioritizedBundle {
 		List<AuthFilter<?, ? extends Principal>> authFilters = this.getAuthFilters(authFilterFactories);
 
 		if (authFilters.isEmpty()) {
-			LOGGER.warn("{} disabled.", this.getClass().getSimpleName());
+			LOG.warn("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
@@ -60,20 +60,20 @@ public class AuthFilterBundle implements PrioritizedBundle {
 			.stream()
 			.map(Object::getClass)
 			.map(Class::getSimpleName)
-			.collect(Collectors.toList());
+			.collect(toList());
 
-		LOGGER.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
+		LOG.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
 
 		environment.jersey().register(this.getAuthDynamicFeature(authFilters));
 		environment.jersey().register(RolesAllowedDynamicFeature.class);
 		environment.jersey().register(new Binder<>(Principal.class));
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
 	@Nonnull
 	private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories) {
-		return authFilterFactories.stream().map(AuthFilterFactory::createAuthFilter).collect(Collectors.toList());
+		return authFilterFactories.stream().map(AuthFilterFactory::createAuthFilter).collect(toList());
 	}
 
 	@Nonnull

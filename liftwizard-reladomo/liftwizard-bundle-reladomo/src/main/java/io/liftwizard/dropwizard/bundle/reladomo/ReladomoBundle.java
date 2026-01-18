@@ -16,14 +16,7 @@
 
 package io.liftwizard.dropwizard.bundle.reladomo;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
-import java.util.TimeZone;
-
-import javax.annotation.Nonnull;
+import static java.time.ZoneOffset.UTC;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.auto.service.AutoService;
@@ -36,13 +29,20 @@ import io.dropwizard.util.Duration;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactory;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+import java.util.TimeZone;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
 public class ReladomoBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReladomoBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -56,7 +56,7 @@ public class ReladomoBundle implements PrioritizedBundle {
 			configuration
 		);
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		ReladomoBundle.assertTimezoneUTC();
 
@@ -86,23 +86,23 @@ public class ReladomoBundle implements PrioritizedBundle {
 
 		environment.lifecycle().manage(new ManagedReladomoCleanup());
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
 	private static void assertTimezoneUTC() {
 		TimeZone defaultTimeZone = TimeZone.getDefault();
 		if (!defaultTimeZone.equals(TimeZone.getTimeZone("UTC"))) {
-			LOGGER.warn("Expected default TimeZone to be UTC, but was: {}.", defaultTimeZone);
+			LOG.warn("Expected default TimeZone to be UTC, but was: {}.", defaultTimeZone);
 		}
 
-		long expectedInfinityMilli = LocalDateTime.of(9999, 12, 1, 23, 59, 0).toInstant(ZoneOffset.UTC).toEpochMilli();
+		long expectedInfinityMilli = LocalDateTime.of(9999, 12, 1, 23, 59, 0).toInstant(UTC).toEpochMilli();
 		long actualInfinityMilli = DefaultInfinityTimestamp.getDefaultInfinity().getTime();
 
 		if (actualInfinityMilli != expectedInfinityMilli) {
 			long difference = actualInfinityMilli - expectedInfinityMilli;
 			long offset = difference / (1000 * 60 * 60);
 
-			LOGGER.warn(
+			LOG.warn(
 				"Expected default Infinity to be {}, but was: {}. Offset: {} hours.",
 				expectedInfinityMilli,
 				actualInfinityMilli,
@@ -141,7 +141,7 @@ public class ReladomoBundle implements PrioritizedBundle {
 	}
 
 	private void loadRuntimeConfiguration(String runtimeConfigurationPath) {
-		LOGGER.info("Loading Reladomo configuration XML: {}", runtimeConfigurationPath);
+		LOG.info("Loading Reladomo configuration XML: {}", runtimeConfigurationPath);
 		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(runtimeConfigurationPath)) {
 			MithraManagerProvider.getMithraManager().readConfiguration(inputStream);
 		} catch (MithraBusinessException e) {

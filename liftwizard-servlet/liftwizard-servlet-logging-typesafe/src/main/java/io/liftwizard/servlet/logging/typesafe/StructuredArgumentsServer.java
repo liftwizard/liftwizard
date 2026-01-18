@@ -16,9 +16,10 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 public class StructuredArgumentsServer {
 
@@ -27,8 +28,8 @@ public class StructuredArgumentsServer {
 	private final int port;
 
 	public StructuredArgumentsServer(String scheme, String name, int port) {
-		this.scheme = Objects.requireNonNull(scheme);
-		this.name = Objects.requireNonNull(name);
+		this.scheme = requireNonNull(scheme);
+		this.name = requireNonNull(name);
 		this.port = port;
 	}
 

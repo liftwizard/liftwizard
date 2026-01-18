@@ -16,6 +16,19 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
+import static java.util.Objects.requireNonNull;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
+import com.codahale.metrics.Timer.Context;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Metered;
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Strings;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
+import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.Clock;
@@ -26,20 +39,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
-import com.codahale.metrics.Timer.Context;
-import com.codahale.metrics.annotation.ExceptionMetered;
-import com.codahale.metrics.annotation.Metered;
-import com.codahale.metrics.annotation.Timed;
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 
 public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 
@@ -105,12 +106,12 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 		@Nonnull String typeName,
 		@Nonnull String path
 	) {
-		this.metricRegistry = Objects.requireNonNull(metricRegistry);
-		this.clock = Objects.requireNonNull(clock);
-		this.dataFetcher = Objects.requireNonNull(dataFetcher);
-		this.typeName = Objects.requireNonNull(typeName);
-		this.fieldName = Objects.requireNonNull(fieldName);
-		this.path = Objects.requireNonNull(path);
+		this.metricRegistry = requireNonNull(metricRegistry);
+		this.clock = requireNonNull(clock);
+		this.dataFetcher = requireNonNull(dataFetcher);
+		this.typeName = requireNonNull(typeName);
+		this.fieldName = requireNonNull(fieldName);
+		this.path = requireNonNull(path);
 
 		this.timedAnnotation = this.getAnnotation(Timed.class);
 		this.meteredAnnotation = this.getAnnotation(Metered.class);
@@ -338,7 +339,7 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	private static String getMetricName(String explicitName, boolean absolute, Class<?> aClass) {
-		if (explicitName == null || explicitName.isEmpty()) {
+		if (Strings.isNullOrEmpty(explicitName)) {
 			return MetricRegistry.name(aClass, "get");
 		}
 

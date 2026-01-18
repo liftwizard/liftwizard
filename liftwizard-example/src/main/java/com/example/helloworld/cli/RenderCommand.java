@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RenderCommand.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RenderCommand.class);
 
 	public RenderCommand() {
 		super("render", "Render the template data to console");
@@ -40,12 +40,12 @@ public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
 		Template template = configuration.buildTemplate();
 
 		if (namespace.getBoolean("include-default")) {
-			LOGGER.info("DEFAULT => {}", template.render(Optional.empty()));
+			LOG.info("DEFAULT => {}", template.render(Optional.empty()));
 		}
 
 		for (String name : namespace.<String>getList("names")) {
 			for (int i = 0; i < 1000; i++) {
-				LOGGER.info("{} => {}", name, template.render(Optional.of(name)));
+				LOG.info("{} => {}", name, template.render(Optional.of(name)));
 				Thread.sleep(1000L);
 			}
 		}

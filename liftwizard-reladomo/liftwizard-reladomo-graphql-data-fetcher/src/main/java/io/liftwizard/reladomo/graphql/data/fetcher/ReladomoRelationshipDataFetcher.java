@@ -16,21 +16,21 @@
 
 package io.liftwizard.reladomo.graphql.data.fetcher;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.finder.DeepRelationshipAttribute;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ReladomoRelationshipDataFetcher<Input, T> implements DataFetcher<T> {
 
 	private final DeepRelationshipAttribute<Input, T> relationshipAttribute;
 
 	public ReladomoRelationshipDataFetcher(DeepRelationshipAttribute<Input, T> relationshipAttribute) {
-		this.relationshipAttribute = Objects.requireNonNull(relationshipAttribute);
+		this.relationshipAttribute = requireNonNull(relationshipAttribute);
 	}
 
 	@Nullable

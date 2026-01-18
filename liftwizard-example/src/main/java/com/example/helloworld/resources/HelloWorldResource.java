@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloWorldResource {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldResource.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HelloWorldResource.class);
 
 	private final Template template;
 	private final AtomicLong counter;
@@ -47,7 +47,7 @@ public class HelloWorldResource {
 
 	@POST
 	public void receiveHello(@Valid Saying saying) {
-		LOGGER.info("Received a saying: {}", saying);
+		LOG.info("Received a saying: {}", saying);
 	}
 
 	@GET
@@ -55,11 +55,11 @@ public class HelloWorldResource {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String receiveDate(@QueryParam("date") Optional<DateTimeParam> dateTimeParam) {
 		if (dateTimeParam.isPresent()) {
-			DateTimeParam actualDateTimeParam = dateTimeParam.get();
-			LOGGER.info("Received a date: {}", actualDateTimeParam);
+			DateTimeParam actualDateTimeParam = dateTimeParam.orElseThrow();
+			LOG.info("Received a date: {}", actualDateTimeParam);
 			return actualDateTimeParam.get().toString();
 		} else {
-			LOGGER.warn("No received date");
+			LOG.warn("No received date");
 			return null;
 		}
 	}

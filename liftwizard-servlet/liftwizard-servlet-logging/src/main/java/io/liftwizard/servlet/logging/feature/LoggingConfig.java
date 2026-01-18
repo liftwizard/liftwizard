@@ -16,8 +16,9 @@
 
 package io.liftwizard.servlet.logging.feature;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
 import org.eclipse.collections.api.list.ImmutableList;
 
 /**
@@ -58,8 +59,8 @@ public class LoggingConfig {
 		this.logExcludedRequestHeaderNames = logExcludedRequestHeaderNames;
 		this.logResponseHeaderNames = logResponseHeaderNames;
 		this.logExcludedResponseHeaderNames = logExcludedResponseHeaderNames;
-		this.includedRequestHeaders = Objects.requireNonNull(includedRequestHeaders);
-		this.includedResponseHeaders = Objects.requireNonNull(includedResponseHeaders);
+		this.includedRequestHeaders = requireNonNull(includedRequestHeaders);
+		this.includedResponseHeaders = requireNonNull(includedResponseHeaders);
 		this.maxEntitySize = maxEntitySize;
 	}
 

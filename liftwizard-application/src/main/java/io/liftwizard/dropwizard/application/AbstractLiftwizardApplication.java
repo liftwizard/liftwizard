@@ -16,9 +16,7 @@
 
 package io.liftwizard.dropwizard.application;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import ch.qos.logback.classic.Level;
 import com.gs.reladomo.serial.jackson.JacksonReladomoModule;
@@ -37,6 +35,8 @@ import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFa
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
 public abstract class AbstractLiftwizardApplication<
@@ -47,7 +47,7 @@ public abstract class AbstractLiftwizardApplication<
 	protected final String name;
 
 	protected AbstractLiftwizardApplication(String name) {
-		this.name = Objects.requireNonNull(name);
+		this.name = requireNonNull(name);
 	}
 
 	@Override

@@ -16,11 +16,7 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
-import java.time.Clock;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
@@ -36,6 +32,10 @@ import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLType;
 import graphql.validation.ValidationError;
 import io.liftwizard.instrumentation.GraphQLInstrumentationUtils;
+import java.time.Clock;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 
 /**
  * An Instrumentation that registers performance metrics about data fetching with Dropwizard's MetricsRegistry.
@@ -58,8 +58,8 @@ public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentati
 	private final Meter validationExceptionsMeter;
 
 	public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock) {
-		this.metricRegistry = Objects.requireNonNull(metricRegistry);
-		this.clock = Objects.requireNonNull(clock);
+		this.metricRegistry = requireNonNull(metricRegistry);
+		this.clock = requireNonNull(clock);
 
 		this.allFieldsSyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
 		this.allFieldsAsyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));

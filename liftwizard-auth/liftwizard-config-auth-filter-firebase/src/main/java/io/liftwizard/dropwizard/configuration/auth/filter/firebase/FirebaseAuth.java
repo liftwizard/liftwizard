@@ -16,16 +16,18 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.firebase;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class FirebaseAuth {
 
@@ -36,8 +38,8 @@ public class FirebaseAuth {
 	private GoogleCredentials credentials;
 
 	public FirebaseAuth(String databaseUrl, String firebaseConfig) {
-		this.databaseUrl = Objects.requireNonNull(databaseUrl);
-		this.firebaseConfig = Objects.requireNonNull(firebaseConfig);
+		this.databaseUrl = requireNonNull(databaseUrl);
+		this.firebaseConfig = requireNonNull(firebaseConfig);
 	}
 
 	public GoogleCredentials getCredentials() {
@@ -77,7 +79,7 @@ public class FirebaseAuth {
 			return;
 		}
 
-		byte[] bytes = this.firebaseConfig.getBytes(StandardCharsets.UTF_8);
+		byte[] bytes = this.firebaseConfig.getBytes(UTF_8);
 		InputStream firebaseCredentials = new ByteArrayInputStream(bytes);
 		try {
 			this.credentials = GoogleCredentials.fromStream(firebaseCredentials);

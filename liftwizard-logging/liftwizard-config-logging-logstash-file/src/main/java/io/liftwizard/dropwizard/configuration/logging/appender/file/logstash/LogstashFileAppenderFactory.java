@@ -16,12 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.logging.appender.file.logstash;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import static java.util.Objects.requireNonNull;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -51,6 +46,11 @@ import io.dropwizard.util.DataSize;
 import io.dropwizard.validation.MinDataSize;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashEncoderFactory;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * A Dropwizard AppenderFactory that sets up a file appender that logs one json object per log statement. The json is formatted by <a href="https://github.com/logstash/logstash-logback-encoder">logstash-logback-encoder</a> and is ready to be parsed by logstash.
@@ -230,7 +230,7 @@ public class LogstashFileAppenderFactory extends AbstractAppenderFactory<ILoggin
 		var appender = new RollingFileAppender<ILoggingEvent>();
 		this.configureAppender(appender, context);
 
-		return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d")
+		return this.maxFileSize == null || requireNonNull(this.archivedLogFilenamePattern).contains("%d")
 			? this.configurePolicyWithDefaults(appender, context)
 			: this.dateAndSizeSpecifiedPolicy(appender, context);
 	}

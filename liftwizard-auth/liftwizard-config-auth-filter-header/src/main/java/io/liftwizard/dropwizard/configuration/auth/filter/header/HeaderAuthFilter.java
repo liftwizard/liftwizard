@@ -16,16 +16,16 @@
 
 package io.liftwizard.dropwizard.configuration.auth.filter.header;
 
+import static java.util.Objects.requireNonNull;
+
+import io.dropwizard.auth.AuthFilter;
 import java.util.List;
 import java.util.Objects;
-
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
-
-import io.dropwizard.auth.AuthFilter;
 
 @Priority(Priorities.AUTHENTICATION)
 public class HeaderAuthFilter extends AuthFilter<String, HeaderPrincipal> {
@@ -34,7 +34,7 @@ public class HeaderAuthFilter extends AuthFilter<String, HeaderPrincipal> {
 	private final String headerPrefix;
 
 	public HeaderAuthFilter(String headerName, String headerPrefix) {
-		this.headerName = Objects.requireNonNull(headerName);
+		this.headerName = requireNonNull(headerName);
 		this.headerPrefix = headerPrefix;
 	}
 
@@ -45,7 +45,7 @@ public class HeaderAuthFilter extends AuthFilter<String, HeaderPrincipal> {
 			throw new WebApplicationException(this.unauthorizedHandler.buildResponse(this.headerName, "unused realm"));
 		}
 
-		String credentials = headerValues.get(0);
+		String credentials = headerValues.getFirst();
 		if (!this.authenticate(requestContext, credentials, "Header")) {
 			Response response = this.unauthorizedHandler.buildResponse(this.headerName, this.headerPrefix);
 			throw new WebApplicationException(response);
@@ -58,7 +58,7 @@ public class HeaderAuthFilter extends AuthFilter<String, HeaderPrincipal> {
 		private final String headerPrefix;
 
 		public Builder(String headerName, String headerPrefix) {
-			this.headerName = Objects.requireNonNull(headerName);
+			this.headerName = requireNonNull(headerName);
 			this.headerPrefix = headerPrefix;
 			this.setAuthenticator(new HeaderAuthenticator(headerPrefix));
 			this.setUnauthorizedHandler(new JSONUnauthorizedHandler());

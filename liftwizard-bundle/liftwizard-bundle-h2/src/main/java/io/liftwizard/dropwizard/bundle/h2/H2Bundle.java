@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(PrioritizedBundle.class)
 public class H2Bundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(H2Bundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(H2Bundle.class);
 
 	@Override
 	public int getPriority() {
@@ -54,11 +54,11 @@ public class H2Bundle implements PrioritizedBundle {
 		H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
 		H2Factory h2Factory = h2FactoryProvider.getH2Factory();
 		if (h2Factory == null || !h2Factory.isEnabled()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		ImmutableList<String> args = Lists.immutable
 			.withAll(h2Factory.getTcpServerArgs())
@@ -78,24 +78,24 @@ public class H2Bundle implements PrioritizedBundle {
 		h2ConsoleServlet.setInitParameter("-properties", propertiesLocation);
 		h2ConsoleServlet.setLoadOnStartup(1);
 
-		LOGGER.debug("H2 Console servlet '{}' configured at URL mapping '{}'", servletName, servletUrlMapping);
-		LOGGER.debug("H2 TCP Server running on port {}", h2Factory.getTcpPort());
-		LOGGER.debug("H2 Web Console available at http://localhost:{}/h2-console", h2Factory.getWebPort());
-		LOGGER.debug(
+		LOG.debug("H2 Console servlet '{}' configured at URL mapping '{}'", servletName, servletUrlMapping);
+		LOG.debug("H2 TCP Server running on port {}", h2Factory.getTcpPort());
+		LOG.debug("H2 Web Console available at http://localhost:{}/h2-console", h2Factory.getWebPort());
+		LOG.debug(
 			"JDBC URL for H2 Console: jdbc:h2:tcp://localhost:{}/./target/h2db/liftwizard;NON_KEYWORDS=USER",
 			h2Factory.getTcpPort()
 		);
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
 	@Nonnull
 	private Server createTcpServer(List<String> tcpServerArgs) {
-		LOGGER.info("Starting H2 TCP Server with args: {}", tcpServerArgs);
+		LOG.info("Starting H2 TCP Server with args: {}", tcpServerArgs);
 		try {
 			Server server = Server.createTcpServer(tcpServerArgs.toArray(new String[] {}));
 			server.start();
-			LOGGER.info(server.getStatus());
+			LOG.info(server.getStatus());
 			return server;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

@@ -16,23 +16,24 @@
 
 package io.liftwizard.dropwizard.config.healthcheck.commonpool;
 
+import static java.util.Collections.unmodifiableList;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
 import java.lang.Thread.State;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CommonPoolHealthCheckFactory {
 
 	private boolean enabled = true;
 
 	private @NotNull String threadNamePrefix = "ForkJoinPool.commonPool-worker-";
-	private @NotNull List<State> threadStates = List.of(State.RUNNABLE);
-	private @NotNull List<Pattern> alwaysAllowedPatterns = List.of();
-	private @NotNull List<Pattern> bannedPatterns = List.of();
+	private @NotNull List<State> threadStates = ImmutableList.of(State.RUNNABLE);
+	private @NotNull List<Pattern> alwaysAllowedPatterns = ImmutableList.of();
+	private @NotNull List<Pattern> bannedPatterns = ImmutableList.of();
 
 	@JsonProperty
 	public boolean isEnabled() {
@@ -61,7 +62,7 @@ public class CommonPoolHealthCheckFactory {
 
 	@JsonProperty
 	public void setThreadStates(List<State> threadStates) {
-		this.threadStates = Collections.unmodifiableList(threadStates);
+		this.threadStates = unmodifiableList(threadStates);
 	}
 
 	@JsonProperty
@@ -71,7 +72,7 @@ public class CommonPoolHealthCheckFactory {
 
 	@JsonProperty
 	public void setAlwaysAllowedPatterns(List<Pattern> alwaysAllowedPatterns) {
-		this.alwaysAllowedPatterns = Collections.unmodifiableList(alwaysAllowedPatterns);
+		this.alwaysAllowedPatterns = unmodifiableList(alwaysAllowedPatterns);
 	}
 
 	@JsonProperty
@@ -81,6 +82,6 @@ public class CommonPoolHealthCheckFactory {
 
 	@JsonProperty
 	public void setBannedPatterns(List<Pattern> bannedPatterns) {
-		this.bannedPatterns = Collections.unmodifiableList(bannedPatterns);
+		this.bannedPatterns = unmodifiableList(bannedPatterns);
 	}
 }

@@ -16,17 +16,18 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.many;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.DateAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorInContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotInContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 import org.eclipse.collections.api.list.ImmutableList;
 
 public class LocalDateListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
@@ -35,7 +36,7 @@ public class LocalDateListBinaryOperatorVisitor extends AbstractBinaryOperatorVi
 	private final Set<Timestamp> timestamps;
 
 	public LocalDateListBinaryOperatorVisitor(DateAttribute attribute, ImmutableList<LocalDate> parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 		this.timestamps = new LinkedHashSet<>(parameter.collect(this::getTimestamp).castToList());
 	}
 

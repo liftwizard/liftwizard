@@ -16,6 +16,13 @@
 
 package io.liftwizard.servlet.logging.filter;
 
+import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsParameters;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequest;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequestHttp;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -24,7 +31,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.ws.rs.ConstrainedTo;
@@ -36,11 +42,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
-
-import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsParameters;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequest;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequestHttp;
 import org.eclipse.collections.api.block.function.Function;
 import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
@@ -59,7 +60,7 @@ public final class ServerLoggingRequestFilter implements ContainerRequestFilter 
 	private final Function<Principal, Map<String, Object>> principalBuilder;
 
 	public ServerLoggingRequestFilter(Function<Principal, Map<String, Object>> principalBuilder) {
-		this.principalBuilder = Objects.requireNonNull(principalBuilder);
+		this.principalBuilder = requireNonNull(principalBuilder);
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public final class ServerLoggingRequestFilter implements ContainerRequestFilter 
 	}
 
 	private void addResourceInfo(@Nonnull StructuredArgumentsRequest request) {
-		Objects.requireNonNull(this.resourceInfo);
+		requireNonNull(this.resourceInfo);
 
 		Class<?> resourceClass = this.resourceInfo.getResourceClass();
 		Method resourceMethod = this.resourceInfo.getResourceMethod();
@@ -110,9 +111,7 @@ public final class ServerLoggingRequestFilter implements ContainerRequestFilter 
 		inputParameters.forEach((parameterName, parameterValues) -> {
 			String value = ListAdapter.adapt(parameterValues).makeString();
 			String duplicate = outputParameters.put(parameterName, value);
-			if (duplicate != null) {
-				throw new IllegalStateException(duplicate);
-			}
+			checkState(duplicate == null, duplicate);
 		});
 
 		return outputParameters.asUnmodifiable();

@@ -16,14 +16,14 @@
 
 package io.liftwizard.junit.rule.liquibase.migrations;
 
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.function.Supplier;
-
 import javax.annotation.Nonnull;
-
-import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import liquibase.Liquibase;
 import liquibase.Scope;
 import liquibase.Scope.Attr;
@@ -48,8 +48,8 @@ public class LiquibaseStatement extends Statement {
 	private final boolean dropAll;
 
 	public LiquibaseStatement(Statement baseStatement, String migrationsFile, boolean dropAll) {
-		this.baseStatement = Objects.requireNonNull(baseStatement);
-		this.migrationsFile = Objects.requireNonNull(migrationsFile);
+		this.baseStatement = requireNonNull(baseStatement);
+		this.migrationsFile = requireNonNull(migrationsFile);
 		this.dropAll = dropAll;
 	}
 

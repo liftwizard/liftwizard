@@ -16,15 +16,17 @@
 
 package io.liftwizard.reladomo.test.resource.writer;
 
+import static java.time.ZoneOffset.UTC;
+import static java.util.Objects.requireNonNull;
+
+import com.gs.fw.common.mithra.attribute.Attribute;
+import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Objects;
-
-import com.gs.fw.common.mithra.attribute.Attribute;
-import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
@@ -37,7 +39,7 @@ public class ReladomoTestResourceColumn {
 	private FrozenReladomoTestResourceColumn frozen;
 
 	public ReladomoTestResourceColumn(Attribute attribute) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 	}
 
 	public void addMithraObject(Object mithraObject) {
@@ -65,7 +67,7 @@ public class ReladomoTestResourceColumn {
 		}
 
 		Instant instant = timestamp.toInstant();
-		LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+		LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, UTC);
 		return Timestamp.valueOf(localDateTime);
 	}
 

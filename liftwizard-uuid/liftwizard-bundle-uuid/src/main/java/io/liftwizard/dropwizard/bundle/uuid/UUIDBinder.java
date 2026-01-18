@@ -16,10 +16,11 @@
 
 package io.liftwizard.dropwizard.bundle.uuid;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
-
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
@@ -28,7 +29,7 @@ public class UUIDBinder extends AbstractBinder {
 	private final Supplier<UUID> uuidSupplier;
 
 	public UUIDBinder(Supplier<UUID> uuidSupplier) {
-		this.uuidSupplier = Objects.requireNonNull(uuidSupplier);
+		this.uuidSupplier = requireNonNull(uuidSupplier);
 	}
 
 	@Override

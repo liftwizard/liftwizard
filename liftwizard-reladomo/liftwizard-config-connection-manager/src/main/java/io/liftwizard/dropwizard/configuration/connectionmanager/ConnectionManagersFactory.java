@@ -16,26 +16,28 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class ConnectionManagersFactory {
 
-	private @Valid @NotNull List<ConnectionManagerFactory> connectionManagerFactories = List.of();
+	private @Valid @NotNull List<ConnectionManagerFactory> connectionManagerFactories = ImmutableList.of();
 
 	private Map<String, ConnectionManagerFactory> connectionManagerFactoriesByName = new LinkedHashMap<>();
 
@@ -66,7 +68,7 @@ public class ConnectionManagersFactory {
 			.toList();
 		List<String> duplicateConnectionManagerNames = orderedConnectionManagerNames
 			.stream()
-			.collect(Collectors.groupingBy((key) -> key, LinkedHashMap::new, Collectors.counting()))
+			.collect(groupingBy((key) -> key, LinkedHashMap::new, counting()))
 			.entrySet()
 			.stream()
 			.filter((p) -> p.getValue() > 1)
@@ -80,7 +82,7 @@ public class ConnectionManagersFactory {
 		// Validate that connection managers sharing the same data source have compatible configurations
 		Map<String, List<ConnectionManagerFactory>> managersByDataSource =
 			this.connectionManagerFactories.stream().collect(
-				Collectors.groupingBy(ConnectionManagerFactory::getDataSourceName)
+				groupingBy(ConnectionManagerFactory::getDataSourceName)
 			);
 
 		for (List<ConnectionManagerFactory> managersWithSameDataSource : managersByDataSource.values()) {
@@ -89,12 +91,12 @@ public class ConnectionManagersFactory {
 			}
 
 			// For managers sharing a data source, verify that they have the same configuration except schema
-			ConnectionManagerFactory firstManager = managersWithSameDataSource.get(0);
+			ConnectionManagerFactory firstManager = managersWithSameDataSource.getFirst();
 			for (int i = 1; i < managersWithSameDataSource.size(); i++) {
 				ConnectionManagerFactory currentManager = managersWithSameDataSource.get(i);
 
 				// Verify that database type matches
-				if (!firstManager.getDatabaseType().equals(currentManager.getDatabaseType())) {
+				if (firstManager.getDatabaseType() != currentManager.getDatabaseType()) {
 					String errorMessage =
 						"Connection managers '%s' and '%s' share data source '%s' but have different database types: %s vs %s".formatted(
 							firstManager.getConnectionManagerName(),

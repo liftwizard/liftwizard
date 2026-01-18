@@ -16,15 +16,15 @@
 
 package io.liftwizard.logging.slf4j.uncaught.exception.handler;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class Slf4jUncaughtExceptionHandlerTest {
 
@@ -35,7 +35,7 @@ class Slf4jUncaughtExceptionHandlerTest {
 	void setUp() {
 		this.originalStderr = System.err;
 		this.stderrCapture = new ByteArrayOutputStream();
-		System.setErr(new PrintStream(this.stderrCapture, true, StandardCharsets.UTF_8));
+		System.setErr(new PrintStream(this.stderrCapture, true, UTF_8));
 	}
 
 	@AfterEach
@@ -53,7 +53,7 @@ class Slf4jUncaughtExceptionHandlerTest {
 
 		new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
 
-		String stderrOutput = this.stderrCapture.toString(StandardCharsets.UTF_8);
+		String stderrOutput = this.stderrCapture.toString(UTF_8);
 		assertThat(stderrOutput)
 			.startsWith("Exception in thread \"")
 			.contains("Slf4jUncaughtExceptionHandlerTest root exception")

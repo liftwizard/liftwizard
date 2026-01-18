@@ -16,11 +16,7 @@
 
 package io.liftwizard.configuration.metrics.reporter.slf4j;
 
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotEmpty;
+import static java.util.function.Function.identity;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
@@ -32,6 +28,10 @@ import io.dropwizard.metrics.BaseReporterFactory;
 import io.dropwizard.metrics.ReporterFactory;
 import io.liftwizard.logging.metrics.structured.Builder;
 import io.liftwizard.logging.metrics.structured.StructuredSlf4jReporter;
+import java.util.Map;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -89,7 +89,7 @@ public class StructuredSlf4jReporterFactory extends BaseReporterFactory {
 
 	@JsonIgnore
 	protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
-		return Function.identity();
+		return identity();
 	}
 
 	@Override

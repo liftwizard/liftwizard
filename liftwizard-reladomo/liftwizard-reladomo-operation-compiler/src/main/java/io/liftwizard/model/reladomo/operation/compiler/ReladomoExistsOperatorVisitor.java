@@ -16,7 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.finder.AbstractRelatedFinder;
 import com.gs.fw.common.mithra.finder.Operation;
@@ -24,6 +24,7 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.ExistsOper
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorExistsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotExistsContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
+import java.util.Objects;
 
 public class ReladomoExistsOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation> {
 
@@ -31,7 +32,7 @@ public class ReladomoExistsOperatorVisitor extends ReladomoOperationThrowingVisi
 	private final Operation notExistsOperation;
 
 	public ReladomoExistsOperatorVisitor(AbstractRelatedFinder navigation, Operation notExistsOperation) {
-		this.navigation = Objects.requireNonNull(navigation);
+		this.navigation = requireNonNull(navigation);
 		this.notExistsOperation = notExistsOperation;
 	}
 

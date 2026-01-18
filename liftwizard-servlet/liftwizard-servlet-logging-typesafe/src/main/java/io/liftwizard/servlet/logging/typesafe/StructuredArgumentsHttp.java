@@ -16,9 +16,10 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
@@ -53,7 +54,7 @@ public class StructuredArgumentsHttp {
 		if (this.excludedHeaders != null) {
 			throw new AssertionError(this.excludedHeaders);
 		}
-		this.excludedHeaders = Objects.requireNonNull(excludedHeaders);
+		this.excludedHeaders = requireNonNull(excludedHeaders);
 	}
 
 	@JsonProperty
@@ -65,7 +66,7 @@ public class StructuredArgumentsHttp {
 		if (this.body != null) {
 			throw new AssertionError(this.body);
 		}
-		this.body = Objects.requireNonNull(body);
+		this.body = requireNonNull(body);
 	}
 
 	@JsonProperty

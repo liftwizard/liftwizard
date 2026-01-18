@@ -16,6 +16,13 @@
 
 package io.liftwizard.generator.reladomo.database.plugin;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
+
+import com.gs.fw.common.mithra.generator.dbgenerator.CoreMithraDbDefinitionGenerator;
+import io.liftwizard.filesystem.ManagedFileSystem;
+import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
+import io.liftwizard.tempdir.ManagedTempDirectory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,13 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.stream.Stream;
-
 import javax.annotation.Nonnull;
-
-import com.gs.fw.common.mithra.generator.dbgenerator.CoreMithraDbDefinitionGenerator;
-import io.liftwizard.filesystem.ManagedFileSystem;
-import io.liftwizard.maven.reladomo.logger.MavenReladomoLogger;
-import io.liftwizard.tempdir.ManagedTempDirectory;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -51,7 +52,7 @@ import org.slf4j.LoggerFactory;
 )
 public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoDatabaseMojo.class);
+	private static final Logger LOG = LoggerFactory.getLogger(GenerateReladomoDatabaseMojo.class);
 
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	protected MavenProject mavenProject;
@@ -112,7 +113,7 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 			Resource resource = new Resource();
 			resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
 
-			LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
+			LOG.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());
 			this.mavenProject.addResource(resource);
 		}
 	}
@@ -156,13 +157,11 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 
 	@Nonnull
 	private ManagedTempDirectory getTempFile() {
-		if (this.definitionsAndClassListDirectory.startsWith("/")) {
-			throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
-		}
+		checkArgument(!this.definitionsAndClassListDirectory.startsWith("/"), "definitionsAndClassListDirectory must not start with a /");
 
 		try {
 			URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
-			Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
+			requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
 			URI uri = resource.toURI();
 			Path from = ManagedFileSystem.get(uri);
 			ManagedTempDirectory managedTempDirectory = ManagedTempDirectory.create(this.getClass().getSimpleName());
@@ -189,11 +188,11 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 		try {
 			if (Files.isDirectory(fileSystemSource)) {
 				if (Files.notExists(copyDestination)) {
-					LOGGER.info("Creating directory {}", copyDestination);
+					LOG.info("Creating directory {}", copyDestination);
 					Files.createDirectories(copyDestination);
 				}
 			} else {
-				LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
+				LOG.info("Copying resource {} to {}", fileSystemSource, copyDestination);
 				Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
 			}
 		} catch (IOException e) {

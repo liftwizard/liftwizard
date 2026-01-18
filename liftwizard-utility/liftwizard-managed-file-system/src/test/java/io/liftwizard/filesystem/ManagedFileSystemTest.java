@@ -16,15 +16,15 @@
 
 package io.liftwizard.filesystem;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-
-import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LogMarkerTestExtension.class)
 class ManagedFileSystemTest {
@@ -32,12 +32,12 @@ class ManagedFileSystemTest {
 	@Test
 	void smokeTest() throws URISyntaxException {
 		Path path1 = ManagedFileSystem.get(new URI("file:///"));
-		assertTrue(path1.isAbsolute());
-		assertTrue(path1.toFile().exists());
+		assertThat(path1.isAbsolute()).isTrue();
+		assertThat(path1.toFile().exists()).isTrue();
 
 		String tmpdir = System.getProperty("java.io.tmpdir");
 		Path path2 = ManagedFileSystem.get(new URI("file://" + tmpdir));
-		assertTrue(path2.isAbsolute());
-		assertTrue(path2.toFile().exists());
+		assertThat(path2.isAbsolute()).isTrue();
+		assertThat(path2.toFile().exists()).isTrue();
 	}
 }

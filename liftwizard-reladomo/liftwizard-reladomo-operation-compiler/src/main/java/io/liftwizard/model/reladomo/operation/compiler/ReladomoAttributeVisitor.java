@@ -16,8 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler;
 
-import java.util.List;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.fw.common.mithra.attribute.DateAttribute;
@@ -36,6 +35,8 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionUn
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FunctionYearContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.SimpleAttributeContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
+import java.util.List;
+import java.util.Objects;
 import org.antlr.v4.runtime.RuleContext;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
@@ -47,8 +48,8 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	private final String errorContext;
 
 	public ReladomoAttributeVisitor(RelatedFinder finder, String errorContext) {
-		this.finder = Objects.requireNonNull(finder);
-		this.errorContext = Objects.requireNonNull(errorContext);
+		this.finder = requireNonNull(finder);
+		this.errorContext = requireNonNull(errorContext);
 	}
 
 	@Override

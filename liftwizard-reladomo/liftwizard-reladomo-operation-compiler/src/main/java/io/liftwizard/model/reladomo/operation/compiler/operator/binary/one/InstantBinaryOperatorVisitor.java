@@ -16,9 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.binary.one;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
@@ -29,6 +27,9 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLe
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorLessThanEqualsContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorNotEqContext;
 import io.liftwizard.model.reladomo.operation.compiler.operator.binary.AbstractBinaryOperatorVisitor;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Objects;
 
 public class InstantBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
 
@@ -36,7 +37,7 @@ public class InstantBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor 
 	private final Timestamp timestamp;
 
 	public InstantBinaryOperatorVisitor(TimestampAttribute attribute, Instant parameter) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 		this.timestamp = Timestamp.from(parameter);
 	}
 

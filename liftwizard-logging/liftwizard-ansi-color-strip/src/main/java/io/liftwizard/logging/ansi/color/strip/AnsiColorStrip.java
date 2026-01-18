@@ -16,11 +16,12 @@
 
 package io.liftwizard.logging.ansi.color.strip;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
 import org.fusesource.jansi.AnsiColors;
 import org.fusesource.jansi.AnsiMode;
 import org.fusesource.jansi.AnsiType;
@@ -36,7 +37,7 @@ public final class AnsiColorStrip {
 	}
 
 	public static String strip(String input) {
-		return strip(input, StandardCharsets.UTF_8);
+		return strip(input, UTF_8);
 	}
 
 	public static String strip(String input, Charset charset) {

@@ -16,11 +16,12 @@
 
 package io.liftwizard.junit.extension.liquibase.migrations;
 
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
-
-import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import liquibase.Liquibase;
 import liquibase.Scope;
 import liquibase.Scope.Attr;
@@ -45,7 +46,7 @@ public class LiquibaseTestExtension implements BeforeEachCallback {
 	}
 
 	public LiquibaseTestExtension(String migrationsFile, boolean dropAll) {
-		this.migrationsFile = Objects.requireNonNull(migrationsFile);
+		this.migrationsFile = requireNonNull(migrationsFile);
 		this.dropAll = dropAll;
 	}
 

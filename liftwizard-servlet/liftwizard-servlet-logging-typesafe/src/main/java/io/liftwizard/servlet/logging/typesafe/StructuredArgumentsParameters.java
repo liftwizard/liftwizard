@@ -16,9 +16,10 @@
 
 package io.liftwizard.servlet.logging.typesafe;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 import org.eclipse.collections.api.map.MapIterable;
 
 public class StructuredArgumentsParameters {
@@ -27,8 +28,8 @@ public class StructuredArgumentsParameters {
 	private final MapIterable<String, String> path;
 
 	public StructuredArgumentsParameters(MapIterable<String, String> query, MapIterable<String, String> path) {
-		this.query = Objects.requireNonNull(query);
-		this.path = Objects.requireNonNull(path);
+		this.query = requireNonNull(query);
+		this.path = requireNonNull(path);
 	}
 
 	@JsonProperty

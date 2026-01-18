@@ -16,6 +16,8 @@
 
 package io.liftwizard.clock.incrementing;
 
+import static java.util.Objects.requireNonNull;
+
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -30,9 +32,9 @@ public final class IncrementingClock extends Clock {
 	private final TemporalAmount incrementAmount;
 
 	public IncrementingClock(Instant startInstant, ZoneId zoneId, TemporalAmount incrementAmount) {
-		this.instant = Objects.requireNonNull(startInstant);
-		this.incrementAmount = Objects.requireNonNull(incrementAmount);
-		this.zoneId = Objects.requireNonNull(zoneId);
+		this.instant = requireNonNull(startInstant);
+		this.incrementAmount = requireNonNull(incrementAmount);
+		this.zoneId = requireNonNull(zoneId);
 	}
 
 	@Override

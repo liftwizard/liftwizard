@@ -16,16 +16,9 @@
 
 package io.liftwizard.dropwizard.configuration.datasource;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +27,15 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.eclipse.collections.api.factory.Lists;
 
 public class NamedDataSourcesFactory {
@@ -66,7 +68,7 @@ public class NamedDataSourcesFactory {
 			.toList();
 		Map<String, Long> frequencies = orderedDataSourceNames
 			.stream()
-			.collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+			.collect(groupingBy(identity(), LinkedHashMap::new, counting()));
 
 		List<String> duplicateDataSourceNames = frequencies
 			.entrySet()

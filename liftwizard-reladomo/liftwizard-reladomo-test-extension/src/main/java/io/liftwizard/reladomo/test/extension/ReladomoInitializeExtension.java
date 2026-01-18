@@ -16,16 +16,16 @@
 
 package io.liftwizard.reladomo.test.extension;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.mithraruntime.MithraRuntimeType;
 import com.gs.fw.common.mithra.util.MithraConfigurationManager;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -36,7 +36,7 @@ public class ReladomoInitializeExtension implements BeforeEachCallback, AfterEac
 	private final String runtimeConfigurationPath;
 
 	public ReladomoInitializeExtension(@Nonnull String runtimeConfigurationPath) {
-		this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
+		this.runtimeConfigurationPath = requireNonNull(runtimeConfigurationPath);
 	}
 
 	@Override

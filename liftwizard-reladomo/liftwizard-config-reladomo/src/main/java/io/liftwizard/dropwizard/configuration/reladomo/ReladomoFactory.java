@@ -16,13 +16,14 @@
 
 package io.liftwizard.dropwizard.configuration.reladomo;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
+import static java.util.Collections.unmodifiableList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
 import io.dropwizard.util.Duration;
+import java.util.Collections;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 
 public class ReladomoFactory {
 
@@ -31,9 +32,7 @@ public class ReladomoFactory {
 	// Something like 30 seconds to 2 minutes makes sense in production
 	private Duration transactionTimeout = Duration.minutes(5);
 	// reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml in production
-	private @NotNull List<String> runtimeConfigurationPaths = List.of(
-		"reladomo-runtime-configuration/TestReladomoRuntimeConfiguration.xml"
-	);
+	private @NotNull List<String> runtimeConfigurationPaths = ImmutableList.of("reladomo-runtime-configuration/TestReladomoRuntimeConfiguration.xml");
 	private boolean enableRetrieveCountMetrics = true;
 	private boolean captureTransactionLevelPerformanceData = true;
 
@@ -74,7 +73,7 @@ public class ReladomoFactory {
 
 	@JsonProperty
 	public void setRuntimeConfigurationPaths(List<String> runtimeConfigurationPaths) {
-		this.runtimeConfigurationPaths = Collections.unmodifiableList(runtimeConfigurationPaths);
+		this.runtimeConfigurationPaths = unmodifiableList(runtimeConfigurationPaths);
 	}
 
 	@JsonProperty

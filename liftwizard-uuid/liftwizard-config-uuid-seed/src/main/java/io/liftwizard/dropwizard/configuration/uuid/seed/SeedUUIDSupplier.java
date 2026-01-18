@@ -16,11 +16,13 @@
 
 package io.liftwizard.dropwizard.configuration.uuid.seed;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
-
 import javax.annotation.Nonnull;
 
 public class SeedUUIDSupplier implements Supplier<UUID> {
@@ -29,7 +31,7 @@ public class SeedUUIDSupplier implements Supplier<UUID> {
 	private int counter;
 
 	public SeedUUIDSupplier(@Nonnull String seed) {
-		this.seed = Objects.requireNonNull(seed);
+		this.seed = requireNonNull(seed);
 	}
 
 	@Nonnull
@@ -37,7 +39,7 @@ public class SeedUUIDSupplier implements Supplier<UUID> {
 	public UUID get() {
 		this.counter++;
 		String name = this.seed + this.counter;
-		byte[] bytes = name.getBytes(StandardCharsets.UTF_8);
+		byte[] bytes = name.getBytes(UTF_8);
 		return UUID.nameUUIDFromBytes(bytes);
 	}
 }

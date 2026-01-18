@@ -16,8 +16,10 @@
 
 package io.liftwizard.dropwizard.bundle.config.logging;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonInclude(Include.NON_DEFAULT)
+@JsonInclude(NON_DEFAULT)
 public class JsonIncludeNonDefaultMixIn {}

@@ -63,7 +63,7 @@ import org.slf4j.MDC.MDCCloseable;
  */
 public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryProvider> extends GraphQLBundle<T> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
 
 	@Nonnull
 	private final ImmutableList<Consumer<RuntimeWiring.Builder>> runtimeWiringBuilders;
@@ -148,14 +148,14 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 		var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
 		var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
 
-		List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
-		return instrumentations;
+		List<Instrumentation> instrumentations = com.google.common.collect.ImmutableList.of(metricsInstrumentation, loggingInstrumentation);
+		
 	}
 
 	@Nonnull
 	private Clock getClock(T configuration) {
 		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
-			LOGGER.warn(
+			LOG.warn(
 				"Configuration {} does not implement {}. Using system clock.",
 				configuration.getClass().getSimpleName(),
 				ClockFactoryProvider.class.getSimpleName()

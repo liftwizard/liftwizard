@@ -16,15 +16,7 @@
 
 package io.liftwizard.logging.metrics.structured;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Counting;
@@ -40,6 +32,15 @@ import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 import io.liftwizard.logging.metrics.structured.proxy.AbstractLoggerProxy;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import org.slf4j.Marker;
 
 /**
@@ -77,11 +78,11 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 			shutdownExecutorOnStop,
 			disabledMetricAttributes
 		);
-		this.loggerProxy = Objects.requireNonNull(loggerProxy);
-		this.marker = Objects.requireNonNull(marker);
-		this.prefix = Objects.requireNonNull(prefix);
-		this.mapToStructuredObjectFunction = Objects.requireNonNull(mapToStructuredObjectFunction);
-		this.message = Objects.requireNonNull(message);
+		this.loggerProxy = requireNonNull(loggerProxy);
+		this.marker = requireNonNull(marker);
+		this.prefix = requireNonNull(prefix);
+		this.mapToStructuredObjectFunction = requireNonNull(mapToStructuredObjectFunction);
+		this.message = requireNonNull(message);
 	}
 
 	/**

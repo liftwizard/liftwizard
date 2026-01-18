@@ -16,28 +16,28 @@
 
 package io.liftwizard.logging.p6spy;
 
+import com.google.common.collect.ImmutableList;
+import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.spy.appender.FormattedLogger;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.p6spy.engine.logging.Category;
-import com.p6spy.engine.spy.appender.FormattedLogger;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class P6SpySlf4jLogger extends FormattedLogger {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(P6SpySlf4jLogger.class);
+	private static final Logger LOG = LoggerFactory.getLogger(P6SpySlf4jLogger.class);
 
 	@Override
 	public void logException(Exception e) {
-		LOGGER.warn("", e);
+		LOG.warn("", e);
 	}
 
 	@Override
 	public void logText(String text) {
-		LOGGER.debug(text);
+		LOG.debug(text);
 	}
 
 	@Override
@@ -60,37 +60,37 @@ public class P6SpySlf4jLogger extends FormattedLogger {
 		structuredArgumentsMap.put("liftwizard.p6spy.url", url);
 
 		if (category.equals(Category.ERROR)) {
-			LOGGER.error(sql, StructuredArguments.entries(structuredArgumentsMap));
+			LOG.error(sql, StructuredArguments.entries(structuredArgumentsMap));
 		} else if (category.equals(Category.WARN)) {
-			LOGGER.warn(sql, StructuredArguments.entries(structuredArgumentsMap));
+			LOG.warn(sql, StructuredArguments.entries(structuredArgumentsMap));
 		} else if (category.equals(Category.INFO)) {
-			LOGGER.info(sql, StructuredArguments.entries(structuredArgumentsMap));
+			LOG.info(sql, StructuredArguments.entries(structuredArgumentsMap));
 		} else if (category.equals(Category.DEBUG)) {
-			LOGGER.debug(sql, StructuredArguments.entries(structuredArgumentsMap));
-		} else if (List.of(Category.ROLLBACK, Category.COMMIT).contains(category)) {
+			LOG.debug(sql, StructuredArguments.entries(structuredArgumentsMap));
+		} else if (ImmutableList.of(Category.ROLLBACK, Category.COMMIT).contains(category)) {
 			if (!sql.isBlank()) {
 				throw new AssertionError("Unexpected SQL for category " + category + ": " + sql);
 			}
-			LOGGER.debug(category.toString(), StructuredArguments.entries(structuredArgumentsMap));
+			LOG.debug(category.toString(), StructuredArguments.entries(structuredArgumentsMap));
 		} else {
-			LOGGER.debug(sql, StructuredArguments.entries(structuredArgumentsMap));
+			LOG.debug(sql, StructuredArguments.entries(structuredArgumentsMap));
 		}
 	}
 
 	@Override
 	public boolean isCategoryEnabled(Category category) {
 		if (category.equals(Category.ERROR)) {
-			return LOGGER.isErrorEnabled();
+			return LOG.isErrorEnabled();
 		}
 
 		if (category.equals(Category.WARN)) {
-			return LOGGER.isWarnEnabled();
+			return LOG.isWarnEnabled();
 		}
 
 		if (category.equals(Category.DEBUG)) {
-			return LOGGER.isDebugEnabled();
+			return LOG.isDebugEnabled();
 		}
 
-		return LOGGER.isInfoEnabled();
+		return LOG.isInfoEnabled();
 	}
 }

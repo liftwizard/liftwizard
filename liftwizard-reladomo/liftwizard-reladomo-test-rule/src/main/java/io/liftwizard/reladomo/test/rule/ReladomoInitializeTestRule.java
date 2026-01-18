@@ -16,16 +16,16 @@
 
 package io.liftwizard.reladomo.test.rule;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.mithraruntime.MithraRuntimeType;
 import com.gs.fw.common.mithra.util.MithraConfigurationManager;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -36,7 +36,7 @@ public class ReladomoInitializeTestRule implements TestRule {
 	private final String runtimeConfigurationPath;
 
 	public ReladomoInitializeTestRule(@Nonnull String runtimeConfigurationPath) {
-		this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
+		this.runtimeConfigurationPath = requireNonNull(runtimeConfigurationPath);
 	}
 
 	@Nonnull
@@ -51,8 +51,8 @@ public class ReladomoInitializeTestRule implements TestRule {
 		private final String runtimeConfigurationPath;
 
 		public ReadRuntimeConfigurationStatement(@Nonnull Statement base, @Nonnull String runtimeConfigurationPath) {
-			this.base = Objects.requireNonNull(base);
-			this.runtimeConfigurationPath = Objects.requireNonNull(runtimeConfigurationPath);
+			this.base = requireNonNull(base);
+			this.runtimeConfigurationPath = requireNonNull(runtimeConfigurationPath);
 		}
 
 		private void before() {

@@ -16,9 +16,10 @@
 
 package io.liftwizard.dropwizard.bundle.clock;
 
+import static java.util.Objects.requireNonNull;
+
 import java.time.Clock;
 import java.util.Objects;
-
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 public class ClockBinder extends AbstractBinder {
@@ -26,7 +27,7 @@ public class ClockBinder extends AbstractBinder {
 	private final Clock clock;
 
 	public ClockBinder(Clock clock) {
-		this.clock = Objects.requireNonNull(clock);
+		this.clock = requireNonNull(clock);
 	}
 
 	@Override

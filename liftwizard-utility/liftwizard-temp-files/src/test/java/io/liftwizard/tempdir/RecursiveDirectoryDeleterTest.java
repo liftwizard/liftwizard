@@ -16,20 +16,20 @@
 
 package io.liftwizard.tempdir;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+
+import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(LogMarkerTestExtension.class)
 class RecursiveDirectoryDeleterTest {
@@ -40,21 +40,21 @@ class RecursiveDirectoryDeleterTest {
 	@BeforeEach
 	void setUp() throws IOException {
 		Path nestedDir = Files.createDirectory(this.testDir.resolve("nested"));
-		Files.write(nestedDir.resolve("file1.txt"), "test content".getBytes(StandardCharsets.UTF_8));
-		Files.write(this.testDir.resolve("root-file.txt"), "root content".getBytes(StandardCharsets.UTF_8));
+		Files.write(nestedDir.resolve("file1.txt"), "test content".getBytes(UTF_8));
+		Files.write(this.testDir.resolve("root-file.txt"), "root content".getBytes(UTF_8));
 	}
 
 	@Test
 	void deleteRecursively_shouldDeleteDirectoryWithContents() throws IOException {
 		RecursiveDirectoryDeleter.deleteRecursively(this.testDir);
 
-		assertThat(Files.exists(this.testDir)).isFalse();
+		assertThat(this.testDir).doesNotExist();
 	}
 
 	@Test
 	void deleteRecursively_shouldHandleNonExistentDirectory() throws IOException {
-		Path nonExistentDir = Paths.get(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
-		assertThat(Files.exists(nonExistentDir)).isFalse();
+		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
+		assertThat(nonExistentDir).doesNotExist();
 
 		RecursiveDirectoryDeleter.deleteRecursively(nonExistentDir);
 	}
@@ -64,13 +64,13 @@ class RecursiveDirectoryDeleterTest {
 		boolean result = RecursiveDirectoryDeleter.tryDeleteRecursively(this.testDir);
 
 		assertThat(result).isTrue();
-		assertThat(Files.exists(this.testDir)).isFalse();
+		assertThat(this.testDir).doesNotExist();
 	}
 
 	@Test
 	void tryDeleteRecursively_shouldReturnTrueForNonExistentDirectory() {
-		Path nonExistentDir = Paths.get(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
-		assertThat(Files.exists(nonExistentDir)).isFalse();
+		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
+		assertThat(nonExistentDir).doesNotExist();
 
 		boolean result = RecursiveDirectoryDeleter.tryDeleteRecursively(nonExistentDir);
 
@@ -80,13 +80,13 @@ class RecursiveDirectoryDeleterTest {
 	@Test
 	void tryDeleteRecursively_shouldReturnFalseForReadOnlyFile() throws IOException {
 		Path readOnlyFile = this.testDir.resolve("readonly.txt");
-		Files.write(readOnlyFile, "content".getBytes(StandardCharsets.UTF_8));
+		Files.write(readOnlyFile, "content".getBytes(UTF_8));
 		boolean setReadOnly = readOnlyFile.toFile().setReadOnly();
 		assertThat(setReadOnly).isTrue();
 
 		// Check if this platform actually prevents deletion of read-only files
 		Path testFile = this.testDir.resolve("test-deletion.txt");
-		Files.write(testFile, "test".getBytes(StandardCharsets.UTF_8));
+		Files.write(testFile, "test".getBytes(UTF_8));
 		testFile.toFile().setReadOnly();
 		boolean canDeleteReadOnly = testFile.toFile().delete();
 
@@ -98,6 +98,6 @@ class RecursiveDirectoryDeleterTest {
 		readOnlyFile.toFile().setWritable(true);
 
 		assertThat(result).isFalse();
-		assertThat(Files.exists(readOnlyFile)).isTrue();
+		assertThat(readOnlyFile).exists();
 	}
 }

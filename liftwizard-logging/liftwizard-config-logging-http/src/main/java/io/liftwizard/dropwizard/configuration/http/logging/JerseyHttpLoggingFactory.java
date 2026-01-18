@@ -16,17 +16,18 @@
 
 package io.liftwizard.dropwizard.configuration.http.logging;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
+import static java.util.Collections.unmodifiableList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
 import io.dropwizard.util.DataSize;
 import io.dropwizard.util.DataSizeUnit;
 import io.dropwizard.validation.MinDataSize;
 import io.dropwizard.validation.ValidationMethod;
+import java.util.Collections;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 
 public class JerseyHttpLoggingFactory {
 
@@ -42,10 +43,10 @@ public class JerseyHttpLoggingFactory {
 	private boolean logExcludedResponseHeaderNames;
 
 	@NotNull
-	private List<String> includedRequestHeaders = List.of("Host", "User-Agent", "Content-Type");
+	private List<String> includedRequestHeaders = ImmutableList.of("Host", "User-Agent", "Content-Type");
 
 	@NotNull
-	private List<String> includedResponseHeaders = List.of("Host", "User-Agent", "Content-Type");
+	private List<String> includedResponseHeaders = ImmutableList.of("Host", "User-Agent", "Content-Type");
 
 	@NotNull
 	@MinDataSize(value = 1, unit = DataSizeUnit.BYTES)
@@ -143,22 +144,22 @@ public class JerseyHttpLoggingFactory {
 
 	@JsonProperty
 	public List<String> getIncludedRequestHeaders() {
-		return Collections.unmodifiableList(this.includedRequestHeaders);
+		return unmodifiableList(this.includedRequestHeaders);
 	}
 
 	@JsonProperty
 	public void setIncludedRequestHeaders(List<String> includedRequestHeaders) {
-		this.includedRequestHeaders = Collections.unmodifiableList(includedRequestHeaders);
+		this.includedRequestHeaders = unmodifiableList(includedRequestHeaders);
 	}
 
 	@JsonProperty
 	public List<String> getIncludedResponseHeaders() {
-		return Collections.unmodifiableList(this.includedResponseHeaders);
+		return unmodifiableList(this.includedResponseHeaders);
 	}
 
 	@JsonProperty
 	public void setIncludedResponseHeaders(List<String> includedResponseHeaders) {
-		this.includedResponseHeaders = Collections.unmodifiableList(includedResponseHeaders);
+		this.includedResponseHeaders = unmodifiableList(includedResponseHeaders);
 	}
 
 	@JsonProperty

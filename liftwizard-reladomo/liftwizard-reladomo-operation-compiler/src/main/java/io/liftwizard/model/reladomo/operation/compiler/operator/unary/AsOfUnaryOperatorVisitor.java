@@ -16,7 +16,7 @@
 
 package io.liftwizard.model.reladomo.operation.compiler.operator.unary;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.finder.Operation;
@@ -25,13 +25,14 @@ import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorIs
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.OperatorIsNullContext;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.UnaryOperatorContext;
 import io.liftwizard.model.reladomo.operation.visitor.ReladomoOperationThrowingVisitor;
+import java.util.Objects;
 
 public class AsOfUnaryOperatorVisitor extends ReladomoOperationThrowingVisitor<Operation> {
 
 	private final AsOfAttribute attribute;
 
 	public AsOfUnaryOperatorVisitor(AsOfAttribute attribute) {
-		this.attribute = Objects.requireNonNull(attribute);
+		this.attribute = requireNonNull(attribute);
 	}
 
 	@Override

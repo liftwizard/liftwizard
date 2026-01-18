@@ -16,15 +16,15 @@
 
 package io.liftwizard.reladomo.test.rule;
 
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
+import io.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.Objects;
 import java.util.function.Supplier;
-
 import javax.annotation.Nonnull;
-
-import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
-import io.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -47,22 +47,22 @@ public class ExecuteSqlTestRule implements TestRule {
 		H2InMemoryConnectionManager.getInstance().getConnection();
 
 	public ExecuteSqlTestRule setDdlLocationPattern(@Nonnull String ddlLocationPattern) {
-		this.ddlLocationPattern = Objects.requireNonNull(ddlLocationPattern);
+		this.ddlLocationPattern = requireNonNull(ddlLocationPattern);
 		return this;
 	}
 
 	public ExecuteSqlTestRule setIdxLocationPattern(@Nonnull String idxLocationPattern) {
-		this.idxLocationPattern = Objects.requireNonNull(idxLocationPattern);
+		this.idxLocationPattern = requireNonNull(idxLocationPattern);
 		return this;
 	}
 
 	public ExecuteSqlTestRule setFkLocationPattern(@Nonnull String fkLocationPattern) {
-		this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
+		this.fkLocationPattern = requireNonNull(fkLocationPattern);
 		return this;
 	}
 
 	public ExecuteSqlTestRule setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier) {
-		this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
+		this.connectionSupplier = requireNonNull(connectionSupplier);
 		return this;
 	}
 

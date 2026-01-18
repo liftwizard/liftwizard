@@ -16,13 +16,7 @@
 
 package io.liftwizard.dropwizard.bundle.ddl.executor;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.sql.DataSource;
+import static java.util.Objects.requireNonNull;
 
 import com.google.auto.service.AutoService;
 import io.dropwizard.setup.Environment;
@@ -32,13 +26,19 @@ import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourcesFactory
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactory;
 import io.liftwizard.dropwizard.configuration.ddl.executor.DdlExecutorFactoryProvider;
 import io.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
 public class DdlExecutorBundle implements PrioritizedBundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DdlExecutorBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DdlExecutorBundle.class);
 
 	@Override
 	public int getPriority() {
@@ -61,11 +61,11 @@ public class DdlExecutorBundle implements PrioritizedBundle {
 		NamedDataSourcesFactory namedDataSourcesFactory = dataSourceProvider.getNamedDataSourcesFactory();
 
 		if (ddlExecutorFactories.isEmpty()) {
-			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
+			LOG.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", this.getClass().getSimpleName());
+		LOG.info("Running {}.", this.getClass().getSimpleName());
 
 		for (DdlExecutorFactory ddlExecutorFactory : ddlExecutorFactories) {
 			String dataSourceName = ddlExecutorFactory.getDataSourceName();
@@ -73,19 +73,19 @@ public class DdlExecutorBundle implements PrioritizedBundle {
 			String idxLocationPattern = ddlExecutorFactory.getIdxLocationPattern();
 			String fkLocationPattern = ddlExecutorFactory.getFkLocationPattern();
 
-			LOGGER.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
+			LOG.info("Running {} with data source '{}'.", this.getClass().getSimpleName(), dataSourceName);
 
 			DataSource dataSource = namedDataSourcesFactory.getDataSourceByName(
 				dataSourceName,
 				environment.metrics(),
 				environment.lifecycle()
 			);
-			Objects.requireNonNull(dataSource, dataSourceName);
+			requireNonNull(dataSource, dataSourceName);
 			try (Connection connection = dataSource.getConnection()) {
 				DatabaseDdlExecutor.executeSql(connection, ddlLocationPattern, idxLocationPattern, fkLocationPattern);
 			}
 		}
 
-		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
+		LOG.info("Completing {}.", this.getClass().getSimpleName());
 	}
 }

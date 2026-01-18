@@ -16,14 +16,14 @@
 
 package io.liftwizard.graphql.data.fetcher;
 
-import java.util.Objects;
-import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import static java.util.Objects.requireNonNull;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.Objects;
+import java.util.function.Function;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A DataFetcher backed by a Function.
@@ -37,7 +37,7 @@ public class FunctionDataFetcher<Input, Output> implements DataFetcher<Output> {
 	private final Function<Input, Output> function;
 
 	public FunctionDataFetcher(@Nonnull Function<Input, Output> function) {
-		this.function = Objects.requireNonNull(function);
+		this.function = requireNonNull(function);
 	}
 
 	@Nullable

@@ -16,6 +16,15 @@
 
 package io.liftwizard.servlet.logging.filter;
 
+import static java.util.Objects.requireNonNull;
+
+import io.liftwizard.servlet.logging.feature.LoggingConfig;
+import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsClient;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsPath;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequestHttp;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
+import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsServer;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.Clock;
@@ -25,7 +34,6 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 import java.util.function.Consumer;
-
 import javax.annotation.Nonnull;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,14 +43,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import io.liftwizard.servlet.logging.feature.LoggingConfig;
-import io.liftwizard.servlet.logging.typesafe.StructuredArguments;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsClient;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsPath;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsRequestHttp;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsResponseHttp;
-import io.liftwizard.servlet.logging.typesafe.StructuredArgumentsServer;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.MutableMap;
@@ -55,7 +55,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 public class ServerLoggingFilter implements Filter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServerLoggingFilter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ServerLoggingFilter.class);
 
 	private final LoggingConfig loggingConfig;
 	private final Consumer<StructuredArguments> structuredLogger;
@@ -66,9 +66,9 @@ public class ServerLoggingFilter implements Filter {
 		Consumer<StructuredArguments> structuredLogger,
 		Clock clock
 	) {
-		this.loggingConfig = Objects.requireNonNull(loggingConfig);
-		this.structuredLogger = Objects.requireNonNull(structuredLogger);
-		this.clock = Objects.requireNonNull(clock);
+		this.loggingConfig = requireNonNull(loggingConfig);
+		this.structuredLogger = requireNonNull(structuredLogger);
+		this.clock = requireNonNull(clock);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class ServerLoggingFilter implements Filter {
 	) {
 		String authType = httpServletRequest.getAuthType();
 		if (authType != null) {
-			LOGGER.trace("authType: {}", authType);
+			LOG.trace("authType: {}", authType);
 		}
 
 		StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();

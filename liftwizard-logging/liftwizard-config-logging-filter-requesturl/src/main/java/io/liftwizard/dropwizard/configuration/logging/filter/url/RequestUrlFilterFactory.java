@@ -16,12 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.logging.filter.url;
 
-import java.util.List;
-import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import static java.util.Objects.requireNonNull;
 
 import ch.qos.logback.access.net.URLEvaluator;
 import ch.qos.logback.access.spi.IAccessEvent;
@@ -32,6 +27,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.logging.filter.FilterFactory;
+import java.util.List;
+import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import org.eclipse.collections.api.factory.Lists;
 
 @JsonTypeName("url")
@@ -66,7 +66,7 @@ public class RequestUrlFilterFactory implements FilterFactory<IAccessEvent> {
 
 	@JsonProperty
 	public void setUrls(List<String> urls) {
-		this.urls = Objects.requireNonNull(urls);
+		this.urls = requireNonNull(urls);
 	}
 
 	@JsonProperty

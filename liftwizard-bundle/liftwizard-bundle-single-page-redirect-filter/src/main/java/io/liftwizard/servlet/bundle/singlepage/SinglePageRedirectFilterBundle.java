@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class SinglePageRedirectFilterBundle<T> implements ConfiguredBundle<T> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SinglePageRedirectFilterBundle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SinglePageRedirectFilterBundle.class);
 
 	public abstract SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory(T configuration);
 
@@ -47,11 +47,11 @@ public abstract class SinglePageRedirectFilterBundle<T> implements ConfiguredBun
 		SinglePageRedirectFilterFactory factory
 	) {
 		if (factory == null || !factory.isEnabled()) {
-			LOGGER.info("{} disabled.", bundle.getClass().getSimpleName());
+			LOG.info("{} disabled.", bundle.getClass().getSimpleName());
 			return;
 		}
 
-		LOGGER.info("Running {}.", bundle.getClass().getSimpleName());
+		LOG.info("Running {}.", bundle.getClass().getSimpleName());
 
 		String redirectPage = factory.getRedirectPage();
 		String cacheControlHeader = factory.getCacheControlHeader();
