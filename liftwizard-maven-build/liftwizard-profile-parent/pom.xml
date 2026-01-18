@@ -968,19 +968,7 @@
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
-                                <arg>-Xplugin:ErrorProne \
-                                    -XepExcludedPaths:.*/generated-sources/.* \
-                                    -XepPatchChecks:ERROR \
-                                    -XepPatchLocation:${project.build.directory}/errorprone \
-                                    -Xep:BadImport:ERROR \
-                                    -Xep:DefaultCharset:ERROR \
-                                    -Xep:InvalidInlineTag:ERROR \
-                                    -Xep:JavaDurationGetSecondsToToSeconds:ERROR \
-                                    -Xep:MissingOverride:ERROR \
-                                    -Xep:ObjectToString:ERROR \
-                                    -Xep:StringCaseLocaleUsage:ERROR \
-                                    -Xep:StringSplitter:ERROR \
-                                    -Xep:UnnecessaryLambda:ERROR</arg>
+                                <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -XepPatchChecks:Refaster,StaticImport,Slf4jLoggerDeclaration,DirectReturn,IdentityConversion -XepPatchLocation:IN_PLACE -Xep:BadImport:ERROR -Xep:DefaultCharset:ERROR -Xep:DirectReturn:ERROR -Xep:IdentityConversion:ERROR -Xep:InvalidInlineTag:ERROR -Xep:JavaDurationGetSecondsToToSeconds:ERROR -Xep:MissingOverride:ERROR -Xep:ObjectToString:ERROR -Xep:RedundantStringConversion:ERROR -Xep:Slf4jLoggerDeclaration:ERROR -Xep:StaticImport:ERROR -Xep:StringCaseLocaleUsage:ERROR -Xep:StringSplitter:ERROR -Xep:UnnecessaryLambda:ERROR</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
