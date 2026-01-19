@@ -108,9 +108,7 @@ public class ECAllSatisfyNegatedLambda extends Recipe {
 			J.Identifier methodName = methodInvocation.getName();
 			J.Identifier newMethodName = methodName.withSimpleName("noneSatisfy");
 
-			return methodInvocation
-				.withName(newMethodName)
-				.withArguments(Lists.fixedSize.with(newLambda));
+			return methodInvocation.withName(newMethodName).withArguments(Lists.fixedSize.with(newLambda));
 		}
 
 		private Expression unwrapParentheses(Expression expression) {

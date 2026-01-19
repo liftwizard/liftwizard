@@ -34,15 +34,17 @@ public abstract class AbstractEclipseCollectionsTest implements RewriteTest {
 		"No star imports style",
 		"Prevents OpenRewrite from collapsing imports into star imports",
 		Sets.fixedSize.empty(),
-		Lists.fixedSize.with(ImportLayoutStyle.builder()
-			.classCountToUseStarImport(9999)
-			.nameCountToUseStarImport(9999)
-			.importPackage("org.eclipse.collections.*")
-			.blankLine()
-			.importAllOthers()
-			.blankLine()
-			.importStaticAllOthers()
-			.build())
+		Lists.fixedSize.with(
+			ImportLayoutStyle.builder()
+				.classCountToUseStarImport(9999)
+				.nameCountToUseStarImport(9999)
+				.importPackage("org.eclipse.collections.*")
+				.blankLine()
+				.importAllOthers()
+				.blankLine()
+				.importStaticAllOthers()
+				.build()
+		)
 	);
 
 	@Override
