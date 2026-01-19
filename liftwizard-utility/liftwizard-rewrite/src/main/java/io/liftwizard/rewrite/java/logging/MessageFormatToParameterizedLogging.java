@@ -102,7 +102,11 @@ public class MessageFormatToParameterizedLogging extends Recipe {
 			}
 
 			int maxIndex = placeholderIndices.last();
-			if (!this.isSequential(placeholderIndices) || !this.isInOrder(patternString) || formatArgs.size() != maxIndex + 2) {
+			if (
+				!this.isSequential(placeholderIndices)
+				|| !this.isInOrder(patternString)
+				|| formatArgs.size() != maxIndex + 2
+			) {
 				return m;
 			}
 
