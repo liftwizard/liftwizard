@@ -28,8 +28,8 @@ import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.MithraObjectPortal;
 import com.gs.fw.common.mithra.attribute.Attribute;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
-import com.gs.fw.common.mithra.test.MithraTestDataParser;
 import com.gs.fw.common.mithra.util.fileparser.MithraParsedData;
+import io.liftwizard.reladomo.test.data.parser.UtcMithraTestDataParser;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.rules.TestRule;
@@ -94,7 +94,7 @@ public class ReladomoLoadDataTestRule implements TestRule {
 
 		private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
 			LOGGER.debug("Loading test data from file: {}", testDataFileName);
-			MithraTestDataParser parser = new MithraTestDataParser(testDataFileName);
+			UtcMithraTestDataParser parser = new UtcMithraTestDataParser(testDataFileName);
 			List<MithraParsedData> parsedDataList = parser.getResults();
 
 			for (MithraParsedData mithraParsedData : parsedDataList) {

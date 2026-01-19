@@ -41,13 +41,14 @@
         </dependency>
 
         <dependency>
-            <groupId>com.goldmansachs.reladomo</groupId>
-            <artifactId>reladomo</artifactId>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-reladomo-test-data-parser</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs.reladomo</groupId>
-            <artifactId>reladomo-test-util</artifactId>
+            <artifactId>reladomo</artifactId>
         </dependency>
 
         <dependency>
