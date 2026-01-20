@@ -153,6 +153,9 @@
                                     <recipe>org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements</recipe>
                                     <recipe>org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions</recipe>
                                 </activeRecipes>
+                                <activeStyles>
+                                    <style>io.liftwizard.NoStarImports</style>
+                                </activeStyles>
                             </configuration>
                             <dependencies>
                                 <dependency>
@@ -200,6 +203,9 @@
                                     <recipe>org.openrewrite.maven.BestPractices</recipe>
                                     <recipe>org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments</recipe>
                                 </activeRecipes>
+                                <activeStyles>
+                                    <style>io.liftwizard.NoStarImports</style>
+                                </activeStyles>
                             </configuration>
                             <dependencies>
                                 <dependency>
@@ -242,6 +248,9 @@
                                 <activeRecipes>
                                     <recipe>io.liftwizard.rewrite.eclipse.collections.ECExperimentalRecipes</recipe>
                                 </activeRecipes>
+                                <activeStyles>
+                                    <style>io.liftwizard.NoStarImports</style>
+                                </activeStyles>
                             </configuration>
                             <dependencies>
                                 <dependency>
