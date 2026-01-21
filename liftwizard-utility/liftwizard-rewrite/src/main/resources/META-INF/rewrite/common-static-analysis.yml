@@ -1,5 +1,5 @@
 #
-# Copyright 2021 the original author or authors.
+# Copyright 2025 the original author or authors.
 # <p>
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -82,7 +82,8 @@ recipeList:
     #  - org.openrewrite.java.RemoveUnusedImports
     #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
     #  - org.openrewrite.staticanalysis.RemoveUnusedPrivateMethods
-    - org.openrewrite.staticanalysis.RenameLocalVariablesToCamelCase
+    # Disabled - bug #7: incorrectly renames constructor when variable name matches class name
+    # - org.openrewrite.staticanalysis.RenameLocalVariablesToCamelCase
     - org.openrewrite.staticanalysis.RenameMethodsNamedHashcodeEqualOrToString
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
@@ -90,7 +91,8 @@ recipeList:
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
     - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
-    - org.openrewrite.staticanalysis.ReplaceStringConcatenationWithStringValueOf
+    # Disabled in Liftwizard
+    # - org.openrewrite.staticanalysis.ReplaceStringConcatenationWithStringValueOf
     - org.openrewrite.staticanalysis.SimplifyArraysAsList
     - org.openrewrite.staticanalysis.SimplifyBooleanExpression
     # Disabled in Liftwizard
