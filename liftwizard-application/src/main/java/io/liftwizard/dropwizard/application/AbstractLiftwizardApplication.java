@@ -37,6 +37,7 @@ import io.liftwizard.dropwizard.configuration.factory.JsonConfigurationFactoryFa
 import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
+import io.liftwizard.reladomo.rollback.ReladomoRollbackCommand;
 import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
 
 public abstract class AbstractLiftwizardApplication<
@@ -77,7 +78,9 @@ public abstract class AbstractLiftwizardApplication<
 		bootstrap.addBundle(new EnvironmentConfigBundle());
 	}
 
-	protected void initializeCommands(@Nonnull Bootstrap<T> bootstrap) {}
+	protected void initializeCommands(@Nonnull Bootstrap<T> bootstrap) {
+		bootstrap.addCommand(new ReladomoRollbackCommand<>(this));
+	}
 
 	protected void initializeEarlyBundles(@Nonnull Bootstrap<T> bootstrap) {
 		bootstrap.addBundle(new ClockBundle());

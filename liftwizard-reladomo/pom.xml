@@ -46,6 +46,7 @@
         <module>liftwizard-reladomo-graphql-operation</module>
         <module>liftwizard-reladomo-operation-compiler</module>
         <module>liftwizard-reladomo-operation-grammar</module>
+        <module>liftwizard-reladomo-rollback</module>
         <module>liftwizard-reladomo-csv-test-extension</module>
         <module>liftwizard-reladomo-serialize</module>
         <module>liftwizard-reladomo-simulated-sequence</module>
