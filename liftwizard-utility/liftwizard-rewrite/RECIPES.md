@@ -243,6 +243,19 @@ Simplify negated satisfies calls on Iterate utility:
 - `!Iterate.anySatisfy(iterable, predicate)` → `Iterate.noneSatisfy(iterable, predicate)`
 - `!Iterate.noneSatisfy(iterable, predicate)` → `Iterate.anySatisfy(iterable, predicate)`
 
+### Select/Reject Simplifications
+
+#### ECSimplifyNegatedSelectReject
+
+Flip select() and reject() when the lambda contains a negation pattern:
+
+- `list.select(x -> !pred(x))` → `list.reject(x -> pred(x))`
+- `list.select(x -> x != value)` → `list.reject(x -> x == value)`
+- `list.reject(x -> !pred(x))` → `list.select(x -> pred(x))`
+- `list.reject(x -> x != value)` → `list.select(x -> x == value)`
+
+This eliminates double negation patterns and improves readability by using the more appropriate method for the predicate logic.
+
 ### Primitive Sum Optimizations
 
 #### ECCollectIntSum and ECCollectLongSum
