@@ -305,6 +305,14 @@ Replace select().notEmpty() chains with anySatisfy():
 - `ArrayIterate.select(array, predicate).notEmpty()` -> `ArrayIterate.anySatisfy(array, predicate)`
 - `ListIterate.select(list, predicate).notEmpty()` -> `ListIterate.anySatisfy(list, predicate)`
 
+#### ECSelectIsEmptyToNoneSatisfy
+
+Replace select().isEmpty() chains with noneSatisfy():
+
+- `collection.select(predicate).isEmpty()` -> `collection.noneSatisfy(predicate)`
+- `ArrayIterate.select(array, predicate).isEmpty()` -> `ArrayIterate.noneSatisfy(array, predicate)`
+- `ListIterate.select(list, predicate).isEmpty()` -> `ListIterate.noneSatisfy(list, predicate)`
+
 #### ECStreamReduceToInjectInto
 
 Replace stream().reduce() with injectInto() on Eclipse Collections types:
