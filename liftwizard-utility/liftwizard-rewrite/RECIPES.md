@@ -297,6 +297,14 @@ Replace select().getFirstOptional()/getFirst() chains with detectOptional()/dete
 - `ListIterate.select(list, predicate).getFirstOptional()` -> `ListIterate.detectOptional(list, predicate)`
 - `ListIterate.select(list, predicate).getFirst()` -> `ListIterate.detect(list, predicate)`
 
+#### ECSelectNotEmptyToAnySatisfy
+
+Replace select().notEmpty() chains with anySatisfy():
+
+- `collection.select(predicate).notEmpty()` -> `collection.anySatisfy(predicate)`
+- `ArrayIterate.select(array, predicate).notEmpty()` -> `ArrayIterate.anySatisfy(array, predicate)`
+- `ListIterate.select(list, predicate).notEmpty()` -> `ListIterate.anySatisfy(list, predicate)`
+
 #### ECStreamReduceToInjectInto
 
 Replace stream().reduce() with injectInto() on Eclipse Collections types:
