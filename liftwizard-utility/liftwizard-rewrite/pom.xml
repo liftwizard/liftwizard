@@ -228,6 +228,7 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                         <arg>-Arewrite.generatedAnnotation=jakarta.annotation.Generated</arg>
+                        <arg>-Arewrite.javaParserClasspathFrom=resources</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
