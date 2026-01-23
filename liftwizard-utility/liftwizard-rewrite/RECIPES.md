@@ -286,6 +286,17 @@ Replace stream().filter().findFirst() with detectOptional() on Eclipse Collectio
 
 - `collection.stream().filter(predicate).findFirst()` -> `collection.detectOptional(predicate)`
 
+#### ECSelectFirstToDetect
+
+Replace select().getFirstOptional()/getFirst() chains with detectOptional()/detect():
+
+- `collection.select(predicate).getFirstOptional()` -> `collection.detectOptional(predicate)`
+- `collection.select(predicate).getFirst()` -> `collection.detect(predicate)`
+- `ArrayIterate.select(array, predicate).getFirstOptional()` -> `ArrayIterate.detectOptional(array, predicate)`
+- `ArrayIterate.select(array, predicate).getFirst()` -> `ArrayIterate.detect(array, predicate)`
+- `ListIterate.select(list, predicate).getFirstOptional()` -> `ListIterate.detectOptional(list, predicate)`
+- `ListIterate.select(list, predicate).getFirst()` -> `ListIterate.detect(list, predicate)`
+
 #### ECStreamReduceToInjectInto
 
 Replace stream().reduce() with injectInto() on Eclipse Collections types:
