@@ -256,6 +256,21 @@ Flip select() and reject() when the lambda contains a negation pattern:
 
 This eliminates double negation patterns and improves readability by using the more appropriate method for the predicate logic.
 
+### Method Reference Simplifications
+
+#### ECSimplifyMethodReferences
+
+Simplify redundant functional method references by removing unnecessary method calls:
+
+- `list.select(predicate::accept)` → `list.select(predicate)`
+- `list.select(predicate::test)` → `list.select(predicate)`
+- `list.collect(function::valueOf)` → `list.collect(function)`
+- `list.collect(function::apply)` → `list.collect(function)`
+- `list.forEach(procedure::value)` → `list.forEach(procedure)`
+- `list.forEach(consumer::accept)` → `list.forEach(consumer)`
+
+When a variable is already the correct functional type, calling its single abstract method via a method reference is redundant. This applies to both Eclipse Collections functional types (Predicate, Function, Procedure) and JDK functional types (java.util.function.Predicate, Function, Consumer).
+
 ### Primitive Sum Optimizations
 
 #### ECCollectIntSum and ECCollectLongSum
