@@ -43,6 +43,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamFindFirstOrElseToDetect
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSelectFirstToDetectRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSelectNotEmptyToAnySatisfyRecipes
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSelectIsEmptyToNoneSatisfyRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamReduceToInjectInto
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamMinMaxToMinMax
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectorsMinMaxByToMinMaxBy
