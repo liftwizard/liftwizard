@@ -166,7 +166,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 
 			this.maybeRemoveImport(implementationClass);
 			this.maybeAddImport(factoryClass);
-			this.doAfterVisit(new OrderImports(false).getVisitor());
+			this.doAfterVisit(new OrderImports(false, null).getVisitor());
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.factoryClassName + "." + this.factoryMethod + "." + typeParamsTemplate;
