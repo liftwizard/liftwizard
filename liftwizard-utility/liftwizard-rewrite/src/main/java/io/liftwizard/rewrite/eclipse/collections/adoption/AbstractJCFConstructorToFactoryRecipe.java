@@ -116,7 +116,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
 			this.maybeRemoveImport("java.util." + this.sourceTypeSimpleName);
 			this.maybeAddImport("org.eclipse.collections.api.factory." + this.targetFactorySimpleName);
-			this.doAfterVisit(new OrderImports(false).getVisitor());
+			this.doAfterVisit(new OrderImports(false, null).getVisitor());
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
