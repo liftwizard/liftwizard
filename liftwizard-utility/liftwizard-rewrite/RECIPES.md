@@ -341,6 +341,16 @@ Replace select().isEmpty() chains with noneSatisfy():
 - `ArrayIterate.select(array, predicate).isEmpty()` -> `ArrayIterate.noneSatisfy(array, predicate)`
 - `ListIterate.select(list, predicate).isEmpty()` -> `ListIterate.noneSatisfy(list, predicate)`
 
+#### ECSelectSizeToCount
+
+Replace select().size() chains with count():
+
+- `collection.select(predicate).size()` -> `collection.count(predicate)`
+- `ArrayIterate.select(array, predicate).size()` -> `ArrayIterate.count(array, predicate)`
+- `ListIterate.select(list, predicate).size()` -> `ListIterate.count(list, predicate)`
+
+The count() method is more efficient as it avoids creating an intermediate collection.
+
 #### ECStreamReduceToInjectInto
 
 Replace stream().reduce() with injectInto() on Eclipse Collections types:
