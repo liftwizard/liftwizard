@@ -22,30 +22,38 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.TimeZone;
 
+import com.gs.fw.common.mithra.MithraList;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.MithraObjectPortal;
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
+import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
+import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.common.mithra.util.MithraRuntimeCacheController;
+import com.gs.fw.finder.TemporalTransactionalDomainList;
 import com.gs.reladomo.metadata.ReladomoClassMetaData;
 import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ListIterable;
+import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.eclipse.collections.impl.utility.ArrayIterate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Rolls back all bitemporal Reladomo tables to a specified point in time.
+ * Rolls back all temporal tables to a specified point in time.
  *
  * <p>For each temporal table, this performs two operations:
  * <ol>
- *   <li>Delete all rows where system_from &gt; targetDate (versions created after the rollback point)</li>
- *   <li>Update system_to = infinity for all rows where system_to &gt; targetDate AND system_to &lt; infinity
- *       (restore versions that were superseded after the rollback point)</li>
+ *   <li>Purge all rows where system_from &gt; targetDate</li>
+ *   <li>Restore versions that were superseded after the rollback point</li>
  * </ol>
+ *
+ * @see <a href="https://github.com/goldmansachs/reladomo/issues/261">Reladomo Issue #261</a>
  */
 public class ReladomoTemporalRollback {
 
@@ -79,43 +87,79 @@ public class ReladomoTemporalRollback {
 	private void rollbackTable(MithraRuntimeCacheController cacheController) {
 		ReladomoClassMetaData metaData = cacheController.getMetaData();
 
+		AsOfAttribute[] asOfAttributes = metaData.getAsOfAttributes();
+		if (asOfAttributes == null) {
+			return;
+		}
+
+		AsOfAttribute systemAttribute = ArrayIterate.detect(asOfAttributes, AsOfAttribute::isProcessingDate);
+
+		if (systemAttribute == null) {
+			return;
+		}
+
 		RelatedFinder<?> finder = metaData.getFinderInstance();
 		MithraObjectPortal portal = finder.getMithraObjectPortal();
 		String tableName = portal.getDatabaseObject().getDefaultTableName();
 
-		Optional<AsOfAttribute> maybeSystemAttribute = ArrayIterate.detectOptional(
-			metaData.getAsOfAttributes(),
-			AsOfAttribute::isProcessingDate
-		);
-		if (maybeSystemAttribute.isEmpty()) {
-			LOGGER.debug("Skipping non-system-temporal table: {}", metaData.getBusinessOrInterfaceClassName());
-			return;
-		}
-		AsOfAttribute systemColumn = maybeSystemAttribute.orElseThrow(() ->
-			new IllegalStateException("No system temporal attribute found")
-		);
-		String systemFromColumn = systemColumn.getFromAttribute().getColumnName();
-		String systemToColumn = systemColumn.getToAttribute().getColumnName();
-
 		LOGGER.info(
 			"Rolling back table: {} (system_from={}, system_to={})",
 			tableName,
-			systemFromColumn,
-			systemToColumn
+			systemAttribute.getFromAttribute().getColumnName(),
+			systemAttribute.getToAttribute().getColumnName()
 		);
 
-		this.deleteFutureVersions(portal, tableName, systemFromColumn);
-		this.restoreSupersededVersions(portal, tableName, systemToColumn);
+		this.purgeFutureVersions(metaData, finder, systemAttribute, tableName);
+		this.restoreSupersededVersions(portal, tableName, systemAttribute);
 	}
 
-	private void deleteFutureVersions(MithraObjectPortal portal, String tableName, String systemFromColumn) {
-		String sql = String.format("DELETE FROM %s WHERE %s > ?", tableName, systemFromColumn);
+	/**
+	 * Purges all rows where system_from &gt; targetDate.
+	 */
+	private void purgeFutureVersions(
+		ReladomoClassMetaData metaData,
+		RelatedFinder<?> finder,
+		AsOfAttribute systemAttribute,
+		String tableName
+	) {
+		TimestampAttribute systemFromAttribute = systemAttribute.getFromAttribute();
 
-		int deletedRows = this.executeUpdate(portal, sql, this.targetTimestamp);
-		LOGGER.info("Deleted {} future versions from {}", deletedRows, tableName);
+		ListIterable<AsOfAttribute> asOfAttributes = metaData.getAsOfAttributes() == null
+			? Lists.immutable.empty()
+			: ArrayAdapter.adapt(metaData.getAsOfAttributes());
+
+		Operation edgePointOperation = asOfAttributes
+			.collect(AsOfAttribute::equalsEdgePoint)
+			.reduce(Operation::and)
+			.orElseGet(finder::all);
+
+		Operation futureVersionsOperation = edgePointOperation.and(
+			systemFromAttribute.greaterThan(this.targetTimestamp)
+		);
+
+		MithraList<?> futureVersions = finder.findMany(futureVersionsOperation);
+		int count = futureVersions.size();
+
+		if (count == 0) {
+			LOGGER.info("No future versions to purge from {}", tableName);
+			return;
+		}
+
+		if (!(futureVersions instanceof TemporalTransactionalDomainList<?> temporalList)) {
+			throw new IllegalStateException("Cannot purge future versions - invalid list type");
+		}
+
+		temporalList.purgeAll();
+		LOGGER.info("Purged {} future versions from {}", count, tableName);
 	}
 
-	private void restoreSupersededVersions(MithraObjectPortal portal, String tableName, String systemToColumn) {
+	/**
+	 * Restores superseded versions by setting system_to = infinity for rows
+	 * where system_to &gt; targetDate AND system_to &lt; infinity.
+	 */
+	private void restoreSupersededVersions(MithraObjectPortal portal, String tableName, AsOfAttribute systemAttribute) {
+		String systemToColumn = systemAttribute.getToAttribute().getColumnName();
+
 		String sql = String.format(
 			"UPDATE %s SET %s = ? WHERE %s > ? AND %s < ?",
 			tableName,
@@ -124,30 +168,27 @@ public class ReladomoTemporalRollback {
 			systemToColumn
 		);
 
-		int updatedRows = this.executeUpdate(
-			portal,
-			sql,
-			this.infinityTimestamp,
-			this.targetTimestamp,
-			this.infinityTimestamp
-		);
-		LOGGER.info("Restored {} superseded versions in {}", updatedRows, tableName);
-	}
-
-	private int executeUpdate(MithraObjectPortal portal, String sql, Timestamp... parameters) {
 		SourcelessConnectionManager connectionManager = (SourcelessConnectionManager) portal
 			.getDatabaseObject()
 			.getConnectionManager();
 		DatabaseType databaseType = connectionManager.getDatabaseType();
+		TimeZone timeZone = connectionManager.getDatabaseTimeZone();
 
 		try (
 			Connection connection = connectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement(sql)
 		) {
-			for (int i = 0; i < parameters.length; i++) {
-				databaseType.setTimestamp(statement, i + 1, parameters[i], false, null);
+			databaseType.setTimestamp(statement, 1, this.infinityTimestamp, false, timeZone);
+			databaseType.setTimestamp(statement, 2, this.targetTimestamp, false, timeZone);
+			databaseType.setTimestamp(statement, 3, this.infinityTimestamp, false, timeZone);
+
+			int updatedRows = statement.executeUpdate();
+
+			if (updatedRows > 0) {
+				LOGGER.info("Restored {} superseded versions in {}", updatedRows, tableName);
+			} else {
+				LOGGER.info("No superseded versions to restore in {}", tableName);
 			}
-			return statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException("Failed to execute SQL: " + sql, e);
 		}
