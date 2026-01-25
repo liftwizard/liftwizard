@@ -123,28 +123,28 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
 			boolean isInitialCapacityConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& isNumericType(arguments.get(0).getType());
+					&& !(arguments.get(0) instanceof J.Empty)
+					&& isNumericType(arguments.get(0).getType());
 			boolean isComparatorConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& isComparatorType(arguments.get(0).getType());
+					&& !(arguments.get(0) instanceof J.Empty)
+					&& isComparatorType(arguments.get(0).getType());
 			boolean isComparatorWithIterableConstructor =
 				arguments.size() == 2
-				&& isComparatorType(arguments.get(0).getType())
-				&& isIterableType(arguments.get(1).getType());
+					&& isComparatorType(arguments.get(0).getType())
+					&& isIterableType(arguments.get(1).getType());
 			boolean isCollectionConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& !isNumericType(arguments.get(0).getType())
-				&& !isComparatorType(arguments.get(0).getType());
+					&& !(arguments.get(0) instanceof J.Empty)
+					&& !isNumericType(arguments.get(0).getType())
+					&& !isComparatorType(arguments.get(0).getType());
 
 			if (
 				!isEmptyConstructor
-				&& !isInitialCapacityConstructor
-				&& !isComparatorConstructor
-				&& !isComparatorWithIterableConstructor
-				&& !isCollectionConstructor
+					&& !isInitialCapacityConstructor
+					&& !isComparatorConstructor
+					&& !isComparatorWithIterableConstructor
+					&& !isCollectionConstructor
 			) {
 				return nc;
 			}
@@ -172,7 +172,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			String prefix = this.factoryClassName + "." + this.factoryMethod + "." + typeParamsTemplate;
 			String templateSource =
 				prefix
-				+ this.getTemplateSource(
+					+ this.getTemplateSource(
 					isInitialCapacityConstructor,
 					isComparatorConstructor,
 					isComparatorWithIterableConstructor,
@@ -192,11 +192,11 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 					arguments.get(0),
 					arguments.get(1)
 				);
-			} else if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
-				return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
-			} else {
-				return template.apply(this.getCursor(), nc.getCoordinates().replace());
 			}
+			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
+				return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
+			}
+			return template.apply(this.getCursor(), nc.getCoordinates().replace());
 		}
 
 		private String getTemplateSource(
