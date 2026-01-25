@@ -31,8 +31,8 @@ class AssertionsStaticImportTest implements RewriteTest {
 		spec.recipe(new AssertionsStaticImport()).parser(JavaParser.fromJavaVersion().classpath("assertj-core"));
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

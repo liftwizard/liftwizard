@@ -31,8 +31,8 @@ class IterateRejectRedundantTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new IterateRejectRedundantRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceIterateRejectWithRichIterableReject() {
 		this.rewriteRun(
 				java(

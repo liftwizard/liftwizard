@@ -47,8 +47,8 @@ class VerifyAssertCountToAssertJTest implements RewriteTest {
 			);
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

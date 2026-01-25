@@ -31,8 +31,8 @@ class ECStreamCollectorsMinMaxByToMinMaxByTest extends AbstractEclipseCollection
 		spec.recipe(new ECStreamCollectorsMinMaxByToMinMaxBy());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

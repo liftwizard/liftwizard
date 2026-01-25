@@ -31,8 +31,8 @@ class ECStreamMinMaxToMinMaxTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamMinMaxToMinMax());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamMinWithMinOptional() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class ComparatorsNullSafeEqualsToObjectsEqualsTest extends AbstractEclipseCollec
 		spec.recipe(new ComparatorsNullSafeEqualsToObjectsEqualsRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

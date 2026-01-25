@@ -31,8 +31,8 @@ class ECStreamCountToCountTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamCountToCount());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamFilterCountWithCount() {
 		this.rewriteRun(
 				java(

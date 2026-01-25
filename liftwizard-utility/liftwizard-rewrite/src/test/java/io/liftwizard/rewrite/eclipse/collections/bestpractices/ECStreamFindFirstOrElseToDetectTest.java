@@ -31,8 +31,8 @@ class ECStreamFindFirstOrElseToDetectTest extends AbstractEclipseCollectionsTest
 		spec.recipe(new ECStreamFindFirstOrElseToDetect());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

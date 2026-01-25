@@ -30,8 +30,8 @@ class RemoveUnnecessaryLogLevelGuardsTest implements RewriteTest {
 		spec.recipe(new RemoveUnnecessaryLogLevelGuards());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

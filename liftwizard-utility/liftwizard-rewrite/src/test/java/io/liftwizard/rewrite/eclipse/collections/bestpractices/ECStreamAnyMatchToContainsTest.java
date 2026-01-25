@@ -31,8 +31,8 @@ class ECStreamAnyMatchToContainsTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamAnyMatchToContainsRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamAnyMatchWithContains() {
 		this.rewriteRun(
 				java(

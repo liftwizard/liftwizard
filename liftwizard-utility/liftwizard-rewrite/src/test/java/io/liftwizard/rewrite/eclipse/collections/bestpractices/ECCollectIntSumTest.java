@@ -31,8 +31,8 @@ class ECCollectIntSumTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECCollectIntSumRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceCollectIntSumWithSumOfInt() {
 		this.rewriteRun(
 				java(

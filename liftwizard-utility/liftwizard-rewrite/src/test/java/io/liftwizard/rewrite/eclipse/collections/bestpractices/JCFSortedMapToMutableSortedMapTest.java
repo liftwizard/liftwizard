@@ -31,8 +31,8 @@ class JCFSortedMapToMutableSortedMapTest extends AbstractEclipseCollectionsTest 
 		spec.recipe(new JCFSortedMapToMutableSortedMap());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

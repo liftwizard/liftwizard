@@ -31,8 +31,8 @@ class JCFCollectionToMutableCollectionTest extends AbstractEclipseCollectionsTes
 		spec.recipe(new JCFCollectionToMutableCollection());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

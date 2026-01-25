@@ -31,8 +31,8 @@ class ECArraysAsListToWithTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECArraysAsListToWith());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class ECStreamJoiningToMakeStringTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamJoiningToMakeString());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

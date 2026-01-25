@@ -31,8 +31,8 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECAnySatisfyEqualsToContainsRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

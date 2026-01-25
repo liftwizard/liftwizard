@@ -72,8 +72,8 @@ class ECConcreteToInterfaceRecipeTest extends AbstractEclipseCollectionsTest {
 		);
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

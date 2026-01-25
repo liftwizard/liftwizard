@@ -31,8 +31,8 @@ class ECAnySatisfyPredicatesNotToNoneSatisfyTest extends AbstractEclipseCollecti
 		spec.recipe(new ECAnySatisfyPredicatesNotToNoneSatisfyRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class ArrayIterateEmptyTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ArrayIterateEmptyRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

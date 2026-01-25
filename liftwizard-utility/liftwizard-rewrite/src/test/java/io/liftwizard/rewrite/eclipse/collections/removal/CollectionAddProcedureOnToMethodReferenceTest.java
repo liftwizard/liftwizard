@@ -34,8 +34,8 @@ class CollectionAddProcedureOnToMethodReferenceTest extends AbstractEclipseColle
 			.typeValidationOptions(TypeValidation.none());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class CollectionsUnmodifiableToAsUnmodifiableTest extends AbstractEclipseCollect
 		spec.recipe(new CollectionsUnmodifiableToAsUnmodifiableRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

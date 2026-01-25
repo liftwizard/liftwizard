@@ -31,8 +31,8 @@ class ECCountEqualsSizeTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECCountEqualsSizeRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceCountEqualsSizeWithAllSatisfy() {
 		this.rewriteRun(
 				java(

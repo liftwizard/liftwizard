@@ -31,8 +31,8 @@ class ECSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECSetConstructorToFactory());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

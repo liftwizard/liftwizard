@@ -31,8 +31,8 @@ class ECStreamForEachTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamForEachRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamForEachWithForEach() {
 		this.rewriteRun(
 				java(

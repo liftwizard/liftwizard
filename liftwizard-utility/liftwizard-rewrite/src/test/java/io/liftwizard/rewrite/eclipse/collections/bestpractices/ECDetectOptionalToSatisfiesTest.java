@@ -31,8 +31,8 @@ class ECDetectOptionalToSatisfiesTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECDetectOptionalToSatisfiesRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

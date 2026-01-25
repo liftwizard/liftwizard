@@ -30,8 +30,8 @@ class MessageFormatToParameterizedLoggingTest implements RewriteTest {
 		spec.recipe(new MessageFormatToParameterizedLogging());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

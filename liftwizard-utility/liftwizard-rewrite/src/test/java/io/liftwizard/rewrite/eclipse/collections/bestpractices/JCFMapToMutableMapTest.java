@@ -31,8 +31,8 @@ class JCFMapToMutableMapTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new JCFMapToMutableMap());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

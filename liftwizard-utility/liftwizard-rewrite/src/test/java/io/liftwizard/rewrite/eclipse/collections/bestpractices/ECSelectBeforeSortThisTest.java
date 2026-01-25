@@ -31,8 +31,8 @@ class ECSelectBeforeSortThisTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECSelectBeforeSortThisRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceSortThisSelectWithSelectSortThis() {
 		this.rewriteRun(
 				java(
