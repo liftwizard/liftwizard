@@ -87,23 +87,23 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 				arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
 			boolean isInitialCapacityConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& isNumericType(arguments.get(0).getType());
+					&& !(arguments.get(0) instanceof J.Empty)
+					&& isNumericType(arguments.get(0).getType());
 			boolean isComparatorConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& isComparatorType(arguments.get(0).getType());
+					&& !(arguments.get(0) instanceof J.Empty)
+					&& isComparatorType(arguments.get(0).getType());
 			boolean isCollectionConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& !isNumericType(arguments.get(0).getType())
-				&& !isComparatorType(arguments.get(0).getType());
+					&& !(arguments.get(0) instanceof J.Empty)
+					&& !isNumericType(arguments.get(0).getType())
+					&& !isComparatorType(arguments.get(0).getType());
 
 			if (
 				!isEmptyConstructor
-				&& !isInitialCapacityConstructor
-				&& !isComparatorConstructor
-				&& !isCollectionConstructor
+					&& !isInitialCapacityConstructor
+					&& !isComparatorConstructor
+					&& !isCollectionConstructor
 			) {
 				return nc;
 			}
@@ -122,7 +122,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
 			String templateSource =
 				prefix
-				+ this.getTemplateSource(
+					+ this.getTemplateSource(
 					isInitialCapacityConstructor,
 					isComparatorConstructor,
 					isCollectionConstructor
@@ -135,9 +135,8 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
 			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
 				return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
-			} else {
-				return template.apply(this.getCursor(), nc.getCoordinates().replace());
 			}
+			return template.apply(this.getCursor(), nc.getCoordinates().replace());
 		}
 
 		private String getTemplateSource(
