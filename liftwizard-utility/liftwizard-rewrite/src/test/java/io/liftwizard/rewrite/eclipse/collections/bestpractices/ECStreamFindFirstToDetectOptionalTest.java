@@ -31,8 +31,8 @@ class ECStreamFindFirstToDetectOptionalTest extends AbstractEclipseCollectionsTe
 		spec.recipe(new ECStreamFindFirstToDetectOptional());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamFilterFindFirstWithDetectOptional() {
 		this.rewriteRun(
 				java(

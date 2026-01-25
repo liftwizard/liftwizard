@@ -31,8 +31,8 @@ class ECSimplifyNegatedIterateSatisfiesTest extends AbstractEclipseCollectionsTe
 		spec.recipe(new ECSimplifyNegatedIterateSatisfiesRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class IterateSelectRedundantTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new IterateSelectRedundantRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceIterateSelectWithRichIterableSelect() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class ECStreamReduceToInjectIntoTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamReduceToInjectInto());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamReduceWithInjectInto() {
 		this.rewriteRun(
 				java(

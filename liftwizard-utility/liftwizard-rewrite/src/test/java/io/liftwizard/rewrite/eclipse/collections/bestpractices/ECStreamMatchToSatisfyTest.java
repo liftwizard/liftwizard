@@ -31,8 +31,8 @@ class ECStreamMatchToSatisfyTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamMatchToSatisfy());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceStreamAnyMatchWithAnySatisfy() {
 		this.rewriteRun(
 				java(

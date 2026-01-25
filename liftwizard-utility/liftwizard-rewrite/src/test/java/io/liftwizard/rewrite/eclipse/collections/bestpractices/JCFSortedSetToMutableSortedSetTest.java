@@ -31,8 +31,8 @@ class JCFSortedSetToMutableSortedSetTest extends AbstractEclipseCollectionsTest 
 		spec.recipe(new JCFSortedSetToMutableSortedSet());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

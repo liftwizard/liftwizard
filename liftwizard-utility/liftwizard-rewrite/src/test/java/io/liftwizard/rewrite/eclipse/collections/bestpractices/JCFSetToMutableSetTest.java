@@ -31,8 +31,8 @@ class JCFSetToMutableSetTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new JCFSetToMutableSet());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

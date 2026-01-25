@@ -31,8 +31,8 @@ class ECStreamCollectToListToToListTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamCollectToListToToList());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

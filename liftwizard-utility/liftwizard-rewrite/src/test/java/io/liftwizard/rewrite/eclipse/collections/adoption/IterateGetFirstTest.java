@@ -31,8 +31,8 @@ class IterateGetFirstTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new IterateGetFirstRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

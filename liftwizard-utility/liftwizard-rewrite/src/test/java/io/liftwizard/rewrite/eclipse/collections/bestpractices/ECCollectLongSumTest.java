@@ -31,8 +31,8 @@ class ECCollectLongSumTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECCollectLongSumRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceCollectLongSumWithSumOfLong() {
 		this.rewriteRun(
 				java(

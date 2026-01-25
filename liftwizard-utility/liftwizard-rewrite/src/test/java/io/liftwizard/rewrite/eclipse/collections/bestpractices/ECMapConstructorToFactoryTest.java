@@ -31,8 +31,8 @@ class ECMapConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECMapConstructorToFactory());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

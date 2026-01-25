@@ -31,8 +31,8 @@ class CollectionsSynchronizedToAsSynchronizedTest extends AbstractEclipseCollect
 		spec.recipe(new CollectionsSynchronizedToAsSynchronizedRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

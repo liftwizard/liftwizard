@@ -49,8 +49,8 @@ class VerifyAssertThrowsToAssertJTest implements RewriteTest {
 			);
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				(spec) ->

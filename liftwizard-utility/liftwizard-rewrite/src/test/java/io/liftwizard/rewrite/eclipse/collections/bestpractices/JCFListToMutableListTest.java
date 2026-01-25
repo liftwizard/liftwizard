@@ -31,8 +31,8 @@ class JCFListToMutableListTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new JCFListToMutableList());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class ECCountToSatisfiesTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECCountToSatisfiesRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

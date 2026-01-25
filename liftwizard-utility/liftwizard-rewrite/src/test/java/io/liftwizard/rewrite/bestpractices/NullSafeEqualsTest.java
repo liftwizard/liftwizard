@@ -31,8 +31,8 @@ class NullSafeEqualsTest implements RewriteTest {
 		spec.recipe(new NullSafeEqualsRecipes()).parser(JavaParser.fromJavaVersion());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

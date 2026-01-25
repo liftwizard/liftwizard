@@ -31,8 +31,8 @@ class CollectionsEmptyToFactoryTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new CollectionsEmptyToFactory());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

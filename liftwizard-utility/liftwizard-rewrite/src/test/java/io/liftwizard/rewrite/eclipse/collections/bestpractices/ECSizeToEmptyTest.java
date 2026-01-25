@@ -31,8 +31,8 @@ class ECSizeToEmptyTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECSizeToEmptyRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

@@ -31,8 +31,8 @@ class JCFHashSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest 
 		spec.recipe(new JCFHashSetConstructorToFactory());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

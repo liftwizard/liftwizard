@@ -52,8 +52,8 @@ class VerifyAssertSizeToAssertJTest implements RewriteTest {
 			);
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

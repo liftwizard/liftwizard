@@ -31,8 +31,8 @@ class JCFTreeSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest 
 		spec.recipe(new JCFTreeSetConstructorToFactory());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

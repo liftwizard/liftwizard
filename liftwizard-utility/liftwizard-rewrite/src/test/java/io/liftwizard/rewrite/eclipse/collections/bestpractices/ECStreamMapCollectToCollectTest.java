@@ -31,8 +31,8 @@ class ECStreamMapCollectToCollectTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECStreamMapCollectToCollect());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

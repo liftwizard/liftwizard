@@ -31,8 +31,8 @@ class JCFListConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new JCFListConstructorToFactory());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(

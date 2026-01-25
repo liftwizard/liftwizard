@@ -31,8 +31,8 @@ class ECCollectDoubleSumTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECCollectDoubleSumRecipes());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceCollectDoubleSumWithSumOfDouble() {
 		this.rewriteRun(
 				java(

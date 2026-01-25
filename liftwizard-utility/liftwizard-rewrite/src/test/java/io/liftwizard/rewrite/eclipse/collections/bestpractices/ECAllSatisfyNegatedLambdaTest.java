@@ -31,8 +31,8 @@ class ECAllSatisfyNegatedLambdaTest extends AbstractEclipseCollectionsTest {
 		spec.recipe(new ECAllSatisfyNegatedLambda());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replaceAllSatisfyWithNegatedLambda() {
 		this.rewriteRun(
 				java(

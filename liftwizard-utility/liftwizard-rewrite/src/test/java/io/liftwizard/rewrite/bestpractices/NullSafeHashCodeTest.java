@@ -31,8 +31,8 @@ class NullSafeHashCodeTest implements RewriteTest {
 		spec.recipe(new NullSafeHashCodeRecipes()).parser(JavaParser.fromJavaVersion());
 	}
 
-	@Test
 	@DocumentExample
+	@Test
 	void replacePatterns() {
 		this.rewriteRun(
 				java(
