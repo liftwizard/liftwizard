@@ -334,8 +334,30 @@
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
                 <configuration>
-                    <skip>true</skip>
+                    <activeRecipes>
+                        <!--Excluded recipes that require Lombok:-->
+                        <!--org.openrewrite.java.recipes.UseDisplayNameAndDescriptionFields-->
+                        <!--org.openrewrite.java.recipes.UseEstimatedEffortPerOccurrenceField-->
+                        <!--org.openrewrite.java.recipes.UseTagsField-->
+
+                        <!--Excluded recipes that conflict with prettier-java:-->
+                        <!--org.openrewrite.java.OrderImports-->
+                        <!--org.openrewrite.staticanalysis.OperatorWrap-->
+
+                        <recipe>org.openrewrite.java.recipes.RemoveImportBeforeAddImport</recipe>
+                        <recipe>org.openrewrite.staticanalysis.ReorderAnnotations</recipe>
+                        <recipe>org.openrewrite.staticanalysis.UnwrapElseAfterReturn</recipe>
+                        <!--<recipe>org.openrewrite.java.recipes.SelectRecipeExamples</recipe>-->
+                        <!--<recipe>org.openrewrite.staticanalysis.EqualsAvoidsNull</recipe>-->
+                    </activeRecipes>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-rewrite</artifactId>
+                        <version>0.19.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
