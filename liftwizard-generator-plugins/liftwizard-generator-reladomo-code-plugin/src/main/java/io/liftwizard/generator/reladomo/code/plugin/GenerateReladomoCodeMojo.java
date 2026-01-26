@@ -64,13 +64,13 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
 	private File nonGeneratedDir;
 
 	@Parameter(property = "generateConcreteClasses", defaultValue = "true")
-	private final boolean generateConcreteClasses = true;
+	private boolean generateConcreteClasses;
 
 	@Parameter(property = "warnAboutConcreteClasses", defaultValue = "true")
-	private final boolean warnAboutConcreteClasses = true;
+	private boolean warnAboutConcreteClasses;
 
 	@Parameter(property = "generateEcListMethod", defaultValue = "true")
-	private final boolean generateEcListMethod = true;
+	private boolean generateEcListMethod;
 
 	@Override
 	public void execute() {
