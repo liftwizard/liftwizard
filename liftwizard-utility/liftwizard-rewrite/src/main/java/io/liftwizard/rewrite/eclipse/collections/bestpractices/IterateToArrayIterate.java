@@ -89,8 +89,8 @@ public class IterateToArrayIterate extends Recipe {
 
 				final Expression arrayArgument = arraysAsListCall.getArguments().get(0);
 				this.maybeRemoveImport("org.eclipse.collections.impl.utility.Iterate");
-				this.maybeAddImport("org.eclipse.collections.impl.utility.ArrayIterate");
 				this.maybeRemoveImport("java.util.Arrays");
+				this.maybeAddImport("org.eclipse.collections.impl.utility.ArrayIterate");
 
 				String methodName = mi.getSimpleName();
 				List<Expression> remainingArguments = mi.getArguments().subList(1, mi.getArguments().size());
