@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import com.gs.fw.common.mithra.MithraList;
@@ -88,29 +89,36 @@ public class ReladomoTemporalRollback {
 		ReladomoClassMetaData metaData = cacheController.getMetaData();
 
 		AsOfAttribute[] asOfAttributes = metaData.getAsOfAttributes();
-		if (asOfAttributes == null) {
+		if (ArrayIterate.isEmpty(asOfAttributes)) {
+			LOGGER.debug("Skipping non-temporal table: {}", metaData.getBusinessOrInterfaceClassName());
 			return;
 		}
 
-		AsOfAttribute systemAttribute = ArrayIterate.detect(asOfAttributes, AsOfAttribute::isProcessingDate);
-
-		if (systemAttribute == null) {
+		Optional<AsOfAttribute> maybeSystemAttribute = ArrayIterate.detectOptional(
+			asOfAttributes,
+			AsOfAttribute::isProcessingDate
+		);
+		if (maybeSystemAttribute.isEmpty()) {
+			LOGGER.debug("Skipping non-system-temporal table: {}", metaData.getBusinessOrInterfaceClassName());
 			return;
 		}
 
 		RelatedFinder<?> finder = metaData.getFinderInstance();
 		MithraObjectPortal portal = finder.getMithraObjectPortal();
 		String tableName = portal.getDatabaseObject().getDefaultTableName();
+		AsOfAttribute systemColumn = maybeSystemAttribute.orElseThrow(() ->
+			new IllegalStateException("No system temporal attribute found")
+		);
 
 		LOGGER.info(
 			"Rolling back table: {} (system_from={}, system_to={})",
 			tableName,
-			systemAttribute.getFromAttribute().getColumnName(),
-			systemAttribute.getToAttribute().getColumnName()
+			systemColumn.getFromAttribute().getColumnName(),
+			systemColumn.getToAttribute().getColumnName()
 		);
 
-		this.purgeFutureVersions(metaData, finder, systemAttribute, tableName);
-		this.restoreSupersededVersions(portal, tableName, systemAttribute);
+		this.purgeFutureVersions(metaData, finder, systemColumn, tableName);
+		this.restoreSupersededVersions(portal, tableName, systemColumn);
 	}
 
 	/**
@@ -155,15 +163,17 @@ public class ReladomoTemporalRollback {
 
 	/**
 	 * Restores superseded versions by setting system_to = infinity for rows
-	 * where system_to &gt; targetDate AND system_to &lt; infinity.
+	 * where system_from &lt;= targetDate AND system_to &gt; targetDate AND system_to &lt; infinity.
 	 */
 	private void restoreSupersededVersions(MithraObjectPortal portal, String tableName, AsOfAttribute systemAttribute) {
+		String systemFromColumn = systemAttribute.getFromAttribute().getColumnName();
 		String systemToColumn = systemAttribute.getToAttribute().getColumnName();
 
 		String sql = String.format(
-			"UPDATE %s SET %s = ? WHERE %s > ? AND %s < ?",
+			"UPDATE %s SET %s = ? WHERE %s <= ? AND %s > ? AND %s < ?",
 			tableName,
 			systemToColumn,
+			systemFromColumn,
 			systemToColumn,
 			systemToColumn
 		);
@@ -180,7 +190,8 @@ public class ReladomoTemporalRollback {
 		) {
 			databaseType.setTimestamp(statement, 1, this.infinityTimestamp, false, timeZone);
 			databaseType.setTimestamp(statement, 2, this.targetTimestamp, false, timeZone);
-			databaseType.setTimestamp(statement, 3, this.infinityTimestamp, false, timeZone);
+			databaseType.setTimestamp(statement, 3, this.targetTimestamp, false, timeZone);
+			databaseType.setTimestamp(statement, 4, this.infinityTimestamp, false, timeZone);
 
 			int updatedRows = statement.executeUpdate();
 
