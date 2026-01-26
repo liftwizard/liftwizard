@@ -35,6 +35,7 @@ class ECListConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 	@Test
 	void replacePatterns() {
 		this.rewriteRun(
+				// Basic constructor patterns with various generic types
 				java(
 					"""
 					import org.eclipse.collections.api.list.MutableList;
@@ -101,6 +102,54 @@ class ECListConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 					    }
 					}
 					"""
+				),
+				// Transformation works alongside FieldAccess expressions in the same file
+				java(
+					"""
+					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.impl.list.mutable.FastList;
+					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
+
+					class TestWithFieldAccess {
+					    public static final ImmutableSetFactory immutable = ImmutableSetFactoryImpl.INSTANCE;
+					    private final MutableList<String> list = new FastList<>();
+					}
+					""",
+					"""
+					import org.eclipse.collections.api.factory.Lists;
+					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
+
+					class TestWithFieldAccess {
+					    public static final ImmutableSetFactory immutable = ImmutableSetFactoryImpl.INSTANCE;
+					    private final MutableList<String> list = Lists.mutable.empty();
+					}
+					"""
+				),
+				// Transformation works with fully qualified field access expressions
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.impl.list.mutable.FastList;
+
+					final class TestWithFullyQualifiedFieldAccess {
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
+					    public static final java.util.List<?> EMPTY_LIST = java.util.Collections.EMPTY_LIST;
+					    private final MutableList<String> list = new FastList<>();
+					}
+					""",
+					"""
+					import org.eclipse.collections.api.factory.Lists;
+					import org.eclipse.collections.api.list.MutableList;
+
+					final class TestWithFullyQualifiedFieldAccess {
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
+					    public static final java.util.List<?> EMPTY_LIST = java.util.Collections.EMPTY_LIST;
+					    private final MutableList<String> list = Lists.mutable.empty();
+					}
+					"""
 				)
 			);
 	}
@@ -108,6 +157,7 @@ class ECListConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 	@Test
 	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
+				// Concrete type declarations should not be replaced
 				java(
 					"""
 					import org.eclipse.collections.impl.list.mutable.FastList;
@@ -120,6 +170,37 @@ class ECListConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 					        FastList<String> concreteTypeCapacity = new FastList<>(10);
 					        FastList<String> concreteTypeCollection = new FastList<>(concreteTypeEmpty);
 					    }
+					}
+					"""
+				),
+				// FieldAccess expressions without any FastList constructors - no crash
+				java(
+					"""
+					import java.util.Collections;
+					import java.util.Set;
+
+					class TestFieldAccess {
+					    private static final Set<?> EMPTY = Collections.EMPTY_SET;
+					}
+					"""
+				),
+				// Multiple FieldAccess factory patterns - no crash
+				java(
+					"""
+					import org.eclipse.collections.api.factory.set.FixedSizeSetFactory;
+					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
+					import org.eclipse.collections.api.factory.set.MutableSetFactory;
+					import org.eclipse.collections.api.factory.set.MultiReaderSetFactory;
+					import org.eclipse.collections.impl.set.fixed.FixedSizeSetFactoryImpl;
+					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
+					import org.eclipse.collections.impl.set.mutable.MutableSetFactoryImpl;
+					import org.eclipse.collections.impl.set.mutable.MultiReaderMutableSetFactory;
+
+					final class Sets {
+					    public static final ImmutableSetFactory immutable = ImmutableSetFactoryImpl.INSTANCE;
+					    public static final FixedSizeSetFactory fixedSize = FixedSizeSetFactoryImpl.INSTANCE;
+					    public static final MutableSetFactory mutable = MutableSetFactoryImpl.INSTANCE;
+					    public static final MultiReaderSetFactory multiReader = MultiReaderMutableSetFactory.INSTANCE;
 					}
 					"""
 				)
