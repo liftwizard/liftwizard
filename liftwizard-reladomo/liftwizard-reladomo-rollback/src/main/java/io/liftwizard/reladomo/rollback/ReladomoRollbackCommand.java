@@ -47,8 +47,16 @@ public class ReladomoRollbackCommand<T extends Configuration> extends Environmen
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoRollbackCommand.class);
 
+	private final Application<T> application;
+
 	public ReladomoRollbackCommand(Application<T> application) {
 		super(application, "rollback-temporal", "Roll back all bitemporal tables to a specified point in time");
+		this.application = application;
+	}
+
+	@Override
+	protected Class<T> getConfigurationClass() {
+		return this.application.getConfigurationClass();
 	}
 
 	@Override
