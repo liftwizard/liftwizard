@@ -1,8 +1,14 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
 	"files": {
-		"includes": ["**/*.json", "**/*.jsonc"],
-		"experimentalScannerIgnores": [".llm/**/*", "target/**/*"],
+		"includes": [
+			"**/*.json",
+			"**/*.jsonc",
+		],
+		"experimentalScannerIgnores": [
+			".llm/**/*",
+			"target/**/*",
+		],
 		"ignoreUnknown": true,
 	},
 	"formatter": {
@@ -19,11 +25,14 @@
 	"json": {
 		"formatter": {
 			"bracketSpacing": false,
+			"expand": "always",
 		},
 	},
 	"overrides": [
 		{
-			"includes": ["**/*.json"],
+			"includes": [
+				"**/*.json",
+			],
 			"json": {
 				"formatter": {
 					"trailingCommas": "none",
@@ -31,7 +40,9 @@
 			},
 		},
 		{
-			"includes": ["**/*.jsonc"],
+			"includes": [
+				"**/*.jsonc",
+			],
 			"json": {
 				"formatter": {
 					"trailingCommas": "all",
