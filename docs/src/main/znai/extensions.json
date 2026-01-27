@@ -1,3 +1,5 @@
 {
-	"htmlHeadResources": ["tracking.html"]
+	"htmlHeadResources": [
+		"tracking.html"
+	]
 }
