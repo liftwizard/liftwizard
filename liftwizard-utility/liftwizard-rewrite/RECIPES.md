@@ -36,6 +36,19 @@ Replace null-safe hashCode patterns with Objects.hashCode():
 
 - `object == null ? 0 : object.hashCode()` → `Objects.hashCode(object)`
 
+### ExplicitTypeToVar
+
+Replace explicit type declarations with `var` when the variable is initialized with a constructor call of exactly the same type:
+
+- `StringBuilder sb = new StringBuilder()` → `var sb = new StringBuilder()`
+- `ArrayList<String> list = new ArrayList<>()` → `var list = new ArrayList<String>()`
+
+**This recipe is conservative and does NOT transform:**
+
+- Supertype: `Object x = new StringBuilder()`
+- Interface vs implementation: `List<String> x = new ArrayList<>()`
+- Non-constructor initializers: `ArrayList<String> x = this.getList()`
+
 ## Logging Best Practices Recipes
 
 The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eager logging patterns to use SLF4J parameterized logging. It combines Liftwizard recipes with OpenRewrite recipes in a specific order.

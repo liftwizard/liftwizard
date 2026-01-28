@@ -22,3 +22,4 @@ description: Apply general Java best practices for improved code quality and mai
 recipeList:
     - io.liftwizard.rewrite.bestpractices.NullSafeEqualsRecipes
     - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
+    - io.liftwizard.rewrite.java.style.ExplicitTypeToVar
