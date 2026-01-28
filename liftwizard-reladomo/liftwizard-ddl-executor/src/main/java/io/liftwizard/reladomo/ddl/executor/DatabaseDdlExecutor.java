@@ -69,7 +69,7 @@ public final class DatabaseDdlExecutor {
 			.setScanners(new ResourcesScanner())
 			.filterInputsBy(filterBuilder)
 			.setUrls(urls);
-		Reflections reflections = new Reflections(configurationBuilder);
+		var reflections = new Reflections(configurationBuilder);
 		MutableSet<String> ddlLocations = SetAdapter.adapt(
 			reflections.getResources(Pattern.compile(ddlLocationPattern))
 		);
@@ -106,7 +106,7 @@ public final class DatabaseDdlExecutor {
 			throw new RuntimeException(message);
 		}
 
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+		try (var reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
 			RunScript.execute(connection, reader);
 		} catch (@Nonnull IOException | SQLException e) {
 			LOGGER.error("Failed to run sql script {}.", ddlLocation, e);

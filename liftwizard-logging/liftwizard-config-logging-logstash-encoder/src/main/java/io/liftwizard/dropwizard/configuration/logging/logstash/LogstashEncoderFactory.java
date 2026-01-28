@@ -194,7 +194,7 @@ public class LogstashEncoderFactory {
 	}
 
 	private JsonProviders<ILoggingEvent> getProviders(boolean includeCallerData, TimeZone timeZone) {
-		JsonProviders<ILoggingEvent> providers = new JsonProviders<>();
+		var providers = new JsonProviders<ILoggingEvent>();
 
 		providers.addProvider(getTimestampProvider(timeZone));
 		providers.addProvider(new MessageJsonProvider());
@@ -252,7 +252,7 @@ public class LogstashEncoderFactory {
 	}
 
 	private JsonProviders<ILoggingEvent> getErrorProvider() {
-		JsonProviders<ILoggingEvent> providers = new JsonProviders<>();
+		var providers = new JsonProviders<ILoggingEvent>();
 		providers.addProvider(this.getStackTraceProvider());
 		providers.addProvider(getThrowableClassNameProvider());
 		providers.addProvider(getThrowableRootCauseClassNameJson());
@@ -316,7 +316,7 @@ public class LogstashEncoderFactory {
 	}
 
 	private static JsonProviders<ILoggingEvent> wrap(JsonProvider<ILoggingEvent> delegateProvider) {
-		JsonProviders<ILoggingEvent> providers = new JsonProviders<>();
+		var providers = new JsonProviders<ILoggingEvent>();
 		providers.addProvider(delegateProvider);
 		return providers;
 	}

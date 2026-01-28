@@ -43,7 +43,7 @@ public final class ReladomoDefaultSerializer {
 	public static String serialize(@Nonnull MithraObject mithraObject, @Nonnull ObjectMapper objectMapper) {
 		RelatedFinder finder = mithraObject.zGetPortal().getFinder();
 		SerializationConfig serializationConfig = SerializationConfig.shallowWithDefaultAttributes(finder);
-		Serialized<MithraObject> serialized = new Serialized<>(mithraObject, serializationConfig);
+		var serialized = new Serialized<MithraObject>(mithraObject, serializationConfig);
 
 		try {
 			return objectMapper.writeValueAsString(serialized);

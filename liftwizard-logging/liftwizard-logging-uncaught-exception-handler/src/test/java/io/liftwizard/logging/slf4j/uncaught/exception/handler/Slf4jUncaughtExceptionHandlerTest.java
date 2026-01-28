@@ -45,11 +45,8 @@ class Slf4jUncaughtExceptionHandlerTest {
 
 	@Test
 	void uncaughtException() {
-		CauseException causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
-		RootException rootException = new RootException(
-			"Slf4jUncaughtExceptionHandlerTest root exception",
-			causeException
-		);
+		var causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
+		var rootException = new RootException("Slf4jUncaughtExceptionHandlerTest root exception", causeException);
 
 		new Slf4jUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), rootException);
 

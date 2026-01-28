@@ -28,7 +28,7 @@ public class ObjectSequenceObjectFactory implements MithraSequenceObjectFactory 
 			return objectSequence;
 		}
 
-		ObjectSequence newObjectSequence = new ObjectSequence();
+		var newObjectSequence = new ObjectSequence();
 		newObjectSequence.setSequenceName(sequenceName);
 		newObjectSequence.setNextId(initialValue);
 		newObjectSequence.insert();

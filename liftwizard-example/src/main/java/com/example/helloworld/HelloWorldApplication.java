@@ -62,7 +62,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 		bootstrap.addBundle(new ObjectMapperBundle());
 		bootstrap.addBundle(new ConfigLoggingBundle());
 
-		StructuredArgumentsMDCLogger structuredLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
+		var structuredLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
 		bootstrap.addBundle(new JerseyHttpLoggingBundle(structuredLogger));
 
 		bootstrap.addBundle(new ClockBundle());
@@ -119,7 +119,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 		environment.jersey().register(new HelloWorldResource(template));
 		environment.jersey().register(new ViewResource());
 		environment.jersey().register(new ProtectedResource());
-		PersonDAO dao = new PersonDAO();
+		var dao = new PersonDAO();
 		environment.jersey().register(new PeopleResource(dao));
 		environment.jersey().register(new PersonResource(dao));
 		environment.jersey().register(new FilteredResource());

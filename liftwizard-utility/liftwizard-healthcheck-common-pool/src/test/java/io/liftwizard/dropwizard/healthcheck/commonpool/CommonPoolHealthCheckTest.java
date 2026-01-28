@@ -41,7 +41,7 @@ class CommonPoolHealthCheckTest {
 
 	@Test
 	void unhealthy() {
-		CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
+		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
 			Lists.immutable.empty(),
@@ -54,7 +54,7 @@ class CommonPoolHealthCheckTest {
 
 	@Test
 	void allow() {
-		CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
+		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
 			pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),
@@ -66,7 +66,7 @@ class CommonPoolHealthCheckTest {
 
 	@Test
 	void ban() {
-		CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
+		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
 			Lists.immutable.empty(),
@@ -79,7 +79,7 @@ class CommonPoolHealthCheckTest {
 
 	@Test
 	void both() {
-		CommonPoolHealthCheck commonPoolHealthCheck = new CommonPoolHealthCheck(
+		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
 			pattern("io.liftwizard.dropwizard.healthcheck.commonpool.CommonPoolHealthCheck.check"),

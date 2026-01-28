@@ -54,7 +54,7 @@ public class EnvironmentConfigBundle implements ConfiguredBundle<Object> {
 	private void initializeWithMdc(Bootstrap<?> bootstrap) {
 		ConfigurationSourceProvider configurationSourceProvider = bootstrap.getConfigurationSourceProvider();
 
-		EnvironmentVariableSubstitutor environmentVariableSubstitutor = new EnvironmentVariableSubstitutor(this.strict);
+		var environmentVariableSubstitutor = new EnvironmentVariableSubstitutor(this.strict);
 		environmentVariableSubstitutor.setPreserveEscapes(true);
 
 		ConfigurationSourceProvider wrapped = new SubstitutingSourceProvider(

@@ -46,7 +46,7 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 
 	@Nonnull
 	private Constraint getConstraint() {
-		Constraint constraint = new Constraint(Constraint.__BASIC_AUTH, ADMIN_ROLE);
+		var constraint = new Constraint(Constraint.__BASIC_AUTH, ADMIN_ROLE);
 		constraint.setAuthenticate(true);
 		constraint.setRoles(new String[] { ADMIN_ROLE });
 		return constraint;
@@ -54,7 +54,7 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 
 	@Nonnull
 	private ConstraintMapping getConstraintMapping(Constraint constraint) {
-		ConstraintMapping constraintMapping = new ConstraintMapping();
+		var constraintMapping = new ConstraintMapping();
 		constraintMapping.setConstraint(constraint);
 		constraintMapping.setPathSpec("/*");
 		return constraintMapping;

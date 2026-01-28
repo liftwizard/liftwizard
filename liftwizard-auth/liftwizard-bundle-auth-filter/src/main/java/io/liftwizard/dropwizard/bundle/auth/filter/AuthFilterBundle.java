@@ -78,7 +78,7 @@ public class AuthFilterBundle implements PrioritizedBundle {
 
 	@Nonnull
 	private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters) {
-		ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(authFilters);
+		var chainedAuthFilter = new ChainedAuthFilter(authFilters);
 		return new AuthDynamicFeature(chainedAuthFilter);
 	}
 }

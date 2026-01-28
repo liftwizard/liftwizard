@@ -282,7 +282,7 @@ public class LiftwizardAppExtension<C extends Configuration>
 	}
 
 	protected JerseyClientBuilder clientBuilder() {
-		ClientConfig clientConfig = new ClientConfig();
+		var clientConfig = new ClientConfig();
 		clientConfig
 			.connectorProvider(new GrizzlyConnectorProvider())
 			.register(new JacksonFeature(this.getObjectMapper()))

@@ -30,7 +30,7 @@ public class Slf4jUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable throwable) {
-		try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
+		try (var mdc = new MultiMDCCloseable()) {
 			mdc.put("threadName", thread.getName());
 			mdc.put("exceptionClass", throwable.getClass().getCanonicalName());
 			mdc.put("exceptionMessage", throwable.getMessage());
@@ -42,8 +42,8 @@ public class Slf4jUncaughtExceptionHandler implements UncaughtExceptionHandler {
 			String message = "Exception in thread \"" + thread.getName() + "\"";
 			LOGGER.warn(message, throwable);
 
-			StringWriter stringWriter = new StringWriter();
-			PrintWriter printWriter = new PrintWriter(stringWriter, true);
+			var stringWriter = new StringWriter();
+			var printWriter = new PrintWriter(stringWriter, true);
 			throwable.printStackTrace(printWriter);
 
 			System.err.print(message + " " + stringWriter);

@@ -69,7 +69,7 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 	}
 
 	public static String slurp(@Nonnull InputStream inputStream, Charset charset) {
-		try (Scanner scanner = new Scanner(inputStream, charset)) {
+		try (var scanner = new Scanner(inputStream, charset)) {
 			return scanner.useDelimiter("\\A").next();
 		}
 	}
@@ -128,7 +128,7 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 			file.getParentFile().mkdirs();
 		}
 
-		try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
+		try (var printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
 			String prettyPrintedString = this.getPrettyPrintedString(string);
 			printWriter.print(prettyPrintedString);
 		}

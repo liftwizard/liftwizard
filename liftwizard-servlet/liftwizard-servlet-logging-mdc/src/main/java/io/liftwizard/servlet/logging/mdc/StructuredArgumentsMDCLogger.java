@@ -54,7 +54,7 @@ public class StructuredArgumentsMDCLogger implements Consumer<StructuredArgument
 	}
 
 	private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode) {
-		MultiMDCCloseable result = new MultiMDCCloseable();
+		var result = new MultiMDCCloseable();
 		this.structuredArgumentsToMDC(result, Stacks.immutable.empty(), objectNode);
 		return result;
 	}

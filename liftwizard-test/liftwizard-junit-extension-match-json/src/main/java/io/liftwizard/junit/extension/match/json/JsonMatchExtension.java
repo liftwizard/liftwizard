@@ -98,7 +98,7 @@ public class JsonMatchExtension extends AbstractMatchExtension {
 					resourceClassPathLocation,
 					fileContents
 				);
-				AssertionError assertionError = new AssertionError(detailMessage);
+				var assertionError = new AssertionError(detailMessage);
 				this.errorCollectorExtension.addError(assertionError);
 			}
 		}
@@ -132,7 +132,7 @@ public class JsonMatchExtension extends AbstractMatchExtension {
 			return true;
 		} catch (JacksonException e) {
 			String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
-			AssertionError assertionError = new AssertionError(detailMessage, e);
+			var assertionError = new AssertionError(detailMessage, e);
 			this.errorCollectorExtension.addError(assertionError);
 			return false;
 		}

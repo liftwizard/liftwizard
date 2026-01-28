@@ -64,7 +64,7 @@ class HeaderAuthFilterFactoryTest {
 	@Test
 	void headerAuthFilter() throws Exception {
 		URL resource = Resources.getResource("config-test.json5");
-		File json = new File(resource.toURI());
+		var json = new File(resource.toURI());
 		AuthFilterFactory authFilterFactory = this.factory.build(json);
 		assertThat(authFilterFactory).isInstanceOf(HeaderAuthFilterFactory.class);
 		AuthFilter<?, ? extends Principal> authFilter = authFilterFactory.createAuthFilter();

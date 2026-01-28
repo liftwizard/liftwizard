@@ -47,7 +47,7 @@ public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
 
 		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-		CommonPoolHealthCheck healthCheck = new CommonPoolHealthCheck(
+		var healthCheck = new CommonPoolHealthCheck(
 			factory.getThreadNamePrefix(),
 			Lists.immutable.withAll(factory.getThreadStates()),
 			Lists.immutable.withAll(factory.getAlwaysAllowedPatterns()),

@@ -27,7 +27,7 @@ public class ImpersonationAuthenticator implements Authenticator<String, Imperso
 	@Nonnull
 	@Override
 	public Optional<ImpersonatedPrincipal> authenticate(String principalName) {
-		ImpersonatedPrincipal principal = new ImpersonatedPrincipal(principalName);
+		var principal = new ImpersonatedPrincipal(principalName);
 		return Optional.of(principal);
 	}
 }

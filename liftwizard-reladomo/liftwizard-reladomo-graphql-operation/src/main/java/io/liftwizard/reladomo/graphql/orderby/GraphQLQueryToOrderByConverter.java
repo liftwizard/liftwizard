@@ -46,7 +46,7 @@ public class GraphQLQueryToOrderByConverter {
 	}
 
 	private static Optional<OrderBy> convertOrderBy(RelatedFinder finder, Map<String, ?> map) {
-		GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
+		var converter = new GraphQLQueryToOrderByConverter();
 		Map<String, ?> attribute = (Map<String, ?>) map.get("attribute");
 		String direction = (String) map.get("direction");
 
@@ -87,7 +87,7 @@ public class GraphQLQueryToOrderByConverter {
 		}
 
 		RelatedFinder relatedFinder = finder.getRelationshipFinderByName(key);
-		GraphQLQueryToOrderByConverter converter = new GraphQLQueryToOrderByConverter();
+		var converter = new GraphQLQueryToOrderByConverter();
 		converter.convertAttribute(relatedFinder, (Map<String, ?>) value, direction);
 		Optional<OrderBy> nestedResult = converter.getResult().stream().reduce(OrderBy::and);
 		nestedResult.ifPresent(this.result::add);

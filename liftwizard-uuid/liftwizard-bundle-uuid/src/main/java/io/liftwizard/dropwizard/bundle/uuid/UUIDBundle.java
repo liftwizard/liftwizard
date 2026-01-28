@@ -44,7 +44,7 @@ public class UUIDBundle implements ConfiguredBundle<UUIDSupplierFactoryProvider>
 	private void runWithMdc(UUIDSupplierFactoryProvider configuration, @Nonnull Environment environment) {
 		UUIDSupplierFactory uuidSupplierFactory = configuration.getUuidSupplierFactory();
 		Supplier<UUID> uuidSupplier = uuidSupplierFactory.createUUIDSupplier();
-		UUIDBinder uuidBinder = new UUIDBinder(uuidSupplier);
+		var uuidBinder = new UUIDBinder(uuidSupplier);
 		environment.jersey().register(uuidBinder);
 	}
 }

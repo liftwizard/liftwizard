@@ -76,7 +76,7 @@ public class ReladomoRollbackCommand<T extends Configuration> extends Environmen
 
 		LOGGER.info("Starting temporal rollback to: {}", targetDate);
 
-		ReladomoTemporalRollback rollback = new ReladomoTemporalRollback(targetDate);
+		var rollback = new ReladomoTemporalRollback(targetDate);
 		rollback.rollbackAllTables();
 
 		LOGGER.info("Temporal rollback completed successfully");

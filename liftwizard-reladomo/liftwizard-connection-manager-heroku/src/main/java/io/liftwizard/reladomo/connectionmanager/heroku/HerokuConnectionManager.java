@@ -45,7 +45,7 @@ public final class HerokuConnectionManager implements SourcelessConnectionManage
 
 	@Nonnull
 	private XAConnectionManager createXaConnectionManager() {
-		XAConnectionManager connectionManager = new XAConnectionManager();
+		var connectionManager = new XAConnectionManager();
 		connectionManager.setDriverClassName("org.postgresql.Driver");
 		connectionManager.setMaxWait(500);
 		connectionManager.setJdbcConnectionString(System.getenv("JDBC_DATABASE_URL"));

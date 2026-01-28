@@ -142,7 +142,7 @@ public class CommonPoolHealthCheck extends HealthCheck {
 			String threadName = badThreadInfo.getThreadName();
 			String stackTraceString = this.getStackTraceString(badThreadInfo.getStackTrace());
 
-			try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
+			try (var mdc = new MultiMDCCloseable()) {
 				mdc.put("threadState", threadState.name());
 				mdc.put("threadName", threadName);
 				mdc.put("stackTrace", stackTraceString);

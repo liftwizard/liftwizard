@@ -40,9 +40,7 @@ public class NoopScheduledExecutorServiceFactory implements ScheduledExecutorSer
 	@JsonIgnore
 	public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
 		ScheduledExecutorService scheduledExecutorService = environment.scheduledExecutorService("noop", true).build();
-		NoopScheduledExecutorService noopScheduledExecutorService = new NoopScheduledExecutorService(
-			scheduledExecutorService
-		);
+		var noopScheduledExecutorService = new NoopScheduledExecutorService(scheduledExecutorService);
 		return new InstrumentedScheduledExecutorService(noopScheduledExecutorService, metricRegistry, "noop");
 	}
 }

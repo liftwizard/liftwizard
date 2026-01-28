@@ -90,7 +90,7 @@ public class ServerLoggingFilter implements Filter {
 
 		Instant startTime = this.clock.instant();
 
-		StructuredArguments structuredArguments = new StructuredArguments();
+		var structuredArguments = new StructuredArguments();
 		request.setAttribute("structuredArguments", structuredArguments);
 
 		this.addInitialRequestAttributes(structuredArguments, httpServletRequest);
@@ -125,19 +125,19 @@ public class ServerLoggingFilter implements Filter {
 		http.setContextPath(httpServletRequest.getContextPath());
 		http.setRemoteUser(httpServletRequest.getRemoteUser());
 
-		StructuredArgumentsPath path = new StructuredArgumentsPath(
+		var path = new StructuredArgumentsPath(
 			httpServletRequest.getRequestURL().toString(),
 			httpServletRequest.getRequestURI()
 		);
 		http.setPath(path);
 
-		StructuredArgumentsClient client = new StructuredArgumentsClient(
+		var client = new StructuredArgumentsClient(
 			httpServletRequest.getRemoteAddr(),
 			httpServletRequest.getRemoteHost(),
 			httpServletRequest.getRemotePort()
 		);
 		http.setClient(client);
-		StructuredArgumentsServer server = new StructuredArgumentsServer(
+		var server = new StructuredArgumentsServer(
 			httpServletRequest.getScheme(),
 			httpServletRequest.getServerName(),
 			httpServletRequest.getServerPort()

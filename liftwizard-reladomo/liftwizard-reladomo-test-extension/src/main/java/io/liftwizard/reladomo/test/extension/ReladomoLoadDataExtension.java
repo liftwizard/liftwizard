@@ -85,7 +85,7 @@ public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachC
 
 	private void loadTestData(String testDataFileName) throws ReflectiveOperationException {
 		LOGGER.debug("Loading test data from file: {}", testDataFileName);
-		UtcMithraTestDataParser parser = new UtcMithraTestDataParser(testDataFileName);
+		var parser = new UtcMithraTestDataParser(testDataFileName);
 		List<MithraParsedData> parsedDataList = parser.getResults();
 
 		for (MithraParsedData mithraParsedData : parsedDataList) {
