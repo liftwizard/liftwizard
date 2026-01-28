@@ -42,7 +42,7 @@ public class UtcMithraTestDataParser extends MithraTestDataParser {
 
 	@Override
 	protected void addNewMithraParsedData() {
-		UtcMithraParsedData utcParsedData = new UtcMithraParsedData();
+		var utcParsedData = new UtcMithraParsedData();
 		this.setCurrentParsedData(utcParsedData);
 		this.getResults().add(utcParsedData);
 	}

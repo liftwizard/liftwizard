@@ -94,7 +94,7 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 
 	@Override
 	public void execute() {
-		File generatedOutputDirectory = new File(this.generatedResourcesDirectory, this.outputDirectory);
+		var generatedOutputDirectory = new File(this.generatedResourcesDirectory, this.outputDirectory);
 
 		if (!generatedOutputDirectory.exists()) {
 			generatedOutputDirectory.mkdirs();
@@ -109,7 +109,7 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 
 			this.deleteLogFiles(generatedOutputDirectory);
 
-			Resource resource = new Resource();
+			var resource = new Resource();
 			resource.setDirectory(this.generatedResourcesDirectory.getAbsolutePath());
 
 			LOGGER.debug("Adding resource directory: {}", this.generatedResourcesDirectory.getAbsolutePath());

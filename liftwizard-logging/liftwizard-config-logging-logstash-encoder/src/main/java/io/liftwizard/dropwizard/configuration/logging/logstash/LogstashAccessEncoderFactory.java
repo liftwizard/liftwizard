@@ -77,12 +77,11 @@ public class LogstashAccessEncoderFactory {
 	}
 
 	public Encoder<IAccessEvent> build(TimeZone timeZone) {
-		LogstashAccessEncoder encoder = new LogstashAccessEncoder();
+		var encoder = new LogstashAccessEncoder();
 		encoder.setIncludeContext(this.includeContext);
 
 		if (this.customFields != null && !this.customFields.isEmpty()) {
-			GlobalCustomFieldsJsonProvider<IAccessEvent> globalCustomFieldsProvider =
-				new GlobalCustomFieldsJsonProvider<>();
+			var globalCustomFieldsProvider = new GlobalCustomFieldsJsonProvider<IAccessEvent>();
 			globalCustomFieldsProvider.setCustomFieldsNode(this.customFields);
 			encoder.getProviders().addProvider(globalCustomFieldsProvider);
 		}

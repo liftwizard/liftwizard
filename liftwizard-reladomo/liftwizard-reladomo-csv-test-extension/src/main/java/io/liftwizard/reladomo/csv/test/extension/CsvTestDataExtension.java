@@ -67,7 +67,7 @@ public class CsvTestDataExtension implements BeforeEachCallback, AfterEachCallba
 	private void loadCsvTestData(String csvFileName) throws ReflectiveOperationException {
 		LOGGER.debug("Loading CSV test data from file: {}", csvFileName);
 
-		CsvTestDataParser parser = new CsvTestDataParser(csvFileName);
+		var parser = new CsvTestDataParser(csvFileName);
 		String className = parser.getClassName();
 		List<Attribute<?, ?>> attributes = parser.getAttributes();
 		List<MithraDataObject> dataObjects = parser.getDataObjects();

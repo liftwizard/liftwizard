@@ -42,8 +42,8 @@ public final class AnsiColorStrip {
 	public static String strip(String input, Charset charset) {
 		byte[] bytes = input.getBytes(charset);
 		try (
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			AnsiOutputStream ansiOutputStream = new AnsiOutputStream(
+			var byteArrayOutputStream = new ByteArrayOutputStream();
+			var ansiOutputStream = new AnsiOutputStream(
 				byteArrayOutputStream,
 				null,
 				AnsiMode.Strip,

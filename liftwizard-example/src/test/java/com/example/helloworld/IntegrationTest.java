@@ -120,7 +120,7 @@ class IntegrationTest {
 
 	@Test
 	void postPerson() {
-		PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
+		var person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
 		PersonDTO newPerson = this.postPerson(person);
 		assertThat(newPerson.getId()).isNotNull();
 		assertThat(newPerson.getFullName()).isEqualTo(person.getFullName());
@@ -138,7 +138,7 @@ class IntegrationTest {
 	}
 
 	private void testRenderingPerson(String viewName) {
-		PersonDTO person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
+		var person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
 		PersonDTO newPerson = this.postPerson(person);
 		String url = "http://localhost:%d/people/%d/%s".formatted(
 			this.dropwizardAppExtension.getLocalPort(),

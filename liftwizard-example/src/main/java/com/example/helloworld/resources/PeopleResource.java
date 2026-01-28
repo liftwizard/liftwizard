@@ -27,7 +27,7 @@ public class PeopleResource {
 	@POST
 	@UnitOfWork
 	public PersonDTO createPerson(PersonDTO personDTO) {
-		Person person = new Person();
+		var person = new Person();
 		person.setFullName(personDTO.getFullName());
 		person.setJobTitle(personDTO.getJobTitle());
 		Person result = this.peopleDAO.create(person);

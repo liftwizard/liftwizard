@@ -52,7 +52,7 @@ public class MDCDataFetcher<T> implements DataFetcher<T> {
 	public T get(DataFetchingEnvironment environment) throws Exception {
 		String dataFetcherName = this.getDataFetcherName();
 
-		try (MultiMDCCloseable mdc = new MultiMDCCloseable()) {
+		try (var mdc = new MultiMDCCloseable()) {
 			mdc.put("liftwizard.graphql.executionId", this.executionId);
 			mdc.put("liftwizard.graphql.field.path", this.path);
 			mdc.put("liftwizard.graphql.field.parentType", this.parentTypeName);

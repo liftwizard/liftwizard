@@ -85,7 +85,7 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 
 		int maxEntitySize = Math.toIntExact(factory.getMaxEntitySize().toBytes());
 
-		LoggingConfig loggingConfig = new LoggingConfig(
+		var loggingConfig = new LoggingConfig(
 			factory.isLogRequests(),
 			factory.isLogRequestBodies(),
 			factory.isLogResponses(),

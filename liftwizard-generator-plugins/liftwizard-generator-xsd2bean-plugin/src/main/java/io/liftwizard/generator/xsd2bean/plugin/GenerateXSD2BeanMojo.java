@@ -151,7 +151,7 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 
 	@Nonnull
 	private FreyaXmlGenerator getFreyaXmlGenerator(File schemaFile) {
-		FreyaXmlGenerator generator = new FreyaXmlGenerator();
+		var generator = new FreyaXmlGenerator();
 		generator.setLogger(new FreyaMavenLogger(this.getLog()));
 
 		generator.setDestinationPackage(this.destinationPackage);

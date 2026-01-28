@@ -50,7 +50,7 @@ class NetworkIsolationTest {
 		assertThatThrownBy(() -> {
 			try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 				// Use IP address to skip DNS resolution and ensure consistent cross-platform behavior
-				HttpGet request = new HttpGet("http://8.8.8.8");
+				var request = new HttpGet("http://8.8.8.8");
 				httpClient.execute(request, (response) -> EntityUtils.toString(response.getEntity()));
 			}
 		})

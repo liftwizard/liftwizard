@@ -39,7 +39,7 @@ public class ErrorCollectorExtension implements AfterEachCallback {
 			return;
 		}
 
-		MultipleFailuresError multipleFailuresError = new MultipleFailuresError(null, this.errors);
+		var multipleFailuresError = new MultipleFailuresError(null, this.errors);
 		this.errors.forEach(multipleFailuresError::addSuppressed);
 		throw multipleFailuresError;
 	}

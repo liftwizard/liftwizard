@@ -28,7 +28,7 @@ public class AdminLoginService extends AbstractLoginService {
 
 	public AdminLoginService(String userName, String password) {
 		this.adminUserName = Objects.requireNonNull(userName);
-		Password credential = new Password(Objects.requireNonNull(password));
+		var credential = new Password(Objects.requireNonNull(password));
 		this.adminPrincipal = new UserPrincipal(userName, credential);
 	}
 

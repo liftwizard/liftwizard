@@ -86,7 +86,7 @@ public class LogstashAccessConsoleAppenderFactory extends AbstractAppenderFactor
 	}
 
 	private OutputStreamAppender<IAccessEvent> appender(Context context) {
-		ConsoleAppender<IAccessEvent> appender = new ConsoleAppender<>();
+		var appender = new ConsoleAppender<IAccessEvent>();
 		appender.setName("console-access-logstash-appender");
 		appender.setContext(context);
 		appender.setTarget(this.target.get());

@@ -43,7 +43,7 @@ public final class H2InMemoryConnectionManager implements SourcelessConnectionMa
 
 	@Nonnull
 	private static DataSource createDataSource() {
-		PoolProperties poolProperties = new PoolProperties();
+		var poolProperties = new PoolProperties();
 		poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
 		poolProperties.setUrl("jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER");
 		poolProperties.setUsername("sa");
@@ -60,7 +60,7 @@ public final class H2InMemoryConnectionManager implements SourcelessConnectionMa
 		poolProperties.setMinEvictableIdleTimeMillis(60000);
 		poolProperties.setName("Reladomo default connection pool");
 
-		DataSource dataSource = new DataSource();
+		var dataSource = new DataSource();
 		dataSource.setPoolProperties(poolProperties);
 
 		return dataSource;

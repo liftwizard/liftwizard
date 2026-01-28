@@ -54,7 +54,7 @@ public class HeaderAuthenticator implements Authenticator<String, HeaderPrincipa
 
 		if (this.headerPrefix == null) {
 			MDC.put(HEADER_PRINCIPAL_NAME, headerValue);
-			HeaderPrincipal principal = new HeaderPrincipal(headerValue);
+			var principal = new HeaderPrincipal(headerValue);
 			return Optional.of(principal);
 		}
 
@@ -70,7 +70,7 @@ public class HeaderAuthenticator implements Authenticator<String, HeaderPrincipa
 		}
 
 		MDC.put(HEADER_PRINCIPAL_NAME, principalName);
-		HeaderPrincipal principal = new HeaderPrincipal(principalName);
+		var principal = new HeaderPrincipal(principalName);
 		return Optional.of(principal);
 	}
 }

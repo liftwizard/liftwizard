@@ -38,7 +38,7 @@ class JsonPrettyPrinterTest {
 	private static ObjectMapper getObjectMapper() {
 		PrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
 
-		ObjectMapper objectMapper = new ObjectMapper();
+		var objectMapper = new ObjectMapper();
 		objectMapper.setDefaultPrettyPrinter(jsonPrettyPrinter);
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		return objectMapper;

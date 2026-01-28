@@ -74,7 +74,7 @@ public class LiquibaseStatement extends Statement {
 
 	private Liquibase openLiquibase(Connection connection) throws LiquibaseException {
 		Database database = this.createDatabase(connection);
-		Liquibase liquibase = new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
+		var liquibase = new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
 		liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
 		return liquibase;
 	}

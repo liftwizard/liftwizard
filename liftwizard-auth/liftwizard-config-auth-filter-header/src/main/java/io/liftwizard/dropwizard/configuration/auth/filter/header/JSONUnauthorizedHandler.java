@@ -29,7 +29,7 @@ public class JSONUnauthorizedHandler implements UnauthorizedHandler {
 	@Override
 	public Response buildResponse(String headerName, String prefixName) {
 		String message = "Single value header '%s' with prefix '%s' is required.".formatted(headerName, prefixName);
-		ErrorMessage errorMessage = new ErrorMessage(Status.UNAUTHORIZED.getStatusCode(), message);
+		var errorMessage = new ErrorMessage(Status.UNAUTHORIZED.getStatusCode(), message);
 		return Response.status(errorMessage.getCode())
 			.header(HttpHeaders.WWW_AUTHENTICATE, headerName)
 			.type(MediaType.APPLICATION_JSON_TYPE)

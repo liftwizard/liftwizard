@@ -70,12 +70,12 @@ public class FileMatchRule extends AbstractMatchRule {
 						uri,
 						actualString
 					);
-					AssertionError assertionError = new AssertionError(detailMessage);
+					var assertionError = new AssertionError(detailMessage);
 					this.addError(assertionError);
 					return;
 				}
 
-				File file = new File(uri);
+				var file = new File(uri);
 				this.writeStringToFile(resourceClassPathLocation, actualString, file);
 			}
 

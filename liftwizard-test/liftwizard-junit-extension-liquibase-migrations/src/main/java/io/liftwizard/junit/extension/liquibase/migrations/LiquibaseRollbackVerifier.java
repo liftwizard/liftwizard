@@ -130,7 +130,7 @@ public final class LiquibaseRollbackVerifier {
 	}
 
 	private static Liquibase createLiquibase(String migrationsFile, Database database) throws LiquibaseException {
-		Liquibase liquibase = new Liquibase(migrationsFile, new ClassLoaderResourceAccessor(), database);
+		var liquibase = new Liquibase(migrationsFile, new ClassLoaderResourceAccessor(), database);
 		liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
 		return liquibase;
 	}

@@ -100,7 +100,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 			return "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(uri, fileContents);
 		}
 
-		File file = new File(uri);
+		var file = new File(uri);
 		this.writeStringToFile(resourceClassPathLocation, fileContents, file);
 
 		return "Writing expected file to: %s%n".formatted(uri);
@@ -117,7 +117,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 			destinationFile.getParentFile().mkdirs();
 		}
 
-		try (PrintWriter printWriter = new PrintWriter(destinationFile, StandardCharsets.UTF_8)) {
+		try (var printWriter = new PrintWriter(destinationFile, StandardCharsets.UTF_8)) {
 			printWriter.print(fileContents);
 		}
 	}

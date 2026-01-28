@@ -97,7 +97,7 @@ public class CsvTestDataParser {
 
 			try (
 				Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-				CSVParser csvParser = new CSVParser(
+				var csvParser = new CSVParser(
 					reader,
 					CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).setTrim(true).build()
 				)

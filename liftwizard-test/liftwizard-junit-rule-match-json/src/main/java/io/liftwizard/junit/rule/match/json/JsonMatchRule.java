@@ -93,16 +93,16 @@ public class JsonMatchRule extends AbstractMatchRule {
 						uri,
 						actualString
 					);
-					AssertionError assertionError = new AssertionError(detailMessage);
+					var assertionError = new AssertionError(detailMessage);
 					this.addError(assertionError);
 					return;
 				}
 
-				File file = new File(uri);
+				var file = new File(uri);
 				this.writeStringToFile(resourceClassPathLocation, actualString, file);
 
 				String detailMessage = "Writing expected file to: %s%n%s".formatted(uri, message);
-				AssertionError assertionError = new AssertionError(detailMessage);
+				var assertionError = new AssertionError(detailMessage);
 				this.addError(assertionError);
 			}
 		}
@@ -136,7 +136,7 @@ public class JsonMatchRule extends AbstractMatchRule {
 			return true;
 		} catch (JacksonException e) {
 			String detailMessage = "Invalid JSON in %s:%n%s".formatted(uri, expectedStringFromFile);
-			AssertionError assertionError = new AssertionError(detailMessage, e);
+			var assertionError = new AssertionError(detailMessage, e);
 			this.addError(assertionError);
 			return false;
 		}

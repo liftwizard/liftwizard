@@ -45,7 +45,7 @@ public final class FileSlurper {
 	}
 
 	public static String slurp(@Nonnull InputStream inputStream, Charset charset) {
-		try (Scanner scanner = new Scanner(inputStream, charset)) {
+		try (var scanner = new Scanner(inputStream, charset)) {
 			return scanner.useDelimiter("\\A").next();
 		}
 	}

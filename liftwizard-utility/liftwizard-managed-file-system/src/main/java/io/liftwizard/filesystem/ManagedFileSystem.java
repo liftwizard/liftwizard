@@ -70,7 +70,7 @@ public final class ManagedFileSystem {
 	}
 
 	private static Path getFile(URI uri) {
-		File file = new File(uri);
+		var file = new File(uri);
 		return file.toPath();
 	}
 

@@ -86,7 +86,7 @@ public class LogstashConsoleAppenderFactory extends AbstractAppenderFactory<ILog
 	}
 
 	private OutputStreamAppender<ILoggingEvent> appender(Context context) {
-		ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
+		var appender = new ConsoleAppender<ILoggingEvent>();
 		appender.setName("console-logstash-appender");
 		appender.setContext(context);
 		appender.setTarget(this.target.get());

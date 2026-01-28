@@ -39,7 +39,7 @@ class ExecutorServiceFactoryTest {
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
 	private <T> T getConfiguredType(Class<T> klass, String path) throws IOException, ConfigurationException {
-		JsonConfigurationFactory<T> factory = new JsonConfigurationFactory<>(
+		var factory = new JsonConfigurationFactory<T>(
 			klass,
 			Validators.newValidator(),
 			ExecutorServiceFactoryTest.newObjectMapper(),

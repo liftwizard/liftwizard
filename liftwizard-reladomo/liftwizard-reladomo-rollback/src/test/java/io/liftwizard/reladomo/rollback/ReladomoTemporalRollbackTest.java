@@ -73,7 +73,7 @@ class ReladomoTemporalRollbackTest {
 		assertThat(allPersonsBefore).hasSize(3);
 
 		// Perform rollback to June 1, 2024
-		ReladomoTemporalRollback rollback = new ReladomoTemporalRollback(ROLLBACK_DATE, INFINITY);
+		var rollback = new ReladomoTemporalRollback(ROLLBACK_DATE, INFINITY);
 		rollback.rollbackAllTables();
 
 		// Clear cache to ensure we read from database
@@ -112,7 +112,7 @@ class ReladomoTemporalRollbackTest {
 		MithraList<Person> allPersonsBefore = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
 		int countBefore = allPersonsBefore.size();
 
-		ReladomoTemporalRollback rollback = new ReladomoTemporalRollback(futureDate, INFINITY);
+		var rollback = new ReladomoTemporalRollback(futureDate, INFINITY);
 		rollback.rollbackAllTables();
 
 		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
