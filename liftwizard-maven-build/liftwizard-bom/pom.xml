@@ -602,6 +602,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-reladomo-csv-test-extension</artifactId>
+                <version>2.1.42-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-graphql-data-fetcher</artifactId>
                 <version>2.1.42-SNAPSHOT</version>
             </dependency>
