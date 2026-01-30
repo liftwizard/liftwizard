@@ -53,8 +53,6 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamFilterCollectToSelect
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamMapCollectToCollect
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToListToToList
-    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamGroupingByToGroupBy
-    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamGroupingByCountingToCountBy
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamJoiningToMakeString
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSelectBeforeSortThisRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECListConstructorToFactory
