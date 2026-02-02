@@ -118,7 +118,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
+                <version>3.15.0</version>
                 <configuration>
                     <!-- https://maven.apache.org/plugins-archives/maven-compiler-plugin-3.8.1/compile-mojo.html#parameters -->
                     <!-- https://stackoverflow.com/a/44075684/ -->
