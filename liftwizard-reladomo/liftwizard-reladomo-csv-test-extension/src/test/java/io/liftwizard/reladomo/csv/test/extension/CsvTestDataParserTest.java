@@ -99,6 +99,9 @@ class CsvTestDataParserTest {
 
 	@Test
 	void populatesDataObjectsWithCorrectValues() {
+		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
+		List<MithraDataObject> dataObjects = parser.getDataObjects();
+
 		var expectedAlice = new PersonData();
 		expectedAlice.setId(1L);
 		expectedAlice.setFullName("Alice Smith");
@@ -112,9 +115,6 @@ class CsvTestDataParserTest {
 		expectedBob.setJobTitle("Manager");
 		expectedBob.setSystemFrom(Timestamp.from(Instant.parse("2024-01-15T00:00:00.000Z")));
 		expectedBob.setSystemTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
-
-		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
-		List<MithraDataObject> dataObjects = parser.getDataObjects();
 
 		assertThat(dataObjects)
 			.usingRecursiveFieldByFieldElementComparator()
