@@ -16,7 +16,6 @@
             defaultIfNotSpecified="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
             futureExpiringRowsExist="true"
             isProcessingDate="true"
-            timezoneConversion="convert-to-utc"
             finalGetter="true"
             fromColumnName="system_from"
             toColumnName="system_to" />
