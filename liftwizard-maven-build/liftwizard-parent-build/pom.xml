@@ -163,7 +163,7 @@
                     <plugin>
                         <groupId>org.testingisdocumenting.znai</groupId>
                         <artifactId>znai-maven-plugin</artifactId>
-                        <version>1.85.2</version>
+                        <version>1.85.3</version>
                         <configuration>
                             <docId>docs</docId>
                             <sourceRoot>${project.basedir}/src/main/znai</sourceRoot>
