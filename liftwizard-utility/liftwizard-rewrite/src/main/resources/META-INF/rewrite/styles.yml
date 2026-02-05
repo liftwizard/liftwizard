@@ -25,3 +25,12 @@ styleConfigs:
               - "import all other imports"
               - "<blank line>"
               - "import static all other imports"
+    - org.openrewrite.java.style.SpacesStyle:
+          other:
+              beforeComma: false
+              afterComma: true
+              beforeForSemicolon: false
+              afterForSemicolon: true
+              afterTypeCast: true
+              beforeColonInForEach: true
+              insideOneLineEnumBraces: false
