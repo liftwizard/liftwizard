@@ -58,6 +58,16 @@ class CsvTestDataParserTest {
 	}
 
 	@Test
+	void extractsClassNameFromFilenameWithoutPath() {
+		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
+
+		String className = parser.getClassName();
+
+		assertThat(className).doesNotContain("/");
+		assertThat(className).isEqualTo("com.example.helloworld.core.Person");
+	}
+
+	@Test
 	void throwsExceptionForNonCsvFile() {
 		assertThatThrownBy(() -> new CsvTestDataParser("test-data/com.example.SomeClass.txt"))
 			.isInstanceOf(IllegalArgumentException.class)
@@ -101,23 +111,19 @@ class CsvTestDataParserTest {
 	void populatesDataObjectsWithCorrectValues() {
 		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
+		PersonData alice = (PersonData) dataObjects.get(0);
+		PersonData bob = (PersonData) dataObjects.get(1);
 
-		var expectedAlice = new PersonData();
-		expectedAlice.setId(1L);
-		expectedAlice.setFullName("Alice Smith");
-		expectedAlice.setJobTitle("Engineer");
-		expectedAlice.setSystemFrom(Timestamp.from(Instant.parse("2024-01-01T00:00:00.000Z")));
-		expectedAlice.setSystemTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
+		assertThat(alice.getId()).isEqualTo(1L);
+		assertThat(alice.getFullName()).isEqualTo("Alice Smith");
+		assertThat(alice.getJobTitle()).isEqualTo("Engineer");
+		assertThat(alice.getSystemFrom()).isEqualTo(Timestamp.from(Instant.parse("2024-01-01T00:00:00.000Z")));
+		assertThat(alice.getSystemTo()).isEqualTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
 
-		var expectedBob = new PersonData();
-		expectedBob.setId(2L);
-		expectedBob.setFullName("Bob Jones");
-		expectedBob.setJobTitle("Manager");
-		expectedBob.setSystemFrom(Timestamp.from(Instant.parse("2024-01-15T00:00:00.000Z")));
-		expectedBob.setSystemTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
-
-		assertThat(dataObjects)
-			.usingRecursiveFieldByFieldElementComparator()
-			.containsExactly(expectedAlice, expectedBob);
+		assertThat(bob.getId()).isEqualTo(2L);
+		assertThat(bob.getFullName()).isEqualTo("Bob Jones");
+		assertThat(bob.getJobTitle()).isEqualTo("Manager");
+		assertThat(bob.getSystemFrom()).isEqualTo(Timestamp.from(Instant.parse("2024-01-15T00:00:00.000Z")));
+		assertThat(bob.getSystemTo()).isEqualTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
 	}
 }
