@@ -150,8 +150,6 @@ public class ECStreamFilterCollectToSelect extends Recipe {
 				return methodInvocation;
 			}
 
-			Expression predicate = filterArguments.get(0);
-
 			J.Identifier selectMethodName = methodInvocation.getName().withSimpleName("select");
 
 			if (isToSet) {
