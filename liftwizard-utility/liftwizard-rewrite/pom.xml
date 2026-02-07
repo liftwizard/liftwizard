@@ -93,13 +93,13 @@
         <dependency>
             <groupId>org.eclipse.collections</groupId>
             <artifactId>eclipse-collections-api</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.collections</groupId>
             <artifactId>eclipse-collections</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -228,6 +228,7 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                         <arg>-Arewrite.generatedAnnotation=jakarta.annotation.Generated</arg>
+                        <arg>-Arewrite.javaParserClasspathFrom=resources</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
@@ -361,4 +362,37 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!--
+            When you want to generate a TypeTable for use in JavaParser for JavaTemplate, run the following command:
+            mvn -f liftwizard-utility/liftwizard-rewrite/pom.xml generate-resources -Ptypetable
+        -->
+        <profile>
+            <id>typetable</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openrewrite.maven</groupId>
+                        <artifactId>rewrite-maven-plugin</artifactId>
+                        <version>6.22.1</version>
+                        <configuration>
+                            <recipeArtifactCoordinates>
+                                org.eclipse.collections:eclipse-collections-api:13.0.0,
+                                org.eclipse.collections:eclipse-collections:13.0.0,
+                            </recipeArtifactCoordinates>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>typetable</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
