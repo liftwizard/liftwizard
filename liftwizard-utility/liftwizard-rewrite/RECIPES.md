@@ -6,7 +6,7 @@ For getting started instructions, see [README.md](README.md).
 
 ## Composite Recipes
 
-Seven composite recipes are available:
+Eight composite recipes are available:
 
 | Composite Recipe                                                                             | Description                                                    |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -17,6 +17,7 @@ Seven composite recipes are available:
 | `io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption`                       | Migrate from Java Collections Framework to Eclipse Collections |
 | `io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval`                        | Replace Eclipse Collections APIs with Java alternatives        |
 | `io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe` | Adoption patterns that may change semantics with nulls         |
+| `io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration`                  | Migrate Dropwizard JUnit 4 testing rules to JUnit 5 extensions |
 
 ## Best Practices Recipes (General Java)
 
@@ -592,3 +593,66 @@ Replace detect() != null patterns with anySatisfy():
 - `list.detect(predicate) == null` → `list.noneSatisfy(predicate)`
 
 **Warning**: This transformation changes semantics when the collection contains null values. The original pattern distinguishes between "found null" and "not found", while anySatisfy/noneSatisfy only check predicate satisfaction.
+
+## Dropwizard Testing Migration Recipes
+
+The `io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration` composite recipe migrates Dropwizard JUnit 4 testing rules to their JUnit 5 extension equivalents. Each sub-recipe changes the type, replaces `@ClassRule`/`@Rule` with `@RegisterExtension`, and adds `@ExtendWith(DropwizardExtensionsSupport.class)` to the test class.
+
+### DropwizardAppRuleToLiftwizardAppExtension
+
+Replace `DropwizardAppRule` with Liftwizard's `LiftwizardAppExtension`:
+
+```java
+// Before
+@ClassRule
+public static DropwizardAppRule<MyConfig> RULE =
+        new DropwizardAppRule<>(MyApp.class, "config.yml");
+
+// After
+@ExtendWith(DropwizardExtensionsSupport.class)
+class MyTest {
+    @RegisterExtension
+    public static LiftwizardAppExtension<MyConfig> RULE =
+            new LiftwizardAppExtension<>(MyApp.class, "config.yml");
+}
+```
+
+### DropwizardClientRuleToExtension
+
+Replace `DropwizardClientRule` with `DropwizardClientExtension`:
+
+```java
+// Before
+@ClassRule
+public static DropwizardClientRule RULE =
+        new DropwizardClientRule(new MyResource());
+
+// After
+@ExtendWith(DropwizardExtensionsSupport.class)
+class MyTest {
+    @RegisterExtension
+    public static DropwizardClientExtension RULE =
+            new DropwizardClientExtension(new MyResource());
+}
+```
+
+### ResourceTestRuleToExtension
+
+Replace `ResourceTestRule` with `ResourceExtension`:
+
+```java
+// Before
+@ClassRule
+public static ResourceTestRule RESOURCES = ResourceTestRule.builder()
+        .addResource(new MyResource())
+        .build();
+
+// After
+@ExtendWith(DropwizardExtensionsSupport.class)
+class MyTest {
+    @RegisterExtension
+    public static ResourceExtension RESOURCES = ResourceExtension.builder()
+            .addResource(new MyResource())
+            .build();
+}
+```
