@@ -100,7 +100,7 @@ public class IterateToArrayIterate extends Recipe {
 					.contextSensitive()
 					.javaParser(
 						JavaParser.fromJavaVersion()
-							.classpath("eclipse-collections")
+							.classpathFromResources(ctx, "eclipse-collections")
 							.dependsOn(
 								"""
 								package org.eclipse.collections.impl.utility;
