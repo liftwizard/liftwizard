@@ -70,6 +70,14 @@ class StringFormatToParameterizedLoggingTest implements RewriteTest {
 					        LOGGER.info(MARKER, String.format("Message %s", message));
 					        LOGGER.error(String.format("Failed: %s", message), exception);
 					        LOGGER.error(MARKER, String.format("Failed: %s", message), exception);
+
+					        LOGGER.info(String.format("User %s"
+					                + " logged in", username));
+					        LOGGER.info(String.format("isHTML"
+					                + " '%s', body: %s", username, message));
+					        LOGGER.info(String.format("part1"
+					                + " part2"
+					                + " %s", username));
 					    }
 					}""",
 					"""
@@ -107,6 +115,10 @@ class StringFormatToParameterizedLoggingTest implements RewriteTest {
 					        LOGGER.info(MARKER, "Message {}", message);
 					        LOGGER.error("Failed: {}", message, exception);
 					        LOGGER.error(MARKER, "Failed: {}", message, exception);
+
+					        LOGGER.info("User {} logged in", username);
+					        LOGGER.info("isHTML '{}', body: {}", username, message);
+					        LOGGER.info("part1 part2 {}", username);
 					    }
 					}"""
 				)

@@ -61,6 +61,14 @@ class MessageFormatToParameterizedLoggingTest implements RewriteTest {
 					        logger.info(marker, MessageFormat.format("Message {0}", message));
 					        logger.error(MessageFormat.format("Failed: {0}", message), exception);
 					        logger.error(marker, MessageFormat.format("Failed: {0}", message), exception);
+
+					        logger.info(MessageFormat.format("User {0}"
+					                + " logged in", username));
+					        logger.info(MessageFormat.format("isHTML"
+					                + " ''{0}'', body: {1}", username, message));
+					        logger.info(MessageFormat.format("part1"
+					                + " part2"
+					                + " {0}", username));
 					    }
 					}""",
 					"""
@@ -89,6 +97,10 @@ class MessageFormatToParameterizedLoggingTest implements RewriteTest {
 					        logger.info(marker, "Message {}", message);
 					        logger.error("Failed: {}", message, exception);
 					        logger.error(marker, "Failed: {}", message, exception);
+
+					        logger.info("User {} logged in", username);
+					        logger.info("isHTML ''{}'', body: {}", username, message);
+					        logger.info("part1 part2 {}", username);
 					    }
 					}"""
 				)

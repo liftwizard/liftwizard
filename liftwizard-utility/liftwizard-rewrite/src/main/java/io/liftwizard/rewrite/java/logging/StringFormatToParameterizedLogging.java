@@ -79,11 +79,12 @@ public class StringFormatToParameterizedLogging extends Recipe {
 			}
 
 			List<Expression> formatArgs = formatCall.getArguments();
-			if (formatArgs.isEmpty() || !(formatArgs.get(0) instanceof J.Literal formatLiteral)) {
+			if (formatArgs.isEmpty()) {
 				return m;
 			}
 
-			if (formatLiteral.getValue() == null || !(formatLiteral.getValue() instanceof String formatString)) {
+			String formatString = this.extractFormatString(formatArgs.get(0));
+			if (formatString == null) {
 				return m;
 			}
 
@@ -144,6 +145,23 @@ public class StringFormatToParameterizedLogging extends Recipe {
 			}
 
 			return "String".equals(id.getSimpleName());
+		}
+
+		private String extractFormatString(Expression expr) {
+			if (expr instanceof J.Literal literal) {
+				if (literal.getValue() instanceof String s) {
+					return s;
+				}
+				return null;
+			}
+			if (expr instanceof J.Binary binary && binary.getOperator() == J.Binary.Type.Addition) {
+				String left = this.extractFormatString(binary.getLeft());
+				String right = this.extractFormatString(binary.getRight());
+				if (left != null && right != null) {
+					return left + right;
+				}
+			}
+			return null;
 		}
 
 		private boolean isSimpleFormatString(String format) {
