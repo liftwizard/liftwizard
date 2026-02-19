@@ -130,7 +130,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports("org.eclipse.collections.api.factory." + this.targetFactorySimpleName)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api", "eclipse-collections"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api", "eclipse-collections"))
 				.build();
 
 			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
