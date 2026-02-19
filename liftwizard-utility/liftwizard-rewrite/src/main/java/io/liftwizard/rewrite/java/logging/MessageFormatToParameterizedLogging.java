@@ -83,11 +83,12 @@ public class MessageFormatToParameterizedLogging extends Recipe {
 			}
 
 			List<Expression> formatArgs = formatCall.getArguments();
-			if (formatArgs.isEmpty() || !(formatArgs.get(0) instanceof J.Literal patternLiteral)) {
+			if (formatArgs.isEmpty()) {
 				return m;
 			}
 
-			if (patternLiteral.getValue() == null || !(patternLiteral.getValue() instanceof String patternString)) {
+			String patternString = this.extractFormatString(formatArgs.get(0));
+			if (patternString == null) {
 				return m;
 			}
 
@@ -166,6 +167,23 @@ public class MessageFormatToParameterizedLogging extends Recipe {
 			}
 
 			return false;
+		}
+
+		private String extractFormatString(Expression expr) {
+			if (expr instanceof J.Literal literal) {
+				if (literal.getValue() instanceof String s) {
+					return s;
+				}
+				return null;
+			}
+			if (expr instanceof J.Binary binary && binary.getOperator() == J.Binary.Type.Addition) {
+				String left = this.extractFormatString(binary.getLeft());
+				String right = this.extractFormatString(binary.getRight());
+				if (left != null && right != null) {
+					return left + right;
+				}
+			}
+			return null;
 		}
 
 		private boolean isSimpleMessagePattern(String pattern) {
