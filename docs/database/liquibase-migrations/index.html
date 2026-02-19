@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Liftwizard: Liquibase Migrations</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+<link rel="stylesheet" type="text/css" href="/docs/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/main.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+</head>
+<link rel="shortcut icon" href="/docs/favicon.png"type="image/ico"/>
+<body class="znai-theme theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'znai-theme theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section id="page-content" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<p>Dropwizard ships with a dropwizard migrations bundle The module provides you with a wrapper for Liquibase database refactoring The built in bundle provides Dropwizard Commands for a command line interface to run migrations It does not provide a way to run migrations on application startup That s where Liftwizard comes in To run migrations with Dropwizard you run a command like To run migrations with Liftwizard you run the usual command and Liftwizard will run migrations on startup There are pros and cons of tying migrations to application startup The main pros are that you don t have to remember to run migrations and that they apply to embedded databases in tests The main con is that migrations can take a long time and you may not want to block application startup To turn it on add to the list of registered bundles Change the Configuration class to implement Add a field with type Add the getter setter required by the interface Configuration The requires that you re already using named data sources Add a liquibase section to your json or yaml configuration is an array to allow multiple migrations to different data sources Each dataSourceMigration s must match a dataSource s name in the section If no is specified is the default can be or is the default are an array of Liquibase context tags With this configuration in place migrations will run on application startup dropwizard migrations java jar hello world jar db migrate helloworld yml server LiftwizardLiquibaseMigrationBundle @Override public void initialize Bootstrap&lt;HelloWorldConfiguration&gt; bootstrap bootstrap addBundle new LiftwizardLiquibaseMigrationBundle LiquibaseMigrationFactoryProvider public class HelloWorldConfiguration extends Configuration implements LiquibaseMigrationFactoryProvider other interfaces LiquibaseMigrationFactory private @Valid @NotNull LiquibaseMigrationFactory liquibaseMigrationFactory new LiquibaseMigrationFactory @JsonProperty liquibase @Override public LiquibaseMigrationFactory getLiquibaseMigrationFactory return this liquibaseMigrationFactory @JsonProperty liquibase public void setLiquibaseMigrationFactory LiquibaseMigrationFactory liquibaseMigrationFactory this liquibaseMigrationFactory liquibaseMigrationFactory LiftwizardLiquibaseMigrationBundle dataSourceMigrations dataSourceName dataSources migrationFileName migrations xml migrationFileLocation classpath filesystem classpath contexts</p>
+</article>
+</section>
+<section id="table-of-contents" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<a href="/docs/introduction/liftwizard/">Liftwizard</a>
+</article>
+
+<article>
+<a href="/docs/configuration/environment-variable-substitution/">Environment Variable Substitution</a>
+</article>
+
+<article>
+<a href="/docs/configuration/json5-configuration/">Json5 Configuration</a>
+</article>
+
+<article>
+<a href="/docs/configuration/ConfigLoggingBundle/">ConfigLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/jackson/ObjectMapperBundle/">ObjectMapperBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/JerseyHttpLoggingBundle/">JerseyHttpLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/buffered-logging/">Buffered Logging</a>
+</article>
+
+<article>
+<a href="/docs/logging/filter-factories/">Filter Factories</a>
+</article>
+
+<article>
+<a href="/docs/logging/Slf4jUncaughtExceptionHandlerBundle/">Slf4jUncaughtExceptionHandlerBundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/bundle/">Bundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-logging/">Instrumentation Logging</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-metrics/">Instrumentation Metrics</a>
+</article>
+
+<article>
+<a href="/docs/graphql/data-fetcher-async/">Data Fetcher Async</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-overview/">Reladomo Overview</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-operation-compiler/">Reladomo Operation Compiler</a>
+</article>
+
+<article>
+<a href="/docs/database/named-data-source/">Named Data Source</a>
+</article>
+
+<article>
+<a href="/docs/database/liquibase-migrations/">Liquibase Migrations</a>
+</article>
+
+<article>
+<a href="/docs/auth/dynamic-authentication-and-impersonation/">Dynamic Authentication And Impersonation</a>
+</article>
+
+<article>
+<a href="/docs/testing/testing/">Testing</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-files/">Matching Files</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-json/">Matching Json</a>
+</article>
+
+<article>
+<a href="/docs/maven/maven-best-practices/">Maven Best Practices</a>
+</article>
+
+<article>
+<a href="/docs/maven/minimal-parent/">Minimal Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/profile-parent/">Profile Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/bill-of-materials/">Bill Of Materials</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/temporal-data-overview/">Temporal Data Overview</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/running-example/">Running Example</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/non-destructive-updates/">Non Destructive Updates</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/as-of-queries/">As Of Queries</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/versioning/">Versioning</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/auditing/">Auditing</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/optimistic-locking/">Optimistic Locking</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/diffs/">Diffs</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/maker-checker-workflows/">Maker Checker Workflows</a>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/docs/footer.js"></script>
+<script type="text/javascript" src="/docs/toc.js"></script>
+<script type="text/javascript" src="/docs/assets.js"></script>
+<script type="module" src="/docs/static/__vite-browser-external-8Pss11n5.js"></script>
+<script type="module" src="/docs/static/architecture-U656AL7Q-DjPBJmSV.js"></script>
+<script type="module" src="/docs/static/architectureDiagram-VXUJARFQ-ChBn1xk8.js"></script>
+<script type="module" src="/docs/static/blockDiagram-VD42YOAC-Budi6d17.js"></script>
+<script type="module" src="/docs/static/c4Diagram-YG6GDRKO-Blf-Q85b.js"></script>
+<script type="module" src="/docs/static/classDiagram-2ON5EDUG-CV-r9Le6.js"></script>
+<script type="module" src="/docs/static/classDiagram-v2-WZHVMYZB-FjmVyVcW.js"></script>
+<script type="module" src="/docs/static/cose-bilkent-S5V4N54A-CwokiWn5.js"></script>
+<script type="module" src="/docs/static/dagre-6UL2VRFP-qGDT-4E-.js"></script>
+<script type="module" src="/docs/static/diagram-PSM6KHXK-asygiqY4.js"></script>
+<script type="module" src="/docs/static/diagram-QEK2KX5R-RckI0Vxl.js"></script>
+<script type="module" src="/docs/static/diagram-S2PKOQOG-D3NvEb3Q.js"></script>
+<script type="module" src="/docs/static/erDiagram-Q2GNP2WA-Cyp4lw77.js"></script>
+<script type="module" src="/docs/static/flowDiagram-NV44I4VS-Durqfvdj.js"></script>
+<script type="module" src="/docs/static/ganttDiagram-JELNMOA3-COOaPycs.js"></script>
+<script type="module" src="/docs/static/gitGraph-F6HP7TQM-CqS9sC5f.js"></script>
+<script type="module" src="/docs/static/gitGraphDiagram-NY62KEGX-BQN4gPQ9.js"></script>
+<script type="module" src="/docs/static/index-CvuEZtbh.js"></script>
+<script type="module" src="/docs/static/info-NVLQJR56-BUcKGpxN.js"></script>
+<script type="module" src="/docs/static/infoDiagram-WHAUD3N6-D7Xs3PNk.js"></script>
+<script type="module" src="/docs/static/journeyDiagram-XKPGCS4Q-C0gcrYJQ.js"></script>
+<script type="module" src="/docs/static/kanban-definition-3W4ZIXB7-DA5VTkMF.js"></script>
+<script type="module" src="/docs/static/katex-DDX8Hq9d.js"></script>
+<script type="module" src="/docs/static/mermaid-DyDSBgik.js"></script>
+<script type="module" src="/docs/static/mindmap-definition-VGOIOE7T-CeGF8Nug.js"></script>
+<script type="module" src="/docs/static/packet-BFZMPI3H-BiSDgaWb.js"></script>
+<script type="module" src="/docs/static/pie-7BOR55EZ-6DVHbXh5.js"></script>
+<script type="module" src="/docs/static/pieDiagram-ADFJNKIX-D8LeIfHz.js"></script>
+<script type="module" src="/docs/static/quadrantDiagram-AYHSOK5B-CT_QATm0.js"></script>
+<script type="module" src="/docs/static/radar-NHE76QYJ-DmqrXv6L.js"></script>
+<script type="module" src="/docs/static/requirementDiagram-UZGBJVZJ-BbaHa2fs.js"></script>
+<script type="module" src="/docs/static/rolldown-runtime-BfSZLbwf.js"></script>
+<script type="module" src="/docs/static/sankeyDiagram-TZEHDZUN-D9YTmh-I.js"></script>
+<script type="module" src="/docs/static/sequenceDiagram-WL72ISMW-D9tLLYI1.js"></script>
+<script type="module" src="/docs/static/stateDiagram-FKZM4ZOC-C__hSZA6.js"></script>
+<script type="module" src="/docs/static/stateDiagram-v2-4FDKWEC3-i8H-EINL.js"></script>
+<script type="module" src="/docs/static/timeline-definition-IT6M3QCI-xF8WKVt0.js"></script>
+<script type="module" src="/docs/static/treemap-KMMF4GRG-DIUMOj6d.js"></script>
+<script type="module" src="/docs/static/xychartDiagram-PRI3JC2R-BDCeeoNZ.js"></script>
+<script type="module" src="/docs/search-index.js"></script>
+<script type="module">
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+/*
+ * Copyright 2025 znai maintainers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+function initializeSearchIndex() {
+    if (window.znaiSearchData) {
+        window.znaiSearchIdx = window.createLocalSearchIndex();
+        window.populateLocalSearchIndexWithData(window.znaiSearchIdx, window.znaiSearchData);
+    }
+}
+
+// Call the method to initialize the search index.
+initializeSearchIndex();
+
+window.ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "link" : "https://github.com/liftwizard/liftwizard/blob/main/docs/src/main/znai",
+      "title" : "View On GitHub"
+    },
+    "id" : "docs",
+    "title" : "Liftwizard",
+    "type" : "Guide",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Dropwizard ships with a ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "https://www.dropwizard.io/en/latest/manual/migrations.html",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "dropwizard-migrations",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " bundle.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "BlockQuote",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "dropwizard-migrations",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " module provides you with a wrapper for ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://www.liquibase.org/",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Liquibase",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " database refactoring.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "The built-in bundle provides Dropwizard Commands, for a command line interface to run migrations. It does ",
+        "type" : "SimpleText"
+      }, {
+        "type" : "Emphasis",
+        "content" : [ {
+          "text" : "not",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " provide a way to run migrations on application startup. That's where Liftwizard comes in.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "To run migrations with Dropwizard, you run a command like ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "java -jar hello-world.jar db migrate helloworld.yml",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "To run migrations with Liftwizard, you run the usual ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "server",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " command, and Liftwizard will run migrations on startup.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "There are pros and cons of tying migrations to application startup. The main pros are that you don't have to remember to run migrations, and that they apply to embedded databases in tests. The main con is that migrations can take a long time, and you may not want to block application startup.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "To turn it on, add ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "LiftwizardLiquibaseMigrationBundle",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " to the list of registered bundles.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "@Override\npublic void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)\n{\n    // ...\n    bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());\n    // ...\n}",
+      "lineNumber" : "",
+      "title" : "HelloWorldApplication.initialize()",
+      "anchorId" : "helloworldapplicationinitialize",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Change the Configuration class to implement ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "LiquibaseMigrationFactoryProvider",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "public class HelloWorldConfiguration\n        extends Configuration\n        implements LiquibaseMigrationFactoryProvider // , ... other interfaces\n{\n    // ...\n}",
+      "lineNumber" : "",
+      "title" : "HelloWorldConfiguration.java",
+      "anchorId" : "helloworldconfigurationjava",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add a field with type ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "LiquibaseMigrationFactory",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "\tprivate @Valid @NotNull LiquibaseMigrationFactory liquibaseMigrationFactory = new LiquibaseMigrationFactory();",
+      "title" : "HelloWorldConfiguration.java field",
+      "surroundedBy" : "// include-liquibaseMigrationFactory",
+      "anchorId" : "helloworldconfigurationjava-field",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add the getter/setter required by the interface.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "\t@JsonProperty(\"liquibase\")\n\t@Override\n\tpublic LiquibaseMigrationFactory getLiquibaseMigrationFactory() {\n\t\treturn this.liquibaseMigrationFactory;\n\t}\n\t@JsonProperty(\"liquibase\")\n\tpublic void setLiquibaseMigrationFactory(LiquibaseMigrationFactory liquibaseMigrationFactory) {\n\t\tthis.liquibaseMigrationFactory = liquibaseMigrationFactory;\n\t}",
+      "title" : "HelloWorldConfiguration.java methods",
+      "entry" : [ "getLiquibaseMigrationFactory", "setLiquibaseMigrationFactory" ],
+      "anchorId" : "helloworldconfigurationjava-methods",
+      "type" : "Snippet"
+    }, {
+      "id" : "configuration",
+      "additionalIds" : [ ],
+      "level" : 2,
+      "title" : "Configuration",
+      "type" : "SubHeading"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "The ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "LiftwizardLiquibaseMigrationBundle",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " requires that you're already using ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "/docs/database/named-data-source",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "named data sources",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add a liquibase section to your ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "/docs/configuration/json5-configuration",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "json",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " or yaml configuration.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "title" : "example.json5",
+      "include" : "$['liquibase', 'absent']",
+      "data" : {
+        "liquibase" : {
+          "enabled" : true,
+          "dataSourceMigrations" : [ {
+            "dataSourceName" : "h2-tcp",
+            "migrationFileName" : "migrations.xml",
+            "migrationFileLocation" : "classpath",
+            "contexts" : [ ]
+          } ],
+          "dryRun" : false
+        }
+      },
+      "highlightValues" : [ "root.liquibase.dataSourceMigrations[0].dataSourceName" ],
+      "highlightKeys" : [ ],
+      "anchorId" : "configuration-examplejson5",
+      "type" : "Json"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "code" : "dataSourceMigrations",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " is an array, to allow multiple migrations to different data sources.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Each dataSourceMigration's ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "dataSourceName",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " must match a dataSource's name in the ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "dataSources",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " section.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "If no ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "migrationFileName",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " is specified, ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "migrations.xml",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " is the default.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "code" : "migrationFileLocation",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " can be ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "classpath",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " or ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "filesystem",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ". ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "classpath",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " is the default.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "code" : "contexts",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " are an array of Liquibase ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "https://docs.liquibase.com/concepts/changelogs/attributes/contexts.html",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "context tags",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "With this configuration in place, migrations will run on application startup.",
+        "type" : "SimpleText"
+      } ]
+    } ],
+    "lastModifiedTime" : 1771537682073,
+    "tocItem" : {
+      "chapterTitle" : "Database",
+      "pageTitle" : "Liquibase Migrations",
+      "pageMeta" : { },
+      "dirName" : "database",
+      "fileName" : "liquibase-migrations",
+      "fileExtension" : "md",
+      "viewOnRelativePath" : null,
+      "pageSectionIdTitles" : [ ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>

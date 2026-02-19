@@ -1,0 +1,2892 @@
+[//]: # (this is an auto generated file)
+"Liftwizard" full guide:
+
+# Index :: Liftwizard
+answer-link: docs/index#liftwizard
+
+Liftwizard is a collection of bundles and add-ons for [Dropwizard](https://www.dropwizard.io/), the Java framework for writing web services.
+
+There are very few dependencies between the bundles, so you can pick and choose the ones you want.
+
+## Module groups
+
+The bundles can be loosely grouped into categories.
+
+- Dropwizard configuration
+- JSON serialization/deserialization
+- Servlet client/server logging
+- GraphQL utility
+- [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
+- Other Dropwizard utility
+
+## Guide structure
+
+In this guide, we'll start with the application [`dropwizard-example`](https://github.com/dropwizard/dropwizard/tree/master/dropwizard-example) which is a maven module that's part of the main Dropwizard repository. We'll gradually turn it into [`liftwizard-example`](https://github.com/liftwizard/liftwizard/tree/master/liftwizard-example), an application with an identical service api that uses as many Liftwizard features as possible.
+
+# Introduction :: Liftwizard
+answer-link: docs/introduction/liftwizard
+
+Liftwizard is a collection of bundles and add-ons for [Dropwizard](https://www.dropwizard.io/), the Java framework for writing web services.
+
+There are very few dependencies between the bundles, so you can pick and choose the ones you want.
+
+The bundles can be loosely grouped into categories:
+
+- Dropwizard configuration and bundles
+- Jackson JSON serialization/deserialization
+- Servlet client/server logging
+- [Reladomo](https://github.com/goldmansachs/reladomo) ORM integration for Dropwizard
+- JUnit 4 and JUnit 5 test utilities
+
+# Configuration :: Environment Variable Substitution
+answer-link: docs/configuration/environment-variable-substitution
+
+The `EnvironmentConfigBundle` supports environment variable substitution inside Dropwizard configuration files.
+
+# Configuration :: Environment Variable Substitution :: in example applications
+answer-link: docs/configuration/environment-variable-substitution#in-example-applications
+
+In the example applications, environment variable substitution is used for `defaultName`.
+
+```yaml
+template: Hello, %s!
+defaultName: ${DW_DEFAULT_NAME:-Stranger}
+```
+
+We can see this in action by running the `render` command, with and without the environment variable set.
+
+```bash
+$ java -jar target/liftwizard-example-0.1.0.jar render example.yml --include-default
+INFO  [2020-05-02 03:07:41,910] com.example.helloworld.cli.RenderCommand: DEFAULT => Hello, Stranger!
+$ DW_DEFAULT_NAME=EnvSubstitution java -jar target/liftwizard-example-0.1.0.jar render example.yml --include-default
+INFO  [2020-05-02 03:08:05,685] com.example.helloworld.cli.RenderCommand: DEFAULT => Hello, EnvSubstitution!
+```
+
+# Configuration :: Environment Variable Substitution :: in dropwizard-example
+answer-link: docs/configuration/environment-variable-substitution#in-dropwizard-example
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    // Enable variable substitution with environment variables
+    bootstrap.setConfigurationSourceProvider(
+            new SubstitutingSourceProvider(
+                    bootstrap.getConfigurationSourceProvider(),
+                    new EnvironmentVariableSubstitutor(false)
+            )
+    );
+
+    // ...
+}
+```
+
+# Configuration :: Environment Variable Substitution :: in liftwizard-example
+answer-link: docs/configuration/environment-variable-substitution#in-liftwizard-example
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    bootstrap.addBundle(new EnvironmentConfigBundle());
+    // ...
+}
+```
+
+`EnvironmentConfigBundle` lives in the `liftwizard-bundle-environment-config` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-environment-config</artifactId>
+</dependency>
+```
+
+# Configuration :: Json5 Configuration
+answer-link: docs/configuration/json5-configuration
+
+Dropwizard's configuration is specified in yaml by default. While yaml has nice properties, you may prefer json or some other format.
+
+Dropwizard's [documentation](https://www.dropwizard.io/en/latest/manual/core.html#configuration) claims:
+
+> If your configuration file doesn't end in .yml or .yaml, Dropwizard tries to parse it as a JSON file.
+
+This is easily disproved by renaming example.yml to example.json and trying to run the application. It will incorrectly start without error.
+
+Since json syntax is a subset of yml syntax, you can go ahead and convert your configuration file to json without changing the file extension from yaml or yml. However, this approach doesn't prevent you from accidentally using yaml syntax.
+
+# Configuration :: Json5 Configuration :: Configuration through json5 instead of yaml
+answer-link: docs/configuration/json5-configuration#configuration-through-json5-instead-of-yaml
+
+You can change your application to use json for its configuration using `JsonConfigurationFactoryFactory`.
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
+    // ...
+}
+```
+
+`JsonConfigurationFactoryFactory` uses json5 syntax by default, using optional features in Jackson. So you'll still be able to include comments inside your configuration files.
+
+After adding the bundle, you'll have to convert your configuration files to json5 and rename them. So `example.yml` becomes `example.json5`. Configuration files used in `DropwizardAppRule` / `DropwizardAppExtension` tests must be converted as well. So `src/test/resources/test-example.yml` becomes `src/test/resources/test-example.json5`
+
+# Configuration :: Json5 Configuration :: Adding the dependency
+answer-link: docs/configuration/json5-configuration#adding-the-dependency
+
+`JsonConfigurationFactoryFactory` lives in the `liftwizard-configuration-factory-json` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-configuration-factory-json</artifactId>
+</dependency>
+```
+
+# Configuration :: ConfigLoggingBundle
+answer-link: docs/configuration/ConfigLoggingBundle
+
+The `ConfigLoggingBundle` logs the Dropwizard configuration using SLF4J. It serializes the in-memory configuration object to json and logs that json, not the contents of the original configuration file. The output contains default values set by constructors, that were not specified in the original configuration file.
+
+To turn it on, add `ConfigLoggingBundle` to the list of registered bundles.
+
+
+Now `HelloWorldApplication` will log something like this on startup:
+
+```console
+INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingBundle} io.liftwizard.dropwizard.bundle.config.logging.ConfigLoggingBundle: Inferred Dropwizard configuration:
+
+```
+
+```json5
+{
+	template: "Hello, %s!",
+	defaultName: "Stranger",
+	configLogging: {
+		enabled: true,
+	},
+	// ...
+	metrics: {
+		frequency: "1 minute",
+		reporters: [],
+	},
+}
+```
+
+```json
+{
+	template: "Hello, %s!",
+	defaultName: "Stranger",
+	clock: {
+		type: "incrementing",
+	},
+	uuid: {
+		type: "seed",
+		seed: "example seed",
+	},
+	server: {
+		detailedJsonProcessingExceptionMapper: true,
+		applicationConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+		adminConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+	},
+	logging: {
+		level: "INFO",
+		appenders: [
+			{
+				type: "buffered",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				includeCallerData: true,
+			},
+			{
+				type: "file",
+				currentLogFilename: "./logs/application.log",
+				archive: true,
+				archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
+				archivedFileCount: 7,
+				maxFileSize: "1 megabyte",
+			},
+			{
+				type: "file-logstash",
+				currentLogFilename: "./logs/logstash.jsonl",
+				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+				includeCallerData: true,
+				encoder: {
+					includeContext: true,
+					includeMdc: true,
+					includeStructuredArguments: true,
+					includedNonStructuredArguments: true,
+					includeTags: true,
+					prettyPrint: false,
+				},
+			},
+		],
+	},
+	configLogging: {
+		enabled: true,
+	},
+	h2: {
+		enabled: true,
+		webPort: 8082,
+		tcpPort: 9092,
+	},
+	dataSources: [
+		{
+			name: "h2-mem",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-tcp",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-file",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "postgres",
+			driverClass: "org.postgresql.Driver",
+			readOnlyByDefault: false,
+			user: "${JDBC_DATABASE_USERNAME}",
+			password: "${JDBC_DATABASE_PASSWORD}",
+			url: "${JDBC_DATABASE_URL}",
+		},
+	],
+	connectionManagers: [
+		{
+			connectionManagerName: "h2-tcp",
+			dataSourceName: "h2-tcp",
+			databaseType: "H2",
+			schemaName: "liftwizard-app-h2",
+		},
+	],
+	reladomo: {
+		runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
+	},
+	liquibase: {
+		enabled: true,
+		dataSourceMigrations: [
+			{
+				dataSourceName: "h2-tcp",
+				migrationFileName: "migrations.xml",
+				migrationFileLocation: "classpath",
+				contexts: [],
+			},
+		],
+		dryRun: false,
+	},
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+		},
+	],
+}
+```
+
+Note that the `metrics` section at the end was not specified in `test-example.json5`. It comes from serializing the output of `io.dropwizard.Configuration.getMetricsFactory()`.
+
+
+This output can be helpful for fleshing out the configuration file with default options. Including "redundant" defaults makes it easier to edit the configuration by hand. It's easier to flip a boolean flag from `false` to `true` than to first figure out where in the configuration file it belongs and the exact spelling of its key.
+
+The `ConfigLoggingBundle` also logs the "default" configuration at the `DEBUG` level. It does this by instantiating a new copy of the configuration class using the default no-arg constructor, serializing it to json, and logging it. The default configuration output can be useful for finding redundant configuration to remove.
+
+# Configuration :: ConfigLoggingBundle :: Adding the dependency
+answer-link: docs/configuration/ConfigLoggingBundle#adding-the-dependency
+
+`ConfigLoggingBundle` lives in the `liftwizard-bundle-logging-config` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-logging-config</artifactId>
+</dependency>
+```
+
+# Jackson :: ObjectMapperBundle
+answer-link: docs/jackson/ObjectMapperBundle
+
+The `ObjectMapperBundle` configures the Jackson `ObjectMapper` used by Dropwizard for serializing and deserializing all responses, as well as for logging by bundles such as `liftwizard-bundle-logging-config`.
+
+`ObjectMapperBundle` supports configuring pretty-printing on or off, and serialization inclusion to any value in Jackson's `JsonInclude.Include`.
+
+`ObjectMapperBundle` also turns on all json5 features, turns on `FAIL_ON_UNKNOWN_PROPERTIES`, turns on `STRICT_DUPLICATE_DETECTION`, and turns on serialization of dates and Strings.
+
+To turn it on, add `ObjectMapperBundle` to the list of registered bundles.
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    // JsonConfigurationFactoryFactory uses a separate ObjectMapper, and can be configured earlier
+    bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
+    bootstrap.addBundle(new EnvironmentConfigBundle());
+
+    bootstrap.addBundle(new ObjectMapperBundle());
+
+    // ConfigLoggingBundle uses the ObjectMapper configured by ObjectMapperBundle
+    bootstrap.addBundle(new ConfigLoggingBundle());
+
+    // ...
+}
+```
+
+You'll be able to see that `ObjectMapperBundle` is working because the output of `ConfigLoggingBundle` will now be pretty-printed by default.
+
+# Jackson :: ObjectMapperBundle :: Adding the dependency
+answer-link: docs/jackson/ObjectMapperBundle#adding-the-dependency
+
+`ObjectMapperBundle` lives in the `liftwizard-bundle-object-mapper` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-object-mapper</artifactId>
+</dependency>
+```
+
+# Logging :: JerseyHttpLoggingBundle
+answer-link: docs/logging/JerseyHttpLoggingBundle
+
+The `JerseyHttpLoggingBundle` is an alternative to Jersey's `LoggingFeature`. Jersey's `LoggingFeature` can be configured to log or not log bodies, but it cannot be configured to exclude headers. Since headers can include authentication tokens, you may not want to log headers, or only log those in an allow-list.
+
+The bundle can be configured:
+
+- include/exclude request bodies
+- include/exclude response bodies
+- allow-list of headers
+- include/exclude the list of excluded header *names*
+- the max body size before truncation
+
+Through code, the bundle can be configured to log using different combinations of slf4j/log4j/logback with context in MDC or OpenTracing or a Map.
+
+To turn it on, add `JerseyHttpLoggingBundle` to the list of registered bundles.
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
+    bootstrap.addBundle(new EnvironmentConfigBundle());
+
+    bootstrap.addBundle(new ObjectMapperBundle());
+    bootstrap.addBundle(new ConfigLoggingBundle());
+
+    StructuredArgumentsMDCLogger structuredLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
+    bootstrap.addBundle(new JerseyHttpLoggingBundle(structuredLogger));
+
+    // ...
+}
+```
+
+The bundle registers filters which gather all the arguments to log. A "logger" is passed into the constructor which abstracts over whether the logging uses logback or log4j, whether the structured arguments are converted into MDC, Markers, or a Map. The `StructuredArgumentsMDCLogger` in the example above logs using slf4j with context in MDC.
+
+```java
+var mdcLogger = new StructuredArgumentsMDCLogger(bootstrap.getObjectMapper());
+var logstashLogger = new StructuredArgumentsLogstashEncoderLogger();
+
+Consumer<StructuredArguments> structuredLogger = structuredArguments ->
+{
+    mdcLogger.accept(structuredArguments);
+    logstashLogger.accept(structuredArguments);
+};
+
+bootstrap.addBundle(new JerseyHttpLoggingBundle(structuredLogger));
+```
+
+`JerseyHttpLoggingBundle` lives in the `liftwizard-bundle-logging-http` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-logging-http</artifactId>
+</dependency>
+```
+
+In order to see the logging in action, we'll need to configure a log format that includes mdc and markers.
+
+### test-example.json5
+
+`src/test/resources/test-example.json5`
+
+```json5
+{
+	type: "console",
+	timeZone: "${LOGGING_TIMEZONE:-system}",
+	logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+	includeCallerData: true,
+}
+```
+
+Next, lets turn on all the basic filters and see how they change what gets logged.
+
+## Logging output
+
+We can rerun `IntegrationTest` and see the new logs in action.
+
+```console
+DEBUG 13:21:49 [dw-249] io.liftwizard.servlet.logging.mdc.StructuredArgumentsMDCLogger: Response sent <> <
+response.http.elapsedNanos=1000000000,
+request.http.method=GET,
+request.http.parameters.query.name=Dr. IntegrationTest,
+request.http.path.full=/hello-world,
+request.http.path.absolute=http://localhost:63842/hello-world,
+request.http.client.port=63855,
+request.http.headers.User-Agent=Jersey/2.25.1 (HttpUrlConnection 17.0.2),
+request.http.server.port=63842,
+request.http.client.host=127.0.0.1,
+request.resourceClass=com.example.helloworld.resources.HelloWorldResource,
+request.http.path.template=/hello-world,
+request.http.server.name=localhost,
+request.http.headers.Host=localhost:63842,
+response.http.headers.Content-Type=application/json,
+response.http.contentType=application/json,
+response.http.entityType=com.example.helloworld.api.Saying,
+response.http.status.code=200,
+request.http.client.address=127.0.0.1,
+request.resourceMethod=sayHello,
+response.http.status.phrase=OK,
+response.http.body={
+  "id" : 1,
+  "content" : "Hello, Dr. IntegrationTest!"
+},
+response.http.contentLength=59,
+request.http.server.scheme=http,
+response.http.status.status=OK,
+response.http.status.family=SUCCESSFUL>
+```
+
+## Logstash encoder
+
+`liftwizard-config-logging-logstash-file` is a Dropwizard `AppenderFactory`. It sets up a file appender that logs one json object per log statement. The json is formatted by [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) and is ready to be parsed by logstash.
+
+Let's add the logstash-file appender to the list of configured appenders.
+
+### test-example.json5
+
+`src/test/resources/test-example.json5`
+
+```json5
+{
+	// ...
+	logging: {
+		level: "DEBUG",
+		appenders: [
+			{
+				type: "console",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				includeCallerData: true,
+			},
+			{
+				type: "file-logstash",
+				currentLogFilename: "./logs/logstash.jsonl",
+				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+				includeCallerData: true,
+				encoder: {
+					includeContext: true,
+					includeMdc: true,
+					includeStructuredArguments: true,
+					includedNonStructuredArguments: true,
+					includeTags: true,
+					prettyPrint: false,
+				},
+			},
+		],
+	},
+	// ...
+}
+```
+
+### logstash.jsonl
+
+`logs/logstash.jsonl` snippet
+
+# Logging :: Buffered Logging
+answer-link: docs/logging/buffered-logging
+
+In unit tests, it can be useful to suppress all logging for successful tests, but still log everything when tests fail.
+
+In order to accomplish this, we need to buffer all logging before we know the result of the test, and then flush or clear the buffer once we know the outcome.
+
+## BufferedAppender
+
+`BufferedAppender` is the logback appender that buffers all logging until it receives a `CLEAR` or `FLUSH` marker.
+
+You can use directly in logback configuration. It requires a delegate appender for flushing, declared using an `appender-ref`.
+
+
+`BufferedAppender` lives in the `liftwizard-logging-buffered-appender` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-logging-buffered-appender</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+## Log Markers
+
+We must log `CLEAR` and `FLUSH` markers to instruct `BufferedAppender` to clear or flush its logs. If you are using JUnit 4 or 5, you can use the included Rule or Extension to log these markers automatically.
+
+
+## BufferedAppenderFactory
+
+The `BufferedAppenderFactory` allows you to use an appender with the type `buffered` where you would otherwise use `console` in your Dropwizard configuration.
+
+```json5
+"logging": {
+  "level": "DEBUG",
+  "appenders": [
+    {
+      "type": "buffered",
+      "timeZone": "${LOGGING_TIMEZONE:-system}",
+      "logFormat": "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+      "includeCallerData": true,
+    },
+  ]
+}
+```
+
+`BufferedAppenderFactory` lives in the `liftwizard-config-logging-buffered` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-config-logging-buffered</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+Note: `BufferedAppenderFactory` is primarily useful for tests that use [Dropwizard's JUnit 4 Rule](https://www.dropwizard.io/en/release-2.1.x/manual/testing.html#junit-4) `DropwizardAppRule` or [Dropwizard's JUnit 5 Extension](https://www.dropwizard.io/en/release-2.1.x/manual/testing.html#junit-5) `DropwizardAppExtension`.
+
+# Logging :: Filter Factories
+answer-link: docs/logging/filter-factories
+
+Dropwizard comes with support for dynamic configuration of [log filters](https://www.dropwizard.io/en/latest/manual/core.html#logging-filters). However, it ships with just a single filter, the [UriFilterFactory](https://www.dropwizard.io/en/latest/manual/core.html#filtering-request-logs-for-a-specific-uri).
+
+> One can create logging filters that will intercept log statements before they are written and decide if they’re allowed. Log filters can work on both regular statements and request log statements.
+
+Liftwizard provides an improved `RequestUrlFilterFactory` for request logs and `JaninoFilterFactory` for plain logs.
+
+## RequestUrlFilterFactory
+
+`RequestUrlFilterFactory` is an improved version of `UriFilterFactory`. It can filter access logs that do or don't match a list of urls.
+
+To use it, add a dependency on `liftwizard-config-logging-filter-requesturl`. Then add a filter factory to your config with type `url` and a list of `urls` to include or exclude. The default value of `onMatch` is `ch.qos.logback.core.spi.FilterReply.DENY`.
+
+
+## JaninoFilterFactory
+
+`JaninoFilterFactory` allows you to specify the filter condition in a snippet of Java code that gets compiled with [Janino](https://janino-compiler.github.io/janino/).
+
+To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then add a filter factory to your config with type `janino` and a `javaExpression` that evaluates to a boolean. The default value of `onMatch` is `ch.qos.logback.core.spi.FilterReply.DENY`.
+
+```json5
+{
+	logging: {
+		level: "DEBUG",
+		appenders: [
+			{
+				type: "console",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				filterFactories: [
+					{
+						type: "janino",
+						javaExpression: 'logger.equals("io.liftwizard.logging.p6spy.P6SpySlf4jLogger") && mdc.get("liftwizard.bundle").equals("DdlExecutorBundle")',
+						onMatch: "DENY",
+					},
+				],
+			},
+		],
+	},
+}
+```
+
+# Logging :: Slf4jUncaughtExceptionHandlerBundle
+answer-link: docs/logging/Slf4jUncaughtExceptionHandlerBundle
+
+`Slf4jUncaughtExceptionHandler` is an [`UncaughtExceptionHandler`](https://docs.oracle.com/en%2Fjava%2Fjavase%2F21%2Fdocs%2Fapi%2F%2F/java.base/java/lang/Thread.UncaughtExceptionHandler.html) that logs uncaught exceptions using SLF4J.
+
+`Slf4jUncaughtExceptionHandlerBundle` is a Dropwizard bundle that installs `Slf4jUncaughtExceptionHandler` on startup.
+
+> When a thread is about to terminate due to an uncaught exception the Java Virtual Machine will query the thread for its UncaughtExceptionHandler using Thread.getUncaughtExceptionHandler() and will invoke the handler's uncaughtException method, passing the thread and the exception as arguments.
+
+# Logging :: Slf4jUncaughtExceptionHandlerBundle :: The logs
+answer-link: docs/logging/Slf4jUncaughtExceptionHandlerBundle#the-logs
+
+When an uncaught exception is thrown, `Slf4jUncaughtExceptionHandler` logs the exception at the WARN level.
+
+With logback configuration like this:
+
+```xml
+<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <pattern>%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, ${LOGGING_TIMEZONE}}) %gray(\(%file:%line\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException</pattern>
+    </encoder>
+</appender>
+```
+
+The logs look like this:
+
+```console
+WARN  12:00:00.000 (Slf4jUncaughtExceptionHandler.java:46) [main]  {exceptionClass=io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.RootException, liftwizard.error.message=example root, liftwizard.error.kind=io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.RootException, threadName=main, exceptionMessage=example root, liftwizard.error.thread=main} io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandler: Exception in thread "main"
+io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest$CauseException: example cause
+	at io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.testUncaughtException(Slf4jUncaughtExceptionHandlerTest.java:26) ~[test-classes/:na]
+	... 68 common frames omitted
+Wrapped by: io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest$RootException: example root
+	at io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandlerTest.testUncaughtException(Slf4jUncaughtExceptionHandlerTest.java:27) ~[test-classes/:na]
+```
+
+# Logging :: Slf4jUncaughtExceptionHandlerBundle :: With Dropwizard
+answer-link: docs/logging/Slf4jUncaughtExceptionHandlerBundle#with-dropwizard
+
+To use the exception handler with Dropwizard, add `Slf4jUncaughtExceptionHandlerBundle` to the list of registered bundles.
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
+{
+    bootstrap.addBundle(new Slf4jUncaughtExceptionHandlerBundle());
+}
+```
+
+And add the dependency:
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-logging-uncaught-exception-handler</artifactId>
+</dependency>
+```
+
+# Logging :: Slf4jUncaughtExceptionHandlerBundle :: Without Dropwizard
+answer-link: docs/logging/Slf4jUncaughtExceptionHandlerBundle#without-dropwizard
+
+To use `Slf4jUncaughtExceptionHandler` without the bundle, create an instance and set it as the default uncaught exception handler.
+
+```java
+Thread.setDefaultUncaughtExceptionHandler(new Slf4jUncaughtExceptionHandler());
+```
+
+And add the dependency:
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-logging-uncaught-exception-handler</artifactId>
+</dependency>
+```
+
+# Graphql :: Bundle
+answer-link: docs/graphql/bundle
+
+The `LiftwizardGraphQLBundle` extends `com.smoketurner.dropwizard.graphql.GraphQLBundle`.
+
+The bundle registers [the GraphIQL UI](https://github.com/graphql/graphiql) at `/graphiql` and [the GraphQL Playground UI](https://github.com/graphql/graphql-playground) at `/graphql-playground`, by delegating to `AssetsBundle`. This overrides the behavior of the smoketurner bundle, which registers just one UI at `/` (graphiql in older versions, and graphql-playground in newer versions).
+
+The bundle also registers two instrumentations for logging and metrics. If you choose not to use the bundle, you can still register the instrumentations separately.
+
+To turn it on, add `LiftwizardGraphQLBundle` to the list of registered bundles.
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
+{
+    bootstrap.setConfigurationFactoryFactory(new JsonConfigurationFactoryFactory<>());
+    bootstrap.addBundle(new EnvironmentConfigBundle());
+
+    bootstrap.addBundle(new ObjectMapperBundle());
+    bootstrap.addBundle(new ConfigLoggingBundle());
+
+    bootstrap.addBundle(new JerseyHttpLoggingBundle());
+
+    bootstrap.addBundle(new LiftwizardGraphQLBundle<>(
+            builder ->
+            {
+                // Set up GraphQL wiring
+                // builder.scalar(...);
+                // builder.type(...);
+            }));
+
+    // ...
+}
+```
+
+`LiftwizardGraphQLBundle` lives in the `liftwizard-bundle-graphql` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-bundle-graphql</artifactId>
+</dependency>
+```
+
+# Graphql :: Instrumentation Logging
+answer-link: docs/graphql/instrumentation-logging
+
+`LiftwizardGraphQLLoggingInstrumentation` is an implementation of `Instrumentation` from [GraphQL Java](https://www.graphql-java.com/) that adds helpful context to slf4j's [Mapped Diagnostic Context](http://www.slf4j.org/manual.html#mdc).
+
+For example, say that during the execution of a `DataFetcher`, we execute a database query and log its sql. It would be helpful to see the query in the context of the DataFetcher that executed it, along with the GraphQL field and its type, and the path we took through the graph on the way to this field.
+
+This Instrumentation adds these fields to MDC, prefixed with `liftwizard.graphql`.
+
+To turn it on, either run the entire [`LiftwizardGraphQLBundle`](graphql/bundle.md) or just add `LiftwizardGraphQLLoggingInstrumentation` to the list of instrumentations on your `GraphQLFactory`.
+
+```java
+GraphQLFactory factory = ...;
+
+var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
+
+List<Instrumentation> instrumentations = List.of(loggingInstrumentation);
+factory.setInstrumentations(instrumentations);
+```
+
+Here's an example of what SQL logging might look like with MDC attached when formatted by the "file-logstash" appender.
+
+
+`LiftwizardGraphQLLoggingInstrumentation` lives in the `liftwizard-graphql-instrumentation-logging` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-graphql-instrumentation-logging</artifactId>
+</dependency>
+```
+
+# Graphql :: Instrumentation Metrics
+answer-link: docs/graphql/instrumentation-metrics
+
+`LiftwizardGraphQLMetricsInstrumentation` is an implementation of `Instrumentation` from [GraphQL Java](https://www.graphql-java.com/) that registers [performance metrics](https://metrics.dropwizard.io/) about data fetching with Dropwizard's MetricsRegistry.
+
+To turn it on, either run the entire [`LiftwizardGraphQLBundle`](graphql/bundle.md) or just add `LiftwizardGraphQLMetricsInstrumentation` to the list of instrumentations on your `GraphQLFactory`.
+
+```java
+GraphQLFactory factory = ...;
+
+Clock clock = Clock.systemUTC();
+
+var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
+var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
+
+List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
+factory.setInstrumentations(instrumentations);
+```
+
+## Annotations
+
+Next, annotate the DataFetchers that you want to monitor with `@Timed`, `@Metered`, and/or `@ExceptionMetered`. You can annotate either the `get()` method, or the entire fetcher class.
+
+## Timers
+
+`@Timed` adds three timers:
+
+- {DataFetcher's fully-qualified class name}.get.sync
+- liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.sync
+- liftwizard.graphql.path.{path}.sync
+
+All three timers track the number of times each DataFetcher is called, and the amount of time spent in the get() method.
+
+Although the timers measure the same thing, they may not have identical values. This would happen if the same DataFetcher is wired to multiple fields, or is reached by multiple paths through the graph.
+
+If your DataFetcher returns [`CompleteableFuture`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html), you'll get three additional timers, with names ending in "async" instead of "sync". Rather than track the amount of time spent in `get()`, these timers will track the amount of time until the `CompleteableFutures` complete.
+
+## Meters
+
+Timers *are* meters, so if you want to know the number of times a fetcher is called, annotate them with *@Timer*.
+
+If you annotate your DataFetcher with `@Metered`, the Intrumentation will add meters that track *the number of items returned* by the DataFetcher. If the `DataFetcher` returns a `Collection` or `CompleteableFuture<Collection>`, the meter will increment by the size of the Collection.
+
+## ExceptionMeters
+
+`@ExceptionMetered` adds meters that track the number of times the DataFetcher throws uncaught exceptions, plus the number of CompleteableFutures they return that complete exceptionally. The meters have the same names as the timers, but with the suffix "exceptions":
+
+- {DataFetcher's fully-qualified class name}.get.exceptions
+- liftwizard.graphql.field.{GraphQL Class}.{GraphQL field}.exceptions
+- liftwizard.graphql.path.{path}.exceptions
+
+`LiftwizardGraphQLMetricsInstrumentation` lives in the `liftwizard-graphql-instrumentation-metrics` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-graphql-instrumentation-metrics</artifactId>
+</dependency>
+```
+
+# Graphql :: Data Fetcher Async
+answer-link: docs/graphql/data-fetcher-async
+
+`LiftwizardAsyncDataFetcher` is an enhanced alternative to `AsyncDataFetcher` from [GraphQL Java](https://www.graphql-java.com/).
+
+Both have the ability to wrap a synchronous `DataFetcher` together with an `Executor`, and return `CompleteableFuture`s that execute on the `Executor`. `LiftwizardAsyncDataFetcher` also copies slf4j's [Mapped Diagnostic Context](http://www.slf4j.org/manual.html#mdc) to the background tasks, and restores the MDC when each task completes.
+
+```java
+builder.dataFetcher(
+        "fieldName",
+        LiftwizardAsyncDataFetcher.async(dataFetcher, executor));
+```
+
+When using Dropwizard, the executor should come from its environment.
+
+```java
+ExecutorService executorService = environment
+        .lifecycle()
+        .executorService("my-data-fetcher-%d")
+        .maxThreads(maxThreads)
+        .build();
+```
+
+`LiftwizardAsyncDataFetcher` lives in the `liftwizard-graphql-data-fetcher-async` module.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-graphql-data-fetcher-async</artifactId>
+</dependency>
+```
+
+# Reladomo :: Reladomo Overview :: Reladomo overview
+answer-link: docs/reladomo/reladomo-overview#reladomo-overview
+
+[Reladomo](https://github.com/goldmansachs/reladomo) is an object-relational mapping (ORM) framework for Java with strong support for temporal and bitemporal data.
+
+A comparison between Reladomo and Hibernate is out of scope for this guide. However, we'll look at how to use Reladomo in a Dropwizard application by replacing Hibernate with Reladomo in [`dropwizard-example`](https://github.com/dropwizard/dropwizard/tree/master/dropwizard-example).
+
+After achieving feature parity, we'll see some of the power of Reladomo by adding support for as-of queries over REST.
+
+To replace Hibernate with Reladomo in `liftwizard-example`, we'll need to:
+
+- Create separate DTOs and POJOs
+- Change the rest resources to return DTOs
+- Create a Reladomo definition of the Person class
+- Create a Reladomo class list and runtime configuration
+- Replace `HibernateBundle` with `H2Bundle`, `NamedDataSourceBundle`, `ConnectionManagerBundle`, `ConnectionManagerHolderBundle`, and `ReladomoBundle`
+- Replace the queries inside PersonDAO
+- Add temporal columns and a sequence table to the database migrations
+
+# Reladomo :: Reladomo Operation Compiler
+answer-link: docs/reladomo/reladomo-operation-compiler
+
+When using [Reladomo](https://github.com/goldmansachs/reladomo), queries are usually expressed using its code-generated Finder language.
+
+```java
+Operation operation = MyTypeFinder.optionalString().eq("value")
+    .and(MyTypeFinder.optionalInteger().eq(4));
+
+MyTypeList mithraList = MyTypeFinder.findMany(operation);
+```
+
+In some situations, it can be useful to have a more dynamic way of expressing queries.
+
+That's where `ReladomoOperationCompiler` comes in. It can take a String and compile it into a Reladomo [Operation](https://www.mvndoc.com/c/com.goldmansachs.reladomo/reladomo/com/gs/fw/finder/Operation.html).
+
+In this example, `this.stringProperty = "value" & this.integerProperty = 4` is the equivalent query.
+
+This can be used for dynamic ad-hoc queries, and combines well with [Liftwizard's GraphQL features](graphql/bundle.md).
+
+```java
+MyTypeFinder finder        = MyTypeFinder.getFinderInstance();
+var          operationText = "this.stringProperty = \"value\" & this.integerProperty = 4";
+var          compiler      = new ReladomoOperationCompiler();
+Operation    operation     = compiler.compile(finder, operationText);
+MyTypeList   mithraList    = MyTypeFinder.findMany(operation);
+```
+
+## Compiling toString() representation
+
+The syntax closely matches the `toString()` representation of Reladomo's Operations, with a little added flexibility. In general, you can call `operation.toString()` and compile the output to get back an equivalent Operation.
+
+```java
+Operation operation     = ...;
+String    operationText = operation.toString();
+Operation recompiled    = compiler.compile(finder, operationText);
+assertThat(recompiled, is(operation));
+```
+
+## Error messages
+
+The compiler is designed to give helpful error messages on inputs that parse but don't compile.
+
+For example, running the compiler on `this.invalidAttributeName = "Value"` might throw an error like:
+
+```text
+Could not find attribute 'invalidAttributeName' on type 'MyType' in this.invalidAttributeName = "Value". Valid attributes: [idProperty, stringProperty, integerProperty, longProperty, doubleProperty, floatProperty, booleanProperty, instantProperty, localDateProperty, createdById, createdOn, lastUpdatedById, systemFrom, systemTo]
+```
+
+## Flexible syntax
+
+The compiler allows some flexibility in the syntax.
+
+
+## Complete examples
+
+```console
+# Attribute types
+this.booleanProperty = true
+this.integerProperty = 4
+this.longProperty = 5
+this.floatProperty = 6.6
+this.doubleProperty = 7.7
+this.dateProperty = "2010-12-31"
+this.timeProperty = "2010-12-31T23:59:00.0Z"
+this.stringProperty = "Value"
+this.system = "2010-12-31T23:59:00.0Z"
+
+# Conjunctions
+this.booleanProperty = true & this.integerProperty = 4
+this.booleanProperty = true && this.integerProperty = 4
+this.booleanProperty = true and this.integerProperty = 4
+this.booleanProperty = true | this.integerProperty = 4
+this.booleanProperty = true || this.integerProperty = 4
+this.booleanProperty = true or this.integerProperty = 4
+
+# Equality operators
+this.stringProperty = "Value"
+this.stringProperty != "Value"
+this.stringProperty is null
+this.stringProperty == null
+this.stringProperty is not null
+this.stringProperty != null
+this.stringProperty in ["Value", "Value2", null]
+this.stringProperty not in ["Value", "Value2", null]
+
+# String operators
+this.stringProperty endsWith "Value"
+this.stringProperty contains "Value"
+this.stringProperty startsWith "Value"
+this.stringProperty wildCardEquals "Value?"
+this.stringProperty not endsWith "Value"
+this.stringProperty not contains "Value"
+this.stringProperty not startsWith "Value"
+this.stringProperty not wildCardEquals "Value?"
+
+# Numeric operators
+this.stringProperty > "Value"
+this.stringProperty >= "Value"
+this.stringProperty < "Value"
+this.stringProperty <= "Value"
+
+# Functions / derived attributes
+toLowerCase(this.stringProperty) = "value"
+substring(this.stringProperty, 2, 3) = "value"
+substring(toLowerCase(this.stringProperty), 2, 3) = "value"
+
+# Flexible number literals
+this.floatProperty = 42.0f
+this.floatProperty = 42.0d
+this.floatProperty = 42
+this.doubleProperty = 42.0f
+this.doubleProperty = 42.0d
+this.doubleProperty = 42
+this.longProperty = 10_000_000_000
+this.integerProperty = 1_000_000_000
+
+# Number / date functions / derived attributes
+abs(this.integerProperty) = 1
+
+year(this.timeProperty) = 1999
+month(this.timeProperty) = 12
+dayOfMonth(this.timeProperty) = 31
+year(this.dateProperty) = 1999
+month(this.dateProperty) = 12
+dayOfMonth(this.dateProperty) = 31
+
+# Relationships
+this.target.value = "value"
+this.target exists
+this.target not exists
+this.target { RelatedType.source.value = "value" } not exists
+
+# Edge points
+this.system equalsEdgePoint
+```
+
+# Database :: Named Data Source
+answer-link: docs/database/named-data-source
+
+Dropwizard provides an interface called `ManagedDataSource`.
+
+
+It's just a `io.dropwizard.lifecycle.Managed` and a `javax.sql.DataSource`. It's a `DataSource` with start/stop lifecycle methods.
+
+`ManagedDataSource` works well when you have one of them. When you have multiple data sources, it can be difficult to tie them together through configuration. For example, if you use Liquibase for migrations, [you'd need to write code](https://www.dropwizard.io/en/latest/manual/migrations.html#support-for-adding-multiple-migration-bundles) to tie specific migrations to specific data sources; it cannot be done through configuration alone.
+
+Liftwizard provides `NamedDataSource`, which is a `ManagedDataSource` with a name. [Other Liftwizard bundles](liquibase-migrations.md) expect `NamedDataSource`s to be configured, and refer to them by name in their own configuration. In the liquibase example, we could tie specific migrations to specific data sources through configuration alone.
+
+Different named data sources can refer to different databases, or the same database configured different ways. In the following example, we have one data source for Postgres, and three data sources to connect to h2; over the network, in-memory, and on disk.
+
+```json
+{
+	template: "Hello, %s!",
+	defaultName: "Stranger",
+	clock: {
+		type: "incrementing",
+	},
+	uuid: {
+		type: "seed",
+		seed: "example seed",
+	},
+	server: {
+		detailedJsonProcessingExceptionMapper: true,
+		applicationConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+		adminConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+	},
+	logging: {
+		level: "INFO",
+		appenders: [
+			{
+				type: "buffered",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				includeCallerData: true,
+			},
+			{
+				type: "file",
+				currentLogFilename: "./logs/application.log",
+				archive: true,
+				archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
+				archivedFileCount: 7,
+				maxFileSize: "1 megabyte",
+			},
+			{
+				type: "file-logstash",
+				currentLogFilename: "./logs/logstash.jsonl",
+				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+				includeCallerData: true,
+				encoder: {
+					includeContext: true,
+					includeMdc: true,
+					includeStructuredArguments: true,
+					includedNonStructuredArguments: true,
+					includeTags: true,
+					prettyPrint: false,
+				},
+			},
+		],
+	},
+	configLogging: {
+		enabled: true,
+	},
+	h2: {
+		enabled: true,
+		webPort: 8082,
+		tcpPort: 9092,
+	},
+	dataSources: [
+		{
+			name: "h2-mem",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-tcp",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-file",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "postgres",
+			driverClass: "org.postgresql.Driver",
+			readOnlyByDefault: false,
+			user: "${JDBC_DATABASE_USERNAME}",
+			password: "${JDBC_DATABASE_PASSWORD}",
+			url: "${JDBC_DATABASE_URL}",
+		},
+	],
+	connectionManagers: [
+		{
+			connectionManagerName: "h2-tcp",
+			dataSourceName: "h2-tcp",
+			databaseType: "H2",
+			schemaName: "liftwizard-app-h2",
+		},
+	],
+	reladomo: {
+		runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
+	},
+	liquibase: {
+		enabled: true,
+		dataSourceMigrations: [
+			{
+				dataSourceName: "h2-tcp",
+				migrationFileName: "migrations.xml",
+				migrationFileLocation: "classpath",
+				contexts: [],
+			},
+		],
+		dryRun: false,
+	},
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+		},
+	],
+}
+```
+
+To use named data sources, start by changing the Configuration class to implement `NamedDataSourceFactoryProvider`.
+
+```java
+public class HelloWorldConfiguration
+        extends Configuration
+        implements NamedDataSourceProvider // , ... other interfaces
+{
+    // ...
+}
+```
+
+Add a field with type `NamedDataSourcesFactory`.
+
+
+Add the getter/setter required by the interface.
+
+
+Now we can use the named data sources in the configuration of other bundles. For example, we use the data source named `h2-tcp` in the liquibase configuration.
+
+```json
+{
+	template: "Hello, %s!",
+	defaultName: "Stranger",
+	clock: {
+		type: "incrementing",
+	},
+	uuid: {
+		type: "seed",
+		seed: "example seed",
+	},
+	server: {
+		detailedJsonProcessingExceptionMapper: true,
+		applicationConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+		adminConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+	},
+	logging: {
+		level: "INFO",
+		appenders: [
+			{
+				type: "buffered",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				includeCallerData: true,
+			},
+			{
+				type: "file",
+				currentLogFilename: "./logs/application.log",
+				archive: true,
+				archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
+				archivedFileCount: 7,
+				maxFileSize: "1 megabyte",
+			},
+			{
+				type: "file-logstash",
+				currentLogFilename: "./logs/logstash.jsonl",
+				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+				includeCallerData: true,
+				encoder: {
+					includeContext: true,
+					includeMdc: true,
+					includeStructuredArguments: true,
+					includedNonStructuredArguments: true,
+					includeTags: true,
+					prettyPrint: false,
+				},
+			},
+		],
+	},
+	configLogging: {
+		enabled: true,
+	},
+	h2: {
+		enabled: true,
+		webPort: 8082,
+		tcpPort: 9092,
+	},
+	dataSources: [
+		{
+			name: "h2-mem",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-tcp",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-file",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "postgres",
+			driverClass: "org.postgresql.Driver",
+			readOnlyByDefault: false,
+			user: "${JDBC_DATABASE_USERNAME}",
+			password: "${JDBC_DATABASE_PASSWORD}",
+			url: "${JDBC_DATABASE_URL}",
+		},
+	],
+	connectionManagers: [
+		{
+			connectionManagerName: "h2-tcp",
+			dataSourceName: "h2-tcp",
+			databaseType: "H2",
+			schemaName: "liftwizard-app-h2",
+		},
+	],
+	reladomo: {
+		runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
+	},
+	liquibase: {
+		enabled: true,
+		dataSourceMigrations: [
+			{
+				dataSourceName: "h2-tcp",
+				migrationFileName: "migrations.xml",
+				migrationFileLocation: "classpath",
+				contexts: [],
+			},
+		],
+		dryRun: false,
+	},
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+		},
+	],
+}
+```
+
+# Database :: Liquibase Migrations
+answer-link: docs/database/liquibase-migrations
+
+Dropwizard ships with a [dropwizard-migrations](https://www.dropwizard.io/en/latest/manual/migrations.html) bundle.
+
+> The `dropwizard-migrations` module provides you with a wrapper for [Liquibase](https://www.liquibase.org/) database refactoring.
+
+The built-in bundle provides Dropwizard Commands, for a command line interface to run migrations. It does *not* provide a way to run migrations on application startup. That's where Liftwizard comes in.
+
+To run migrations with Dropwizard, you run a command like `java -jar hello-world.jar db migrate helloworld.yml`.
+
+To run migrations with Liftwizard, you run the usual `server` command, and Liftwizard will run migrations on startup.
+
+There are pros and cons of tying migrations to application startup. The main pros are that you don't have to remember to run migrations, and that they apply to embedded databases in tests. The main con is that migrations can take a long time, and you may not want to block application startup.
+
+To turn it on, add `LiftwizardLiquibaseMigrationBundle` to the list of registered bundles.
+
+```java
+@Override
+public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap)
+{
+    // ...
+    bootstrap.addBundle(new LiftwizardLiquibaseMigrationBundle());
+    // ...
+}
+```
+
+Change the Configuration class to implement `LiquibaseMigrationFactoryProvider`.
+
+```java
+public class HelloWorldConfiguration
+        extends Configuration
+        implements LiquibaseMigrationFactoryProvider // , ... other interfaces
+{
+    // ...
+}
+```
+
+Add a field with type `LiquibaseMigrationFactory`.
+
+
+Add the getter/setter required by the interface.
+
+
+## Configuration
+
+The `LiftwizardLiquibaseMigrationBundle` requires that you're already using [named data sources](database/named-data-source).
+
+Add a liquibase section to your [json](configuration/json5-configuration) or yaml configuration.
+
+```json
+{
+	template: "Hello, %s!",
+	defaultName: "Stranger",
+	clock: {
+		type: "incrementing",
+	},
+	uuid: {
+		type: "seed",
+		seed: "example seed",
+	},
+	server: {
+		detailedJsonProcessingExceptionMapper: true,
+		applicationConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+		adminConnectors: [
+			{
+				type: "http",
+				port: 0,
+			},
+		],
+	},
+	logging: {
+		level: "INFO",
+		appenders: [
+			{
+				type: "buffered",
+				timeZone: "${LOGGING_TIMEZONE:-system}",
+				logFormat: "%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS, %dwTimeZone}) %gray(\\(%file:%line\\)) [%white(%thread)] %blue(%marker) {%magenta(%mdc)} %green(%logger): %message%n%rootException",
+				includeCallerData: true,
+			},
+			{
+				type: "file",
+				currentLogFilename: "./logs/application.log",
+				archive: true,
+				archivedLogFilenamePattern: "./logs/application-%d-%i.log.gz",
+				archivedFileCount: 7,
+				maxFileSize: "1 megabyte",
+			},
+			{
+				type: "file-logstash",
+				currentLogFilename: "./logs/logstash.jsonl",
+				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
+				includeCallerData: true,
+				encoder: {
+					includeContext: true,
+					includeMdc: true,
+					includeStructuredArguments: true,
+					includedNonStructuredArguments: true,
+					includeTags: true,
+					prettyPrint: false,
+				},
+			},
+		],
+	},
+	configLogging: {
+		enabled: true,
+	},
+	h2: {
+		enabled: true,
+		webPort: 8082,
+		tcpPort: 9092,
+	},
+	dataSources: [
+		{
+			name: "h2-mem",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-tcp",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "h2-file",
+			driverClass: "com.p6spy.engine.spy.P6SpyDriver",
+			user: "sa",
+			password: "",
+			url: "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2;NON_KEYWORDS=USER",
+		},
+		{
+			name: "postgres",
+			driverClass: "org.postgresql.Driver",
+			readOnlyByDefault: false,
+			user: "${JDBC_DATABASE_USERNAME}",
+			password: "${JDBC_DATABASE_PASSWORD}",
+			url: "${JDBC_DATABASE_URL}",
+		},
+	],
+	connectionManagers: [
+		{
+			connectionManagerName: "h2-tcp",
+			dataSourceName: "h2-tcp",
+			databaseType: "H2",
+			schemaName: "liftwizard-app-h2",
+		},
+	],
+	reladomo: {
+		runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
+	},
+	liquibase: {
+		enabled: true,
+		dataSourceMigrations: [
+			{
+				dataSourceName: "h2-tcp",
+				migrationFileName: "migrations.xml",
+				migrationFileLocation: "classpath",
+				contexts: [],
+			},
+		],
+		dryRun: false,
+	},
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+		},
+	],
+}
+```
+
+`dataSourceMigrations` is an array, to allow multiple migrations to different data sources.
+
+Each dataSourceMigration's `dataSourceName` must match a dataSource's name in the `dataSources` section.
+
+If no `migrationFileName` is specified, `migrations.xml` is the default.
+
+`migrationFileLocation` can be `classpath` or `filesystem`. `classpath` is the default.
+
+`contexts` are an array of Liquibase [context tags](https://docs.liquibase.com/concepts/changelogs/attributes/contexts.html).
+
+With this configuration in place, migrations will run on application startup.
+
+# Auth :: Dynamic Authentication And Impersonation
+answer-link: docs/auth/dynamic-authentication-and-impersonation
+
+Liftwizard supports the dynamic configuration of [dropwizard-auth](https://www.dropwizard.io/en/stable/manual/auth.html) which enables using different authorization methods in production and tests, without adding conditionals - without adding any code at all. For example, we can configure impersonation authorization in tests with the following config.
+
+```json5
+{
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+			prefix: "Impersonation",
+		},
+	],
+}
+```
+
+## Setup
+
+To get started, add a dependency on `liftwizard-bundle-auth-filter` and add `AuthFilterBundle` to the registered bundles.
+
+Modify the application's configuration class to implement `AuthFilterFactoryProvider` and add a dependency on `liftwizard-config-auth-filter` if it does not already extend `AbstractLiftwizardConfiguration`.
+
+## Test configuration
+
+For tests, you'll typically want to use header-based impersonation.
+
+Add a dependency on `liftwizard-config-auth-filter-header`.
+
+```xml
+<dependency>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-config-auth-filter-header</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+Add an `authFilters` list to `config-test.json5` containing just one filter, of type `header`.
+
+```json5
+{
+	authFilters: [
+		{
+			type: "header",
+			header: "Authorization",
+			prefix: "Impersonation",
+		},
+	],
+}
+```
+
+## Test code
+
+Impersonation authorization works well in tests that uses Dropwizard test utilities, like `DropwizardAppExtension`, `LiftwizardAppExtension`, or `DropwizardAppRule`. There is no change to test setup code, only to the test configuration file. The test code will include headers on client requests, like this.
+
+```java
+@Test
+void smokeTest()
+{
+    Client client = this.appExtension.client();
+
+    Response response = client
+            .target("http://localhost:{port}/api/example")
+            .resolveTemplate("port", this.appExtension.getLocalPort())
+            .request()
+            .header("Authorization", "Impersonation User ID")
+            .get();
+
+    // add assertions here
+}
+```
+
+Whenever we use `dropwizard-auth`, some of our Jersey resource methods will be authenticated. The authenticated methods will be annotated with a security annotation such as `@PermitAll`. The user principal will be passed in as a parameter and annotated like `@Auth Principal principal`. The header authorizer will take the string passed in the header (`"Impersonation User ID"` in this example), remove its prefix (`"User ID"`), and make that string accessible via `principal.getName()`.
+
+Since the header is sent on each request, we can write tests involving multiple users. For example, we can write a test that asserts:
+
+- `User 1` can create an entry, and gets HTTP 201 Created.
+- `User 2` cannot edit or delete the entry, and gets HTTP 403 Forbidden.
+- `User 1` can edit or delete the entry, and gets HTTP 200 OK.
+
+## Production configuration
+
+The production authentication filter dependencies and configuration will depend on the method of authentication used in production. For example, the configuration to use Firebase for auth would look like this.
+
+```json5
+{
+	authFilters: [
+		{
+			type: "firebase",
+			databaseUrl: "https://example.firebaseio.com",
+			firebaseConfig: "${FIREBASE_CONFIG}",
+		},
+	],
+}
+```
+
+# Testing :: Testing
+answer-link: docs/testing/testing
+
+Liftwizard includes utilities for asserting that a string equals the contents of a file.
+
+- "slurping" the file into a string
+- file matching: exact string comparison
+- json matching: json comparison
+- rerecord mode
+
+These utilities are implemented as JUnit 4 Rules and JUnit 5 Extensions.
+
+# Testing :: Matching Files
+answer-link: docs/testing/matching-files
+
+Liftwizard includes utilities for asserting that a string equals the contents of a file.
+
+If your code has changed enough, it can be more convenient to re-record the test resource files, and review the changes using `git diff` rather than the test assertion errors. To enable re-record mode, set the environment variable `LIFTWIZARD_FILE_MATCH_RULE_RERECORD` to `true`.
+
+The setup is different for the JUnit 4 Rule and JUnit 5 Extension. After setup, both have the same API.
+
+```java
+this.fileMatchExtension.assertFileContents(expectedStringClassPathLocation, actualString);
+```
+
+If the file does not exist, or the contents do not match, an assertion error is added to an [ErrorCollector](https://junit.org/junit4/javadoc/4.12/org/junit/rules/ErrorCollector.html). If the ErrorCollector contains any errors, the test fails at the end with all expected/actual pairs reported together.
+
+If `LIFTWIZARD_FILE_MATCH_RULE_RERECORD` is set to `true`, `assertFileContents` will not emit any `AssertionErrors`.
+
+# Testing :: Matching Json
+answer-link: docs/testing/matching-json
+
+Liftwizard includes utilities for asserting that a JSON string equals the contents of a file, using JSON equality semantics. Liftwizard delegates to [JSONassert](https://github.com/skyscreamer/JSONassert) for JSON comparison.
+
+The API is similar to the [file matching API](testing/matching-files), and re-record mode is enabled with the same environment variable `LIFTWIZARD_FILE_MATCH_RULE_RERECORD`.
+
+The setup is different for the JUnit 4 Rule and JUnit 5 Extension. After setup, both have the same API.
+
+```java
+this.jsonMatchExtension.assertFileContents(expectedJsonClassPathLocation, actualJson);
+```
+
+If the file does not exist, or the contents do not match, an assertion error is added to an [ErrorCollector](https://junit.org/junit4/javadoc/4.12/org/junit/rules/ErrorCollector.html). If the ErrorCollector contains any errors, the test fails at the end with all expected/actual pairs reported together.
+
+If `LIFTWIZARD_FILE_MATCH_RULE_RERECORD` is set to `true`, `assertJsonContents` will not emit any `AssertionErrors`.
+
+# Maven :: Maven Best Practices
+answer-link: docs/maven/maven-best-practices
+
+There are a number of best practices that can be handled at once by inheriting from a parent pom that takes care of them all.
+
+Liftwizard ships with several parent poms that form an inheritance hierarchy.
+
+- [`liftwizard-minimal-parent`](minimal-parent.md) is the most minimal parent pom. It is meant to contain uncontroversial best practices that are applicable to all projects.
+- [`liftwizard-profile-parent`](profile-parent.md) is a parent pom that inherits from `liftwizard-minimal-parent` and enables several linters and validators in profiles that are off by default.
+- [`liftwizard-bom`](bill-of-materials.md) is a [Bill of Materials (BOM)](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#bill-of-materials-bom-poms) that exports all modules within Liftwizard.
+- `liftwizard-parent` is a parent pom that inherits from `liftwizard-profile-parent`, selects versions of libraries related to Dropwizard applications, and includes opinionated configurations for plugins.
+
+## Learning Maven
+
+Maven can be confusing due to the extent of the "convention over configuration" approach.
+
+For example, to answer "how does maven run compilation before tests" you would need to learn:
+
+- Plugins which are bound and enabled by default
+- `maven-surefire-plugin` is the plugin that handles tests
+- `maven-compiler-plugin` binds to the `compile` and `testCompile` phases. `maven-surefire-plugin` binds to the `test` phase
+- In the [lifecycle phases](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle) `compile` comes before `testCompile` which comes before `test`.
+
+None of this information appears in `pom.xml`, and little of it is logged during the build.
+
+To make it easier to understand, `liftwizard-minimal-parent` includes region markers surrounding each plugin that label the phase that the plugin is bound to. The sections are sorted by phase.
+
+```xml
+<!--region Phase 22: install-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-install-plugin</artifactId>
+    <version>3.1.4</version>
+</plugin>
+<!--endregion Phase 22: install-->
+```
+
+# Maven :: Minimal Parent
+answer-link: docs/maven/minimal-parent
+
+The most minimal parent pom is `liftwizard-minimal-parent`. If you are able to accept more opinionated defaults, continue to [`liftwizard-profile-parent`](maven/profile-parent). The minimal parent is meant to contain uncontroversial best practices that are applicable to all projects.
+
+# Maven :: Minimal Parent :: Usage
+answer-link: docs/maven/minimal-parent#usage
+
+Inherit from `liftwizard-minimal-parent` in your project's pom.xml:
+
+```xml
+<parent>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-minimal-parent</artifactId>
+    <version>${liftwizard.version}</version>
+</parent>
+```
+
+# Maven :: Minimal Parent :: What you will get
+answer-link: docs/maven/minimal-parent#what-you-will-get
+
+The following sections describe the best practices that are enforced by `liftwizard-minimal-parent`. You will not need to configure these in your project's pom.xml if you inherit from `liftwizard-minimal-parent`.
+
+# Maven :: Minimal Parent :: Resource encodings
+answer-link: docs/maven/minimal-parent#resource-encodings
+
+If you encounter a warning like: `[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!` this is because the project does not [specify a character encoding scheme](https://maven.apache.org/plugins/maven-resources-plugin/examples/encoding.html#specifying-a-character-encoding-scheme) to configure `maven-resources-plugin`.
+
+`liftwizard-minimal-parent` specifies the character encoding scheme in the `properties` section of the pom.xml.
+
+```xml
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+```
+
+This will become unnecessary starting with maven 4.x.
+
+# Maven :: Minimal Parent :: Reproducible builds
+answer-link: docs/maven/minimal-parent#reproducible-builds
+
+> [Reproducible builds](https://reproducible-builds.org/) are a set of software development practices that create an independently-verifiable path from source to binary code. A build is **reproducible** if given the same source code, build environment and build instructions, any party can recreate **bit-by-bit** identical copies of all specified artifacts.
+
+You can [enable Reproducible Builds mode for plugins](https://maven.apache.org/guides/mini/guide-reproducible-builds.html#how-do-i-configure-my-maven-build) by specifying locking down the outputTimestamp property.
+
+```xml
+<project.build.outputTimestamp>2026-02-12T14:50:24Z</project.build.outputTimestamp>
+```
+
+You will also need to run `mvn artifact:check-buildplan` and `mvn verify artifact:compare` as described in the guide to validate that builds are truly reproducible.
+
+# Maven :: Minimal Parent :: Default Goal
+answer-link: docs/maven/minimal-parent#default-goal
+
+You can specify the default goal to run when you run `mvn` without any arguments.
+
+```xml
+<defaultGoal>verify</defaultGoal>
+```
+
+`verify` is a better choice than `install` in the presence of concurrent builds that may write to `.m2/repository` simultaneously.
+
+`verify` is a better choice than `clean verify` because developers may build up state like test files and test databases under `target/` and may not expect them to be deleted by default. It's easy to run `mvn clean` when you need it.
+
+# Maven :: Minimal Parent :: Plugins which are bound and enabled by default
+answer-link: docs/maven/minimal-parent#plugins-which-are-bound-and-enabled-by-default
+
+Maven builds are configured by binding plugins to [lifecycle phases](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle). Even if you don't declare any plugins in your pom.xml, maven will still bind [some plugins](https://maven.apache.org/ref/3.9.6/maven-core/default-bindings.html#plugin-bindings-for-jar-packaging) to the ["main" phases](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#packaging).
+
+All versions of maven bind the [same plugins](https://maven.apache.org/ref/3.9.6/maven-core/default-bindings.html#plugin-bindings-for-jar-packaging), but newer versions of maven bind newer versions of the plugins. If you don't specify the versions of the plugins, different members of the team could be using different versions, leading to different build results on different machines.
+
+It's becoming more common to lock down the version of maven itself, but this wasn't always the case. If you haven't specified the versions of these plugins, [maven-enforcer-plugin](https://maven.apache.org/enforcer/enforcer-rules/requirePluginVersions.html) will log an error like:
+
+```console
+[ERROR] Rule 3: org.apache.maven.enforcer.rules.RequirePluginVersions failed with message:
+
+Some plugins are missing valid versions or depend on Maven 3.9.5 defaults (LATEST, RELEASE as plugin version are not allowed)
+   org.apache.maven.plugins:maven-compiler-plugin. 	The version currently in use is 3.11.0 via default lifecycle bindings
+   org.apache.maven.plugins:maven-surefire-plugin. 	The version currently in use is 3.1.2 via default lifecycle bindings
+   org.apache.maven.plugins:maven-jar-plugin. 		The version currently in use is 3.3.0 via default lifecycle bindings
+   org.apache.maven.plugins:maven-clean-plugin. 	The version currently in use is 3.2.0 via default lifecycle bindings
+   org.apache.maven.plugins:maven-install-plugin. 	The version currently in use is 3.1.1 via default lifecycle bindings
+   org.apache.maven.plugins:maven-site-plugin. 		The version currently in use is 3.12.1 via default lifecycle bindings
+   org.apache.maven.plugins:maven-resources-plugin. 	The version currently in use is 3.3.1 via default lifecycle bindings
+   org.apache.maven.plugins:maven-deploy-plugin. 	The version currently in use is 3.1.1 via default lifecycle bindings
+```
+
+To avoid this, we specify versions of the plugins in the parent pom.
+
+```xml
+<!-- These plugins are bound and enabled by default -->
+<!-- But the default version of these plugins changes with the version of maven running -->
+
+<!--region Phase 0: clean-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-clean-plugin</artifactId>
+    <version>3.5.0</version>
+</plugin>
+<!--endregion Phase 0: clean-->
+
+<!--region Phase 6: process-resources-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>3.4.0</version>
+</plugin>
+<!--endregion Phase 6: process-resources-->
+
+<!--region Phase 7: compile-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.15.0</version>
+    <configuration>
+        <!-- https://maven.apache.org/plugins-archives/maven-compiler-plugin-3.8.1/compile-mojo.html#parameters -->
+        <!-- https://stackoverflow.com/a/44075684/ -->
+        <!-- https://docs.oracle.com/javase/9/tools/javac.htm -->
+        <!-- Generates metadata for reflection on method parameters. Stores formal parameter names of constructors and methods in the generated class file so that the method java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them. -->
+        <parameters>true</parameters>
+    </configuration>
+</plugin>
+<!--endregion Phase 7: compile-->
+
+<!--region Phase 15: test-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.5.4</version>
+    <!-- In maven 3.9.6 and 4.x, maven is able to auto-detect JUnit and these dependencies are not required -->
+    <!-- In maven 3.9.5, there is an internal exception inside surefire without these declared -->
+    <!-- Even with newer versions of maven, it is advantageous to keep these declarations -->
+    <!-- Without them, maven may only run JUnit 5 tests, in a project with both JUnit 4 and 5 -->
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>1.10.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.10.3</version>
+        </dependency>
+    </dependencies>
+    <configuration>
+        <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
+        <!-- https://stackoverflow.com/a/4659279/ -->
+        <!-- The compiler in the server VM now provides correct stack backtraces for all "cold" built-in exceptions. For performance purposes, when such an exception is thrown a few times, the method may be recompiled. After recompilation, the compiler may choose a faster tactic using preallocated exceptions that do not provide a stack trace. To disable completely the use of preallocated exceptions, use this new flag: -XX:-OmitStackTraceInFastThrow. -->
+        <!-- https://stackoverflow.com/a/4659279/ -->
+        <!-- Add argLine to allow the Jacoco plugin to append without overriding the setting -->
+        <!-- https://stackoverflow.com/a/39818768/ -->
+        <argLine>-XX:-OmitStackTraceInFastThrow @{argLine}</argLine>
+        <runOrder>random</runOrder>
+        <trimStackTrace>false</trimStackTrace>
+        <systemPropertyVariables>
+            <!-- Only relevant when using AssertJ. Disables org.assertj.core.util.Throwables.removeAssertJRelatedElementsFromStackTrace() -->
+            <assertj.remove.assertj.related.elements.from.stack.trace>false</assertj.remove.assertj.related.elements.from.stack.trace>
+        </systemPropertyVariables>
+    </configuration>
+</plugin>
+<!--endregion Phase 15: test-->
+
+<!--region Phase 17: package-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <version>3.5.0</version>
+</plugin>
+<!--endregion Phase 17: package-->
+
+<!--region Phase 22: install-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-install-plugin</artifactId>
+    <version>3.1.4</version>
+</plugin>
+<!--endregion Phase 22: install-->
+
+<!--region Phase 23: deploy-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-deploy-plugin</artifactId>
+    <version>3.1.4</version>
+</plugin>
+<!--endregion Phase 23: deploy-->
+```
+
+# Maven :: Minimal Parent :: No phase
+answer-link: docs/maven/minimal-parent#no-phase
+
+The are a number of maven plugins with goals that are designed to be run interactively, rather than being bound to a phase in the pom.xml. For example, `mvn dependency:tree` prints a visual representation of the dependencies of the project, and `mvn versions:set` updates the versions of dependencies in the pom.xml.
+
+Any maven plugin can be run from the command line with `mvn groupId:artifactId:version:goal`, and configured using command line arguments, without it appearing in the pom.xml. For example, we can run the [`buildplan-maven-plugin`](https://www.mojohaus.org/buildplan-maven-plugin/) to list the plugins bound to each phase with this command:
+
+```shell
+mvn org.codehaus.mojo:buildplan-maven-plugin:2.2.2:list
+```
+
+If we configure the plugin in the pom.xml, we can run it with the syntax `mvn phase:goal` and add any configuration that would otherwise be specified with `-D` flags.
+
+```shell
+mvn buildplan:list
+```
+
+We configure several plugins in the parent pom.xml that are not bound to any phase.
+
+```xml
+<!--mvn versions:display-dependency-updates-->
+<!--mvn versions:display-plugin-updates-->
+<!--mvn versions:display-property-updates-->
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>versions-maven-plugin</artifactId>
+    <version>2.21.0</version>
+    <configuration>
+        <!-- Don't create pom.xml.versionsBackup files -->
+        <generateBackupPoms>false</generateBackupPoms>
+        <!-- Process all modules in a multi-module build, even aggregator modules without a parent-child relationship -->
+        <!-- https://stackoverflow.com/a/49246337/23572 -->
+        <processAllModules>true</processAllModules>
+    </configuration>
+</plugin>
+
+<!--mvn dependency:tree-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>3.10.0</version>
+</plugin>
+
+<!--mvn buildplan:list-->
+<!--mvn buildplan:list-phase-->
+<!--mvn buildplan:list-plugin-->
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>buildplan-maven-plugin</artifactId>
+    <version>2.2.2</version>
+    <configuration>
+        <!-- Default value is: deploy -->
+        <tasks>
+            <task>clean</task>
+            <task>deploy</task>
+        </tasks>
+        <!-- print all phases, even if no mapping to an execution is available -->
+        <showAllPhases>true</showAllPhases>
+    </configuration>
+</plugin>
+
+<!--mvn rewrite:run-->
+<!--mvn rewrite:dryRun-->
+<plugin>
+    <groupId>org.openrewrite.maven</groupId>
+    <artifactId>rewrite-maven-plugin</artifactId>
+    <version>6.29.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-static-analysis</artifactId>
+            <version>2.27.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-migrate-java</artifactId>
+            <version>3.27.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-testing-frameworks</artifactId>
+            <version>3.27.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-logging-frameworks</artifactId>
+            <version>3.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-apache</artifactId>
+            <version>2.22.0</version>
+        </dependency>
+    </dependencies>
+</plugin>
+
+<!--mvnw wrapper:wrapper -Dmaven=4.0.0-alpha-7-->
+<plugin>
+    <artifactId>maven-wrapper-plugin</artifactId>
+    <version>3.3.4</version>
+</plugin>
+
+<!--mvn clean release:clean release:prepare -DdevelopmentVersion=1.2.3-SNAPSHOT-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-release-plugin</artifactId>
+    <version>3.3.1</version>
+    <configuration>
+        <!-- Default value is: invoker -->
+        <mavenExecutorId>forked-path</mavenExecutorId>
+        <!-- Automatically assign submodules the parent version -->
+        <autoVersionSubmodules>true</autoVersionSubmodules>
+        <!-- Do not `git push` changes to the upstream repository -->
+        <pushChanges>false</pushChanges>
+        <!-- Format to use when generating the tag name -->
+        <!-- Default value is: @{project.artifactId}-@{project.version} -->
+        <tagNameFormat>@{project.version}</tagNameFormat>
+    </configuration>
+</plugin>
+```
+
+# Maven :: Profile Parent :: Liftwizard Profile Parent
+answer-link: docs/maven/profile-parent#liftwizard-profile-parent
+
+`liftwizard-profile-parent` is a Maven parent POM that gives your project pre-configured profiles for code formatting, static analysis, refactoring, and more. By inheriting from it, you gain access to battle-tested CI workflows without configuring each plugin yourself.
+
+## Quick Start
+
+**Step 1:** Set `liftwizard-profile-parent` as your project's parent:
+
+```xml
+<parent>
+    <groupId>io.liftwizard</groupId>
+    <artifactId>liftwizard-profile-parent</artifactId>
+    <version>${liftwizard.version}</version>
+</parent>
+```
+
+**Step 2:** Run profiles from the command line:
+
+```bash
+# Format Java code
+mvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-prettier-java-sort-imports
+
+# Run static analysis
+mvn verify --activate-profiles errorprone-strict
+```
+
+**Step 3:** Add GitHub Actions workflows to run these profiles in CI. Here are two patterns used in production.
+
+### Pattern 1: Required Checks (merge-group)
+
+Run all checks in parallel and require them to pass before merging:
+
+```yaml
+on:
+    pull_request:
+    merge_group:
+
+jobs:
+    maven-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: jdx/mise-action@v2
+            - run: mvn verify
+
+    maven-errorprone-strict:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: jdx/mise-action@v2
+            - run: mvn verify --activate-profiles errorprone-strict -DskipTests
+
+    checkstyle-semantics:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: jdx/mise-action@v2
+            - run: mvn checkstyle:check --activate-profiles checkstyle-semantics
+
+    spotless-java:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: jdx/mise-action@v2
+            - run: mvn spotless:check --activate-profiles spotless-check,spotless-java,spotless-prettier-java-sort-imports
+
+    all-checks:
+        name: All checks
+        if: ${{ !cancelled() }}
+        needs: [maven-test, maven-errorprone-strict, checkstyle-semantics, spotless-java]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: re-actors/alls-green@release/v1
+              with:
+                  jobs: ${{ toJSON(needs) }}
+```
+
+See [merge-group.yml](https://github.com/motlin/liftwizard/blob/main/.github/workflows/merge-group.yml) for all available profiles in use.
+
+### Pattern 2: Auto-Fix (pull-request)
+
+Automatically fix violations and push to a fix branch:
+
+```yaml
+on:
+    pull_request:
+
+jobs:
+    spotless-java-fix:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.pull_request.head.ref }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - uses: jdx/mise-action@v2
+
+            - name: Configure Git
+              run: |
+                  git config --global user.name "GitHub Actions"
+                  git config --global user.email "github-actions@github.com"
+
+            - name: Run Spotless Apply and commit changes
+              run: |
+                  mvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-prettier-java-sort-imports
+
+                  if [[ -n $(git status --porcelain) ]]; then
+                    FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-java"
+                    git switch --create $FIX_BRANCH
+                    git add --all
+                    git commit --message "Auto-fix: Apply Spotless Java formatting"
+                    git push --force origin $FIX_BRANCH
+                    echo "Fixes pushed to $FIX_BRANCH branch."
+                    exit 1
+                  fi
+```
+
+See [pull-request.yml](https://github.com/motlin/liftwizard/blob/main/.github/workflows/pull-request.yml) for auto-fix jobs for spotless, prettier, errorprone, and OpenRewrite.
+
+## Profile List
+
+| Profile ID | Category | Description |
+| --- | --- | --- |
+| [{type=StrongEmphasis, content=[{text=Build & Packaging, type=SimpleText}]}] |  |  |
+| [{code=maven-javadoc-plugin, type=InlinedCode}] | [{text=Build & Packaging, type=SimpleText}] | [{text=Generate Javadoc, type=SimpleText}] |
+| [{code=maven-shade-plugin, type=InlinedCode}] | [{text=Build & Packaging, type=SimpleText}] | [{text=Create uber-jars, type=SimpleText}] |
+| [{code=znai-maven-plugin, type=InlinedCode}] | [{text=Build & Packaging, type=SimpleText}] | [{text=Generate Znai documentation, type=SimpleText}] |
+| [{type=StrongEmphasis, content=[{text=Code Formatting, type=SimpleText}]}] |  |  |
+| [{code=prettier-apply, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Apply Prettier formatting, type=SimpleText}] |
+| [{code=prettier-check, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Check code formatting with Prettier, type=SimpleText}] |
+| [{code=spotless-antlr, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=ANTLR grammar formatting, type=SimpleText}] |
+| [{code=spotless-apply, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Apply Spotless formatting, type=SimpleText}] |
+| [{code=spotless-check, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Check code formatting with Spotless, type=SimpleText}] |
+| [{code=spotless-formats, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Format .gitattributes and .gitignore files, type=SimpleText}] |
+| [{code=spotless-google-java-format, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Google Java style formatting, type=SimpleText}] |
+| [{code=spotless-java, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Basic Java formatting (whitespace, newlines), type=SimpleText}] |
+| [{code=spotless-java-cleanthat, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Code cleanup and refactoring, type=SimpleText}] |
+| [{code=spotless-java-sort-imports, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Sort and organize Java imports, type=SimpleText}] |
+| [{code=spotless-java-unused-imports, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Remove unused Java imports, type=SimpleText}] |
+| [{code=spotless-json, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=JSON/JSON5 formatting, type=SimpleText}] |
+| [{code=spotless-markdown, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Markdown formatting, type=SimpleText}] |
+| [{code=spotless-pom, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=POM file formatting and sorting, type=SimpleText}] |
+| [{code=spotless-prettier-java, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Prettier formatting for Java, type=SimpleText}] |
+| [{code=spotless-prettier-java-sort-imports, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=Prettier + import sorting, type=SimpleText}] |
+| [{code=spotless-sql, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=SQL formatting with Prettier, type=SimpleText}] |
+| [{code=spotless-yaml, type=InlinedCode}] | [{text=Code Formatting, type=SimpleText}] | [{text=YAML formatting, type=SimpleText}] |
+| [{type=StrongEmphasis, content=[{text=Code Refactoring, type=SimpleText}]}] |  |  |
+| [{code=rewrite-maven-plugin, type=InlinedCode}] | [{text=Code Refactoring, type=SimpleText}] | [{text=Safe refactoring recipes, type=SimpleText}] |
+| [{code=rewrite-maven-plugin-dryRun, type=InlinedCode}] | [{text=Code Refactoring, type=SimpleText}] | [{text=Verify refactors without applying, type=SimpleText}] |
+| [{code=rewrite-maven-plugin-one-off, type=InlinedCode}] | [{text=Code Refactoring, type=SimpleText}] | [{text=Potentially breaking refactors, type=SimpleText}] |
+| [{type=StrongEmphasis, content=[{text=Dependency Management, type=SimpleText}]}] |  |  |
+| [{code=maven-dependency-plugin, type=InlinedCode}] | [{text=Dependency Management, type=SimpleText}] | [{text=Analyze dependencies, type=SimpleText}] |
+| [{code=maven-enforcer-plugin, type=InlinedCode}] | [{text=Dependency Management, type=SimpleText}] | [{text=Enforce dependency rules, type=SimpleText}] |
+| [{type=StrongEmphasis, content=[{text=Static Analysis, type=SimpleText}]}] |  |  |
+| [{code=checkstyle-formatting, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Code formatting checks, type=SimpleText}] |
+| [{code=checkstyle-formatting-strict, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Strict formatting checks, type=SimpleText}] |
+| [{code=checkstyle-semantics, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Semantic code style checks, type=SimpleText}] |
+| [{code=checkstyle-semantics-strict, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Strict semantic checks, type=SimpleText}] |
+| [{code=errorprone, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Basic error-prone checks, type=SimpleText}] |
+| [{code=errorprone-patch, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Generate patches for error-prone fixes, type=SimpleText}] |
+| [{code=errorprone-strict, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=Strict error-prone checks, type=SimpleText}] |
+| [{code=spotbugs-maven-plugin, type=InlinedCode}] | [{text=Static Analysis, type=SimpleText}] | [{text=FindBugs successor for bug detection, type=SimpleText}] |
+| [{type=StrongEmphasis, content=[{text=Testing & Coverage, type=SimpleText}]}] |  |  |
+| [{code=jacoco-maven-plugin, type=InlinedCode}] | [{text=Testing & Coverage, type=SimpleText}] | [{text=Code coverage with JaCoCo, type=SimpleText}] |
+| [{code=rerecord, type=InlinedCode}] | [{text=Testing & Coverage, type=SimpleText}] | [{text=Re-record test snapshots, type=SimpleText}] |
+| [{type=StrongEmphasis, content=[{text=Utility, type=SimpleText}]}] |  |  |
+| [{code=deploy, type=InlinedCode}] | [{text=Utility, type=SimpleText}] | [{text=Deploy artifacts with sources, type=SimpleText}] |
+| [{code=spotless-preserve-cache, type=InlinedCode}] | [{text=Utility, type=SimpleText}] | [{text=Preserve Spotless cache during clean, type=SimpleText}] |
+
+For detailed profile configurations, see [liftwizard-profile-parent/pom.xml](https://github.com/motlin/liftwizard/blob/main/liftwizard-maven-build/liftwizard-profile-parent/pom.xml) on GitHub.
+
+# Temporal Data :: Temporal Data Overview
+answer-link: docs/temporal-data/temporal-data-overview
+
+Liftwizard has built-in support for working with temporal data. In this section, we'll explore the various features of services that utilize this technology.
+
+Note: This section is language and framework agnostic. If you’re interested in the underlying technology, Liftwizard's temporal support is built on [Reladomo](reladomo/reladomo-overview.md).
+
+# Temporal Data :: Temporal Data Overview :: Temporal features
+answer-link: docs/temporal-data/temporal-data-overview#temporal-features
+
+In an application with temporal data storage, data is stored along with timestamps. Here are some key features of temporal support:
+
+[Non-destructive edits](temporal-data/non-destructive-updates): Updates and deletes **won't lose any information**. Old data is phased out with a timestamp, and new data is phased in at the same timestamp.
+
+[As-of queries](temporal-data/as-of-queries): Retrieve data as it existed at a specific **point in time**.
+
+[Versioning](temporal-data/versioning): **Numbered** versions of data can make working with timestamps easier. As-of queries can be performed by either timestamp or version number.
+
+[Auditing](temporal-data/auditing): Keep track of **who** made each change, along with the data. With auditing enabled, each version has a user ID in addition to its timestamps.
+
+[Optimistic locking](temporal-data/optimistic-locking): Prevent multiple users from **accidentally discarding** each other's work with this feature. APIs that perform edits require a version number as input, and will fail if the input version number and current version number don't match.
+
+[Diff](temporal-data/diffs): See the differences between data at two version numbers.
+
+[Maker/Checker workflows](temporal-data/maker-checker-workflows): **Make and review changes** before exposing them to all users. Most users view the latest *approved* version of the data, while makers/checkers see the *latest* version.
+
+In the next section, we'll walk through a [running example](temporal-data/running-example) that showcases these features.
+
+# Temporal Data :: Running Example
+answer-link: docs/temporal-data/running-example
+
+Many real-life applications support temporal services. [Stack Overflow](https://stackoverflow.com/) supports all of the features listed in the [overview](temporal-data/temporal-data-overview).
+
+In this section, we'll use [Factorio School](https://www.factorio.school/blueprints) as a running example. [Factorio School](https://www.factorio.school/) and [Factorio Prints](https://factorioprints.com/) are websites that lets users share designs, called [blueprints](https://wiki.factorio.com/Blueprint), for the video game [Factorio](https://factorio.com/). Liftwizard and Factorio School were both created by the [same author](https://github.com/motlin/) and Factorio School leverages Liftwizard's temporal support.
+
+In the next section, we'll create and edit a blueprint, and see how non-destructive edits work.
+
+# Temporal Data :: Non Destructive Updates
+answer-link: docs/temporal-data/non-destructive-updates
+
+Blueprints are created in 3 steps, starting with a test clock set at `2001-01-01`.
+
+- At time 1 (`2001-01-01`), we create an Imgur Image entry.
+- At time 2 (`2001-01-02`), we upload the blueprint string and receive a sha.
+- At time 3 (`2001-01-03`), we upload the blueprint post.
+
+In this documentation, we'll focus on the third step.
+
+# Temporal Data :: Non Destructive Updates :: POST Request Body
+answer-link: docs/temporal-data/non-destructive-updates#post-request-body
+
+We create a blueprint post by `POST`ing to `/api/blueprint/`.
+
+```json5
+{
+	title: "Blueprint title",
+	blueprintString: {
+		// The blueprintString.sha is a foreign key, pointing to the blueprint data we created at time 2.
+		sha: "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+	},
+	imgurImage: {
+		// The imgurImage.imgurId is a foreign key, pointing to the Imgur Image data we created at time 1.
+		imgurId: "Imgur ID 1",
+	},
+	descriptionMarkdown: "Blueprint description markdown",
+	// Blueprints can be tagged with multiple tags. Here we have a single tag, "belt balancer".
+	tags: [
+		{
+			// This double nesting is how many-to-many relationships are represented. This object is the BlueprintTag mapping.
+			tag: {
+				// This object is the tag. It's part of reference data that was created earlier. The (category, name) pair is the foreign key.
+				category: "belt",
+				name: "balancer",
+			},
+		},
+	],
+}
+```
+
+# Temporal Data :: Non Destructive Updates :: POST Response Body
+answer-link: docs/temporal-data/non-destructive-updates#post-response-body
+
+The response includes all the properties we sent, along with server-generated information.
+
+```json
+{
+	"key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+	"systemFrom": "2001-01-03T23:59:59Z",
+	"systemTo": null,
+	"version": {
+		"number": 1,
+		"systemFrom": "2001-01-03T23:59:59Z",
+		"systemTo": null,
+		"createdOn": "2001-01-03T23:59:59Z",
+		"createdBy": {
+			"userId": "User ID"
+		},
+		"lastUpdatedBy": {
+			"userId": "User ID"
+		}
+	},
+	"title": "Blueprint title",
+	"voteSummary": {
+		"numberOfUpvotes": 0,
+		"systemFrom": "2001-01-03T23:59:59Z",
+		"systemTo": null
+	},
+	"blueprintString": {
+		"sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+		"createdOn": "2001-01-02T23:59:59Z",
+		"createdBy": {
+			"userId": "User ID"
+		}
+	},
+	"imgurImage": {
+		"imgurId": "Imgur ID 1",
+		"imgurType": "image/png",
+		"height": 300,
+		"width": 300,
+		"systemFrom": "2001-01-01T23:59:59Z",
+		"systemTo": null
+	},
+	"descriptionMarkdown": "Blueprint description markdown",
+	"tags": [
+		{
+			"systemFrom": "2001-01-03T23:59:59Z",
+			"systemTo": null,
+			"tag": {
+				"category": "belt",
+				"name": "balancer",
+				"ordinal": 1,
+				"systemFrom": "2000-01-01T00:00:00Z",
+				"systemTo": null
+			}
+		}
+	]
+}
+```
+
+# Temporal Data :: Non Destructive Updates :: Temporal Response
+answer-link: docs/temporal-data/non-destructive-updates#temporal-response
+
+Here's the same response, with some temporal features labeled. These will be covered in upcoming sections.
+
+```json5
+{
+	// The key is generated-server side.
+	key: "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+	// The systemFrom is the time we created the blueprint post time 3: 2001-01-03.
+	systemFrom: "2001-01-03T23:59:59Z",
+	// The systemTo is null, or infinity, indicating this data is current.
+	systemTo: null,
+	// The version object is covered in the section on Versioning.
+	version: {
+		number: 1,
+		systemFrom: "2001-01-03T23:59:59Z",
+		systemTo: null,
+		// The createdOn, createdBy, and lastUpdatedBy properties are covered in the section on Auditing.
+		createdOn: "2001-01-03T23:59:59Z",
+		createdBy: {
+			userId: "User ID",
+		},
+		lastUpdatedBy: {
+			userId: "User ID",
+		},
+	},
+	title: "Blueprint title",
+	voteSummary: {
+		numberOfUpvotes: 0,
+		systemFrom: "2001-01-03T23:59:59Z",
+		systemTo: null,
+	},
+	blueprintString: {
+		// The request only included blueprintString.sha, a foreign key. The response includes the whole object.
+		sha: "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+		// We created the blueprint data at time 2: 2001-01-02.
+		createdOn: "2001-01-02T23:59:59Z",
+		createdBy: {
+			userId: "User ID",
+		},
+	},
+	imgurImage: {
+		// The request only included the imgurImage.id, a foreign key. The response includes the whole object.
+		imgurId: "Imgur ID 1",
+		imgurType: "image/png",
+		height: 300,
+		width: 300,
+		// We created the Imugr image at time 1: 2001-01-01.
+		systemFrom: "2001-01-01T23:59:59Z",
+		systemTo: null,
+	},
+	descriptionMarkdown: "Blueprint description markdown",
+	tags: [
+		{
+			// The BlueprintTag mapping was created along with the blueprint post at time 3: 2001-01-03.
+			systemFrom: "2001-01-03T23:59:59Z",
+			systemTo: null,
+			tag: {
+				// The request only included tag.category and tag.name, the composite foreign key. The response includes the whole object.
+				category: "belt",
+				name: "balancer",
+				ordinal: 1,
+				// It was created a year earlier than the Blueprint.
+				systemFrom: "2000-01-01T00:00:00Z",
+				systemTo: null,
+			},
+		},
+	],
+}
+```
+
+# Temporal Data :: Non Destructive Updates :: Non-destructive updates
+answer-link: docs/temporal-data/non-destructive-updates#non-destructive-updates
+
+Next, we update the blueprint by `PATCH`ing `/api/blueprint/{id}?version=1`.
+
+```json
+{
+	"version": {
+		"number": 1
+	},
+	"title": "Edited blueprint title",
+	"descriptionMarkdown": "Edited Blueprint description markdown"
+}
+```
+
+# Temporal Data :: Non Destructive Updates :: Response
+answer-link: docs/temporal-data/non-destructive-updates#response
+
+The response includes the updated properties we sent, plus our first temporal updates.
+
+The edits are reflected at time 4 (`2001-01-04`).
+
+```diff
+ {
+   "key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+-  "systemFrom": "2001-01-03T23:59:59Z",
++  "systemFrom": "2001-01-04T23:59:59Z",
+   "systemTo": null,
+   "version": {
+-    "number": 1,
+-    "systemFrom": "2001-01-03T23:59:59Z",
++    "number": 2,
++    "systemFrom": "2001-01-04T23:59:59Z",
+     "systemTo": null,
+     "createdOn": "2001-01-03T23:59:59Z",
+     "createdBy": {
+       "userId": "User ID"
+     },
+     "lastUpdatedBy": {
+       "userId": "User ID"
+     }
+   },
+-  "title": "Blueprint title",
++  "title": "Edited blueprint title",
+   "voteSummary": {
+     "numberOfUpvotes": 0,
+     "systemFrom": "2001-01-03T23:59:59Z",
+     "systemTo": null
+   },
+   "blueprintString": {
+     "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+     "createdOn": "2001-01-02T23:59:59Z",
+     "createdBy": {
+       "userId": "User ID"
+     }
+   },
+   "imgurImage": {
+     "imgurId": "Imgur ID 1",
+     "imgurType": "image/png",
+     "height": 300,
+     "width": 300,
+     "systemFrom": "2001-01-01T23:59:59Z",
+     "systemTo": null
+   },
+-  "descriptionMarkdown": "Blueprint description markdown",
++  "descriptionMarkdown": "Edited Blueprint description markdown",
+   "tags": [
+     {
+       "tagCategory": "belt",
+       "tagName": "balancer",
+       "systemFrom": "2001-01-03T23:59:59Z",
+       "systemTo": null,
+       "tag": {
+         "category": "belt",
+         "name": "balancer",
+         "ordinal": 1,
+         "systemFrom": "2000-01-01T00:00:00Z",
+         "systemTo": null
+       }
+     }
+   ]
+ }
+```
+
+# Temporal Data :: Non Destructive Updates :: As-of query
+answer-link: docs/temporal-data/non-destructive-updates#as-of-query
+
+In the next section, we'll perform our first as-of query to prove to ourselves that no data has been lost.
+
+# Temporal Data :: As Of Queries
+answer-link: docs/temporal-data/as-of-queries
+
+To confirm that we have not lost any data, we can perform an as-of query. We want to query the state of the blueprint at time 3 (`2001-01-03`), before the non-destructive update.
+
+We `GET` from `/api/blueprint/{blueprintKey}?asOf={asOf}`.
+
+We created a blueprint with key `6ed1f638-a63c-3a54-af67-ba494f27bff2` at time 3 (`2001-01-03`) and edited it at time 4 (`2001-01-04`). We can query as-of any time in the range `[2001-01-03, 2001-01-04)`. We'll use the beginning of the range: `2001-01-03`.
+
+Plugging these values into the template, we GET `/api/blueprint/6ed1f638-a63c-3a54-af67-ba494f27bff2?asOf=2001-01-03T23:59:59Z`
+
+```diff
+ {
+   "key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+   "systemFrom": "2001-01-03T23:59:59Z",
+-  "systemTo": null,
++  "systemTo": "2001-01-04T23:59:59Z",
+   "version": {
+     "number": 1,
+     "systemFrom": "2001-01-03T23:59:59Z",
+-    "systemTo": null,
++    "systemTo": "2001-01-04T23:59:59Z",
+     "createdOn": "2001-01-03T23:59:59Z",
+     "createdBy": {
+       "userId": "User ID"
+     },
+     "lastUpdatedBy": {
+       "userId": "User ID"
+     }
+   },
+   "title": "Blueprint title",
+   "voteSummary": {
+     "numberOfUpvotes": 0,
+     "systemFrom": "2001-01-03T23:59:59Z",
+     "systemTo": null
+   },
+   "blueprintString": {
+     "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+     "createdOn": "2001-01-02T23:59:59Z",
+     "createdBy": {
+       "userId": "User ID"
+     }
+   },
+   "imgurImage": {
+     "imgurId": "Imgur ID 1",
+     "imgurType": "image/png",
+     "height": 300,
+     "width": 300,
+     "systemFrom": "2001-01-01T23:59:59Z",
+     "systemTo": null
+   },
+   "descriptionMarkdown": "Blueprint description markdown",
+   "tags": [
+     {
+       "tagCategory": "belt",
+       "tagName": "balancer",
+       "systemFrom": "2001-01-03T23:59:59Z",
+       "systemTo": null,
+       "tag": {
+         "category": "belt",
+         "name": "balancer",
+         "ordinal": 1,
+         "systemFrom": "2000-01-01T00:00:00Z",
+         "systemTo": null
+       }
+     }
+   ]
+ }
+```
+
+The response we get from `/api/blueprint/{blueprintKey}?asOf=2001-01-03T23:59:59Z` is nearly identical to the response we would have got from `/api/blueprint/{blueprintKey}` had we run the query at time 3: `2001-01-03`. This makes sense!
+
+There's a small difference in the data. Some of the `systemTo` values that used to be `null` are now time 4: `2001-01-04`. This illustrates an important rule of temporal data.
+
+**All writes into the data store are immutable and append-only, except for the `systemTo` value.**
+
+# Temporal Data :: As Of Queries :: Temporal Schema
+answer-link: docs/temporal-data/as-of-queries#temporal-schema
+
+Next we'll focus on the data store. In this example, we're using a relational database, but these concepts apply to any data store.
+
+The schema maps closely to the json examples above, so if you're comfortable with the data, feel free to skip ahead to the queries.
+
+## BLUEPRINT after create
+
+
+## BLUEPRINT after update
+
+
+## BLUEPRINT_VERSION after create
+
+
+## BLUEPRINT_VERSION after update
+
+
+## Temporal Schema patterns
+
+- All tables have `systemFrom` and `systemTo` columns.
+- Old data is phased out by setting `systemTo` to now.
+- New data is phased in by setting `systemFrom` to now.
+- The new row's `systemFrom` and the old row's `systemTo` are set to the same value, forming a contiguous timeline.
+- When several tables are edited within a transaction, the `systemFrom` and `systemTo` values are set to the same value across all tables.
+- Unchanged data is copied from the old row to the new row. For very wide columns that don't change frequently, it may be more efficient to split out a separate table.
+- The `systemTo` value of the new row is set to `9999-12-01 23:59:00.00` to indicate that the row is still active. In json, we had used `null` to represent the infinity date.
+
+# Temporal Data :: As Of Queries :: Temporal queries in SQL
+answer-link: docs/temporal-data/as-of-queries#temporal-queries-in-sql
+
+As-of queries are implemented in SQL by adding temporal criteria to our `WHERE` clause.
+
+```sql
+select *
+from BLUEPRINT t0
+where t0.key = '6ed1f638-a63c-3a54-af67-ba494f27bff2'
+  and t0.system_from <= '2001-01-03 23:59:59.000'
+  and t0.system_to > '2001-01-03 23:59:59.000'
+```
+
+Now we can see why the infinity date is represented as `9999-12-01 23:59:00.00`. If we instead used `null` we'd need to add additional criteria to our WHERE clauses.
+
+Joins that are one hop away from our main table are similar.
+
+```sql
+select *
+from BLUEPRINT_TAG t0
+where t0.blueprint_key = '6ed1f638-a63c-3a54-af67-ba494f27bff2'
+  and t0.system_from <= '2001-01-03 23:59:59.000'
+  and t0.system_to > '2001-01-03 23:59:59.000'
+```
+
+Joins that are two hops away from our main table are more complicated. We'll see examples of these later.
+
+## Temporal query patterns
+
+- We perform asOf queries by adding `where system_from <= {asOf} and system_to > {asOf}` to our `WHERE` clause.
+- We add this exact came criteria to every query.
+- We always `SELECT` all columns from the table. In the examples above we used `SELECT *`. In production usage, it's common to list the columns explicitly.
+- We never `SELECT` columns from two tables in the same query. Even in the upcoming examples of joins, we always `SELECT` from one table at a time.
+
+In the next section, we'll learn about adding versions and querying "as of" a version number.
+
+# Temporal Data :: Versioning
+answer-link: docs/temporal-data/versioning
+
+We've already seen version numbers in some examples. When we edited our Blueprint, the version number increased from 1 to 2.
+
+When querying for previous data, version numbers can be more convenient than timestamps. We'll see this in the section on querying by version.
+
+With versioning, we bump the version number when we edit any data within the composite. For Blueprints, this means that we bump the version number when we edit the Blueprint itself, when we replace the ImgurImage, when we replace the blueprint string, and when we add or remove tags. We'll take a closer look in the section on Composites.
+
+# Temporal Data :: Versioning :: Query as-of version
+answer-link: docs/temporal-data/versioning#query-as-of-version
+
+As-of queries by version over rest are performed by adding a `version` query parameter to the URL.
+
+Our template is `GET /api/blueprint/{blueprintKey}?version={version}`.
+
+Plugging in the key from our running example, and the version number 1, we GET `/api/blueprint/6ed1f638-a63c-3a54-af67-ba494f27bff2?version=1`
+
+This is similar to the as-of query by timestamp from the previous section, and the response is identical so we won't repeat it here.
+
+# Temporal Data :: Versioning :: Version queries in SQL
+answer-link: docs/temporal-data/versioning#version-queries-in-sql
+
+At the SQL layer, queries by version number are implemented by starting with the version table.
+
+```sql
+select *
+from BLUEPRINT_VERSION t0
+where t0.key = '6ed1f638-a63c-3a54-af67-ba494f27bff2'
+  and t0.number = 1
+```
+
+This query returns version 1, which existed for the duration `[2001-01-03, 2001-01-04)`.
+
+
+At this point we take the system_from value of `2001-01-03 23:59:59.000` and use it in our subsequent queries. The queries on all other tables are identical to the queries in the previous section.
+
+For example, to query the BLUEPRINT table:
+
+```sql
+select *
+from BLUEPRINT t0
+where t0.key = '6ed1f638-a63c-3a54-af67-ba494f27bff2'
+  and t0.system_from <= '2001-01-03 23:59:59.000'
+  and t0.system_to > '2001-01-03 23:59:59.000'
+```
+
+# Temporal Data :: Versioning :: Composites
+answer-link: docs/temporal-data/versioning#composites
+
+In the previous example, we edited the Blueprint's title and markdown description, creating version 2.
+
+Now we'll replace the Blueprint string, the ImgurImage, and add two more tags. We want to bump the version number just once more, to 3.
+
+We update the blueprint by `PATCH`ing `/api/blueprint/{id}?version=2`.
+
+```json
+{
+	"version": {
+		"number": 2
+	},
+	"blueprintString": {
+		"sha": "b11911083a0cf471a5156108389f9899675ccb0c"
+	},
+	"imgurImage": {
+		"imgurId": "2nd Imgur ID"
+	},
+	"tags": [
+		{
+			"tag": {
+				"category": "moderation",
+				"name": "scheduled for deletion"
+			}
+		},
+		{
+			"tag": {
+				"category": "belt",
+				"name": "balancer"
+			}
+		},
+		{
+			"tag": {
+				"category": "belt",
+				"name": "prioritizer"
+			}
+		}
+	]
+}
+```
+
+# Temporal Data :: Versioning :: Response
+answer-link: docs/temporal-data/versioning#response
+
+As desired, we performed the several edits while bumping the version number by only one.
+
+In addition, all of the new `systemFrom` times are identical: `2001-01-05T23:59:59Z`.
+
+At the SQL level, all the edits were performed in a single transaction.
+
+```diff
+ {
+   "key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+-  "systemFrom": "2001-01-04T23:59:59Z",
++  "systemFrom": "2001-01-05T23:59:59Z",
+   "systemTo": null,
+   "version": {
+-    "number": 2,
+-    "systemFrom": "2001-01-04T23:59:59Z",
++    "number": 3,
++    "systemFrom": "2001-01-05T23:59:59Z",
+     "systemTo": null,
+     "createdOn": "2001-01-03T23:59:59Z",
+     "createdBy": {
+       "userId": "User ID"
+     },
+     "lastUpdatedBy": {
+       "userId": "User ID"
+     }
+   },
+   "title": "Edited blueprint title",
+   "voteSummary": {
+     "numberOfUpvotes": 0,
+     "systemFrom": "2001-01-03T23:59:59Z",
+     "systemTo": null
+   },
+   "blueprintString": {
+-    "sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+-    "createdOn": "2001-01-02T23:59:59Z",
++    "sha": "b11911083a0cf471a5156108389f9899675ccb0c",
++    "createdOn": "2001-01-03T00:00:00Z",
+     "createdBy": {
+       "userId": "User ID"
+     }
+   },
+   "imgurImage": {
+-    "imgurId": "Imgur ID 1",
+-    "imgurType": "image/png",
+-    "height": 300,
+-    "width": 300,
++    "imgurId": "2nd Imgur ID",
++    "imgurType": "2nd Imgur Type",
++    "height": 200,
++    "width": 200,
+     "systemFrom": "2001-01-01T23:59:59Z",
+     "systemTo": null
+   },
+   "descriptionMarkdown": "Edited Blueprint description markdown",
+   "tags": [
+     {
+       "tagCategory": "belt",
+       "tagName": "balancer",
+       "systemFrom": "2001-01-03T23:59:59Z",
+       "systemTo": null,
+       "tag": {
+         "category": "belt",
+         "name": "balancer",
+         "ordinal": 1,
+         "systemFrom": "2000-01-01T00:00:00Z",
+         "systemTo": null
+       }
++    },
++    {
++      "tagCategory": "belt",
++      "tagName": "prioritizer",
++      "systemFrom": "2001-01-05T23:59:59Z",
++      "systemTo": null,
++      "tag": {
++        "category": "belt",
++        "name": "prioritizer",
++        "ordinal": 2,
++        "systemFrom": "2000-01-01T00:00:00Z",
++        "systemTo": null
++      }
++    },
++    {
++      "tagCategory": "moderation",
++      "tagName": "scheduled for deletion",
++      "systemFrom": "2001-01-05T23:59:59Z",
++      "systemTo": null,
++      "tag": {
++        "category": "moderation",
++        "name": "scheduled for deletion",
++        "ordinal": 18,
++        "systemFrom": "2000-01-01T00:00:00Z",
++        "systemTo": null
++      }
+     }
+   ]
+ }
+```
+
+# Temporal Data :: Versioning :: Ownership direction
+answer-link: docs/temporal-data/versioning#ownership-direction
+
+`BlueprintTag` sits in the middle of a many-to-many relationship between `Blueprint` and `Tag`. In this example, we considered `BlueprintTag` to be part of the composite making up the `Blueprint`. Should we also consider it to be part of the `Tag` as well?
+
+
+This is our choice as application designers. In this case, it makes sense for `BlueprintTag` to be part of the `Blueprint`, but not part of `Tag`.
+
+Stack Overflow makes a similar choice. `Questions` and `Tag`s are both versioned. Applying new tags to a question creates a new version of the `Question`, but not the `Tag`.
+
+In the UML diagram above, composite relationships are denoted by black diamonds.
+
+Composites are subtle, so let's walk through a few examples.
+
+- Editing a Blueprint's title or description creates a new version. These are properties directly on the root type.
+- Adding or removing BlueprintTag mappings creates a new version. These objects live within the composite.
+- BlueprintTag mappings don't have any mutable properties. If they did, editing those properties would create a new version. For example, if we persisted their relative ordering with an ordinal property, then reordering the Blueprint's tags would create a new version.
+- When the Blueprint author changes their display name, this does not create a new version. The User object is not part of the composite.
+- We don't allow reassigning Blueprints to another author. If we did, repointing the author would create a new version. This works well with a temporal schema, because Blueprint.createdById would be swapped.
+
+# Temporal Data :: Auditing
+answer-link: docs/temporal-data/auditing
+
+**Auditing** means tracking who performed each create and update operation.
+
+The version object is a convenient place to store this information. Each version has a createdOn timestamp, and createdBy and lastUpdatedBy fields.
+
+```json
+{
+	"key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
+	"systemFrom": "2001-01-03T23:59:59Z",
+	"systemTo": null,
+	"version": {
+		"number": 1,
+		"systemFrom": "2001-01-03T23:59:59Z",
+		"systemTo": null,
+		"createdOn": "2001-01-03T23:59:59Z",
+		"createdBy": {
+			"userId": "User ID"
+		},
+		"lastUpdatedBy": {
+			"userId": "User ID"
+		}
+	},
+	"title": "Blueprint title",
+	"voteSummary": {
+		"numberOfUpvotes": 0,
+		"systemFrom": "2001-01-03T23:59:59Z",
+		"systemTo": null
+	},
+	"blueprintString": {
+		"sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
+		"createdOn": "2001-01-02T23:59:59Z",
+		"createdBy": {
+			"userId": "User ID"
+		}
+	},
+	"imgurImage": {
+		"imgurId": "Imgur ID 1",
+		"imgurType": "image/png",
+		"height": 300,
+		"width": 300,
+		"systemFrom": "2001-01-01T23:59:59Z",
+		"systemTo": null
+	},
+	"descriptionMarkdown": "Blueprint description markdown",
+	"tags": [
+		{
+			"systemFrom": "2001-01-03T23:59:59Z",
+			"systemTo": null,
+			"tag": {
+				"category": "belt",
+				"name": "balancer",
+				"ordinal": 1,
+				"systemFrom": "2000-01-01T00:00:00Z",
+				"systemTo": null
+			}
+		}
+	]
+}
+```
+
+The version table includes column createdById and lastUpdatedById that point to a user table.
+
+## Deletes
+

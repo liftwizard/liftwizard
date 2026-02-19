@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Liftwizard: Non Destructive Updates</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+<link rel="stylesheet" type="text/css" href="/docs/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/main.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+</head>
+<link rel="shortcut icon" href="/docs/favicon.png"type="image/ico"/>
+<body class="znai-theme theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'znai-theme theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section id="page-content" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<p>Blueprints are created in 3 steps starting with a test clock set at At time 1 we create an Imgur Image entry At time 2 we upload the blueprint string and receive a sha At time 3 we upload the blueprint post In this documentation we ll focus on the third step 2001 01 01 2001 01 01 2001 01 02 2001 01 03</p>
+</article>
+
+<article>
+<header><h1>POST Request Body</h1></header>
+<p>We create a blueprint post by ing to POST api blueprint title Blueprint title blueprintString The blueprintString sha is a foreign key pointing to the blueprint data we created at time 2 sha cc341849b4086ce7b1893b366b0dc8e99ce4e595 imgurImage The imgurImage imgurId is a foreign key pointing to the Imgur Image data we created at time 1 imgurId Imgur ID 1 descriptionMarkdown Blueprint description markdown Blueprints can be tagged with multiple tags Here we have a single tag belt balancer tags This double nesting is how many to many relationships are represented This object is the BlueprintTag mapping tag This object is the tag It s part of reference data that was created earlier The category name pair is the foreign key category belt name balancer</p>
+</article>
+
+<article>
+<header><h1>POST Response Body</h1></header>
+<p>The response includes all the properties we sent along with server generated information key 6ed1f638 a63c 3a54 af67 ba494f27bff2 systemFrom 2001 01 03T23 59 59Z systemTo null version number 1 systemFrom 2001 01 03T23 59 59Z systemTo null createdOn 2001 01 03T23 59 59Z createdBy userId User ID lastUpdatedBy userId User ID title Blueprint title voteSummary numberOfUpvotes 0 systemFrom 2001 01 03T23 59 59Z systemTo null blueprintString sha cc341849b4086ce7b1893b366b0dc8e99ce4e595 createdOn 2001 01 02T23 59 59Z createdBy userId User ID imgurImage imgurId Imgur ID 1 imgurType image png height 300 width 300 systemFrom 2001 01 01T23 59 59Z systemTo null descriptionMarkdown Blueprint description markdown tags systemFrom 2001 01 03T23 59 59Z systemTo null tag category belt name balancer ordinal 1 systemFrom 2000 01 01T00 00 00Z systemTo null</p>
+</article>
+
+<article>
+<header><h1>Temporal Response</h1></header>
+<p>Here s the same response with some temporal features labeled These will be covered in upcoming sections The key is generated server side key 6ed1f638 a63c 3a54 af67 ba494f27bff2 The systemFrom is the time we created the blueprint post time 3 2001 01 03 systemFrom 2001 01 03T23 59 59Z The systemTo is null or infinity indicating this data is current systemTo null The version object is covered in the section on Versioning version number 1 systemFrom 2001 01 03T23 59 59Z systemTo null The createdOn createdBy and lastUpdatedBy properties are covered in the section on Auditing createdOn 2001 01 03T23 59 59Z createdBy userId User ID lastUpdatedBy userId User ID title Blueprint title voteSummary numberOfUpvotes 0 systemFrom 2001 01 03T23 59 59Z systemTo null blueprintString The request only included blueprintString sha a foreign key The response includes the whole object sha cc341849b4086ce7b1893b366b0dc8e99ce4e595 We created the blueprint data at time 2 2001 01 02 createdOn 2001 01 02T23 59 59Z createdBy userId User ID imgurImage The request only included the imgurImage id a foreign key The response includes the whole object imgurId Imgur ID 1 imgurType image png height 300 width 300 We created the Imugr image at time 1 2001 01 01 systemFrom 2001 01 01T23 59 59Z systemTo null descriptionMarkdown Blueprint description markdown tags The BlueprintTag mapping was created along with the blueprint post at time 3 2001 01 03 systemFrom 2001 01 03T23 59 59Z systemTo null tag The request only included tag category and tag name the composite foreign key The response includes the whole object category belt name balancer ordinal 1 It was created a year earlier than the Blueprint systemFrom 2000 01 01T00 00 00Z systemTo null</p>
+</article>
+
+<article>
+<header><h1>Non-destructive updates</h1></header>
+<p>Next we update the blueprint by ing PATCH api blueprint id version 1</p>
+</article>
+
+<article>
+<header><h1>Response</h1></header>
+<p>The response includes the updated properties we sent plus our first temporal updates The edits are reflected at time 4 2001 01 04 key 6ed1f638 a63c 3a54 af67 ba494f27bff2 systemFrom 2001 01 03T23 59 59Z systemFrom 2001 01 04T23 59 59Z systemTo null version number 1 systemFrom 2001 01 03T23 59 59Z number 2 systemFrom 2001 01 04T23 59 59Z systemTo null createdOn 2001 01 03T23 59 59Z createdBy userId User ID lastUpdatedBy userId User ID title Blueprint title title Edited blueprint title voteSummary numberOfUpvotes 0 systemFrom 2001 01 03T23 59 59Z systemTo null blueprintString sha cc341849b4086ce7b1893b366b0dc8e99ce4e595 createdOn 2001 01 02T23 59 59Z createdBy userId User ID imgurImage imgurId Imgur ID 1 imgurType image png height 300 width 300 systemFrom 2001 01 01T23 59 59Z systemTo null descriptionMarkdown Blueprint description markdown descriptionMarkdown Edited Blueprint description markdown tags tagCategory belt tagName balancer systemFrom 2001 01 03T23 59 59Z systemTo null tag category belt name balancer ordinal 1 systemFrom 2000 01 01T00 00 00Z systemTo null</p>
+</article>
+
+<article>
+<header><h1>As-of query</h1></header>
+<p>In the next section we ll perform our first as of query to prove to ourselves that no data has been lost</p>
+</article>
+</section>
+<section id="table-of-contents" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<a href="/docs/introduction/liftwizard/">Liftwizard</a>
+</article>
+
+<article>
+<a href="/docs/configuration/environment-variable-substitution/">Environment Variable Substitution</a>
+</article>
+
+<article>
+<a href="/docs/configuration/json5-configuration/">Json5 Configuration</a>
+</article>
+
+<article>
+<a href="/docs/configuration/ConfigLoggingBundle/">ConfigLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/jackson/ObjectMapperBundle/">ObjectMapperBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/JerseyHttpLoggingBundle/">JerseyHttpLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/buffered-logging/">Buffered Logging</a>
+</article>
+
+<article>
+<a href="/docs/logging/filter-factories/">Filter Factories</a>
+</article>
+
+<article>
+<a href="/docs/logging/Slf4jUncaughtExceptionHandlerBundle/">Slf4jUncaughtExceptionHandlerBundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/bundle/">Bundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-logging/">Instrumentation Logging</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-metrics/">Instrumentation Metrics</a>
+</article>
+
+<article>
+<a href="/docs/graphql/data-fetcher-async/">Data Fetcher Async</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-overview/">Reladomo Overview</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-operation-compiler/">Reladomo Operation Compiler</a>
+</article>
+
+<article>
+<a href="/docs/database/named-data-source/">Named Data Source</a>
+</article>
+
+<article>
+<a href="/docs/database/liquibase-migrations/">Liquibase Migrations</a>
+</article>
+
+<article>
+<a href="/docs/auth/dynamic-authentication-and-impersonation/">Dynamic Authentication And Impersonation</a>
+</article>
+
+<article>
+<a href="/docs/testing/testing/">Testing</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-files/">Matching Files</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-json/">Matching Json</a>
+</article>
+
+<article>
+<a href="/docs/maven/maven-best-practices/">Maven Best Practices</a>
+</article>
+
+<article>
+<a href="/docs/maven/minimal-parent/">Minimal Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/profile-parent/">Profile Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/bill-of-materials/">Bill Of Materials</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/temporal-data-overview/">Temporal Data Overview</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/running-example/">Running Example</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/non-destructive-updates/">Non Destructive Updates</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/as-of-queries/">As Of Queries</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/versioning/">Versioning</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/auditing/">Auditing</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/optimistic-locking/">Optimistic Locking</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/diffs/">Diffs</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/maker-checker-workflows/">Maker Checker Workflows</a>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/docs/footer.js"></script>
+<script type="text/javascript" src="/docs/toc.js"></script>
+<script type="text/javascript" src="/docs/assets.js"></script>
+<script type="module" src="/docs/static/__vite-browser-external-8Pss11n5.js"></script>
+<script type="module" src="/docs/static/architecture-U656AL7Q-DjPBJmSV.js"></script>
+<script type="module" src="/docs/static/architectureDiagram-VXUJARFQ-ChBn1xk8.js"></script>
+<script type="module" src="/docs/static/blockDiagram-VD42YOAC-Budi6d17.js"></script>
+<script type="module" src="/docs/static/c4Diagram-YG6GDRKO-Blf-Q85b.js"></script>
+<script type="module" src="/docs/static/classDiagram-2ON5EDUG-CV-r9Le6.js"></script>
+<script type="module" src="/docs/static/classDiagram-v2-WZHVMYZB-FjmVyVcW.js"></script>
+<script type="module" src="/docs/static/cose-bilkent-S5V4N54A-CwokiWn5.js"></script>
+<script type="module" src="/docs/static/dagre-6UL2VRFP-qGDT-4E-.js"></script>
+<script type="module" src="/docs/static/diagram-PSM6KHXK-asygiqY4.js"></script>
+<script type="module" src="/docs/static/diagram-QEK2KX5R-RckI0Vxl.js"></script>
+<script type="module" src="/docs/static/diagram-S2PKOQOG-D3NvEb3Q.js"></script>
+<script type="module" src="/docs/static/erDiagram-Q2GNP2WA-Cyp4lw77.js"></script>
+<script type="module" src="/docs/static/flowDiagram-NV44I4VS-Durqfvdj.js"></script>
+<script type="module" src="/docs/static/ganttDiagram-JELNMOA3-COOaPycs.js"></script>
+<script type="module" src="/docs/static/gitGraph-F6HP7TQM-CqS9sC5f.js"></script>
+<script type="module" src="/docs/static/gitGraphDiagram-NY62KEGX-BQN4gPQ9.js"></script>
+<script type="module" src="/docs/static/index-CvuEZtbh.js"></script>
+<script type="module" src="/docs/static/info-NVLQJR56-BUcKGpxN.js"></script>
+<script type="module" src="/docs/static/infoDiagram-WHAUD3N6-D7Xs3PNk.js"></script>
+<script type="module" src="/docs/static/journeyDiagram-XKPGCS4Q-C0gcrYJQ.js"></script>
+<script type="module" src="/docs/static/kanban-definition-3W4ZIXB7-DA5VTkMF.js"></script>
+<script type="module" src="/docs/static/katex-DDX8Hq9d.js"></script>
+<script type="module" src="/docs/static/mermaid-DyDSBgik.js"></script>
+<script type="module" src="/docs/static/mindmap-definition-VGOIOE7T-CeGF8Nug.js"></script>
+<script type="module" src="/docs/static/packet-BFZMPI3H-BiSDgaWb.js"></script>
+<script type="module" src="/docs/static/pie-7BOR55EZ-6DVHbXh5.js"></script>
+<script type="module" src="/docs/static/pieDiagram-ADFJNKIX-D8LeIfHz.js"></script>
+<script type="module" src="/docs/static/quadrantDiagram-AYHSOK5B-CT_QATm0.js"></script>
+<script type="module" src="/docs/static/radar-NHE76QYJ-DmqrXv6L.js"></script>
+<script type="module" src="/docs/static/requirementDiagram-UZGBJVZJ-BbaHa2fs.js"></script>
+<script type="module" src="/docs/static/rolldown-runtime-BfSZLbwf.js"></script>
+<script type="module" src="/docs/static/sankeyDiagram-TZEHDZUN-D9YTmh-I.js"></script>
+<script type="module" src="/docs/static/sequenceDiagram-WL72ISMW-D9tLLYI1.js"></script>
+<script type="module" src="/docs/static/stateDiagram-FKZM4ZOC-C__hSZA6.js"></script>
+<script type="module" src="/docs/static/stateDiagram-v2-4FDKWEC3-i8H-EINL.js"></script>
+<script type="module" src="/docs/static/timeline-definition-IT6M3QCI-xF8WKVt0.js"></script>
+<script type="module" src="/docs/static/treemap-KMMF4GRG-DIUMOj6d.js"></script>
+<script type="module" src="/docs/static/xychartDiagram-PRI3JC2R-BDCeeoNZ.js"></script>
+<script type="module" src="/docs/search-index.js"></script>
+<script type="module">
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+/*
+ * Copyright 2025 znai maintainers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+function initializeSearchIndex() {
+    if (window.znaiSearchData) {
+        window.znaiSearchIdx = window.createLocalSearchIndex();
+        window.populateLocalSearchIndexWithData(window.znaiSearchIdx, window.znaiSearchData);
+    }
+}
+
+// Call the method to initialize the search index.
+initializeSearchIndex();
+
+window.ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "link" : "https://github.com/liftwizard/liftwizard/blob/main/docs/src/main/znai",
+      "title" : "View On GitHub"
+    },
+    "id" : "docs",
+    "title" : "Liftwizard",
+    "type" : "Guide",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Blueprints are created in 3 steps, starting with a test clock set at ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "2001-01-01",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "delimiter" : ".",
+      "startNumber" : 1,
+      "type" : "OrderedList",
+      "content" : [ {
+        "type" : "ListItem",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "At time 1 (",
+            "type" : "SimpleText"
+          }, {
+            "code" : "2001-01-01",
+            "type" : "InlinedCode"
+          }, {
+            "text" : "), we create an Imgur Image entry.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "type" : "ListItem",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "At time 2 (",
+            "type" : "SimpleText"
+          }, {
+            "code" : "2001-01-02",
+            "type" : "InlinedCode"
+          }, {
+            "text" : "), we upload the blueprint string and receive a sha.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "type" : "ListItem",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "At time 3 (",
+            "type" : "SimpleText"
+          }, {
+            "code" : "2001-01-03",
+            "type" : "InlinedCode"
+          }, {
+            "text" : "), we upload the blueprint post.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "In this documentation, we'll focus on the third step.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "id" : "post-request-body",
+      "additionalIds" : [ ],
+      "title" : "POST Request Body",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "We create a blueprint post by ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "POST",
+          "type" : "InlinedCode"
+        }, {
+          "text" : "ing to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "/api/blueprint/",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "json5",
+        "snippet" : "{\n\ttitle: \"Blueprint title\",\n\tblueprintString: {\n\t\t// The blueprintString.sha is a foreign key, pointing to the blueprint data we created at time 2.\n\t\tsha: \"cc341849b4086ce7b1893b366b0dc8e99ce4e595\",\n\t},\n\timgurImage: {\n\t\t// The imgurImage.imgurId is a foreign key, pointing to the Imgur Image data we created at time 1.\n\t\timgurId: \"Imgur ID 1\",\n\t},\n\tdescriptionMarkdown: \"Blueprint description markdown\",\n\t// Blueprints can be tagged with multiple tags. Here we have a single tag, \"belt balancer\".\n\ttags: [\n\t\t{\n\t\t\t// This double nesting is how many-to-many relationships are represented. This object is the BlueprintTag mapping.\n\t\t\ttag: {\n\t\t\t\t// This object is the tag. It's part of reference data that was created earlier. The (category, name) pair is the foreign key.\n\t\t\t\tcategory: \"belt\",\n\t\t\t\tname: \"balancer\",\n\t\t\t},\n\t\t},\n\t],\n}",
+        "title" : "POST /api/blueprint/",
+        "commentsType" : "inline",
+        "anchorId" : "post-request-body-post-api-blueprint-",
+        "type" : "Snippet"
+      } ]
+    }, {
+      "id" : "post-response-body",
+      "additionalIds" : [ ],
+      "title" : "POST Response Body",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The response includes all the properties we sent, along with server-generated information.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "json",
+        "snippet" : "{\n\t\"key\": \"6ed1f638-a63c-3a54-af67-ba494f27bff2\",\n\t\"systemFrom\": \"2001-01-03T23:59:59Z\",\n\t\"systemTo\": null,\n\t\"version\": {\n\t\t\"number\": 1,\n\t\t\"systemFrom\": \"2001-01-03T23:59:59Z\",\n\t\t\"systemTo\": null,\n\t\t\"createdOn\": \"2001-01-03T23:59:59Z\",\n\t\t\"createdBy\": {\n\t\t\t\"userId\": \"User ID\"\n\t\t},\n\t\t\"lastUpdatedBy\": {\n\t\t\t\"userId\": \"User ID\"\n\t\t}\n\t},\n\t\"title\": \"Blueprint title\",\n\t\"voteSummary\": {\n\t\t\"numberOfUpvotes\": 0,\n\t\t\"systemFrom\": \"2001-01-03T23:59:59Z\",\n\t\t\"systemTo\": null\n\t},\n\t\"blueprintString\": {\n\t\t\"sha\": \"cc341849b4086ce7b1893b366b0dc8e99ce4e595\",\n\t\t\"createdOn\": \"2001-01-02T23:59:59Z\",\n\t\t\"createdBy\": {\n\t\t\t\"userId\": \"User ID\"\n\t\t}\n\t},\n\t\"imgurImage\": {\n\t\t\"imgurId\": \"Imgur ID 1\",\n\t\t\"imgurType\": \"image/png\",\n\t\t\"height\": 300,\n\t\t\"width\": 300,\n\t\t\"systemFrom\": \"2001-01-01T23:59:59Z\",\n\t\t\"systemTo\": null\n\t},\n\t\"descriptionMarkdown\": \"Blueprint description markdown\",\n\t\"tags\": [\n\t\t{\n\t\t\t\"systemFrom\": \"2001-01-03T23:59:59Z\",\n\t\t\t\"systemTo\": null,\n\t\t\t\"tag\": {\n\t\t\t\t\"category\": \"belt\",\n\t\t\t\t\"name\": \"balancer\",\n\t\t\t\t\"ordinal\": 1,\n\t\t\t\t\"systemFrom\": \"2000-01-01T00:00:00Z\",\n\t\t\t\t\"systemTo\": null\n\t\t\t}\n\t\t}\n\t]\n}",
+        "title" : "POST /api/blueprint/ response",
+        "highlight" : [ 16, 23, 30, 37, 43, 44 ],
+        "anchorId" : "post-response-body-post-api-blueprint-response",
+        "type" : "Snippet"
+      } ]
+    }, {
+      "id" : "temporal-response",
+      "additionalIds" : [ ],
+      "title" : "Temporal Response",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Here's the same response, with some temporal features labeled. These will be covered in upcoming sections.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "json5",
+        "snippet" : "{\n\t// The key is generated-server side.\n\tkey: \"6ed1f638-a63c-3a54-af67-ba494f27bff2\",\n\t// The systemFrom is the time we created the blueprint post time 3: 2001-01-03.\n\tsystemFrom: \"2001-01-03T23:59:59Z\",\n\t// The systemTo is null, or infinity, indicating this data is current.\n\tsystemTo: null,\n\t// The version object is covered in the section on Versioning.\n\tversion: {\n\t\tnumber: 1,\n\t\tsystemFrom: \"2001-01-03T23:59:59Z\",\n\t\tsystemTo: null,\n\t\t// The createdOn, createdBy, and lastUpdatedBy properties are covered in the section on Auditing.\n\t\tcreatedOn: \"2001-01-03T23:59:59Z\",\n\t\tcreatedBy: {\n\t\t\tuserId: \"User ID\",\n\t\t},\n\t\tlastUpdatedBy: {\n\t\t\tuserId: \"User ID\",\n\t\t},\n\t},\n\ttitle: \"Blueprint title\",\n\tvoteSummary: {\n\t\tnumberOfUpvotes: 0,\n\t\tsystemFrom: \"2001-01-03T23:59:59Z\",\n\t\tsystemTo: null,\n\t},\n\tblueprintString: {\n\t\t// The request only included blueprintString.sha, a foreign key. The response includes the whole object.\n\t\tsha: \"cc341849b4086ce7b1893b366b0dc8e99ce4e595\",\n\t\t// We created the blueprint data at time 2: 2001-01-02.\n\t\tcreatedOn: \"2001-01-02T23:59:59Z\",\n\t\tcreatedBy: {\n\t\t\tuserId: \"User ID\",\n\t\t},\n\t},\n\timgurImage: {\n\t\t// The request only included the imgurImage.id, a foreign key. The response includes the whole object.\n\t\timgurId: \"Imgur ID 1\",\n\t\timgurType: \"image/png\",\n\t\theight: 300,\n\t\twidth: 300,\n\t\t// We created the Imugr image at time 1: 2001-01-01.\n\t\tsystemFrom: \"2001-01-01T23:59:59Z\",\n\t\tsystemTo: null,\n\t},\n\tdescriptionMarkdown: \"Blueprint description markdown\",\n\ttags: [\n\t\t{\n\t\t\t// The BlueprintTag mapping was created along with the blueprint post at time 3: 2001-01-03.\n\t\t\tsystemFrom: \"2001-01-03T23:59:59Z\",\n\t\t\tsystemTo: null,\n\t\t\ttag: {\n\t\t\t\t// The request only included tag.category and tag.name, the composite foreign key. The response includes the whole object.\n\t\t\t\tcategory: \"belt\",\n\t\t\t\tname: \"balancer\",\n\t\t\t\tordinal: 1,\n\t\t\t\t// It was created a year earlier than the Blueprint.\n\t\t\t\tsystemFrom: \"2000-01-01T00:00:00Z\",\n\t\t\t\tsystemTo: null,\n\t\t\t},\n\t\t},\n\t],\n}",
+        "title" : "POST /api/blueprint/ response",
+        "commentsType" : "inline",
+        "anchorId" : "temporal-response-post-api-blueprint-response",
+        "type" : "Snippet"
+      } ]
+    }, {
+      "id" : "non-destructive-updates",
+      "additionalIds" : [ ],
+      "title" : "Non-destructive updates",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Next, we update the blueprint by ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "PATCH",
+          "type" : "InlinedCode"
+        }, {
+          "text" : "ing ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "/api/blueprint/{id}?version=1",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "PATCH /api/blueprint/{id}?version=1",
+        "data" : {
+          "version" : {
+            "number" : 1
+          },
+          "title" : "Edited blueprint title",
+          "descriptionMarkdown" : "Edited Blueprint description markdown"
+        },
+        "highlightValues" : [ ],
+        "highlightKeys" : [ ],
+        "anchorId" : "non-destructive-updates-patch-api-blueprint-idversion1",
+        "type" : "Json"
+      } ]
+    }, {
+      "id" : "response",
+      "additionalIds" : [ ],
+      "title" : "Response",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The response includes the updated properties we sent, plus our first temporal updates.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The edits are reflected at time 4 (",
+          "type" : "SimpleText"
+        }, {
+          "code" : "2001-01-04",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ").",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "diff",
+        "snippet" : " {\n   \"key\": \"6ed1f638-a63c-3a54-af67-ba494f27bff2\",\n-  \"systemFrom\": \"2001-01-03T23:59:59Z\",\n+  \"systemFrom\": \"2001-01-04T23:59:59Z\",\n   \"systemTo\": null,\n   \"version\": {\n-    \"number\": 1,\n-    \"systemFrom\": \"2001-01-03T23:59:59Z\",\n+    \"number\": 2,\n+    \"systemFrom\": \"2001-01-04T23:59:59Z\",\n     \"systemTo\": null,\n     \"createdOn\": \"2001-01-03T23:59:59Z\",\n     \"createdBy\": {\n       \"userId\": \"User ID\"\n     },\n     \"lastUpdatedBy\": {\n       \"userId\": \"User ID\"\n     }\n   },\n-  \"title\": \"Blueprint title\",\n+  \"title\": \"Edited blueprint title\",\n   \"voteSummary\": {\n     \"numberOfUpvotes\": 0,\n     \"systemFrom\": \"2001-01-03T23:59:59Z\",\n     \"systemTo\": null\n   },\n   \"blueprintString\": {\n     \"sha\": \"cc341849b4086ce7b1893b366b0dc8e99ce4e595\",\n     \"createdOn\": \"2001-01-02T23:59:59Z\",\n     \"createdBy\": {\n       \"userId\": \"User ID\"\n     }\n   },\n   \"imgurImage\": {\n     \"imgurId\": \"Imgur ID 1\",\n     \"imgurType\": \"image/png\",\n     \"height\": 300,\n     \"width\": 300,\n     \"systemFrom\": \"2001-01-01T23:59:59Z\",\n     \"systemTo\": null\n   },\n-  \"descriptionMarkdown\": \"Blueprint description markdown\",\n+  \"descriptionMarkdown\": \"Edited Blueprint description markdown\",\n   \"tags\": [\n     {\n       \"tagCategory\": \"belt\",\n       \"tagName\": \"balancer\",\n       \"systemFrom\": \"2001-01-03T23:59:59Z\",\n       \"systemTo\": null,\n       \"tag\": {\n         \"category\": \"belt\",\n         \"name\": \"balancer\",\n         \"ordinal\": 1,\n         \"systemFrom\": \"2000-01-01T00:00:00Z\",\n         \"systemTo\": null\n       }\n     }\n   ]\n }",
+        "title" : "PATCH /api/blueprint/{id}?version=1 response",
+        "anchorId" : "response-patch-api-blueprint-idversion1-response",
+        "type" : "Snippet"
+      } ]
+    }, {
+      "id" : "as-of-query",
+      "additionalIds" : [ ],
+      "title" : "As-of query",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "In the next section, we'll perform our first as-of query to prove to ourselves that no data has been lost.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    } ],
+    "lastModifiedTime" : 1771537682076,
+    "tocItem" : {
+      "chapterTitle" : "Temporal Data",
+      "pageTitle" : "Non Destructive Updates",
+      "pageMeta" : { },
+      "dirName" : "temporal-data",
+      "fileName" : "non-destructive-updates",
+      "fileExtension" : "md",
+      "viewOnRelativePath" : null,
+      "pageSectionIdTitles" : [ {
+        "title" : "POST Request Body",
+        "id" : "post-request-body",
+        "customAnchorId" : "post-request-body"
+      }, {
+        "title" : "POST Response Body",
+        "id" : "post-response-body",
+        "customAnchorId" : "post-response-body"
+      }, {
+        "title" : "Temporal Response",
+        "id" : "temporal-response",
+        "customAnchorId" : "temporal-response"
+      }, {
+        "title" : "Non-destructive updates",
+        "id" : "non-destructive-updates",
+        "customAnchorId" : "non-destructive-updates"
+      }, {
+        "title" : "Response",
+        "id" : "response",
+        "customAnchorId" : "response"
+      }, {
+        "title" : "As-of query",
+        "id" : "as-of-query",
+        "customAnchorId" : "as-of-query"
+      } ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>

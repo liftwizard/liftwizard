@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Liftwizard: Profile Parent</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+<link rel="stylesheet" type="text/css" href="/docs/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/main.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+</head>
+<link rel="shortcut icon" href="/docs/favicon.png"type="image/ico"/>
+<body class="znai-theme theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'znai-theme theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section id="page-content" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<header><h1>Liftwizard Profile Parent</h1></header>
+<p>is a Maven parent POM that gives your project pre configured profiles for code formatting static analysis refactoring and more By inheriting from it you gain access to battle tested CI workflows without configuring each plugin yourself Quick Start Step 1 Set as your project s parent Step 2 Run profiles from the command line Step 3 Add GitHub Actions workflows to run these profiles in CI Here are two patterns used in production Pattern 1 Required Checks merge group Run all checks in parallel and require them to pass before merging See merge group yml for all available profiles in use Pattern 2 Auto Fix pull request Automatically fix violations and push to a fix branch See pull request yml for auto fix jobs for spotless prettier errorprone and OpenRewrite Profile List Profile ID Category Description type StrongEmphasis content text Build &amp; Packaging type SimpleText code maven javadoc plugin type InlinedCode text Build &amp; Packaging type SimpleText text Generate Javadoc type SimpleText code maven shade plugin type InlinedCode text Build &amp; Packaging type SimpleText text Create uber jars type SimpleText code znai maven plugin type InlinedCode text Build &amp; Packaging type SimpleText text Generate Znai documentation type SimpleText type StrongEmphasis content text Code Formatting type SimpleText code prettier apply type InlinedCode text Code Formatting type SimpleText text Apply Prettier formatting type SimpleText code prettier check type InlinedCode text Code Formatting type SimpleText text Check code formatting with Prettier type SimpleText code spotless antlr type InlinedCode text Code Formatting type SimpleText text ANTLR grammar formatting type SimpleText code spotless apply type InlinedCode text Code Formatting type SimpleText text Apply Spotless formatting type SimpleText code spotless check type InlinedCode text Code Formatting type SimpleText text Check code formatting with Spotless type SimpleText code spotless formats type InlinedCode text Code Formatting type SimpleText text Format gitattributes and gitignore files type SimpleText code spotless google java format type InlinedCode text Code Formatting type SimpleText text Google Java style formatting type SimpleText code spotless java type InlinedCode text Code Formatting type SimpleText text Basic Java formatting whitespace newlines type SimpleText code spotless java cleanthat type InlinedCode text Code Formatting type SimpleText text Code cleanup and refactoring type SimpleText code spotless java sort imports type InlinedCode text Code Formatting type SimpleText text Sort and organize Java imports type SimpleText code spotless java unused imports type InlinedCode text Code Formatting type SimpleText text Remove unused Java imports type SimpleText code spotless json type InlinedCode text Code Formatting type SimpleText text JSON JSON5 formatting type SimpleText code spotless markdown type InlinedCode text Code Formatting type SimpleText text Markdown formatting type SimpleText code spotless pom type InlinedCode text Code Formatting type SimpleText text POM file formatting and sorting type SimpleText code spotless prettier java type InlinedCode text Code Formatting type SimpleText text Prettier formatting for Java type SimpleText code spotless prettier java sort imports type InlinedCode text Code Formatting type SimpleText text Prettier import sorting type SimpleText code spotless sql type InlinedCode text Code Formatting type SimpleText text SQL formatting with Prettier type SimpleText code spotless yaml type InlinedCode text Code Formatting type SimpleText text YAML formatting type SimpleText type StrongEmphasis content text Code Refactoring type SimpleText code rewrite maven plugin type InlinedCode text Code Refactoring type SimpleText text Safe refactoring recipes type SimpleText code rewrite maven plugin dryRun type InlinedCode text Code Refactoring type SimpleText text Verify refactors without applying type SimpleText code rewrite maven plugin one off type InlinedCode text Code Refactoring type SimpleText text Potentially breaking refactors type SimpleText type StrongEmphasis content text Dependency Management type SimpleText code maven dependency plugin type InlinedCode text Dependency Management type SimpleText text Analyze dependencies type SimpleText code maven enforcer plugin type InlinedCode text Dependency Management type SimpleText text Enforce dependency rules type SimpleText type StrongEmphasis content text Static Analysis type SimpleText code checkstyle formatting type InlinedCode text Static Analysis type SimpleText text Code formatting checks type SimpleText code checkstyle formatting strict type InlinedCode text Static Analysis type SimpleText text Strict formatting checks type SimpleText code checkstyle semantics type InlinedCode text Static Analysis type SimpleText text Semantic code style checks type SimpleText code checkstyle semantics strict type InlinedCode text Static Analysis type SimpleText text Strict semantic checks type SimpleText code errorprone type InlinedCode text Static Analysis type SimpleText text Basic error prone checks type SimpleText code errorprone patch type InlinedCode text Static Analysis type SimpleText text Generate patches for error prone fixes type SimpleText code errorprone strict type InlinedCode text Static Analysis type SimpleText text Strict error prone checks type SimpleText code spotbugs maven plugin type InlinedCode text Static Analysis type SimpleText text FindBugs successor for bug detection type SimpleText type StrongEmphasis content text Testing &amp; Coverage type SimpleText code jacoco maven plugin type InlinedCode text Testing &amp; Coverage type SimpleText text Code coverage with JaCoCo type SimpleText code rerecord type InlinedCode text Testing &amp; Coverage type SimpleText text Re record test snapshots type SimpleText type StrongEmphasis content text Utility type SimpleText code deploy type InlinedCode text Utility type SimpleText text Deploy artifacts with sources type SimpleText code spotless preserve cache type InlinedCode text Utility type SimpleText text Preserve Spotless cache during clean type SimpleText For detailed profile configurations see liftwizard profile parent pom xml on GitHub liftwizard profile parent liftwizard profile parent &lt;parent&gt; &lt;groupId&gt;io liftwizard&lt; groupId&gt; &lt;artifactId&gt;liftwizard profile parent&lt; artifactId&gt; &lt;version&gt;$ liftwizard version &lt; version&gt; &lt; parent&gt; # Format Java code mvn spotless apply activate profiles spotless apply spotless java spotless prettier java sort imports # Run static analysis mvn verify activate profiles errorprone strict on pull_request merge_group jobs maven test runs on ubuntu latest steps uses actions checkout@v4 uses jdx mise action@v2 run mvn verify maven errorprone strict runs on ubuntu latest steps uses actions checkout@v4 uses jdx mise action@v2 run mvn verify activate profiles errorprone strict DskipTests checkstyle semantics runs on ubuntu latest steps uses actions checkout@v4 uses jdx mise action@v2 run mvn checkstyle check activate profiles checkstyle semantics spotless java runs on ubuntu latest steps uses actions checkout@v4 uses jdx mise action@v2 run mvn spotless check activate profiles spotless check spotless java spotless prettier java sort imports all checks name All checks if $ cancelled needs maven test maven errorprone strict checkstyle semantics spotless java runs on ubuntu latest steps uses re actors alls green@release v1 with jobs $ toJSON needs on pull_request jobs spotless java fix runs on ubuntu latest permissions contents write steps uses actions checkout@v4 with ref $ github event pull_request head ref token $ secrets GITHUB_TOKEN uses jdx mise action@v2 name Configure Git run | git config global user name GitHub Actions git config global user email github actions@github com name Run Spotless Apply and commit changes run | mvn spotless apply activate profiles spotless apply spotless java spotless prettier java sort imports if n $ git status porcelain then FIX_BRANCH fix $ github event pull_request number spotless java git switch create $FIX_BRANCH git add all git commit message Auto fix Apply Spotless Java formatting git push force origin $FIX_BRANCH echo Fixes pushed to $FIX_BRANCH branch exit 1 fi</p>
+</article>
+</section>
+<section id="table-of-contents" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<a href="/docs/introduction/liftwizard/">Liftwizard</a>
+</article>
+
+<article>
+<a href="/docs/configuration/environment-variable-substitution/">Environment Variable Substitution</a>
+</article>
+
+<article>
+<a href="/docs/configuration/json5-configuration/">Json5 Configuration</a>
+</article>
+
+<article>
+<a href="/docs/configuration/ConfigLoggingBundle/">ConfigLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/jackson/ObjectMapperBundle/">ObjectMapperBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/JerseyHttpLoggingBundle/">JerseyHttpLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/buffered-logging/">Buffered Logging</a>
+</article>
+
+<article>
+<a href="/docs/logging/filter-factories/">Filter Factories</a>
+</article>
+
+<article>
+<a href="/docs/logging/Slf4jUncaughtExceptionHandlerBundle/">Slf4jUncaughtExceptionHandlerBundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/bundle/">Bundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-logging/">Instrumentation Logging</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-metrics/">Instrumentation Metrics</a>
+</article>
+
+<article>
+<a href="/docs/graphql/data-fetcher-async/">Data Fetcher Async</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-overview/">Reladomo Overview</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-operation-compiler/">Reladomo Operation Compiler</a>
+</article>
+
+<article>
+<a href="/docs/database/named-data-source/">Named Data Source</a>
+</article>
+
+<article>
+<a href="/docs/database/liquibase-migrations/">Liquibase Migrations</a>
+</article>
+
+<article>
+<a href="/docs/auth/dynamic-authentication-and-impersonation/">Dynamic Authentication And Impersonation</a>
+</article>
+
+<article>
+<a href="/docs/testing/testing/">Testing</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-files/">Matching Files</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-json/">Matching Json</a>
+</article>
+
+<article>
+<a href="/docs/maven/maven-best-practices/">Maven Best Practices</a>
+</article>
+
+<article>
+<a href="/docs/maven/minimal-parent/">Minimal Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/profile-parent/">Profile Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/bill-of-materials/">Bill Of Materials</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/temporal-data-overview/">Temporal Data Overview</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/running-example/">Running Example</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/non-destructive-updates/">Non Destructive Updates</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/as-of-queries/">As Of Queries</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/versioning/">Versioning</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/auditing/">Auditing</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/optimistic-locking/">Optimistic Locking</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/diffs/">Diffs</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/maker-checker-workflows/">Maker Checker Workflows</a>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/docs/footer.js"></script>
+<script type="text/javascript" src="/docs/toc.js"></script>
+<script type="text/javascript" src="/docs/assets.js"></script>
+<script type="module" src="/docs/static/__vite-browser-external-8Pss11n5.js"></script>
+<script type="module" src="/docs/static/architecture-U656AL7Q-DjPBJmSV.js"></script>
+<script type="module" src="/docs/static/architectureDiagram-VXUJARFQ-ChBn1xk8.js"></script>
+<script type="module" src="/docs/static/blockDiagram-VD42YOAC-Budi6d17.js"></script>
+<script type="module" src="/docs/static/c4Diagram-YG6GDRKO-Blf-Q85b.js"></script>
+<script type="module" src="/docs/static/classDiagram-2ON5EDUG-CV-r9Le6.js"></script>
+<script type="module" src="/docs/static/classDiagram-v2-WZHVMYZB-FjmVyVcW.js"></script>
+<script type="module" src="/docs/static/cose-bilkent-S5V4N54A-CwokiWn5.js"></script>
+<script type="module" src="/docs/static/dagre-6UL2VRFP-qGDT-4E-.js"></script>
+<script type="module" src="/docs/static/diagram-PSM6KHXK-asygiqY4.js"></script>
+<script type="module" src="/docs/static/diagram-QEK2KX5R-RckI0Vxl.js"></script>
+<script type="module" src="/docs/static/diagram-S2PKOQOG-D3NvEb3Q.js"></script>
+<script type="module" src="/docs/static/erDiagram-Q2GNP2WA-Cyp4lw77.js"></script>
+<script type="module" src="/docs/static/flowDiagram-NV44I4VS-Durqfvdj.js"></script>
+<script type="module" src="/docs/static/ganttDiagram-JELNMOA3-COOaPycs.js"></script>
+<script type="module" src="/docs/static/gitGraph-F6HP7TQM-CqS9sC5f.js"></script>
+<script type="module" src="/docs/static/gitGraphDiagram-NY62KEGX-BQN4gPQ9.js"></script>
+<script type="module" src="/docs/static/index-CvuEZtbh.js"></script>
+<script type="module" src="/docs/static/info-NVLQJR56-BUcKGpxN.js"></script>
+<script type="module" src="/docs/static/infoDiagram-WHAUD3N6-D7Xs3PNk.js"></script>
+<script type="module" src="/docs/static/journeyDiagram-XKPGCS4Q-C0gcrYJQ.js"></script>
+<script type="module" src="/docs/static/kanban-definition-3W4ZIXB7-DA5VTkMF.js"></script>
+<script type="module" src="/docs/static/katex-DDX8Hq9d.js"></script>
+<script type="module" src="/docs/static/mermaid-DyDSBgik.js"></script>
+<script type="module" src="/docs/static/mindmap-definition-VGOIOE7T-CeGF8Nug.js"></script>
+<script type="module" src="/docs/static/packet-BFZMPI3H-BiSDgaWb.js"></script>
+<script type="module" src="/docs/static/pie-7BOR55EZ-6DVHbXh5.js"></script>
+<script type="module" src="/docs/static/pieDiagram-ADFJNKIX-D8LeIfHz.js"></script>
+<script type="module" src="/docs/static/quadrantDiagram-AYHSOK5B-CT_QATm0.js"></script>
+<script type="module" src="/docs/static/radar-NHE76QYJ-DmqrXv6L.js"></script>
+<script type="module" src="/docs/static/requirementDiagram-UZGBJVZJ-BbaHa2fs.js"></script>
+<script type="module" src="/docs/static/rolldown-runtime-BfSZLbwf.js"></script>
+<script type="module" src="/docs/static/sankeyDiagram-TZEHDZUN-D9YTmh-I.js"></script>
+<script type="module" src="/docs/static/sequenceDiagram-WL72ISMW-D9tLLYI1.js"></script>
+<script type="module" src="/docs/static/stateDiagram-FKZM4ZOC-C__hSZA6.js"></script>
+<script type="module" src="/docs/static/stateDiagram-v2-4FDKWEC3-i8H-EINL.js"></script>
+<script type="module" src="/docs/static/timeline-definition-IT6M3QCI-xF8WKVt0.js"></script>
+<script type="module" src="/docs/static/treemap-KMMF4GRG-DIUMOj6d.js"></script>
+<script type="module" src="/docs/static/xychartDiagram-PRI3JC2R-BDCeeoNZ.js"></script>
+<script type="module" src="/docs/search-index.js"></script>
+<script type="module">
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+/*
+ * Copyright 2025 znai maintainers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+function initializeSearchIndex() {
+    if (window.znaiSearchData) {
+        window.znaiSearchIdx = window.createLocalSearchIndex();
+        window.populateLocalSearchIndexWithData(window.znaiSearchIdx, window.znaiSearchData);
+    }
+}
+
+// Call the method to initialize the search index.
+initializeSearchIndex();
+
+window.ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "link" : "https://github.com/liftwizard/liftwizard/blob/main/docs/src/main/znai",
+      "title" : "View On GitHub"
+    },
+    "id" : "docs",
+    "title" : "Liftwizard",
+    "type" : "Guide",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "id" : "liftwizard-profile-parent",
+      "additionalIds" : [ ],
+      "title" : "Liftwizard Profile Parent",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "code" : "liftwizard-profile-parent",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " is a Maven parent POM that gives your project pre-configured profiles for code formatting, static analysis, refactoring, and more. By inheriting from it, you gain access to battle-tested CI workflows without configuring each plugin yourself.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "id" : "liftwizard-profile-parent-quick-start",
+        "additionalIds" : [ "quick-start" ],
+        "level" : 2,
+        "title" : "Quick Start",
+        "type" : "SubHeading"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "Step 1:",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " Set ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "liftwizard-profile-parent",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " as your project's parent:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "xml",
+        "snippet" : "<parent>\n    <groupId>io.liftwizard</groupId>\n    <artifactId>liftwizard-profile-parent</artifactId>\n    <version>${liftwizard.version}</version>\n</parent>",
+        "lineNumber" : "",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "Step 2:",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " Run profiles from the command line:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "bash",
+        "snippet" : "# Format Java code\nmvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-prettier-java-sort-imports\n\n# Run static analysis\nmvn verify --activate-profiles errorprone-strict",
+        "lineNumber" : "",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "Step 3:",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " Add GitHub Actions workflows to run these profiles in CI. Here are two patterns used in production.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "id" : "liftwizard-profile-parent-quick-start-pattern-1-required-checks-merge-group",
+        "additionalIds" : [ "pattern-1-required-checks-merge-group" ],
+        "level" : 3,
+        "title" : "Pattern 1: Required Checks (merge-group)",
+        "type" : "SubHeading"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Run all checks in parallel and require them to pass before merging:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "yaml",
+        "snippet" : "on:\n    pull_request:\n    merge_group:\n\njobs:\n    maven-test:\n        runs-on: ubuntu-latest\n        steps:\n            - uses: actions/checkout@v4\n            - uses: jdx/mise-action@v2\n            - run: mvn verify\n\n    maven-errorprone-strict:\n        runs-on: ubuntu-latest\n        steps:\n            - uses: actions/checkout@v4\n            - uses: jdx/mise-action@v2\n            - run: mvn verify --activate-profiles errorprone-strict -DskipTests\n\n    checkstyle-semantics:\n        runs-on: ubuntu-latest\n        steps:\n            - uses: actions/checkout@v4\n            - uses: jdx/mise-action@v2\n            - run: mvn checkstyle:check --activate-profiles checkstyle-semantics\n\n    spotless-java:\n        runs-on: ubuntu-latest\n        steps:\n            - uses: actions/checkout@v4\n            - uses: jdx/mise-action@v2\n            - run: mvn spotless:check --activate-profiles spotless-check,spotless-java,spotless-prettier-java-sort-imports\n\n    all-checks:\n        name: All checks\n        if: ${{ !cancelled() }}\n        needs: [maven-test, maven-errorprone-strict, checkstyle-semantics, spotless-java]\n        runs-on: ubuntu-latest\n        steps:\n            - uses: re-actors/alls-green@release/v1\n              with:\n                  jobs: ${{ toJSON(needs) }}",
+        "lineNumber" : "",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "See ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/motlin/liftwizard/blob/main/.github/workflows/merge-group.yml",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "merge-group.yml",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " for all available profiles in use.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "id" : "liftwizard-profile-parent-quick-start-pattern-2-auto-fix-pull-request",
+        "additionalIds" : [ "pattern-2-auto-fix-pull-request" ],
+        "level" : 3,
+        "title" : "Pattern 2: Auto-Fix (pull-request)",
+        "type" : "SubHeading"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Automatically fix violations and push to a fix branch:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "yaml",
+        "snippet" : "on:\n    pull_request:\n\njobs:\n    spotless-java-fix:\n        runs-on: ubuntu-latest\n        permissions:\n            contents: write\n        steps:\n            - uses: actions/checkout@v4\n              with:\n                  ref: ${{ github.event.pull_request.head.ref }}\n                  token: ${{ secrets.GITHUB_TOKEN }}\n\n            - uses: jdx/mise-action@v2\n\n            - name: Configure Git\n              run: |\n                  git config --global user.name \"GitHub Actions\"\n                  git config --global user.email \"github-actions@github.com\"\n\n            - name: Run Spotless Apply and commit changes\n              run: |\n                  mvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-prettier-java-sort-imports\n\n                  if [[ -n $(git status --porcelain) ]]; then\n                    FIX_BRANCH=\"fix-${{ github.event.pull_request.number }}-spotless-java\"\n                    git switch --create $FIX_BRANCH\n                    git add --all\n                    git commit --message \"Auto-fix: Apply Spotless Java formatting\"\n                    git push --force origin $FIX_BRANCH\n                    echo \"Fixes pushed to $FIX_BRANCH branch.\"\n                    exit 1\n                  fi",
+        "lineNumber" : "",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "See ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/motlin/liftwizard/blob/main/.github/workflows/pull-request.yml",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "pull-request.yml",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " for auto-fix jobs for spotless, prettier, errorprone, and OpenRewrite.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "id" : "liftwizard-profile-parent-profile-list",
+        "additionalIds" : [ "profile-list" ],
+        "level" : 2,
+        "title" : "Profile List",
+        "type" : "SubHeading"
+      }, {
+        "table" : {
+          "columns" : [ {
+            "title" : "Profile ID",
+            "align" : "left"
+          }, {
+            "title" : "Category",
+            "align" : "left"
+          }, {
+            "title" : "Description",
+            "align" : "left"
+          } ],
+          "data" : [ [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Build & Packaging",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "maven-javadoc-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Build & Packaging",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Generate Javadoc",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "maven-shade-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Build & Packaging",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Create uber-jars",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "znai-maven-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Build & Packaging",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Generate Znai documentation",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Code Formatting",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "prettier-apply",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Apply Prettier formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "prettier-check",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Check code formatting with Prettier",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-antlr",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "ANTLR grammar formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-apply",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Apply Spotless formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-check",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Check code formatting with Spotless",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-formats",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Format .gitattributes and .gitignore files",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-google-java-format",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Google Java style formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-java",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Basic Java formatting (whitespace, newlines)",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-java-cleanthat",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Code cleanup and refactoring",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-java-sort-imports",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Sort and organize Java imports",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-java-unused-imports",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Remove unused Java imports",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-json",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "JSON/JSON5 formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-markdown",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Markdown formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-pom",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "POM file formatting and sorting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-prettier-java",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Prettier formatting for Java",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-prettier-java-sort-imports",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Prettier + import sorting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-sql",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "SQL formatting with Prettier",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-yaml",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Formatting",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "YAML formatting",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Code Refactoring",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "rewrite-maven-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Refactoring",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Safe refactoring recipes",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "rewrite-maven-plugin-dryRun",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Refactoring",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Verify refactors without applying",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "rewrite-maven-plugin-one-off",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Code Refactoring",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Potentially breaking refactors",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Dependency Management",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "maven-dependency-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Dependency Management",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Analyze dependencies",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "maven-enforcer-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Dependency Management",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Enforce dependency rules",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Static Analysis",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "checkstyle-formatting",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Code formatting checks",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "checkstyle-formatting-strict",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Strict formatting checks",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "checkstyle-semantics",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Semantic code style checks",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "checkstyle-semantics-strict",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Strict semantic checks",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "errorprone",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Basic error-prone checks",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "errorprone-patch",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Generate patches for error-prone fixes",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "errorprone-strict",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Strict error-prone checks",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotbugs-maven-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Static Analysis",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "FindBugs successor for bug detection",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Testing & Coverage",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "jacoco-maven-plugin",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Testing & Coverage",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Code coverage with JaCoCo",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "rerecord",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Testing & Coverage",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Re-record test snapshots",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "type" : "StrongEmphasis",
+            "content" : [ {
+              "text" : "Utility",
+              "type" : "SimpleText"
+            } ]
+          } ], null, null ], [ [ {
+            "code" : "deploy",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Utility",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Deploy artifacts with sources",
+            "type" : "SimpleText"
+          } ] ], [ [ {
+            "code" : "spotless-preserve-cache",
+            "type" : "InlinedCode"
+          } ], [ {
+            "text" : "Utility",
+            "type" : "SimpleText"
+          } ], [ {
+            "text" : "Preserve Spotless cache during clean",
+            "type" : "SimpleText"
+          } ] ] ]
+        },
+        "type" : "Table"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "For detailed profile configurations, see ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/motlin/liftwizard/blob/main/liftwizard-maven-build/liftwizard-profile-parent/pom.xml",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "liftwizard-profile-parent/pom.xml",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " on GitHub.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    } ],
+    "lastModifiedTime" : 1771537682074,
+    "tocItem" : {
+      "chapterTitle" : "Maven",
+      "pageTitle" : "Profile Parent",
+      "pageMeta" : { },
+      "dirName" : "maven",
+      "fileName" : "profile-parent",
+      "fileExtension" : "md",
+      "viewOnRelativePath" : null,
+      "pageSectionIdTitles" : [ {
+        "title" : "Liftwizard Profile Parent",
+        "id" : "liftwizard-profile-parent",
+        "customAnchorId" : "liftwizard-profile-parent"
+      } ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>
