@@ -35,6 +35,6 @@ jobs:
                   MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
                   MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
-            - uses: actions/attest-build-provenance@v3
+            - uses: actions/attest-build-provenance@v4
               with:
                   subject-path: "**/target/*.jar"
