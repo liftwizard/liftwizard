@@ -60,10 +60,12 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 			if (family.equals(Response.Status.Family.REDIRECTION)) {
 				return response;
 			}
+			/*
+			 * Forked from Dropwizard's LoggingExceptionMapper just to comment out this one line
 			if (family.equals(Response.Status.Family.SERVER_ERROR)) {
-				// Forked from Dropwizard's LoggingExceptionMapper just to comment out this one line
-				// logException(exception);
+				logException(exception);
 			}
+             */
 
 			return Response.fromResponse(response)
 				.type(MediaType.APPLICATION_JSON_TYPE)
