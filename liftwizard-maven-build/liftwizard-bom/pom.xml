@@ -608,6 +608,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-reladomo-json-test-extension</artifactId>
+                <version>2.1.43-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-reladomo-graphql-data-fetcher</artifactId>
                 <version>2.1.43-SNAPSHOT</version>
             </dependency>

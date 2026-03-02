@@ -1,0 +1,16 @@
+[
+	{
+		"id": 1,
+		"fullName": "Alice Smith",
+		"jobTitle": "Engineer",
+		"systemFrom": "2024-01-01T00:00:00.000Z",
+		"systemTo": "9999-12-01T23:59:00.000Z"
+	},
+	{
+		"id": 2,
+		"fullName": "Bob Jones",
+		"jobTitle": "Manager",
+		"systemFrom": "2024-01-15T00:00:00.000Z",
+		"systemTo": "9999-12-01T23:59:00.000Z"
+	}
+]
