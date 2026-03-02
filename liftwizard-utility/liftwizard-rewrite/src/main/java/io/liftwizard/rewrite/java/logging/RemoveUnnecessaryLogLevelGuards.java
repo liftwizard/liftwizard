@@ -32,6 +32,12 @@ import org.openrewrite.java.tree.Space;
 import org.openrewrite.java.tree.Statement;
 import org.openrewrite.java.tree.TypeUtils;
 
+/**
+ * @deprecated Use {@code org.openrewrite.java.logging.slf4j.RemoveUnnecessaryLogLevelGuards} from
+ *     rewrite-logging-frameworks instead. This recipe was migrated upstream in
+ *     <a href="https://github.com/openrewrite/rewrite-logging-frameworks/pull/280">PR #280</a>.
+ */
+@Deprecated(forRemoval = true)
 public class RemoveUnnecessaryLogLevelGuards extends Recipe {
 
 	private static final Set<String> LOGGER_METHODS = Set.of("trace", "debug", "info", "warn", "error");
