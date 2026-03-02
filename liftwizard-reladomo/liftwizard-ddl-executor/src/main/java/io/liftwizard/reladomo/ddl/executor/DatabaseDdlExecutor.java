@@ -92,7 +92,7 @@ public final class DatabaseDdlExecutor {
 			String dropSql = "DROP ALL OBJECTS";
 			LOGGER.info("Executing SQL: {}", dropSql);
 			statement.execute(dropSql);
-		} catch (@Nonnull SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -108,7 +108,7 @@ public final class DatabaseDdlExecutor {
 
 		try (var reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
 			RunScript.execute(connection, reader);
-		} catch (@Nonnull IOException | SQLException e) {
+		} catch (IOException | SQLException e) {
 			LOGGER.error("Failed to run sql script {}.", ddlLocation, e);
 			throw new RuntimeException(e);
 		}
