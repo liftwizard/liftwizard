@@ -37,26 +37,44 @@ class ECSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
 					import org.eclipse.collections.api.set.MutableSet;
+					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
 					import org.eclipse.collections.impl.set.mutable.UnifiedSet;
+
 					import java.util.List;
 
 					class Test<T> {
+					    // Field declarations - interface type with various constructors
 					    private final MutableSet<String> fieldInterfaceEmpty = new UnifiedSet<>();
 					    private final MutableSet<Integer> fieldInterfaceCapacity = new UnifiedSet<>(16);
 					    private final MutableSet<String> fieldInterfaceCollection = new UnifiedSet<>(fieldInterfaceEmpty);
 
+					    // FieldAccess expression - should be ignored without crashing
+					    public static final ImmutableSetFactory immutable = ImmutableSetFactoryImpl.INSTANCE;
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
+					    public static final java.util.List<?> EMPTY_LIST = java.util.Collections.EMPTY_LIST;
+
 					    void test() {
+					        // Local variables - various generic forms
 					        MutableSet<String> diamondSet = new UnifiedSet<>();
 					        MutableSet rawSet = new UnifiedSet();
 					        MutableSet<List<Integer>> nestedGenerics = new UnifiedSet<>();
 					        MutableSet<? extends Number> wildcardGenerics = new UnifiedSet<>();
+
+					        // Explicit type parameters
 					        MutableSet<String> explicitSimple = new UnifiedSet<String>();
 					        MutableSet<List<String>> explicitNested = new UnifiedSet<List<String>>();
 					        MutableSet<MutableSet<T>> nestedTypeParam = new UnifiedSet<MutableSet<T>>();
+
+					        // Fully qualified types
 					        org.eclipse.collections.api.set.MutableSet<String> fullyQualified = new org.eclipse.collections.impl.set.mutable.UnifiedSet<>();
+
+					        // Initial capacity constructor
 					        MutableSet<String> withCapacity = new UnifiedSet<>(16);
 					        MutableSet<Integer> withCapacity32 = new UnifiedSet<>(32);
+
+					        // Collection constructor
 					        MutableSet<String> setFromOther = new UnifiedSet<>(diamondSet);
 					    }
 					}
@@ -70,26 +88,43 @@ class ECSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 					""",
 					"""
 					import org.eclipse.collections.api.factory.Sets;
+					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
 					import org.eclipse.collections.api.set.MutableSet;
+					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
 
 					import java.util.List;
 
 					class Test<T> {
+					    // Field declarations - interface type with various constructors
 					    private final MutableSet<String> fieldInterfaceEmpty = Sets.mutable.empty();
 					    private final MutableSet<Integer> fieldInterfaceCapacity = Sets.mutable.withInitialCapacity(16);
 					    private final MutableSet<String> fieldInterfaceCollection = Sets.mutable.withAll(fieldInterfaceEmpty);
 
+					    // FieldAccess expression - should be ignored without crashing
+					    public static final ImmutableSetFactory immutable = ImmutableSetFactoryImpl.INSTANCE;
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
+					    public static final java.util.List<?> EMPTY_LIST = java.util.Collections.EMPTY_LIST;
+
 					    void test() {
+					        // Local variables - various generic forms
 					        MutableSet<String> diamondSet = Sets.mutable.empty();
 					        MutableSet rawSet = Sets.mutable.empty();
 					        MutableSet<List<Integer>> nestedGenerics = Sets.mutable.empty();
 					        MutableSet<? extends Number> wildcardGenerics = Sets.mutable.empty();
+
+					        // Explicit type parameters
 					        MutableSet<String> explicitSimple = Sets.mutable.<String>empty();
 					        MutableSet<List<String>> explicitNested = Sets.mutable.<List<String>>empty();
 					        MutableSet<MutableSet<T>> nestedTypeParam = Sets.mutable.<MutableSet<T>>empty();
+
+					        // Fully qualified types
 					        org.eclipse.collections.api.set.MutableSet<String> fullyQualified = Sets.mutable.empty();
+
+					        // Initial capacity constructor
 					        MutableSet<String> withCapacity = Sets.mutable.withInitialCapacity(16);
 					        MutableSet<Integer> withCapacity32 = Sets.mutable.withInitialCapacity(32);
+
+					        // Collection constructor
 					        MutableSet<String> setFromOther = Sets.mutable.withAll(diamondSet);
 					    }
 					}
@@ -110,9 +145,19 @@ class ECSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.factory.set.FixedSizeSetFactory;
+					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
+					import org.eclipse.collections.api.factory.set.MutableSetFactory;
+					import org.eclipse.collections.impl.set.fixed.FixedSizeSetFactoryImpl;
+					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
+					import org.eclipse.collections.impl.set.mutable.MutableSetFactoryImpl;
 					import org.eclipse.collections.impl.set.mutable.UnifiedSet;
 
+					import java.util.Collections;
+					import java.util.Set;
+
 					class Test {
+					    // Concrete type declarations - should NOT be replaced
 					    private final UnifiedSet<String> fieldConcreteType = new UnifiedSet<>();
 
 					    void test() {
@@ -120,6 +165,16 @@ class ECSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 					        UnifiedSet<String> concreteTypeCapacity = new UnifiedSet<>(10);
 					        UnifiedSet<String> concreteTypeCollection = new UnifiedSet<>(concreteTypeEmpty);
 					    }
+
+					    // FieldAccess expressions - should not crash
+					    private static final Set<?> EMPTY = Collections.EMPTY_SET;
+					}
+
+					// Multiple FieldAccess factory patterns - should not crash
+					final class Sets {
+					    public static final ImmutableSetFactory immutable = ImmutableSetFactoryImpl.INSTANCE;
+					    public static final FixedSizeSetFactory fixedSize = FixedSizeSetFactoryImpl.INSTANCE;
+					    public static final MutableSetFactory mutable = MutableSetFactoryImpl.INSTANCE;
 					}
 					"""
 				)

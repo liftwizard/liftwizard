@@ -36,6 +36,7 @@ import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
+import org.openrewrite.java.tree.VariableDeclarator;
 
 public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
@@ -70,6 +71,15 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 		private ConstructorToFactoryVisitor(String sourceTypeSimpleName, String targetFactorySimpleName) {
 			this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
 			this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
+		}
+
+		@Override
+		public J visitVariable(J.VariableDeclarations.NamedVariable variable, ExecutionContext ctx) {
+			VariableDeclarator declarator = variable.getDeclarator();
+			if (!(declarator instanceof J.Identifier) && !(declarator instanceof J.Literal)) {
+				return variable;
+			}
+			return super.visitVariable(variable, ctx);
 		}
 
 		@Override
