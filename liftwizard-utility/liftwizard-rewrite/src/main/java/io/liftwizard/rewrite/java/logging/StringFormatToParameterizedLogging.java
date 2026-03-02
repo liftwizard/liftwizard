@@ -31,6 +31,12 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
+/**
+ * @deprecated Use {@code org.openrewrite.java.logging.slf4j.StringFormatToParameterizedLogging} from
+ *     rewrite-logging-frameworks instead. This recipe was migrated upstream in
+ *     <a href="https://github.com/openrewrite/rewrite-logging-frameworks/pull/280">PR #280</a>.
+ */
+@Deprecated(forRemoval = true)
 public class StringFormatToParameterizedLogging extends Recipe {
 
 	private static final Set<String> LOGGER_METHODS = Set.of("trace", "debug", "info", "warn", "error");
