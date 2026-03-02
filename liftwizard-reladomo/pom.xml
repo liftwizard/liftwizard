@@ -48,6 +48,7 @@
         <module>liftwizard-reladomo-operation-grammar</module>
         <module>liftwizard-reladomo-rollback</module>
         <module>liftwizard-reladomo-csv-test-extension</module>
+        <module>liftwizard-reladomo-json-test-extension</module>
         <module>liftwizard-reladomo-serialize</module>
         <module>liftwizard-reladomo-simulated-sequence</module>
         <module>liftwizard-reladomo-test-data-parser</module>
