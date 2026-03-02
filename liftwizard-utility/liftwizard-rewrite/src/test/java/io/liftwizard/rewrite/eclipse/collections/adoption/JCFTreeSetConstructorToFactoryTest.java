@@ -49,6 +49,9 @@ class JCFTreeSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest 
 					    private final SortedSet<String> fieldInterfaceComparator = new TreeSet<>(Comparator.naturalOrder());
 					    private final SortedSet<String> fieldInterfaceCollection = new TreeSet<>(Arrays.asList("a", "b"));
 
+					    // FieldAccess expression - should be ignored without crashing
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
+
 					    void test(Collection<String> inputCollection) {
 					        Collection<String> collection = new TreeSet<>();
 					        SortedSet<String> typeInference = new TreeSet<>();
@@ -76,6 +79,9 @@ class JCFTreeSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest 
 					    private final SortedSet<String> fieldInterfaceEmpty = SortedSets.mutable.empty();
 					    private final SortedSet<String> fieldInterfaceComparator = SortedSets.mutable.with(Comparator.naturalOrder());
 					    private final SortedSet<String> fieldInterfaceCollection = SortedSets.mutable.withAll(Arrays.asList("a", "b"));
+
+					    // FieldAccess expression - should be ignored without crashing
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
 
 					    void test(Collection<String> inputCollection) {
 					        Collection<String> collection = SortedSets.mutable.empty();
@@ -106,6 +112,10 @@ class JCFTreeSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest 
 
 					class Test {
 					    private final TreeSet<String> fieldConcreteType = new TreeSet<>();
+
+					    // FieldAccess expressions - should not crash
+					    public static final Object INSTANCE = java.util.Collections.EMPTY_SET;
+					    public static final java.util.List<?> EMPTY_LIST = java.util.Collections.EMPTY_LIST;
 
 					    void test(Collection<String> inputCollection) {
 					        TreeSet<String> diamondSet = new TreeSet<>();
