@@ -20,30 +20,30 @@ import java.util.Collection;
 
 import com.google.errorprone.refaster.annotation.AfterTemplate;
 import com.google.errorprone.refaster.annotation.BeforeTemplate;
-import org.eclipse.collections.api.RichIterable;
 import org.eclipse.collections.api.block.predicate.Predicate;
+import org.eclipse.collections.api.collection.MutableCollection;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-	name = "`Iterate.select(richIterable, predicate)` -> `richIterable.select(predicate)`",
-	description = "Transforms `Iterate.select(richIterable, predicate)` to `richIterable.select(predicate)` when the iterable is already an Eclipse Collections RichIterable. The Iterate utility is for JCF interop; it is redundant when used with EC types."
+	name = "`Iterate.select(mutableCollection, predicate)` -> `mutableCollection.select(predicate)`",
+	description = "Transforms `Iterate.select(mutableCollection, predicate)` to `mutableCollection.select(predicate)` when the iterable is already an Eclipse Collections MutableCollection. The Iterate utility is for JCF interop; it is redundant when used with EC types."
 )
 public class IterateSelectRedundant {
 
 	@RecipeDescriptor(
-		name = "`Iterate.select(richIterable, predicate)` -> `richIterable.select(predicate)`",
-		description = "Converts `Iterate.select(richIterable, predicate)` to `richIterable.select(predicate)` when the iterable is a RichIterable."
+		name = "`Iterate.select(mutableCollection, predicate)` -> `mutableCollection.select(predicate)`",
+		description = "Converts `Iterate.select(mutableCollection, predicate)` to `mutableCollection.select(predicate)` when the iterable is a MutableCollection."
 	)
-	public static final class IterateSelectToRichIterableSelect<T> {
+	public static final class IterateSelectToMutableCollectionSelect<T> {
 
 		@BeforeTemplate
-		Collection<T> before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		Collection<T> before(MutableCollection<T> iterable, Predicate<? super T> predicate) {
 			return Iterate.select(iterable, predicate);
 		}
 
 		@AfterTemplate
-		RichIterable<T> after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		MutableCollection<T> after(MutableCollection<T> iterable, Predicate<? super T> predicate) {
 			return iterable.select(predicate);
 		}
 	}

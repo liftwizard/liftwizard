@@ -20,30 +20,30 @@ import java.util.Collection;
 
 import com.google.errorprone.refaster.annotation.AfterTemplate;
 import com.google.errorprone.refaster.annotation.BeforeTemplate;
-import org.eclipse.collections.api.RichIterable;
 import org.eclipse.collections.api.block.function.Function;
+import org.eclipse.collections.api.collection.MutableCollection;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-	name = "`Iterate.collect(richIterable, function)` -> `richIterable.collect(function)`",
-	description = "Transforms `Iterate.collect(richIterable, function)` to `richIterable.collect(function)` when the iterable is already an Eclipse Collections RichIterable. The Iterate utility is for JCF interop; it is redundant when used with EC types."
+	name = "`Iterate.collect(mutableCollection, function)` -> `mutableCollection.collect(function)`",
+	description = "Transforms `Iterate.collect(mutableCollection, function)` to `mutableCollection.collect(function)` when the iterable is already an Eclipse Collections MutableCollection. The Iterate utility is for JCF interop; it is redundant when used with EC types."
 )
 public class IterateCollectRedundant {
 
 	@RecipeDescriptor(
-		name = "`Iterate.collect(richIterable, function)` -> `richIterable.collect(function)`",
-		description = "Converts `Iterate.collect(richIterable, function)` to `richIterable.collect(function)` when the iterable is a RichIterable."
+		name = "`Iterate.collect(mutableCollection, function)` -> `mutableCollection.collect(function)`",
+		description = "Converts `Iterate.collect(mutableCollection, function)` to `mutableCollection.collect(function)` when the iterable is a MutableCollection."
 	)
-	public static final class IterateCollectToRichIterableCollect<T, V> {
+	public static final class IterateCollectToMutableCollectionCollect<T, V> {
 
 		@BeforeTemplate
-		Collection<V> before(RichIterable<T> iterable, Function<? super T, ? extends V> function) {
+		Collection<V> before(MutableCollection<T> iterable, Function<? super T, ? extends V> function) {
 			return Iterate.collect(iterable, function);
 		}
 
 		@AfterTemplate
-		RichIterable<V> after(RichIterable<T> iterable, Function<? super T, ? extends V> function) {
+		MutableCollection<V> after(MutableCollection<T> iterable, Function<? super T, ? extends V> function) {
 			return iterable.collect(function);
 		}
 	}
