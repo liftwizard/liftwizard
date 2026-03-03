@@ -20,30 +20,30 @@ import java.util.Collection;
 
 import com.google.errorprone.refaster.annotation.AfterTemplate;
 import com.google.errorprone.refaster.annotation.BeforeTemplate;
-import org.eclipse.collections.api.RichIterable;
 import org.eclipse.collections.api.block.predicate.Predicate;
+import org.eclipse.collections.api.collection.MutableCollection;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
-	name = "`Iterate.reject(richIterable, predicate)` -> `richIterable.reject(predicate)`",
-	description = "Transforms `Iterate.reject(richIterable, predicate)` to `richIterable.reject(predicate)` when the iterable is already an Eclipse Collections RichIterable. The Iterate utility is for JCF interop; it is redundant when used with EC types."
+	name = "`Iterate.reject(mutableCollection, predicate)` -> `mutableCollection.reject(predicate)`",
+	description = "Transforms `Iterate.reject(mutableCollection, predicate)` to `mutableCollection.reject(predicate)` when the iterable is already an Eclipse Collections MutableCollection. The Iterate utility is for JCF interop; it is redundant when used with EC types."
 )
 public class IterateRejectRedundant {
 
 	@RecipeDescriptor(
-		name = "`Iterate.reject(richIterable, predicate)` -> `richIterable.reject(predicate)`",
-		description = "Converts `Iterate.reject(richIterable, predicate)` to `richIterable.reject(predicate)` when the iterable is a RichIterable."
+		name = "`Iterate.reject(mutableCollection, predicate)` -> `mutableCollection.reject(predicate)`",
+		description = "Converts `Iterate.reject(mutableCollection, predicate)` to `mutableCollection.reject(predicate)` when the iterable is a MutableCollection."
 	)
-	public static final class IterateRejectToRichIterableReject<T> {
+	public static final class IterateRejectToMutableCollectionReject<T> {
 
 		@BeforeTemplate
-		Collection<T> before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		Collection<T> before(MutableCollection<T> iterable, Predicate<? super T> predicate) {
 			return Iterate.reject(iterable, predicate);
 		}
 
 		@AfterTemplate
-		RichIterable<T> after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		MutableCollection<T> after(MutableCollection<T> iterable, Predicate<? super T> predicate) {
 			return iterable.reject(predicate);
 		}
 	}
