@@ -218,7 +218,7 @@ public class ExplicitTypeToVar extends Recipe {
 			return initializer.withClazz(newClazz);
 		}
 
-			private boolean isDiamondOperator(List<Expression> typeParams) {
+		private boolean isDiamondOperator(List<Expression> typeParams) {
 			// Diamond operator <> is represented as a list with a single J.Empty element or as an empty list
 			return typeParams.isEmpty() || typeParams.stream().allMatch(Empty.class::isInstance);
 		}

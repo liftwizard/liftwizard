@@ -29,9 +29,7 @@ class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
-			.recipeFromResources(
-				"io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration"
-			)
+			.recipeFromResources("io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration")
 			.parser(
 				JavaParser.fromJavaVersion()
 					.dependsOn(
