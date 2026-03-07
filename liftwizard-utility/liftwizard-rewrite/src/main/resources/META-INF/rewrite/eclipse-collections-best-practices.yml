@@ -84,4 +84,5 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFMapToMutableMap
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSetToMutableSet
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedMapToMutableSortedMap
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECIntStreamRangeClosedToIntInterval
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedSetToMutableSortedSet
