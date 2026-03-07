@@ -54,6 +54,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamMapCollectToCollect
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamFlatMapCollectToFlatCollect
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToListToToList
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToMapToGroupByUniqueKey
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamJoiningToMakeString
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSelectBeforeSortThisRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECListConstructorToFactory
