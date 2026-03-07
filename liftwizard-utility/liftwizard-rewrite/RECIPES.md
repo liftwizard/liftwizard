@@ -411,6 +411,14 @@ Replace stream().collect(Collectors.groupingBy(...)) with groupBy() on Eclipse C
 
 The `groupBy` method returns a `Multimap<K, V>` which is richer than `Map<K, Collection<V>>`. This recipe only matches the one-argument form and the two-argument form with `Collectors.toList()` or `Collectors.toSet()` as the downstream collector. Custom downstream collectors (like `Collectors.counting()`) and the three-argument form with a map factory are not transformed.
 
+#### ECStreamSortedCollectToSortedListBy
+
+Replace stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList()) with toSortedListBy(fn) on Eclipse Collections types:
+
+- `collection.stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList())` -> `collection.toSortedListBy(fn)`
+
+This eliminates the unnecessary Stream intermediary since Eclipse Collections has the toSortedListBy method directly on RichIterable. The recipe only matches when Comparator.comparing() is used as the sort key extractor.
+
 ### Operation Ordering Optimizations
 
 #### ECSelectBeforeSortThis
