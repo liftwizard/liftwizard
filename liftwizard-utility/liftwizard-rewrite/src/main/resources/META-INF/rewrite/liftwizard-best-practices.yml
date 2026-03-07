@@ -1,0 +1,41 @@
+#
+# Copyright 2025 Craig Motlin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.LiftwizardBestPractices
+displayName: Liftwizard best practices
+description: >-
+    Composite recipe that includes all Liftwizard best practices recipes.
+    Rules that are meant to always pass. They can run in CI with dryRun, or one-off for rewrites.
+recipeList:
+    - io.liftwizard.UpdateCopyrightYear
+    - io.liftwizard.rewrite.BestPractices
+    - io.liftwizard.rewrite.assertj.AssertJMigration
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval
+    - io.liftwizard.rewrite.java.style.ExplicitThis
+    - io.liftwizard.staticanalysis.CodeCleanup
+    - io.liftwizard.staticanalysis.CommonStaticAnalysis
+    - org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64
+    - org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes
+    - org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes
+    - org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass
+    - org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant
+    - org.openrewrite.java.recipes.JavaRecipeBestPractices
+    - org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements
+    - org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions
