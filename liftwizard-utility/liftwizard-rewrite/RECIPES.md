@@ -384,6 +384,15 @@ Replace stream().anyMatch() with contains() when checking for value equality:
 
 - `collection.stream().anyMatch(value::equals)` -> `collection.contains(value)`
 
+#### ECStreamFlatMapCollectToFlatCollect
+
+Replace stream().flatMap(fn).collect() with flatCollect(fn) on Eclipse Collections types:
+
+- `collection.stream().flatMap(x -> x.items().stream()).collect(Collectors.toList())` -> `collection.flatCollect(x -> x.items())`
+- `collection.stream().flatMap(x -> x.items().stream()).collect(Collectors.toSet())` -> `collection.flatCollect(x -> x.items()).toSet()`
+
+The lambda body must end with a `.stream()` call, which is stripped since `flatCollect` expects an `Iterable` rather than a `Stream`.
+
 ### Operation Ordering Optimizations
 
 #### ECSelectBeforeSortThis
