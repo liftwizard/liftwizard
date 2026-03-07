@@ -538,6 +538,14 @@ Replace verbose collection creation patterns with Eclipse Collections factory me
 - `UnifiedSet.newSet(Arrays.asList(a, b, c))` → `Sets.mutable.with(a, b, c)`
 - `HashBag.newBag(Arrays.asList(a, b, c))` → `Bags.mutable.with(a, b, c)`
 
+#### ECArraysStreamToArrayAdapter
+
+Replace `Arrays.stream(array)` with Eclipse Collections `ArrayAdapter.adapt(array)`:
+
+- `Arrays.stream(values)` -> `ArrayAdapter.adapt(values)`
+
+`ArrayAdapter` wraps an array as a `RichIterable`, providing `select`, `collect`, `groupBy`, and other Eclipse Collections operations without copying the array. Only matches `Object[]` arrays, not primitive arrays (`int[]`, `long[]`, `double[]`).
+
 #### ArrayIterateEmpty
 
 Replace manual array null and length checks with ArrayIterate utility methods:
