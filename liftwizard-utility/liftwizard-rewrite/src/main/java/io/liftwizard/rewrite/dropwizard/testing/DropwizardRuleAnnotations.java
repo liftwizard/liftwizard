@@ -55,8 +55,10 @@ public class DropwizardRuleAnnotations extends Recipe {
 
 	@Override
 	public String getDescription() {
-		return "Replace JUnit 4 `@ClassRule`/`@Rule` annotations with JUnit 5 `@RegisterExtension` "
-			+ "and add `@ExtendWith(DropwizardExtensionsSupport.class)` to the test class.";
+		return (
+			"Replace JUnit 4 `@ClassRule`/`@Rule` annotations with JUnit 5 `@RegisterExtension` "
+			+ "and add `@ExtendWith(DropwizardExtensionsSupport.class)` to the test class."
+		);
 	}
 
 	@Override
@@ -79,7 +81,10 @@ public class DropwizardRuleAnnotations extends Recipe {
 		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
 			J.ClassDeclaration cd = super.visitClassDeclaration(classDecl, ctx);
 
-			boolean hasExtensionField = cd.getBody().getStatements().stream()
+			boolean hasExtensionField = cd
+				.getBody()
+				.getStatements()
+				.stream()
 				.filter(J.VariableDeclarations.class::isInstance)
 				.map(J.VariableDeclarations.class::cast)
 				.anyMatch(this::isExtensionType);
@@ -88,7 +93,9 @@ public class DropwizardRuleAnnotations extends Recipe {
 				return cd;
 			}
 
-			boolean alreadyHasExtendWith = cd.getLeadingAnnotations().stream()
+			boolean alreadyHasExtendWith = cd
+				.getLeadingAnnotations()
+				.stream()
 				.anyMatch(this::isExtendWithDropwizardExtensionsSupport);
 
 			if (alreadyHasExtendWith) {
@@ -105,18 +112,23 @@ public class DropwizardRuleAnnotations extends Recipe {
 					"org.junit.jupiter.api.extension.ExtendWith",
 					"io.dropwizard.testing.junit5.DropwizardExtensionsSupport"
 				)
-				.javaParser(JavaParser.fromJavaVersion().classpath("junit-jupiter-api").dependsOn(
-					"""
-					package io.dropwizard.testing.junit5;
+				.javaParser(
+					JavaParser.fromJavaVersion()
+						.classpath("junit-jupiter-api")
+						.dependsOn(
+							"""
+							package io.dropwizard.testing.junit5;
 
-					public class DropwizardExtensionsSupport {
-					}
-					"""
-				))
+							public class DropwizardExtensionsSupport {
+							}
+							"""
+						)
+				)
 				.build()
-				.apply(this.getCursor(), cd.getCoordinates().addAnnotation(Comparator.comparing(
-					J.Annotation::getSimpleName
-				)));
+				.apply(
+					this.getCursor(),
+					cd.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName))
+				);
 		}
 
 		@Override
@@ -142,10 +154,10 @@ public class DropwizardRuleAnnotations extends Recipe {
 			}
 
 			vd = vd.withLeadingAnnotations(
-				vd.getLeadingAnnotations().stream()
-					.filter((ann) ->
-						!"ClassRule".equals(ann.getSimpleName())
-							&& !"Rule".equals(ann.getSimpleName()))
+				vd
+					.getLeadingAnnotations()
+					.stream()
+					.filter((ann) -> !"ClassRule".equals(ann.getSimpleName()) && !"Rule".equals(ann.getSimpleName()))
 					.toList()
 			);
 
@@ -159,13 +171,16 @@ public class DropwizardRuleAnnotations extends Recipe {
 				.imports("org.junit.jupiter.api.extension.RegisterExtension")
 				.javaParser(JavaParser.fromJavaVersion().classpath("junit-jupiter-api"))
 				.build()
-				.apply(this.getCursor(), vd.getCoordinates().addAnnotation(Comparator.comparing(
-					J.Annotation::getSimpleName
-				)));
+				.apply(
+					this.getCursor(),
+					vd.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName))
+				);
 		}
 
 		private boolean hasAnnotationByName(J.VariableDeclarations vd, String simpleName) {
-			return vd.getLeadingAnnotations().stream()
+			return vd
+				.getLeadingAnnotations()
+				.stream()
 				.anyMatch((ann) -> simpleName.equals(ann.getSimpleName()));
 		}
 
@@ -196,7 +211,9 @@ public class DropwizardRuleAnnotations extends Recipe {
 			if (annotation.getArguments() == null) {
 				return false;
 			}
-			return annotation.getArguments().stream()
+			return annotation
+				.getArguments()
+				.stream()
 				.filter(J.FieldAccess.class::isInstance)
 				.map(J.FieldAccess.class::cast)
 				.filter((fa) -> "class".equals(fa.getSimpleName()))
