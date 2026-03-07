@@ -409,7 +409,15 @@ Replace stream().collect(Collectors.groupingBy(...)) with groupBy() on Eclipse C
 - `collection.stream().collect(Collectors.groupingBy(fn, Collectors.toList()))` -> `collection.groupBy(fn)`
 - `collection.stream().collect(Collectors.groupingBy(fn, Collectors.toSet()))` -> `collection.groupBy(fn)`
 
-The `groupBy` method returns a `Multimap<K, V>` which is richer than `Map<K, Collection<V>>`. This recipe only matches the one-argument form and the two-argument form with `Collectors.toList()` or `Collectors.toSet()` as the downstream collector. Custom downstream collectors (like `Collectors.counting()`) and the three-argument form with a map factory are not transformed.
+The `groupBy` method returns a `Multimap<K, V>` which is richer than `Map<K, Collection<V>>`. This recipe only matches the one-argument form and the two-argument form with `Collectors.toList()` or `Collectors.toSet()` as the downstream collector. The three-argument form with a map factory is not transformed.
+
+#### ECStreamCollectGroupingByCountingToCountBy
+
+Replace stream().collect(Collectors.groupingBy(fn, Collectors.counting())) with countBy(fn) on Eclipse Collections types:
+
+- `collection.stream().collect(Collectors.groupingBy(fn, Collectors.counting()))` -> `collection.countBy(fn)`
+
+The `countBy` method returns a `Bag<K>` which provides `occurrencesOf()` and `topOccurrences()` instead of `Map<K, Long>`. This recipe only matches the two-argument form of `Collectors.groupingBy` with `Collectors.counting()` as the downstream collector.
 
 #### ECStreamSortedCollectToSortedListBy
 
