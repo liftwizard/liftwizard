@@ -393,6 +393,14 @@ Replace stream().flatMap(fn).collect() with flatCollect(fn) on Eclipse Collectio
 
 The lambda body must end with a `.stream()` call, which is stripped since `flatCollect` expects an `Iterable` rather than a `Stream`.
 
+#### ECStreamCollectToMapToGroupByUniqueKey
+
+Replace stream().collect(Collectors.toMap(keyFn, Function.identity())) with groupByUniqueKey(keyFn) on Eclipse Collections types:
+
+- `collection.stream().collect(Collectors.toMap(Donut::code, Function.identity()))` -> `collection.groupByUniqueKey(Donut::code)`
+
+This recipe only matches the two-argument form of `Collectors.toMap` where the value mapper is `Function.identity()`. The `groupByUniqueKey` method returns a `MutableMap<K, V>` directly, eliminating stream and collector boilerplate.
+
 ### Operation Ordering Optimizations
 
 #### ECSelectBeforeSortThis
