@@ -508,6 +508,12 @@ Replace Eclipse Collections map constructors with factory methods:
 - `new UnifiedMap<>()` → `Maps.mutable.empty()`
 - `new UnifiedMap<String, Integer>()` → `Maps.mutable.<String, Integer>empty()`
 
+#### ECIntStreamRangeClosedToIntInterval
+
+Replace `IntStream.rangeClosed()` with Eclipse Collections `IntInterval.fromTo()`:
+
+- `IntStream.rangeClosed(from, to)` -> `IntInterval.fromTo(from, to)`
+
 #### ECArraysAsListToWith
 
 Replace verbose collection creation patterns with Eclipse Collections factory methods:
