@@ -411,6 +411,14 @@ Replace stream().collect(Collectors.groupingBy(...)) with groupBy() on Eclipse C
 
 The `groupBy` method returns a `Multimap<K, V>` which is richer than `Map<K, Collection<V>>`. This recipe only matches the one-argument form and the two-argument form with `Collectors.toList()` or `Collectors.toSet()` as the downstream collector. The three-argument form with a map factory is not transformed.
 
+#### ECStreamCollectGroupingByIdentityCountingToToBag
+
+Replace stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())) with toBag() on Eclipse Collections types:
+
+- `collection.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))` -> `collection.toBag()`
+
+The `toBag()` method returns a `Bag<T>` which provides `occurrencesOf()` and `topOccurrences()` out of the box, replacing manual Map-based word counting patterns. This recipe only matches the two-argument form of `Collectors.groupingBy` with `Function.identity()` as the classifier and `Collectors.counting()` as the downstream collector.
+
 #### ECStreamCollectGroupingByCountingToCountBy
 
 Replace stream().collect(Collectors.groupingBy(fn, Collectors.counting())) with countBy(fn) on Eclipse Collections types:

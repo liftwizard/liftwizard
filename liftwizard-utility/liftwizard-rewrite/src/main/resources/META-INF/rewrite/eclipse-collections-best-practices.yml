@@ -58,6 +58,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToUnmodifiableToToImmutable
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToMapToGroupByUniqueKey
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectGroupingByToGroupBy
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectGroupingByIdentityCountingToToBag
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectGroupingByCountingToCountBy
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectPartitioningByToPartition
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectSummarizingToCollectPrimitive
