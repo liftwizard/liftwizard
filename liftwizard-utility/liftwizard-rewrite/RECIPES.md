@@ -445,6 +445,15 @@ Replace stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList()) w
 
 This eliminates the unnecessary Stream intermediary since Eclipse Collections has the toSortedListBy method directly on RichIterable. The recipe only matches when Comparator.comparing() is used as the sort key extractor.
 
+#### ECStreamCollectToUnmodifiableToToImmutable
+
+Replace stream().collect(Collectors.toUnmodifiableList/Set()) with toImmutableList/Set() on Eclipse Collections types:
+
+- `collection.stream().collect(Collectors.toUnmodifiableList())` -> `collection.toImmutableList()`
+- `collection.stream().collect(Collectors.toUnmodifiableSet())` -> `collection.toImmutableSet()`
+
+This eliminates the unnecessary Stream intermediary since Eclipse Collections has the toImmutableList and toImmutableSet methods directly on RichIterable. Eclipse Collections immutable types provide a richer API than JDK unmodifiable wrappers.
+
 ### Operation Ordering Optimizations
 
 #### ECSelectBeforeSortThis
