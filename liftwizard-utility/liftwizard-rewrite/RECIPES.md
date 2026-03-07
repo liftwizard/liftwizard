@@ -437,6 +437,16 @@ Replace stream().collect(Collectors.summarizing*(fn)) with collect*(fn).summaryS
 
 This eliminates the unnecessary Stream intermediary since Eclipse Collections has the collectDouble/collectInt/collectLong methods directly on RichIterable, and the resulting primitive collections have summaryStatistics().
 
+#### ECStreamMapToPrimitiveSumToCollectPrimitiveSum
+
+Replace stream().mapToDouble/mapToInt/mapToLong(fn).sum() with collectDouble/collectInt/collectLong(fn).sum() on Eclipse Collections types:
+
+- `collection.stream().mapToDouble(fn).sum()` -> `collection.collectDouble(fn).sum()`
+- `collection.stream().mapToInt(fn).sum()` -> `collection.collectInt(fn).sum()`
+- `collection.stream().mapToLong(fn).sum()` -> `collection.collectLong(fn).sum()`
+
+This eliminates the unnecessary Stream intermediary since Eclipse Collections has the collectDouble/collectInt/collectLong methods directly on RichIterable, and the resulting primitive collections have sum().
+
 #### ECStreamSortedCollectToSortedListBy
 
 Replace stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList()) with toSortedListBy(fn) on Eclipse Collections types:
