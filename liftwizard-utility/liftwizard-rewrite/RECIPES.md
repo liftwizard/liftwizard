@@ -514,6 +514,14 @@ Replace `IntStream.rangeClosed()` with Eclipse Collections `IntInterval.fromTo()
 
 - `IntStream.rangeClosed(from, to)` -> `IntInterval.fromTo(from, to)`
 
+#### ECStreamGatherWindowFixedToChunk
+
+Replace Java 24+ `Gatherers.windowFixed(n)` with Eclipse Collections `chunk(n)`:
+
+- `collection.stream().gather(Gatherers.windowFixed(n)).collect(Collectors.toList())` -> `collection.chunk(n)`
+
+This recipe targets Java 24+ code using the Gatherers API (JEP 485). Eclipse Collections' `chunk(n)` method on `RichIterable` returns a `LazyIterable<RichIterable<T>>` which provides a rich collection API without the Stream intermediary.
+
 #### ECArraysAsListToWith
 
 Replace verbose collection creation patterns with Eclipse Collections factory methods:
