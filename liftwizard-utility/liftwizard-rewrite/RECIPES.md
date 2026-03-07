@@ -464,6 +464,16 @@ Replace stream().collect(Collectors.toUnmodifiableList/Set()) with toImmutableLi
 
 This eliminates the unnecessary Stream intermediary since Eclipse Collections has the toImmutableList and toImmutableSet methods directly on RichIterable. Eclipse Collections immutable types provide a richer API than JDK unmodifiable wrappers.
 
+### Map Method Conversions
+
+#### ECMapGetOrDefaultToGetIfAbsentValue
+
+Replace JDK `Map.getOrDefault()` with Eclipse Collections `MapIterable.getIfAbsentValue()`:
+
+- `map.getOrDefault(key, defaultValue)` -> `map.getIfAbsentValue(key, defaultValue)`
+
+This replaces the JDK Map method with the idiomatic Eclipse Collections equivalent. Only applies to Eclipse Collections map types (MutableMap, etc.), not plain JDK maps.
+
 ### Operation Ordering Optimizations
 
 #### ECSelectBeforeSortThis
