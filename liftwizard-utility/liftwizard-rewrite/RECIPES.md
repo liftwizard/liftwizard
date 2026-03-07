@@ -522,6 +522,14 @@ Replace Java 24+ `Gatherers.windowFixed(n)` with Eclipse Collections `chunk(n)`:
 
 This recipe targets Java 24+ code using the Gatherers API (JEP 485). Eclipse Collections' `chunk(n)` method on `RichIterable` returns a `LazyIterable<RichIterable<T>>` which provides a rich collection API without the Stream intermediary.
 
+#### ECStreamGatherFoldToInjectInto
+
+Replace Java 24+ `Gatherers.fold()` with Eclipse Collections `injectInto()`:
+
+- `collection.stream().gather(Gatherers.fold(() -> init, folder)).findFirst().orElseThrow()` -> `collection.injectInto(init, folder)`
+
+This recipe targets Java 24+ code using the Gatherers API (JEP 485). `Gatherers.fold()` returns a single-element stream requiring `findFirst()` to extract the value. Eclipse Collections' `injectInto()` method on `RichIterable` is the native fold operation and eliminates the Stream intermediary.
+
 #### ECArraysAsListToWith
 
 Replace verbose collection creation patterns with Eclipse Collections factory methods:
