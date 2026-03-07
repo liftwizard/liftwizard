@@ -401,6 +401,16 @@ Replace stream().collect(Collectors.toMap(keyFn, Function.identity())) with grou
 
 This recipe only matches the two-argument form of `Collectors.toMap` where the value mapper is `Function.identity()`. The `groupByUniqueKey` method returns a `MutableMap<K, V>` directly, eliminating stream and collector boilerplate.
 
+#### ECStreamCollectGroupingByToGroupBy
+
+Replace stream().collect(Collectors.groupingBy(...)) with groupBy() on Eclipse Collections types:
+
+- `collection.stream().collect(Collectors.groupingBy(fn))` -> `collection.groupBy(fn)`
+- `collection.stream().collect(Collectors.groupingBy(fn, Collectors.toList()))` -> `collection.groupBy(fn)`
+- `collection.stream().collect(Collectors.groupingBy(fn, Collectors.toSet()))` -> `collection.groupBy(fn)`
+
+The `groupBy` method returns a `Multimap<K, V>` which is richer than `Map<K, Collection<V>>`. This recipe only matches the one-argument form and the two-argument form with `Collectors.toList()` or `Collectors.toSet()` as the downstream collector. Custom downstream collectors (like `Collectors.counting()`) and the three-argument form with a map factory are not transformed.
+
 ### Operation Ordering Optimizations
 
 #### ECSelectBeforeSortThis
