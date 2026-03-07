@@ -55,6 +55,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamFlatMapCollectToFlatCollect
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamSortedCollectToSortedListBy
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToListToToList
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToUnmodifiableToToImmutable
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectToMapToGroupByUniqueKey
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectGroupingByToGroupBy
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamCollectGroupingByCountingToCountBy
