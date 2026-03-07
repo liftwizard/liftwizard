@@ -427,6 +427,16 @@ Replace stream().collect(Collectors.partitioningBy(pred)) with partition(pred) o
 
 The `partition` method returns a `PartitionIterable` with `getSelected()` and `getRejected()` instead of `Map<Boolean, List<T>>` with `get(true)`/`get(false)`. This recipe only matches the one-argument form of `Collectors.partitioningBy`. The two-argument form with a downstream collector is not transformed.
 
+#### ECStreamCollectSummarizingToCollectPrimitive
+
+Replace stream().collect(Collectors.summarizing*(fn)) with collect*(fn).summaryStatistics() on Eclipse Collections types:
+
+- `collection.stream().collect(Collectors.summarizingDouble(fn))` -> `collection.collectDouble(fn).summaryStatistics()`
+- `collection.stream().collect(Collectors.summarizingInt(fn))` -> `collection.collectInt(fn).summaryStatistics()`
+- `collection.stream().collect(Collectors.summarizingLong(fn))` -> `collection.collectLong(fn).summaryStatistics()`
+
+This eliminates the unnecessary Stream intermediary since Eclipse Collections has the collectDouble/collectInt/collectLong methods directly on RichIterable, and the resulting primitive collections have summaryStatistics().
+
 #### ECStreamSortedCollectToSortedListBy
 
 Replace stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList()) with toSortedListBy(fn) on Eclipse Collections types:
