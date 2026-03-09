@@ -23,4 +23,5 @@ recipeList:
     - io.liftwizard.rewrite.bestpractices.NullSafeEqualsRecipes
     - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
     - io.liftwizard.rewrite.java.style.EnforceConsistentArgumentLineWrapping
+    - io.liftwizard.rewrite.java.style.EnforceConsistentParameterLineWrapping
     - io.liftwizard.rewrite.java.style.ExplicitTypeToVar
