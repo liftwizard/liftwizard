@@ -51,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 
 public class ServerLoggingFilter implements Filter {
 
@@ -95,8 +94,10 @@ public class ServerLoggingFilter implements Filter {
 
 		this.addInitialRequestAttributes(structuredArguments, httpServletRequest);
 
-		var requestWrapper = new ContentCachingRequestWrapper(httpServletRequest);
-		var responseWrapper = new ContentCachingResponseWrapper(httpServletResponse);
+		int maxEntitySize = this.loggingConfig.getMaxEntitySize();
+
+		var requestWrapper = new ContentCachingRequestWrapper(httpServletRequest, maxEntitySize);
+		var responseWrapper = new BodyCaptureResponseWrapper(httpServletResponse, maxEntitySize);
 		try {
 			chain.doFilter(requestWrapper, responseWrapper);
 		} finally {
@@ -193,10 +194,10 @@ public class ServerLoggingFilter implements Filter {
 
 	private void addFinalResponseAttributes(
 		@Nonnull StructuredArguments structuredArguments,
-		@Nonnull ContentCachingResponseWrapper responseWrapper,
+		@Nonnull BodyCaptureResponseWrapper responseWrapper,
 		@Nonnull HttpServletResponse httpServletResponse,
 		@Nonnull Duration elapsed
-	) throws IOException {
+	) {
 		StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 
 		http.setElapsed(elapsed);
@@ -210,18 +211,18 @@ public class ServerLoggingFilter implements Filter {
 
 		this.addResponseHeaders(httpServletResponse, http);
 
-		if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getContentAsByteArray().length > 0) {
+		if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getCapturedSize() > 0) {
 			String payload = this.getPayloadFromByteArray(
-				responseWrapper.getContentAsByteArray(),
+				responseWrapper.getCapturedBody(),
 				responseWrapper.getCharacterEncoding()
 			);
 
-			String truncatedPayload = this.getTruncatedPayload(payload);
-			http.setBody(truncatedPayload);
-			http.setContentLength(responseWrapper.getContentSize());
-		}
+			if (responseWrapper.isTruncated()) {
+				payload += "...more...";
+			}
 
-		responseWrapper.copyBodyToResponse();
+			http.setBody(payload);
+		}
 	}
 
 	@Nonnull
