@@ -38,7 +38,6 @@ jobs:
               run: mvn package --projects docs --also-make --activate-profiles 'znai-maven-plugin'
 
             - name: Create deploy directory
-              if: github.event_name == 'push'
               run: |
                   mkdir ./deploy
                   mv ./docs/target/docs/ ./deploy/
@@ -53,6 +52,60 @@ jobs:
                   cname: liftwizard.io
                   force_orphan: true
                   commit_message: "[skip ci] deploy to gh-pages"
+
+            - name: Deploy to Cloudflare Pages
+              id: cloudflare-deploy
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: pages deploy ./deploy --project-name=liftwizard --branch=${{ github.head_ref || github.ref_name }}
+
+            - name: Add Cloudflare preview URL to PR comment
+              if: github.event_name == 'pull_request'
+              uses: actions/github-script@v7
+              env:
+                  DEPLOYMENT_URL: ${{ steps.cloudflare-deploy.outputs.deployment-url }}
+                  HEAD_REF: ${{ github.head_ref }}
+                  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+              with:
+                  script: |
+                      const deploymentUrl = process.env.DEPLOYMENT_URL;
+                      const branchUrl = `https://${process.env.HEAD_REF}.liftwizard.pages.dev`;
+                      const headSha = process.env.HEAD_SHA;
+                      const body = [
+                        '## Cloudflare Pages Deployment',
+                        '',
+                        '| | |',
+                        '|---|---|',
+                        `| **Latest commit:** | \`${headSha}\` |`,
+                        '| **Status:** | ✅ Deploy successful! |',
+                        `| **Preview URL:** | ${deploymentUrl}/docs/ |`,
+                        `| **Branch Preview URL:** | ${branchUrl}/docs/ |`,
+                      ].join('\n');
+
+                      const { data: comments } = await github.rest.issues.listComments({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: context.issue.number,
+                      });
+                      const botComment = comments.find(c => c.body.includes('Cloudflare Pages Deployment'));
+
+                      if (botComment) {
+                        await github.rest.issues.updateComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          comment_id: botComment.id,
+                          body,
+                        });
+                      } else {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: context.issue.number,
+                          body,
+                        });
+                      }
 
             - name: "Clean Maven cache"
               run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
