@@ -28,6 +28,10 @@ testing
     testing
     matching-files
     matching-json
+openrewrite
+    overview
+    getting-started
+    recipe-reference
 maven
     maven-best-practices
     minimal-parent
