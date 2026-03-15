@@ -26,7 +26,7 @@ jobs:
                   server-password: MAVEN_PASSWORD
                   gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Publish package
               run: just deploy

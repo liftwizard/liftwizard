@@ -27,7 +27,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - run: just mvn
 
