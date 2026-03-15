@@ -27,7 +27,7 @@ jobs:
                   java-version: 21
                   distribution: oracle
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Configure Git
               run: |

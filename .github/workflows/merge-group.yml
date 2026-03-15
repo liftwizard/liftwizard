@@ -26,7 +26,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - run: just test
 
@@ -48,7 +48,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - run: just spotbugs
 
@@ -70,7 +70,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Add Error Prone problem matcher
               run: echo "::add-matcher::.github/errorprone.json"
@@ -95,7 +95,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Add Error Prone problem matcher
               run: echo "::add-matcher::.github/errorprone.json"
@@ -120,7 +120,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Run maven-enforcer-plugin
               run: just enforcer
@@ -143,7 +143,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Run maven-dependency-plugin
               run: just dependency
@@ -166,7 +166,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Run maven-javadoc-plugin
               run: just javadoc
@@ -193,7 +193,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Produce Checkstyle XML: Semantics"
               run: just checkstyle-profile checkstyle-semantics false
@@ -224,7 +224,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Produce Checkstyle XML: Strict Semantics"
               run: just checkstyle-profile checkstyle-semantics-strict false
@@ -255,7 +255,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Produce Checkstyle XML: Formatting"
               run: just checkstyle-profile checkstyle-formatting false
@@ -283,7 +283,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Run rewrite-maven-plugin (dry run)
               run: just rewrite-dry-run
@@ -307,7 +307,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: Run artifact:check-buildplan
               run: just reproducible
@@ -333,7 +333,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Spotless Check: Formats"
               run: just spotless formats
@@ -362,7 +362,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Spotless Check: Java cleanthat"
               run: just spotless java-cleanthat
@@ -391,7 +391,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Spotless Check: Java"
               run: just spotless java
@@ -420,7 +420,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Spotless Check: Prettier Java (with sorted imports)"
               run: just spotless prettier-java-sort-imports
@@ -449,7 +449,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Spotless Check: Sql"
               run: just spotless sql
@@ -478,7 +478,7 @@ jobs:
 
             - uses: twosigma/maven-cache-cleaner@v1
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Spotless Check: Pom"
               run: just spotless pom
@@ -497,7 +497,7 @@ jobs:
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Prettier Format Check"
               run: npx prettier --check .
@@ -509,7 +509,7 @@ jobs:
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
 
-            - uses: jdx/mise-action@v3
+            - uses: jdx/mise-action@v4
 
             - name: "Biome Format Check"
               run: npx @biomejs/biome ci
