@@ -41,7 +41,8 @@ recipeList:
     # - org.openrewrite.staticanalysis.EqualsAvoidsNull
     - org.openrewrite.staticanalysis.ExplicitInitialization
     - org.openrewrite.staticanalysis.FallThrough
-    - org.openrewrite.staticanalysis.HideUtilityClassConstructor
+    # Disabled in Liftwizard
+    # - org.openrewrite.staticanalysis.HideUtilityClassConstructor
     - org.openrewrite.staticanalysis.NeedBraces
     # Disabled in Liftwizard - formatting handled by auto-formatters
     # - org.openrewrite.staticanalysis.OperatorWrap
