@@ -29,7 +29,7 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
-			.recipe(new ECImplFactoryToApiFactoryRecipes())
+			.recipe(new ECImplFactoryToApiFactory())
 			.parser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api", "eclipse-collections"));
 	}
 
@@ -130,11 +130,13 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 					import java.util.List;
 					import java.util.Map;
 					import java.util.Set;
+					import org.eclipse.collections.api.factory.set.MutableSetFactory;
 					import org.eclipse.collections.api.list.MutableList;
 					import org.eclipse.collections.api.map.MutableMap;
 					import org.eclipse.collections.impl.factory.Lists;
 					import org.eclipse.collections.impl.factory.Maps;
 					import org.eclipse.collections.impl.factory.Sets;
+					import org.eclipse.collections.impl.factory.sets.MutableSetFactoryImpl;
 
 					public class Example {
 					    void setsUnion(Set<String> a, Set<String> b) {
@@ -150,6 +152,9 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 					        Map<String, String> javaMap = new HashMap<>();
 					        MutableMap<String, String> adapted = Maps.adapt(javaMap);
 					    }
+
+					    // Field initializer should not crash (Bug 1)
+					    public static final MutableSetFactory mutable = MutableSetFactoryImpl.INSTANCE;
 					}
 					"""
 				)
