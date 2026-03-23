@@ -27,6 +27,7 @@ import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.JavaType.FullyQualified;
+import org.openrewrite.java.tree.TypeUtils;
 
 /**
  * Simplifies redundant functional method references by removing unnecessary method calls.
@@ -58,17 +59,14 @@ import org.openrewrite.java.tree.JavaType.FullyQualified;
  */
 public class ECSimplifyMethodReferences extends Recipe {
 
-	// Eclipse Collections functional interface method names
 	private static final Set<String> PREDICATE_METHODS = Sets.fixedSize.with("accept", "test");
 	private static final Set<String> FUNCTION_METHODS = Sets.fixedSize.with("valueOf", "apply");
 	private static final Set<String> PROCEDURE_METHODS = Sets.fixedSize.with("value", "accept");
 
-	// Eclipse Collections functional interface FQNs
 	private static final String EC_PREDICATE = "org.eclipse.collections.api.block.predicate.Predicate";
 	private static final String EC_FUNCTION = "org.eclipse.collections.api.block.function.Function";
 	private static final String EC_PROCEDURE = "org.eclipse.collections.api.block.procedure.Procedure";
 
-	// JDK functional interface FQNs
 	private static final String JDK_PREDICATE = "java.util.function.Predicate";
 	private static final String JDK_FUNCTION = "java.util.function.Function";
 	private static final String JDK_CONSUMER = "java.util.function.Consumer";
@@ -102,7 +100,6 @@ public class ECSimplifyMethodReferences extends Recipe {
 				return result;
 			}
 
-			// Only handle instance method references (object::method), not static (Type::method)
 			Expression containing = visitedMemberRef.getContaining();
 			if (!(containing instanceof J.Identifier identifier)) {
 				return result;
@@ -115,9 +112,12 @@ public class ECSimplifyMethodReferences extends Recipe {
 				return result;
 			}
 
-			// Check if this is a redundant method reference
 			if (this.isRedundantMethodReference(containingType, methodName)) {
-				// Replace the entire method reference with just the identifier
+				JavaType targetType = this.getExpectedTargetType(visitedMemberRef);
+				if (targetType != null && !this.areTypesCompatible(containingType, targetType)) {
+					return result;
+				}
+
 				return identifier.withPrefix(visitedMemberRef.getPrefix());
 			}
 
@@ -144,31 +144,78 @@ public class ECSimplifyMethodReferences extends Recipe {
 			if (!validMethods.contains(methodName)) {
 				return false;
 			}
-			return this.isAssignableTo(type, expectedTypeFqn);
+			return TypeUtils.isAssignableTo(expectedTypeFqn, type);
 		}
 
-		private boolean isAssignableTo(JavaType type, String targetFqn) {
-			if (type instanceof FullyQualified fullyQualified) {
-				if (fullyQualified.getFullyQualifiedName().equals(targetFqn)) {
-					return true;
+		private JavaType getExpectedTargetType(J.MemberReference memberRef) {
+			var cursor = this.getCursor().getParent();
+			while (cursor != null) {
+				Object value = cursor.getValue();
+
+				if (value instanceof J.VariableDeclarations varDecls) {
+					return varDecls.getTypeAsFullyQualified();
 				}
-				// Check interfaces
-				for (FullyQualified iface : fullyQualified.getInterfaces()) {
-					if (this.isAssignableTo(iface, targetFqn)) {
-						return true;
+
+				if (value instanceof J.MethodInvocation methodInv) {
+					JavaType paramType = this.getMethodParameterType(memberRef, methodInv);
+					if (paramType != null) {
+						return paramType;
 					}
 				}
-				// Check supertype
-				FullyQualified superType = fullyQualified.getSupertype();
-				if (superType != null && this.isAssignableTo(superType, targetFqn)) {
-					return true;
+
+				if (value instanceof J.Assignment assignment) {
+					return assignment.getVariable().getType();
+				}
+
+				cursor = cursor.getParent();
+			}
+
+			return null;
+		}
+
+		private JavaType getMethodParameterType(J.MemberReference memberRef, J.MethodInvocation methodInv) {
+			java.util.List<Expression> arguments = methodInv.getArguments();
+			int argIndex = -1;
+			for (int i = 0; i < arguments.size(); i++) {
+				if (arguments.get(i) == memberRef) {
+					argIndex = i;
+					break;
 				}
 			}
-			// Handle parameterized types
-			if (type instanceof JavaType.Parameterized parameterized) {
-				return this.isAssignableTo(parameterized.getType(), targetFqn);
+
+			if (argIndex < 0) {
+				return null;
 			}
-			return false;
+
+			JavaType methodType = methodInv.getMethodType();
+			if (methodType instanceof JavaType.Method method) {
+				java.util.List<JavaType> paramTypes = method.getParameterTypes();
+				if (argIndex < paramTypes.size()) {
+					return paramTypes.get(argIndex);
+				}
+			}
+
+			return null;
+		}
+
+		private boolean areTypesCompatible(JavaType sourceType, JavaType targetType) {
+			if (sourceType == null || targetType == null) {
+				return true;
+			}
+
+			if (TypeUtils.isAssignableTo(targetType, sourceType)) {
+				return true;
+			}
+
+			// Fallback: compare raw fully-qualified names to handle generic variance
+			FullyQualified sourceFqn = TypeUtils.asFullyQualified(sourceType);
+			FullyQualified targetFqn = TypeUtils.asFullyQualified(targetType);
+
+			if (sourceFqn == null || targetFqn == null) {
+				return true;
+			}
+
+			return sourceFqn.getFullyQualifiedName().equals(targetFqn.getFullyQualifiedName());
 		}
 	}
 }
