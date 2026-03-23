@@ -28,7 +28,7 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 	@Override
 	public void defaults(RecipeSpec spec) {
 		super.defaults(spec);
-		spec.recipe(new ECAnySatisfyEqualsToContainsRecipes());
+		spec.recipe(new ECAnySatisfyEqualsToContains());
 	}
 
 	@DocumentExample
@@ -139,7 +139,38 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 					        boolean anySatisfyPredicate = list.anySatisfy(predicate);
 					        boolean anySatisfyLambda = list.anySatisfy(s -> s.length() > 5);
 					        boolean directContains = list.contains("hello");
+
 					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void replaceStringLiteralMethodReference() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.eclipse.collections.api.list.MutableList;
+
+					class Test {
+					    void test(MutableList<String> list) {
+					        assertFalse(list.anySatisfy("Monkey"::equals));
+					    }
+
+					    void assertFalse(boolean value) {}
+					}
+					""",
+					"""
+					import org.eclipse.collections.api.list.MutableList;
+
+					class Test {
+					    void test(MutableList<String> list) {
+					        assertFalse(list.contains("Monkey"));
+					    }
+
+					    void assertFalse(boolean value) {}
 					}
 					"""
 				)
