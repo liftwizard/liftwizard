@@ -16,32 +16,74 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
-import com.google.errorprone.refaster.annotation.AfterTemplate;
-import com.google.errorprone.refaster.annotation.BeforeTemplate;
-import org.eclipse.collections.api.RichIterable;
-import org.openrewrite.java.template.RecipeDescriptor;
+import java.util.List;
 
-@RecipeDescriptor(
-	name = "`anySatisfy(value::equals)` to `contains(value)`",
-	description = "Converts `iterable.anySatisfy(value::equals)` to `iterable.contains(value)` for Eclipse Collections types. "
-	+ "The contains() method is simpler and more readable, and may be faster for indexed collections."
-)
-public class ECAnySatisfyEqualsToContains {
+import org.openrewrite.ExecutionContext;
+import org.openrewrite.Preconditions;
+import org.openrewrite.Recipe;
+import org.openrewrite.TreeVisitor;
+import org.openrewrite.java.JavaParser;
+import org.openrewrite.java.JavaTemplate;
+import org.openrewrite.java.JavaVisitor;
+import org.openrewrite.java.MethodMatcher;
+import org.openrewrite.java.search.UsesMethod;
+import org.openrewrite.java.tree.Expression;
+import org.openrewrite.java.tree.J;
 
-	@RecipeDescriptor(
-		name = "`anySatisfy(value::equals)` to `contains(value)`",
-		description = "Converts `iterable.anySatisfy(value::equals)` to `iterable.contains(value)`."
-	)
-	public static final class AnySatisfyEqualsToContains<T, S> {
+public class ECAnySatisfyEqualsToContains extends Recipe {
 
-		@BeforeTemplate
-		boolean before(RichIterable<T> iterable, S value) {
-			return iterable.anySatisfy(value::equals);
-		}
+	private static final MethodMatcher ANY_SATISFY_MATCHER = new MethodMatcher(
+		"org.eclipse.collections.api.RichIterable anySatisfy(org.eclipse.collections.api.block.predicate.Predicate)"
+	);
 
-		@AfterTemplate
-		boolean after(RichIterable<T> iterable, S value) {
-			return iterable.contains(value);
+	@Override
+	public String getDisplayName() {
+		return "`anySatisfy(value::equals)` to `contains(value)`";
+	}
+
+	@Override
+	public String getDescription() {
+		return (
+			"Converts `iterable.anySatisfy(value::equals)` to `iterable.contains(value)` for Eclipse Collections types. "
+			+ "The contains() method is simpler and more readable, and may be faster for indexed collections."
+		);
+	}
+
+	@Override
+	public TreeVisitor<?, ExecutionContext> getVisitor() {
+		return Preconditions.check(
+			new UsesMethod<>(ANY_SATISFY_MATCHER),
+			new AnySatisfyEqualsToContainsVisitor()
+		);
+	}
+
+	private static final class AnySatisfyEqualsToContainsVisitor extends JavaVisitor<ExecutionContext> {
+
+		@Override
+		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			J.MethodInvocation mi = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
+
+			if (!ANY_SATISFY_MATCHER.matches(mi)) {
+				return mi;
+			}
+
+			List<Expression> args = mi.getArguments();
+			if (args.size() != 1 || !(args.get(0) instanceof J.MemberReference memberRef)) {
+				return mi;
+			}
+
+			if (!"equals".equals(memberRef.getReference().getSimpleName())) {
+				return mi;
+			}
+
+			Expression select = mi.getSelect();
+			Expression value = memberRef.getContaining();
+
+			JavaTemplate template = JavaTemplate.builder("#{any()}.contains(#{any()})")
+				.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api"))
+				.build();
+
+			return template.apply(getCursor(), mi.getCoordinates().replace(), select, value);
 		}
 	}
 }
