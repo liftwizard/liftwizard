@@ -256,7 +256,7 @@
             <dependency>
                 <groupId>org.glassfish.hk2.external</groupId>
                 <artifactId>aopalliance-repackaged</artifactId>
-                <version>3.1.1</version>
+                <version>4.0.0</version>
             </dependency>
 
             <dependency>
