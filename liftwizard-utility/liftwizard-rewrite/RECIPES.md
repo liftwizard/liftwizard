@@ -52,17 +52,17 @@ Replace explicit type declarations with `var` when the variable is initialized w
 
 ## Logging Best Practices Recipes
 
-The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eager logging patterns to use SLF4J parameterized logging. It combines Liftwizard recipes with OpenRewrite recipes in a specific order.
+The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eager logging patterns to use SLF4J parameterized logging. All recipes are from the [rewrite-logging-frameworks](https://docs.openrewrite.org/recipes/java/logging/slf4j) module.
 
 ### Composite Recipe Order
 
 | Order | Recipe                                | Source      |
 | ----- | ------------------------------------- | ----------- |
-| 1     | `StringFormatToParameterizedLogging`  | Liftwizard  |
-| 2     | `MessageFormatToParameterizedLogging` | Liftwizard  |
+| 1     | `StringFormatToParameterizedLogging`  | OpenRewrite |
+| 2     | `MessageFormatToParameterizedLogging` | OpenRewrite |
 | 3     | `ParameterizedLogging`                | OpenRewrite |
 | 4     | `StripToStringFromArguments`          | OpenRewrite |
-| 5     | `RemoveUnnecessaryLogLevelGuards`     | Liftwizard  |
+| 5     | `RemoveUnnecessaryLogLevelGuards`     | OpenRewrite |
 
 **Why this order matters:**
 
@@ -70,59 +70,23 @@ The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eag
 2. Then, strip unnecessary `toString()` calls
 3. Finally, remove guards that are now redundant
 
-### Liftwizard Recipes
+### Recipes
 
 #### StringFormatToParameterizedLogging
 
 Converts `String.format()` calls in SLF4J logging statements to parameterized logging.
 
 - `LOGGER.info(String.format("User %s logged in", username))` → `LOGGER.info("User {} logged in", username)`
-- `LOGGER.info(String.format("User %s has %d items", name, count))` → `LOGGER.info("User {} has {} items", name, count)`
 
-Only handles simple format specifiers (`%s`, `%d`, `%x`, `%o`, `%f`, `%b`, `%c`). Complex specifiers with width, precision, or argument indices are left unchanged:
-
-- `String.format("Value: %.2f", value)` - unchanged (precision)
-- `String.format("Width: %5d", number)` - unchanged (width)
-- `String.format("Order: %2$s %1$s", first, second)` - unchanged (argument index)
+See [StringFormatToParameterizedLogging documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/stringformattoparameterizedlogging).
 
 #### MessageFormatToParameterizedLogging
 
 Converts `MessageFormat.format()` calls in SLF4J logging statements to parameterized logging.
 
 - `LOGGER.info(MessageFormat.format("User {0} logged in", username))` → `LOGGER.info("User {} logged in", username)`
-- `LOGGER.info(MessageFormat.format("User {0} has {1} items", name, count))` → `LOGGER.info("User {} has {} items", name, count)`
 
-#### RemoveUnnecessaryLogLevelGuards
-
-Removes redundant if-statement guards around SLF4J logging calls when all arguments are safe (no expensive computation).
-
-- `if (LOGGER.isDebugEnabled()) { LOGGER.debug("Value: {}", name); }` → `LOGGER.debug("Value: {}", name);`
-- `if (LOGGER.isDebugEnabled(MARKER)) { LOGGER.debug(MARKER, "Value: {}", name); }` → `LOGGER.debug(MARKER, "Value: {}", name);`
-
-**Safe arguments (guard removed):**
-
-- Literals (`"message"`, `123`)
-- Identifiers (`name`, `count`)
-- Field access (`this.name`, `object.field`)
-- `Exception.getMessage()`
-- `toString()` on safe expressions
-
-**Unsafe arguments (guard preserved):**
-
-- Arbitrary method invocations (may be expensive)
-- Lambda expressions
-- New object creation
-
-**Other conditions that preserve the guard:**
-
-- Else branch present
-- Body contains non-logging statements
-- Compound conditions (`isDebugEnabled() && x`)
-- Negated conditions (`!isDebugEnabled()`)
-
-### OpenRewrite Recipes
-
-These recipes are from the [rewrite-logging-frameworks](https://docs.openrewrite.org/recipes/java/logging/slf4j) module.
+See [MessageFormatToParameterizedLogging documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/messageformattoparameterizedlogging).
 
 #### ParameterizedLogging
 
@@ -139,6 +103,14 @@ Removes unnecessary `.toString()` calls from SLF4J logger arguments. SLF4J autom
 - `LOGGER.debug("Value: {}", obj.toString())` → `LOGGER.debug("Value: {}", obj)`
 
 See [StripToStringFromArguments documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/striptostringfromarguments).
+
+#### RemoveUnnecessaryLogLevelGuards
+
+Removes redundant if-statement guards around SLF4J logging calls when all arguments are safe (no expensive computation).
+
+- `if (LOGGER.isDebugEnabled()) { LOGGER.debug("Value: {}", name); }` → `LOGGER.debug("Value: {}", name);`
+
+See [RemoveUnnecessaryLogLevelGuards documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/removeunnecessaryloglevelguards).
 
 ## AssertJ Migration Recipes
 

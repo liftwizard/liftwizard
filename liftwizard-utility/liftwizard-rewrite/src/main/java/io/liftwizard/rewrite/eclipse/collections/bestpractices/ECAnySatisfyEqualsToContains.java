@@ -51,10 +51,7 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 
 	@Override
 	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return Preconditions.check(
-			new UsesMethod<>(ANY_SATISFY_MATCHER),
-			new AnySatisfyEqualsToContainsVisitor()
-		);
+		return Preconditions.check(new UsesMethod<>(ANY_SATISFY_MATCHER), new AnySatisfyEqualsToContainsVisitor());
 	}
 
 	private static final class AnySatisfyEqualsToContainsVisitor extends JavaVisitor<ExecutionContext> {

@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,16 +41,17 @@ class YamlRecipeValidationTest {
 
 	@Test
 	void allYamlRecipeReferencesResolve() throws IOException {
-		Environment env = Environment.builder()
-			.scanRuntimeClasspath()
-			.build();
+		Environment env = Environment.builder().scanRuntimeClasspath().build();
 
-		Set<String> knownRecipeNames = env.listRecipeDescriptors().stream()
+		Set<String> knownRecipeNames = env
+			.listRecipeDescriptors()
+			.stream()
 			.map(RecipeDescriptor::getName)
 			.collect(Collectors.toCollection(LinkedHashSet::new));
 
-		ImmutableList<String> liftwizardReferences = getReferencedRecipeNames()
-			.select(name -> name.startsWith("io.liftwizard."));
+		ImmutableList<String> liftwizardReferences = getReferencedRecipeNames().select((name) ->
+			name.startsWith("io.liftwizard.")
+		);
 
 		assertThat(liftwizardReferences).isNotEmpty();
 
@@ -60,9 +61,7 @@ class YamlRecipeValidationTest {
 	private static ImmutableList<String> getReferencedRecipeNames() throws IOException {
 		MutableList<String> result = Lists.mutable.empty();
 		Yaml yaml = new Yaml();
-		Enumeration<URL> resources = Thread.currentThread()
-			.getContextClassLoader()
-			.getResources("META-INF/rewrite");
+		Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("META-INF/rewrite");
 
 		while (resources.hasMoreElements()) {
 			URL url = resources.nextElement();
