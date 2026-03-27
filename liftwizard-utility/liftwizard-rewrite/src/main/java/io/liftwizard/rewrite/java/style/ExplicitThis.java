@@ -32,6 +32,11 @@ import org.openrewrite.java.tree.JavaType.Method;
 import org.openrewrite.java.tree.Space;
 import org.openrewrite.marker.Markers;
 
+/**
+ * @deprecated Use {@code org.openrewrite.staticanalysis.ExplicitThis} from rewrite-static-analysis instead.
+ *     This recipe was contributed upstream (PR #791, merged 2026-03-21).
+ */
+@Deprecated(forRemoval = true)
 public class ExplicitThis extends Recipe {
 
 	@Override

@@ -28,7 +28,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
     - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
     - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval
-    - io.liftwizard.rewrite.java.style.ExplicitThis
+    - org.openrewrite.staticanalysis.ExplicitThis
     - io.liftwizard.staticanalysis.CodeCleanup
     - io.liftwizard.staticanalysis.CommonStaticAnalysis
     - org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64
