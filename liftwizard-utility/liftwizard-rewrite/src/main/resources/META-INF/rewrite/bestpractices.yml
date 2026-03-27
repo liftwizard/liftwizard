@@ -24,6 +24,6 @@ recipeList:
     - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
     - io.liftwizard.rewrite.java.style.EnforceConsistentArgumentLineWrapping
     - io.liftwizard.rewrite.java.style.EnforceConsistentParameterLineWrapping
-    - io.liftwizard.rewrite.java.style.ExplicitTypeToVar
     - io.liftwizard.rewrite.java.style.UseVarForPrimitiveLiterals
+    - org.openrewrite.java.migrate.lang.var.UseVarForConstructors
     - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast
