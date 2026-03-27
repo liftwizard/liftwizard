@@ -57,7 +57,7 @@ public final class GraphQLDeepFetcher {
 			currentFinder = currentFinder.getRelationshipFinderByName(navigationName);
 			Objects.requireNonNull(currentFinder);
 		}
-		Navigation<T> navigation = (Navigation<T>) currentFinder;
+		var navigation = (Navigation<T>) currentFinder;
 		result.deepFetch(navigation);
 	}
 

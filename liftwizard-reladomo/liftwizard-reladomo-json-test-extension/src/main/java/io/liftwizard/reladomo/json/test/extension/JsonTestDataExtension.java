@@ -84,15 +84,14 @@ public class JsonTestDataExtension implements BeforeEachCallback, AfterEachCallb
 		Class<?> finderClass = Class.forName(finderClassName);
 
 		Method allPersistentAttributesMethod = finderClass.getMethod("allPersistentAttributes", NO_PARAMS);
-		Attribute<?, ?>[] attributeArray = (Attribute<?, ?>[]) allPersistentAttributesMethod.invoke(null, NO_ARGS);
+		var attributeArray = (Attribute<?, ?>[]) allPersistentAttributesMethod.invoke(null, NO_ARGS);
 		List<Attribute<?, ?>> attributes = Arrays.asList(attributeArray);
 
 		Method method = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
-		MithraObjectPortal mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
+		var mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
 
 		MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
-		SourcelessConnectionManager databaseObjectConnectionManager =
-			(SourcelessConnectionManager) databaseObject.getConnectionManager();
+		var databaseObjectConnectionManager = (SourcelessConnectionManager) databaseObject.getConnectionManager();
 
 		LOGGER.debug(
 			"Loading JSON test data for class {} using connection manager: {}",

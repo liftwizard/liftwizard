@@ -84,7 +84,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
 		@Override
 		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
-			J.NewClass nc = (J.NewClass) super.visitNewClass(newClass, ctx);
+			var nc = (J.NewClass) super.visitNewClass(newClass, ctx);
 
 			JavaType.FullyQualified type = TypeUtils.asFullyQualified(nc.getType());
 			if (type == null || !("java.util." + this.sourceTypeSimpleName).equals(type.getFullyQualifiedName())) {

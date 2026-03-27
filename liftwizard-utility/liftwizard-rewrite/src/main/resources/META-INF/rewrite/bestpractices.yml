@@ -25,3 +25,4 @@ recipeList:
     - io.liftwizard.rewrite.java.style.EnforceConsistentArgumentLineWrapping
     - io.liftwizard.rewrite.java.style.EnforceConsistentParameterLineWrapping
     - io.liftwizard.rewrite.java.style.ExplicitTypeToVar
+    - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast

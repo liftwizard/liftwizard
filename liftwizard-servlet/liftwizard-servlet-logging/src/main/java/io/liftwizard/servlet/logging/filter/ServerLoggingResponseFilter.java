@@ -40,9 +40,7 @@ public final class ServerLoggingResponseFilter implements ContainerResponseFilte
 		@Nonnull ContainerRequestContext requestContext,
 		@Nonnull ContainerResponseContext responseContext
 	) throws IOException {
-		StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty(
-			"structuredArguments"
-		);
+		var structuredArguments = (StructuredArguments) requestContext.getProperty("structuredArguments");
 
 		if (structuredArguments.getResponse() == null) {
 			throw new IllegalStateException();

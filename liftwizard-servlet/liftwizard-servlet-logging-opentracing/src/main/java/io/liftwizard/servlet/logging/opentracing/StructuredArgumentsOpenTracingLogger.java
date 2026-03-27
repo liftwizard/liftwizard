@@ -80,7 +80,7 @@ public class StructuredArgumentsOpenTracingLogger implements Consumer<Structured
 
 		if (value.isObject()) {
 			ImmutableStack<String> nextStack = stack.push(key);
-			ObjectNode nextObjectNode = (ObjectNode) value;
+			var nextObjectNode = (ObjectNode) value;
 			this.structuredArgumentsToSpans(span, nextStack, nextObjectNode);
 			return;
 		}

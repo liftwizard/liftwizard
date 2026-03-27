@@ -178,9 +178,7 @@ public class ReladomoTemporalRollback {
 			systemToColumn
 		);
 
-		SourcelessConnectionManager connectionManager = (SourcelessConnectionManager) portal
-			.getDatabaseObject()
-			.getConnectionManager();
+		var connectionManager = (SourcelessConnectionManager) portal.getDatabaseObject().getConnectionManager();
 		DatabaseType databaseType = connectionManager.getDatabaseType();
 		TimeZone timeZone = connectionManager.getDatabaseTimeZone();
 

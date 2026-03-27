@@ -65,8 +65,8 @@ public class FirebaseOAuthAuthenticator implements Authenticator<String, Firebas
 	private static FirebasePrincipal getFirebasePrincipal(@Nonnull FirebaseToken firebaseToken) {
 		Map<String, Object> claims = firebaseToken.getClaims();
 
-		Map<String, Object> firebase = (Map<String, Object>) claims.get("firebase");
-		String signInProvider = (String) firebase.get("sign_in_provider");
+		var firebase = (Map<String, Object>) claims.get("firebase");
+		var signInProvider = (String) firebase.get("sign_in_provider");
 
 		String uid = firebaseToken.getUid();
 		String name = firebaseToken.getName();

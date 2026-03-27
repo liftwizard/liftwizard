@@ -126,7 +126,7 @@ public final class ManagedTempDirectory implements AutoCloseable {
 		if (o == null || this.getClass() != o.getClass()) {
 			return false;
 		}
-		ManagedTempDirectory that = (ManagedTempDirectory) o;
+		var that = (ManagedTempDirectory) o;
 		return this.path.equals(that.path);
 	}
 

@@ -97,7 +97,7 @@ public class PersonDTO {
 			return false;
 		}
 
-		PersonDTO personDTO = (PersonDTO) o;
+		var personDTO = (PersonDTO) o;
 
 		if (!Objects.equals(this.id, personDTO.id)) {
 			return false;

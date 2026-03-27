@@ -47,8 +47,8 @@ public class GraphQLQueryToOrderByConverter {
 
 	private static Optional<OrderBy> convertOrderBy(RelatedFinder finder, Map<String, ?> map) {
 		var converter = new GraphQLQueryToOrderByConverter();
-		Map<String, ?> attribute = (Map<String, ?>) map.get("attribute");
-		String direction = (String) map.get("direction");
+		var attribute = (Map<String, ?>) map.get("attribute");
+		var direction = (String) map.get("direction");
 
 		if (attribute == null) {
 			throw new LiftwizardGraphQLContextException(
