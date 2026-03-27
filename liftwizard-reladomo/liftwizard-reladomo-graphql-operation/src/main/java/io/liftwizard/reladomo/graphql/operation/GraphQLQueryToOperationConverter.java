@@ -131,7 +131,7 @@ public class GraphQLQueryToOperationConverter {
 			}
 		}
 
-		List<?> nestedGraphQlOperations = (List<?>) graphQlOperation;
+		var nestedGraphQlOperations = (List<?>) graphQlOperation;
 		MutableList<Operation> nestedOperations = ListAdapter.adapt(nestedGraphQlOperations).collectWithIndex(
 				(nestedGraphQlOperation, index) -> {
 					this.context.push(conjunctionName + "[" + index + "]");

@@ -118,7 +118,7 @@ public class CsvTestDataParser {
 			for (String headerName : headerNames) {
 				String getterMethodName = headerName;
 				Method getterMethod = finderClass.getMethod(getterMethodName, NO_PARAMS);
-				Attribute<?, ?> attribute = (Attribute<?, ?>) getterMethod.invoke(null, NO_ARGS);
+				var attribute = (Attribute<?, ?>) getterMethod.invoke(null, NO_ARGS);
 				this.attributes.add(attribute);
 			}
 		} catch (
@@ -137,7 +137,7 @@ public class CsvTestDataParser {
 			Class<?> dataClass = Class.forName(dataClassName);
 
 			for (CSVRecord record : csvParser) {
-				MithraDataObject dataObject = (MithraDataObject) dataClass.getDeclaredConstructor().newInstance();
+				var dataObject = (MithraDataObject) dataClass.getDeclaredConstructor().newInstance();
 				this.populateDataObject(dataObject, record);
 				this.dataObjects.add(dataObject);
 			}

@@ -44,7 +44,7 @@ public class ReladomoTestResourceColumn {
 		Object value = this.attribute.valueOf(mithraObject);
 
 		if (this.attribute.valueType() == Timestamp.class) {
-			Timestamp timestamp = (Timestamp) value;
+			var timestamp = (Timestamp) value;
 			Timestamp adjustedTimestamp = this.adjustTimestamp(timestamp);
 			this.values.add(adjustedTimestamp);
 		} else {
@@ -57,7 +57,7 @@ public class ReladomoTestResourceColumn {
 			return null;
 		}
 
-		TimestampAttribute timestampAttribute = (TimestampAttribute) this.attribute;
+		var timestampAttribute = (TimestampAttribute) this.attribute;
 		Timestamp infinityTimestamp = timestampAttribute.getAsOfAttributeInfinity();
 
 		if (timestamp.equals(infinityTimestamp)) {

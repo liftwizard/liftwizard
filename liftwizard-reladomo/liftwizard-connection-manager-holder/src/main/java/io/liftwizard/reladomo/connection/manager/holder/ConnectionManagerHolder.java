@@ -42,7 +42,7 @@ public final class ConnectionManagerHolder {
 			throw new IllegalStateException("Expected a single property called name but found " + properties.keySet());
 		}
 
-		String name = (String) properties.get(KEY_NAME);
+		var name = (String) properties.get(KEY_NAME);
 		Objects.requireNonNull(
 			connectionManagersByName,
 			"connectionManagersByName is null. Did you remember to run ConnectionManagerHolderBundle?"

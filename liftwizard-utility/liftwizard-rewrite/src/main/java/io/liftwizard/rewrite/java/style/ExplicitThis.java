@@ -67,7 +67,7 @@ public class ExplicitThis extends Recipe {
 
 		@Override
 		public J visitIdentifier(J.Identifier identifier, ExecutionContext ctx) {
-			J.Identifier id = (J.Identifier) super.visitIdentifier(identifier, ctx);
+			var id = (J.Identifier) super.visitIdentifier(identifier, ctx);
 
 			// In static context, no "this." allowed
 			if (this.isStatic) {
@@ -119,7 +119,7 @@ public class ExplicitThis extends Recipe {
 			boolean previousStatic = this.isStatic;
 			this.isStatic = true;
 
-			J.Block result = (J.Block) super.visitBlock(block, ctx);
+			var result = (J.Block) super.visitBlock(block, ctx);
 
 			this.isStatic = previousStatic;
 			return result;
@@ -135,7 +135,7 @@ public class ExplicitThis extends Recipe {
 				this.isStatic = (methodType.getFlagsBitMap() & 0x0008L) != 0;
 			}
 
-			J.MethodDeclaration result = (J.MethodDeclaration) super.visitMethodDeclaration(method, ctx);
+			var result = (J.MethodDeclaration) super.visitMethodDeclaration(method, ctx);
 
 			// Restore previous state
 			this.isStatic = previousStatic;
@@ -145,7 +145,7 @@ public class ExplicitThis extends Recipe {
 
 		@Override
 		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-			J.MethodInvocation m = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
+			var m = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
 			// Fast path: in static context, no "this." allowed
 			if (this.isStatic) {
@@ -194,7 +194,7 @@ public class ExplicitThis extends Recipe {
 			if (parent == null || !(parent.getValue() instanceof J.VariableDeclarations.NamedVariable)) {
 				return false;
 			}
-			J.VariableDeclarations.NamedVariable namedVar = (J.VariableDeclarations.NamedVariable) parent.getValue();
+			var namedVar = (J.VariableDeclarations.NamedVariable) parent.getValue();
 			return namedVar.getName() == this.getCursor().getValue();
 		}
 

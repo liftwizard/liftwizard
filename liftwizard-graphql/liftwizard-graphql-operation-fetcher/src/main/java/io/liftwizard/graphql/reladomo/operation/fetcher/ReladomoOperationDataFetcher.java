@@ -51,10 +51,10 @@ public class ReladomoOperationDataFetcher<T> implements DataFetcher<List<T>> {
 	@Override
 	public List<T> get(DataFetchingEnvironment environment) {
 		Map<String, Object> arguments = environment.getArguments();
-		String inputOperation = (String) arguments.get("operation");
+		var inputOperation = (String) arguments.get("operation");
 		Operation operation = this.compileOperation(this.finder, inputOperation);
 		LOGGER.debug("Executing operation: {}", operation);
-		DomainList<T> result = (DomainList<T>) this.finder.findMany(operation);
+		var result = (DomainList<T>) this.finder.findMany(operation);
 		GraphQLDeepFetcher.deepFetch(result, this.finder, environment.getSelectionSet());
 		return result;
 	}

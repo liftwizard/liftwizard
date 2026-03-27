@@ -70,7 +70,7 @@ public class UtcMithraParsedData extends MithraParsedData {
 			case StreamTokenizer.TT_EOL -> throw new RuntimeException("should never get here");
 			case StreamTokenizer.TT_EOF -> throw new ParseException("Unexpected end of file", st.lineno());
 			default -> {
-				char ch = (char) st.ttype;
+				var ch = (char) st.ttype;
 				throw new ParseException(
 					"unexpected character "
 					+ ch

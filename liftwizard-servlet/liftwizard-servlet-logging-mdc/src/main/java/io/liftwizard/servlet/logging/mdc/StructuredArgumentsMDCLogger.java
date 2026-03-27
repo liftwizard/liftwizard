@@ -77,7 +77,7 @@ public class StructuredArgumentsMDCLogger implements Consumer<StructuredArgument
 
 		if (value.isObject()) {
 			ImmutableStack<String> nextStack = stack.push(key);
-			ObjectNode nextObjectNode = (ObjectNode) value;
+			var nextObjectNode = (ObjectNode) value;
 			this.structuredArgumentsToMDC(mdc, nextStack, nextObjectNode);
 			return;
 		}

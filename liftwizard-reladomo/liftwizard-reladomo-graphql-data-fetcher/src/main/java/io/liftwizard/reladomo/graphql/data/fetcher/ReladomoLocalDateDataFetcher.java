@@ -46,7 +46,7 @@ public class ReladomoLocalDateDataFetcher<Input> implements TrivialDataFetcher<L
 			return null;
 		}
 
-		Date result = (Date) this.dateAttribute.valueOf(persistentInstance);
+		var result = (Date) this.dateAttribute.valueOf(persistentInstance);
 		return result.toLocalDate();
 	}
 }

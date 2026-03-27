@@ -64,9 +64,7 @@ public final class ServerLoggingRequestFilter implements ContainerRequestFilter 
 
 	@Override
 	public void filter(@Nonnull ContainerRequestContext requestContext) throws IOException {
-		StructuredArguments structuredArguments = (StructuredArguments) requestContext.getProperty(
-			"structuredArguments"
-		);
+		var structuredArguments = (StructuredArguments) requestContext.getProperty("structuredArguments");
 		UriInfo uriInfo = requestContext.getUriInfo();
 
 		StructuredArgumentsRequestHttp http = structuredArguments.getRequest().getHttp();

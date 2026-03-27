@@ -29,7 +29,7 @@ public final class ProtectedClassResource {
 	/* Access to this method is authorized by the class level annotation */
 	@GET
 	public String showBasicUserSecret(@Context SecurityContext context) {
-		User user = (User) context.getUserPrincipal();
+		var user = (User) context.getUserPrincipal();
 		return String.format("Hey there, %s. You seem to be a basic user. %d", user.getName(), user.getId());
 	}
 

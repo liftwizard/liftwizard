@@ -58,7 +58,7 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 
 		@Override
 		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-			J.MethodInvocation mi = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
+			var mi = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
 			if (!ANY_SATISFY_MATCHER.matches(mi)) {
 				return mi;

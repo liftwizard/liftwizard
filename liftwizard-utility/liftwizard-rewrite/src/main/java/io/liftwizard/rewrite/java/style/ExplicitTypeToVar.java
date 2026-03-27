@@ -164,7 +164,7 @@ public class ExplicitTypeToVar extends Recipe {
 
 		private VariableDeclarations transformToVar(VariableDeclarations vd) {
 			NamedVariable variable = vd.getVariables().get(0);
-			NewClass initializer = (NewClass) variable.getInitializer();
+			var initializer = (NewClass) variable.getInitializer();
 
 			Space prefix = vd.getTypeExpression() == null ? Space.EMPTY : vd.getTypeExpression().getPrefix();
 

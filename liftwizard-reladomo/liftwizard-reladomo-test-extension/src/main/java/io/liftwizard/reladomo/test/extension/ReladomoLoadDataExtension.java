@@ -110,11 +110,10 @@ public class ReladomoLoadDataExtension implements BeforeEachCallback, AfterEachC
 		String finderClassName = parsedClassName + "Finder";
 		Class<?> finderClass = Class.forName(finderClassName);
 		Method method = finderClass.getMethod("getMithraObjectPortal", NO_PARAMS);
-		MithraObjectPortal mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
+		var mithraObjectPortal = (MithraObjectPortal) method.invoke(null, NO_ARGS);
 
 		MithraDatabaseObject databaseObject = mithraObjectPortal.getDatabaseObject();
-		SourcelessConnectionManager databaseObjectConnectionManager =
-			(SourcelessConnectionManager) databaseObject.getConnectionManager();
+		var databaseObjectConnectionManager = (SourcelessConnectionManager) databaseObject.getConnectionManager();
 
 		LOGGER.debug(
 			"Loading test data for class {} using connection manager: {}",

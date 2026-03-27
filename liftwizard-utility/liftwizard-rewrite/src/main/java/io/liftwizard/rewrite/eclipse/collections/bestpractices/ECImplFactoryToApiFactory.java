@@ -65,7 +65,7 @@ public class ECImplFactoryToApiFactory extends Recipe {
 
 		@Override
 		public J visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx) {
-			J.FieldAccess fa = (J.FieldAccess) super.visitFieldAccess(fieldAccess, ctx);
+			var fa = (J.FieldAccess) super.visitFieldAccess(fieldAccess, ctx);
 
 			String fieldName = fa.getSimpleName();
 			if (!FACTORY_FIELDS.contains(fieldName)) {

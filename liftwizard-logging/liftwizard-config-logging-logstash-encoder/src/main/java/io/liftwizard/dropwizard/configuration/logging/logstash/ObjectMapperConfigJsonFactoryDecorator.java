@@ -36,7 +36,7 @@ public class ObjectMapperConfigJsonFactoryDecorator implements JsonFactoryDecora
 
 	@Override
 	public JsonFactory decorate(JsonFactory factory) {
-		ObjectMapper objectMapper = (ObjectMapper) factory.getCodec();
+		var objectMapper = (ObjectMapper) factory.getCodec();
 		ObjectMapperConfig.configure(objectMapper, this.prettyPrint, true, this.serializationInclusion);
 		return factory;
 	}
