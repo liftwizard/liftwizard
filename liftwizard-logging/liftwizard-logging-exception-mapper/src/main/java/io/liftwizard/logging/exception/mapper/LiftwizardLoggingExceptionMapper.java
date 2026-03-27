@@ -57,7 +57,7 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 		if (exception instanceof WebApplicationException) {
 			final Response response = ((WebApplicationException) exception).getResponse();
 			Response.Status.Family family = response.getStatusInfo().getFamily();
-			if (family.equals(Response.Status.Family.REDIRECTION)) {
+			if (family == Response.Status.Family.REDIRECTION) {
 				return response;
 			}
 			/*

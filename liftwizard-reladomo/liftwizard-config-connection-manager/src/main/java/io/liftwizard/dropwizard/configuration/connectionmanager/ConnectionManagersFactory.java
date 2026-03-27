@@ -94,7 +94,7 @@ public class ConnectionManagersFactory {
 				ConnectionManagerFactory currentManager = managersWithSameDataSource.get(i);
 
 				// Verify that database type matches
-				if (!firstManager.getDatabaseType().equals(currentManager.getDatabaseType())) {
+				if (firstManager.getDatabaseType() != currentManager.getDatabaseType()) {
 					String errorMessage =
 						"Connection managers '%s' and '%s' share data source '%s' but have different database types: %s vs %s".formatted(
 							firstManager.getConnectionManagerName(),
