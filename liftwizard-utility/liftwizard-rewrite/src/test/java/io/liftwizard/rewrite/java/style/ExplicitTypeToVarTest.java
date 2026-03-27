@@ -23,6 +23,7 @@ import org.openrewrite.test.RewriteTest;
 import static org.openrewrite.java.Assertions.java;
 import static org.openrewrite.java.Assertions.javaVersion;
 
+@SuppressWarnings("deprecation")
 class ExplicitTypeToVarTest implements RewriteTest {
 
 	@Override

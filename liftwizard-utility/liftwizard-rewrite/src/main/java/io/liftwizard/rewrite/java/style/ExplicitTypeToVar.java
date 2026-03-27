@@ -45,7 +45,11 @@ import org.openrewrite.marker.Markers;
  * Replaces explicit type declarations with {@code var} keyword when the initializer is a constructor call with an exactly matching type.
  *
  * <p>This recipe is more conservative than OpenRewrite's {@code UseVarForObject}
+ *
+ * @deprecated Use {@code org.openrewrite.java.migrate.lang.var.UseVarForConstructors} from rewrite-migrate-java instead.
+ *     This recipe was contributed upstream (PR #1009, merged 2026-03-21).
  */
+@Deprecated(forRemoval = true)
 public class ExplicitTypeToVar extends Recipe {
 
 	@Override
