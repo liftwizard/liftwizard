@@ -30,12 +30,15 @@ recipeList:
     - org.openrewrite.staticanalysis.BooleanChecksNotInverted
     - org.openrewrite.staticanalysis.CaseInsensitiveComparisonsDoNotChangeCase
     - org.openrewrite.staticanalysis.CatchClauseOnlyRethrows
+    - org.openrewrite.staticanalysis.CombineSemanticallyEqualCatchBlocks
+    - org.openrewrite.staticanalysis.CompareEnumsWithEqualityOperator
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
     - org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType
     - org.openrewrite.staticanalysis.CovariantEquals
     - org.openrewrite.staticanalysis.DefaultComesLast
     - org.openrewrite.staticanalysis.EmptyBlock
+    - org.openrewrite.staticanalysis.EqualsToContentEquals
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.EqualsAvoidsNull
     - org.openrewrite.staticanalysis.ExplicitInitialization
@@ -74,11 +77,15 @@ recipeList:
     - org.openrewrite.staticanalysis.PreferSystemGetPropertyOverGetenv
     - org.openrewrite.staticanalysis.PrimitiveWrapperClassConstructorToValueOf
     - org.openrewrite.staticanalysis.RedundantFileCreation
+    - org.openrewrite.staticanalysis.RemoveCallsToObjectFinalize
+    - org.openrewrite.staticanalysis.RemoveCallsToSystemGc
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.RemoveExtraSemicolons
+    - org.openrewrite.staticanalysis.RemoveHashCodeCallsFromArrayInstances
     - org.openrewrite.staticanalysis.RemoveRedundantNullCheckBeforeInstanceof
     - org.openrewrite.staticanalysis.RemoveRedundantNullCheckBeforeLiteralEquals
     #  - org.openrewrite.staticanalysis.RemoveRedundantTypeCast
+    - org.openrewrite.staticanalysis.RemoveToStringCallsFromArrayInstances
     #  - org.openrewrite.java.RemoveUnusedImports
     #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
     #  - org.openrewrite.staticanalysis.RemoveUnusedPrivateMethods
@@ -88,6 +95,8 @@ recipeList:
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
     - org.openrewrite.staticanalysis.ReplaceClassIsInstanceWithInstanceof
+    - org.openrewrite.staticanalysis.ReplaceStackWithDeque
+    - org.openrewrite.staticanalysis.ReplaceWeekYearWithYear
     # Disabled in Liftwizard
     # - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
     - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
@@ -116,7 +125,11 @@ recipeList:
     #  - org.openrewrite.staticanalysis.UseCollectionInterfaces
     - org.openrewrite.staticanalysis.UseDiamondOperator
     - org.openrewrite.staticanalysis.UseJavaStyleArrayDeclarations
+    - org.openrewrite.staticanalysis.UseListSort
+    - org.openrewrite.staticanalysis.UseObjectNotifyAll
     - org.openrewrite.staticanalysis.UsePortableNewlines
+    - org.openrewrite.staticanalysis.UseStandardCharset
+    - org.openrewrite.staticanalysis.UseSystemLineSeparator
     # https://github.com/openrewrite/rewrite-static-analysis/issues/10
     #  - org.openrewrite.staticanalysis.UseLambdaForFunctionalInterface
     #  - org.openrewrite.staticanalysis.UseStringReplace
