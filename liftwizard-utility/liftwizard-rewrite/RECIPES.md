@@ -50,6 +50,20 @@ Replace explicit type declarations with `var` when the variable is initialized w
 - Interface vs implementation: `List<String> x = new ArrayList<>()`
 - Non-constructor initializers: `ArrayList<String> x = this.getList()`
 
+### HideUtilityClassConstructor
+
+Fork of `org.openrewrite.staticanalysis.HideUtilityClassConstructor` that generates a private constructor throwing `AssertionError` to enforce noninstantiability.
+
+For utility classes with no explicit constructor, adds:
+
+```java
+private ClassName() {
+    throw new AssertionError("Suppress default constructor for noninstantiability");
+}
+```
+
+For utility classes with public or package-private constructors, changes the access level to private.
+
 ## Logging Best Practices Recipes
 
 The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eager logging patterns to use SLF4J parameterized logging. All recipes are from the [rewrite-logging-frameworks](https://docs.openrewrite.org/recipes/java/logging/slf4j) module.
