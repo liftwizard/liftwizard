@@ -89,7 +89,7 @@ public final class DatabaseDdlExecutor {
 
 	public static void dropAllObjects(Connection connection) {
 		try (Statement statement = connection.createStatement()) {
-			String dropSql = "DROP ALL OBJECTS";
+			var dropSql = "DROP ALL OBJECTS";
 			LOGGER.info("Executing SQL: {}", dropSql);
 			statement.execute(dropSql);
 		} catch (SQLException e) {

@@ -44,7 +44,7 @@ public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
 		}
 
 		for (String name : namespace.<String>getList("names")) {
-			for (int i = 0; i < 1000; i++) {
+			for (var i = 0; i < 1000; i++) {
 				LOGGER.info("{} => {}", name, template.render(Optional.of(name)));
 				Thread.sleep(1000L);
 			}

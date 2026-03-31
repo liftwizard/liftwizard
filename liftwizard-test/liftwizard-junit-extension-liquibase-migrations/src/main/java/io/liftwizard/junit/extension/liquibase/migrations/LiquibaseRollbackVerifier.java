@@ -100,7 +100,7 @@ public final class LiquibaseRollbackVerifier {
 
 				LOGGER.info("Verifying {} changesets from {}", changeSets.size(), migrationsFile);
 
-				for (int i = 0; i < changeSets.size(); i++) {
+				for (var i = 0; i < changeSets.size(); i++) {
 					ChangeSet changeSet = changeSets.get(i);
 					String changeSetId = changeSet.getId();
 					String author = changeSet.getAuthor();

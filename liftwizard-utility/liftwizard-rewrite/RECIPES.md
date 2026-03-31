@@ -51,6 +51,24 @@ Replace explicit type declarations with `var` when the variable is initialized w
 - Interface vs implementation: `List<String> x = new ArrayList<>()`
 - Non-constructor initializers: `ArrayList<String> x = this.getList()`
 
+### UseVarForPrimitiveLiterals
+
+Replace explicit primitive and String type declarations with `var` when the variable is initialized with a literal value:
+
+- `int i = 42` → `var i = 42`
+- `boolean b = true` → `var b = true`
+- `double d = 3.14` → `var d = 3.14`
+- `String s = "hello"` → `var s = "hello"`
+- `long l = 42` → `var l = 42L` (adds type suffix)
+- `char c = 'a'` → `var c = 'a'`
+
+**This recipe is conservative and does NOT transform:**
+
+- Method return values: `int x = Integer.parseInt("42")`
+- `byte` and `short` literals (they look like `int` literals)
+- Field declarations (var is only allowed for local variables)
+- Constructor calls (handled by `ExplicitTypeToVar`)
+
 ### HideUtilityClassConstructor
 
 Fork of `org.openrewrite.staticanalysis.HideUtilityClassConstructor` that generates a private constructor throwing `AssertionError` to enforce noninstantiability.

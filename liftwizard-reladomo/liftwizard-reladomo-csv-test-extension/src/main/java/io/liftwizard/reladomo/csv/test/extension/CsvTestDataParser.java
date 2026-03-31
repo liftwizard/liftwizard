@@ -153,7 +153,7 @@ public class CsvTestDataParser {
 	}
 
 	private void populateDataObject(@Nonnull MithraDataObject dataObject, @Nonnull CSVRecord record) {
-		for (int i = 0; i < this.attributes.size(); i++) {
+		for (var i = 0; i < this.attributes.size(); i++) {
 			Attribute<?, ?> attribute = this.attributes.get(i);
 			String value = record.get(i);
 
