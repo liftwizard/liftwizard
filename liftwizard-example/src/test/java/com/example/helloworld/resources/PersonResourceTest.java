@@ -66,7 +66,7 @@ class PersonResourceTest {
 
 		// <editor-fold desc="Expected JSON">
 		// language=JSON
-		String expected = """
+		var expected = """
 			{
 			  "id"      : 1,
 			  "fullName": "Full Name",
@@ -85,7 +85,7 @@ class PersonResourceTest {
 
 		// <editor-fold desc="Expected JSON">
 		// language=JSON
-		String expected = """
+		var expected = """
 			{
 			  "code"   : 404,
 			  "message": "No such user."

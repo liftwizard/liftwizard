@@ -73,7 +73,7 @@ class IntegrationTest {
 
 		String jsonResponse = response.readEntity(String.class);
 		// language=JSON
-		String expected = """
+		var expected = """
 			{
 			  "id"     : 1,
 			  "content": "Hello, Dr. IntegrationTest!"
