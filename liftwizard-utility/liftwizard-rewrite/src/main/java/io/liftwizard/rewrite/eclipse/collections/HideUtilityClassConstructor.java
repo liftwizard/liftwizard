@@ -141,6 +141,7 @@ public class HideUtilityClassConstructor extends Recipe {
 
 			@Override
 			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+				J.ClassDeclaration result = classDecl;
 				if (
 					utilityClassMatcher.hasImplicitDefaultConstructor(classDecl)
 					&& J.ClassDeclaration.Kind.Type.Enum != classDecl.getKind()
@@ -158,7 +159,7 @@ public class HideUtilityClassConstructor extends Recipe {
 							classDecl.getSimpleName()
 						);
 				}
-				return classDecl;
+				return result;
 			}
 		}
 
