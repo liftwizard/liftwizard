@@ -100,21 +100,13 @@ The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eag
 
 ### Recipes
 
-#### StringFormatToParameterizedLogging
-
-Converts `String.format()` calls in SLF4J logging statements to parameterized logging.
+#### [StringFormatToParameterizedLogging](https://docs.openrewrite.org/recipes/java/logging/slf4j/stringformattoparameterizedlogging)
 
 - `LOGGER.info(String.format("User %s logged in", username))` → `LOGGER.info("User {} logged in", username)`
 
-See [StringFormatToParameterizedLogging documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/stringformattoparameterizedlogging).
-
-#### MessageFormatToParameterizedLogging
-
-Converts `MessageFormat.format()` calls in SLF4J logging statements to parameterized logging.
+#### [MessageFormatToParameterizedLogging](https://docs.openrewrite.org/recipes/java/logging/slf4j/messageformattoparameterizedlogging)
 
 - `LOGGER.info(MessageFormat.format("User {0} logged in", username))` → `LOGGER.info("User {} logged in", username)`
-
-See [MessageFormatToParameterizedLogging documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/messageformattoparameterizedlogging).
 
 #### ParameterizedLogging (Liftwizard fork)
 
@@ -127,15 +119,9 @@ Converts string concatenation in logging statements to parameterized logging. Fo
 
 - `LOGGER.debug("Value: {}", obj.toString())` → `LOGGER.debug("Value: {}", obj)`
 
-See [StripToStringFromArguments documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/striptostringfromarguments).
-
-#### RemoveUnnecessaryLogLevelGuards
-
-Removes redundant if-statement guards around SLF4J logging calls when all arguments are safe (no expensive computation).
+#### [RemoveUnnecessaryLogLevelGuards](https://docs.openrewrite.org/recipes/java/logging/slf4j/removeunnecessaryloglevelguards)
 
 - `if (LOGGER.isDebugEnabled()) { LOGGER.debug("Value: {}", name); }` → `LOGGER.debug("Value: {}", name);`
-
-See [RemoveUnnecessaryLogLevelGuards documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/removeunnecessaryloglevelguards).
 
 ## AssertJ Migration Recipes
 
