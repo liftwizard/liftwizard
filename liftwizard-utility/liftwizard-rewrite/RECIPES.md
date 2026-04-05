@@ -6,11 +6,12 @@ For getting started instructions, see [README.md](README.md).
 
 ## Composite Recipes
 
-Eight composite recipes are available:
+Nine composite recipes are available:
 
 | Composite Recipe                                                                             | Description                                                    |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | `io.liftwizard.rewrite.BestPractices`                                                        | General Java best practices for null-safety                    |
+| `io.liftwizard.rewrite.logging.Log4j1ToSlf4j1`                                               | Migrate Log4j 1 to SLF4J, skipping object logging files        |
 | `io.liftwizard.rewrite.LoggingBestPractices`                                                 | Transform logging to SLF4J parameterized format                |
 | `io.liftwizard.rewrite.assertj.AssertJMigration`                                             | Migrate from Eclipse Collections testutils to AssertJ          |
 | `io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices`                  | Optimize existing Eclipse Collections usage                    |
@@ -64,25 +65,19 @@ private ClassName() {
 
 For utility classes with public or package-private constructors, changes the access level to private.
 
+## Log4j 1 to SLF4J Migration
+
+The `io.liftwizard.rewrite.logging.Log4j1ToSlf4j1` composite recipe migrates Log4j 1.x to SLF4J 1.x, with a key safety improvement over the upstream recipe: it skips files that use Log4j 1's object logging pattern.
+
+### Why a fork?
+
+Log4j 1's `Category.info(Object)` accepts any Object, enabling structured logging where appenders can inspect the argument's type via `instanceof`. The upstream migration chain silently destroys this by transforming `LOGGER.info(myObject)` to `LOGGER.info("{}", myObject)`, which compiles but loses the object's type information.
+
+Our fork adds a precondition: if a file contains any log call with a non-String argument (e.g., `LOGGER.info(myEvent)`), the entire file is skipped. It stays on Log4j 1 and must be migrated manually.
+
 ## Logging Best Practices Recipes
 
-The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eager logging patterns to use SLF4J parameterized logging. All recipes are from the [rewrite-logging-frameworks](https://docs.openrewrite.org/recipes/java/logging/slf4j) module.
-
-### Composite Recipe Order
-
-| Order | Recipe                                | Source      |
-| ----- | ------------------------------------- | ----------- |
-| 1     | `StringFormatToParameterizedLogging`  | OpenRewrite |
-| 2     | `MessageFormatToParameterizedLogging` | OpenRewrite |
-| 3     | `ParameterizedLogging`                | OpenRewrite |
-| 4     | `StripToStringFromArguments`          | OpenRewrite |
-| 5     | `RemoveUnnecessaryLogLevelGuards`     | OpenRewrite |
-
-**Why this order matters:**
-
-1. First, convert all eager patterns (`String.format()`, `MessageFormat.format()`, string concatenation) to parameterized logging
-2. Then, strip unnecessary `toString()` calls
-3. Finally, remove guards that are now redundant
+The `io.liftwizard.rewrite.LoggingBestPractices` composite recipe transforms eager logging patterns to use SLF4J parameterized logging.
 
 ### Recipes
 
@@ -102,17 +97,14 @@ Converts `MessageFormat.format()` calls in SLF4J logging statements to parameter
 
 See [MessageFormatToParameterizedLogging documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/messageformattoparameterizedlogging).
 
-#### ParameterizedLogging
+#### ParameterizedLogging (Liftwizard fork)
 
-Converts string concatenation in logging statements to parameterized logging.
+Converts string concatenation in logging statements to parameterized logging. Forked from the [upstream OpenRewrite recipe](https://docs.openrewrite.org/recipes/java/logging/slf4j/parameterizedlogging) to exclude the incorrect transformation of simple object arguments.
 
-- `LOGGER.info("User " + username + " logged in")` → `LOGGER.info("User {} logged in", username)`
+- `LOGGER.info("User " + username + " logged in")` -> `LOGGER.info("User {} logged in", username)`
+- `LOGGER.info(myObject)` -> unchanged (upstream would incorrectly transform to `LOGGER.info("{}", myObject)`)
 
-See [ParameterizedLogging documentation](https://docs.openrewrite.org/recipes/java/logging/slf4j/parameterizedlogging).
-
-#### StripToStringFromArguments
-
-Removes unnecessary `.toString()` calls from SLF4J logger arguments. SLF4J automatically calls `toString()` on arguments when needed, and only when the log level is enabled.
+#### [StripToStringFromArguments](https://docs.openrewrite.org/recipes/java/logging/slf4j/striptostringfromarguments)
 
 - `LOGGER.debug("Value: {}", obj.toString())` → `LOGGER.debug("Value: {}", obj)`
 
