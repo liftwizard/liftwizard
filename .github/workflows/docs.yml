@@ -55,6 +55,7 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cloudflare-deploy
+              if: github.actor != 'dependabot[bot]'
               uses: cloudflare/wrangler-action@v3
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -62,7 +63,7 @@ jobs:
                   command: pages deploy ./deploy --project-name=liftwizard --branch=${{ github.head_ref || github.ref_name }}
 
             - name: Add Cloudflare preview URL to PR comment
-              if: github.event_name == 'pull_request'
+              if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
               uses: actions/github-script@v7
               env:
                   DEPLOYMENT_URL: ${{ steps.cloudflare-deploy.outputs.deployment-url }}
