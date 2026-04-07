@@ -41,3 +41,4 @@ recipeList:
     - org.openrewrite.java.testing.junit5.AssertThrowsOnLastStatement
     - org.openrewrite.java.testing.junit5.AssertTrueInstanceofToAssertInstanceOf
     - org.openrewrite.java.testing.junit5.UseAssertSame
+    - io.liftwizard.rewrite.junit.AddTestAnnotationToOverrideMethods

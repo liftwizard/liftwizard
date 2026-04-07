@@ -6,7 +6,7 @@ For getting started instructions, see [README.md](README.md).
 
 ## Composite Recipes
 
-Nine composite recipes are available:
+Ten composite recipes are available:
 
 | Composite Recipe                                                                             | Description                                                    |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -18,6 +18,7 @@ Nine composite recipes are available:
 | `io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption`                       | Migrate from Java Collections Framework to Eclipse Collections |
 | `io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval`                        | Replace Eclipse Collections APIs with Java alternatives        |
 | `io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe` | Adoption patterns that may change semantics with nulls         |
+| `io.liftwizard.testing.junit.JupiterBestPractices`                                           | JUnit Jupiter best practices for test quality                  |
 | `io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration`                  | Migrate Dropwizard JUnit 4 testing rules to JUnit 5 extensions |
 
 ## Best Practices Recipes (General Java)
@@ -717,6 +718,33 @@ Replace detect() != null patterns with anySatisfy():
 - `list.detect(predicate) == null` → `list.noneSatisfy(predicate)`
 
 **Warning**: This transformation changes semantics when the collection contains null values. The original pattern distinguishes between "found null" and "not found", while anySatisfy/noneSatisfy only check predicate satisfaction.
+
+## JUnit Jupiter Best Practices Recipes
+
+The `io.liftwizard.testing.junit.JupiterBestPractices` composite recipe applies JUnit Jupiter best practices, excluding `SimplifyTestThrows` which changes specific exceptions to generic `Exception`.
+
+### AddTestAnnotationToOverrideMethods
+
+Add `@Test` annotation to `@Override` methods in test classes when the overridden parent method has `@Test`. This prevents test methods from being silently skipped when a subclass overrides a parent test method without carrying the `@Test` annotation forward.
+
+```java
+// Before
+public class ChildTest extends ParentTest {
+    @Override
+    public void testMethod() {
+    }
+}
+
+// After
+import org.junit.jupiter.api.Test;
+
+public class ChildTest extends ParentTest {
+    @Override
+    @Test
+    public void testMethod() {
+    }
+}
+```
 
 ## Dropwizard Testing Migration Recipes
 
