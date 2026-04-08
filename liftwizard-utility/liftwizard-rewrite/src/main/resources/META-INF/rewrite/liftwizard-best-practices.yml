@@ -37,5 +37,11 @@ recipeList:
     - org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass
     - org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant
     - org.openrewrite.java.recipes.JavaRecipeBestPractices
+    - org.openrewrite.java.migrate.nio.file.PathsGetToPathOf
+    - org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent
+    - org.openrewrite.java.migrate.util.OptionalNotPresentToIsEmpty
+    - org.openrewrite.java.migrate.util.ReplaceMathRandomWithThreadLocalRandomRecipe
+    - org.openrewrite.java.migrate.util.SequencedCollection
+    - org.openrewrite.staticanalysis.InstanceOfPatternMatch
     - org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements
     - org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions

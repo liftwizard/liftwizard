@@ -2,6 +2,7 @@ package com.example.helloworld.core;
 
 import java.security.Principal;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class User implements Principal {
 
@@ -25,7 +26,7 @@ public class User implements Principal {
 	}
 
 	public int getId() {
-		return (int) (Math.random() * 100.0);
+		return (int) (ThreadLocalRandom.current().nextDouble() * 100.0);
 	}
 
 	public Set<String> getRoles() {

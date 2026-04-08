@@ -382,11 +382,8 @@ public class ReladomoOperationBuilderVisitor<T> extends ReladomoOperationThrowin
 			if (attribute instanceof DateAttribute dateAttribute) {
 				return new LocalDateListBinaryOperatorVisitor(dateAttribute, (ImmutableList<LocalDate>) parameter);
 			}
-			if (attribute instanceof TimestampAttribute) {
-				return new InstantListBinaryOperatorVisitor(
-					(TimestampAttribute) attribute,
-					(ImmutableList<Instant>) parameter
-				);
+			if (attribute instanceof TimestampAttribute timestampAttribute) {
+				return new InstantListBinaryOperatorVisitor(timestampAttribute, (ImmutableList<Instant>) parameter);
 			}
 			if (attribute instanceof AsOfAttribute) {
 				throw new AssertionError("AsOfAttribute should not be used with a list of parameters");
