@@ -45,7 +45,7 @@ public class HeaderAuthFilter extends AuthFilter<String, HeaderPrincipal> {
 			throw new WebApplicationException(this.unauthorizedHandler.buildResponse(this.headerName, "unused realm"));
 		}
 
-		String credentials = headerValues.get(0);
+		String credentials = headerValues.getFirst();
 		if (!this.authenticate(requestContext, credentials, "Header")) {
 			Response response = this.unauthorizedHandler.buildResponse(this.headerName, this.headerPrefix);
 			throw new WebApplicationException(response);

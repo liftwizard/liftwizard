@@ -89,7 +89,7 @@ public class ConnectionManagersFactory {
 			}
 
 			// For managers sharing a data source, verify that they have the same configuration except schema
-			ConnectionManagerFactory firstManager = managersWithSameDataSource.get(0);
+			ConnectionManagerFactory firstManager = managersWithSameDataSource.getFirst();
 			for (var i = 1; i < managersWithSameDataSource.size(); i++) {
 				ConnectionManagerFactory currentManager = managersWithSameDataSource.get(i);
 

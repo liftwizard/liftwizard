@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +52,7 @@ class RecursiveDirectoryDeleterTest {
 
 	@Test
 	void deleteRecursively_shouldHandleNonExistentDirectory() throws IOException {
-		Path nonExistentDir = Paths.get(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
+		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
 		assertThat(Files.exists(nonExistentDir)).isFalse();
 
 		RecursiveDirectoryDeleter.deleteRecursively(nonExistentDir);
@@ -69,7 +68,7 @@ class RecursiveDirectoryDeleterTest {
 
 	@Test
 	void tryDeleteRecursively_shouldReturnTrueForNonExistentDirectory() {
-		Path nonExistentDir = Paths.get(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
+		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
 		assertThat(Files.exists(nonExistentDir)).isFalse();
 
 		boolean result = RecursiveDirectoryDeleter.tryDeleteRecursively(nonExistentDir);

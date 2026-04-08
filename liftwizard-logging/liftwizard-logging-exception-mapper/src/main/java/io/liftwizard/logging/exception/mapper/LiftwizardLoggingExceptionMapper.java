@@ -54,8 +54,8 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 	public Response toResponse(E exception) {
 		// If we're dealing with a web exception, we can service certain types of request (like
 		// redirection or server errors) better and also propagate properties of the inner response.
-		if (exception instanceof WebApplicationException) {
-			final Response response = ((WebApplicationException) exception).getResponse();
+		if (exception instanceof WebApplicationException applicationException) {
+			final Response response = applicationException.getResponse();
 			Response.Status.Family family = response.getStatusInfo().getFamily();
 			if (family == Response.Status.Family.REDIRECTION) {
 				return response;

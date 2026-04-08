@@ -25,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
@@ -113,7 +112,7 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 	protected static Path getPackagePath(@Nonnull Class<?> callingClass) {
 		String packageName = callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 

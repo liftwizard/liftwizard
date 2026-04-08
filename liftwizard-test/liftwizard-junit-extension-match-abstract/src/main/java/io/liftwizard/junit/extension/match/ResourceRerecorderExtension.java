@@ -26,7 +26,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -64,7 +63,7 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 	public Path getPackagePath() {
 		String packageName = this.callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 

@@ -18,7 +18,6 @@ package io.liftwizard.junit.extension.match;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -51,7 +50,7 @@ public abstract class AbstractMatchExtension implements BeforeEachCallback, Afte
 	protected Path getPackagePath() {
 		String packageName = this.callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
-		Path testResources = Paths.get("", "src", "test", "resources").toAbsolutePath();
+		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 

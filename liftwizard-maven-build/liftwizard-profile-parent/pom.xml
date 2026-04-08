@@ -149,6 +149,11 @@
                                 </dependency>
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
+                                    <artifactId>rewrite-migrate-java</artifactId>
+                                    <version>3.31.3</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-rewrite</artifactId>
                                     <version>0.22.0</version>
                                 </dependency>

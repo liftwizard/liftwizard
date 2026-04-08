@@ -3,7 +3,6 @@ package com.example.helloworld;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.annotation.Nonnull;
 import javax.ws.rs.BadRequestException;
@@ -162,7 +161,7 @@ class IntegrationTest {
 		// The log file is using a size and time based policy, which used to silently
 		// fail (and not write to a log file). This test ensures not only that the
 		// log file exists, but also contains the log line that jetty prints on startup
-		Path log = Paths.get("./logs/application.log");
+		Path log = Path.of("./logs/application.log");
 		assertThat(log).exists();
 		String actual = Files.readString(log);
 		assertThat(actual).contains("0.0.0.0:" + this.dropwizardAppExtension.getLocalPort());
