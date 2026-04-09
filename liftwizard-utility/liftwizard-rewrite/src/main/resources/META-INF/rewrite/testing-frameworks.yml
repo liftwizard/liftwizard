@@ -20,9 +20,10 @@
 type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.testing.junit.JupiterBestPractices
 displayName: JUnit Jupiter best practices
-description: Apply JUnit Jupiter best practices, excluding SimplifyTestThrows which changes specific exceptions to generic Exception.
+description: Apply JUnit Jupiter best practices, excluding large migrations and lossy transforms.
 recipeList:
-    - org.openrewrite.java.testing.hamcrest.MigrateHamcrestToJUnit5
+    # Disabled in Liftwizard - large migration, not suitable for always-on
+    # - org.openrewrite.java.testing.hamcrest.MigrateHamcrestToJUnit5
     - org.openrewrite.java.testing.junit5.StaticImports
     - org.openrewrite.java.testing.junit5.CleanupAssertions
     - org.openrewrite.java.testing.junit5.CsvSourceToValueSource
