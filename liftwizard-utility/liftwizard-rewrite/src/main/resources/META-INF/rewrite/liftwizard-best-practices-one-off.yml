@@ -23,7 +23,6 @@ description: >-
     Rules that don't reliably pass. They can't run in CI with dryRun, only one-off for rewrites.
 recipeList:
     - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe
-    - io.liftwizard.testing.junit.JupiterBestPractices
     - org.openrewrite.github.PreferTemurinDistributions
     - org.openrewrite.java.logging.slf4j.Slf4jBestPractices
     - org.openrewrite.java.migrate.lombok.LombokBestPractices
