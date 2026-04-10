@@ -64,7 +64,7 @@ jobs:
 
             - name: Add Cloudflare preview URL to PR comment
               if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
-              uses: actions/github-script@v8
+              uses: actions/github-script@v9
               env:
                   DEPLOYMENT_URL: ${{ steps.cloudflare-deploy.outputs.deployment-url }}
                   HEAD_REF: ${{ github.head_ref }}
