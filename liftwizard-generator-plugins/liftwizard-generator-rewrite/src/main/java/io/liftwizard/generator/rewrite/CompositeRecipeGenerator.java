@@ -145,7 +145,7 @@ public class CompositeRecipeGenerator {
 				+ "type: specs.openrewrite.org/v1beta/recipe\n"
 				+ "name: " + spec.getGeneratedRecipeName() + "\n"
 				+ "displayName: " + spec.getDisplayName() + "\n"
-				+ this.renderDescription(spec.getDescription())
+				+ "description: " + spec.getDescription() + "\n"
 				+ "recipeList:\n";
 		// @formatter:on
 
@@ -164,10 +164,6 @@ public class CompositeRecipeGenerator {
 			return this.renderMapEntry(parameterized);
 		}
 		throw new IllegalArgumentException("Unexpected entry type: " + entry.getClass());
-	}
-
-	private String renderDescription(String description) {
-		return "description: " + description + "\n";
 	}
 
 	private String renderMapEntry(ParameterizedEntry parameterized) {
