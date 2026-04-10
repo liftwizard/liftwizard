@@ -198,7 +198,31 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-static-analysis</artifactId>
+            <version>2.31.0</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-testing-frameworks</artifactId>
+            <version>3.33.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.ben-manes.caffeine</groupId>
+                    <artifactId>caffeine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -279,6 +303,8 @@
                         <ignoredUnusedDeclaredDependency>com.google.errorprone:error_prone_core</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections-api</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-static-analysis</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-testing-frameworks</ignoredUnusedDeclaredDependency>
                     </ignoredUnusedDeclaredDependencies>
                 </configuration>
             </plugin>
@@ -335,6 +361,137 @@
                         </banDuplicateClasses>
                     </rules>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-generator-rewrite-plugin</artifactId>
+                <version>${project.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-static-analysis</artifactId>
+                        <version>2.31.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-testing-frameworks</artifactId>
+                        <version>3.33.0</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-filtered-recipes</id>
+                        <goals>
+                            <goal>generate-rewrite-recipes</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <filteredRecipeSpecs>
+                                <filteredRecipeSpec>
+                                    <generatedRecipeName>io.liftwizard.testing.junit.JupiterBestPractices</generatedRecipeName>
+                                    <displayName>JUnit Jupiter best practices</displayName>
+                                    <description>Apply JUnit Jupiter best practices, excluding SimplifyTestThrows which changes specific exceptions to generic Exception.</description>
+                                    <baseRecipeName>org.openrewrite.java.testing.junit.JupiterBestPractices</baseRecipeName>
+                                    <outputFileName>testing-frameworks.yml</outputFileName>
+                                    <exclusions>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.testing.cleanup.SimplifyTestThrows</recipeName>
+                                            <reason>changes IOException to Exception</reason>
+                                        </exclusion>
+                                    </exclusions>
+                                </filteredRecipeSpec>
+                                <filteredRecipeSpec>
+                                    <generatedRecipeName>io.liftwizard.staticanalysis.CommonStaticAnalysis</generatedRecipeName>
+                                    <displayName>Common static analysis issues</displayName>
+                                    <description>Resolve common static analysis issues (also known as SAST issues).</description>
+                                    <baseRecipeName>org.openrewrite.staticanalysis.CommonStaticAnalysis</baseRecipeName>
+                                    <outputFileName>common-static-analysis.yml</outputFileName>
+                                    <exclusions>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.EqualsAvoidsNull</recipeName>
+                                            <reason>Yoda conditions reduce readability</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.FixStringFormatExpressions</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.InlineVariable</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.RemoveExtraSemicolons</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.ReplaceStringConcatenationWithStringValueOf</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.SimplifyBooleanReturn</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.StringLiteralEquality</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments</recipeName>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.UnnecessaryParentheses</recipeName>
+                                        </exclusion>
+                                    </exclusions>
+                                </filteredRecipeSpec>
+                                <filteredRecipeSpec>
+                                    <generatedRecipeName>io.liftwizard.staticanalysis.CodeCleanup</generatedRecipeName>
+                                    <displayName>Code cleanup</displayName>
+                                    <description>Automatically cleanup code, e.g. remove unnecessary parentheses, simplify expressions.</description>
+                                    <baseRecipeName>org.openrewrite.staticanalysis.CodeCleanup</baseRecipeName>
+                                    <outputFileName>static-analysis.yml</outputFileName>
+                                    <exclusions>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.format.EmptyNewlineAtEndOfFile</recipeName>
+                                            <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.format.MethodParamPad</recipeName>
+                                            <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.format.NoWhitespaceAfter</recipeName>
+                                            <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.format.NoWhitespaceBefore</recipeName>
+                                            <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.format.PadEmptyForLoopComponents</recipeName>
+                                            <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.EqualsAvoidsNull</recipeName>
+                                            <reason>Yoda conditions reduce readability</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.HideUtilityClassConstructor</recipeName>
+                                            <reason>prefer Liftwizard fork which adds AssertionError in constructor</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.OperatorWrap</recipeName>
+                                            <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.staticanalysis.UnnecessaryParentheses</recipeName>
+                                        </exclusion>
+                                    </exclusions>
+                                </filteredRecipeSpec>
+                            </filteredRecipeSpecs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

@@ -29,6 +29,8 @@
     <name>Liftwizard Generator Maven Plugins (Module Group)</name>
 
     <modules>
+        <module>liftwizard-generator-rewrite</module>
+        <module>liftwizard-generator-rewrite-plugin</module>
         <module>liftwizard-generator-xsd2bean-plugin</module>
         <module>liftwizard-generator-reladomo-code-plugin</module>
         <module>liftwizard-generator-reladomo-database-plugin</module>

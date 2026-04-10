@@ -43,6 +43,8 @@ recipeList:
     - org.openrewrite.java.migrate.util.ReplaceMathRandomWithThreadLocalRandomRecipe
     - org.openrewrite.java.migrate.util.SequencedCollection
     - org.openrewrite.staticanalysis.InstanceOfPatternMatch
+    - io.liftwizard.rewrite.LoggingBestPractices
+    - io.liftwizard.rewrite.eclipse.collections.HideUtilityClassConstructor
     - io.liftwizard.testing.junit.JupiterBestPractices
     - org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements
     - org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions
