@@ -56,9 +56,9 @@ public final class ServerLoggingRequestFilter implements ContainerRequestFilter 
 	@Context
 	private ResourceInfo resourceInfo;
 
-	private final Function<Principal, Map<String, Object>> principalBuilder;
+	private final Function<? super Principal, ? extends Map<String, Object>> principalBuilder;
 
-	public ServerLoggingRequestFilter(Function<Principal, Map<String, Object>> principalBuilder) {
+	public ServerLoggingRequestFilter(Function<? super Principal, ? extends Map<String, Object>> principalBuilder) {
 		this.principalBuilder = Objects.requireNonNull(principalBuilder);
 	}
 
