@@ -54,7 +54,7 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 	private final Consumer<StructuredArguments> structuredLogger;
 
 	@Nonnull
-	private final Function<Principal, Map<String, Object>> principalBuilder;
+	private final Function<? super Principal, ? extends Map<String, Object>> principalBuilder;
 
 	public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger) {
 		this(structuredLogger, (principal) -> Map.of("name", principal.getName()));
@@ -62,7 +62,7 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 
 	public JerseyHttpLoggingBundle(
 		@Nonnull Consumer<StructuredArguments> structuredLogger,
-		@Nonnull Function<Principal, Map<String, Object>> principalBuilder
+		@Nonnull Function<? super Principal, ? extends Map<String, Object>> principalBuilder
 	) {
 		this.structuredLogger = Objects.requireNonNull(structuredLogger);
 		this.principalBuilder = Objects.requireNonNull(principalBuilder);

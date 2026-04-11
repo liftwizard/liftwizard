@@ -90,3 +90,63 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamGatherFoldToInjectInto
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECArraysStreamToArrayAdapter
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedSetToMutableSortedSet
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsDeclarationSiteTypeVariances
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsDeclarationSiteTypeVariances
+displayName: "Properly use declaration-site type variance for Eclipse Collections types"
+description: >-
+    When using a method parameter like `Function<IN, OUT>`, it should rather be `Function<? super IN, ? extends OUT>`.
+    This recipe checks for method parameters of well-known Eclipse Collections functional interface types.
+recipeList:
+    - org.openrewrite.staticanalysis.DeclarationSiteTypeVariance:
+          variantTypes:
+              # Core types
+              - org.eclipse.collections.api.block.predicate.Predicate<IN>
+              - org.eclipse.collections.api.block.predicate.Predicate2<IN, IN>
+              - org.eclipse.collections.api.block.procedure.Procedure<IN>
+              - org.eclipse.collections.api.block.procedure.Procedure2<IN, IN>
+              - org.eclipse.collections.api.block.function.Function<IN, OUT>
+              - org.eclipse.collections.api.block.function.Function0<OUT>
+              - org.eclipse.collections.api.block.function.Function2<IN, IN, OUT>
+              - org.eclipse.collections.api.block.function.Function3<IN, IN, IN, OUT>
+              - org.eclipse.collections.api.block.HashingStrategy<IN>
+              - org.eclipse.collections.api.block.SerializableComparator<IN>
+              # Primitive-to-object functions
+              - org.eclipse.collections.api.block.function.primitive.BooleanToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.ByteToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.CharToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.DoubleToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.FloatToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.IntToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.LongToObjectFunction<OUT>
+              - org.eclipse.collections.api.block.function.primitive.ShortToObjectFunction<OUT>
+              # Object-to-primitive functions
+              - org.eclipse.collections.api.block.function.primitive.BooleanFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.ByteFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.CharFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.DoubleFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.FloatFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.IntFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.LongFunction<IN>
+              - org.eclipse.collections.api.block.function.primitive.ShortFunction<IN>
+              # Mixed object+primitive predicates
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectBooleanPredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectBytePredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectCharPredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectDoublePredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectFloatPredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectIntPredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectLongPredicate<IN>
+              - org.eclipse.collections.api.block.predicate.primitive.ObjectShortPredicate<IN>
+              # Mixed object+primitive procedures
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectBooleanProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectByteProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectCharProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectDoubleProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectFloatProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectIntProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectLongProcedure<IN>
+              - org.eclipse.collections.api.block.procedure.primitive.ObjectShortProcedure<IN>
+          excludeBounds:
+              - java.lang.*
