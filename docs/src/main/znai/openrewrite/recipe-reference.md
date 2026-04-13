@@ -6,7 +6,7 @@ Ten composite recipes are available:
 
 | Composite Recipe                                                                             | Description                                                    |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `io.liftwizard.rewrite.BestPractices`                                                        | General Java best practices for null-safety                    |
+| `io.liftwizard.rewrite.BestPractices`                                                        | General Java best practices for code quality and style         |
 | `io.liftwizard.rewrite.logging.Log4j1ToSlf4j1`                                               | Migrate Log4j 1 to SLF4J, skipping object logging files        |
 | `io.liftwizard.rewrite.LoggingBestPractices`                                                 | Transform logging to SLF4J parameterized format                |
 | `io.liftwizard.rewrite.assertj.AssertJMigration`                                             | Migrate from Eclipse Collections testutils to AssertJ          |
@@ -35,7 +35,39 @@ Replace null-safe hashCode patterns with Objects.hashCode():
 
 - `object == null ? 0 : object.hashCode()` → `Objects.hashCode(object)`
 
-### ExplicitTypeToVar
+### EnforceConsistentArgumentLineWrapping
+
+When a method call has multiple arguments and any argument is line-wrapped, enforce that all arguments use line wrapping for consistency:
+
+```java
+// Before: inconsistent wrapping
+method(arg1, arg2,
+        arg3);
+
+// After: all arguments wrapped
+method(
+        arg1,
+        arg2,
+        arg3);
+```
+
+### EnforceConsistentParameterLineWrapping
+
+When a method declaration has multiple parameters and any parameter is line-wrapped, enforce that all parameters use line wrapping for consistency:
+
+```java
+// Before: inconsistent wrapping
+public void method(String param1, String param2,
+        String param3) {}
+
+// After: all parameters wrapped
+public void method(
+        String param1,
+        String param2,
+        String param3) {}
+```
+
+### [UseVarForConstructors](https://docs.openrewrite.org/recipes/java/migrate/lang/var/usevarforconstructors)
 
 Replace explicit type declarations with `var` when the variable is initialized with a constructor call of exactly the same type:
 
@@ -64,7 +96,13 @@ Replace explicit primitive and String type declarations with `var` when the vari
 - Method return values: `int x = Integer.parseInt("42")`
 - `byte` and `short` literals (they look like `int` literals)
 - Field declarations (var is only allowed for local variables)
-- Constructor calls (handled by `ExplicitTypeToVar`)
+- Constructor calls (handled by `UseVarForConstructors`)
+
+### [UseVarForTypeCast](https://docs.openrewrite.org/recipes/java/migrate/lang/var/usevarfortypecast)
+
+Replace explicit type declarations with `var` when the variable is initialized with a type cast:
+
+- `String s = (String) obj` → `var s = (String) obj`
 
 ### HideUtilityClassConstructor
 
