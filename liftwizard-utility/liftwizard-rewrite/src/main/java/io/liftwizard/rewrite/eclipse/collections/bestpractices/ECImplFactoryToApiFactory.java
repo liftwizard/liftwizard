@@ -87,6 +87,15 @@ public class ECImplFactoryToApiFactory extends Recipe {
 				return fa;
 			}
 
+			String implPackage = implClassName.substring(0, implClassName.lastIndexOf('.'));
+			J.CompilationUnit cu = getCursor().firstEnclosingOrThrow(J.CompilationUnit.class);
+			if (cu.getPackageDeclaration() != null) {
+				String filePackage = cu.getPackageDeclaration().getExpression().printTrimmed(getCursor());
+				if (implPackage.equals(filePackage)) {
+					return fa;
+				}
+			}
+
 			String apiClassName = implClassName.replace(".impl.factory.", ".api.factory.");
 			JavaType.FullyQualified apiType = JavaType.ShallowClass.build(apiClassName);
 
