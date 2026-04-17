@@ -348,7 +348,7 @@
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <configuration>
-                    <rules combine.children="append">
+                    <rules>
                         <banDuplicateClasses>
                             <ignoreClasses combine.children="append">
                                 <ignoreClass>blogspot.software_and_algorithms.stern_library.*</ignoreClass>
