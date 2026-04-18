@@ -144,6 +144,29 @@ class ECImplFactoryToApiFactoryTest implements RewriteTest {
 	}
 
 	@Test
+	void doNotTransformWhenImplClassStillNeededForUtilityMethods() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.HashMap;
+					import org.eclipse.collections.api.map.MutableMap;
+					import org.eclipse.collections.impl.factory.Maps;
+
+					public class Example {
+					    void factoryUsage() {
+					        MutableMap<Integer, Integer> map = Maps.mutable.with(1, 1, 2, 2, 3, 3);
+					    }
+
+					    void utilityUsage() {
+					        MutableMap<String, String> adapted = Maps.adapt(new HashMap<>());
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
 	void doNotTransformStaticUtilityMethods() {
 		this.rewriteRun(
 				java(
