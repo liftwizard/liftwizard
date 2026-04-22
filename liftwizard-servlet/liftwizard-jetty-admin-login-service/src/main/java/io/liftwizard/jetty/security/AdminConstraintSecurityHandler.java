@@ -16,17 +16,11 @@
 
 package io.liftwizard.jetty.security;
 
-import java.io.IOException;
-
 import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
-import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.security.Constraint;
 
 public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
