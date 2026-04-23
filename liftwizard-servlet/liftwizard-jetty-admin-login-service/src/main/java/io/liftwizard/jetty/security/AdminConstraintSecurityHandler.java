@@ -17,6 +17,7 @@
 package io.liftwizard.jetty.security;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
@@ -73,6 +74,7 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws IOException, ServletException {
+		Objects.requireNonNull(request);
 		super.handle(pathInContext, baseRequest, request, response);
 	}
 }
