@@ -1,0 +1,1 @@
+import{h as e}from"./index-BQIcBekP.js";export default e();

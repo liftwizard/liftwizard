@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Liftwizard: Named Data Source</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+<link rel="stylesheet" type="text/css" href="/docs/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/main.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+</head>
+<link rel="shortcut icon" href="/docs/favicon.png"type="image/ico"/>
+<body class="znai-theme theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'znai-theme theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section id="page-content" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<p>Dropwizard provides an interface called It s just a and a It s a with start stop lifecycle methods works well when you have one of them When you have multiple data sources it can be difficult to tie them together through configuration For example if you use Liquibase for migrations you d need to write code to tie specific migrations to specific data sources it cannot be done through configuration alone Liftwizard provides which is a with a name Other Liftwizard bundles expect s to be configured and refer to them by name in their own configuration In the liquibase example we could tie specific migrations to specific data sources through configuration alone Different named data sources can refer to different databases or the same database configured different ways In the following example we have one data source for Postgres and three data sources to connect to h2 over the network in memory and on disk To use named data sources start by changing the Configuration class to implement Add a field with type Add the getter setter required by the interface Now we can use the named data sources in the configuration of other bundles For example we use the data source named in the liquibase configuration ManagedDataSource public interface ManagedDataSource extends DataSource Managed io dropwizard lifecycle Managed javax sql DataSource DataSource ManagedDataSource NamedDataSource ManagedDataSource NamedDataSource NamedDataSourceFactoryProvider public class HelloWorldConfiguration extends Configuration implements NamedDataSourceProvider other interfaces NamedDataSourcesFactory @JsonUnwrapped private @Valid @NotNull NamedDataSourcesFactory namedDataSourcesFactory new NamedDataSourcesFactory @Override @JsonProperty dataSources @JsonUnwrapped public NamedDataSourcesFactory getNamedDataSourcesFactory return this namedDataSourcesFactory @JsonProperty dataSources @JsonUnwrapped public void setNamedDataSourcesFactory NamedDataSourcesFactory namedDataSourcesFactory this namedDataSourcesFactory namedDataSourcesFactory h2 tcp</p>
+</article>
+</section>
+<section id="table-of-contents" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<a href="/docs/introduction/liftwizard/">Liftwizard</a>
+</article>
+
+<article>
+<a href="/docs/configuration/environment-variable-substitution/">Environment Variable Substitution</a>
+</article>
+
+<article>
+<a href="/docs/configuration/json5-configuration/">Json5 Configuration</a>
+</article>
+
+<article>
+<a href="/docs/configuration/ConfigLoggingBundle/">ConfigLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/jackson/ObjectMapperBundle/">ObjectMapperBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/JerseyHttpLoggingBundle/">JerseyHttpLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/buffered-logging/">Buffered Logging</a>
+</article>
+
+<article>
+<a href="/docs/logging/filter-factories/">Filter Factories</a>
+</article>
+
+<article>
+<a href="/docs/logging/Slf4jUncaughtExceptionHandlerBundle/">Slf4jUncaughtExceptionHandlerBundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/bundle/">Bundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-logging/">Instrumentation Logging</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-metrics/">Instrumentation Metrics</a>
+</article>
+
+<article>
+<a href="/docs/graphql/data-fetcher-async/">Data Fetcher Async</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-overview/">Reladomo Overview</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-operation-compiler/">Reladomo Operation Compiler</a>
+</article>
+
+<article>
+<a href="/docs/database/named-data-source/">Named Data Source</a>
+</article>
+
+<article>
+<a href="/docs/database/liquibase-migrations/">Liquibase Migrations</a>
+</article>
+
+<article>
+<a href="/docs/auth/dynamic-authentication-and-impersonation/">Dynamic Authentication And Impersonation</a>
+</article>
+
+<article>
+<a href="/docs/testing/testing/">Testing</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-files/">Matching Files</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-json/">Matching Json</a>
+</article>
+
+<article>
+<a href="/docs/maven/maven-best-practices/">Maven Best Practices</a>
+</article>
+
+<article>
+<a href="/docs/maven/minimal-parent/">Minimal Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/profile-parent/">Profile Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/bill-of-materials/">Bill Of Materials</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/temporal-data-overview/">Temporal Data Overview</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/running-example/">Running Example</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/non-destructive-updates/">Non Destructive Updates</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/as-of-queries/">As Of Queries</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/versioning/">Versioning</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/auditing/">Auditing</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/optimistic-locking/">Optimistic Locking</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/diffs/">Diffs</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/maker-checker-workflows/">Maker Checker Workflows</a>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/docs/footer.js"></script>
+<script type="text/javascript" src="/docs/toc.js"></script>
+<script type="text/javascript" src="/docs/assets.js"></script>
+<script type="module" src="/docs/static/__vite-browser-external-JMjJvYWc.js"></script>
+<script type="module" src="/docs/static/architecture-YZFGNWBL-CBtYz5y_.js"></script>
+<script type="module" src="/docs/static/architectureDiagram-Q4EWVU46-CwntcgVb.js"></script>
+<script type="module" src="/docs/static/blockDiagram-DXYQGD6D-B7c9iheY.js"></script>
+<script type="module" src="/docs/static/c4Diagram-AHTNJAMY--4nmelcn.js"></script>
+<script type="module" src="/docs/static/classDiagram-6PBFFD2Q-CpCZxAsI.js"></script>
+<script type="module" src="/docs/static/classDiagram-v2-HSJHXN6E-PsZc1eO3.js"></script>
+<script type="module" src="/docs/static/cose-bilkent-S5V4N54A-dB10twh0.js"></script>
+<script type="module" src="/docs/static/dagre-KV5264BT-sLhaQPEh.js"></script>
+<script type="module" src="/docs/static/diagram-5BDNPKRD-vr-oRHKR.js"></script>
+<script type="module" src="/docs/static/diagram-G4DWMVQ6-BsMPymNE.js"></script>
+<script type="module" src="/docs/static/diagram-MMDJMWI5-DpE5K1rf.js"></script>
+<script type="module" src="/docs/static/diagram-TYMM5635-_FBPU7GM.js"></script>
+<script type="module" src="/docs/static/erDiagram-SMLLAGMA-RUMNy26D.js"></script>
+<script type="module" src="/docs/static/flowDiagram-DWJPFMVM-D2b-LlQU.js"></script>
+<script type="module" src="/docs/static/ganttDiagram-T4ZO3ILL-AtLgIdcR.js"></script>
+<script type="module" src="/docs/static/gitGraph-7Q5UKJZL-BymcsQCe.js"></script>
+<script type="module" src="/docs/static/gitGraphDiagram-UUTBAWPF-n-gmcrE9.js"></script>
+<script type="module" src="/docs/static/index-BQIcBekP.js"></script>
+<script type="module" src="/docs/static/info-OMHHGYJF-DjUQs3tL.js"></script>
+<script type="module" src="/docs/static/infoDiagram-42DDH7IO-G5RyQoMz.js"></script>
+<script type="module" src="/docs/static/ishikawaDiagram-UXIWVN3A-BCiC-TSN.js"></script>
+<script type="module" src="/docs/static/journeyDiagram-VCZTEJTY-BYpWUx2r.js"></script>
+<script type="module" src="/docs/static/kanban-definition-6JOO6SKY-R1ZR5VP5.js"></script>
+<script type="module" src="/docs/static/katex-CTN1XKqA.js"></script>
+<script type="module" src="/docs/static/mermaid-BSuUy9h_.js"></script>
+<script type="module" src="/docs/static/mindmap-definition-QFDTVHPH-BInZ5urj.js"></script>
+<script type="module" src="/docs/static/packet-4T2RLAQJ-D6aSmvTn.js"></script>
+<script type="module" src="/docs/static/pie-ZZUOXDRM-Clb_pxMY.js"></script>
+<script type="module" src="/docs/static/pieDiagram-DEJITSTG-BLFgRtdQ.js"></script>
+<script type="module" src="/docs/static/quadrantDiagram-34T5L4WZ-t4dVzBsG.js"></script>
+<script type="module" src="/docs/static/radar-PYXPWWZC-C_F4Pwbg.js"></script>
+<script type="module" src="/docs/static/requirementDiagram-MS252O5E-D5kA2v_c.js"></script>
+<script type="module" src="/docs/static/rolldown-runtime-DmV8ZhqI.js"></script>
+<script type="module" src="/docs/static/sankeyDiagram-XADWPNL6-DWgyIVpU.js"></script>
+<script type="module" src="/docs/static/sequenceDiagram-FGHM5R23-DNrPT0cS.js"></script>
+<script type="module" src="/docs/static/stateDiagram-FHFEXIEX-CzU1ko6z.js"></script>
+<script type="module" src="/docs/static/stateDiagram-v2-QKLJ7IA2-BRVGtyw6.js"></script>
+<script type="module" src="/docs/static/timeline-definition-GMOUNBTQ-DuSp8XkO.js"></script>
+<script type="module" src="/docs/static/treeView-SZITEDCU-Cgo1HEF6.js"></script>
+<script type="module" src="/docs/static/treemap-W4RFUUIX-KNbnHB1t.js"></script>
+<script type="module" src="/docs/static/vennDiagram-DHZGUBPP-BssMIY-G.js"></script>
+<script type="module" src="/docs/static/wardley-RL74JXVD-Dhm_myXh.js"></script>
+<script type="module" src="/docs/static/wardleyDiagram-NUSXRM2D-B4ENdcE9.js"></script>
+<script type="module" src="/docs/static/xychartDiagram-5P7HB3ND-a8JUEwQ-.js"></script>
+<script type="module" src="/docs/search-index.js"></script>
+<script type="module">
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+/*
+ * Copyright 2025 znai maintainers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+function initializeSearchIndex() {
+    if (window.znaiSearchData) {
+        window.znaiSearchIdx = window.createLocalSearchIndex();
+        window.populateLocalSearchIndexWithData(window.znaiSearchIdx, window.znaiSearchData);
+    }
+}
+
+// Call the method to initialize the search index.
+initializeSearchIndex();
+
+window.ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "link" : "https://github.com/liftwizard/liftwizard/blob/main/docs/src/main/znai",
+      "title" : "View On GitHub"
+    },
+    "id" : "docs",
+    "title" : "Liftwizard",
+    "type" : "Guide",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Dropwizard provides an interface called ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "ManagedDataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "public interface ManagedDataSource extends DataSource, Managed {\n\n}",
+      "title" : "io.dropwizard.db.ManagedDataSource",
+      "entry" : "ManagedDataSource",
+      "anchorId" : "iodropwizarddbmanageddatasource",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "It's just a ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "io.dropwizard.lifecycle.Managed",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " and a ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "javax.sql.DataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ". It's a ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "DataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " with start/stop lifecycle methods.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "code" : "ManagedDataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " works well when you have one of them. When you have multiple data sources, it can be difficult to tie them together through configuration. For example, if you use Liquibase for migrations, ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "https://www.dropwizard.io/en/latest/manual/migrations.html#support-for-adding-multiple-migration-bundles",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "you'd need to write code",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " to tie specific migrations to specific data sources; it cannot be done through configuration alone.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Liftwizard provides ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "NamedDataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ", which is a ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "ManagedDataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " with a name. ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "/docs/database/liquibase-migrations",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "Other Liftwizard bundles",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " expect ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "NamedDataSource",
+        "type" : "InlinedCode"
+      }, {
+        "text" : "s to be configured, and refer to them by name in their own configuration. In the liquibase example, we could tie specific migrations to specific data sources through configuration alone.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Different named data sources can refer to different databases, or the same database configured different ways. In the following example, we have one data source for Postgres, and three data sources to connect to h2; over the network, in-memory, and on disk.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "title" : "example.json5",
+      "include" : "$['absent', 'dataSources']",
+      "data" : {
+        "dataSources" : [ {
+          "name" : "h2-mem",
+          "driverClass" : "com.p6spy.engine.spy.P6SpyDriver",
+          "user" : "sa",
+          "password" : "",
+          "url" : "jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER"
+        }, {
+          "name" : "h2-tcp",
+          "driverClass" : "com.p6spy.engine.spy.P6SpyDriver",
+          "user" : "sa",
+          "password" : "",
+          "url" : "jdbc:p6spy:h2:tcp://localhost:9092/liftwizard-app-h2;NON_KEYWORDS=USER"
+        }, {
+          "name" : "h2-file",
+          "driverClass" : "com.p6spy.engine.spy.P6SpyDriver",
+          "user" : "sa",
+          "password" : "",
+          "url" : "jdbc:p6spy:h2:file:./target/h2db/liftwizard-app-h2;NON_KEYWORDS=USER"
+        }, {
+          "name" : "postgres",
+          "driverClass" : "org.postgresql.Driver",
+          "readOnlyByDefault" : false,
+          "user" : "${JDBC_DATABASE_USERNAME}",
+          "password" : "${JDBC_DATABASE_PASSWORD}",
+          "url" : "${JDBC_DATABASE_URL}"
+        } ]
+      },
+      "highlightValues" : [ "root.dataSources[0].name", "root.dataSources[1].name", "root.dataSources[2].name", "root.dataSources[3].name" ],
+      "highlightKeys" : [ ],
+      "anchorId" : "examplejson5",
+      "type" : "Json"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "To use named data sources, start by changing the Configuration class to implement ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "NamedDataSourceFactoryProvider",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "public class HelloWorldConfiguration\n        extends Configuration\n        implements NamedDataSourceProvider // , ... other interfaces\n{\n    // ...\n}",
+      "lineNumber" : "",
+      "title" : "HelloWorldConfiguration.java",
+      "anchorId" : "helloworldconfigurationjava",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add a field with type ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "NamedDataSourcesFactory",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "\t@JsonUnwrapped\n\tprivate @Valid @NotNull NamedDataSourcesFactory namedDataSourcesFactory = new NamedDataSourcesFactory();",
+      "title" : "HelloWorldConfiguration.java field",
+      "surroundedBy" : "// include-namedDataSourcesFactory",
+      "anchorId" : "helloworldconfigurationjava-field",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add the getter/setter required by the interface.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "\t@Override\n\t@JsonProperty(\"dataSources\")\n\t@JsonUnwrapped\n\tpublic NamedDataSourcesFactory getNamedDataSourcesFactory() {\n\t\treturn this.namedDataSourcesFactory;\n\t}\n\t@JsonProperty(\"dataSources\")\n\t@JsonUnwrapped\n\tpublic void setNamedDataSourcesFactory(NamedDataSourcesFactory namedDataSourcesFactory) {\n\t\tthis.namedDataSourcesFactory = namedDataSourcesFactory;\n\t}",
+      "title" : "HelloWorldConfiguration.java methods",
+      "entry" : [ "getNamedDataSourcesFactory", "setNamedDataSourcesFactory" ],
+      "anchorId" : "helloworldconfigurationjava-methods",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Now we can use the named data sources in the configuration of other bundles. For example, we use the data source named ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "h2-tcp",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " in the liquibase configuration.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "title" : "example.json5",
+      "include" : "$['absent', 'liquibase']",
+      "data" : {
+        "liquibase" : {
+          "enabled" : true,
+          "dataSourceMigrations" : [ {
+            "dataSourceName" : "h2-tcp",
+            "migrationFileName" : "migrations.xml",
+            "migrationFileLocation" : "classpath",
+            "contexts" : [ ]
+          } ],
+          "dryRun" : false
+        }
+      },
+      "highlightValues" : [ "root.liquibase.dataSourceMigrations[0].dataSourceName" ],
+      "highlightKeys" : [ ],
+      "anchorId" : "examplejson5-3",
+      "type" : "Json"
+    } ],
+    "lastModifiedTime" : 1777047166455,
+    "tocItem" : {
+      "chapterTitle" : "Database",
+      "pageTitle" : "Named Data Source",
+      "pageMeta" : { },
+      "dirName" : "database",
+      "fileName" : "named-data-source",
+      "fileExtension" : "md",
+      "viewOnRelativePath" : null,
+      "pageSectionIdTitles" : [ ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>
