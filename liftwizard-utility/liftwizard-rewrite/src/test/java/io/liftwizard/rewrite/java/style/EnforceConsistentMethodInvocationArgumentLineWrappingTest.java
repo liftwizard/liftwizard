@@ -23,11 +23,11 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
+class EnforceConsistentMethodInvocationArgumentLineWrappingTest implements RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new EnforceConsistentArgumentLineWrapping());
+		spec.recipe(new EnforceConsistentMethodInvocationArgumentLineWrapping());
 	}
 
 	@DocumentExample
@@ -40,6 +40,8 @@ class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
 					    void method(String a, String b, String c) {}
 					    String methodReturning(String a, String b) { return a; }
 					    void method2(String a, String b) {}
+					    void method5(String a, String b, String c, String d, String e) {}
+					    void method6(String a, String b, String c, String d, String e, String f) {}
 
 					    void test() {
 					        method("first",
@@ -51,6 +53,13 @@ class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
 					                "first", "second", "third");
 					        methodReturning("first",
 					                "second").toString();
+					        method6("a", "b",
+					                "c", "d",
+					                "e", "f");
+					        method5(
+					                "a", "b",
+					                "c", "d",
+					                "e");
 					    }
 					}""",
 					"""
@@ -58,6 +67,8 @@ class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
 					    void method(String a, String b, String c) {}
 					    String methodReturning(String a, String b) { return a; }
 					    void method2(String a, String b) {}
+					    void method5(String a, String b, String c, String d, String e) {}
+					    void method6(String a, String b, String c, String d, String e, String f) {}
 
 					    void test() {
 					        method(
@@ -74,6 +85,19 @@ class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
 					        methodReturning(
 					                "first",
 					                "second").toString();
+					        method6(
+					                "a",
+					                "b",
+					                "c",
+					                "d",
+					                "e",
+					                "f");
+					        method5(
+					                "a",
+					                "b",
+					                "c",
+					                "d",
+					                "e");
 					    }
 					}"""
 				)
@@ -88,6 +112,8 @@ class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
 					class Test {
 					    void method(String a, String b, String c) {}
 					    void method1(String a) {}
+					    void method4(String a, String b, String c, String d) {}
+					    void method6(String a, String b, String c, String d, String e, String f) {}
 
 					    void test() {
 					        method("first", "second", "third");
@@ -98,6 +124,16 @@ class EnforceConsistentArgumentLineWrappingTest implements RewriteTest {
 					        method1("first");
 					        method1(
 					                "first");
+					        method6(
+					                "a", "b",
+					                "c", "d",
+					                "e", "f");
+					        method6(
+					                "a", "b", "c",
+					                "d", "e", "f");
+					        method4(
+					                "a", "b",
+					                "c", "d");
 					    }
 					}"""
 				)
