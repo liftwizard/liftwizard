@@ -23,11 +23,11 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentParameterLineWrappingTest implements RewriteTest {
+class EnforceConsistentMethodParameterLineWrappingTest implements RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new EnforceConsistentParameterLineWrapping());
+		spec.recipe(new EnforceConsistentMethodParameterLineWrapping());
 	}
 
 	@DocumentExample
@@ -49,6 +49,16 @@ class EnforceConsistentParameterLineWrappingTest implements RewriteTest {
 
 					    abstract String abstractMethod(String a,
 					            String b);
+
+					    void fiveParams(
+					            String a, String b,
+					            String c, String d,
+					            String e) {}
+
+					    void sevenParams(
+					            String a, String b,
+					            String c, String d,
+					            String e, String f, String g) {}
 					}""",
 					"""
 					abstract class Test {
@@ -69,6 +79,22 @@ class EnforceConsistentParameterLineWrappingTest implements RewriteTest {
 					    abstract String abstractMethod(
 					            String a,
 					            String b);
+
+					    void fiveParams(
+					            String a,
+					            String b,
+					            String c,
+					            String d,
+					            String e) {}
+
+					    void sevenParams(
+					            String a,
+					            String b,
+					            String c,
+					            String d,
+					            String e,
+					            String f,
+					            String g) {}
 					}"""
 				)
 			);
@@ -93,6 +119,20 @@ class EnforceConsistentParameterLineWrappingTest implements RewriteTest {
 					            String a) {}
 
 					    void noParams() {}
+
+					    void sixParamsTwoPerLine(
+					            String a, String b,
+					            String c, String d,
+					            String e, String f) {}
+
+					    void nineParamsThreePerLine(
+					            String a, String b, String c,
+					            String d, String e, String f,
+					            String g, String h, String i) {}
+
+					    void eightParamsFourPerLine(
+					            String a, String b, String c, String d,
+					            String e, String f, String g, String h) {}
 					}"""
 				)
 			);

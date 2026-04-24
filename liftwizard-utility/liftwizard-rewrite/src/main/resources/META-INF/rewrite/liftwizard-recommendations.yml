@@ -23,7 +23,7 @@ recipeList:
     - io.liftwizard.rewrite.bestpractices.NullSafeEqualsRecipes
     - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
     - io.liftwizard.rewrite.java.style.EnforceConsistentMethodInvocationArgumentLineWrapping
-    - io.liftwizard.rewrite.java.style.EnforceConsistentParameterLineWrapping
+    - io.liftwizard.rewrite.java.style.EnforceConsistentMethodParameterLineWrapping
     - io.liftwizard.rewrite.java.style.UseVarForPrimitiveLiterals
     - org.openrewrite.java.migrate.lang.var.UseVarForConstructors
     - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast
