@@ -10,7 +10,7 @@ Ten composite recipes are available:
 
 | Composite Recipe                                                                             | Description                                                    |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `io.liftwizard.rewrite.BestPractices`                                                        | General Java best practices for null-safety                    |
+| `io.liftwizard.rewrite.LiftwizardRecommendations`                                            | Liftwizard recommended recipes for code quality                |
 | `io.liftwizard.rewrite.logging.Log4j1ToSlf4j1`                                               | Migrate Log4j 1 to SLF4J, skipping object logging files        |
 | `io.liftwizard.rewrite.LoggingBestPractices`                                                 | Transform logging to SLF4J parameterized format                |
 | `io.liftwizard.rewrite.assertj.AssertJMigration`                                             | Migrate from Eclipse Collections testutils to AssertJ          |
@@ -21,7 +21,7 @@ Ten composite recipes are available:
 | `io.liftwizard.testing.junit.JupiterBestPractices`                                           | JUnit Jupiter best practices for test quality                  |
 | `io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration`                  | Migrate Dropwizard JUnit 4 testing rules to JUnit 5 extensions |
 
-## Best Practices Recipes (General Java)
+## Liftwizard Recommended Recipes (General Java)
 
 These recipes improve general Java code quality and are not specific to Eclipse Collections.
 

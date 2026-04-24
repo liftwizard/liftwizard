@@ -16,9 +16,9 @@
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
-name: io.liftwizard.rewrite.BestPractices
-displayName: General Java best practices
-description: Apply general Java best practices for improved code quality and maintainability.
+name: io.liftwizard.rewrite.LiftwizardRecommendations
+displayName: Liftwizard recommended recipes
+description: Liftwizard recommended OpenRewrite recipes for improved code quality and maintainability.
 recipeList:
     - io.liftwizard.rewrite.bestpractices.NullSafeEqualsRecipes
     - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
