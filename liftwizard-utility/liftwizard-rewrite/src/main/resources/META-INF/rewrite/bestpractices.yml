@@ -27,3 +27,4 @@ recipeList:
     - io.liftwizard.rewrite.java.style.UseVarForPrimitiveLiterals
     - org.openrewrite.java.migrate.lang.var.UseVarForConstructors
     - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast
+    - io.liftwizard.rewrite.eclipse.collections.HideUtilityClassConstructor
