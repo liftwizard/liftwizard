@@ -23,7 +23,7 @@ description: >-
     Rules that are meant to always pass. They can run in CI with dryRun, or one-off for rewrites.
 recipeList:
     - io.liftwizard.UpdateCopyrightYear
-    - io.liftwizard.rewrite.BestPractices
+    - io.liftwizard.rewrite.LiftwizardRecommendations
     - io.liftwizard.rewrite.assertj.AssertJMigration
     - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
     - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
