@@ -49,11 +49,6 @@ public class JsonPrettyPrinter extends DefaultPrettyPrinter {
 	}
 
 	@Override
-	public void writeStartObject(@Nonnull JsonGenerator jsonGenerator) throws IOException {
-		super.writeStartObject(jsonGenerator);
-	}
-
-	@Override
 	public void writeEndObject(@Nonnull JsonGenerator jsonGenerator, int nrOfEntries) throws IOException {
 		super.writeEndObject(jsonGenerator, nrOfEntries);
 		if (this._nesting == 0) {
