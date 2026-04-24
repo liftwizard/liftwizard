@@ -23,11 +23,11 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentParameterLineWrappingTest implements RewriteTest {
+class EnforceConsistentMethodParameterLineWrappingTest implements RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new EnforceConsistentParameterLineWrapping());
+		spec.recipe(new EnforceConsistentMethodParameterLineWrapping());
 	}
 
 	@DocumentExample
