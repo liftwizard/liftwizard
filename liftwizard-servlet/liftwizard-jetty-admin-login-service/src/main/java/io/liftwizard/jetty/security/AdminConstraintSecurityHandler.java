@@ -64,15 +64,4 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 	private AdminLoginService getAdminLoginService(String userName, String password) {
 		return new AdminLoginService(userName, password);
 	}
-
-	// Adding this method is a hack to get maven-dependency-plugin to recognize jakarta.servlet-api as a dependency
-	@Override
-	public void handle(
-		String pathInContext,
-		Request baseRequest,
-		HttpServletRequest request,
-		HttpServletResponse response
-	) throws IOException, ServletException {
-		super.handle(pathInContext, baseRequest, request, response);
-	}
 }
