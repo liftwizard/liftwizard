@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.java.style;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openrewrite.ExecutionContext;
@@ -72,9 +73,43 @@ public class EnforceConsistentMethodParameterLineWrapping extends AbstractEnforc
 				}
 
 				List<JRightPadded<Statement>> newParams = applyWrapping(params, wrappedIndent);
+				newParams = normalizeInternalNewlines(newParams);
 				JContainer<Statement> newContainer = paramsContainer.getPadding().withElements(newParams);
 				return m.getPadding().withParameters(newContainer);
 			}
 		};
+	}
+
+	private static List<JRightPadded<Statement>> normalizeInternalNewlines(List<JRightPadded<Statement>> params) {
+		List<JRightPadded<Statement>> result = new ArrayList<>(params.size());
+		for (JRightPadded<Statement> param : params) {
+			result.add(normalizeParam(param));
+		}
+		return result;
+	}
+
+	private static JRightPadded<Statement> normalizeParam(JRightPadded<Statement> param) {
+		if (param.getElement() instanceof J.VariableDeclarations varDecls) {
+			J.VariableDeclarations normalized = normalizeVariableDeclaration(varDecls);
+			if (normalized != varDecls) {
+				return param.withElement(normalized);
+			}
+		}
+		return param;
+	}
+
+	private static J.VariableDeclarations normalizeVariableDeclaration(J.VariableDeclarations varDecls) {
+		List<JRightPadded<J.VariableDeclarations.NamedVariable>> paddedVars = varDecls.getPadding().getVariables();
+		for (int i = 0; i < paddedVars.size(); i++) {
+			JRightPadded<J.VariableDeclarations.NamedVariable> paddedVar = paddedVars.get(i);
+			J.VariableDeclarations.NamedVariable namedVar = paddedVar.getElement();
+			if (containsNewline(namedVar.getPrefix())) {
+				namedVar = namedVar.withPrefix(namedVar.getPrefix().withWhitespace(" "));
+				List<JRightPadded<J.VariableDeclarations.NamedVariable>> newVars = new ArrayList<>(paddedVars);
+				newVars.set(i, paddedVar.withElement(namedVar));
+				return varDecls.getPadding().withVariables(newVars);
+			}
+		}
+		return varDecls;
 	}
 }
