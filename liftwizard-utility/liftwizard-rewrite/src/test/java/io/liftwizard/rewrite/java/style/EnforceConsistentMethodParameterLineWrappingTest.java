@@ -36,7 +36,7 @@ class EnforceConsistentMethodParameterLineWrappingTest implements RewriteTest {
 		this.rewriteRun(
 				java(
 					"""
-					abstract class Test {
+					abstract class Test<K, V> {
 					    void partiallyWrapped(String a,
 					            String b,
 					            String c) {}
@@ -59,9 +59,13 @@ class EnforceConsistentMethodParameterLineWrappingTest implements RewriteTest {
 					            String a, String b,
 					            String c, String d,
 					            String e, String f, String g) {}
+
+					    void lineBreakInsideParameter(
+					            K key1, V value1, K
+					            key2, V value2) {}
 					}""",
 					"""
-					abstract class Test {
+					abstract class Test<K, V> {
 					    void partiallyWrapped(
 					            String a,
 					            String b,
@@ -95,6 +99,12 @@ class EnforceConsistentMethodParameterLineWrappingTest implements RewriteTest {
 					            String e,
 					            String f,
 					            String g) {}
+
+					    void lineBreakInsideParameter(
+					            K key1,
+					            V value1,
+					            K key2,
+					            V value2) {}
 					}"""
 				)
 			);
