@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.validation.Validator;
 
-import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.boolex.EventEvaluator;
 import ch.qos.logback.core.filter.EvaluatorFilter;

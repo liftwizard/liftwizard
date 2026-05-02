@@ -29,19 +29,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.smoketurner.dropwizard</groupId>
-            <artifactId>graphql-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-smoketurner-graphql</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

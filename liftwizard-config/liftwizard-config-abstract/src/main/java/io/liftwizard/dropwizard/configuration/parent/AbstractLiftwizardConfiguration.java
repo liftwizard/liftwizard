@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;

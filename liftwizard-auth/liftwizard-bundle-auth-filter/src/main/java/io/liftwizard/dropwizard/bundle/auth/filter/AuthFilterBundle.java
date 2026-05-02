@@ -27,7 +27,7 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.AuthValueFactoryProvider.Binder;
 import io.dropwizard.auth.chained.ChainedAuthFilter;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;

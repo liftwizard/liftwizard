@@ -23,8 +23,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.setup.Environment;
 
 @JsonTypeName("noop")
 @AutoService(ScheduledExecutorServiceFactory.class)

@@ -99,8 +99,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.smoketurner.dropwizard</groupId>
-            <artifactId>graphql-core</artifactId>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-smoketurner-graphql</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

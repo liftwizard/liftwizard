@@ -20,8 +20,8 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactory;
 import io.liftwizard.servlet.filter.singlepage.SinglePageRedirectFilter;
 import org.eclipse.collections.api.factory.Lists;
