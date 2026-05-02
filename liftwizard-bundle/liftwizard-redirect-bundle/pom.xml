@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2026 Craig Motlin
+  ~ Copyright 2025 Craig Motlin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,28 +18,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.liftwizard</groupId>
-        <artifactId>liftwizard</artifactId>
+        <artifactId>liftwizard-bundle</artifactId>
         <version>2.1.45-SNAPSHOT</version>
     </parent>
 
-    <artifactId>liftwizard-bundle</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>liftwizard-redirect-bundle</artifactId>
 
-    <name>Liftwizard Bundle (Module Group)</name>
+    <name>Liftwizard Redirect Bundle</name>
 
-    <modules>
-        <module>liftwizard-bundle-assets-cache</module>
-        <module>liftwizard-bundle-cors</module>
-        <module>liftwizard-bundle-ddl-executor</module>
-        <module>liftwizard-bundle-dynamic-bundles</module>
-        <module>liftwizard-bundle-environment-config</module>
-        <module>liftwizard-bundle-graphql</module>
-        <module>liftwizard-bundle-h2</module>
-        <module>liftwizard-bundle-healthcheck-common-pool</module>
-        <module>liftwizard-bundle-liquibase-migration</module>
-        <module>liftwizard-bundle-prioritized-api</module>
-        <module>liftwizard-redirect-bundle</module>
-        <module>liftwizard-bundle-single-page-redirect-filter</module>
-        <module>liftwizard-bundle-system-properties</module>
-    </modules>
+    <dependencies>
+
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
+
+    </dependencies>
 </project>

@@ -15,6 +15,7 @@ repos:
             exclude: ^\.idea/
           - id: check-added-large-files
             args: ["--maxkb=1000"]
+            exclude: "liftwizard-bundle/liftwizard-metrics-ui/src/main/resources/org/marmelo/dropwizard/metrics/bundle\\.js"
           - id: check-case-conflict
           - id: check-merge-conflict
           - id: detect-private-key

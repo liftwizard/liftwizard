@@ -38,7 +38,7 @@ import io.liftwizard.dropwizard.configuration.uuid.UUIDSupplierFactoryProvider;
 import io.liftwizard.dropwizard.healthcheck.reladomo.ReladomoHealthCheck;
 import io.liftwizard.dropwizard.task.reladomo.clear.cache.ReladomoClearCacheTask;
 import io.liftwizard.reladomo.rollback.ReladomoRollbackCommand;
-import org.marmelo.dropwizard.metrics.bundles.MetricsUIBundle;
+
 
 public abstract class AbstractLiftwizardApplication<
 	T extends Configuration & UUIDSupplierFactoryProvider & ClockFactoryProvider
@@ -88,7 +88,6 @@ public abstract class AbstractLiftwizardApplication<
 		var redirectBundle = new RedirectBundle(httpsRedirect);
 		bootstrap.addBundle(redirectBundle);
 		bootstrap.addBundle(new UUIDBundle());
-		bootstrap.addBundle(new MetricsUIBundle("/dashboard/*"));
 	}
 
 	protected void initializeBundles(@Nonnull Bootstrap<T> bootstrap) {}
