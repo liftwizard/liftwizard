@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auto.service.AutoService;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactory;
 import io.liftwizard.dropwizard.configuration.object.mapper.ObjectMapperFactoryProvider;

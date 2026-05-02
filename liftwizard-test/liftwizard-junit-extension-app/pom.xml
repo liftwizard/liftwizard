@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-testing</artifactId>
+            <artifactId>dropwizard-testing-junit4</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>

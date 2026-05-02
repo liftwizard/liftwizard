@@ -19,7 +19,7 @@ package io.liftwizard.dropwizard.bundle.healthcheck.commonpool;
 import javax.annotation.Nonnull;
 
 import com.google.auto.service.AutoService;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.config.healthcheck.commonpool.CommonPoolHealthCheckFactory;
 import io.liftwizard.dropwizard.config.healthcheck.commonpool.CommonPoolHealthCheckFactoryProvider;

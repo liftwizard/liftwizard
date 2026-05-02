@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.util.Duration;
 import io.dropwizard.validation.MinDuration;
 

@@ -50,7 +50,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-bom</artifactId>
-                <version>2.1.12</version>
+                <version>3.0.17</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -58,7 +58,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-dependencies</artifactId>
-                <version>2.1.12</version>
+                <version>3.0.17</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -84,38 +84,32 @@
 
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.36</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-nop</artifactId>
-                <version>2.0.15</version>
+                <version>2.0.17</version>
             </dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
-                <version>2.0.15</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.2.13</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>1.2.13</version>
+                <version>2.0.17</version>
             </dependency>
 
             <dependency>
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>7.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>3.1.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>commons-compiler</artifactId>
+                <version>3.1.8</version>
             </dependency>
 
             <dependency>
@@ -136,24 +130,6 @@
                 <artifactId>p6spy</artifactId>
                 <version>3.9.1</version>
                 <scope>runtime</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.collections</groupId>
-                <artifactId>eclipse-collections-api</artifactId>
-                <version>13.0.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.collections</groupId>
-                <artifactId>eclipse-collections</artifactId>
-                <version>13.0.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.collections</groupId>
-                <artifactId>eclipse-collections-testutils</artifactId>
-                <version>13.0.0</version>
             </dependency>
 
             <dependency>
@@ -449,7 +425,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-core</artifactId>
-                <version>2.1.12</version>
+                <version>3.0.17</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -465,7 +441,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-jersey</artifactId>
-                <version>2.1.12</version>
+                <version>3.0.17</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -480,8 +456,8 @@
 
             <dependency>
                 <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-testing</artifactId>
-                <version>2.1.12</version>
+                <artifactId>dropwizard-testing-junit4</artifactId>
+                <version>3.0.17</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -509,7 +485,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-auth</artifactId>
-                <version>2.1.12</version>
+                <version>3.0.17</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -554,32 +530,50 @@
 
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>5.12.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.10.3</version>
+                <version>5.12.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>5.12.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
-                <version>5.10.3</version>
+                <version>5.12.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>5.12.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-commons</artifactId>
-                <version>1.10.3</version>
+                <version>1.12.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-engine</artifactId>
-                <version>1.10.3</version>
+                <version>1.12.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
-                <version>1.10.3</version>
+                <version>1.12.2</version>
             </dependency>
 
             <dependency>

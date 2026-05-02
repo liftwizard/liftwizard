@@ -19,7 +19,7 @@ import com.example.helloworld.api.Saying;
 import com.example.helloworld.core.Template;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.jersey.caching.CacheControl;
-import io.dropwizard.jersey.params.DateTimeParam;
+import io.dropwizard.jersey.jsr310.LocalDateTimeParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +53,9 @@ public class HelloWorldResource {
 	@GET
 	@Path("/date")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String receiveDate(@QueryParam("date") Optional<DateTimeParam> dateTimeParam) {
+	public String receiveDate(@QueryParam("date") Optional<LocalDateTimeParam> dateTimeParam) {
 		if (dateTimeParam.isPresent()) {
-			DateTimeParam actualDateTimeParam = dateTimeParam.get();
+			LocalDateTimeParam actualDateTimeParam = dateTimeParam.get();
 			LOGGER.info("Received a date: {}", actualDateTimeParam);
 			return actualDateTimeParam.get().toString();
 		} else {

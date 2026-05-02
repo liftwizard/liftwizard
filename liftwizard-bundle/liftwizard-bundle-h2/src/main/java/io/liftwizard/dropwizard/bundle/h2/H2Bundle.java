@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import com.google.auto.service.AutoService;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.h2.H2Factory;
 import io.liftwizard.dropwizard.configuration.h2.H2FactoryProvider;

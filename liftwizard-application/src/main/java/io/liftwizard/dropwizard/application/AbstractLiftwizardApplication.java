@@ -22,12 +22,12 @@ import javax.annotation.Nonnull;
 
 import ch.qos.logback.classic.Level;
 import com.gs.reladomo.serial.jackson.JacksonReladomoModule;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.bundles.redirect.HttpsRedirect;
 import io.dropwizard.bundles.redirect.RedirectBundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.clock.ClockBundle;
 import io.liftwizard.dropwizard.bundle.dynamic.bundles.DynamicBundlesBundle;
 import io.liftwizard.dropwizard.bundle.environment.config.EnvironmentConfigBundle;
