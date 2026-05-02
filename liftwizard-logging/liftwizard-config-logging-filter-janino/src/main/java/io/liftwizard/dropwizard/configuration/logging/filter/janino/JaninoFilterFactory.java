@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.EvaluatorFilter;
 import ch.qos.logback.core.filter.Filter;
@@ -29,8 +28,8 @@ import ch.qos.logback.core.spi.FilterReply;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
-import io.dropwizard.logging.LoggingUtil;
-import io.dropwizard.logging.filter.FilterFactory;
+import io.dropwizard.logging.common.LoggingUtil;
+import io.dropwizard.logging.common.filter.FilterFactory;
 
 @JsonTypeName("janino")
 @AutoService(FilterFactory.class)

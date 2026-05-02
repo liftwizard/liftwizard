@@ -16,12 +16,12 @@
 
 package io.liftwizard.dropwizard.bundle.environment.config;
 
-import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 

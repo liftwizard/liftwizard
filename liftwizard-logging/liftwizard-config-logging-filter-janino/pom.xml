@@ -70,10 +70,9 @@
         </dependency>
 
         <dependency>
-            <groupId>janino</groupId>
+            <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
-            <version>2.5.10</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -145,7 +144,7 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <configuration>
                             <ignoredUnusedDeclaredDependencies combine.children="append">
-                                <ignoredUnusedDeclaredDependency>janino:janino</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.codehaus.janino:janino</ignoredUnusedDeclaredDependency>
                             </ignoredUnusedDeclaredDependencies>
                         </configuration>
                     </plugin>

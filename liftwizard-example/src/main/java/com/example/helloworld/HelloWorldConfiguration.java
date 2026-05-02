@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactory;
 import io.liftwizard.dropwizard.configuration.auth.filter.AuthFilterFactoryProvider;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;

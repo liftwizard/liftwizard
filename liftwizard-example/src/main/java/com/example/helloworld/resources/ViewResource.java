@@ -6,7 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import io.dropwizard.views.View;
+import io.dropwizard.views.common.View;
 
 @Path("/views")
 public class ViewResource {

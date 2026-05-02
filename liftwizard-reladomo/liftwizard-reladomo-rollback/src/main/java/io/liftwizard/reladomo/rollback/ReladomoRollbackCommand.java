@@ -19,10 +19,10 @@ package io.liftwizard.reladomo.rollback;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.cli.EnvironmentCommand;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.cli.EnvironmentCommand;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import org.slf4j.Logger;
