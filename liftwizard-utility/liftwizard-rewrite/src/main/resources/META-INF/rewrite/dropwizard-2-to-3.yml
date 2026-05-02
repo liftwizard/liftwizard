@@ -1,0 +1,230 @@
+#
+# Copyright 2025 Craig Motlin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard2To3Migration
+displayName: Migrate Dropwizard 2 to Dropwizard 3
+description: >-
+    Comprehensive migration from Dropwizard 2.1.x to Dropwizard 3.0.x.
+    Includes JPMS-compliant package renames, Jetty 10 API changes, Apache HttpClient 5 migration,
+    dropwizard-util removals, JUnit 4 testing module reorganization,
+    logback conversion word updates, and dependency version upgrades.
+    Does NOT include javax to jakarta migration, which is the Dropwizard 3 to 4 change.
+recipeList:
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
+    - org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Module
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
+displayName: Dropwizard 3 package renames
+description: >-
+    Rename Dropwizard packages for JPMS compliance.
+    Handles io.dropwizard -> io.dropwizard.core (non-recursive),
+    io.dropwizard.setup -> io.dropwizard.core.setup,
+    io.dropwizard.cli -> io.dropwizard.core.cli,
+    io.dropwizard.logging -> io.dropwizard.logging.common,
+    io.dropwizard.metrics -> io.dropwizard.metrics.common,
+    io.dropwizard.views -> io.dropwizard.views.common.
+recipeList:
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
+displayName: Rename io.dropwizard core packages to io.dropwizard.core
+description: >-
+    Rename the four classes that moved from io.dropwizard to io.dropwizard.core
+    (Application, Bundle, Configuration, ConfiguredBundle) using ChangeType,
+    and rename the subpackages that moved using ChangePackage.
+    Uses ChangeType instead of ChangePackage for the top-level package because
+    ChangePackage recursive=false incorrectly renames subpackages in practice.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.Application
+          newFullyQualifiedTypeName: io.dropwizard.core.Application
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.Bundle
+          newFullyQualifiedTypeName: io.dropwizard.core.Bundle
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.Configuration
+          newFullyQualifiedTypeName: io.dropwizard.core.Configuration
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.ConfiguredBundle
+          newFullyQualifiedTypeName: io.dropwizard.core.ConfiguredBundle
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.setup
+          newPackageName: io.dropwizard.core.setup
+          recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.cli
+          newPackageName: io.dropwizard.core.cli
+          recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.server
+          newPackageName: io.dropwizard.core.server
+          recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.sslreload
+          newPackageName: io.dropwizard.core.sslreload
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
+displayName: Rename io.dropwizard.logging to io.dropwizard.logging.common
+description: >-
+    Rename io.dropwizard.logging to io.dropwizard.logging.common for JPMS compliance.
+    Includes all subpackages (async, filter, layout).
+recipeList:
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.logging
+          newPackageName: io.dropwizard.logging.common
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
+displayName: Rename io.dropwizard.metrics to io.dropwizard.metrics.common
+description: >-
+    Rename io.dropwizard.metrics to io.dropwizard.metrics.common for JPMS compliance.
+recipeList:
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.metrics
+          newPackageName: io.dropwizard.metrics.common
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename
+displayName: Rename io.dropwizard.views to io.dropwizard.views.common
+description: >-
+    Rename io.dropwizard.views to io.dropwizard.views.common for JPMS compliance.
+recipeList:
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.views
+          newPackageName: io.dropwizard.views.common
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
+displayName: Migrate Jetty 9 to Jetty 10 API changes
+description: >-
+    Migrate Jetty API changes introduced in Jetty 10.
+    Renames addLifeCycleListener to addEventListener on LifeCycle,
+    AbstractLifeCycle, and ContainerLifeCycle.
+recipeList:
+    - org.openrewrite.java.ChangeMethodName:
+          methodPattern: org.eclipse.jetty.util.component.AbstractLifeCycle addLifeCycleListener(..)
+          newMethodName: addEventListener
+    - org.openrewrite.java.ChangeMethodName:
+          methodPattern: org.eclipse.jetty.util.component.ContainerLifeCycle addLifeCycleListener(..)
+          newMethodName: addEventListener
+    - org.openrewrite.java.ChangeMethodName:
+          methodPattern: org.eclipse.jetty.util.component.LifeCycle addLifeCycleListener(..)
+          newMethodName: addEventListener
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
+displayName: Migrate dropwizard-util removed classes
+description: >-
+    Migrate removed utility classes from dropwizard-util.
+    Replaces io.dropwizard.util.Sets with java.util.Set,
+    since Sets.of() is replaced by Set.of() in Java 9+.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.util.Sets
+          newFullyQualifiedTypeName: java.util.Set
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Module
+displayName: Migrate Dropwizard JUnit 4 testing to separate module
+description: >-
+    In Dropwizard 3, JUnit 4 support was moved from dropwizard-testing to
+    a separate dropwizard-testing-junit4 module. This recipe updates the
+    Maven dependency for projects still using JUnit 4 testing rules.
+recipeList:
+    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+          oldGroupId: io.dropwizard
+          oldArtifactId: dropwizard-testing
+          newArtifactId: dropwizard-testing-junit4
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
+displayName: Migrate Dropwizard logback conversion words
+description: >-
+    Migrate Dropwizard-specific logback conversion words to their renamed equivalents
+    in Dropwizard 3. The old standard logback names are reclaimed, and Dropwizard's
+    custom conversion words are prefixed with 'dw'.
+    Ordered longest-first to prevent partial matches.
+recipeList:
+    - org.openrewrite.text.FindAndReplace:
+          find: "%rootException"
+          replace: "%dwRootException"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%rEx"
+          replace: "%dwREx"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%xException"
+          replace: "%dwXException"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%xThrowable"
+          replace: "%dwXThrowable"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%xEx"
+          replace: "%dwXEx"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%exception"
+          replace: "%dwException"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%throwable"
+          replace: "%dwThrowable"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%ex"
+          replace: "%dwEx"
+          filePattern: "**/logback*.xml"
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
+displayName: Upgrade Dropwizard dependencies to 3.0.x
+description: >-
+    Upgrade Dropwizard Maven dependencies from 2.1.x to 3.0.x.
+recipeList:
+    - org.openrewrite.maven.UpgradeDependencyVersion:
+          groupId: io.dropwizard
+          artifactId: "*"
+          newVersion: 3.0.x
