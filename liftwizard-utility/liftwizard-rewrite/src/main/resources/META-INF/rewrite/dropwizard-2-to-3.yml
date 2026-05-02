@@ -1,0 +1,393 @@
+#
+# Copyright 2025 Craig Motlin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard2To3Migration
+displayName: Migrate Dropwizard 2 to Dropwizard 3
+description: >-
+    Comprehensive migration from Dropwizard 2.1.x to Dropwizard 3.0.x.
+    Includes JPMS-compliant package renames, Jetty 10 API changes, Apache HttpClient 5 migration,
+    dropwizard-util removals, JUnit 4 testing module reorganization,
+    logback conversion word updates, and dependency version upgrades.
+    Does NOT include javax to jakarta migration, which is the Dropwizard 3 to 4 change.
+recipeList:
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
+    - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3LoadRoleInfoSignature
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
+    - org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
+    - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3IAccessEventGetSequenceNumber
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
+displayName: Dropwizard 3 package renames
+description: >-
+    Rename Dropwizard packages for JPMS compliance.
+    Handles io.dropwizard -> io.dropwizard.core (non-recursive),
+    io.dropwizard.setup -> io.dropwizard.core.setup,
+    io.dropwizard.cli -> io.dropwizard.core.cli,
+    io.dropwizard.logging -> io.dropwizard.logging.common,
+    io.dropwizard.metrics -> io.dropwizard.metrics.common,
+    io.dropwizard.views -> io.dropwizard.views.common.
+recipeList:
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
+displayName: Rename io.dropwizard core packages to io.dropwizard.core
+description: >-
+    Rename the four classes that moved from io.dropwizard to io.dropwizard.core
+    (Application, Bundle, Configuration, ConfiguredBundle) using ChangeType,
+    and rename the subpackages that moved using ChangePackage.
+    Uses ChangeType instead of ChangePackage for the top-level package because
+    ChangePackage recursive=false incorrectly renames subpackages in practice.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.Application
+          newFullyQualifiedTypeName: io.dropwizard.core.Application
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.Bundle
+          newFullyQualifiedTypeName: io.dropwizard.core.Bundle
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.Configuration
+          newFullyQualifiedTypeName: io.dropwizard.core.Configuration
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.ConfiguredBundle
+          newFullyQualifiedTypeName: io.dropwizard.core.ConfiguredBundle
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.setup
+          newPackageName: io.dropwizard.core.setup
+          recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.cli
+          newPackageName: io.dropwizard.core.cli
+          recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.server
+          newPackageName: io.dropwizard.core.server
+          recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.sslreload
+          newPackageName: io.dropwizard.core.sslreload
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
+displayName: Rename io.dropwizard.logging to io.dropwizard.logging.common
+description: >-
+    Rename io.dropwizard.logging to io.dropwizard.logging.common for JPMS compliance.
+    Includes all subpackages (async, filter, layout).
+recipeList:
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.logging
+          newPackageName: io.dropwizard.logging.common
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
+displayName: Rename io.dropwizard.metrics to io.dropwizard.metrics.common
+description: >-
+    Rename io.dropwizard.metrics to io.dropwizard.metrics.common for JPMS compliance.
+recipeList:
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.metrics
+          newPackageName: io.dropwizard.metrics.common
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename
+displayName: Rename io.dropwizard.views to io.dropwizard.views.common
+description: >-
+    Rename io.dropwizard.views to io.dropwizard.views.common for JPMS compliance.
+recipeList:
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.views
+          newPackageName: io.dropwizard.views.common
+          recursive: true
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
+displayName: Migrate Jetty 9 to Jetty 10 API changes
+description: >-
+    Migrate Jetty API changes introduced in Jetty 10.
+    Renames addLifeCycleListener to addEventListener on LifeCycle,
+    AbstractLifeCycle, and ContainerLifeCycle.
+recipeList:
+    - org.openrewrite.java.ChangeMethodName:
+          methodPattern: org.eclipse.jetty.util.component.AbstractLifeCycle addLifeCycleListener(..)
+          newMethodName: addEventListener
+    - org.openrewrite.java.ChangeMethodName:
+          methodPattern: org.eclipse.jetty.util.component.ContainerLifeCycle addLifeCycleListener(..)
+          newMethodName: addEventListener
+    - org.openrewrite.java.ChangeMethodName:
+          methodPattern: org.eclipse.jetty.util.component.LifeCycle addLifeCycleListener(..)
+          newMethodName: addEventListener
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
+displayName: Promote Jetty AbstractLoginService nested types to top-level
+description: >-
+    In Jetty 10, UserPrincipal and RolePrincipal were promoted from nested
+    classes inside AbstractLoginService to top-level classes in the
+    org.eclipse.jetty.security package. This recipe rewrites references to
+    the old nested-type names so imports resolve under Jetty 10/Dropwizard 3.
+    Note: this only handles the type rename; it does NOT change the return
+    type of AbstractLoginService.loadRoleInfo (was String[], now
+    List<RolePrincipal>) — that signature change requires a custom recipe.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$UserPrincipal
+          newFullyQualifiedTypeName: org.eclipse.jetty.security.UserPrincipal
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$RolePrincipal
+          newFullyQualifiedTypeName: org.eclipse.jetty.security.RolePrincipal
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
+displayName: Remove stale jetty-bom managed dependency
+description: >-
+    Remove any explicit jetty-bom managed-dependency import. Dropwizard 3's
+    own dropwizard-bom manages a compatible Jetty version, and a project-pinned
+    jetty-bom (commonly Jetty 9.4.x) imported BEFORE dropwizard-bom will win
+    the BOM-merge order and silently downgrade Jetty back to a Dropwizard 2
+    era release, dragging in javax.servlet 3.1 and breaking BannedDependencies.
+recipeList:
+    - org.openrewrite.maven.RemoveManagedDependency:
+          groupId: org.eclipse.jetty
+          artifactId: jetty-bom
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
+displayName: Exclude jetty-servlet-api from dependencies
+description: >-
+    Jetty 10 (which Dropwizard 3 brings in) ships
+    org.eclipse.jetty.toolchain:jetty-servlet-api as a transitive dependency.
+    Its classes overlap with jakarta.servlet:jakarta.servlet-api (both
+    declare classes in the javax.servlet.* package under Jakarta EE 8),
+    causing BanDuplicateClasses enforcer failures. Exclude jetty-servlet-api
+    so jakarta.servlet-api is the single source of those classes.
+recipeList:
+    - org.openrewrite.maven.ExcludeDependency:
+          groupId: org.eclipse.jetty.toolchain
+          artifactId: jetty-servlet-api
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
+displayName: Migrate dropwizard-util removed classes
+description: >-
+    Migrate removed utility classes from dropwizard-util.
+    Replaces io.dropwizard.util.Sets with java.util.Set,
+    since Sets.of() is replaced by Set.of() in Java 9+.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.util.Sets
+          newFullyQualifiedTypeName: java.util.Set
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
+displayName: Migrate Dropwizard Jersey param classes to jsr310 package
+description: >-
+    In Dropwizard 3, InstantParam and LocalDateParam moved from
+    io.dropwizard.jersey.params to io.dropwizard.jersey.jsr310.
+    DateTimeParam is replaced by ZonedDateTimeParam in the jsr310 package.
+    BooleanParam, DurationParam, and SizeParam are replaced by their
+    underlying Java types with .get() calls unwrapped.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.InstantParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.InstantParam
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.LocalDateParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.LocalDateParam
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.DateTimeParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.ZonedDateTimeParam
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.BooleanParam
+          newType: java.lang.Boolean
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.DurationParam
+          newType: java.time.Duration
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.SizeParam
+          newType: io.dropwizard.util.DataSize
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
+displayName: Roll dropwizard-testing-junit4 references back to dropwizard-testing
+description: >-
+    Dropwizard 3 removed JUnit 4 support entirely from the testing module —
+    the dropwizard-testing-junit4 artifact does not exist on Maven Central.
+    This recipe rewrites stale dropwizard-testing-junit4 dependencies back to
+    dropwizard-testing so existing projects (and any earlier mis-migration)
+    resolve correctly. Source code that still relies on JUnit 4 rules must be
+    migrated to JUnit 5 extensions separately (see DropwizardTestingJUnit5Migration).
+recipeList:
+    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+          oldGroupId: io.dropwizard
+          oldArtifactId: dropwizard-testing-junit4
+          newArtifactId: dropwizard-testing
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
+displayName: Migrate Dropwizard logback conversion words
+description: >-
+    Migrate Dropwizard-specific logback conversion words to their renamed equivalents
+    in Dropwizard 3. The old standard logback names are reclaimed, and Dropwizard's
+    custom conversion words are prefixed with 'dw'.
+    Ordered longest-first to prevent partial matches.
+recipeList:
+    - org.openrewrite.text.FindAndReplace:
+          find: "%rootException"
+          replace: "%dwRootException"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%rEx"
+          replace: "%dwREx"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%xException"
+          replace: "%dwXException"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%xThrowable"
+          replace: "%dwXThrowable"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%xEx"
+          replace: "%dwXEx"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%exception"
+          replace: "%dwException"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%throwable"
+          replace: "%dwThrowable"
+          filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: "%ex"
+          replace: "%dwEx"
+          filePattern: "**/logback*.xml"
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
+displayName: Upgrade Dropwizard dependencies to 3.0.x
+description: >-
+    Upgrade Dropwizard Maven dependencies from 2.1.x to 3.0.x, including
+    common third-party Dropwizard bundles whose version is keyed to the
+    Dropwizard major release (e.g. smoketurner graphql-core ships a 3.0.x
+    line built against Dropwizard 3).
+recipeList:
+    - org.openrewrite.maven.UpgradeDependencyVersion:
+          groupId: io.dropwizard
+          artifactId: "*"
+          newVersion: 3.0.x
+    - org.openrewrite.maven.UpgradeDependencyVersion:
+          groupId: com.smoketurner.dropwizard
+          artifactId: graphql-core
+          newVersion: 3.x
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle
+displayName: Switch dropwizard-redirect-bundle to liftwizard-redirect-bundle
+description: >-
+    Replace the third-party io.dropwizard-bundles:dropwizard-redirect-bundle
+    dependency with the inline io.liftwizard:liftwizard-redirect-bundle fork.
+    The upstream dropwizard-bundles project never released a Dropwizard 3
+    compatible artifact, so projects migrating to Dropwizard 3 must switch to
+    the Liftwizard-maintained fork that tracks Dropwizard 3 APIs.
+recipeList:
+    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+          oldGroupId: io.dropwizard-bundles
+          oldArtifactId: dropwizard-redirect-bundle
+          newGroupId: io.liftwizard
+          newArtifactId: liftwizard-redirect-bundle
+          newVersion: ${project.version}
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL
+displayName: Switch smoketurner graphql-core to liftwizard-smoketurner-graphql
+description: >-
+    Replace the third-party com.smoketurner.dropwizard:graphql-core dependency
+    with the inline io.liftwizard:liftwizard-smoketurner-graphql fork. The
+    upstream smoketurner project never released a Dropwizard 3 compatible
+    artifact, so projects migrating to Dropwizard 3 must switch to the
+    Liftwizard-maintained fork that tracks Dropwizard 3 APIs. Also drop the
+    now-redundant javax.xml.bind:jaxb-api exclusion (the inline fork does not
+    drag in javax.xml.bind) and the standalone jakarta.xml.bind:jakarta.xml.bind-api
+    dependency that was only kept as a replacement for the excluded jaxb-api.
+recipeList:
+    - org.openrewrite.maven.RemoveExclusion:
+          groupId: com.smoketurner.dropwizard
+          artifactId: graphql-core
+          exclusionGroupId: javax.xml.bind
+          exclusionArtifactId: jaxb-api
+    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+          oldGroupId: com.smoketurner.dropwizard
+          oldArtifactId: graphql-core
+          newGroupId: io.liftwizard
+          newArtifactId: liftwizard-smoketurner-graphql
+          newVersion: ${project.version}
+    - org.openrewrite.maven.RemoveDependency:
+          groupId: jakarta.xml.bind
+          artifactId: jakarta.xml.bind-api
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL
+displayName: Remove explicit smoketurner graphql-core dependency
+description: >-
+    Remove the explicit com.smoketurner.dropwizard:graphql-core dependency from
+    poms where it is now available transitively via
+    io.liftwizard:liftwizard-smoketurner-graphql. Intended to run after
+    Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL so the inline fork has
+    already taken over upstream modules and the explicit declaration is
+    redundant.
+recipeList:
+    - org.openrewrite.maven.RemoveDependency:
+          groupId: com.smoketurner.dropwizard
+          artifactId: graphql-core
