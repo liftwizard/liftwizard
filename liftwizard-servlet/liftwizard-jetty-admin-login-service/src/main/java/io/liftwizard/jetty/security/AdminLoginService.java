@@ -16,9 +16,12 @@
 
 package io.liftwizard.jetty.security;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jetty.security.AbstractLoginService;
+import org.eclipse.jetty.security.RolePrincipal;
+import org.eclipse.jetty.security.UserPrincipal;
 import org.eclipse.jetty.util.security.Password;
 
 public class AdminLoginService extends AbstractLoginService {
@@ -33,11 +36,11 @@ public class AdminLoginService extends AbstractLoginService {
 	}
 
 	@Override
-	protected String[] loadRoleInfo(UserPrincipal principal) {
+	protected List<RolePrincipal> loadRoleInfo(UserPrincipal principal) {
 		if (this.adminUserName.equals(principal.getName())) {
-			return new String[] { "admin" };
+			return List.of(new RolePrincipal("admin"));
 		}
-		return new String[0];
+		return List.of();
 	}
 
 	@Override

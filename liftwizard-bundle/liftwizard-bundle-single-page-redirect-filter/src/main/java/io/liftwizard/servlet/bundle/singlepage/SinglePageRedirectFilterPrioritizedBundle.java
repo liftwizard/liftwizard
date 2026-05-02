@@ -19,7 +19,7 @@ package io.liftwizard.servlet.bundle.singlepage;
 import javax.annotation.Nonnull;
 
 import com.google.auto.service.AutoService;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactory;
 import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactoryProvider;

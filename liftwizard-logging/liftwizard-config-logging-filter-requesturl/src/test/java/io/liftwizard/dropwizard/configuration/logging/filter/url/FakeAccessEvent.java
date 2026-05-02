@@ -260,4 +260,11 @@ public class FakeAccessEvent implements IAccessEvent {
 			this.getClass().getSimpleName() + ".prepareForDeferredProcessing() not implemented yet"
 		);
 	}
+
+	@Override
+	public long getSequenceNumber() {
+		throw new UnsupportedOperationException(
+			this.getClass().getSimpleName() + ".getSequenceNumber() not implemented yet"
+		);
+	}
 }

@@ -28,8 +28,8 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.ManagedDataSource;
-import io.dropwizard.setup.Environment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
 

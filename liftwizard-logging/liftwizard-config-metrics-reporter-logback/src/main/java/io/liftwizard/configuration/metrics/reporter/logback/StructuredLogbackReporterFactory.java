@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
-import io.dropwizard.metrics.ReporterFactory;
+import io.dropwizard.metrics.common.ReporterFactory;
 import io.liftwizard.configuration.metrics.reporter.slf4j.StructuredSlf4jReporterFactory;
 import net.logstash.logback.argument.StructuredArguments;
 
