@@ -32,40 +32,7 @@ class Dropwizard3LogbackConversionWordsTest implements RewriteTest {
 
 	@DocumentExample
 	@Test
-	void replacesRootException() {
-		this.rewriteRun(text("""
-				<?xml version="1.0" encoding="UTF-8"?>
-
-				<configuration>
-				    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS}) %green(%logger): %message%n%rootException</pattern>
-				        </encoder>
-				    </appender>
-
-				    <root level="INFO">
-				        <appender-ref ref="Console" />
-				    </root>
-				</configuration>
-				""", """
-				<?xml version="1.0" encoding="UTF-8"?>
-
-				<configuration>
-				    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%highlight(%-5level) %cyan(%date{HH:mm:ss.SSS}) %green(%logger): %message%n%dwRootException</pattern>
-				        </encoder>
-				    </appender>
-
-				    <root level="INFO">
-				        <appender-ref ref="Console" />
-				    </root>
-				</configuration>
-				""", (spec) -> spec.path("logback-test.xml")));
-	}
-
-	@Test
-	void replacesAllConversionWords() {
+	void replacePatterns() {
 		this.rewriteRun(text("""
 				<?xml version="1.0" encoding="UTF-8"?>
 
@@ -153,6 +120,21 @@ class Dropwizard3LogbackConversionWordsTest implements RewriteTest {
 				    <appender name="Ex" class="ch.qos.logback.core.ConsoleAppender">
 				        <encoder>
 				            <pattern>%message%n%dwEx</pattern>
+				        </encoder>
+				    </appender>
+				</configuration>
+				""", (spec) -> spec.path("logback-test.xml")));
+	}
+
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(text("""
+				<?xml version="1.0" encoding="UTF-8"?>
+
+				<configuration>
+				    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+				        <encoder>
+				            <pattern>%message%n%dwRootException</pattern>
 				        </encoder>
 				    </appender>
 				</configuration>

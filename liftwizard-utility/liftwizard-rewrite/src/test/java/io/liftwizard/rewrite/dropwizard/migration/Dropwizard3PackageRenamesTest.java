@@ -32,264 +32,202 @@ class Dropwizard3PackageRenamesTest implements RewriteTest {
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames")
 			.parser(
 				JavaParser.fromJavaVersion().dependsOn(
-						"""
-						package io.dropwizard;
+					"""
+					package io.dropwizard;
 
-						public class Application<T> {
-						    public void run(String... args) {}
-						}
-						""",
-						"""
-						package io.dropwizard;
+					public class Application<T> {
+					    public void run(String... args) {}
+					}
+					""",
+					"""
+					package io.dropwizard;
 
-						public class Configuration {
-						}
-						""",
-						"""
-						package io.dropwizard;
+					public interface Bundle {
+					}
+					""",
+					"""
+					package io.dropwizard;
 
-						public interface ConfiguredBundle<T> {
-						    void initialize(Object bootstrap);
-						    void run(T configuration, Object environment);
-						}
-						""",
-						"""
-						package io.dropwizard.setup;
+					public class Configuration {
+					}
+					""",
+					"""
+					package io.dropwizard;
 
-						public class Bootstrap<T> {
-						    public void addBundle(Object bundle) {}
-						}
-						""",
-						"""
-						package io.dropwizard.setup;
+					public interface ConfiguredBundle<T> {
+					    void initialize(Object bootstrap);
+					    void run(T configuration, Object environment);
+					}
+					""",
+					"""
+					package io.dropwizard.server;
 
-						public class Environment {
-						    public String getName() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.cli;
+					public interface ServerFactory {
+					}
+					""",
+					"""
+					package io.dropwizard.setup;
 
-						public abstract class Command {
-						    public abstract void run(Object environment, Object namespace);
-						}
-						""",
-						"""
-						package io.dropwizard.cli;
+					public class Bootstrap<T> {
+					    public void addBundle(Object bundle) {}
+					}
+					""",
+					"""
+					package io.dropwizard.setup;
 
-						public abstract class ConfiguredCommand<T> extends Command {
-						}
-						""",
-						"""
-						package io.dropwizard.logging;
+					public class Environment {
+					    public String getName() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.cli;
 
-						public abstract class AbstractAppenderFactory<E> {
-						}
-						""",
-						"""
-						package io.dropwizard.logging.filter;
+					public abstract class Command {
+					    public abstract void run(Object environment, Object namespace);
+					}
+					""",
+					"""
+					package io.dropwizard.cli;
 
-						public interface FilterFactory<E> {
-						}
-						""",
-						"""
-						package io.dropwizard.logging.layout;
+					public abstract class ConfiguredCommand<T> extends Command {
+					}
+					""",
+					"""
+					package io.dropwizard.logging;
 
-						public interface LayoutFactory<E> {
-						}
-						""",
-						"""
-						package io.dropwizard.metrics;
+					public abstract class AbstractAppenderFactory<E> {
+					}
+					""",
+					"""
+					package io.dropwizard.logging.filter;
 
-						public interface ReporterFactory {
-						}
-						""",
-						"""
-						package io.dropwizard.views;
+					public interface FilterFactory<E> {
+					}
+					""",
+					"""
+					package io.dropwizard.logging.layout;
 
-						public abstract class View {
-						    protected View(String templateName) {}
-						}
-						""",
-						"""
-						package io.dropwizard.auth;
+					public interface LayoutFactory<E> {
+					}
+					""",
+					"""
+					package io.dropwizard.metrics;
 
-						public class AuthFilter {
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.setup;
+					public interface ReporterFactory {
+					}
+					""",
+					"""
+					package io.dropwizard.views;
 
-						public class JerseyEnvironment {
-						}
-						"""
-					)
+					public abstract class View {
+					    protected View(String templateName) {}
+					}
+					""",
+					"""
+					package io.dropwizard.auth;
+
+					public class AuthFilter {
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.setup;
+
+					public class JerseyEnvironment {
+					}
+					"""
+				)
 			);
 	}
 
 	@DocumentExample
 	@Test
-	void replacesCorePackage() {
+	void replacePatterns() {
 		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.Application;
-					import io.dropwizard.Configuration;
+			java(
+				"""
+				import io.dropwizard.Application;
+				import io.dropwizard.Configuration;
+				import io.dropwizard.cli.Command;
+				import io.dropwizard.cli.ConfiguredCommand;
+				import io.dropwizard.logging.AbstractAppenderFactory;
+				import io.dropwizard.logging.filter.FilterFactory;
+				import io.dropwizard.logging.layout.LayoutFactory;
+				import io.dropwizard.metrics.ReporterFactory;
+				import io.dropwizard.setup.Bootstrap;
+				import io.dropwizard.setup.Environment;
+				import io.dropwizard.views.View;
 
-					class MyApp extends Application<Configuration> {
-					    public void run(String... args) {}
-					}
-					""",
-					"""
-					import io.dropwizard.core.Application;
-					import io.dropwizard.core.Configuration;
+				class MyApp extends Application<Configuration> {
+				    public void run(String... args) {}
 
-					class MyApp extends Application<Configuration> {
-					    public void run(String... args) {}
-					}
-					"""
-				)
-			);
+				    void setupPackage(Bootstrap<?> bootstrap, Environment environment) {}
+
+				    void loggingPackage(FilterFactory<?> filterFactory, LayoutFactory<?> layoutFactory) {}
+
+				    void metricsPackage(ReporterFactory reporterFactory) {}
+				}
+
+				abstract class MyCommand extends Command {
+				    public void run(Object environment, Object namespace) {}
+				}
+
+				class MyView extends View {
+				    protected MyView() {
+				        super("my-template.ftl");
+				    }
+				}
+				""",
+				"""
+				import io.dropwizard.core.cli.Command;
+				import io.dropwizard.core.cli.ConfiguredCommand;
+				import io.dropwizard.core.Application;
+				import io.dropwizard.core.Configuration;
+				import io.dropwizard.logging.common.AbstractAppenderFactory;
+				import io.dropwizard.logging.common.filter.FilterFactory;
+				import io.dropwizard.logging.common.layout.LayoutFactory;
+				import io.dropwizard.metrics.common.ReporterFactory;
+				import io.dropwizard.core.setup.Bootstrap;
+				import io.dropwizard.core.setup.Environment;
+				import io.dropwizard.views.common.View;
+
+				class MyApp extends Application<Configuration> {
+				    public void run(String... args) {}
+
+				    void setupPackage(Bootstrap<?> bootstrap, Environment environment) {}
+
+				    void loggingPackage(FilterFactory<?> filterFactory, LayoutFactory<?> layoutFactory) {}
+
+				    void metricsPackage(ReporterFactory reporterFactory) {}
+				}
+
+				abstract class MyCommand extends Command {
+				    public void run(Object environment, Object namespace) {}
+				}
+
+				class MyView extends View {
+				    protected MyView() {
+				        super("my-template.ftl");
+				    }
+				}
+				"""
+			)
+		);
 	}
 
 	@Test
-	void replacesSetupPackage() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.setup.Bootstrap;
-					import io.dropwizard.setup.Environment;
+			java(
+				"""
+				import io.dropwizard.auth.AuthFilter;
+				import io.dropwizard.jersey.setup.JerseyEnvironment;
 
-					class MyBundle {
-					    void initialize(Bootstrap<?> bootstrap) {}
-					    void run(Environment environment) {}
-					}
-					""",
-					"""
-					import io.dropwizard.core.setup.Bootstrap;
-					import io.dropwizard.core.setup.Environment;
-
-					class MyBundle {
-					    void initialize(Bootstrap<?> bootstrap) {}
-					    void run(Environment environment) {}
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replacesCliPackage() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.cli.Command;
-					import io.dropwizard.cli.ConfiguredCommand;
-
-					abstract class MyCommand extends Command {
-					    public void run(Object environment, Object namespace) {}
-					}
-					""",
-					"""
-					import io.dropwizard.core.cli.Command;
-					import io.dropwizard.core.cli.ConfiguredCommand;
-
-					abstract class MyCommand extends Command {
-					    public void run(Object environment, Object namespace) {}
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replacesLoggingPackage() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.logging.AbstractAppenderFactory;
-					import io.dropwizard.logging.filter.FilterFactory;
-					import io.dropwizard.logging.layout.LayoutFactory;
-
-					class MyAppender {
-					    FilterFactory<?> filterFactory;
-					    LayoutFactory<?> layoutFactory;
-					}
-					""",
-					"""
-					import io.dropwizard.logging.common.AbstractAppenderFactory;
-					import io.dropwizard.logging.common.filter.FilterFactory;
-					import io.dropwizard.logging.common.layout.LayoutFactory;
-
-					class MyAppender {
-					    FilterFactory<?> filterFactory;
-					    LayoutFactory<?> layoutFactory;
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replacesMetricsPackage() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.metrics.ReporterFactory;
-
-					class MyReporter implements ReporterFactory {
-					}
-					""",
-					"""
-					import io.dropwizard.metrics.common.ReporterFactory;
-
-					class MyReporter implements ReporterFactory {
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replacesViewsPackage() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.views.View;
-
-					class MyView extends View {
-					    protected MyView() {
-					        super("my-template.ftl");
-					    }
-					}
-					""",
-					"""
-					import io.dropwizard.views.common.View;
-
-					class MyView extends View {
-					    protected MyView() {
-					        super("my-template.ftl");
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void doesNotRenameUnaffectedPackages() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.auth.AuthFilter;
-					import io.dropwizard.jersey.setup.JerseyEnvironment;
-
-					class MyResource {
-					    AuthFilter filter;
-					    JerseyEnvironment jersey;
-					}
-					"""
-				)
-			);
+				class MyResource {
+				    AuthFilter filter;
+				    JerseyEnvironment jersey;
+				}
+				"""
+			)
+		);
 	}
 }

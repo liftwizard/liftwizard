@@ -32,43 +32,58 @@ class Dropwizard3UtilMigrationTest implements RewriteTest {
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration")
 			.parser(
 				JavaParser.fromJavaVersion().dependsOn(
-						"""
-						package io.dropwizard.util;
+					"""
+					package io.dropwizard.util;
 
-						import java.util.Collections;
+					import java.util.Collections;
 
-						public final class Sets {
-						    @SafeVarargs
-						    public static <T> java.util.Set<T> of(T... elements) {
-						        return Collections.emptySet();
-						    }
-						}
-						"""
-					)
+					public final class Sets {
+					    @SafeVarargs
+					    public static <T> java.util.Set<T> of(T... elements) {
+					        return Collections.emptySet();
+					    }
+					}
+					"""
+				)
 			);
 	}
 
 	@DocumentExample
 	@Test
-	void replacesSetsWithSetOf() {
+	void replacePatterns() {
 		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.util.Sets;
-					import java.util.Set;
+			java(
+				"""
+				import io.dropwizard.util.Sets;
+				import java.util.Set;
 
-					class MyConfig {
-					    Set<String> allowed = Sets.of("a", "b", "c");
-					}
-					""",
-					"""
-					import java.util.Set;
+				class MyConfig {
+				    Set<String> allowed = Sets.of("a", "b", "c");
+				}
+				""",
+				"""
+				import java.util.Set;
 
-					class MyConfig {
-					    Set<String> allowed = Set.of("a", "b", "c");
-					}
-					"""
-				)
-			);
+				class MyConfig {
+				    Set<String> allowed = Set.of("a", "b", "c");
+				}
+				"""
+			)
+		);
+	}
+
+	@Test
+	void doNotReplaceInvalidPatterns() {
+		this.rewriteRun(
+			java(
+				"""
+				import java.util.Set;
+
+				class MyConfig {
+				    Set<String> allowed = Set.of("a", "b", "c");
+				}
+				"""
+			)
+		);
 	}
 }

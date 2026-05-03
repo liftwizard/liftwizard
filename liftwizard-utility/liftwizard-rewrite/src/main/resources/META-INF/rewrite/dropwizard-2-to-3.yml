@@ -33,6 +33,7 @@ recipeList:
     - io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
     - org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5
     - io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
     - io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
     - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3IAccessEventGetSequenceNumber
     - io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
@@ -215,6 +216,36 @@ recipeList:
     - org.openrewrite.java.ChangeType:
           oldFullyQualifiedTypeName: io.dropwizard.util.Sets
           newFullyQualifiedTypeName: java.util.Set
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
+displayName: Migrate Dropwizard Jersey param classes to jsr310 package
+description: >-
+    In Dropwizard 3, InstantParam and LocalDateParam moved from
+    io.dropwizard.jersey.params to io.dropwizard.jersey.jsr310.
+    DateTimeParam is replaced by ZonedDateTimeParam in the jsr310 package.
+    BooleanParam, DurationParam, and SizeParam are replaced by their
+    underlying Java types with .get() calls unwrapped.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.InstantParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.InstantParam
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.LocalDateParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.LocalDateParam
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.DateTimeParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.ZonedDateTimeParam
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.BooleanParam
+          newType: java.lang.Boolean
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.DurationParam
+          newType: java.time.Duration
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.SizeParam
+          newType: io.dropwizard.util.DataSize
 
 ---
 type: specs.openrewrite.org/v1beta/recipe

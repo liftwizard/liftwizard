@@ -32,93 +32,93 @@ class Dropwizard3Jetty10MigrationTest implements RewriteTest {
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration")
 			.parser(
 				JavaParser.fromJavaVersion().dependsOn(
-						"""
-						package org.eclipse.jetty.util.component;
+					"""
+					package org.eclipse.jetty.util.component;
 
-						import java.util.EventListener;
+					import java.util.EventListener;
 
-						public abstract class AbstractLifeCycle implements LifeCycle {
-						    public void addLifeCycleListener(LifeCycle.Listener listener) {}
-						    public void addEventListener(EventListener listener) {}
-						}
-						""",
-						"""
-						package org.eclipse.jetty.util.component;
+					public abstract class AbstractLifeCycle implements LifeCycle {
+					    public void addLifeCycleListener(LifeCycle.Listener listener) {}
+					    public void addEventListener(EventListener listener) {}
+					}
+					""",
+					"""
+					package org.eclipse.jetty.util.component;
 
-						import java.util.EventListener;
+					import java.util.EventListener;
 
-						public interface LifeCycle {
-						    void addLifeCycleListener(Listener listener);
-						    void addEventListener(EventListener listener);
+					public interface LifeCycle {
+					    void addLifeCycleListener(Listener listener);
+					    void addEventListener(EventListener listener);
 
-						    interface Listener extends EventListener {
-						    }
-						}
-						""",
-						"""
-						package org.eclipse.jetty.util.component;
+					    interface Listener extends EventListener {
+					    }
+					}
+					""",
+					"""
+					package org.eclipse.jetty.util.component;
 
-						public class ContainerLifeCycle extends AbstractLifeCycle {
-						}
-						"""
-					)
+					public class ContainerLifeCycle extends AbstractLifeCycle {
+					}
+					"""
+				)
 			);
 	}
 
 	@DocumentExample
 	@Test
-	void replacesAddLifeCycleListener() {
+	void replacePatterns() {
 		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.jetty.util.component.AbstractLifeCycle;
-					import org.eclipse.jetty.util.component.LifeCycle;
+			java(
+				"""
+				import org.eclipse.jetty.util.component.AbstractLifeCycle;
+				import org.eclipse.jetty.util.component.ContainerLifeCycle;
+				import org.eclipse.jetty.util.component.LifeCycle;
 
-					class MyComponent {
-					    void setup(AbstractLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addLifeCycleListener(listener);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.jetty.util.component.AbstractLifeCycle;
-					import org.eclipse.jetty.util.component.LifeCycle;
+				class MyComponent {
+				    void onAbstractLifeCycle(AbstractLifeCycle lifecycle, LifeCycle.Listener listener) {
+				        lifecycle.addLifeCycleListener(listener);
+				    }
 
-					class MyComponent {
-					    void setup(AbstractLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addEventListener(listener);
-					    }
-					}
-					"""
-				)
-			);
+				    void onContainerLifeCycle(ContainerLifeCycle lifecycle, LifeCycle.Listener listener) {
+				        lifecycle.addLifeCycleListener(listener);
+				    }
+				}
+				""",
+				"""
+				import org.eclipse.jetty.util.component.AbstractLifeCycle;
+				import org.eclipse.jetty.util.component.ContainerLifeCycle;
+				import org.eclipse.jetty.util.component.LifeCycle;
+
+				class MyComponent {
+				    void onAbstractLifeCycle(AbstractLifeCycle lifecycle, LifeCycle.Listener listener) {
+				        lifecycle.addEventListener(listener);
+				    }
+
+				    void onContainerLifeCycle(ContainerLifeCycle lifecycle, LifeCycle.Listener listener) {
+				        lifecycle.addEventListener(listener);
+				    }
+				}
+				"""
+			)
+		);
 	}
 
 	@Test
-	void replacesOnContainerLifeCycle() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.jetty.util.component.ContainerLifeCycle;
-					import org.eclipse.jetty.util.component.LifeCycle;
+			java(
+				"""
+				import java.util.EventListener;
+				import org.eclipse.jetty.util.component.AbstractLifeCycle;
 
-					class MyComponent {
-					    void setup(ContainerLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addLifeCycleListener(listener);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.jetty.util.component.ContainerLifeCycle;
-					import org.eclipse.jetty.util.component.LifeCycle;
-
-					class MyComponent {
-					    void setup(ContainerLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addEventListener(listener);
-					    }
-					}
-					"""
-				)
-			);
+				class MyComponent {
+				    void alreadyUsingAddEventListener(AbstractLifeCycle lifecycle, EventListener listener) {
+				        lifecycle.addEventListener(listener);
+				    }
+				}
+				"""
+			)
+		);
 	}
 }
