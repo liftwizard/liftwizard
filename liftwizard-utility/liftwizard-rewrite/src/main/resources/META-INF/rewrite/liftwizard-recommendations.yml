@@ -26,6 +26,7 @@ recipeList:
     - io.liftwizard.rewrite.java.style.EnforceConsistentConstructorArgumentLineWrapping
     - io.liftwizard.rewrite.java.style.EnforceConsistentArrayInitializerLineWrapping
     - io.liftwizard.rewrite.java.style.EnforceConsistentMethodParameterLineWrapping
+    - io.liftwizard.rewrite.java.style.EnforceConsistentRecordComponentLineWrapping
     - io.liftwizard.rewrite.java.style.UseVarForPrimitiveLiterals
     - org.openrewrite.java.migrate.lang.var.UseVarForConstructors
     - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast
