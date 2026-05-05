@@ -401,7 +401,7 @@
 
         <dependency>
             <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-testing-junit4</artifactId>
+            <artifactId>dropwizard-testing</artifactId>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

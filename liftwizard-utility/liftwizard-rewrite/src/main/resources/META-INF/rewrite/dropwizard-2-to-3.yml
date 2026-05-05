@@ -27,11 +27,16 @@ description: >-
 recipeList:
     - io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
     - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
+    - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3LoadRoleInfoSignature
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
     - org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5
     - io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
     - io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
+    - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3IAccessEventGetSequenceNumber
     - io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
-    - io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Module
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
@@ -149,6 +154,57 @@ recipeList:
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
+displayName: Promote Jetty AbstractLoginService nested types to top-level
+description: >-
+    In Jetty 10, UserPrincipal and RolePrincipal were promoted from nested
+    classes inside AbstractLoginService to top-level classes in the
+    org.eclipse.jetty.security package. This recipe rewrites references to
+    the old nested-type names so imports resolve under Jetty 10/Dropwizard 3.
+    Note: this only handles the type rename; it does NOT change the return
+    type of AbstractLoginService.loadRoleInfo (was String[], now
+    List<RolePrincipal>) — that signature change requires a custom recipe.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$UserPrincipal
+          newFullyQualifiedTypeName: org.eclipse.jetty.security.UserPrincipal
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$RolePrincipal
+          newFullyQualifiedTypeName: org.eclipse.jetty.security.RolePrincipal
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
+displayName: Remove stale jetty-bom managed dependency
+description: >-
+    Remove any explicit jetty-bom managed-dependency import. Dropwizard 3's
+    own dropwizard-bom manages a compatible Jetty version, and a project-pinned
+    jetty-bom (commonly Jetty 9.4.x) imported BEFORE dropwizard-bom will win
+    the BOM-merge order and silently downgrade Jetty back to a Dropwizard 2
+    era release, dragging in javax.servlet 3.1 and breaking BannedDependencies.
+recipeList:
+    - org.openrewrite.maven.RemoveManagedDependency:
+          groupId: org.eclipse.jetty
+          artifactId: jetty-bom
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
+displayName: Exclude jetty-servlet-api from dependencies
+description: >-
+    Jetty 10 (which Dropwizard 3 brings in) ships
+    org.eclipse.jetty.toolchain:jetty-servlet-api as a transitive dependency.
+    Its classes overlap with jakarta.servlet:jakarta.servlet-api (both
+    declare classes in the javax.servlet.* package under Jakarta EE 8),
+    causing BanDuplicateClasses enforcer failures. Exclude jetty-servlet-api
+    so jakarta.servlet-api is the single source of those classes.
+recipeList:
+    - org.openrewrite.maven.ExcludeDependency:
+          groupId: org.eclipse.jetty.toolchain
+          artifactId: jetty-servlet-api
+
+---
+type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
 displayName: Migrate dropwizard-util removed classes
 description: >-
@@ -162,17 +218,20 @@ recipeList:
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
-name: io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Module
-displayName: Migrate Dropwizard JUnit 4 testing to separate module
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
+displayName: Roll dropwizard-testing-junit4 references back to dropwizard-testing
 description: >-
-    In Dropwizard 3, JUnit 4 support was moved from dropwizard-testing to
-    a separate dropwizard-testing-junit4 module. This recipe updates the
-    Maven dependency for projects still using JUnit 4 testing rules.
+    Dropwizard 3 removed JUnit 4 support entirely from the testing module —
+    the dropwizard-testing-junit4 artifact does not exist on Maven Central.
+    This recipe rewrites stale dropwizard-testing-junit4 dependencies back to
+    dropwizard-testing so existing projects (and any earlier mis-migration)
+    resolve correctly. Source code that still relies on JUnit 4 rules must be
+    migrated to JUnit 5 extensions separately (see DropwizardTestingJUnit5Migration).
 recipeList:
     - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
           oldGroupId: io.dropwizard
-          oldArtifactId: dropwizard-testing
-          newArtifactId: dropwizard-testing-junit4
+          oldArtifactId: dropwizard-testing-junit4
+          newArtifactId: dropwizard-testing
 
 ---
 type: specs.openrewrite.org/v1beta/recipe
@@ -222,9 +281,16 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
 displayName: Upgrade Dropwizard dependencies to 3.0.x
 description: >-
-    Upgrade Dropwizard Maven dependencies from 2.1.x to 3.0.x.
+    Upgrade Dropwizard Maven dependencies from 2.1.x to 3.0.x, including
+    common third-party Dropwizard bundles whose version is keyed to the
+    Dropwizard major release (e.g. smoketurner graphql-core ships a 3.0.x
+    line built against Dropwizard 3).
 recipeList:
     - org.openrewrite.maven.UpgradeDependencyVersion:
           groupId: io.dropwizard
           artifactId: "*"
           newVersion: 3.0.x
+    - org.openrewrite.maven.UpgradeDependencyVersion:
+          groupId: com.smoketurner.dropwizard
+          artifactId: graphql-core
+          newVersion: 3.x

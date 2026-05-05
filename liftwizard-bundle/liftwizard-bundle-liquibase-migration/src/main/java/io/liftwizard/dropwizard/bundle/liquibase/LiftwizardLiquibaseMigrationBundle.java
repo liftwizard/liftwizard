@@ -25,8 +25,8 @@ import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 import com.google.auto.service.AutoService;
-import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.db.ManagedDataSource;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseDataSourceMigrationFactory;
