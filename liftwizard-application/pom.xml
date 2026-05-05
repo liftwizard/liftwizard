@@ -107,12 +107,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.marmelo.dropwizard</groupId>
-            <artifactId>dropwizard-metrics-ui</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
         </dependency>
