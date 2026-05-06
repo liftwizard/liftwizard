@@ -39,6 +39,7 @@
         <module>liftwizard-bundle-liquibase-migration</module>
         <module>liftwizard-bundle-prioritized-api</module>
         <module>liftwizard-redirect-bundle</module>
+        <module>liftwizard-smoketurner-graphql</module>
         <module>liftwizard-bundle-single-page-redirect-filter</module>
         <module>liftwizard-bundle-system-properties</module>
     </modules>
