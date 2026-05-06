@@ -94,7 +94,7 @@ class IntegrationTest {
 			.queryParam("date", "2022-01-20")
 			.request()
 			.get(String.class);
-		assertThat(date).isEqualTo("2022-01-20T00:00:00.000Z");
+		assertThat(date).isEqualTo("2022-01-20");
 	}
 
 	@Test

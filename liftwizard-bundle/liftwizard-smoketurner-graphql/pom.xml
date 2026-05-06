@@ -90,12 +90,12 @@
 
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
-            <artifactId>graphql-java-servlet-javax</artifactId>
+            <artifactId>graphql-java-kickstart-javax</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
-            <artifactId>graphql-java-kickstart-javax</artifactId>
+            <artifactId>graphql-java-servlet-javax</artifactId>
         </dependency>
 
         <dependency>
