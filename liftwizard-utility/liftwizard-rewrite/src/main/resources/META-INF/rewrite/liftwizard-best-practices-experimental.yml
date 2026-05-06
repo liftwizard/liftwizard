@@ -23,3 +23,4 @@ description: >-
     Experimental recipes that are more aggressive and may require manual review.
 recipeList:
     - io.liftwizard.rewrite.eclipse.collections.ECExperimentalRecipes
+    - io.liftwizard.rewrite.java.style.EnforceConsistentLineWrapping
