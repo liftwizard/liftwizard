@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector;
  * is meant to be paired with the mapper's existing introspector so that all other annotations continue to apply.
  *
  * <p>This is used to skip properties that cannot be serialized in some deployments, such as the Dropwizard request log
- * factory ({@code requestLog} on {@link io.dropwizard.server.AbstractServerFactory}) in an application that runs a
+ * factory ({@code requestLog} on {@link io.dropwizard.core.server.AbstractServerFactory}) in an application that runs a
  * non-logback logging backend without logback-access on the classpath. The ignore is scoped to the declaring type so
  * that a property of the same name on an unrelated type is left untouched.
  */

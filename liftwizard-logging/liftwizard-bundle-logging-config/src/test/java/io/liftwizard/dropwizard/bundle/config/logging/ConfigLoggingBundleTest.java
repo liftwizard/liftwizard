@@ -24,11 +24,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.server.AbstractServerFactory;
+import io.dropwizard.core.server.DefaultServerFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.request.logging.LogbackAccessRequestLogFactory;
-import io.dropwizard.server.AbstractServerFactory;
-import io.dropwizard.server.DefaultServerFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
