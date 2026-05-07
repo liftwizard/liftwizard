@@ -58,7 +58,6 @@ class JCFSortedMapToMutableSortedMapTest extends AbstractEclipseCollectionsTest 
 					""",
 					"""
 					import java.util.List;
-					import java.util.SortedMap;
 					import org.eclipse.collections.api.factory.SortedMaps;
 					import org.eclipse.collections.api.map.sorted.MutableSortedMap;
 					import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;

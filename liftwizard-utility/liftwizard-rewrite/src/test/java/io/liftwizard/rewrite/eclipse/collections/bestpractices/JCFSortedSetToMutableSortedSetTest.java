@@ -57,7 +57,6 @@ class JCFSortedSetToMutableSortedSetTest extends AbstractEclipseCollectionsTest 
 					}
 					""",
 					"""
-					import java.util.SortedSet;
 					import java.util.List;
 					import org.eclipse.collections.api.factory.SortedSets;
 					import org.eclipse.collections.api.set.sorted.MutableSortedSet;
