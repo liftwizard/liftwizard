@@ -213,4 +213,49 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 				)
 			);
 	}
+
+	@Test
+	void detectsObjectArgumentWhenLoggerInheritanceIsSevered() {
+		String severedLoggerStub =
+			"""
+			package org.apache.log4j;
+			public class Logger {
+			    public static Logger getLogger(Class clazz) { return null; }
+			    public void debug(Object message) {}
+			    public void info(Object message) {}
+			    public void warn(Object message) {}
+			    public void error(Object message) {}
+			    public void fatal(Object message) {}
+			}
+			""";
+
+		this.rewriteRun(
+				spec -> spec.parser(JavaParser.fromJavaVersion().dependsOn(severedLoggerStub)),
+				java(
+					"""
+					import org.apache.log4j.Logger;
+
+					class Test {
+					    private static final Logger LOGGER = Logger.getLogger(Test.class);
+
+					    void test(Object myObject) {
+					        LOGGER.info(myObject);
+					    }
+					}
+					""",
+					"""
+					import org.apache.log4j.Logger;
+
+					class Test {
+					    private static final Logger LOGGER = Logger.getLogger(Test.class);
+
+					    void test(Object myObject) {
+					        /*~~>*/LOGGER.info(myObject);
+					    }
+					}
+					"""
+				)
+			);
+	}
+
 }

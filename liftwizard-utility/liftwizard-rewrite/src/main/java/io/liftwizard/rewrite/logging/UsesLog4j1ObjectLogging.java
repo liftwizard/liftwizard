@@ -46,7 +46,12 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 		new MethodMatcher("org.apache.log4j.Category info(..)", true),
 		new MethodMatcher("org.apache.log4j.Category warn(..)", true),
 		new MethodMatcher("org.apache.log4j.Category error(..)", true),
-		new MethodMatcher("org.apache.log4j.Category fatal(..)", true)
+		new MethodMatcher("org.apache.log4j.Category fatal(..)", true),
+		new MethodMatcher("org.apache.log4j.Logger debug(..)", true),
+		new MethodMatcher("org.apache.log4j.Logger info(..)", true),
+		new MethodMatcher("org.apache.log4j.Logger warn(..)", true),
+		new MethodMatcher("org.apache.log4j.Logger error(..)", true),
+		new MethodMatcher("org.apache.log4j.Logger fatal(..)", true)
 	);
 
 	@Override
