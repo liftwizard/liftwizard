@@ -347,20 +347,42 @@
 
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <configuration>
-                    <rules>
-                        <banDuplicateClasses>
-                            <ignoreClasses combine.children="append">
-                                <ignoreClass>blogspot.software_and_algorithms.stern_library.*</ignoreClass>
-                                <ignoreClass>com.github.benmanes.caffeine.cache.*</ignoreClass>
-                                <ignoreClass>com.github.difflib.*</ignoreClass>
-                                <ignoreClass>com.google.*</ignoreClass>
-                                <ignoreClass>org.jspecify.*</ignoreClass>
-                                <ignoreClass>org.pcollections.*</ignoreClass>
-                            </ignoreClasses>
-                        </banDuplicateClasses>
-                    </rules>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>enforce-requireProfileIdsExist</id>
+                        <configuration>
+                            <rules combine.children="merge">
+                                <banDuplicateClasses>
+                                    <ignoreClasses combine.children="append">
+                                        <ignoreClass>blogspot.software_and_algorithms.stern_library.*</ignoreClass>
+                                        <ignoreClass>com.github.benmanes.caffeine.cache.*</ignoreClass>
+                                        <ignoreClass>com.github.difflib.*</ignoreClass>
+                                        <ignoreClass>com.google.*</ignoreClass>
+                                        <ignoreClass>org.jspecify.*</ignoreClass>
+                                        <ignoreClass>org.pcollections.*</ignoreClass>
+                                    </ignoreClasses>
+                                </banDuplicateClasses>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>enforce</id>
+                        <configuration>
+                            <rules combine.children="merge">
+                                <banDuplicateClasses>
+                                    <ignoreClasses combine.children="append">
+                                        <ignoreClass>blogspot.software_and_algorithms.stern_library.*</ignoreClass>
+                                        <ignoreClass>com.github.benmanes.caffeine.cache.*</ignoreClass>
+                                        <ignoreClass>com.github.difflib.*</ignoreClass>
+                                        <ignoreClass>com.google.*</ignoreClass>
+                                        <ignoreClass>org.jspecify.*</ignoreClass>
+                                        <ignoreClass>org.pcollections.*</ignoreClass>
+                                    </ignoreClasses>
+                                </banDuplicateClasses>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
