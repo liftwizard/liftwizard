@@ -30,5 +30,4 @@ recipeList:
     - org.openrewrite.java.testing.junit5.JUnit5BestPractices
     - org.openrewrite.java.testing.mockito.MockitoBestPractices
     - org.openrewrite.java.testing.testcontainers.TestContainersBestPractices
-    - org.openrewrite.maven.BestPractices
     - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
