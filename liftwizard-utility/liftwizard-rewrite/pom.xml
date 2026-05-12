@@ -391,6 +391,11 @@
                 <version>${project.version}</version>
                 <dependencies>
                     <dependency>
+                        <groupId>org.openrewrite</groupId>
+                        <artifactId>rewrite-maven</artifactId>
+                        <version>8.81.13</version>
+                    </dependency>
+                    <dependency>
                         <groupId>org.openrewrite.recipe</groupId>
                         <artifactId>rewrite-static-analysis</artifactId>
                         <version>2.34.1</version>
@@ -410,6 +415,23 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <filteredRecipeSpecs>
+                                <filteredRecipeSpec>
+                                    <generatedRecipeName>io.liftwizard.maven.BestPractices</generatedRecipeName>
+                                    <displayName>Liftwizard Apache Maven best practices</displayName>
+                                    <description>Apply Maven best practices, excluding recipes that conflict with Liftwizard POM conventions (Spotless POM sorting and io.liftwizard-first dependency grouping).</description>
+                                    <baseRecipeName>org.openrewrite.maven.BestPractices</baseRecipeName>
+                                    <outputFileName>maven-best-practices.yml</outputFileName>
+                                    <exclusions>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.maven.OrderPomElements</recipeName>
+                                            <reason>throws IndexOutOfBoundsException on some POMs; redundant since Spotless already sorts POM elements</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.maven.SortDependencies</recipeName>
+                                            <reason>sorts dependencies alphabetically by groupId; conflicts with Liftwizard convention that groups io.liftwizard first, then io.dropwizard, then third-party</reason>
+                                        </exclusion>
+                                    </exclusions>
+                                </filteredRecipeSpec>
                                 <filteredRecipeSpec>
                                     <generatedRecipeName>io.liftwizard.testing.junit.JupiterBestPractices</generatedRecipeName>
                                     <displayName>JUnit Jupiter best practices</displayName>
