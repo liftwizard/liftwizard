@@ -278,6 +278,7 @@
 
             <!--mvnw wrapper:wrapper -Dmaven=4.0.0-alpha-7-->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-wrapper-plugin</artifactId>
                 <version>3.3.4</version>
             </plugin>

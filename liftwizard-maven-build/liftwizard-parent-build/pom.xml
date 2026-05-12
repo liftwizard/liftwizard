@@ -55,6 +55,7 @@
 
                 <!--region Phase 3: generate-sources-->
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.2.0</version>
                 </plugin>
@@ -114,6 +115,7 @@
         <plugins>
             <!--region Phase 7: compile-->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <annotationProcessorPaths combine.children="append">
@@ -181,6 +183,7 @@
                 <pluginManagement>
                     <plugins>
                         <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-shade-plugin</artifactId>
                             <version>3.6.2</version>
                             <configuration>
