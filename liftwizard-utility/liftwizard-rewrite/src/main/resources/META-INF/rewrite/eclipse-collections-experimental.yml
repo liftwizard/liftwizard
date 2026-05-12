@@ -91,3 +91,9 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECConcreteToInterfaceRecipe:
           concreteTypeFqn: org.eclipse.collections.impl.map.sorted.mutable.SortedMapAdapter
           interfaceTypeFqn: org.eclipse.collections.api.map.sorted.MutableSortedMap
+    - org.openrewrite.maven.AddDependency:
+          groupId: org.eclipse.collections
+          artifactId: eclipse-collections-api
+          version: latest.release
+          onlyIfUsing: org.eclipse.collections.api..*
+          acceptTransitive: true

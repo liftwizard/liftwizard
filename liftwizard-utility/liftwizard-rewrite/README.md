@@ -16,6 +16,8 @@ Most projects will use these composite recipes:
 
 **Best Practices** (`io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices`) transforms verbose patterns into idiomatic Eclipse Collections code, such as replacing `richIterable.size() > 0` with `richIterable.notEmpty()`.
 
+Both adoption and best-practices suites also add `org.eclipse.collections:eclipse-collections-api` to the target module's `pom.xml` when EC API types are referenced, so transformed modules compile even if they didn't previously depend on Eclipse Collections.
+
 **Logging Best Practices** (`io.liftwizard.rewrite.LoggingBestPractices`) transforms eager logging patterns to use SLF4J parameterized logging, using recipes from OpenRewrite's [rewrite-logging-frameworks](https://docs.openrewrite.org/recipes/java/logging/slf4j) module.
 
 ## Getting Started
