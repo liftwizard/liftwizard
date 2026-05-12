@@ -150,3 +150,9 @@ recipeList:
               - org.eclipse.collections.api.block.procedure.primitive.ObjectShortProcedure<IN>
           excludeBounds:
               - java.lang.*
+    - org.openrewrite.maven.AddDependency:
+          groupId: org.eclipse.collections
+          artifactId: eclipse-collections-api
+          version: latest.release
+          onlyIfUsing: org.eclipse.collections.api..*
+          acceptTransitive: true
