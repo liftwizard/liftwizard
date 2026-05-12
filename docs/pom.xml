@@ -42,6 +42,7 @@
                     <plugin>
                         <groupId>org.testingisdocumenting.znai</groupId>
                         <artifactId>znai-maven-plugin</artifactId>
+                        <version>1.90.1</version>
                         <dependencies>
                             <dependency>
                                 <groupId>io.dropwizard</groupId>

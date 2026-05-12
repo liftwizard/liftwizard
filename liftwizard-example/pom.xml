@@ -581,6 +581,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.6.2</version>
                     </plugin>
                 </plugins>
             </build>
@@ -595,6 +596,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
+                        <version>3.10.0</version>
                         <configuration>
                             <failOnWarning>false</failOnWarning>
                         </configuration>
