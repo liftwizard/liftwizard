@@ -97,10 +97,10 @@ checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
     (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
 
 # spotless
-spotless NAME MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles spotless-apply,spotless-" + NAME) default_flags)
+spotless NAME MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent' --activate-profiles spotless-apply,spotless-" + NAME) default_flags)
 
 # spotless-all
-spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent,!liftwizard-utility/liftwizard-checkstyle,!liftwizard-utility/liftwizard-rewrite' --activate-profiles " + default_spotless_profiles) default_flags)
+spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent' --activate-profiles " + default_spotless_profiles) default_flags)
 
 # `mvn` with reproducible build check
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags)
