@@ -216,8 +216,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
 	@Test
 	void detectsObjectArgumentWhenLoggerInheritanceIsSevered() {
-		String severedLoggerStub =
-			"""
+		String severedLoggerStub = """
 			package org.apache.log4j;
 			public class Logger {
 			    public static Logger getLogger(Class clazz) { return null; }
@@ -230,7 +229,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 			""";
 
 		this.rewriteRun(
-				spec -> spec.parser(JavaParser.fromJavaVersion().dependsOn(severedLoggerStub)),
+				(spec) -> spec.parser(JavaParser.fromJavaVersion().dependsOn(severedLoggerStub)),
 				java(
 					"""
 					import org.apache.log4j.Logger;
@@ -257,5 +256,4 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 				)
 			);
 	}
-
 }
