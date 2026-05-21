@@ -393,7 +393,7 @@
                     <dependency>
                         <groupId>org.openrewrite</groupId>
                         <artifactId>rewrite-maven</artifactId>
-                        <version>8.82.1</version>
+                        <version>8.83.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.openrewrite.recipe</groupId>
