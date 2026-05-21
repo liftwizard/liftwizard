@@ -61,7 +61,7 @@ public class ReladomoTestResourceColumn {
 		Timestamp infinityTimestamp = timestampAttribute.getAsOfAttributeInfinity();
 
 		if (timestamp.equals(infinityTimestamp)) {
-			return infinityTimestamp;
+			return null;
 		}
 
 		Instant instant = timestamp.toInstant();

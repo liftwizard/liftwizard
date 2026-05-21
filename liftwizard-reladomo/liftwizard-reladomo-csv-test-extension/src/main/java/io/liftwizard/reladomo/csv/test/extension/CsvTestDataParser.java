@@ -167,7 +167,10 @@ public class CsvTestDataParser {
 
 	private void setNullValue(@Nonnull MithraDataObject dataObject, @Nonnull Attribute<?, ?> attribute) {
 		if (attribute instanceof TimestampAttribute timestampAttribute) {
-			timestampAttribute.setTimestampValue(dataObject, null);
+			Timestamp timestamp = timestampAttribute.isAsOfAttributeTo()
+				? timestampAttribute.getAsOfAttributeInfinity()
+				: null;
+			timestampAttribute.setTimestampValue(dataObject, timestamp);
 		} else if (attribute instanceof DateAttribute dateAttribute) {
 			dateAttribute.setDateValue(dataObject, null);
 		} else if (attribute instanceof StringAttribute stringAttribute) {

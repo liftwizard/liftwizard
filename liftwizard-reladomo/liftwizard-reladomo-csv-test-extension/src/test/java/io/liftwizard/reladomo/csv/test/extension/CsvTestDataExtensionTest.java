@@ -72,7 +72,7 @@ class CsvTestDataExtensionTest {
 
 		Instant aliceSystemFrom = Instant.parse("2024-01-01T00:00:00.000Z");
 		Instant bobSystemFrom = Instant.parse("2024-01-15T00:00:00.000Z");
-		Instant infinityInstant = Instant.parse("9999-12-01T23:59:00.000Z");
+		Instant infinityInstant = PersonFinder.systemTo().getAsOfAttributeInfinity().toInstant();
 
 		assertThat(alice)
 			.isNotNull()
