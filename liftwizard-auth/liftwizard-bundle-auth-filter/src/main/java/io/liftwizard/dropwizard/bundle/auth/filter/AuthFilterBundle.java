@@ -60,7 +60,7 @@ public class AuthFilterBundle implements PrioritizedBundle {
 			.stream()
 			.map(Object::getClass)
 			.map(Class::getSimpleName)
-			.collect(Collectors.toList());
+			.collect(Collectors.toUnmodifiableList());
 
 		LOGGER.info("Running {} with auth filters {}.", this.getClass().getSimpleName(), authFilterNames);
 
@@ -73,7 +73,10 @@ public class AuthFilterBundle implements PrioritizedBundle {
 
 	@Nonnull
 	private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories) {
-		return authFilterFactories.stream().map(AuthFilterFactory::createAuthFilter).collect(Collectors.toList());
+		return authFilterFactories
+			.stream()
+			.map(AuthFilterFactory::createAuthFilter)
+			.collect(Collectors.toUnmodifiableList());
 	}
 
 	@Nonnull

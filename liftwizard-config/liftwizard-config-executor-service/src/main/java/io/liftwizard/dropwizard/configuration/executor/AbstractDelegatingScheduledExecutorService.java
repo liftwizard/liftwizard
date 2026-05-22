@@ -43,7 +43,7 @@ public abstract class AbstractDelegatingScheduledExecutorService implements Sche
 	protected abstract <V> Callable<V> wrapTask(Callable<V> callable);
 
 	protected <T> Collection<? extends Callable<T>> wrapTasks(Collection<? extends Callable<T>> tasks) {
-		return tasks.stream().map(this::wrapTask).collect(Collectors.toList());
+		return tasks.stream().map(this::wrapTask).collect(Collectors.toUnmodifiableList());
 	}
 
 	@Override
