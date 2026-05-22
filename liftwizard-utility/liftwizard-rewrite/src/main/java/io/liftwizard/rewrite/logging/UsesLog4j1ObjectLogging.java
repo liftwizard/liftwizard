@@ -36,6 +36,10 @@ import org.openrewrite.marker.SearchResult;
  * to SLF4J (which only has {@code info(String)}) would either break compilation or silently
  * destroy structured logging if transformed to {@code info("{}", object)}.
  *
+ * <p>{@code Throwable} message arguments are excluded: calls like {@code LOGGER.error(exception)}
+ * are not structured object logging and migrate safely to SLF4J, which has a native
+ * {@code error(String, Throwable)} overload.
+ *
  * <p>This recipe is used as the basis for the {@link DoesNotUseLog4j1ObjectLogging} precondition,
  * which prevents the Log4j 1 to SLF4J migration from running on files that use this pattern.
  */
@@ -64,7 +68,9 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 		return (
 			"Finds Log4j 1.x logging calls where the message argument is not a String. "
 			+ "These calls pass an Object directly (e.g., `LOGGER.info(myObject)`) "
-			+ "which allows appenders to inspect the object's type for structured logging."
+			+ "which allows appenders to inspect the object's type for structured logging. "
+			+ "Throwable message arguments (e.g., `LOGGER.error(exception)`) are excluded "
+			+ "because they migrate safely to SLF4J."
 		);
 	}
 
@@ -84,7 +90,10 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 			for (MethodMatcher matcher : LOG_MATCHERS) {
 				if (matcher.matches(m)) {
 					Expression firstArg = m.getArguments().get(0);
-					if (!TypeUtils.isString(firstArg.getType())) {
+					if (
+						!TypeUtils.isString(firstArg.getType())
+						&& !TypeUtils.isAssignableTo("java.lang.Throwable", firstArg.getType())
+					) {
 						return SearchResult.found(m);
 					}
 					break;
