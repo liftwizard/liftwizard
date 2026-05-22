@@ -870,9 +870,12 @@
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
+                                <!-- Refaster NamePattern excludes rules we disagree with: -->
+                                <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
+                                <!-- StringRules$StringIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
                                 <arg>-Xplugin:ErrorProne \
                                     -XepExcludedPaths:.*/generated-sources/.* \
-                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$).* \
+                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringIsNullOrEmpty).* \
                                     ${errorprone.flags.suppressed} \
                                     ${errorprone.flags.strict.addon} \
                                     ${errorprone.flags.patch.addon} \
