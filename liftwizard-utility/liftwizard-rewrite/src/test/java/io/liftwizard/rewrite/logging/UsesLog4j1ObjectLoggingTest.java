@@ -34,6 +34,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 		    public void info(Object message) {}
 		    public void warn(Object message) {}
 		    public void error(Object message) {}
+		    public void error(Object message, Throwable t) {}
 		    public void fatal(Object message) {}
 		}
 		""";
@@ -207,6 +208,26 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
 					    void test(String name) {
 					        LOGGER.info("Hello " + name);
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void doesNotDetectThrowables() {
+		this.rewriteRun(
+				java(
+					"""
+					import org.apache.log4j.Logger;
+
+					class Test {
+					    private static final Logger LOGGER = Logger.getLogger(Test.class);
+
+					    void test(Exception exception) {
+					        LOGGER.error(exception);
+					        LOGGER.error(exception.getClass().getName(), exception);
 					    }
 					}
 					"""
