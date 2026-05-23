@@ -430,6 +430,10 @@
                                             <recipeName>org.openrewrite.maven.SortDependencies</recipeName>
                                             <reason>sorts dependencies alphabetically by groupId; conflicts with Liftwizard convention that groups io.liftwizard first, then io.dropwizard, then third-party</reason>
                                         </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.maven.UpdateScmFromGitOrigin</recipeName>
+                                            <reason>rewrites SCM URLs from the local git origin; on fork PRs and contributor clones this replaces the canonical liftwizard/liftwizard URL with the fork's, producing unwanted diffs the CI fix-up job cannot push back</reason>
+                                        </exclusion>
                                     </exclusions>
                                 </filteredRecipeSpec>
                                 <filteredRecipeSpec>
