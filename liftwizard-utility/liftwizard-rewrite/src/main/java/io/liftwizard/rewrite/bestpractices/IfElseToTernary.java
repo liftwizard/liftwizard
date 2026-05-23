@@ -89,7 +89,15 @@ public class IfElseToTernary extends Recipe {
 				getCursor()
 			);
 
-			return this.autoFormat(transformed.withPrefix(iff.getPrefix()), ctx);
+			Statement result = transformed.withPrefix(iff.getPrefix());
+
+			Object parentValue = getCursor().getParentTreeCursor().getValue();
+			if (parentValue instanceof J.If.Else && !(result instanceof J.Block)) {
+				J.Block block = J.Block.createEmptyBlock().withStatements(List.of(result));
+				return this.autoFormat(block.withPrefix(iff.getPrefix()), ctx);
+			}
+
+			return this.autoFormat(result, ctx);
 		}
 
 		private static Statement unwrapSingleStatement(Statement statement) {
@@ -155,14 +163,30 @@ public class IfElseToTernary extends Recipe {
 				if (thenSelect == null || elseSelect == null) {
 					return null;
 				}
+				if (
+					thenSelect instanceof J.MethodInvocation thenSelectInvocation
+					&& elseSelect instanceof J.MethodInvocation elseSelectInvocation
+				) {
+					TernarySlot deeper = findMethodInvocationDifference(thenSelectInvocation, elseSelectInvocation);
+					if (deeper != null) {
+						return deeper;
+					}
+				}
 				return new TernarySlot(thenSelect, elseSelect, true);
 			}
 
-			return new TernarySlot(
-				thenArguments.get(differingArgumentIndex),
-				elseArguments.get(differingArgumentIndex),
-				false
-			);
+			Expression thenArgument = thenArguments.get(differingArgumentIndex);
+			Expression elseArgument = elseArguments.get(differingArgumentIndex);
+			if (
+				thenArgument instanceof J.MethodInvocation thenArgumentInvocation
+				&& elseArgument instanceof J.MethodInvocation elseArgumentInvocation
+			) {
+				TernarySlot deeper = findMethodInvocationDifference(thenArgumentInvocation, elseArgumentInvocation);
+				if (deeper != null) {
+					return deeper;
+				}
+			}
+			return new TernarySlot(thenArgument, elseArgument, false);
 		}
 
 		private static TernarySlot findAssignmentDifference(J.Assignment thenAssignment, J.Assignment elseAssignment) {
