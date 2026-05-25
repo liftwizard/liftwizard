@@ -6,7 +6,7 @@ For getting started instructions, see [README.md](README.md).
 
 ## Composite Recipes
 
-Ten composite recipes are available:
+Eleven composite recipes are available:
 
 | Composite Recipe                                                                             | Description                                                    |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -20,6 +20,7 @@ Ten composite recipes are available:
 | `io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe` | Adoption patterns that may change semantics with nulls         |
 | `io.liftwizard.testing.junit.JupiterBestPractices`                                           | JUnit Jupiter best practices for test quality                  |
 | `io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration`                  | Migrate Dropwizard JUnit 4 testing rules to JUnit 5 extensions |
+| `io.liftwizard.migrate.UpgradeToJava21`                                                      | Upgrade to Java 21, excluding `StringFormatted`                |
 
 ## Liftwizard Recommended Recipes (General Java)
 
@@ -794,3 +795,7 @@ class MyTest {
             .build();
 }
 ```
+
+## Upgrade to Java 21
+
+The `io.liftwizard.migrate.UpgradeToJava21` composite recipe applies the upstream `org.openrewrite.java.migrate.UpgradeToJava21` recipe with `StringFormatted` excluded. `StringFormatted` rewrites `String.format(...)` to `"...".formatted(...)`, which Liftwizard avoids. Downstream consumers can reference this generated recipe instead of hand-rolling a filtered override of the upstream Java-upgrade suite.

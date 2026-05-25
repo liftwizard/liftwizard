@@ -405,6 +405,11 @@
                         <artifactId>rewrite-testing-frameworks</artifactId>
                         <version>3.36.0</version>
                     </dependency>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-migrate-java</artifactId>
+                        <version>3.35.0</version>
+                    </dependency>
                 </dependencies>
                 <executions>
                     <execution>
@@ -489,6 +494,19 @@
                                         </exclusion>
                                         <exclusion>
                                             <recipeName>org.openrewrite.staticanalysis.UnnecessaryParentheses</recipeName>
+                                        </exclusion>
+                                    </exclusions>
+                                </filteredRecipeSpec>
+                                <filteredRecipeSpec>
+                                    <generatedRecipeName>io.liftwizard.migrate.UpgradeToJava21</generatedRecipeName>
+                                    <displayName>Migrate to Java 21</displayName>
+                                    <description>Upgrade to Java 21, excluding recipes that conflict with Liftwizard conventions (StringFormatted converts String.format to .formatted).</description>
+                                    <baseRecipeName>org.openrewrite.java.migrate.UpgradeToJava21</baseRecipeName>
+                                    <outputFileName>upgrade-to-java.yml</outputFileName>
+                                    <exclusions>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.migrate.lang.StringFormatted</recipeName>
+                                            <reason>converts String.format(...) to .formatted(...)</reason>
                                         </exclusion>
                                     </exclusions>
                                 </filteredRecipeSpec>
