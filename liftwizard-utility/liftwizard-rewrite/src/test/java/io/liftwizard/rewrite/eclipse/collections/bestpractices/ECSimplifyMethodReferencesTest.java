@@ -37,14 +37,16 @@ class ECSimplifyMethodReferencesTest extends AbstractEclipseCollectionsTest {
 		this.rewriteRun(
 				java(
 					"""
+					import java.util.List;
+					import java.util.stream.Collectors;
+					import java.util.function.Consumer;
 					import org.eclipse.collections.api.block.function.Function;
 					import org.eclipse.collections.api.block.predicate.Predicate;
 					import org.eclipse.collections.api.block.procedure.Procedure;
 					import org.eclipse.collections.api.list.MutableList;
-					import java.util.function.Consumer;
 
 					class Test {
-					    void test(
+					    void ecCollectionMethods(
 					            MutableList<String> list,
 					            Predicate<String> predicate,
 					            Function<String, Integer> function,
@@ -86,17 +88,55 @@ class ECSimplifyMethodReferencesTest extends AbstractEclipseCollectionsTest {
 					            .select(predicate::accept)
 					            .collect(function::valueOf);
 					    }
+
+					    void jdkOnlyMethodsWithJdkTypes(
+					            List<String> list,
+					            java.util.function.Predicate<String> predicate,
+					            java.util.function.Function<String, Integer> function,
+					            Consumer<String> consumer) {
+					        // JDK Predicate with Collection.removeIf
+					        list.removeIf(predicate::test);
+
+					        // JDK Consumer with Iterable.forEach
+					        list.forEach(consumer::accept);
+
+					        // JDK Function with Stream.map
+					        list.stream().map(function::apply).collect(Collectors.toList());
+					    }
+
+					    void jdkOnlyMethodsWithEcTypes(
+					            List<String> list,
+					            Predicate<String> predicate,
+					            Function<String, Integer> function,
+					            Procedure<String> procedure) {
+					        // EC Predicate with Collection.removeIf
+					        // (EC Predicate extends JDK Predicate, so this is safe)
+					        list.removeIf(predicate::accept);
+					        list.removeIf(predicate::test);
+
+					        // EC Procedure with Iterable.forEach
+					        // (EC Procedure extends JDK Consumer, so this is safe)
+					        list.forEach(procedure::value);
+					        list.forEach(procedure::accept);
+
+					        // EC Function with Stream.map
+					        // (EC Function extends JDK Function, so this is safe)
+					        list.stream().map(function::valueOf).collect(Collectors.toList());
+					        list.stream().map(function::apply).collect(Collectors.toList());
+					    }
 					}
 					""",
 					"""
+					import java.util.List;
+					import java.util.stream.Collectors;
+					import java.util.function.Consumer;
 					import org.eclipse.collections.api.block.function.Function;
 					import org.eclipse.collections.api.block.predicate.Predicate;
 					import org.eclipse.collections.api.block.procedure.Procedure;
 					import org.eclipse.collections.api.list.MutableList;
-					import java.util.function.Consumer;
 
 					class Test {
-					    void test(
+					    void ecCollectionMethods(
 					            MutableList<String> list,
 					            Predicate<String> predicate,
 					            Function<String, Integer> function,
@@ -138,54 +178,11 @@ class ECSimplifyMethodReferencesTest extends AbstractEclipseCollectionsTest {
 					            .select(predicate)
 					            .collect(function);
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void jdkOnlyMethodsWithJdkTypes() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.ArrayList;
-					import java.util.List;
-					import java.util.stream.Collectors;
-					import java.util.function.Consumer;
-					import java.util.function.Function;
-					import java.util.function.Predicate;
-
-					class Test {
-					    void test(
+					    void jdkOnlyMethodsWithJdkTypes(
 					            List<String> list,
-					            Predicate<String> predicate,
-					            Function<String, Integer> function,
-					            Consumer<String> consumer) {
-					        // JDK Predicate with Collection.removeIf
-					        list.removeIf(predicate::test);
-
-					        // JDK Consumer with Iterable.forEach
-					        list.forEach(consumer::accept);
-
-					        // JDK Function with Stream.map
-					        list.stream().map(function::apply).collect(Collectors.toList());
-					    }
-					}
-					""",
-					"""
-					import java.util.ArrayList;
-					import java.util.List;
-					import java.util.stream.Collectors;
-					import java.util.function.Consumer;
-					import java.util.function.Function;
-					import java.util.function.Predicate;
-
-					class Test {
-					    void test(
-					            List<String> list,
-					            Predicate<String> predicate,
-					            Function<String, Integer> function,
+					            java.util.function.Predicate<String> predicate,
+					            java.util.function.Function<String, Integer> function,
 					            Consumer<String> consumer) {
 					        // JDK Predicate with Collection.removeIf
 					        list.removeIf(predicate);
@@ -196,55 +193,8 @@ class ECSimplifyMethodReferencesTest extends AbstractEclipseCollectionsTest {
 					        // JDK Function with Stream.map
 					        list.stream().map(function).collect(Collectors.toList());
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void jdkOnlyMethodsWithEcTypes() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.List;
-					import java.util.stream.Collectors;
-					import org.eclipse.collections.api.block.function.Function;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.block.procedure.Procedure;
-
-					class Test {
-					    void test(
-					            List<String> list,
-					            Predicate<String> predicate,
-					            Function<String, Integer> function,
-					            Procedure<String> procedure) {
-					        // EC Predicate with Collection.removeIf
-					        // (EC Predicate extends JDK Predicate, so this is safe)
-					        list.removeIf(predicate::accept);
-					        list.removeIf(predicate::test);
-
-					        // EC Procedure with Iterable.forEach
-					        // (EC Procedure extends JDK Consumer, so this is safe)
-					        list.forEach(procedure::value);
-					        list.forEach(procedure::accept);
-
-					        // EC Function with Stream.map
-					        // (EC Function extends JDK Function, so this is safe)
-					        list.stream().map(function::valueOf).collect(Collectors.toList());
-					        list.stream().map(function::apply).collect(Collectors.toList());
-					    }
-					}
-					""",
-					"""
-					import java.util.List;
-					import java.util.stream.Collectors;
-					import org.eclipse.collections.api.block.function.Function;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.block.procedure.Procedure;
-
-					class Test {
-					    void test(
+					    void jdkOnlyMethodsWithEcTypes(
 					            List<String> list,
 					            Predicate<String> predicate,
 					            Function<String, Integer> function,

@@ -33,92 +33,27 @@ class ECCollectDoubleSumTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceCollectDoubleSumWithSumOfDouble() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.RichIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    double test(MutableList<String> list) {
+					    double withCast(MutableList<String> list) {
 					        return list.collectDouble(s -> (double) s.length()).sum();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    double test(MutableList<String> list) {
-					        return list.sumOfDouble(s -> (double) s.length());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceCollectDoubleSumWithLambda() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    double test(MutableList<Double> list) {
+					    double withLambda(MutableList<Double> list) {
 					        return list.collectDouble(d -> d * 2).sum();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    double test(MutableList<Double> list) {
-					        return list.sumOfDouble(d -> d * 2);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceCollectDoubleSumWithRichIterable() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.RichIterable;
-
-					class Test {
-					    double test(RichIterable<Double> iterable) {
+					    double withRichIterable(RichIterable<Double> iterable) {
 					        return iterable.collectDouble(d -> d * 2).sum();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.RichIterable;
 
-					class Test {
-					    double test(RichIterable<Double> iterable) {
-					        return iterable.sumOfDouble(d -> d * 2);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceCollectDoubleSumInExpression() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<Double> list) {
+					    void inExpression(MutableList<Double> list) {
 					        double result = list.collectDouble(d -> d).sum() + 10.0;
 					        if (list.collectDouble(d -> d * 2).sum() > 100.0) {
 					            this.doWork();
@@ -129,10 +64,23 @@ class ECCollectDoubleSumTest extends AbstractEclipseCollectionsTest {
 					}
 					""",
 					"""
+					import org.eclipse.collections.api.RichIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<Double> list) {
+					    double withCast(MutableList<String> list) {
+					        return list.sumOfDouble(s -> (double) s.length());
+					    }
+
+					    double withLambda(MutableList<Double> list) {
+					        return list.sumOfDouble(d -> d * 2);
+					    }
+
+					    double withRichIterable(RichIterable<Double> iterable) {
+					        return iterable.sumOfDouble(d -> d * 2);
+					    }
+
+					    void inExpression(MutableList<Double> list) {
 					        double result = list.sumOfDouble(d -> d) + 10.0;
 					        if (list.sumOfDouble(d -> d * 2) > 100.0) {
 					            this.doWork();
@@ -147,37 +95,21 @@ class ECCollectDoubleSumTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceIntermediateOperations() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.DoubleIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    double test(MutableList<Double> list) {
-					        // Should not replace when there are intermediate operations
-					        double sumOfFiltered = list.collectDouble(d -> d)
+					    double withIntermediateOperations(MutableList<Double> list) {
+					        return list.collectDouble(d -> d)
 					            .select(i -> i > 5.0)
 					            .sum();
-					        return sumOfFiltered;
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doNotReplaceWhenOnlyCollectDouble() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.DoubleIterable;
-
-					class Test {
-					    DoubleIterable test(MutableList<Double> list) {
-					        // Should not replace when we only call collectDouble without sum
+					    DoubleIterable onlyCollectDouble(MutableList<Double> list) {
 					        return list.collectDouble(d -> d);
 					    }
 					}

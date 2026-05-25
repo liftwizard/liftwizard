@@ -33,134 +33,60 @@ class ECSelectBeforeSortThisTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceSortThisSelectWithSelectSortThis() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import java.util.Comparator;
+
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    MutableList<String> test(MutableList<String> list) {
+					    MutableList<String> sortThisSelect(MutableList<String> list) {
 					        return list.sortThis().select(s -> s.length() > 3);
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
-					        return list.select(s -> s.length() > 3).sortThis();
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceSortThisWithComparatorSelectWithSelectSortThis() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import java.util.Comparator;
-
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
+					    MutableList<String> sortThisWithComparatorSelect(MutableList<String> list) {
 					        return list.sortThis(Comparator.comparing(String::length)).select(s -> s.length() > 3);
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import java.util.Comparator;
 
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
-					        return list.select(s -> s.length() > 3).sortThis(Comparator.comparing(String::length));
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceSortThisRejectWithRejectSortThis() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
+					    MutableList<String> sortThisReject(MutableList<String> list) {
 					        return list.sortThis().reject(s -> s.isEmpty());
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
-					        return list.reject(s -> s.isEmpty()).sortThis();
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceSortThisWithComparatorRejectWithRejectSortThis() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import java.util.Comparator;
-
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
+					    MutableList<String> sortThisWithComparatorReject(MutableList<String> list) {
 					        return list.sortThis(Comparator.reverseOrder()).reject(String::isEmpty);
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import java.util.Comparator;
 
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
-					        return list.reject(String::isEmpty).sortThis(Comparator.reverseOrder());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceMultiplePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import java.util.Comparator;
-
-					class Test {
-					    void test(MutableList<String> list1, MutableList<Integer> list2) {
+					    void multiplePatterns(MutableList<String> list1, MutableList<Integer> list2) {
 					        MutableList<String> result1 = list1.sortThis().select(s -> s.length() > 3);
 					        MutableList<Integer> result2 = list2.sortThis(Comparator.naturalOrder()).reject(i -> i < 0);
 					    }
 					}
 					""",
 					"""
-					import org.eclipse.collections.api.list.MutableList;
 					import java.util.Comparator;
 
+					import org.eclipse.collections.api.list.MutableList;
+
 					class Test {
-					    void test(MutableList<String> list1, MutableList<Integer> list2) {
+					    MutableList<String> sortThisSelect(MutableList<String> list) {
+					        return list.select(s -> s.length() > 3).sortThis();
+					    }
+
+					    MutableList<String> sortThisWithComparatorSelect(MutableList<String> list) {
+					        return list.select(s -> s.length() > 3).sortThis(Comparator.comparing(String::length));
+					    }
+
+					    MutableList<String> sortThisReject(MutableList<String> list) {
+					        return list.reject(s -> s.isEmpty()).sortThis();
+					    }
+
+					    MutableList<String> sortThisWithComparatorReject(MutableList<String> list) {
+					        return list.reject(String::isEmpty).sortThis(Comparator.reverseOrder());
+					    }
+
+					    void multiplePatterns(MutableList<String> list1, MutableList<Integer> list2) {
 					        MutableList<String> result1 = list1.select(s -> s.length() > 3).sortThis();
 					        MutableList<Integer> result2 = list2.reject(i -> i < 0).sortThis(Comparator.naturalOrder());
 					    }
@@ -171,48 +97,22 @@ class ECSelectBeforeSortThisTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceSelectBeforeSortThis() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    MutableList<String> test(MutableList<String> list) {
+					    MutableList<String> selectBeforeSortThis(MutableList<String> list) {
 					        return list.select(s -> s.length() > 3).sortThis();
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doNotReplaceSortThisWithoutSelectOrReject() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    MutableList<String> test(MutableList<String> list) {
+					    MutableList<String> sortThisAlone(MutableList<String> list) {
 					        return list.sortThis();
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doNotReplaceSortThisFollowedByCollect() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    MutableList<Integer> test(MutableList<String> list) {
+					    MutableList<Integer> sortThisFollowedByCollect(MutableList<String> list) {
 					        return list.sortThis().collect(String::length);
 					    }
 					}

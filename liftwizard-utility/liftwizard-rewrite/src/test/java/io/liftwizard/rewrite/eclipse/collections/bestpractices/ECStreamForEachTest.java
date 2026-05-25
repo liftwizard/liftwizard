@@ -33,103 +33,55 @@ class ECStreamForEachTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceStreamForEachWithForEach() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        list.stream().forEach(System.out::println);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        list.forEach(System.out::println);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceStreamForEachWithLambda() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list, java.util.List<String> target) {
-					        list.stream().forEach(s -> target.add(s));
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list, java.util.List<String> target) {
-					        list.forEach(s -> target.add(s));
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceStreamForEachWithImmutableList() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class Test {
-					    void test(ImmutableList<String> list) {
-					        list.stream().forEach(System.out::println);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class Test {
-					    void test(ImmutableList<String> list) {
-					        list.forEach(System.out::println);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceStreamForEachWithMutableSet() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.set.MutableSet;
 					import java.util.List;
 
+					import org.eclipse.collections.api.list.ImmutableList;
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.set.MutableSet;
+
 					class Test {
-					    void test(MutableSet<Integer> set, List<Integer> target) {
+					    void streamForEachWithForEach(MutableList<String> list) {
+					        list.stream().forEach(System.out::println);
+					    }
+
+					    void streamForEachWithLambda(MutableList<String> list, List<String> target) {
+					        list.stream().forEach(s -> target.add(s));
+					    }
+
+					    void streamForEachWithImmutableList(ImmutableList<String> list) {
+					        list.stream().forEach(System.out::println);
+					    }
+
+					    void streamForEachWithMutableSet(MutableSet<Integer> set, List<Integer> target) {
 					        set.stream().forEach(i -> target.add(i * 2));
 					    }
 					}
 					""",
 					"""
-					import org.eclipse.collections.api.set.MutableSet;
 					import java.util.List;
 
+					import org.eclipse.collections.api.list.ImmutableList;
+					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.set.MutableSet;
+
 					class Test {
-					    void test(MutableSet<Integer> set, List<Integer> target) {
+					    void streamForEachWithForEach(MutableList<String> list) {
+					        list.forEach(System.out::println);
+					    }
+
+					    void streamForEachWithLambda(MutableList<String> list, List<String> target) {
+					        list.forEach(s -> target.add(s));
+					    }
+
+					    void streamForEachWithImmutableList(ImmutableList<String> list) {
+					        list.forEach(System.out::println);
+					    }
+
+					    void streamForEachWithMutableSet(MutableSet<Integer> set, List<Integer> target) {
 					        set.forEach(i -> target.add(i * 2));
 					    }
 					}
@@ -139,36 +91,22 @@ class ECStreamForEachTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceStreamWithIntermediateOperations() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import java.util.stream.Stream;
+
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<String> list) {
-					        // Should not replace when there are intermediate operations
+					    void withIntermediateOperations(MutableList<String> list) {
 					        list.stream()
 					            .filter(s -> s.length() > 5)
 					            .forEach(System.out::println);
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doNotReplaceWhenOnlyStream() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import java.util.stream.Stream;
-
-					class Test {
-					    Stream<String> test(MutableList<String> list) {
-					        // Should not replace when we only call stream without forEach
+					    Stream<String> onlyStream(MutableList<String> list) {
 					        return list.stream();
 					    }
 					}

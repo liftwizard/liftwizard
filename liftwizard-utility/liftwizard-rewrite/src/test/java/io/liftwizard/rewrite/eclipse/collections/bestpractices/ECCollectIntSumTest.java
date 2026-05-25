@@ -33,92 +33,27 @@ class ECCollectIntSumTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceCollectIntSumWithSumOfInt() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.RichIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    long test(MutableList<String> list) {
+					    long withMethodReference(MutableList<String> list) {
 					        return list.collectInt(String::length).sum();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    long test(MutableList<String> list) {
-					        return list.sumOfInt(String::length);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceCollectIntSumWithLambda() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    long test(MutableList<String> list) {
+					    long withLambda(MutableList<String> list) {
 					        return list.collectInt(s -> s.length()).sum();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    long test(MutableList<String> list) {
-					        return list.sumOfInt(s -> s.length());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceCollectIntSumWithRichIterable() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.RichIterable;
-
-					class Test {
-					    long test(RichIterable<Integer> iterable) {
+					    long withRichIterable(RichIterable<Integer> iterable) {
 					        return iterable.collectInt(i -> i * 2).sum();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.RichIterable;
 
-					class Test {
-					    long test(RichIterable<Integer> iterable) {
-					        return iterable.sumOfInt(i -> i * 2);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceCollectIntSumInExpression() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
+					    void inExpression(MutableList<String> list) {
 					        long result = list.collectInt(String::length).sum() + 10;
 					        if (list.collectInt(s -> s.length()).sum() > 100) {
 					            this.doWork();
@@ -129,10 +64,23 @@ class ECCollectIntSumTest extends AbstractEclipseCollectionsTest {
 					}
 					""",
 					"""
+					import org.eclipse.collections.api.RichIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<String> list) {
+					    long withMethodReference(MutableList<String> list) {
+					        return list.sumOfInt(String::length);
+					    }
+
+					    long withLambda(MutableList<String> list) {
+					        return list.sumOfInt(s -> s.length());
+					    }
+
+					    long withRichIterable(RichIterable<Integer> iterable) {
+					        return iterable.sumOfInt(i -> i * 2);
+					    }
+
+					    void inExpression(MutableList<String> list) {
 					        long result = list.sumOfInt(String::length) + 10;
 					        if (list.sumOfInt(s -> s.length()) > 100) {
 					            this.doWork();
@@ -147,37 +95,21 @@ class ECCollectIntSumTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceIntermediateOperations() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.IntIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    long test(MutableList<String> list) {
-					        // Should not replace when there are intermediate operations
-					        long sumOfFiltered = list.collectInt(String::length)
+					    long withIntermediateOperations(MutableList<String> list) {
+					        return list.collectInt(String::length)
 					            .select(i -> i > 5)
 					            .sum();
-					        return sumOfFiltered;
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doNotReplaceWhenOnlyCollectInt() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.IntIterable;
-
-					class Test {
-					    IntIterable test(MutableList<String> list) {
-					        // Should not replace when we only call collectInt without sum
+					    IntIterable onlyCollectInt(MutableList<String> list) {
 					        return list.collectInt(String::length);
 					    }
 					}
