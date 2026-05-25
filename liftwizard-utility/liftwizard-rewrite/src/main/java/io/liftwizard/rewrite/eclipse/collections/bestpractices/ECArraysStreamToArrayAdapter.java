@@ -58,6 +58,15 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 
 	private static final MethodMatcher ARRAYS_STREAM_MATCHER = new MethodMatcher("java.util.Arrays stream(..)");
 
+	private static final String[] STUBS = {
+		"""
+			package org.eclipse.collections.impl.list.fixed;
+			public final class ArrayAdapter<T> {
+			    public static <T> ArrayAdapter<T> adapt(T... array) { return null; }
+			}
+			""",
+	};
+
 	@Override
 	public String getDisplayName() {
 		return "`Arrays.stream(array)` -> `ArrayAdapter.adapt(array)`";
@@ -92,7 +101,7 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 
 		private static final JavaTemplate ARRAY_ADAPTER_ADAPT = JavaTemplate.builder("ArrayAdapter.adapt(#{any()})")
 			.imports("org.eclipse.collections.impl.list.fixed.ArrayAdapter")
-			.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections"))
+			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 			.build();
 
 		@Override
