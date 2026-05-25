@@ -462,6 +462,10 @@
                                     <outputFileName>common-static-analysis.yml</outputFileName>
                                     <exclusions>
                                         <exclusion>
+                                            <recipeName>org.openrewrite.java.OrderImports</recipeName>
+                                            <reason>formatting handled by auto-formatters (prettier-java, spotless importOrder)</reason>
+                                        </exclusion>
+                                        <exclusion>
                                             <recipeName>org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls</recipeName>
                                         </exclusion>
                                         <exclusion>
@@ -536,6 +540,10 @@
                                         <exclusion>
                                             <recipeName>org.openrewrite.java.format.PadEmptyForLoopComponents</recipeName>
                                             <reason>formatting handled by auto-formatters</reason>
+                                        </exclusion>
+                                        <exclusion>
+                                            <recipeName>org.openrewrite.java.OrderImports</recipeName>
+                                            <reason>formatting handled by auto-formatters (prettier-java, spotless importOrder)</reason>
                                         </exclusion>
                                         <exclusion>
                                             <recipeName>org.openrewrite.staticanalysis.EqualsAvoidsNull</recipeName>
