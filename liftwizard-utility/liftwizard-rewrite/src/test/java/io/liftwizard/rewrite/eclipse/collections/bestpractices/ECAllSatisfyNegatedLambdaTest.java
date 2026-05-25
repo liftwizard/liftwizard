@@ -33,167 +33,68 @@ class ECAllSatisfyNegatedLambdaTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceAllSatisfyWithNegatedLambda() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
+					import org.eclipse.collections.api.RichIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<String> list) {
+					    void withNegatedLambda(MutableList<String> list) {
 					        boolean result = list.allSatisfy(s -> !s.isEmpty());
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    void test(MutableList<String> list) {
-					        boolean result = list.noneSatisfy(s -> s.isEmpty());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceAllSatisfyWithNegatedMethodCall() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
+					    void withNegatedMethodCall(MutableList<String> list) {
 					        boolean lengthCheck = list.allSatisfy(s -> !(s.length() > 5));
 					        boolean contains = list.allSatisfy(s -> !s.contains("x"));
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    void test(MutableList<String> list) {
-					        boolean lengthCheck = list.noneSatisfy(s -> s.length() > 5);
-					        boolean contains = list.noneSatisfy(s -> s.contains("x"));
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceAllSatisfyWithNegatedComparison() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<Integer> list) {
+					    void withNegatedComparison(MutableList<Integer> list) {
 					        boolean result = list.allSatisfy(n -> !(n > 10));
 					        boolean equality = list.allSatisfy(n -> !(n == 0));
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    void test(MutableList<Integer> list) {
-					        boolean result = list.noneSatisfy(n -> n > 10);
-					        boolean equality = list.noneSatisfy(n -> n == 0);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void doNotReplaceNonNegatedLambda() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        boolean result = list.allSatisfy(s -> s.isEmpty());
-					        boolean lengthCheck = list.allSatisfy(s -> s.length() > 5);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void doNotReplaceMethodReference() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-
-					class Test {
-					    void test(MutableList<String> list, Predicate<String> predicate) {
-					        boolean result = list.allSatisfy(String::isEmpty);
-					        boolean withPredicate = list.allSatisfy(predicate);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void doNotReplaceAnySatisfyOrNoneSatisfy() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        boolean any = list.anySatisfy(s -> !s.isEmpty());
-					        boolean none = list.noneSatisfy(s -> !s.isEmpty());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceInIfCondition() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
+					    void inIfCondition(MutableList<String> list) {
 					        if (list.allSatisfy(s -> !s.isEmpty())) {
 					            this.doWork();
 					        }
 					    }
 
+					    void withRichIterable(RichIterable<String> iterable) {
+					        boolean result = iterable.allSatisfy(s -> !s.isEmpty());
+					    }
+
 					    void doWork() {}
 					}
 					""",
 					"""
+					import org.eclipse.collections.api.RichIterable;
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<String> list) {
+					    void withNegatedLambda(MutableList<String> list) {
+					        boolean result = list.noneSatisfy(s -> s.isEmpty());
+					    }
+
+					    void withNegatedMethodCall(MutableList<String> list) {
+					        boolean lengthCheck = list.noneSatisfy(s -> s.length() > 5);
+					        boolean contains = list.noneSatisfy(s -> s.contains("x"));
+					    }
+
+					    void withNegatedComparison(MutableList<Integer> list) {
+					        boolean result = list.noneSatisfy(n -> n > 10);
+					        boolean equality = list.noneSatisfy(n -> n == 0);
+					    }
+
+					    void inIfCondition(MutableList<String> list) {
 					        if (list.noneSatisfy(s -> s.isEmpty())) {
 					            this.doWork();
 					        }
+					    }
+
+					    void withRichIterable(RichIterable<String> iterable) {
+					        boolean result = iterable.noneSatisfy(s -> s.isEmpty());
 					    }
 
 					    void doWork() {}
@@ -204,24 +105,27 @@ class ECAllSatisfyNegatedLambdaTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void replaceWithRichIterableType() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
-					import org.eclipse.collections.api.RichIterable;
+					import org.eclipse.collections.api.block.predicate.Predicate;
+					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(RichIterable<String> iterable) {
-					        boolean result = iterable.allSatisfy(s -> !s.isEmpty());
+					    void nonNegatedLambda(MutableList<String> list) {
+					        boolean result = list.allSatisfy(s -> s.isEmpty());
+					        boolean lengthCheck = list.allSatisfy(s -> s.length() > 5);
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.RichIterable;
 
-					class Test {
-					    void test(RichIterable<String> iterable) {
-					        boolean result = iterable.noneSatisfy(s -> s.isEmpty());
+					    void methodReference(MutableList<String> list, Predicate<String> predicate) {
+					        boolean result = list.allSatisfy(String::isEmpty);
+					        boolean withPredicate = list.allSatisfy(predicate);
+					    }
+
+					    void anySatisfyOrNoneSatisfy(MutableList<String> list) {
+					        boolean any = list.anySatisfy(s -> !s.isEmpty());
+					        boolean none = list.noneSatisfy(s -> !s.isEmpty());
 					    }
 					}
 					"""

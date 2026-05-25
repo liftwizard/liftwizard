@@ -40,7 +40,9 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<String> list, String target) {
+					    private final String expected = "hello";
+
+					    void targetMethodReference(MutableList<String> list, String target) {
 					        boolean containsTarget = list.anySatisfy(target::equals);
 
 					        if (list.anySatisfy(target::equals)) {
@@ -48,14 +50,30 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 					        }
 					    }
 
+					    void fieldReference(MutableList<String> list) {
+					        boolean containsExpected = list.anySatisfy(this.expected::equals);
+					    }
+
+					    void integerType(MutableList<Integer> list, Integer target) {
+					        boolean containsTarget = list.anySatisfy(target::equals);
+					    }
+
+					    void stringLiteralMethodReference(MutableList<String> list) {
+					        assertFalse(list.anySatisfy("Monkey"::equals));
+					    }
+
 					    void doWork() {}
+
+					    void assertFalse(boolean value) {}
 					}
 					""",
 					"""
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void test(MutableList<String> list, String target) {
+					    private final String expected = "hello";
+
+					    void targetMethodReference(MutableList<String> list, String target) {
 					        boolean containsTarget = list.contains(target);
 
 					        if (list.contains(target)) {
@@ -63,63 +81,21 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 					        }
 					    }
 
-					    void doWork() {}
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithFieldReference() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    private final String expected = "hello";
-
-					    void test(MutableList<String> list) {
-					        boolean containsExpected = list.anySatisfy(this.expected::equals);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    private final String expected = "hello";
-
-					    void test(MutableList<String> list) {
+					    void fieldReference(MutableList<String> list) {
 					        boolean containsExpected = list.contains(this.expected);
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void replaceWithIntegerType() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<Integer> list, Integer target) {
-					        boolean containsTarget = list.anySatisfy(target::equals);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<Integer> list, Integer target) {
+					    void integerType(MutableList<Integer> list, Integer target) {
 					        boolean containsTarget = list.contains(target);
 					    }
+
+					    void stringLiteralMethodReference(MutableList<String> list) {
+					        assertFalse(list.contains("Monkey"));
+					    }
+
+					    void doWork() {}
+
+					    void assertFalse(boolean value) {}
 					}
 					"""
 				)
@@ -141,36 +117,6 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 					        boolean directContains = list.contains("hello");
 
 					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceStringLiteralMethodReference() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        assertFalse(list.anySatisfy("Monkey"::equals));
-					    }
-
-					    void assertFalse(boolean value) {}
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        assertFalse(list.contains("Monkey"));
-					    }
-
-					    void assertFalse(boolean value) {}
 					}
 					"""
 				)

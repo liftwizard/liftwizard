@@ -33,201 +33,51 @@ class ECStreamMinMaxToMinMaxTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceStreamMinWithMinOptional() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
 					import java.util.Comparator;
 					import java.util.Optional;
 
+					import org.eclipse.collections.api.list.ImmutableList;
 					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.set.MutableSet;
 
 					class Test {
-					    Optional<String> test(MutableList<String> list) {
+					    Optional<String> streamMinWithMinOptional(MutableList<String> list) {
 					        return list.stream().min(Comparator.naturalOrder());
 					    }
-					}
-					""",
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
 
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> test(MutableList<String> list) {
-					        return list.minOptional(Comparator.naturalOrder());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceStreamMaxWithMaxOptional() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> test(MutableList<String> list) {
+					    Optional<String> streamMaxWithMaxOptional(MutableList<String> list) {
 					        return list.stream().max(Comparator.naturalOrder());
 					    }
-					}
-					""",
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
 
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> test(MutableList<String> list) {
-					        return list.maxOptional(Comparator.naturalOrder());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithCustomComparator() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> testMin(MutableList<String> list) {
+					    Optional<String> withCustomComparatorMin(MutableList<String> list) {
 					        return list.stream().min(Comparator.comparing(String::length));
 					    }
 
-					    Optional<String> testMax(MutableList<String> list) {
+					    Optional<String> withCustomComparatorMax(MutableList<String> list) {
 					        return list.stream().max(Comparator.comparing(String::length));
 					    }
-					}
-					""",
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
 
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> testMin(MutableList<String> list) {
-					        return list.minOptional(Comparator.comparing(String::length));
-					    }
-
-					    Optional<String> testMax(MutableList<String> list) {
-					        return list.maxOptional(Comparator.comparing(String::length));
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithImmutableList() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class Test {
-					    Optional<Integer> testMin(ImmutableList<Integer> list) {
+					    Optional<Integer> withImmutableListMin(ImmutableList<Integer> list) {
 					        return list.stream().min(Comparator.naturalOrder());
 					    }
 
-					    Optional<Integer> testMax(ImmutableList<Integer> list) {
+					    Optional<Integer> withImmutableListMax(ImmutableList<Integer> list) {
 					        return list.stream().max(Comparator.naturalOrder());
 					    }
-					}
-					""",
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
 
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class Test {
-					    Optional<Integer> testMin(ImmutableList<Integer> list) {
-					        return list.minOptional(Comparator.naturalOrder());
-					    }
-
-					    Optional<Integer> testMax(ImmutableList<Integer> list) {
-					        return list.maxOptional(Comparator.naturalOrder());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithMutableSet() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    Optional<String> testMin(MutableSet<String> set) {
+					    Optional<String> withMutableSetMin(MutableSet<String> set) {
 					        return set.stream().min(Comparator.naturalOrder());
 					    }
 
-					    Optional<String> testMax(MutableSet<String> set) {
+					    Optional<String> withMutableSetMax(MutableSet<String> set) {
 					        return set.stream().max(Comparator.naturalOrder());
 					    }
-					}
-					""",
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
 
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    Optional<String> testMin(MutableSet<String> set) {
-					        return set.minOptional(Comparator.naturalOrder());
-					    }
-
-					    Optional<String> testMax(MutableSet<String> set) {
-					        return set.maxOptional(Comparator.naturalOrder());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceInIfCondition() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<Integer> list) {
+					    void inIfCondition(MutableList<Integer> list) {
 					        Optional<Integer> min = list.stream().min(Comparator.naturalOrder());
 					        if (list.stream().max(Comparator.naturalOrder()).isPresent()) {
 					            this.doWork();
@@ -241,10 +91,44 @@ class ECStreamMinMaxToMinMaxTest extends AbstractEclipseCollectionsTest {
 					import java.util.Comparator;
 					import java.util.Optional;
 
+					import org.eclipse.collections.api.list.ImmutableList;
 					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.set.MutableSet;
 
 					class Test {
-					    void test(MutableList<Integer> list) {
+					    Optional<String> streamMinWithMinOptional(MutableList<String> list) {
+					        return list.minOptional(Comparator.naturalOrder());
+					    }
+
+					    Optional<String> streamMaxWithMaxOptional(MutableList<String> list) {
+					        return list.maxOptional(Comparator.naturalOrder());
+					    }
+
+					    Optional<String> withCustomComparatorMin(MutableList<String> list) {
+					        return list.minOptional(Comparator.comparing(String::length));
+					    }
+
+					    Optional<String> withCustomComparatorMax(MutableList<String> list) {
+					        return list.maxOptional(Comparator.comparing(String::length));
+					    }
+
+					    Optional<Integer> withImmutableListMin(ImmutableList<Integer> list) {
+					        return list.minOptional(Comparator.naturalOrder());
+					    }
+
+					    Optional<Integer> withImmutableListMax(ImmutableList<Integer> list) {
+					        return list.maxOptional(Comparator.naturalOrder());
+					    }
+
+					    Optional<String> withMutableSetMin(MutableSet<String> set) {
+					        return set.minOptional(Comparator.naturalOrder());
+					    }
+
+					    Optional<String> withMutableSetMax(MutableSet<String> set) {
+					        return set.maxOptional(Comparator.naturalOrder());
+					    }
+
+					    void inIfCondition(MutableList<Integer> list) {
 					        Optional<Integer> min = list.minOptional(Comparator.naturalOrder());
 					        if (list.maxOptional(Comparator.naturalOrder()).isPresent()) {
 					            this.doWork();
@@ -259,30 +143,7 @@ class ECStreamMinMaxToMinMaxTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceStreamWithIntermediateOperations() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Comparator;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> test(MutableList<String> list) {
-					        // Should not replace when there are intermediate operations
-					        return list.stream()
-					            .filter(s -> s.length() > 3)
-					            .min(Comparator.naturalOrder());
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void doNotReplaceNonEclipseCollections() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
@@ -290,14 +151,20 @@ class ECStreamMinMaxToMinMaxTest extends AbstractEclipseCollectionsTest {
 					import java.util.List;
 					import java.util.Optional;
 
+					import org.eclipse.collections.api.list.MutableList;
+
 					class Test {
-					    Optional<String> testMin(List<String> list) {
-					        // Should not replace JCF List
+					    Optional<String> withIntermediateOperations(MutableList<String> list) {
+					        return list.stream()
+					            .filter(s -> s.length() > 3)
+					            .min(Comparator.naturalOrder());
+					    }
+
+					    Optional<String> jcfListMin(List<String> list) {
 					        return list.stream().min(Comparator.naturalOrder());
 					    }
 
-					    Optional<String> testMax(List<String> list) {
-					        // Should not replace JCF List
+					    Optional<String> jcfListMax(List<String> list) {
 					        return list.stream().max(Comparator.naturalOrder());
 					    }
 					}

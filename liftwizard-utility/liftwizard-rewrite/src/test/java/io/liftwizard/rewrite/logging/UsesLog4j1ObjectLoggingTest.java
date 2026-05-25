@@ -55,84 +55,28 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
 	@DocumentExample
 	@Test
-	void detectsObjectArgument() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
 					import org.apache.log4j.Logger;
 
+					class MyEvent {
+					    String name;
+					}
+
 					class Test {
 					    private static final Logger LOGGER = Logger.getLogger(Test.class);
 
-					    void test(Object myObject) {
+					    void detectsObjectArgument(Object myObject) {
 					        LOGGER.info(myObject);
 					    }
-					}
-					""",
-					"""
-					import org.apache.log4j.Logger;
 
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(Object myObject) {
-					        /*~~>*/LOGGER.info(myObject);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void detectsCustomTypeArgument() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					class MyEvent {
-					    String name;
-					}
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(MyEvent event) {
+					    void detectsCustomTypeArgument(MyEvent event) {
 					        LOGGER.info(event);
 					    }
-					}
-					""",
-					"""
-					import org.apache.log4j.Logger;
 
-					class MyEvent {
-					    String name;
-					}
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(MyEvent event) {
-					        /*~~>*/LOGGER.info(event);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void detectsAcrossLogLevels() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(Object obj) {
+					    void detectsAcrossLogLevels(Object obj) {
 					        LOGGER.debug(obj);
 					        LOGGER.warn(obj);
 					        LOGGER.error(obj);
@@ -143,10 +87,22 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					"""
 					import org.apache.log4j.Logger;
 
+					class MyEvent {
+					    String name;
+					}
+
 					class Test {
 					    private static final Logger LOGGER = Logger.getLogger(Test.class);
 
-					    void test(Object obj) {
+					    void detectsObjectArgument(Object myObject) {
+					        /*~~>*/LOGGER.info(myObject);
+					    }
+
+					    void detectsCustomTypeArgument(MyEvent event) {
+					        /*~~>*/LOGGER.info(event);
+					    }
+
+					    void detectsAcrossLogLevels(Object obj) {
 					        /*~~>*/LOGGER.debug(obj);
 					        /*~~>*/LOGGER.warn(obj);
 					        /*~~>*/LOGGER.error(obj);
@@ -159,7 +115,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 	}
 
 	@Test
-	void doesNotDetectStringLiteral() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
@@ -168,64 +124,19 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					class Test {
 					    private static final Logger LOGGER = Logger.getLogger(Test.class);
 
-					    void test() {
+					    void doesNotDetectStringLiteral() {
 					        LOGGER.info("Simple message");
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doesNotDetectStringVariable() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(String message) {
+					    void doesNotDetectStringVariable(String message) {
 					        LOGGER.info(message);
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doesNotDetectStringConcatenation() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(String name) {
+					    void doesNotDetectStringConcatenation(String name) {
 					        LOGGER.info("Hello " + name);
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doesNotDetectThrowables() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(Exception exception) {
+					    void doesNotDetectThrowables(Exception exception) {
 					        LOGGER.error(exception);
 					        LOGGER.error(exception.getClass().getName(), exception);
 					    }

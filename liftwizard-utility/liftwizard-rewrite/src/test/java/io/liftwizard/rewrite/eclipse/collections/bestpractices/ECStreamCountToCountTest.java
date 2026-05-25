@@ -33,156 +33,38 @@ class ECStreamCountToCountTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceStreamFilterCountWithCount() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
 					import java.util.function.Predicate;
 
+					import org.eclipse.collections.api.list.ImmutableList;
 					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.set.MutableSet;
 
 					class Test {
-					    long test(MutableList<String> list, Predicate<String> predicate) {
+					    long streamFilterCount(MutableList<String> list, Predicate<String> predicate) {
 					        return list.stream().filter(predicate).count();
 					    }
-					}
-					""",
-					"""
-					import java.util.function.Predicate;
 
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    long test(MutableList<String> list, Predicate<String> predicate) {
-					        return list.count(predicate);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithLambdaPredicate() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    long test(MutableList<String> list) {
+					    long withLambdaPredicate(MutableList<String> list) {
 					        return list.stream().filter(s -> s.length() > 5).count();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    long test(MutableList<String> list) {
-					        return list.count(s -> s.length() > 5);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithMethodReferencePredicate() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    long test(MutableList<String> list) {
+					    long withMethodReferencePredicate(MutableList<String> list) {
 					        return list.stream().filter(String::isEmpty).count();
 					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
 
-					class Test {
-					    long test(MutableList<String> list) {
-					        return list.count(String::isEmpty);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithImmutableList() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.function.Predicate;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class Test {
-					    long test(ImmutableList<String> list, Predicate<String> predicate) {
+					    long withImmutableList(ImmutableList<String> list, Predicate<String> predicate) {
 					        return list.stream().filter(predicate).count();
 					    }
-					}
-					""",
-					"""
-					import java.util.function.Predicate;
 
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class Test {
-					    long test(ImmutableList<String> list, Predicate<String> predicate) {
-					        return list.count(predicate);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceWithMutableSet() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.function.Predicate;
-
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    long test(MutableSet<Integer> set, Predicate<Integer> predicate) {
+					    long withMutableSet(MutableSet<Integer> set, Predicate<Integer> predicate) {
 					        return set.stream().filter(predicate).count();
 					    }
-					}
-					""",
-					"""
-					import java.util.function.Predicate;
 
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    long test(MutableSet<Integer> set, Predicate<Integer> predicate) {
-					        return set.count(predicate);
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void replaceInIfCondition() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
+					    void inIfCondition(MutableList<String> list) {
 					        if (list.stream().filter(String::isEmpty).count() > 5) {
 					            this.doWork();
 					        }
@@ -192,10 +74,34 @@ class ECStreamCountToCountTest extends AbstractEclipseCollectionsTest {
 					}
 					""",
 					"""
+					import java.util.function.Predicate;
+
+					import org.eclipse.collections.api.list.ImmutableList;
 					import org.eclipse.collections.api.list.MutableList;
+					import org.eclipse.collections.api.set.MutableSet;
 
 					class Test {
-					    void test(MutableList<String> list) {
+					    long streamFilterCount(MutableList<String> list, Predicate<String> predicate) {
+					        return list.count(predicate);
+					    }
+
+					    long withLambdaPredicate(MutableList<String> list) {
+					        return list.count(s -> s.length() > 5);
+					    }
+
+					    long withMethodReferencePredicate(MutableList<String> list) {
+					        return list.count(String::isEmpty);
+					    }
+
+					    long withImmutableList(ImmutableList<String> list, Predicate<String> predicate) {
+					        return list.count(predicate);
+					    }
+
+					    long withMutableSet(MutableSet<Integer> set, Predicate<Integer> predicate) {
+					        return set.count(predicate);
+					    }
+
+					    void inIfCondition(MutableList<String> list) {
 					        if (list.count(String::isEmpty) > 5) {
 					            this.doWork();
 					        }
@@ -209,28 +115,7 @@ class ECStreamCountToCountTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceWithMultipleIntermediateOperations() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    long test(MutableList<String> list) {
-					        // Should not replace when there are multiple intermediate operations
-					        return list.stream()
-					            .filter(s -> s.length() > 3)
-					            .map(String::toUpperCase)
-					            .count();
-					    }
-					}
-					"""
-				)
-			);
-	}
-
-	@Test
-	void doNotReplaceWhenOnlyStream() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
@@ -239,26 +124,18 @@ class ECStreamCountToCountTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    Stream<String> test(MutableList<String> list) {
-					        // Should not replace when we only call stream without filter+count
+					    long withMultipleIntermediateOperations(MutableList<String> list) {
+					        return list.stream()
+					            .filter(s -> s.length() > 3)
+					            .map(String::toUpperCase)
+					            .count();
+					    }
+
+					    Stream<String> onlyStream(MutableList<String> list) {
 					        return list.stream();
 					    }
-					}
-					"""
-				)
-			);
-	}
 
-	@Test
-	void doNotReplaceWhenOnlyCount() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    long test(MutableList<String> list) {
-					        // Should not replace when only count without filter
+					    long onlyCount(MutableList<String> list) {
 					        return list.stream().count();
 					    }
 					}

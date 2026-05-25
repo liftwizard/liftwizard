@@ -33,7 +33,7 @@ class ECCountEqualsSizeTest extends AbstractEclipseCollectionsTest {
 
 	@DocumentExample
 	@Test
-	void replaceCountEqualsSizeWithAllSatisfy() {
+	void replacePatterns() {
 		this.rewriteRun(
 				java(
 					"""
@@ -69,7 +69,7 @@ class ECCountEqualsSizeTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceOtherPatterns() {
+	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				java(
 					"""
