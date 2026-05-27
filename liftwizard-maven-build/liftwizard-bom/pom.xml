@@ -414,6 +414,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-bundle-metrics-dogstatsd-push</artifactId>
+                <version>2.1.46-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-logging-buffered</artifactId>
                 <version>2.1.48-SNAPSHOT</version>
             </dependency>
@@ -462,6 +468,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-metrics-reporter-dogstatsd</artifactId>
+                <version>2.1.46-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-metrics-reporter-log4j</artifactId>
                 <version>2.1.48-SNAPSHOT</version>
             </dependency>
@@ -506,6 +518,12 @@
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-logging-uncaught-exception-handler</artifactId>
                 <version>2.1.48-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-metrics-reporter-dogstatsd</artifactId>
+                <version>2.1.46-SNAPSHOT</version>
             </dependency>
 
             <dependency>
