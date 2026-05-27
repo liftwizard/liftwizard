@@ -57,6 +57,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-logging-buffered-appender</artifactId>
             <version>${project.version}</version>
@@ -71,4 +76,26 @@
         </dependency>
 
     </dependencies>
+
+    <!--region Phase 21: verify-->
+    <profiles>
+        <profile>
+            <id>maven-dependency-plugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <configuration>
+                            <ignoredUnusedDeclaredDependencies combine.children="append">
+                                <ignoredUnusedDeclaredDependency>org.yaml:snakeyaml</ignoredUnusedDeclaredDependency>
+                            </ignoredUnusedDeclaredDependencies>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <!--endregion Phase 21: verify-->
 </project>
