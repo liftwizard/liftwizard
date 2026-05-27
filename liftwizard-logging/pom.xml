@@ -32,6 +32,7 @@
         <module>liftwizard-bundle-logging-config</module>
         <module>liftwizard-bundle-logging-http</module>
         <module>liftwizard-bundle-logging-uncaught-exception-handler</module>
+        <module>liftwizard-bundle-metrics-dogstatsd-push</module>
         <module>liftwizard-config-logging-buffered</module>
         <module>liftwizard-config-logging-config</module>
         <module>liftwizard-config-logging-filter-janino</module>
@@ -40,6 +41,7 @@
         <module>liftwizard-config-logging-logstash-console</module>
         <module>liftwizard-config-logging-logstash-encoder</module>
         <module>liftwizard-config-logging-logstash-file</module>
+        <module>liftwizard-config-metrics-reporter-dogstatsd</module>
         <module>liftwizard-config-metrics-reporter-log4j</module>
         <module>liftwizard-config-metrics-reporter-logback</module>
         <module>liftwizard-config-metrics-reporter-slf4j</module>
@@ -48,6 +50,7 @@
         <module>liftwizard-logging-mdc-closeable</module>
         <module>liftwizard-logging-p6spy</module>
         <module>liftwizard-logging-uncaught-exception-handler</module>
+        <module>liftwizard-metrics-reporter-dogstatsd</module>
         <module>liftwizard-metrics-reporter-log4j</module>
         <module>liftwizard-metrics-reporter-slf4j</module>
     </modules>
