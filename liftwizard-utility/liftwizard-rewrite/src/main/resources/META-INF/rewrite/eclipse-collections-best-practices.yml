@@ -24,6 +24,7 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedEmptyChecks
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedSatisfiesRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyNegatedSelectReject
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECGarbageFreeLambdas
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECSimplifyMethodReferences
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECAnySatisfyPredicatesNotToNoneSatisfyRecipes
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECNoneSatisfyPredicatesNotToAnySatisfyRecipes
