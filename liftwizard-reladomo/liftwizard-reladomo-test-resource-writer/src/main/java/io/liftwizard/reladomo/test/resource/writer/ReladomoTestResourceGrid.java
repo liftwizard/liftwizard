@@ -92,7 +92,7 @@ public class ReladomoTestResourceGrid {
 
 	private String getRowString(int index) {
 		return (
-			this.columns.collect((each) -> each.getPaddedValueString(index))
+			this.columns.collectWith(ReladomoTestResourceColumn::getPaddedValueString, index)
 				.makeString()
 				.stripTrailing()
 			+ "\n"

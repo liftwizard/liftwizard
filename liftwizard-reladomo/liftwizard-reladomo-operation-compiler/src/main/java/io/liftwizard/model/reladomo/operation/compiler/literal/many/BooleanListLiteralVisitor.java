@@ -18,6 +18,7 @@ package io.liftwizard.model.reladomo.operation.compiler.literal.many;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.BooleanListLiteralContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.BooleanLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.literal.one.BooleanLiteralVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
@@ -40,7 +41,7 @@ public class BooleanListLiteralVisitor extends AbstractLiteralVisitor<ImmutableL
 	@Override
 	public ImmutableList<Boolean> visitBooleanListLiteral(BooleanListLiteralContext ctx) {
 		return ListAdapter.adapt(ctx.booleanLiteral())
-			.collect((each) -> each.accept(this.booleanLiteralVisitor))
+			.collectWith(BooleanLiteralContext::accept, this.booleanLiteralVisitor)
 			.toImmutable();
 	}
 }
