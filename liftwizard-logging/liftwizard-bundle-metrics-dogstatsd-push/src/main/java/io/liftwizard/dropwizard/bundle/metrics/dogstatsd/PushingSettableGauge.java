@@ -41,9 +41,11 @@ public class PushingSettableGauge<T> extends DefaultSettableGauge<T> {
 	public void setValue(T value) {
 		super.setValue(value);
 		if (value instanceof Number) {
-			this.statsdSupplier
-				.get()
-				.gauge(this.tagged.getName(), ((Number) value).doubleValue(), this.tagged.getTags());
+			this.statsdSupplier.get().gauge(
+				this.tagged.getName(),
+				((Number) value).doubleValue(),
+				this.tagged.getTags()
+			);
 		}
 	}
 }

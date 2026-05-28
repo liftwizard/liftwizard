@@ -37,11 +37,7 @@ class DogStatsDReporterFactoryTest {
 			.getContextClassLoader()
 			.getResource("META-INF/services/io.dropwizard.metrics.ReporterFactory");
 		assertThat(url).isNotNull();
-		try (
-			var reader = new BufferedReader(
-				new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)
-			)
-		) {
+		try (var reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
 			String contents = reader.lines().collect(Collectors.joining("\n"));
 			assertThat(contents).contains(DogStatsDReporterFactory.class.getName());
 		}

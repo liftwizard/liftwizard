@@ -37,8 +37,10 @@ public class PushingTimer extends Timer {
 	@Override
 	public void update(long duration, TimeUnit unit) {
 		super.update(duration, unit);
-		this.statsdSupplier
-			.get()
-			.recordExecutionTime(this.tagged.getName(), unit.toMillis(duration), this.tagged.getTags());
+		this.statsdSupplier.get().recordExecutionTime(
+			this.tagged.getName(),
+			unit.toMillis(duration),
+			this.tagged.getTags()
+		);
 	}
 }
