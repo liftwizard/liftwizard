@@ -49,7 +49,7 @@ class DogStatsDReporterFactoryTest {
 
 	@Test
 	void factoryBuildsDogStatsDReporter() {
-		DogStatsDReporterFactory factory = new DogStatsDReporterFactory();
+		var factory = new DogStatsDReporterFactory();
 		factory.setHost("localhost");
 		factory.setPort(8125);
 		factory.setPrefix("test");
@@ -62,7 +62,7 @@ class DogStatsDReporterFactoryTest {
 
 	@Test
 	void defaultsArePopulated() {
-		DogStatsDReporterFactory factory = new DogStatsDReporterFactory();
+		var factory = new DogStatsDReporterFactory();
 		assertThat(factory.getHost()).isEqualTo("localhost");
 		assertThat(factory.getPort()).isEqualTo(8125);
 		assertThat(factory.getPrefix()).isEmpty();

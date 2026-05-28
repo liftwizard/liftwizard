@@ -19,6 +19,7 @@ package io.liftwizard.dropwizard.bundle.metrics.dogstatsd;
 import java.util.concurrent.TimeUnit;
 
 import com.codahale.metrics.Counter;
+import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.Timer;
@@ -50,7 +51,7 @@ class PushingMetricRegistryTest {
 
 		assertThat(counter.getCount()).isEqualTo(3);
 		assertThat(this.statsd.getCalls()).hasSize(1);
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.kind).isEqualTo(Kind.COUNT);
 		assertThat(call.name).isEqualTo("orders.placed");
 		assertThat(call.value).isEqualTo(3.0);
@@ -62,7 +63,7 @@ class PushingMetricRegistryTest {
 		Counter counter = this.registry.counter("queue.depth");
 		counter.dec(2);
 
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.kind).isEqualTo(Kind.COUNT);
 		assertThat(call.value).isEqualTo(-2.0);
 	}
@@ -72,7 +73,7 @@ class PushingMetricRegistryTest {
 		Counter counter = this.registry.counter("requests[endpoint:/users,method:GET]");
 		counter.inc();
 
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.name).isEqualTo("requests");
 		assertThat(call.tags).containsExactly("endpoint:/users", "method:GET");
 	}
@@ -91,7 +92,7 @@ class PushingMetricRegistryTest {
 
 		assertThat(meter).isInstanceOf(PushingMeter.class);
 		assertThat(meter.getCount()).isEqualTo(5);
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.kind).isEqualTo(Kind.COUNT);
 		assertThat(call.value).isEqualTo(5.0);
 	}
@@ -103,7 +104,7 @@ class PushingMetricRegistryTest {
 
 		assertThat(histogram).isInstanceOf(PushingHistogram.class);
 		assertThat(this.statsd.getCalls()).hasSize(1);
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.kind).isEqualTo(Kind.HISTOGRAM);
 		assertThat(call.value).isEqualTo(42.0);
 	}
@@ -114,18 +115,18 @@ class PushingMetricRegistryTest {
 		timer.update(250, TimeUnit.MILLISECONDS);
 
 		assertThat(timer).isInstanceOf(PushingTimer.class);
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.kind).isEqualTo(Kind.EXECUTION_TIME);
 		assertThat(call.value).isEqualTo(250.0);
 	}
 
 	@Test
 	void settableGaugeSetValuePushesGauge() {
-		PushingSettableGauge<Integer> gauge = new PushingSettableGauge<>("queue.size", () -> this.statsd);
+		var gauge = new PushingSettableGauge<Integer>("queue.size", () -> this.statsd);
 		gauge.setValue(7);
 
 		assertThat(gauge.getValue()).isEqualTo(7);
-		Call call = this.statsd.getCalls().get(0);
+		Call call = this.statsd.getCalls().getFirst();
 		assertThat(call.kind).isEqualTo(Kind.GAUGE);
 		assertThat(call.value).isEqualTo(7.0);
 	}
@@ -136,7 +137,7 @@ class PushingMetricRegistryTest {
 		counter.inc();
 		assertThat(this.statsd.getCalls()).hasSize(1);
 
-		RecordingStatsDClient replacement = new RecordingStatsDClient();
+		var replacement = new RecordingStatsDClient();
 		this.registry.setStatsDClient(replacement);
 
 		counter.inc();
@@ -146,8 +147,9 @@ class PushingMetricRegistryTest {
 
 	@Test
 	void pushingSettableGaugeIsAGaugeButShouldBeExcludedFromPollingFilter() {
-		PushingSettableGauge<Integer> gauge = new PushingSettableGauge<>("queue.size", () -> this.statsd);
-		assertThat(gauge).isInstanceOf(com.codahale.metrics.Gauge.class);
-		assertThat(gauge).isInstanceOf(PushingSettableGauge.class);
+		var gauge = new PushingSettableGauge<Integer>("queue.size", () -> this.statsd);
+		assertThat(gauge)
+				.isInstanceOf(Gauge.class)
+				.isInstanceOf(PushingSettableGauge.class);
 	}
 }

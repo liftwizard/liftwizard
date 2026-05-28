@@ -77,7 +77,7 @@ public final class TaggedMetricName {
 		if (!(other instanceof TaggedMetricName)) {
 			return false;
 		}
-		TaggedMetricName that = (TaggedMetricName) other;
+		var that = (TaggedMetricName) other;
 		return this.name.equals(that.name) && Arrays.equals(this.tags, that.tags);
 	}
 

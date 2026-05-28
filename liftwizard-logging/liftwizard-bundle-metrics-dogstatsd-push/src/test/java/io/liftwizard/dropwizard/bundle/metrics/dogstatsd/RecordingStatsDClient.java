@@ -16,12 +16,12 @@
 
 package io.liftwizard.dropwizard.bundle.metrics.dogstatsd;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.timgroup.statsd.Event;
 import com.timgroup.statsd.NoOpStatsDClient;
 import com.timgroup.statsd.ServiceCheck;
+import org.eclipse.collections.api.factory.Lists;
 
 /**
  * Records every StatsD call into a list of typed events for inspection in tests. Inherits
@@ -51,7 +51,7 @@ class RecordingStatsDClient extends NoOpStatsDClient {
 		}
 	}
 
-	private final List<Call> calls = new ArrayList<>();
+	private final List<Call> calls = Lists.mutable.empty();
 
 	List<Call> getCalls() {
 		return this.calls;
