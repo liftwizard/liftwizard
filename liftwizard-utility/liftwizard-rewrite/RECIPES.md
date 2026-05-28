@@ -254,6 +254,30 @@ Flip select() and reject() when the lambda contains a negation pattern:
 
 This eliminates double negation patterns and improves readability by using the more appropriate method for the predicate logic.
 
+### Garbage-Free Lambda Conversions
+
+#### ECGarbageFreeLambdas
+
+Convert capturing lambdas of the form `x -> x.foo(captured)` to the non-capturing `*With` method-reference form `Type::foo, captured`. The `*With` variants accept a `Predicate2`/`Function2`/`Procedure2` plus a captured parameter, so the call site uses a non-capturing method reference instead of a capturing lambda — the call site allocates no garbage per invocation. The captured value must not reference the lambda parameter. See Don Raab, [Fat-free lambdas in Java](https://donraab.medium.com/fat-free-lambdas-in-java-bf228da0613b) (Don's term for the same pattern).
+
+The composite recipe applies a single parameterized `GarbageFreeLambdaRecipe` to each transformable method, plus `ECDetectIfNoneToDetectWithIfNone` for the 3-arg `detectIfNone` overload:
+
+- `strings.select(s -> s.startsWith(prefix))` → `strings.selectWith(String::startsWith, prefix)`
+- `strings.select(s -> s.equals(target))` → `strings.selectWith(Object::equals, target)`
+- `strings.reject(s -> s.startsWith(prefix))` → `strings.rejectWith(String::startsWith, prefix)`
+- `strings.collect(s -> s.concat(suffix))` → `strings.collectWith(String::concat, suffix)`
+- `strings.detect(s -> s.startsWith(prefix))` → `strings.detectWith(String::startsWith, prefix)`
+- `strings.detectOptional(s -> s.startsWith(prefix))` → `strings.detectWithOptional(String::startsWith, prefix)`
+- `strings.detectIfNone(s -> s.startsWith(prefix), () -> "fallback")` → `strings.detectWithIfNone(String::startsWith, prefix, () -> "fallback")`
+- `strings.anySatisfy(s -> s.startsWith(prefix))` → `strings.anySatisfyWith(String::startsWith, prefix)`
+- `strings.allSatisfy(s -> s.startsWith(prefix))` → `strings.allSatisfyWith(String::startsWith, prefix)`
+- `strings.noneSatisfy(s -> s.startsWith(prefix))` → `strings.noneSatisfyWith(String::startsWith, prefix)`
+- `strings.count(s -> s.startsWith(prefix))` → `strings.countWith(String::startsWith, prefix)`
+- `strings.partition(s -> s.startsWith(prefix))` → `strings.partitionWith(String::startsWith, prefix)`
+- `strings.countBy(s -> s.concat(suffix))` → `strings.countByWith(String::concat, suffix)`
+- `builders.forEach(b -> b.append(text))` → `builders.forEachWith(StringBuilder::append, text)` (Eclipse Collections `forEach(Procedure)` overload)
+- `strings.removeIf(s -> s.startsWith(prefix))` → `strings.removeIfWith(String::startsWith, prefix)` (Eclipse Collections `MutableCollection.removeIf(Predicate)` overload)
+
 ### Method Reference Simplifications
 
 #### ECSimplifyMethodReferences
