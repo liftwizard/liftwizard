@@ -18,6 +18,7 @@ package io.liftwizard.model.reladomo.operation.compiler.literal.many;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerListLiteralContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.IntegerLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.literal.one.IntegerLiteralVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
@@ -39,8 +40,7 @@ public class IntegerListLiteralVisitor extends AbstractLiteralVisitor<ImmutableL
 
 	@Override
 	public ImmutableList<Integer> visitIntegerListLiteral(IntegerListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.integerLiteral())
-			.collect((each) -> each.accept(this.integerLiteralVisitor))
+		return ListAdapter.adapt(ctx.integerLiteral()).collectWith(IntegerLiteralContext::accept, this.integerLiteralVisitor)
 			.toImmutable();
 	}
 }

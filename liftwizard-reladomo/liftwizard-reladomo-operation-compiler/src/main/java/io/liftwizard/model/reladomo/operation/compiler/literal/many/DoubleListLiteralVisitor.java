@@ -18,6 +18,7 @@ package io.liftwizard.model.reladomo.operation.compiler.literal.many;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointListLiteralContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.FloatingPointLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.literal.one.DoubleLiteralVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
@@ -39,8 +40,7 @@ public class DoubleListLiteralVisitor extends AbstractLiteralVisitor<ImmutableLi
 
 	@Override
 	public ImmutableList<Double> visitFloatingPointListLiteral(FloatingPointListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.floatingPointLiteral())
-			.collect((each) -> each.accept(this.doubleLiteralVisitor))
+		return ListAdapter.adapt(ctx.floatingPointLiteral()).collectWith(FloatingPointLiteralContext::accept, this.doubleLiteralVisitor)
 			.toImmutable();
 	}
 }

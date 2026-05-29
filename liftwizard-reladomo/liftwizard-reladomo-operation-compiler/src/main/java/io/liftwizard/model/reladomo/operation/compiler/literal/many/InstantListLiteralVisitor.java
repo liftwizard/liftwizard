@@ -20,6 +20,7 @@ import java.time.Instant;
 
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringListLiteralContext;
+import io.liftwizard.model.reladomo.operation.ReladomoOperationParser.StringLiteralContext;
 import io.liftwizard.model.reladomo.operation.compiler.literal.AbstractLiteralVisitor;
 import io.liftwizard.model.reladomo.operation.compiler.literal.one.InstantLiteralVisitor;
 import org.eclipse.collections.api.list.ImmutableList;
@@ -41,8 +42,7 @@ public class InstantListLiteralVisitor extends AbstractLiteralVisitor<ImmutableL
 
 	@Override
 	public ImmutableList<Instant> visitStringListLiteral(StringListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.stringLiteral())
-			.collect((each) -> each.accept(this.instantLiteralVisitor))
+		return ListAdapter.adapt(ctx.stringLiteral()).collectWith(StringLiteralContext::accept, this.instantLiteralVisitor)
 			.toImmutable();
 	}
 }
