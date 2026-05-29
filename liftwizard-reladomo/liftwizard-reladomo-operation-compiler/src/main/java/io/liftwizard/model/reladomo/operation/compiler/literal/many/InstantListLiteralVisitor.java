@@ -41,8 +41,7 @@ public class InstantListLiteralVisitor extends AbstractLiteralVisitor<ImmutableL
 
 	@Override
 	public ImmutableList<Instant> visitStringListLiteral(StringListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.stringLiteral())
-			.collect((each) -> each.accept(this.instantLiteralVisitor))
+		return ListAdapter.adapt(ctx.stringLiteral()).collectWith(StringLiteralContext::accept, this.instantLiteralVisitor)
 			.toImmutable();
 	}
 }

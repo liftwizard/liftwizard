@@ -39,8 +39,7 @@ public class StringListLiteralVisitor extends AbstractLiteralVisitor<ImmutableLi
 
 	@Override
 	public ImmutableList<String> visitStringListLiteral(StringListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.stringLiteral())
-			.collect((each) -> each.accept(this.stringLiteralVisitor))
+		return ListAdapter.adapt(ctx.stringLiteral()).collectWith(StringLiteralContext::accept, this.stringLiteralVisitor)
 			.toImmutable();
 	}
 }
