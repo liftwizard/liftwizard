@@ -41,7 +41,8 @@ public class LocalDateListLiteralVisitor extends AbstractLiteralVisitor<Immutabl
 
 	@Override
 	public ImmutableList<LocalDate> visitStringListLiteral(StringListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.stringLiteral()).collectWith(StringLiteralContext::accept, this.localDateLiteralVisitor)
+		return ListAdapter.adapt(ctx.stringLiteral())
+			.collectWith(StringLiteralContext::accept, this.localDateLiteralVisitor)
 			.toImmutable();
 	}
 }

@@ -39,7 +39,8 @@ public class LongListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList
 
 	@Override
 	public ImmutableList<Long> visitIntegerListLiteral(IntegerListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.integerLiteral()).collectWith(IntegerLiteralContext::accept, this.longLiteralVisitor)
+		return ListAdapter.adapt(ctx.integerLiteral())
+			.collectWith(IntegerLiteralContext::accept, this.longLiteralVisitor)
 			.toImmutable();
 	}
 }

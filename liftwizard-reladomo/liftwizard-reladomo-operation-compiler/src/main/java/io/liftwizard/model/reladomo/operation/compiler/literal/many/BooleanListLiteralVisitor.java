@@ -39,7 +39,8 @@ public class BooleanListLiteralVisitor extends AbstractLiteralVisitor<ImmutableL
 
 	@Override
 	public ImmutableList<Boolean> visitBooleanListLiteral(BooleanListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.booleanLiteral()).collectWith(BooleanLiteralContext::accept, this.booleanLiteralVisitor)
+		return ListAdapter.adapt(ctx.booleanLiteral())
+			.collectWith(BooleanLiteralContext::accept, this.booleanLiteralVisitor)
 			.toImmutable();
 	}
 }

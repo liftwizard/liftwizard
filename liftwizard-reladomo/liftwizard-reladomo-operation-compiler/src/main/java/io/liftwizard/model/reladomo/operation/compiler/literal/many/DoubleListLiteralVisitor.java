@@ -39,7 +39,8 @@ public class DoubleListLiteralVisitor extends AbstractLiteralVisitor<ImmutableLi
 
 	@Override
 	public ImmutableList<Double> visitFloatingPointListLiteral(FloatingPointListLiteralContext ctx) {
-		return ListAdapter.adapt(ctx.floatingPointLiteral()).collectWith(FloatingPointLiteralContext::accept, this.doubleLiteralVisitor)
+		return ListAdapter.adapt(ctx.floatingPointLiteral())
+			.collectWith(FloatingPointLiteralContext::accept, this.doubleLiteralVisitor)
 			.toImmutable();
 	}
 }
