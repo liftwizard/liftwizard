@@ -20,12 +20,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
@@ -70,13 +73,20 @@ class YamlRecipeValidationTest {
 			}
 
 			File dir = new File(url.getFile());
-			File[] ymlFiles = dir.listFiles((d, name) -> name.endsWith(".yml"));
-			if (ymlFiles == null) {
+			if (!dir.isDirectory()) {
 				continue;
 			}
 
-			for (File ymlFile : ymlFiles) {
-				try (InputStream is = ymlFile.toURI().toURL().openStream()) {
+			List<Path> ymlFiles;
+			try (Stream<Path> paths = Files.walk(dir.toPath())) {
+				ymlFiles = paths
+					.filter(Files::isRegularFile)
+					.filter((path) -> path.getFileName().toString().endsWith(".yml"))
+					.collect(Collectors.toList());
+			}
+
+			for (Path ymlFile : ymlFiles) {
+				try (InputStream is = Files.newInputStream(ymlFile)) {
 					for (Object document : yaml.loadAll(is)) {
 						if (document instanceof Map<?, ?> map) {
 							Object recipeList = map.get("recipeList");

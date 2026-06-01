@@ -1,0 +1,45 @@
+#
+# Copyright 2025 Craig Motlin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
+displayName: Migrate Dropwizard Jersey param classes to jsr310 package
+description: >-
+    In Dropwizard 3, InstantParam and LocalDateParam moved from
+    io.dropwizard.jersey.params to io.dropwizard.jersey.jsr310.
+    DateTimeParam is replaced by ZonedDateTimeParam in the jsr310 package.
+    BooleanParam, DurationParam, and SizeParam are replaced by their
+    underlying Java types with .get() calls unwrapped.
+recipeList:
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.InstantParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.InstantParam
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.LocalDateParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.LocalDateParam
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.jersey.params.DateTimeParam
+          newFullyQualifiedTypeName: io.dropwizard.jersey.jsr310.ZonedDateTimeParam
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.BooleanParam
+          newType: java.lang.Boolean
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.DurationParam
+          newType: java.time.Duration
+    - io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam:
+          oldParamType: io.dropwizard.jersey.params.SizeParam
+          newType: io.dropwizard.util.DataSize
