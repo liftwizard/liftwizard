@@ -1,0 +1,44 @@
+#
+# Copyright 2025 Craig Motlin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL
+displayName: Switch smoketurner graphql-core to liftwizard-smoketurner-graphql
+description: >-
+    Replace the third-party com.smoketurner.dropwizard:graphql-core dependency
+    with the inline io.liftwizard:liftwizard-smoketurner-graphql fork. The
+    upstream smoketurner project never released a Dropwizard 3 compatible
+    artifact, so projects migrating to Dropwizard 3 must switch to the
+    Liftwizard-maintained fork that tracks Dropwizard 3 APIs. Also drop the
+    now-redundant javax.xml.bind:jaxb-api exclusion (the inline fork does not
+    drag in javax.xml.bind) and the standalone jakarta.xml.bind:jakarta.xml.bind-api
+    dependency that was only kept as a replacement for the excluded jaxb-api.
+recipeList:
+    - org.openrewrite.maven.RemoveExclusion:
+          groupId: com.smoketurner.dropwizard
+          artifactId: graphql-core
+          exclusionGroupId: javax.xml.bind
+          exclusionArtifactId: jaxb-api
+    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+          oldGroupId: com.smoketurner.dropwizard
+          oldArtifactId: graphql-core
+          newGroupId: io.liftwizard
+          newArtifactId: liftwizard-smoketurner-graphql
+          newVersion: ${project.version}
+    - org.openrewrite.maven.RemoveDependency:
+          groupId: jakarta.xml.bind
+          artifactId: jakarta.xml.bind-api
