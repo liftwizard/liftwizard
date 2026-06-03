@@ -8,6 +8,11 @@ updates:
           timezone: America/New_York
       open-pull-requests-limit: 99
       target-branch: main
+      groups:
+          openrewrite:
+              patterns:
+                  - "org.openrewrite:*"
+                  - "org.openrewrite.recipe:*"
     - package-ecosystem: "github-actions"
       directory: "/"
       schedule:
