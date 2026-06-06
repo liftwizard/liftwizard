@@ -11,8 +11,25 @@ updates:
       groups:
           openrewrite:
               patterns:
-                  - "org.openrewrite:*"
-                  - "org.openrewrite.recipe:*"
+                  - "org.openrewrite*"
+          jackson:
+              patterns:
+                  - "com.fasterxml.jackson*"
+          error-prone:
+              patterns:
+                  - "com.google.errorprone*"
+                  - "tech.picnic.error-prone-support*"
+          junit:
+              patterns:
+                  - "org.junit*"
+          dropwizard:
+              patterns:
+                  - "io.dropwizard*"
+          logging:
+              patterns:
+                  - "org.slf4j*"
+                  - "ch.qos.logback*"
+                  - "net.logstash.logback*"
     - package-ecosystem: "github-actions"
       directory: "/"
       schedule:
