@@ -412,6 +412,17 @@
                 <artifactId>liftwizard-generator-rewrite-plugin</artifactId>
                 <version>${project.version}</version>
                 <dependencies>
+                    <!--
+                      ~ OpenRewrite's bundled Java parser is generated with ANTLR 4.13.2 and (since rewrite 8.84.0)
+                      ~ serializes its ATN in a format only antlr4-runtime 4.10+ can read. The repo-wide pin in
+                      ~ liftwizard-dependencies forces antlr4-runtime 4.9.3 (for the Reladomo grammar), and a
+                      ~ project dependencyManagement override does not reach plugin realms, so pin 4.13.2 here.
+                      -->
+                    <dependency>
+                        <groupId>org.antlr</groupId>
+                        <artifactId>antlr4-runtime</artifactId>
+                        <version>4.13.2</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.openrewrite</groupId>
                         <artifactId>rewrite-maven</artifactId>
