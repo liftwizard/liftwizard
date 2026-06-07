@@ -526,9 +526,16 @@
                                 <filteredRecipeSpec>
                                     <generatedRecipeName>io.liftwizard.migrate.UpgradeToJava21</generatedRecipeName>
                                     <displayName>Migrate to Java 21</displayName>
-                                    <description>Upgrade to Java 21, excluding recipes that conflict with Liftwizard conventions (StringFormatted converts String.format to .formatted).</description>
+                                    <description>Upgrade to Java 21.</description>
                                     <baseRecipeName>org.openrewrite.java.migrate.UpgradeToJava21</baseRecipeName>
                                     <outputFileName>upgrade-to-java.yml</outputFileName>
+                                </filteredRecipeSpec>
+                                <filteredRecipeSpec>
+                                    <generatedRecipeName>io.liftwizard.migrate.JavaBestPractices</generatedRecipeName>
+                                    <displayName>Java best practices</displayName>
+                                    <description>Apply Java best practices, excluding recipes that conflict with Liftwizard conventions (StringFormatted converts String.format to .formatted).</description>
+                                    <baseRecipeName>org.openrewrite.java.migrate.JavaBestPractices</baseRecipeName>
+                                    <outputFileName>java-best-practices.yml</outputFileName>
                                     <exclusions>
                                         <exclusion>
                                             <recipeName>org.openrewrite.java.migrate.lang.StringFormatted</recipeName>
