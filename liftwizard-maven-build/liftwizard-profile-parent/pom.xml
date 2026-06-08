@@ -154,12 +154,12 @@
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-migrate-java</artifactId>
-                                    <version>3.35.0</version>
+                                    <version>3.36.0</version>
                                 </dependency>
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-rewrite</artifactId>
-                                    <version>0.25.0</version>
+                                    <version>0.26.0</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
@@ -200,22 +200,22 @@
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-github-actions</artifactId>
-                                    <version>3.23.0</version>
+                                    <version>3.24.0</version>
                                 </dependency>
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-static-analysis</artifactId>
-                                    <version>2.35.0</version>
+                                    <version>2.36.0</version>
                                 </dependency>
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-apache</artifactId>
-                                    <version>2.26.0</version>
+                                    <version>2.27.0</version>
                                 </dependency>
                                 <dependency>
                                     <groupId>org.openrewrite.recipe</groupId>
                                     <artifactId>rewrite-migrate-java</artifactId>
-                                    <version>3.35.0</version>
+                                    <version>3.36.0</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
