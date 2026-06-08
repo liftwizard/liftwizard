@@ -47,6 +47,16 @@ public class CompositeRecipeGenerator {
 	}
 
 	public String generate(Environment env, FilteredRecipeSpec spec) {
+		if (spec.getExclusions().isEmpty()) {
+			throw new IllegalArgumentException(
+				"FilteredRecipeSpec '"
+				+ spec.getGeneratedRecipeName()
+				+ "' has no exclusions; a filtered recipe must exclude at least one recipe. Reference the base recipe '"
+				+ spec.getBaseRecipeName()
+				+ "' directly instead."
+			);
+		}
+
 		RecipeDescriptor root = this.findDescriptor(env, spec.getBaseRecipeName());
 
 		MutableMap<String, String> exclusionReasons = MapAdapter.adapt(new LinkedHashMap<>());
