@@ -20,7 +20,7 @@ Eleven composite recipes are available:
 | `io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe` | Adoption patterns that may change semantics with nulls         |
 | `io.liftwizard.testing.junit.JupiterBestPractices`                                           | JUnit Jupiter best practices for test quality                  |
 | `io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration`                  | Migrate Dropwizard JUnit 4 testing rules to JUnit 5 extensions |
-| `io.liftwizard.migrate.UpgradeToJava21`                                                      | Upgrade to Java 21, excluding `StringFormatted`                |
+| `io.liftwizard.migrate.JavaBestPractices`                                                    | Java best practices, excluding `StringFormatted`               |
 
 ## Liftwizard Recommended Recipes (General Java)
 
@@ -820,6 +820,8 @@ class MyTest {
 }
 ```
 
-## Upgrade to Java 21
+## Java best practices
 
-The `io.liftwizard.migrate.UpgradeToJava21` composite recipe applies the upstream `org.openrewrite.java.migrate.UpgradeToJava21` recipe with `StringFormatted` excluded. `StringFormatted` rewrites `String.format(...)` to `"...".formatted(...)`, which Liftwizard avoids. Downstream consumers can reference this generated recipe instead of hand-rolling a filtered override of the upstream Java-upgrade suite.
+The `io.liftwizard.migrate.JavaBestPractices` composite recipe applies the upstream `org.openrewrite.java.migrate.JavaBestPractices` recipe with `StringFormatted` excluded. `StringFormatted` rewrites `String.format(...)` to `"...".formatted(...)`, which Liftwizard avoids. Downstream consumers can reference this generated recipe instead of hand-rolling a filtered override.
+
+As of OpenRewrite 8.84.0 (`rewrite-migrate-java` 3.36.0), upstream moved `StringFormatted` out of the Java-upgrade chain (`UpgradeToJava21` &rarr; `UpgradeToJava17`) and into `JavaBestPractices`. The Java-21 upgrade no longer applies `StringFormatted`, so no filtered override of `UpgradeToJava21` is needed; reference `org.openrewrite.java.migrate.UpgradeToJava21` directly.
