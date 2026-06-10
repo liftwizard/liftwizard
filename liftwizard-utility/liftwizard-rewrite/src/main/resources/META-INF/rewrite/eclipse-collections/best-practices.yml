@@ -90,5 +90,6 @@ recipeList:
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamGatherWindowFixedToChunk
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamGatherFoldToInjectInto
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECArraysStreamToArrayAdapter
+    - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamChainToListIterable
     - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedSetToMutableSortedSet
     - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsDeclarationSiteTypeVariances

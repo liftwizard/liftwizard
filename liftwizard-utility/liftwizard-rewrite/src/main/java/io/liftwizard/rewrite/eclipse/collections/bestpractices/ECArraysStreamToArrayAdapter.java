@@ -17,50 +17,44 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.collections.api.factory.Sets;
-import org.eclipse.collections.api.set.ImmutableSet;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
-import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.search.UsesMethod;
-import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 
 /**
- * Transforms {@code Arrays.stream(array)} to Eclipse Collections
- * {@code ArrayAdapter.adapt(array)}.
+ * Transforms {@code Arrays.stream(array)} chains to Eclipse Collections
+ * {@code ArrayAdapter.adapt(array)} chains.
  *
  * <p>Example:
  * <pre>{@code
  * // Before
- * Arrays.stream(values)
+ * Arrays.stream(values).skip(1).toArray()
+ * Arrays.stream(values).filter(each -> !each.isEmpty()).anyMatch(each -> each.length() > 3)
  *
  * // After
- * ArrayAdapter.adapt(values)
+ * ArrayAdapter.adapt(values).drop(1).toArray()
+ * ArrayAdapter.adapt(values).select(each -> !each.isEmpty()).anySatisfy(each -> each.length() > 3)
  * }</pre>
  *
  * <p>Eclipse Collections' {@code ArrayAdapter} wraps an array as a {@code RichIterable},
  * providing the full Eclipse Collections API ({@code select}, {@code collect},
  * {@code groupBy}, etc.) without copying the array.
  *
- * <p>Note: This recipe only matches the single-argument {@code Arrays.stream(T[])} overload.
- * It does not match the primitive overloads ({@code int[]}, {@code long[]}, {@code double[]})
- * or the range overload ({@code Arrays.stream(T[], int, int)}).
- *
- * <p>Because the transformation changes the expression's type from {@code Stream} to
- * {@code ArrayAdapter}, it only applies when the result is immediately consumed by a method
- * that exists on both types with the same semantics ({@code toList()}, {@code toArray()},
- * {@code iterator()}, or {@code forEach} with a lambda or method reference). Stream-only
- * chains like {@code skip} or {@code filter} are left untouched.
+ * <p>Chain walking, the operation translation tables, and the shared guards live in
+ * {@link AbstractECStreamChainVisitor}. This recipe adds the array-specific root handling:
+ * only the single-argument {@code Arrays.stream(T[])} overload matches — not the primitive
+ * overloads ({@code int[]}, {@code long[]}, {@code double[]}) or the range overload — and the
+ * root is replaced with {@code ArrayAdapter.adapt(array)}.
  */
 public class ECArraysStreamToArrayAdapter extends Recipe {
 
@@ -83,10 +77,11 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 	@Override
 	public String getDescription() {
 		return (
-			"Transforms `Arrays.stream(array)` to `ArrayAdapter.adapt(array)`. "
-			+ "Eclipse Collections' `ArrayAdapter` wraps an array as a `RichIterable`, "
-			+ "providing `select`, `collect`, `groupBy`, and other operations "
-			+ "without copying the array."
+			"Transforms `Arrays.stream(array)` chains to `ArrayAdapter.adapt(array)` chains, "
+			+ "renaming intermediate operations to their Eclipse Collections equivalents "
+			+ "(`skip` to `drop`, `limit` to `take`, `filter` to `select`, `map` to `collect`, "
+			+ "`anyMatch` to `anySatisfy`, ...). Eclipse Collections' `ArrayAdapter` wraps an array "
+			+ "as a `RichIterable` without copying the array."
 		);
 	}
 
@@ -105,82 +100,40 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 		return Preconditions.check(new UsesMethod<>(ARRAYS_STREAM_MATCHER), new ECArraysStreamToArrayAdapterVisitor());
 	}
 
-	private static final class ECArraysStreamToArrayAdapterVisitor extends JavaIsoVisitor<ExecutionContext> {
+	private static final class ECArraysStreamToArrayAdapterVisitor extends AbstractECStreamChainVisitor {
 
 		private static final JavaTemplate ARRAY_ADAPTER_ADAPT = JavaTemplate.builder("ArrayAdapter.adapt(#{any()})")
 			.imports("org.eclipse.collections.impl.list.fixed.ArrayAdapter")
 			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 			.build();
 
-		// Methods that exist on both Stream and ArrayAdapter with the same signature and semantics
-		private static final ImmutableSet<String> SAFE_ZERO_ARG_CONSUMERS = Sets.immutable.with(
-			"toList",
-			"toArray",
-			"iterator"
-		);
-
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
-
-			if (!ARRAYS_STREAM_MATCHER.matches(mi)) {
-				return mi;
-			}
-
-			if (mi.getArguments().size() != 1) {
-				return mi;
-			}
-
-			Expression argument = mi.getArguments().get(0);
-			JavaType argType = argument.getType();
-
-			// Only match Object[] arrays, not primitive arrays (int[], long[], double[])
-			if (argType instanceof JavaType.Array arrayType) {
-				JavaType elemType = arrayType.getElemType();
-				if (elemType instanceof JavaType.Primitive) {
-					return mi;
-				}
-			}
-
-			if (!this.isSafelyConsumed(method)) {
-				return mi;
-			}
-
-			this.maybeRemoveImport("java.util.Arrays");
-			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
-
-			return ARRAY_ADAPTER_ADAPT.apply(this.getCursor(), mi.getCoordinates().replace(), argument);
+		protected boolean isChainRoot(J.MethodInvocation invocation) {
+			return ARRAYS_STREAM_MATCHER.matches(invocation);
 		}
 
-		/**
-		 * The transformation changes the expression's type from {@code Stream} to {@code ArrayAdapter}, so it
-		 * is only valid when the result is immediately consumed by a method that exists on both types with the
-		 * same signature and semantics. Stream-only chains ({@code skip}, {@code filter}, {@code map},
-		 * {@code collect}, ...) and Stream-typed usages (assignment, argument, return) must stay untouched.
-		 */
-		private boolean isSafelyConsumed(J.MethodInvocation streamInvocation) {
-			if (!(this.getCursor().getParentTreeCursor().getValue() instanceof J.MethodInvocation parentInvocation)) {
+		@Override
+		protected boolean isRootTranslatable(J.MethodInvocation root) {
+			if (root.getArguments().size() != 1) {
 				return false;
 			}
 
-			Expression select = parentInvocation.getSelect();
-			if (select == null || !select.getId().equals(streamInvocation.getId())) {
+			// Only match Object[] arrays, not primitive arrays (int[], long[], double[])
+			JavaType argType = root.getArguments().get(0).getType();
+			if (argType instanceof JavaType.Array arrayType && arrayType.getElemType() instanceof JavaType.Primitive) {
 				return false;
 			}
+			return true;
+		}
 
-			List<Expression> arguments = parentInvocation.getArguments();
-			boolean hasNoArguments =
-				arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
-			if (hasNoArguments) {
-				return SAFE_ZERO_ARG_CONSUMERS.contains(parentInvocation.getSimpleName());
-			}
-
-			// Consumer and Procedure are both functional interfaces, so lambdas and method references compile
-			// against either, but a variable of type Consumer would not
-			return (
-				"forEach".equals(parentInvocation.getSimpleName())
-				&& arguments.size() == 1
-				&& (arguments.get(0) instanceof J.Lambda || arguments.get(0) instanceof J.MemberReference)
+		@Override
+		protected J.MethodInvocation visitTranslatableRoot(J.MethodInvocation root) {
+			this.maybeRemoveImport("java.util.Arrays");
+			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
+			return ARRAY_ADAPTER_ADAPT.apply(
+				this.getCursor(),
+				root.getCoordinates().replace(),
+				root.getArguments().get(0)
 			);
 		}
 	}
