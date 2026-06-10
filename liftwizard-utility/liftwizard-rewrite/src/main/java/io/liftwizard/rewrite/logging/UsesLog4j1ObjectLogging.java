@@ -23,8 +23,8 @@ import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.MethodMatcher;
-import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.marker.SearchResult;
 
@@ -66,10 +66,11 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 	@Override
 	public String getDescription() {
 		return (
-			"Finds Log4j 1.x logging calls where the message argument is not a String. "
+			"Finds Log4j 1.x logging calls where the message argument is not a CharSequence. "
 			+ "These calls pass an Object directly (e.g., `LOGGER.info(myObject)`) "
 			+ "which allows appenders to inspect the object's type for structured logging. "
-			+ "Throwable message arguments (e.g., `LOGGER.error(exception)`) are excluded "
+			+ "CharSequence message arguments (e.g., String, StringBuilder) and Throwable "
+			+ "message arguments (e.g., `LOGGER.error(exception)`) are excluded "
 			+ "because they migrate safely to SLF4J."
 		);
 	}
@@ -89,10 +90,9 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 			}
 			for (MethodMatcher matcher : LOG_MATCHERS) {
 				if (matcher.matches(m)) {
-					Expression firstArg = m.getArguments().get(0);
+					JavaType firstArgType = m.getArguments().get(0).getType();
 					if (
-						!TypeUtils.isString(firstArg.getType())
-						&& !TypeUtils.isAssignableTo("java.lang.Throwable", firstArg.getType())
+						!isCharSequence(firstArgType) && !TypeUtils.isAssignableTo("java.lang.Throwable", firstArgType)
 					) {
 						return SearchResult.found(m);
 					}
@@ -100,6 +100,17 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 				}
 			}
 			return m;
+		}
+
+		/**
+		 * Returns whether the type is a CharSequence, and thus a string-like message that migrates
+		 * safely to SLF4J. Both checks are required: a string literal carries
+		 * {@link JavaType.Primitive#String}, which {@code isAssignableTo("java.lang.CharSequence", ..)}
+		 * does not match, while {@code StringBuilder} and {@code StringBuffer} are matched only by the
+		 * assignability check.
+		 */
+		private static boolean isCharSequence(JavaType type) {
+			return TypeUtils.isString(type) || TypeUtils.isAssignableTo("java.lang.CharSequence", type);
 		}
 	}
 }

@@ -140,6 +140,10 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        LOGGER.error(exception);
 					        LOGGER.error(exception.getClass().getName(), exception);
 					    }
+
+					    void doesNotDetectStringBuilder(StringBuilder builder) {
+					        LOGGER.info(builder);
+					    }
 					}
 					"""
 				)
