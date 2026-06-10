@@ -26,9 +26,9 @@ import static org.openrewrite.java.Assertions.java;
 
 class UsesLog4jFatalTest implements RewriteTest {
 
-	private static final String LOG4J_CATEGORY_STUB = """
+	private static final String LOG4J1_STUB = """
 		package org.apache.log4j;
-		public class Category {
+		class Category {
 		    public static Logger getLogger(Class clazz) { return null; }
 		    public void debug(Object message) {}
 		    public void info(Object message) {}
@@ -37,20 +37,26 @@ class UsesLog4jFatalTest implements RewriteTest {
 		    public void fatal(Object message) {}
 		    public void fatal(Object message, Throwable t) {}
 		}
-		""";
-
-	private static final String LOG4J_LOGGER_STUB = """
-		package org.apache.log4j;
 		public class Logger extends Category {
 		    public static Logger getLogger(Class clazz) { return null; }
 		}
 		""";
 
+	private static final String LOG4J2_STUB = """
+		package org.apache.logging.log4j;
+		public interface Logger {
+		    void debug(Object message);
+		    void info(Object message);
+		    void warn(Object message);
+		    void error(Object message);
+		    void fatal(Object message);
+		    void fatal(Object message, Throwable t);
+		}
+		""";
+
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new UsesLog4jFatal())
-			.parser(JavaParser.fromJavaVersion().dependsOn(LOG4J_CATEGORY_STUB, LOG4J_LOGGER_STUB));
+		spec.recipe(new UsesLog4jFatal()).parser(JavaParser.fromJavaVersion().dependsOn(LOG4J1_STUB, LOG4J2_STUB));
 	}
 
 	@DocumentExample
@@ -80,6 +86,15 @@ class UsesLog4jFatalTest implements RewriteTest {
 					        LOGGER.fatal("Failure", exception);
 					    }
 					}
+
+					class Log4j2Test {
+					    private static final org.apache.logging.log4j.Logger LOG4J2_LOGGER = null;
+
+					    void detectsLog4j2Fatal(Object message, Exception exception) {
+					        LOG4J2_LOGGER.fatal(message);
+					        LOG4J2_LOGGER.fatal("Failure", exception);
+					    }
+					}
 					""",
 					"""
 					import org.apache.log4j.Logger;
@@ -101,6 +116,15 @@ class UsesLog4jFatalTest implements RewriteTest {
 
 					    void detectsThrowableArgument(Exception exception) {
 					        /*~~>*/LOGGER.fatal("Failure", exception);
+					    }
+					}
+
+					class Log4j2Test {
+					    private static final org.apache.logging.log4j.Logger LOG4J2_LOGGER = null;
+
+					    void detectsLog4j2Fatal(Object message, Exception exception) {
+					        /*~~>*/LOG4J2_LOGGER.fatal(message);
+					        /*~~>*/LOG4J2_LOGGER.fatal("Failure", exception);
 					    }
 					}
 					"""
@@ -132,6 +156,17 @@ class UsesLog4jFatalTest implements RewriteTest {
 
 					    void doesNotDetectUnrelatedFatal(String message) {
 					        custom.fatal(message);
+					    }
+					}
+
+					class Log4j2Test {
+					    private static final org.apache.logging.log4j.Logger LOG4J2_LOGGER = null;
+
+					    void doesNotDetectLog4j2OtherLevels(String message) {
+					        LOG4J2_LOGGER.debug(message);
+					        LOG4J2_LOGGER.info(message);
+					        LOG4J2_LOGGER.warn(message);
+					        LOG4J2_LOGGER.error(message);
 					    }
 					}
 					"""

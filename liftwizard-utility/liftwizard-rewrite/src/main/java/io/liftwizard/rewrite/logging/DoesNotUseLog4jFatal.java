@@ -22,23 +22,24 @@ import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
 
 /**
- * Precondition recipe that matches files which do <em>not</em> use Log4j 1.x {@code fatal} logging.
+ * Precondition recipe that matches files which do <em>not</em> use Log4j 1.x or 2.x {@code fatal}
+ * logging.
  *
  * <p>This is the negation of {@link UsesLog4jFatal}. It is intended to be used as a YAML
- * {@code preconditions} entry so that a composite migration recipe (e.g., Log4j 1 to SLF4J)
+ * {@code preconditions} entry so that a composite migration recipe (e.g., Log4j 2 to SLF4J)
  * skips files that log at the {@code FATAL} level, which has no SLF4J equivalent.
  */
 public final class DoesNotUseLog4jFatal extends Recipe {
 
 	@Override
 	public String getDisplayName() {
-		return "Does not use Log4j 1.x fatal logging";
+		return "Does not use Log4j 1.x or 2.x fatal logging";
 	}
 
 	@Override
 	public String getDescription() {
 		return (
-			"Precondition that matches source files which do not use the Log4j 1.x `fatal` level "
+			"Precondition that matches source files which do not use the Log4j 1.x or 2.x `fatal` level "
 			+ "(e.g., `LOGGER.fatal(message)`). Files that use fatal logging are excluded, preventing "
 			+ "migration recipes from downgrading FATAL to ERROR, which has no equivalent in SLF4J."
 		);

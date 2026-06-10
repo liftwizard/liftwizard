@@ -22,24 +22,24 @@ import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
 
 /**
- * Precondition recipe that matches files which do <em>not</em> use Log4j 1.x object logging.
+ * Precondition recipe that matches files which do <em>not</em> use Log4j 1.x or 2.x object logging.
  *
  * <p>This is the negation of {@link UsesLog4j1ObjectLogging}. It is intended to be used as a
- * YAML {@code preconditions} entry so that a composite migration recipe (e.g., Log4j 1 to SLF4J)
+ * YAML {@code preconditions} entry so that a composite migration recipe (e.g., Log4j 2 to SLF4J)
  * skips files that pass Objects to logging methods, preserving structured logging capabilities.
  */
 public final class DoesNotUseLog4j1ObjectLogging extends Recipe {
 
 	@Override
 	public String getDisplayName() {
-		return "Does not use Log4j 1.x object logging";
+		return "Does not use Log4j 1.x or 2.x object logging";
 	}
 
 	@Override
 	public String getDescription() {
 		return (
 			"Precondition that matches source files which do not pass non-String Objects to "
-			+ "Log4j 1.x logging methods. Files that use object logging (e.g., `LOGGER.info(myObject)`) "
+			+ "Log4j 1.x or 2.x logging methods. Files that use object logging (e.g., `LOGGER.info(myObject)`) "
 			+ "are excluded, preventing migration recipes from destroying structured logging."
 		);
 	}

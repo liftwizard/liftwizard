@@ -29,12 +29,18 @@ import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.marker.SearchResult;
 
 /**
- * Search recipe that finds Log4j 1.x logging calls where the message argument is not a String.
+ * Search recipe that finds Log4j 1.x and Log4j 2.x logging calls where the message argument is
+ * not a String.
  *
- * <p>Log4j 1's {@code Category.info(Object)} accepts any Object, enabling structured logging
- * where appenders can inspect the argument's type via {@code instanceof}. Migrating such calls
- * to SLF4J (which only has {@code info(String)}) would either break compilation or silently
- * destroy structured logging if transformed to {@code info("{}", object)}.
+ * <p>Both Log4j 1's {@code Category.info(Object)} and Log4j 2's {@code Logger.info(Object)} accept
+ * any Object, enabling structured logging where appenders can inspect the argument's type via
+ * {@code instanceof}. Migrating such calls to SLF4J (which only has {@code info(String)}) would
+ * either break compilation or silently destroy structured logging if transformed to
+ * {@code info("{}", object)}.
+ *
+ * <p>Matching both Log4j versions matters because the Log4j 1 to SLF4J migration runs Log4j 1 to
+ * Log4j 2 first; by the time this precondition is evaluated, the affected calls are already typed
+ * as {@code org.apache.logging.log4j.Logger}.
  *
  * <p>{@code Throwable} message arguments are excluded: calls like {@code LOGGER.error(exception)}
  * are not structured object logging and migrate safely to SLF4J, which has a native
@@ -55,18 +61,23 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 		new MethodMatcher("org.apache.log4j.Logger info(..)", true),
 		new MethodMatcher("org.apache.log4j.Logger warn(..)", true),
 		new MethodMatcher("org.apache.log4j.Logger error(..)", true),
-		new MethodMatcher("org.apache.log4j.Logger fatal(..)", true)
+		new MethodMatcher("org.apache.log4j.Logger fatal(..)", true),
+		new MethodMatcher("org.apache.logging.log4j.Logger debug(..)", true),
+		new MethodMatcher("org.apache.logging.log4j.Logger info(..)", true),
+		new MethodMatcher("org.apache.logging.log4j.Logger warn(..)", true),
+		new MethodMatcher("org.apache.logging.log4j.Logger error(..)", true),
+		new MethodMatcher("org.apache.logging.log4j.Logger fatal(..)", true)
 	);
 
 	@Override
 	public String getDisplayName() {
-		return "Find Log4j 1.x object logging calls";
+		return "Find Log4j 1.x and 2.x object logging calls";
 	}
 
 	@Override
 	public String getDescription() {
 		return (
-			"Finds Log4j 1.x logging calls where the message argument is not a CharSequence. "
+			"Finds Log4j 1.x and 2.x logging calls where the message argument is not a CharSequence. "
 			+ "These calls pass an Object directly (e.g., `LOGGER.info(myObject)`) "
 			+ "which allows appenders to inspect the object's type for structured logging. "
 			+ "CharSequence message arguments (e.g., String, StringBuilder) and Throwable "

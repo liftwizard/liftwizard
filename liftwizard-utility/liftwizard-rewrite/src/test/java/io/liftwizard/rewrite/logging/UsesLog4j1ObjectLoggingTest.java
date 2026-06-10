@@ -26,9 +26,9 @@ import static org.openrewrite.java.Assertions.java;
 
 class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
-	private static final String LOG4J_CATEGORY_STUB = """
+	private static final String LOG4J1_STUB = """
 		package org.apache.log4j;
-		public class Category {
+		class Category {
 		    public static Logger getLogger(Class clazz) { return null; }
 		    public void debug(Object message) {}
 		    public void info(Object message) {}
@@ -37,12 +37,19 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 		    public void error(Object message, Throwable t) {}
 		    public void fatal(Object message) {}
 		}
-		""";
-
-	private static final String LOG4J_LOGGER_STUB = """
-		package org.apache.log4j;
 		public class Logger extends Category {
 		    public static Logger getLogger(Class clazz) { return null; }
+		}
+		""";
+
+	private static final String LOG4J2_STUB = """
+		package org.apache.logging.log4j;
+		public interface Logger {
+		    void debug(Object message);
+		    void info(Object message);
+		    void warn(Object message);
+		    void error(Object message);
+		    void fatal(Object message);
 		}
 		""";
 
@@ -50,7 +57,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UsesLog4j1ObjectLogging())
-			.parser(JavaParser.fromJavaVersion().dependsOn(LOG4J_CATEGORY_STUB, LOG4J_LOGGER_STUB));
+			.parser(JavaParser.fromJavaVersion().dependsOn(LOG4J1_STUB, LOG4J2_STUB));
 	}
 
 	@DocumentExample
@@ -83,6 +90,15 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        LOGGER.fatal(obj);
 					    }
 					}
+
+					class Log4j2Test {
+					    private static final org.apache.logging.log4j.Logger LOG4J2_LOGGER = null;
+
+					    void detectsLog4j2ObjectArgument(Object obj) {
+					        LOG4J2_LOGGER.info(obj);
+					        LOG4J2_LOGGER.fatal(obj);
+					    }
+					}
 					""",
 					"""
 					import org.apache.log4j.Logger;
@@ -107,6 +123,15 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        /*~~>*/LOGGER.warn(obj);
 					        /*~~>*/LOGGER.error(obj);
 					        /*~~>*/LOGGER.fatal(obj);
+					    }
+					}
+
+					class Log4j2Test {
+					    private static final org.apache.logging.log4j.Logger LOG4J2_LOGGER = null;
+
+					    void detectsLog4j2ObjectArgument(Object obj) {
+					        /*~~>*/LOG4J2_LOGGER.info(obj);
+					        /*~~>*/LOG4J2_LOGGER.fatal(obj);
 					    }
 					}
 					"""
@@ -143,6 +168,18 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
 					    void doesNotDetectStringBuilder(StringBuilder builder) {
 					        LOGGER.info(builder);
+					    }
+					}
+
+					class Log4j2Test {
+					    private static final org.apache.logging.log4j.Logger LOG4J2_LOGGER = null;
+
+					    void doesNotDetectLog4j2StringLiteral() {
+					        LOG4J2_LOGGER.info("Simple message");
+					    }
+
+					    void doesNotDetectLog4j2StringVariable(String message) {
+					        LOG4J2_LOGGER.fatal(message);
 					    }
 					}
 					"""
