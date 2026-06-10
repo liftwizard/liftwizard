@@ -86,21 +86,91 @@ class ECArraysStreamToArrayAdapterTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void doNotReplaceStreamOnlyChains() {
+	void doNotReplaceUntranslatableChains() {
 		this.rewriteRun(
 				java(
 					"""
 					import java.util.Arrays;
+					import java.util.function.Predicate;
 					import java.util.stream.Collectors;
+
+					class Test {
+					    void test(String[] values, Predicate<String> predicate, long n) {
+					        var result1 = Arrays.stream(values).collect(Collectors.toSet());
+					        var result2 = Arrays.stream(values).count();
+					        var result3 = Arrays.stream(values).toArray(String[]::new);
+					        var result4 = Arrays.stream(values).filter(predicate).toList();
+					        var result5 = Arrays.stream(values).skip(n).toArray();
+					        var result6 = Arrays.stream(values).sorted().toList();
+					        var result7 = Arrays.stream(values).skip(1);
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void translateStreamChains() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Arrays;
 
 					class Test {
 					    void test(String[] values) {
 					        var result1 = Arrays.stream(values).skip(1).toArray();
-					        var result2 = Arrays.stream(values).filter(each -> !each.isEmpty()).toList();
-					        var result3 = Arrays.stream(values).map(String::trim).toList();
-					        var result4 = Arrays.stream(values).collect(Collectors.toSet());
-					        var result5 = Arrays.stream(values).count();
-					        var result6 = Arrays.stream(values).toArray(String[]::new);
+					        var result2 = Arrays.stream(values).limit(2).toList();
+					        var result3 = Arrays.stream(values).filter(each -> !each.isEmpty()).toList();
+					        var result4 = Arrays.stream(values).map(String::trim).toList();
+					        var result5 = Arrays.stream(values).distinct().toList();
+					        var result6 = Arrays.stream(values).filter(each -> !each.isEmpty()).map(String::trim).toArray();
+					    }
+					}
+					""",
+					"""
+					import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
+
+					class Test {
+					    void test(String[] values) {
+					        var result1 = ArrayAdapter.adapt(values).drop(1).toArray();
+					        var result2 = ArrayAdapter.adapt(values).take(2);
+					        var result3 = ArrayAdapter.adapt(values).select(each -> !each.isEmpty());
+					        var result4 = ArrayAdapter.adapt(values).collect(String::trim);
+					        var result5 = ArrayAdapter.adapt(values).distinct();
+					        var result6 = ArrayAdapter.adapt(values).select(each -> !each.isEmpty()).collect(String::trim).toArray();
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void translateMatchTerminals() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Arrays;
+
+					class Test {
+					    void test(String[] values) {
+					        boolean result1 = Arrays.stream(values).anyMatch(String::isEmpty);
+					        boolean result2 = Arrays.stream(values).allMatch(each -> each.length() > 1);
+					        boolean result3 = Arrays.stream(values).noneMatch(String::isBlank);
+					        boolean result4 = Arrays.stream(values).filter(each -> !each.isEmpty()).anyMatch(each -> each.length() > 3);
+					    }
+					}
+					""",
+					"""
+					import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
+
+					class Test {
+					    void test(String[] values) {
+					        boolean result1 = ArrayAdapter.adapt(values).anySatisfy(String::isEmpty);
+					        boolean result2 = ArrayAdapter.adapt(values).allSatisfy(each -> each.length() > 1);
+					        boolean result3 = ArrayAdapter.adapt(values).noneSatisfy(String::isBlank);
+					        boolean result4 = ArrayAdapter.adapt(values).select(each -> !each.isEmpty()).anySatisfy(each -> each.length() > 3);
 					    }
 					}
 					"""
