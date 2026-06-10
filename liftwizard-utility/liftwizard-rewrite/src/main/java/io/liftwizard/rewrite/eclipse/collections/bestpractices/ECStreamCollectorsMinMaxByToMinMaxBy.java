@@ -27,7 +27,6 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
-import org.openrewrite.java.tree.TypeUtils;
 
 /**
  * Transforms stream collect with Collectors.minBy/maxBy to Eclipse Collections minBy/maxBy.
@@ -150,7 +149,7 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
 				return methodInvocation;
 			}
 
-			if (!this.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall)) {
 				return methodInvocation;
 			}
 
@@ -159,7 +158,7 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
 				return methodInvocation;
 			}
 
-			if (!this.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
 				return methodInvocation;
 			}
 
@@ -184,23 +183,6 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
 
 		private static boolean isNullLiteral(Expression expression) {
 			return expression instanceof J.Literal literal && literal.getValue() == null;
-		}
-
-		private boolean isStreamMethod(J.MethodInvocation method) {
-			if (!"stream".equals(method.getSimpleName())) {
-				return false;
-			}
-			if (method.getArguments().isEmpty()) {
-				return true;
-			}
-			if (method.getArguments().size() != 1) {
-				return false;
-			}
-			return method.getArguments().getFirst() instanceof J.Empty;
-		}
-
-		private boolean isEclipseCollectionsType(Expression expression) {
-			return TypeUtils.isAssignableTo("org.eclipse.collections.api.RichIterable", expression.getType());
 		}
 	}
 }
