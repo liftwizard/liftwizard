@@ -27,7 +27,6 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
-import org.openrewrite.java.tree.TypeUtils;
 
 /**
  * Transforms stream collect groupingBy with Function.identity() and counting to Eclipse Collections toBag.
@@ -118,7 +117,7 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 				return methodInvocation;
 			}
 
-			if (!this.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall)) {
 				return methodInvocation;
 			}
 
@@ -127,7 +126,7 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 				return methodInvocation;
 			}
 
-			if (!this.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
 				return methodInvocation;
 			}
 
@@ -169,25 +168,6 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 			}
 
 			return COUNTING_MATCHER.matches(downstreamCall);
-		}
-
-		private boolean isStreamMethod(J.MethodInvocation method) {
-			if (!"stream".equals(method.getSimpleName())) {
-				return false;
-			}
-			if (!method.getArguments().isEmpty()) {
-				if (method.getArguments().size() != 1) {
-					return false;
-				}
-				if (!(method.getArguments().get(0) instanceof J.Empty)) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private boolean isEclipseCollectionsType(Expression expression) {
-			return TypeUtils.isAssignableTo("org.eclipse.collections.api.RichIterable", expression.getType());
 		}
 	}
 }
