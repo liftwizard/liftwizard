@@ -17,9 +17,11 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.api.set.ImmutableSet;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
@@ -53,6 +55,12 @@ import org.openrewrite.java.tree.JavaType;
  * <p>Note: This recipe only matches the single-argument {@code Arrays.stream(T[])} overload.
  * It does not match the primitive overloads ({@code int[]}, {@code long[]}, {@code double[]})
  * or the range overload ({@code Arrays.stream(T[], int, int)}).
+ *
+ * <p>Because the transformation changes the expression's type from {@code Stream} to
+ * {@code ArrayAdapter}, it only applies when the result is immediately consumed by a method
+ * that exists on both types with the same semantics ({@code toList()}, {@code toArray()},
+ * {@code iterator()}, or {@code forEach} with a lambda or method reference). Stream-only
+ * chains like {@code skip} or {@code filter} are left untouched.
  */
 public class ECArraysStreamToArrayAdapter extends Recipe {
 
@@ -104,6 +112,13 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 			.build();
 
+		// Methods that exist on both Stream and ArrayAdapter with the same signature and semantics
+		private static final ImmutableSet<String> SAFE_ZERO_ARG_CONSUMERS = Sets.immutable.with(
+			"toList",
+			"toArray",
+			"iterator"
+		);
+
 		@Override
 		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
 			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
@@ -127,10 +142,46 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 				}
 			}
 
+			if (!this.isSafelyConsumed(method)) {
+				return mi;
+			}
+
 			this.maybeRemoveImport("java.util.Arrays");
 			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
 
 			return ARRAY_ADAPTER_ADAPT.apply(this.getCursor(), mi.getCoordinates().replace(), argument);
+		}
+
+		/**
+		 * The transformation changes the expression's type from {@code Stream} to {@code ArrayAdapter}, so it
+		 * is only valid when the result is immediately consumed by a method that exists on both types with the
+		 * same signature and semantics. Stream-only chains ({@code skip}, {@code filter}, {@code map},
+		 * {@code collect}, ...) and Stream-typed usages (assignment, argument, return) must stay untouched.
+		 */
+		private boolean isSafelyConsumed(J.MethodInvocation streamInvocation) {
+			if (!(this.getCursor().getParentTreeCursor().getValue() instanceof J.MethodInvocation parentInvocation)) {
+				return false;
+			}
+
+			Expression select = parentInvocation.getSelect();
+			if (select == null || !select.getId().equals(streamInvocation.getId())) {
+				return false;
+			}
+
+			List<Expression> arguments = parentInvocation.getArguments();
+			boolean hasNoArguments =
+				arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
+			if (hasNoArguments) {
+				return SAFE_ZERO_ARG_CONSUMERS.contains(parentInvocation.getSimpleName());
+			}
+
+			// Consumer and Procedure are both functional interfaces, so lambdas and method references compile
+			// against either, but a variable of type Consumer would not
+			return (
+				"forEach".equals(parentInvocation.getSimpleName())
+				&& arguments.size() == 1
+				&& (arguments.get(0) instanceof J.Lambda || arguments.get(0) instanceof J.MemberReference)
+			);
 		}
 	}
 }

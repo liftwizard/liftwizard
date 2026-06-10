@@ -84,4 +84,82 @@ class ECArraysStreamToArrayAdapterTest extends AbstractEclipseCollectionsTest {
 				)
 			);
 	}
+
+	@Test
+	void doNotReplaceStreamOnlyChains() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Arrays;
+					import java.util.stream.Collectors;
+
+					class Test {
+					    void test(String[] values) {
+					        var result1 = Arrays.stream(values).skip(1).toArray();
+					        var result2 = Arrays.stream(values).filter(each -> !each.isEmpty()).toList();
+					        var result3 = Arrays.stream(values).map(String::trim).toList();
+					        var result4 = Arrays.stream(values).collect(Collectors.toSet());
+					        var result5 = Arrays.stream(values).count();
+					        var result6 = Arrays.stream(values).toArray(String[]::new);
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void doNotReplaceStreamTypedUsages() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Arrays;
+					import java.util.stream.Stream;
+
+					class Test {
+					    Stream<String> test(String[] values) {
+					        Stream<String> stream = Arrays.stream(values);
+					        this.consume(Arrays.stream(values));
+					        return Arrays.stream(values);
+					    }
+
+					    void consume(Stream<String> stream) {
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void replaceSafeTerminalConsumers() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Arrays;
+
+					class Test {
+					    void test(String[] values) {
+					        var result1 = Arrays.stream(values).toArray();
+					        var result2 = Arrays.stream(values).iterator();
+					        Arrays.stream(values).forEach(each -> each.trim());
+					        Arrays.stream(values).forEach(System.out::println);
+					    }
+					}
+					""",
+					"""
+					import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
+
+					class Test {
+					    void test(String[] values) {
+					        var result1 = ArrayAdapter.adapt(values).toArray();
+					        var result2 = ArrayAdapter.adapt(values).iterator();
+					        ArrayAdapter.adapt(values).forEach(each -> each.trim());
+					        ArrayAdapter.adapt(values).forEach(System.out::println);
+					    }
+					}
+					"""
+				)
+			);
+	}
 }
