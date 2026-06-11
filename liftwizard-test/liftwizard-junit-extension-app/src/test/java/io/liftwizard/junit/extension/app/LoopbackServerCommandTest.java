@@ -39,8 +39,8 @@ class LoopbackServerCommandTest {
 		extension.before();
 		try {
 			var serverFactory = (DefaultServerFactory) extension.getConfiguration().getServerFactory();
-			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().get(0);
-			var adminConnector = (HttpConnectorFactory) serverFactory.getAdminConnectors().get(0);
+			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().getFirst();
+			var adminConnector = (HttpConnectorFactory) serverFactory.getAdminConnectors().getFirst();
 			assertThat(applicationConnector.getBindHost()).isEqualTo("127.0.0.1");
 			assertThat(adminConnector.getBindHost()).isEqualTo("127.0.0.1");
 			assertThat(extension.getLocalPort()).isPositive();
@@ -74,8 +74,8 @@ class LoopbackServerCommandTest {
 		extension.before();
 		try {
 			var serverFactory = (DefaultServerFactory) extension.getConfiguration().getServerFactory();
-			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().get(0);
-			var adminConnector = (HttpConnectorFactory) serverFactory.getAdminConnectors().get(0);
+			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().getFirst();
+			var adminConnector = (HttpConnectorFactory) serverFactory.getAdminConnectors().getFirst();
 			assertThat(applicationConnector.getBindHost()).isEqualTo("localhost");
 			assertThat(adminConnector.getBindHost()).isEqualTo("127.0.0.1");
 		} finally {
@@ -94,7 +94,7 @@ class LoopbackServerCommandTest {
 		extension.before();
 		try {
 			var serverFactory = (DefaultServerFactory) extension.getConfiguration().getServerFactory();
-			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().get(0);
+			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().getFirst();
 			assertThat(applicationConnector.getBindHost()).isNull();
 		} finally {
 			extension.after();
