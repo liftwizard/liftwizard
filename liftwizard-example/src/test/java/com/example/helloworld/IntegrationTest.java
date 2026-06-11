@@ -164,6 +164,6 @@ class IntegrationTest {
 		Path log = Path.of("./logs/application.log");
 		assertThat(log).exists();
 		String actual = Files.readString(log);
-		assertThat(actual).contains("0.0.0.0:" + this.dropwizardAppExtension.getLocalPort());
+		assertThat(actual).contains("127.0.0.1:" + this.dropwizardAppExtension.getLocalPort());
 	}
 }

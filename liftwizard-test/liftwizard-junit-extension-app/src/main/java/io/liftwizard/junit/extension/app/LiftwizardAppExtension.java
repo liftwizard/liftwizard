@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.cli.Command;
-import io.dropwizard.cli.ServerCommand;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.jersey.jackson.JacksonFeature;
 import io.dropwizard.lifecycle.Managed;
@@ -78,7 +77,7 @@ public class LiftwizardAppExtension<C extends Configuration>
 		@Nullable String customPropertyPrefix,
 		ConfigOverride... configOverrides
 	) {
-		this(applicationClass, configPath, customPropertyPrefix, ServerCommand::new, configOverrides);
+		this(applicationClass, configPath, customPropertyPrefix, LoopbackServerCommand::new, configOverrides);
 	}
 
 	public LiftwizardAppExtension(
@@ -124,7 +123,7 @@ public class LiftwizardAppExtension<C extends Configuration>
 			configPath,
 			configSourceProvider,
 			customPropertyPrefix,
-			ServerCommand::new,
+			LoopbackServerCommand::new,
 			configOverrides
 		);
 	}
