@@ -227,7 +227,7 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 			// Lambdas and method references compile against either functional interface family, but a
 			// variable of a java.util.function type would not
 			case "filter", "map", "anyMatch", "allMatch", "noneMatch", "forEach" -> arguments.size() == 1
-				&& (arguments.get(0) instanceof J.Lambda || arguments.get(0) instanceof J.MemberReference);
+			&& (arguments.get(0) instanceof J.Lambda || arguments.get(0) instanceof J.MemberReference);
 			case "distinct", "toList", "toArray", "iterator" -> arguments.isEmpty();
 			default -> false;
 		};

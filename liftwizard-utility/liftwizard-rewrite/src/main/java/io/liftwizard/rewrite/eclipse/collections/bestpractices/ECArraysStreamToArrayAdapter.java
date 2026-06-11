@@ -130,7 +130,11 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 		protected J.MethodInvocation visitTranslatableRoot(J.MethodInvocation root) {
 			this.maybeRemoveImport("java.util.Arrays");
 			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
-			return ARRAY_ADAPTER_ADAPT.apply(this.getCursor(), root.getCoordinates().replace(), root.getArguments().get(0));
+			return ARRAY_ADAPTER_ADAPT.apply(
+				this.getCursor(),
+				root.getCoordinates().replace(),
+				root.getArguments().get(0)
+			);
 		}
 	}
 }
