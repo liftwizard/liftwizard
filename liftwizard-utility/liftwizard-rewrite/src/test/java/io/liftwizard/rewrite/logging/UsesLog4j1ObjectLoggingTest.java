@@ -43,6 +43,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 		package org.apache.log4j;
 		public class Logger extends Category {
 		    public static Logger getLogger(Class clazz) { return null; }
+		    public void trace(Object message) {}
 		}
 		""";
 
@@ -77,6 +78,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					    }
 
 					    void detectsAcrossLogLevels(Object obj) {
+					        LOGGER.trace(obj);
 					        LOGGER.debug(obj);
 					        LOGGER.warn(obj);
 					        LOGGER.error(obj);
@@ -103,6 +105,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					    }
 
 					    void detectsAcrossLogLevels(Object obj) {
+					        /*~~>*/LOGGER.trace(obj);
 					        /*~~>*/LOGGER.debug(obj);
 					        /*~~>*/LOGGER.warn(obj);
 					        /*~~>*/LOGGER.error(obj);
@@ -156,6 +159,7 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 			package org.apache.log4j;
 			public class Logger {
 			    public static Logger getLogger(Class clazz) { return null; }
+			    public void trace(Object message) {}
 			    public void debug(Object message) {}
 			    public void info(Object message) {}
 			    public void warn(Object message) {}
