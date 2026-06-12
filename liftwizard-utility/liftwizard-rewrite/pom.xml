@@ -331,6 +331,7 @@
                         <ignoredUnusedDeclaredDependency>com.google.errorprone:error_prone_core</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections-api</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>ch.qos.reload4j:reload4j</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-static-analysis</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-testing-frameworks</ignoredUnusedDeclaredDependency>
                     </ignoredUnusedDeclaredDependencies>
