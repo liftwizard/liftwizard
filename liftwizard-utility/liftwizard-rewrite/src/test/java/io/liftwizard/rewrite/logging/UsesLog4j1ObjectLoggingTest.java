@@ -40,7 +40,10 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 		this.rewriteRun(
 				java(
 					"""
+					import org.apache.log4j.Level;
 					import org.apache.log4j.Logger;
+
+					import java.util.function.Consumer;
 
 					class MyEvent {
 					    String name;
@@ -64,10 +67,24 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        LOGGER.error(obj);
 					        LOGGER.fatal(obj);
 					    }
+
+					    void detectsLogWithPriority(Object obj) {
+					        LOGGER.log(Level.INFO, obj);
+					    }
+
+					    void detectsObjectMethodReference() {
+					        take(LOGGER::info);
+					    }
+
+					    void take(Consumer<MyEvent> sink) {
+					    }
 					}
 					""",
 					"""
+					import org.apache.log4j.Level;
 					import org.apache.log4j.Logger;
+
+					import java.util.function.Consumer;
 
 					class MyEvent {
 					    String name;
@@ -91,6 +108,17 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        /*~~>*/LOGGER.error(obj);
 					        /*~~>*/LOGGER.fatal(obj);
 					    }
+
+					    void detectsLogWithPriority(Object obj) {
+					        /*~~>*/LOGGER.log(Level.INFO, obj);
+					    }
+
+					    void detectsObjectMethodReference() {
+					        take(/*~~>*/LOGGER::info);
+					    }
+
+					    void take(Consumer<MyEvent> sink) {
+					    }
 					}
 					"""
 				)
@@ -102,7 +130,10 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 		this.rewriteRun(
 				java(
 					"""
+					import org.apache.log4j.Level;
 					import org.apache.log4j.Logger;
+
+					import java.util.function.Consumer;
 
 					class Test {
 					    private static final Logger LOGGER = Logger.getLogger(Test.class);
@@ -127,12 +158,31 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					    void doesNotDetectStringBuilder(StringBuilder builder) {
 					        LOGGER.info(builder);
 					    }
+
+					    void doesNotDetectLogWithStringMessage(String message, StringBuilder builder) {
+					        LOGGER.log(Level.INFO, message);
+					        LOGGER.log(Level.INFO, builder);
+					    }
+
+					    void doesNotDetectStringMethodReference() {
+					        take(LOGGER::info);
+					    }
+
+					    void take(Consumer<String> sink) {
+					    }
 					}
 					"""
 				)
 			);
 	}
 
+	/**
+	 * Distinct-parser-config scenario (sanctioned exception to the single-{@code replacePatterns}
+	 * convention): a {@code Logger} stub that does <em>not</em> extend {@code Category}, so
+	 * {@code LOGGER.info(..)} resolves to {@code Logger.info} rather than the inherited
+	 * {@code Category.info}. Guards that the {@code Logger}-declared matchers keep detecting object
+	 * logging when the inheritance is not resolvable — removing those matchers must fail this test.
+	 */
 	@Test
 	void detectsObjectArgumentWhenLoggerInheritanceIsSevered() {
 		String severedLoggerStub = """
