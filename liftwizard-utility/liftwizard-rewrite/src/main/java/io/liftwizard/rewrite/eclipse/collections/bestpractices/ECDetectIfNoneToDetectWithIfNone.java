@@ -101,7 +101,7 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(result.typeFqn())
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
 				.build();
 
 			if (!result.typeFqn().startsWith("java.lang.")) {

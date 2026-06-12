@@ -329,6 +329,53 @@
                         <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-testing-frameworks</ignoredUnusedDeclaredDependency>
                     </ignoredUnusedDeclaredDependencies>
                 </configuration>
+                <executions>
+                    <!--
+                        JavaTemplate parsers need these dependencies on the classpath when recipes
+                        run inside the rewrite-maven-plugin realm, where JavaParser.classpath(String)
+                        cannot see them (it scans java.class.path, which holds only plexus-classworlds).
+                        Bundle the jars under META-INF/rewrite/classpath so JavaParser.classpathFromResources
+                        can load them from the recipe jar at runtime.
+                    -->
+                    <execution>
+                        <id>copy-template-classpath-jars</id>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF/rewrite/classpath</outputDirectory>
+                            <includeArtifactIds>eclipse-collections-api,assertj-core,junit-jupiter-api</includeArtifactIds>
+                            <includeScope>test</includeScope>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <!--
+                        classpathFromResources matches jars by filename prefix, and "eclipse-collections"
+                        is a prefix of "eclipse-collections-api", so both names would resolve to the api jar
+                        and the impl-only types (IntInterval, ArrayIterate) would be Unknown. Bundle the impl
+                        jar under a non-colliding name so recipes can request it as "eclipse-collections-impl".
+                    -->
+                    <execution>
+                        <id>copy-eclipse-collections-impl-jar</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF/rewrite/classpath</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.eclipse.collections</groupId>
+                                    <artifactId>eclipse-collections</artifactId>
+                                    <version>${eclipse-collections.version}</version>
+                                    <destFileName>eclipse-collections-impl.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

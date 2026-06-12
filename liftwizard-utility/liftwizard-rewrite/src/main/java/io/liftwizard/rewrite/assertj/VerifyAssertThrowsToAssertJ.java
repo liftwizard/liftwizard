@@ -66,7 +66,7 @@ public class VerifyAssertThrowsToAssertJ extends Recipe {
 				: "assertThatThrownBy(#{any(java.util.concurrent.Callable)}::call).isInstanceOf(#{any(java.lang.Class)})";
 			JavaTemplate template = JavaTemplate.builder(templateSourceCode)
 				.staticImports("org.assertj.core.api.Assertions.assertThatThrownBy")
-				.javaParser(JavaParser.fromJavaVersion().classpath("assertj-core"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "assertj-core"))
 				.build();
 
 			this.maybeRemoveImport("org.eclipse.collections.impl.test.Verify");

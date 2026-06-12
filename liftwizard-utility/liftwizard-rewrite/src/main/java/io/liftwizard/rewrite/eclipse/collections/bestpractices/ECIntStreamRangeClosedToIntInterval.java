@@ -85,13 +85,6 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 
 	private static final class IntStreamRangeClosedVisitor extends JavaIsoVisitor<ExecutionContext> {
 
-		private static final JavaTemplate INT_INTERVAL_FROM_TO = JavaTemplate.builder(
-			"IntInterval.fromTo(#{any(int)}, #{any(int)})"
-		)
-			.imports("org.eclipse.collections.impl.list.primitive.IntInterval")
-			.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections"))
-			.build();
-
 		@Override
 		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
 			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
@@ -107,7 +100,18 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 			this.maybeRemoveImport("java.util.stream.IntStream");
 			this.maybeAddImport("org.eclipse.collections.impl.list.primitive.IntInterval");
 
-			return INT_INTERVAL_FROM_TO.apply(
+			JavaTemplate intIntervalFromTo = JavaTemplate.builder("IntInterval.fromTo(#{any(int)}, #{any(int)})")
+				.imports("org.eclipse.collections.impl.list.primitive.IntInterval")
+				.javaParser(
+					JavaParser.fromJavaVersion().classpathFromResources(
+						ctx,
+						"eclipse-collections-api",
+						"eclipse-collections-impl"
+					)
+				)
+				.build();
+
+			return intIntervalFromTo.apply(
 				this.getCursor(),
 				mi.getCoordinates().replace(),
 				mi.getArguments().get(0),

@@ -114,7 +114,7 @@ public class DropwizardRuleAnnotations extends Recipe {
 				)
 				.javaParser(
 					JavaParser.fromJavaVersion()
-						.classpath("junit-jupiter-api")
+						.classpathFromResources(ctx, "junit-jupiter-api")
 						.dependsOn(
 							"""
 							package io.dropwizard.testing.junit5;
@@ -169,7 +169,7 @@ public class DropwizardRuleAnnotations extends Recipe {
 
 			return JavaTemplate.builder("@RegisterExtension")
 				.imports("org.junit.jupiter.api.extension.RegisterExtension")
-				.javaParser(JavaParser.fromJavaVersion().classpath("junit-jupiter-api"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "junit-jupiter-api"))
 				.build()
 				.apply(
 					this.getCursor(),
