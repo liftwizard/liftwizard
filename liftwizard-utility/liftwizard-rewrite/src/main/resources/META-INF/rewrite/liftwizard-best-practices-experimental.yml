@@ -19,8 +19,8 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.LiftwizardBestPracticesExperimental
 displayName: Liftwizard best practices (experimental)
 description: >-
-    Composite recipe for experimental rewrites.
-    Experimental recipes that are more aggressive and may require manual review.
+  Composite recipe for experimental rewrites.
+  Experimental recipes that are more aggressive and may require manual review.
 recipeList:
-    - io.liftwizard.rewrite.eclipse.collections.ECExperimentalRecipes
-    - io.liftwizard.rewrite.java.style.EnforceConsistentLineWrapping
+  - io.liftwizard.rewrite.eclipse.collections.ECExperimentalRecipes
+  - io.liftwizard.rewrite.java.style.EnforceConsistentLineWrapping

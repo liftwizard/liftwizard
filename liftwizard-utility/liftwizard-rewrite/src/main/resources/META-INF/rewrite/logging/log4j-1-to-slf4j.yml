@@ -19,19 +19,19 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.logging.Log4j1ToSlf4j1
 displayName: Migrate Log4j 1.x to SLF4J 1.x (skipping object logging)
 description: >-
-    Transforms usages of Log4j 1.x to leveraging SLF4J 1.x directly.
-    Unlike the upstream recipe, this version skips files that pass non-String
-    Objects to Log4j 1 logging methods (e.g., LOGGER.info(myObject)),
-    preserving structured logging capabilities. It also skips files that log at
-    the FATAL level (e.g., LOGGER.fatal(message)), which has no SLF4J equivalent.
-    Files with object logging or fatal logging remain on Log4j 1 and must be
-    migrated manually.
+  Transforms usages of Log4j 1.x to leveraging SLF4J 1.x directly.
+  Unlike the upstream recipe, this version skips files that pass non-String
+  Objects to Log4j 1 logging methods (e.g., LOGGER.info(myObject)),
+  preserving structured logging capabilities. It also skips files that log at
+  the FATAL level (e.g., LOGGER.fatal(message)), which has no SLF4J equivalent.
+  Files with object logging or fatal logging remain on Log4j 1 and must be
+  migrated manually.
 preconditions:
-    - io.liftwizard.rewrite.logging.DoesNotUseLog4j1ObjectLogging
-    - io.liftwizard.rewrite.logging.DoesNotUseLog4jFatal
+  - io.liftwizard.rewrite.logging.DoesNotUseLog4j1ObjectLogging
+  - io.liftwizard.rewrite.logging.DoesNotUseLog4jFatal
 recipeList:
-    - org.openrewrite.java.ChangeType:
-          oldFullyQualifiedTypeName: org.apache.log4j.MDC
-          newFullyQualifiedTypeName: org.slf4j.MDC
-    - org.openrewrite.java.logging.log4j.Log4j1ToLog4j2
-    - org.openrewrite.java.logging.slf4j.Log4j2ToSlf4j1
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: org.apache.log4j.MDC
+      newFullyQualifiedTypeName: org.slf4j.MDC
+  - org.openrewrite.java.logging.log4j.Log4j1ToLog4j2
+  - org.openrewrite.java.logging.slf4j.Log4j2ToSlf4j1

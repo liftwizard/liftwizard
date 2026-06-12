@@ -19,15 +19,15 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
 displayName: Dropwizard 3 package renames
 description: >-
-    Rename Dropwizard packages for JPMS compliance.
-    Handles io.dropwizard -> io.dropwizard.core (non-recursive),
-    io.dropwizard.setup -> io.dropwizard.core.setup,
-    io.dropwizard.cli -> io.dropwizard.core.cli,
-    io.dropwizard.logging -> io.dropwizard.logging.common,
-    io.dropwizard.metrics -> io.dropwizard.metrics.common,
-    io.dropwizard.views -> io.dropwizard.views.common.
+  Rename Dropwizard packages for JPMS compliance.
+  Handles io.dropwizard -> io.dropwizard.core (non-recursive),
+  io.dropwizard.setup -> io.dropwizard.core.setup,
+  io.dropwizard.cli -> io.dropwizard.core.cli,
+  io.dropwizard.logging -> io.dropwizard.logging.common,
+  io.dropwizard.metrics -> io.dropwizard.metrics.common,
+  io.dropwizard.views -> io.dropwizard.views.common.
 recipeList:
-    - io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
-    - io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
-    - io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
-    - io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename
+  - io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
+  - io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
+  - io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
+  - io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename

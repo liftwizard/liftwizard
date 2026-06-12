@@ -19,37 +19,37 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3CorePackageRename
 displayName: Rename io.dropwizard core packages to io.dropwizard.core
 description: >-
-    Rename the four classes that moved from io.dropwizard to io.dropwizard.core
-    (Application, Bundle, Configuration, ConfiguredBundle) using ChangeType,
-    and rename the subpackages that moved using ChangePackage.
-    Uses ChangeType instead of ChangePackage for the top-level package because
-    ChangePackage recursive=false incorrectly renames subpackages in practice.
+  Rename the four classes that moved from io.dropwizard to io.dropwizard.core
+  (Application, Bundle, Configuration, ConfiguredBundle) using ChangeType,
+  and rename the subpackages that moved using ChangePackage.
+  Uses ChangeType instead of ChangePackage for the top-level package because
+  ChangePackage recursive=false incorrectly renames subpackages in practice.
 recipeList:
-    - org.openrewrite.java.ChangeType:
-          oldFullyQualifiedTypeName: io.dropwizard.Application
-          newFullyQualifiedTypeName: io.dropwizard.core.Application
-    - org.openrewrite.java.ChangeType:
-          oldFullyQualifiedTypeName: io.dropwizard.Bundle
-          newFullyQualifiedTypeName: io.dropwizard.core.Bundle
-    - org.openrewrite.java.ChangeType:
-          oldFullyQualifiedTypeName: io.dropwizard.Configuration
-          newFullyQualifiedTypeName: io.dropwizard.core.Configuration
-    - org.openrewrite.java.ChangeType:
-          oldFullyQualifiedTypeName: io.dropwizard.ConfiguredBundle
-          newFullyQualifiedTypeName: io.dropwizard.core.ConfiguredBundle
-    - org.openrewrite.java.ChangePackage:
-          oldPackageName: io.dropwizard.setup
-          newPackageName: io.dropwizard.core.setup
-          recursive: true
-    - org.openrewrite.java.ChangePackage:
-          oldPackageName: io.dropwizard.cli
-          newPackageName: io.dropwizard.core.cli
-          recursive: true
-    - org.openrewrite.java.ChangePackage:
-          oldPackageName: io.dropwizard.server
-          newPackageName: io.dropwizard.core.server
-          recursive: true
-    - org.openrewrite.java.ChangePackage:
-          oldPackageName: io.dropwizard.sslreload
-          newPackageName: io.dropwizard.core.sslreload
-          recursive: true
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: io.dropwizard.Application
+      newFullyQualifiedTypeName: io.dropwizard.core.Application
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: io.dropwizard.Bundle
+      newFullyQualifiedTypeName: io.dropwizard.core.Bundle
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: io.dropwizard.Configuration
+      newFullyQualifiedTypeName: io.dropwizard.core.Configuration
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: io.dropwizard.ConfiguredBundle
+      newFullyQualifiedTypeName: io.dropwizard.core.ConfiguredBundle
+  - org.openrewrite.java.ChangePackage:
+      oldPackageName: io.dropwizard.setup
+      newPackageName: io.dropwizard.core.setup
+      recursive: true
+  - org.openrewrite.java.ChangePackage:
+      oldPackageName: io.dropwizard.cli
+      newPackageName: io.dropwizard.core.cli
+      recursive: true
+  - org.openrewrite.java.ChangePackage:
+      oldPackageName: io.dropwizard.server
+      newPackageName: io.dropwizard.core.server
+      recursive: true
+  - org.openrewrite.java.ChangePackage:
+      oldPackageName: io.dropwizard.sslreload
+      newPackageName: io.dropwizard.core.sslreload
+      recursive: true

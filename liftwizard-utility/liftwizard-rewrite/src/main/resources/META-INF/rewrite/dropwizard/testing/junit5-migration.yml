@@ -19,9 +19,9 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration
 displayName: Migrate Dropwizard JUnit 4 testing rules to JUnit 5 extensions
 description: >-
-    Migrate Dropwizard JUnit 4 testing rules (DropwizardAppRule, DropwizardClientRule, ResourceTestRule)
-    to their JUnit 5 extension equivalents with proper annotations.
+  Migrate Dropwizard JUnit 4 testing rules (DropwizardAppRule, DropwizardClientRule, ResourceTestRule)
+  to their JUnit 5 extension equivalents with proper annotations.
 recipeList:
-    - io.liftwizard.rewrite.dropwizard.testing.DropwizardAppRuleToLiftwizardAppExtension
-    - io.liftwizard.rewrite.dropwizard.testing.DropwizardClientRuleToExtension
-    - io.liftwizard.rewrite.dropwizard.testing.ResourceTestRuleToExtension
+  - io.liftwizard.rewrite.dropwizard.testing.DropwizardAppRuleToLiftwizardAppExtension
+  - io.liftwizard.rewrite.dropwizard.testing.DropwizardClientRuleToExtension
+  - io.liftwizard.rewrite.dropwizard.testing.ResourceTestRuleToExtension

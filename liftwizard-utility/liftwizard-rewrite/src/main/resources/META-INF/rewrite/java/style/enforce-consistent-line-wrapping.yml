@@ -19,14 +19,14 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.java.style.EnforceConsistentLineWrapping
 displayName: Enforce consistent line wrapping
 description: >-
-    Composite recipe that enforces consistent line wrapping across all comma-separated argument
-    and parameter contexts: method invocations, constructor calls, array initializers,
-    annotation arguments, method parameters, and record components.
-    Valid fixed-multiple groupings (e.g., key-value pairs) are left unchanged.
+  Composite recipe that enforces consistent line wrapping across all comma-separated argument
+  and parameter contexts: method invocations, constructor calls, array initializers,
+  annotation arguments, method parameters, and record components.
+  Valid fixed-multiple groupings (e.g., key-value pairs) are left unchanged.
 recipeList:
-    - io.liftwizard.rewrite.java.style.EnforceConsistentMethodInvocationArgumentLineWrapping
-    - io.liftwizard.rewrite.java.style.EnforceConsistentConstructorArgumentLineWrapping
-    - io.liftwizard.rewrite.java.style.EnforceConsistentArrayInitializerLineWrapping
-    - io.liftwizard.rewrite.java.style.EnforceConsistentAnnotationArgumentLineWrapping
-    - io.liftwizard.rewrite.java.style.EnforceConsistentMethodParameterLineWrapping
-    - io.liftwizard.rewrite.java.style.EnforceConsistentRecordComponentLineWrapping
+  - io.liftwizard.rewrite.java.style.EnforceConsistentMethodInvocationArgumentLineWrapping
+  - io.liftwizard.rewrite.java.style.EnforceConsistentConstructorArgumentLineWrapping
+  - io.liftwizard.rewrite.java.style.EnforceConsistentArrayInitializerLineWrapping
+  - io.liftwizard.rewrite.java.style.EnforceConsistentAnnotationArgumentLineWrapping
+  - io.liftwizard.rewrite.java.style.EnforceConsistentMethodParameterLineWrapping
+  - io.liftwizard.rewrite.java.style.EnforceConsistentRecordComponentLineWrapping

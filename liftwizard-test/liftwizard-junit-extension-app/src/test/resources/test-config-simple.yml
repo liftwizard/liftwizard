@@ -1,8 +1,8 @@
 server:
-    type: simple
-    connector:
-        type: http
-        port: 0
+  type: simple
+  connector:
+    type: http
+    port: 0
 
 logging:
-    level: WARN
+  level: WARN

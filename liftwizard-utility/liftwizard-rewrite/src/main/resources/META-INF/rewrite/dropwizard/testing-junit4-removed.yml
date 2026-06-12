@@ -19,14 +19,14 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
 displayName: Roll dropwizard-testing-junit4 references back to dropwizard-testing
 description: >-
-    Dropwizard 3 removed JUnit 4 support entirely from the testing module —
-    the dropwizard-testing-junit4 artifact does not exist on Maven Central.
-    This recipe rewrites stale dropwizard-testing-junit4 dependencies back to
-    dropwizard-testing so existing projects (and any earlier mis-migration)
-    resolve correctly. Source code that still relies on JUnit 4 rules must be
-    migrated to JUnit 5 extensions separately (see DropwizardTestingJUnit5Migration).
+  Dropwizard 3 removed JUnit 4 support entirely from the testing module —
+  the dropwizard-testing-junit4 artifact does not exist on Maven Central.
+  This recipe rewrites stale dropwizard-testing-junit4 dependencies back to
+  dropwizard-testing so existing projects (and any earlier mis-migration)
+  resolve correctly. Source code that still relies on JUnit 4 rules must be
+  migrated to JUnit 5 extensions separately (see DropwizardTestingJUnit5Migration).
 recipeList:
-    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
-          oldGroupId: io.dropwizard
-          oldArtifactId: dropwizard-testing-junit4
-          newArtifactId: dropwizard-testing
+  - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+      oldGroupId: io.dropwizard
+      oldArtifactId: dropwizard-testing-junit4
+      newArtifactId: dropwizard-testing

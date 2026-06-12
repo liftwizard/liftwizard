@@ -19,15 +19,15 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle
 displayName: Switch dropwizard-redirect-bundle to liftwizard-redirect-bundle
 description: >-
-    Replace the third-party io.dropwizard-bundles:dropwizard-redirect-bundle
-    dependency with the inline io.liftwizard:liftwizard-redirect-bundle fork.
-    The upstream dropwizard-bundles project never released a Dropwizard 3
-    compatible artifact, so projects migrating to Dropwizard 3 must switch to
-    the Liftwizard-maintained fork that tracks Dropwizard 3 APIs.
+  Replace the third-party io.dropwizard-bundles:dropwizard-redirect-bundle
+  dependency with the inline io.liftwizard:liftwizard-redirect-bundle fork.
+  The upstream dropwizard-bundles project never released a Dropwizard 3
+  compatible artifact, so projects migrating to Dropwizard 3 must switch to
+  the Liftwizard-maintained fork that tracks Dropwizard 3 APIs.
 recipeList:
-    - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
-          oldGroupId: io.dropwizard-bundles
-          oldArtifactId: dropwizard-redirect-bundle
-          newGroupId: io.liftwizard
-          newArtifactId: liftwizard-redirect-bundle
-          newVersion: ${project.version}
+  - org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId:
+      oldGroupId: io.dropwizard-bundles
+      oldArtifactId: dropwizard-redirect-bundle
+      newGroupId: io.liftwizard
+      newArtifactId: liftwizard-redirect-bundle
+      newVersion: ${project.version}

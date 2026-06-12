@@ -19,16 +19,16 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
 displayName: Upgrade Dropwizard dependencies to 3.0.x
 description: >-
-    Upgrade Dropwizard Maven dependencies from 2.1.x to 3.0.x, including
-    common third-party Dropwizard bundles whose version is keyed to the
-    Dropwizard major release (e.g. smoketurner graphql-core ships a 3.0.x
-    line built against Dropwizard 3).
+  Upgrade Dropwizard Maven dependencies from 2.1.x to 3.0.x, including
+  common third-party Dropwizard bundles whose version is keyed to the
+  Dropwizard major release (e.g. smoketurner graphql-core ships a 3.0.x
+  line built against Dropwizard 3).
 recipeList:
-    - org.openrewrite.maven.UpgradeDependencyVersion:
-          groupId: io.dropwizard
-          artifactId: "*"
-          newVersion: 3.0.x
-    - org.openrewrite.maven.UpgradeDependencyVersion:
-          groupId: com.smoketurner.dropwizard
-          artifactId: graphql-core
-          newVersion: 3.x
+  - org.openrewrite.maven.UpgradeDependencyVersion:
+      groupId: io.dropwizard
+      artifactId: "*"
+      newVersion: 3.0.x
+  - org.openrewrite.maven.UpgradeDependencyVersion:
+      groupId: com.smoketurner.dropwizard
+      artifactId: graphql-core
+      newVersion: 3.x
