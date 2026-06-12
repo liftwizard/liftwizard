@@ -38,10 +38,6 @@ class UsesLog4jFatalTest implements RewriteTest {
 	@Test
 	void replacePatterns() {
 		this.rewriteRun(
-				// fatal method usage marks the compilation unit (UsesMethod), while the Level.FATAL
-				// constant is marked in place; the Preconditions.or composition surfaces these across
-				// two cycles when both appear in one file.
-				(spec) -> spec.expectedCyclesThatMakeChanges(2),
 				java(
 					"""
 					import org.apache.log4j.Level;
@@ -82,7 +78,7 @@ class UsesLog4jFatalTest implements RewriteTest {
 					}
 					""",
 					"""
-					/*~~>*/import org.apache.log4j.Level;
+					import org.apache.log4j.Level;
 					import org.apache.log4j.Logger;
 
 					import java.util.Optional;
@@ -91,23 +87,23 @@ class UsesLog4jFatalTest implements RewriteTest {
 					    private static final Logger LOGGER = Logger.getLogger(Test.class);
 
 					    void fatalStringLiteral() {
-					        LOGGER.fatal("Simple message");
+					        /*~~>*/LOGGER.fatal("Simple message");
 					    }
 
 					    void fatalStringVariable(String message) {
-					        LOGGER.fatal(message);
+					        /*~~>*/LOGGER.fatal(message);
 					    }
 
 					    void fatalObjectArgument(Object myObject) {
-					        LOGGER.fatal(myObject);
+					        /*~~>*/LOGGER.fatal(myObject);
 					    }
 
 					    void fatalThrowableArgument(Exception exception) {
-					        LOGGER.fatal("Failure", exception);
+					        /*~~>*/LOGGER.fatal("Failure", exception);
 					    }
 
 					    void fatalMethodReference(Optional<Object> value) {
-					        value.ifPresent(LOGGER::fatal);
+					        value.ifPresent(/*~~>*/LOGGER::fatal);
 					    }
 
 					    void bareLevelFatalConstant() {

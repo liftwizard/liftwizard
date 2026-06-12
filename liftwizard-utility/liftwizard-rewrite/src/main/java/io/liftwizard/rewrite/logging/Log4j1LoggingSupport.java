@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
+import org.openrewrite.Cursor;
 import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
@@ -107,6 +108,34 @@ final class Log4j1LoggingSupport {
 			METHOD_NAMES.contains(mr.getReference().getSimpleName())
 			&& (matchesAny(LEVEL_MATCHERS, mr) || matchesAny(LOG_MATCHERS, mr))
 		);
+	}
+
+	/**
+	 * Whether {@code m} is a Log4j 1 level-method invocation at the given level (e.g. {@code "fatal"}
+	 * for {@code LOGGER.fatal(..)}). Matches both the {@code Category}- and {@code Logger}-declared
+	 * variants, so it survives severed {@code Logger extends Category} inheritance.
+	 */
+	static boolean isLevelInvocation(J.MethodInvocation m, String level) {
+		return level.equals(m.getSimpleName()) && matchesAny(LEVEL_MATCHERS, m);
+	}
+
+	/** Whether {@code mr} is a Log4j 1 level-method reference at the given level (e.g. {@code LOGGER::fatal}). */
+	static boolean isLevelReference(J.MemberReference mr, String level) {
+		return level.equals(mr.getReference().getSimpleName()) && matchesAny(LEVEL_MATCHERS, mr);
+	}
+
+	/**
+	 * Whether a field/identifier named {@code constantName} is the level constant declared on
+	 * {@code org.apache.log4j.Priority} (or its subclass {@code Level}) — e.g. {@code Level.FATAL} or
+	 * {@code Priority.FATAL}. {@code ownerType} is the type the constant is read from.
+	 */
+	static boolean isLevelConstant(@Nullable JavaType ownerType, String simpleName, String constantName) {
+		return constantName.equals(simpleName) && TypeUtils.isAssignableTo(LOG4J_PRIORITY, ownerType);
+	}
+
+	/** Whether the cursor's identifier is the {@code name} child of a {@link J.FieldAccess} (e.g. the {@code FATAL} in {@code Level.FATAL}). */
+	static boolean isFieldAccessName(Cursor cursor) {
+		return cursor.getParentTreeCursor().getValue() instanceof J.FieldAccess;
 	}
 
 	/**
