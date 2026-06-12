@@ -77,7 +77,7 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 			Expression value = memberRef.getContaining();
 
 			JavaTemplate template = JavaTemplate.builder("#{any()}.contains(#{any()})")
-				.javaParser(JavaParser.fromJavaVersion().classpath("eclipse-collections-api"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
 				.build();
 
 			return template.apply(getCursor(), mi.getCoordinates().replace(), select, value);

@@ -83,7 +83,7 @@ public class AssertionsStaticImport extends Recipe {
 
 			JavaTemplate template = JavaTemplate.builder(templatePattern.toString())
 				.staticImports("org.assertj.core.api.Assertions." + methodName)
-				.javaParser(JavaParser.fromJavaVersion().classpath("assertj-core"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "assertj-core"))
 				.build();
 
 			this.maybeRemoveImport("org.assertj.core.api.Assertions");

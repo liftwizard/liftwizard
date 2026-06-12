@@ -88,7 +88,7 @@ public class AddTestAnnotationToOverrideMethods extends Recipe {
 
 			return JavaTemplate.builder("@Test")
 				.imports("org.junit.jupiter.api.Test")
-				.javaParser(JavaParser.fromJavaVersion().classpath("junit-jupiter-api"))
+				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "junit-jupiter-api"))
 				.build()
 				.apply(
 					this.getCursor(),
