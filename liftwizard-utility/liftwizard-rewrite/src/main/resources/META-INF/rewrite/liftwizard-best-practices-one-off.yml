@@ -19,17 +19,17 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.LiftwizardBestPracticesOneOff
 displayName: Liftwizard best practices (one-off)
 description: >-
-    Composite recipe for one-off rewrites.
-    Rules that don't reliably pass. They can't run in CI with dryRun, only one-off for rewrites.
+  Composite recipe for one-off rewrites.
+  Rules that don't reliably pass. They can't run in CI with dryRun, only one-off for rewrites.
 recipeList:
-    - io.liftwizard.rewrite.bestpractices.IfElseToTernary
-    - io.liftwizard.rewrite.dropwizard.Dropwizard2To3Migration
-    - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe
-    - org.openrewrite.github.PreferTemurinDistributions
-    - org.openrewrite.java.logging.slf4j.Slf4jBestPractices
-    - org.openrewrite.java.migrate.lombok.LombokBestPractices
-    - org.openrewrite.java.testing.assertj.Assertj
-    - org.openrewrite.java.testing.junit5.JUnit5BestPractices
-    - org.openrewrite.java.testing.mockito.MockitoBestPractices
-    - org.openrewrite.java.testing.testcontainers.TestContainersBestPractices
-    - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
+  - io.liftwizard.rewrite.bestpractices.IfElseToTernary
+  - io.liftwizard.rewrite.dropwizard.Dropwizard2To3Migration
+  - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe
+  - org.openrewrite.github.PreferTemurinDistributions
+  - org.openrewrite.java.logging.slf4j.Slf4jBestPractices
+  - org.openrewrite.java.migrate.lombok.LombokBestPractices
+  - org.openrewrite.java.testing.assertj.Assertj
+  - org.openrewrite.java.testing.junit5.JUnit5BestPractices
+  - org.openrewrite.java.testing.mockito.MockitoBestPractices
+  - org.openrewrite.java.testing.testcontainers.TestContainersBestPractices
+  - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments

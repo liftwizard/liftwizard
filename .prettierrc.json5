@@ -37,4 +37,14 @@
 	// Default: "end"
 	// Options: "start" | "end"
 	experimentalOperatorPosition: "start",
+
+	overrides: [
+		{
+			files: [".yamllint.yaml", "**/*.yaml", "**/*.yml"],
+			options: {
+				tabWidth: 2,
+				useTabs: false,
+			},
+		},
+	],
 }

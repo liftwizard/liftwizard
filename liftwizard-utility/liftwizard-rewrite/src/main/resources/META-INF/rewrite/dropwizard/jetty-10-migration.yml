@@ -19,16 +19,16 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
 displayName: Migrate Jetty 9 to Jetty 10 API changes
 description: >-
-    Migrate Jetty API changes introduced in Jetty 10.
-    Renames addLifeCycleListener to addEventListener on LifeCycle,
-    AbstractLifeCycle, and ContainerLifeCycle.
+  Migrate Jetty API changes introduced in Jetty 10.
+  Renames addLifeCycleListener to addEventListener on LifeCycle,
+  AbstractLifeCycle, and ContainerLifeCycle.
 recipeList:
-    - org.openrewrite.java.ChangeMethodName:
-          methodPattern: org.eclipse.jetty.util.component.AbstractLifeCycle addLifeCycleListener(..)
-          newMethodName: addEventListener
-    - org.openrewrite.java.ChangeMethodName:
-          methodPattern: org.eclipse.jetty.util.component.ContainerLifeCycle addLifeCycleListener(..)
-          newMethodName: addEventListener
-    - org.openrewrite.java.ChangeMethodName:
-          methodPattern: org.eclipse.jetty.util.component.LifeCycle addLifeCycleListener(..)
-          newMethodName: addEventListener
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: org.eclipse.jetty.util.component.AbstractLifeCycle addLifeCycleListener(..)
+      newMethodName: addEventListener
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: org.eclipse.jetty.util.component.ContainerLifeCycle addLifeCycleListener(..)
+      newMethodName: addEventListener
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: org.eclipse.jetty.util.component.LifeCycle addLifeCycleListener(..)
+      newMethodName: addEventListener

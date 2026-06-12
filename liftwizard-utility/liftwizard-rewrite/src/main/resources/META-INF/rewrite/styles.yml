@@ -18,19 +18,19 @@
 type: specs.openrewrite.org/v1beta/style
 name: io.liftwizard.NoStarImports
 styleConfigs:
-    - org.openrewrite.java.style.ImportLayoutStyle:
-          classCountToUseStarImport: 9999
-          nameCountToUseStarImport: 9999
-          layout:
-              - "import all other imports"
-              - "<blank line>"
-              - "import static all other imports"
-    - org.openrewrite.java.style.SpacesStyle:
-          other:
-              beforeComma: false
-              afterComma: true
-              beforeForSemicolon: false
-              afterForSemicolon: true
-              afterTypeCast: true
-              beforeColonInForEach: true
-              insideOneLineEnumBraces: false
+  - org.openrewrite.java.style.ImportLayoutStyle:
+      classCountToUseStarImport: 9999
+      nameCountToUseStarImport: 9999
+      layout:
+        - "import all other imports"
+        - "<blank line>"
+        - "import static all other imports"
+  - org.openrewrite.java.style.SpacesStyle:
+      other:
+        beforeComma: false
+        afterComma: true
+        beforeForSemicolon: false
+        afterForSemicolon: true
+        afterTypeCast: true
+        beforeColonInForEach: true
+        insideOneLineEnumBraces: false
