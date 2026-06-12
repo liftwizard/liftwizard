@@ -351,7 +351,7 @@
                         <phase>process-classes</phase>
                         <configuration>
                             <outputDirectory>${project.build.outputDirectory}/META-INF/rewrite/classpath</outputDirectory>
-                            <includeArtifactIds>eclipse-collections-api,assertj-core,junit-jupiter-api</includeArtifactIds>
+                            <includeArtifactIds>eclipse-collections-api,assertj-core,junit-jupiter-api,reload4j</includeArtifactIds>
                             <includeScope>test</includeScope>
                             <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
