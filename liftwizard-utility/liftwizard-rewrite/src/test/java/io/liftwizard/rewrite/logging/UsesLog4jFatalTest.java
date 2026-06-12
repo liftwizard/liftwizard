@@ -18,6 +18,7 @@ package io.liftwizard.rewrite.logging;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -26,57 +27,11 @@ import static org.openrewrite.java.Assertions.java;
 
 class UsesLog4jFatalTest implements RewriteTest {
 
-	private static final String LOG4J_CATEGORY_STUB = """
-		package org.apache.log4j;
-		public class Category {
-		    public static Logger getLogger(Class clazz) { return null; }
-		    public void debug(Object message) {}
-		    public void info(Object message) {}
-		    public void warn(Object message) {}
-		    public void error(Object message) {}
-		    public void fatal(Object message) {}
-		    public void fatal(Object message, Throwable t) {}
-		    public void log(Priority priority, Object message) {}
-		    public void log(Priority priority, Object message, Throwable t) {}
-		}
-		""";
-
-	private static final String LOG4J_LOGGER_STUB = """
-		package org.apache.log4j;
-		public class Logger extends Category {
-		    public static Logger getLogger(Class clazz) { return null; }
-		}
-		""";
-
-	private static final String LOG4J_PRIORITY_STUB = """
-		package org.apache.log4j;
-		public class Priority {
-		    public static final Priority FATAL = null;
-		    public static final Priority ERROR = null;
-		}
-		""";
-
-	private static final String LOG4J_LEVEL_STUB = """
-		package org.apache.log4j;
-		public class Level extends Priority {
-		    public static final Level FATAL = null;
-		    public static final Level ERROR = null;
-		    public static final Level DEBUG = null;
-		}
-		""";
-
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UsesLog4jFatal())
-			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
-					LOG4J_CATEGORY_STUB,
-					LOG4J_LOGGER_STUB,
-					LOG4J_PRIORITY_STUB,
-					LOG4J_LEVEL_STUB
-				)
-			);
+			.parser(JavaParser.fromJavaVersion().classpathFromResources(new InMemoryExecutionContext(), "reload4j"));
 	}
 
 	@DocumentExample

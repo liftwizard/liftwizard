@@ -26,32 +26,11 @@ import static org.openrewrite.java.Assertions.java;
 
 class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
-	private static final String LOG4J_CATEGORY_STUB = """
-		package org.apache.log4j;
-		public class Category {
-		    public static Logger getLogger(Class clazz) { return null; }
-		    public void debug(Object message) {}
-		    public void info(Object message) {}
-		    public void warn(Object message) {}
-		    public void error(Object message) {}
-		    public void error(Object message, Throwable t) {}
-		    public void fatal(Object message) {}
-		}
-		""";
-
-	private static final String LOG4J_LOGGER_STUB = """
-		package org.apache.log4j;
-		public class Logger extends Category {
-		    public static Logger getLogger(Class clazz) { return null; }
-		    public void trace(Object message) {}
-		}
-		""";
-
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UsesLog4j1ObjectLogging())
-			.parser(JavaParser.fromJavaVersion().dependsOn(LOG4J_CATEGORY_STUB, LOG4J_LOGGER_STUB));
+			.parser(JavaParser.fromJavaVersion().classpath("reload4j"));
 	}
 
 	@DocumentExample
