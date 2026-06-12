@@ -53,6 +53,10 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 	private static final MethodMatcher RANGE_CLOSED_MATCHER = new MethodMatcher(
 		"java.util.stream.IntStream rangeClosed(int, int)"
 	);
+	private static final String INT_INTERVAL_TYPE = "org.eclipse.collections.impl.list.primitive.IntInterval";
+	private static final String INT_INTERVAL_FROM_TO = "IntInterval.fromTo(#{any(int)}, #{any(int)})";
+	private static final String ECLIPSE_COLLECTIONS_API = "eclipse-collections-api";
+	private static final String ECLIPSE_COLLECTIONS_IMPL = "eclipse-collections-impl";
 
 	@Override
 	public String getDisplayName() {
@@ -98,18 +102,9 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 			}
 
 			this.maybeRemoveImport("java.util.stream.IntStream");
-			this.maybeAddImport("org.eclipse.collections.impl.list.primitive.IntInterval");
+			this.maybeAddImport(INT_INTERVAL_TYPE);
 
-			JavaTemplate intIntervalFromTo = JavaTemplate.builder("IntInterval.fromTo(#{any(int)}, #{any(int)})")
-				.imports("org.eclipse.collections.impl.list.primitive.IntInterval")
-				.javaParser(
-					JavaParser.fromJavaVersion().classpathFromResources(
-						ctx,
-						"eclipse-collections-api",
-						"eclipse-collections-impl"
-					)
-				)
-				.build();
+			JavaTemplate intIntervalFromTo = intIntervalFromToTemplate(ctx);
 
 			return intIntervalFromTo.apply(
 				this.getCursor(),
@@ -117,6 +112,19 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 				mi.getArguments().get(0),
 				mi.getArguments().get(1)
 			);
+		}
+
+		private static JavaTemplate intIntervalFromToTemplate(ExecutionContext ctx) {
+			return JavaTemplate.builder(INT_INTERVAL_FROM_TO)
+				.imports(INT_INTERVAL_TYPE)
+				.javaParser(
+					JavaParser.fromJavaVersion().classpathFromResources(
+						ctx,
+						ECLIPSE_COLLECTIONS_API,
+						ECLIPSE_COLLECTIONS_IMPL
+					)
+				)
+				.build();
 		}
 	}
 }

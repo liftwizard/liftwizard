@@ -271,12 +271,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>ch.qos.reload4j</groupId>
-            <artifactId>reload4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -331,7 +325,6 @@
                         <ignoredUnusedDeclaredDependency>com.google.errorprone:error_prone_core</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections-api</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.eclipse.collections:eclipse-collections</ignoredUnusedDeclaredDependency>
-                        <ignoredUnusedDeclaredDependency>ch.qos.reload4j:reload4j</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-static-analysis</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.openrewrite.recipe:rewrite-testing-frameworks</ignoredUnusedDeclaredDependency>
                     </ignoredUnusedDeclaredDependencies>
@@ -352,7 +345,7 @@
                         <phase>process-classes</phase>
                         <configuration>
                             <outputDirectory>${project.build.outputDirectory}/META-INF/rewrite/classpath</outputDirectory>
-                            <includeArtifactIds>eclipse-collections-api,assertj-core,junit-jupiter-api,reload4j</includeArtifactIds>
+                            <includeArtifactIds>eclipse-collections-api,assertj-core,junit-jupiter-api</includeArtifactIds>
                             <includeScope>test</includeScope>
                             <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
@@ -378,6 +371,27 @@
                                     <artifactId>eclipse-collections</artifactId>
                                     <version>${eclipse-collections.version}</version>
                                     <destFileName>eclipse-collections-impl.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <!--
+                        Log4j 1 recipes need reload4j only as parser metadata. Copy it as a packaged
+                        resource instead of declaring an unused test dependency.
+                    -->
+                    <execution>
+                        <id>copy-reload4j-template-classpath-jar</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF/rewrite/classpath</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>ch.qos.reload4j</groupId>
+                                    <artifactId>reload4j</artifactId>
                                 </artifactItem>
                             </artifactItems>
                             <overWriteIfNewer>true</overWriteIfNewer>
