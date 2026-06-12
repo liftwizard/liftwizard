@@ -46,6 +46,6 @@ public final class DoesNotUseLog4jFatal extends Recipe {
 
 	@Override
 	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return Preconditions.not(new UsesLog4jFatal.Log4jFatalVisitor());
+		return Preconditions.not(UsesLog4jFatal.fatalUsage());
 	}
 }
