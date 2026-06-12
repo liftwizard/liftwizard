@@ -271,6 +271,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>ch.qos.reload4j</groupId>
+            <artifactId>reload4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -351,10 +357,11 @@
                         </configuration>
                     </execution>
                     <!--
-                        classpathFromResources matches jars by filename prefix, and "eclipse-collections"
-                        is a prefix of "eclipse-collections-api", so both names would resolve to the api jar
-                        and the impl-only types (IntInterval, ArrayIterate) would be Unknown. Bundle the impl
-                        jar under a non-colliding name so recipes can request it as "eclipse-collections-impl".
+                        classpathFromResources matches jars by filename prefix and returns the first match.
+                        Requesting "eclipse-collections" can therefore match "eclipse-collections-api"
+                        before "eclipse-collections", leaving impl-only types like IntInterval and
+                        ArrayIterate unresolved. Bundle the impl jar under a non-colliding name so recipes
+                        can request it as "eclipse-collections-impl".
                     -->
                     <execution>
                         <id>copy-eclipse-collections-impl-jar</id>
