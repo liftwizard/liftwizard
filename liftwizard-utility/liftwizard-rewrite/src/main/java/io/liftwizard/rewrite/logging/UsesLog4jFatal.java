@@ -16,16 +16,12 @@
 
 package io.liftwizard.rewrite.logging;
 
-import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
-import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaIsoVisitor;
-import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
-import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.marker.SearchResult;
 
 /**
@@ -44,17 +40,17 @@ import org.openrewrite.marker.SearchResult;
  *         {@code LOGGER.log(Level.FATAL, message)} or any bare reference to the constant).</li>
  * </ul>
  *
- * <p>Method invocations and references are found with {@link UsesMethod}, which matches every call
- * form via the compilation unit's resolved method types. The {@code FATAL} constant is a field, not
- * a method, so it is found with a dedicated field-access visitor.
+ * <p>Recognizing Log4j 1 logging is delegated to {@link Log4j1LoggingSupport}; this recipe contributes
+ * only the policy of which level (FATAL) is unsafe to migrate. Each form marks its specific node
+ * (rather than the whole compilation unit), so detection settles in a single pass.
  *
  * <p>This recipe is the basis for the {@link DoesNotUseLog4jFatal} precondition, which prevents the
  * Log4j 1 to SLF4J migration from running on files that use this pattern.
  */
 public final class UsesLog4jFatal extends Recipe {
 
-	private static final String LOG4J_PRIORITY = "org.apache.log4j.Priority";
-	private static final String FATAL_FIELD_NAME = "FATAL";
+	private static final String FATAL_LEVEL = "fatal";
+	private static final String FATAL_CONSTANT = "FATAL";
 
 	@Override
 	public String getDisplayName() {
@@ -82,24 +78,33 @@ public final class UsesLog4jFatal extends Recipe {
 	 * so the precondition stays in sync with this recipe's detection.
 	 */
 	static TreeVisitor<?, ExecutionContext> fatalUsage() {
-		// Logger extends Category and inherits fatal(..), so matching the declaring type covers both.
-		return Preconditions.or(
-			new UsesMethod<>("org.apache.log4j.Category fatal(..)", true),
-			new LevelFatalConstantVisitor()
-		);
+		return new Log4jFatalVisitor();
 	}
 
-	/**
-	 * Flags references to the {@code FATAL} constant declared on {@code org.apache.log4j.Priority}
-	 * (and its subclass {@code Level}), whether qualified ({@code Level.FATAL}) or statically imported
-	 * (bare {@code FATAL}).
-	 */
-	static final class LevelFatalConstantVisitor extends JavaIsoVisitor<ExecutionContext> {
+	static final class Log4jFatalVisitor extends JavaIsoVisitor<ExecutionContext> {
+
+		@Override
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
+			if (Log4j1LoggingSupport.isLevelInvocation(m, FATAL_LEVEL)) {
+				return SearchResult.found(m);
+			}
+			return m;
+		}
+
+		@Override
+		public J.MemberReference visitMemberReference(J.MemberReference memberReference, ExecutionContext ctx) {
+			J.MemberReference mr = super.visitMemberReference(memberReference, ctx);
+			if (Log4j1LoggingSupport.isLevelReference(mr, FATAL_LEVEL)) {
+				return SearchResult.found(mr);
+			}
+			return mr;
+		}
 
 		@Override
 		public J.FieldAccess visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx) {
 			J.FieldAccess fa = super.visitFieldAccess(fieldAccess, ctx);
-			if (isFatalConstant(fa.getSimpleName(), fa.getTarget().getType())) {
+			if (Log4j1LoggingSupport.isLevelConstant(fa.getTarget().getType(), fa.getSimpleName(), FATAL_CONSTANT)) {
 				return SearchResult.found(fa);
 			}
 			return fa;
@@ -109,22 +114,17 @@ public final class UsesLog4jFatal extends Recipe {
 		public J.Identifier visitIdentifier(J.Identifier identifier, ExecutionContext ctx) {
 			J.Identifier id = super.visitIdentifier(identifier, ctx);
 			// Cheap name check first: visitIdentifier runs for every identifier in the file.
-			if (!FATAL_FIELD_NAME.equals(id.getSimpleName()) || isFieldAccessName(this.getCursor())) {
+			if (!FATAL_CONSTANT.equals(id.getSimpleName()) || Log4j1LoggingSupport.isFieldAccessName(this.getCursor())) {
 				return id;
 			}
 			JavaType.Variable fieldType = id.getFieldType();
-			if (fieldType != null && TypeUtils.isAssignableTo(LOG4J_PRIORITY, fieldType.getOwner())) {
+			if (
+				fieldType != null
+				&& Log4j1LoggingSupport.isLevelConstant(fieldType.getOwner(), id.getSimpleName(), FATAL_CONSTANT)
+			) {
 				return SearchResult.found(id);
 			}
 			return id;
-		}
-
-		private static boolean isFatalConstant(String simpleName, JavaType ownerType) {
-			return FATAL_FIELD_NAME.equals(simpleName) && TypeUtils.isAssignableTo(LOG4J_PRIORITY, ownerType);
-		}
-
-		private static boolean isFieldAccessName(Cursor cursor) {
-			return cursor.getParentTreeCursor().getValue() instanceof J.FieldAccess;
 		}
 	}
 }
