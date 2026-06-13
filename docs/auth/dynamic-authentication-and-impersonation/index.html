@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Liftwizard: Dynamic Authentication And Impersonation</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JBFKWT91J2"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-JBFKWT91J2");
+</script>
+<link rel="stylesheet" type="text/css" href="/docs/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/main.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/docs/static/css/global-overrides.css">
+</head>
+<link rel="shortcut icon" href="/docs/favicon.png"type="image/ico"/>
+<body class="znai-theme theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'znai-theme theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section id="page-content" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<p>Liftwizard supports the dynamic configuration of dropwizard auth which enables using different authorization methods in production and tests without adding conditionals without adding any code at all For example we can configure impersonation authorization in tests with the following config Setup To get started add a dependency on and add to the registered bundles Modify the application s configuration class to implement and add a dependency on if it does not already extend Test configuration For tests you ll typically want to use header based impersonation Add a dependency on Add an list to containing just one filter of type Test code Impersonation authorization works well in tests that uses Dropwizard test utilities like or There is no change to test setup code only to the test configuration file The test code will include headers on client requests like this Whenever we use some of our Jersey resource methods will be authenticated The authenticated methods will be annotated with a security annotation such as The user principal will be passed in as a parameter and annotated like The header authorizer will take the string passed in the header in this example remove its prefix and make that string accessible via Since the header is sent on each request we can write tests involving multiple users For example we can write a test that asserts can create an entry and gets HTTP 201 Created cannot edit or delete the entry and gets HTTP 403 Forbidden can edit or delete the entry and gets HTTP 200 OK Production configuration The production authentication filter dependencies and configuration will depend on the method of authentication used in production For example the configuration to use Firebase for auth would look like this authFilters type header header Authorization prefix Impersonation liftwizard bundle auth filter AuthFilterBundle AuthFilterFactoryProvider liftwizard config auth filter AbstractLiftwizardConfiguration liftwizard config auth filter header &lt;dependency&gt; &lt;groupId&gt;io liftwizard&lt; groupId&gt; &lt;artifactId&gt;liftwizard config auth filter header&lt; artifactId&gt; &lt;scope&gt;test&lt; scope&gt; &lt; dependency&gt; authFilters config test json5 header authFilters type header header Authorization prefix Impersonation DropwizardAppExtension LiftwizardAppExtension DropwizardAppRule @Test void smokeTest Client client this appExtension client Response response client target http localhost port api example resolveTemplate port this appExtension getLocalPort request header Authorization Impersonation User ID get add assertions here dropwizard auth @PermitAll @Auth Principal principal Impersonation User ID User ID principal getName User 1 User 2 User 1 authFilters type firebase databaseUrl https example firebaseio com firebaseConfig $ FIREBASE_CONFIG</p>
+</article>
+</section>
+<section id="table-of-contents" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<a href="/docs/introduction/liftwizard/">Liftwizard</a>
+</article>
+
+<article>
+<a href="/docs/configuration/environment-variable-substitution/">Environment Variable Substitution</a>
+</article>
+
+<article>
+<a href="/docs/configuration/json5-configuration/">Json5 Configuration</a>
+</article>
+
+<article>
+<a href="/docs/configuration/ConfigLoggingBundle/">ConfigLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/jackson/ObjectMapperBundle/">ObjectMapperBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/JerseyHttpLoggingBundle/">JerseyHttpLoggingBundle</a>
+</article>
+
+<article>
+<a href="/docs/logging/buffered-logging/">Buffered Logging</a>
+</article>
+
+<article>
+<a href="/docs/logging/filter-factories/">Filter Factories</a>
+</article>
+
+<article>
+<a href="/docs/logging/Slf4jUncaughtExceptionHandlerBundle/">Slf4jUncaughtExceptionHandlerBundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/bundle/">Bundle</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-logging/">Instrumentation Logging</a>
+</article>
+
+<article>
+<a href="/docs/graphql/instrumentation-metrics/">Instrumentation Metrics</a>
+</article>
+
+<article>
+<a href="/docs/graphql/data-fetcher-async/">Data Fetcher Async</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-overview/">Reladomo Overview</a>
+</article>
+
+<article>
+<a href="/docs/reladomo/reladomo-operation-compiler/">Reladomo Operation Compiler</a>
+</article>
+
+<article>
+<a href="/docs/database/named-data-source/">Named Data Source</a>
+</article>
+
+<article>
+<a href="/docs/database/liquibase-migrations/">Liquibase Migrations</a>
+</article>
+
+<article>
+<a href="/docs/auth/dynamic-authentication-and-impersonation/">Dynamic Authentication And Impersonation</a>
+</article>
+
+<article>
+<a href="/docs/testing/testing/">Testing</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-files/">Matching Files</a>
+</article>
+
+<article>
+<a href="/docs/testing/matching-json/">Matching Json</a>
+</article>
+
+<article>
+<a href="/docs/maven/maven-best-practices/">Maven Best Practices</a>
+</article>
+
+<article>
+<a href="/docs/maven/minimal-parent/">Minimal Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/profile-parent/">Profile Parent</a>
+</article>
+
+<article>
+<a href="/docs/maven/bill-of-materials/">Bill Of Materials</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/temporal-data-overview/">Temporal Data Overview</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/running-example/">Running Example</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/non-destructive-updates/">Non Destructive Updates</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/as-of-queries/">As Of Queries</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/versioning/">Versioning</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/auditing/">Auditing</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/optimistic-locking/">Optimistic Locking</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/diffs/">Diffs</a>
+</article>
+
+<article>
+<a href="/docs/temporal-data/maker-checker-workflows/">Maker Checker Workflows</a>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/docs/footer.js"></script>
+<script type="text/javascript" src="/docs/toc.js"></script>
+<script type="text/javascript" src="/docs/assets.js"></script>
+<script type="module" src="/docs/static/__vite-browser-external-RdVdkQtE.js"></script>
+<script type="module" src="/docs/static/architecture-7EHR7CIX-xxpzkfCG.js"></script>
+<script type="module" src="/docs/static/architectureDiagram-3BPJPVTR-BUvXLKpc.js"></script>
+<script type="module" src="/docs/static/blockDiagram-GPEHLZMM-DQkskzPw.js"></script>
+<script type="module" src="/docs/static/c4Diagram-AAUBKEIU-Bpn-7umj.js"></script>
+<script type="module" src="/docs/static/classDiagram-4FO5ZUOK-C-2B96sD.js"></script>
+<script type="module" src="/docs/static/classDiagram-v2-Q7XG4LA2-D3oi48vF.js"></script>
+<script type="module" src="/docs/static/cose-bilkent-S5V4N54A-BCXCvQOF.js"></script>
+<script type="module" src="/docs/static/dagre-BM42HDAG-Cc78wdVZ.js"></script>
+<script type="module" src="/docs/static/diagram-2AECGRRQ-C097eezT.js"></script>
+<script type="module" src="/docs/static/diagram-5GNKFQAL-hjxnnMhB.js"></script>
+<script type="module" src="/docs/static/diagram-KO2AKTUF-CAUZLpoG.js"></script>
+<script type="module" src="/docs/static/diagram-LMA3HP47-diPTlvm_.js"></script>
+<script type="module" src="/docs/static/diagram-OG6HWLK6-CH2jcJIT.js"></script>
+<script type="module" src="/docs/static/erDiagram-TEJ5UH35-Cr1VvSmz.js"></script>
+<script type="module" src="/docs/static/eventmodeling-FCH6USID-RC1BLkKd.js"></script>
+<script type="module" src="/docs/static/flowDiagram-I6XJVG4X-CDCv2295.js"></script>
+<script type="module" src="/docs/static/ganttDiagram-6RSMTGT7-BR4mRbFY.js"></script>
+<script type="module" src="/docs/static/gitGraph-WXDBUCRP-CpmxTMqy.js"></script>
+<script type="module" src="/docs/static/gitGraphDiagram-PVQCEYII-DxNbnbwd.js"></script>
+<script type="module" src="/docs/static/index-7Sh1X86R.js"></script>
+<script type="module" src="/docs/static/info-J43DQDTF-DAgppa5S.js"></script>
+<script type="module" src="/docs/static/infoDiagram-5YYISTIA-CVuWbv6I.js"></script>
+<script type="module" src="/docs/static/ishikawaDiagram-YF4QCWOH-DB_WPzDJ.js"></script>
+<script type="module" src="/docs/static/journeyDiagram-JHISSGLW-BPrxtqhf.js"></script>
+<script type="module" src="/docs/static/kanban-definition-UN3LZRKU-DUfwLEfg.js"></script>
+<script type="module" src="/docs/static/katex-DeIpYIwo.js"></script>
+<script type="module" src="/docs/static/mermaid-BqwjLks-.js"></script>
+<script type="module" src="/docs/static/mindmap-definition-RKZ34NQL-DaM2_BWN.js"></script>
+<script type="module" src="/docs/static/packet-YPE3B663-DTT4Hb4J.js"></script>
+<script type="module" src="/docs/static/pie-LRSECV5Y-BDDKzod5.js"></script>
+<script type="module" src="/docs/static/pieDiagram-4H26LBE5-N6wANTAe.js"></script>
+<script type="module" src="/docs/static/quadrantDiagram-W4KKPZXB-DR0fXv_u.js"></script>
+<script type="module" src="/docs/static/radar-GUYGQ44K-C2mNSmA1.js"></script>
+<script type="module" src="/docs/static/requirementDiagram-4Y6WPE33-C8mXe5ei.js"></script>
+<script type="module" src="/docs/static/rolldown-runtime-CWU8vmCm.js"></script>
+<script type="module" src="/docs/static/sankeyDiagram-5OEKKPKP-BBDoZ-sx.js"></script>
+<script type="module" src="/docs/static/sequenceDiagram-3UESZ5HK-BqisPtOK.js"></script>
+<script type="module" src="/docs/static/stateDiagram-AJRCARHV-CiC-Moml.js"></script>
+<script type="module" src="/docs/static/stateDiagram-v2-BHNVJYJU-D0Ryiamm.js"></script>
+<script type="module" src="/docs/static/timeline-definition-PNZ67QCA-D661wfqD.js"></script>
+<script type="module" src="/docs/static/treeView-BLDUP644-C40wJjez.js"></script>
+<script type="module" src="/docs/static/treemap-LRROVOQU-BsK_pOnH.js"></script>
+<script type="module" src="/docs/static/vennDiagram-CIIHVFJN-DwXJOwH8.js"></script>
+<script type="module" src="/docs/static/wardley-L42UT6IY-CZ93k7bK.js"></script>
+<script type="module" src="/docs/static/wardleyDiagram-YWT4CUSO-C_RE8KDW.js"></script>
+<script type="module" src="/docs/static/xychartDiagram-2RQKCTM6-DZh5UzCw.js"></script>
+<script type="module" src="/docs/search-index.js"></script>
+<script type="module">
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+/*
+ * Copyright 2025 znai maintainers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+function initializeSearchIndex() {
+    if (window.znaiSearchData) {
+        window.znaiSearchIdx = window.createLocalSearchIndex();
+        window.populateLocalSearchIndexWithData(window.znaiSearchIdx, window.znaiSearchData);
+    }
+}
+
+// Call the method to initialize the search index.
+initializeSearchIndex();
+
+window.ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "link" : "https://github.com/liftwizard/liftwizard/blob/main/docs/src/main/znai",
+      "title" : "View On GitHub"
+    },
+    "id" : "docs",
+    "title" : "Liftwizard",
+    "type" : "Guide",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Liftwizard supports the dynamic configuration of ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "https://www.dropwizard.io/en/stable/manual/auth.html",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "dropwizard-auth",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " which enables using different authorization methods in production and tests, without adding conditionals - without adding any code at all. For example, we can configure impersonation authorization in tests with the following config.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "json5",
+      "snippet" : "{\n\tauthFilters: [\n\t\t{\n\t\t\ttype: \"header\",\n\t\t\theader: \"Authorization\",\n\t\t\tprefix: \"Impersonation\",\n\t\t},\n\t],\n}",
+      "lineNumber" : "",
+      "type" : "Snippet"
+    }, {
+      "id" : "setup",
+      "additionalIds" : [ ],
+      "level" : 2,
+      "title" : "Setup",
+      "type" : "SubHeading"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "To get started, add a dependency on ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "liftwizard-bundle-auth-filter",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " and add ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "AuthFilterBundle",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " to the registered bundles.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Modify the application's configuration class to implement ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "AuthFilterFactoryProvider",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " and add a dependency on ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "liftwizard-config-auth-filter",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " if it does not already extend ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "AbstractLiftwizardConfiguration",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "id" : "test-configuration",
+      "additionalIds" : [ ],
+      "level" : 2,
+      "title" : "Test configuration",
+      "type" : "SubHeading"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "For tests, you'll typically want to use header-based impersonation.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add a dependency on ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "liftwizard-config-auth-filter-header",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "xml",
+      "snippet" : "<dependency>\n    <groupId>io.liftwizard</groupId>\n    <artifactId>liftwizard-config-auth-filter-header</artifactId>\n    <scope>test</scope>\n</dependency>",
+      "lineNumber" : "",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Add an ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "authFilters",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " list to ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "config-test.json5",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " containing just one filter, of type ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "header",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "json5",
+      "snippet" : "{\n\tauthFilters: [\n\t\t{\n\t\t\ttype: \"header\",\n\t\t\theader: \"Authorization\",\n\t\t\tprefix: \"Impersonation\",\n\t\t},\n\t],\n}",
+      "lineNumber" : "",
+      "type" : "Snippet"
+    }, {
+      "id" : "test-code",
+      "additionalIds" : [ ],
+      "level" : 2,
+      "title" : "Test code",
+      "type" : "SubHeading"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Impersonation authorization works well in tests that uses Dropwizard test utilities, like ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "DropwizardAppExtension",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ", ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "LiftwizardAppExtension",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ", or ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "DropwizardAppRule",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ". There is no change to test setup code, only to the test configuration file. The test code will include headers on client requests, like this.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "java",
+      "snippet" : "@Test\nvoid smokeTest()\n{\n    Client client = this.appExtension.client();\n\n    Response response = client\n            .target(\"http://localhost:{port}/api/example\")\n            .resolveTemplate(\"port\", this.appExtension.getLocalPort())\n            .request()\n            .header(\"Authorization\", \"Impersonation User ID\")\n            .get();\n\n    // add assertions here\n}",
+      "lineNumber" : "",
+      "type" : "Snippet"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Whenever we use ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "dropwizard-auth",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ", some of our Jersey resource methods will be authenticated. The authenticated methods will be annotated with a security annotation such as ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "@PermitAll",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ". The user principal will be passed in as a parameter and annotated like ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "@Auth Principal principal",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ". The header authorizer will take the string passed in the header (",
+        "type" : "SimpleText"
+      }, {
+        "code" : "\"Impersonation User ID\"",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " in this example), remove its prefix (",
+        "type" : "SimpleText"
+      }, {
+        "code" : "\"User ID\"",
+        "type" : "InlinedCode"
+      }, {
+        "text" : "), and make that string accessible via ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "principal.getName()",
+        "type" : "InlinedCode"
+      }, {
+        "text" : ".",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "Since the header is sent on each request, we can write tests involving multiple users. For example, we can write a test that asserts:",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "bulletMarker" : "-",
+      "tight" : true,
+      "type" : "BulletList",
+      "content" : [ {
+        "type" : "ListItem",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "code" : "User 1",
+            "type" : "InlinedCode"
+          }, {
+            "text" : " can create an entry, and gets HTTP 201 Created.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "type" : "ListItem",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "code" : "User 2",
+            "type" : "InlinedCode"
+          }, {
+            "text" : " cannot edit or delete the entry, and gets HTTP 403 Forbidden.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "type" : "ListItem",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "code" : "User 1",
+            "type" : "InlinedCode"
+          }, {
+            "text" : " can edit or delete the entry, and gets HTTP 200 OK.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      } ]
+    }, {
+      "id" : "production-configuration",
+      "additionalIds" : [ ],
+      "level" : 2,
+      "title" : "Production configuration",
+      "type" : "SubHeading"
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "The production authentication filter dependencies and configuration will depend on the method of authentication used in production. For example, the configuration to use Firebase for auth would look like this.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "lang" : "json5",
+      "snippet" : "{\n\tauthFilters: [\n\t\t{\n\t\t\ttype: \"firebase\",\n\t\t\tdatabaseUrl: \"https://example.firebaseio.com\",\n\t\t\tfirebaseConfig: \"${FIREBASE_CONFIG}\",\n\t\t},\n\t],\n}",
+      "lineNumber" : "",
+      "type" : "Snippet"
+    } ],
+    "lastModifiedTime" : 1781319667924,
+    "tocItem" : {
+      "chapterTitle" : "Auth",
+      "pageTitle" : "Dynamic Authentication And Impersonation",
+      "pageMeta" : { },
+      "dirName" : "auth",
+      "fileName" : "dynamic-authentication-and-impersonation",
+      "fileExtension" : "md",
+      "viewOnRelativePath" : null,
+      "pageSectionIdTitles" : [ ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>
