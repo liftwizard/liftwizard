@@ -176,13 +176,6 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 			);
 	}
 
-	/**
-	 * Distinct-parser-config scenario (sanctioned exception to the single-{@code replacePatterns}
-	 * convention): a {@code Logger} stub that does <em>not</em> extend {@code Category}, so
-	 * {@code LOGGER.info(..)} resolves to {@code Logger.info} rather than the inherited
-	 * {@code Category.info}. Guards that the {@code Logger}-declared matchers keep detecting object
-	 * logging when the inheritance is not resolvable — removing those matchers must fail this test.
-	 */
 	@Test
 	void detectsObjectArgumentWhenLoggerInheritanceIsSevered() {
 		String severedLoggerStub = """
