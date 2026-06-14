@@ -19,10 +19,10 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3LoggingPackageRename
 displayName: Rename io.dropwizard.logging to io.dropwizard.logging.common
 description: >-
-  Rename io.dropwizard.logging to io.dropwizard.logging.common for JPMS compliance.
-  Includes all subpackages (async, filter, layout).
+    Rename io.dropwizard.logging to io.dropwizard.logging.common for JPMS compliance.
+    Includes all subpackages (async, filter, layout).
 recipeList:
-  - org.openrewrite.java.ChangePackage:
-      oldPackageName: io.dropwizard.logging
-      newPackageName: io.dropwizard.logging.common
-      recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.logging
+          newPackageName: io.dropwizard.logging.common
+          recursive: true

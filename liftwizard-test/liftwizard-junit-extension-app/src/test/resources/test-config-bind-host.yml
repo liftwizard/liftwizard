@@ -1,11 +1,11 @@
 server:
-  applicationConnectors:
-    - type: http
-      port: 0
-      bindHost: localhost
-  adminConnectors:
-    - type: http
-      port: 0
+    applicationConnectors:
+        - type: http
+          port: 0
+          bindHost: localhost
+    adminConnectors:
+        - type: http
+          port: 0
 
 logging:
-  level: WARN
+    level: WARN

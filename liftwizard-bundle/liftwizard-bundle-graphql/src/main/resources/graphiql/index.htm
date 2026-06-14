@@ -45,14 +45,14 @@
 		<script src="/renderExample.js" type="application/javascript"></script>
 		<script>
 			function graphQLFetcher(graphQLParams) {
-				return fetch("https://swapi-graphql.netlify.com/.netlify/functions/index", {
-					method: "post",
+				return fetch('https://swapi-graphql.netlify.com/.netlify/functions/index', {
+					method: 'post',
 					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
+						Accept: 'application/json',
+						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify(graphQLParams),
-					credentials: "omit",
+					credentials: 'omit',
 				}).then(function (response) {
 					return response.json().catch(function () {
 						return response.text();
@@ -65,7 +65,7 @@
 					fetcher: graphQLFetcher,
 					defaultVariableEditorOpen: true,
 				}),
-				document.getElementById("graphiql"),
+				document.getElementById('graphiql'),
 			);
 		</script>
 	</body>

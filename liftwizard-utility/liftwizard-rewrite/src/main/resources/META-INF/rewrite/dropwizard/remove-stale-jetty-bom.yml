@@ -19,12 +19,12 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
 displayName: Remove stale jetty-bom managed dependency
 description: >-
-  Remove any explicit jetty-bom managed-dependency import. Dropwizard 3's
-  own dropwizard-bom manages a compatible Jetty version, and a project-pinned
-  jetty-bom (commonly Jetty 9.4.x) imported BEFORE dropwizard-bom will win
-  the BOM-merge order and silently downgrade Jetty back to a Dropwizard 2
-  era release, dragging in javax.servlet 3.1 and breaking BannedDependencies.
+    Remove any explicit jetty-bom managed-dependency import. Dropwizard 3's
+    own dropwizard-bom manages a compatible Jetty version, and a project-pinned
+    jetty-bom (commonly Jetty 9.4.x) imported BEFORE dropwizard-bom will win
+    the BOM-merge order and silently downgrade Jetty back to a Dropwizard 2
+    era release, dragging in javax.servlet 3.1 and breaking BannedDependencies.
 recipeList:
-  - org.openrewrite.maven.RemoveManagedDependency:
-      groupId: org.eclipse.jetty
-      artifactId: jetty-bom
+    - org.openrewrite.maven.RemoveManagedDependency:
+          groupId: org.eclipse.jetty
+          artifactId: jetty-bom

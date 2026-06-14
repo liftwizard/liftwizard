@@ -19,11 +19,11 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.testing.ResourceTestRuleToExtension
 displayName: Replace ResourceTestRule with ResourceExtension
 description: >-
-  Replace ResourceTestRule with ResourceExtension, change @ClassRule/@Rule to @RegisterExtension,
-  and add @ExtendWith(DropwizardExtensionsSupport.class) to the test class.
+    Replace ResourceTestRule with ResourceExtension, change @ClassRule/@Rule to @RegisterExtension,
+    and add @ExtendWith(DropwizardExtensionsSupport.class) to the test class.
 recipeList:
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: io.dropwizard.testing.junit.ResourceTestRule
-      newFullyQualifiedTypeName: io.dropwizard.testing.junit5.ResourceExtension
-  - io.liftwizard.rewrite.dropwizard.testing.DropwizardRuleAnnotations:
-      extensionTypeFqn: io.dropwizard.testing.junit5.ResourceExtension
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.testing.junit.ResourceTestRule
+          newFullyQualifiedTypeName: io.dropwizard.testing.junit5.ResourceExtension
+    - io.liftwizard.rewrite.dropwizard.testing.DropwizardRuleAnnotations:
+          extensionTypeFqn: io.dropwizard.testing.junit5.ResourceExtension

@@ -19,13 +19,13 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
 displayName: Exclude jetty-servlet-api from dependencies
 description: >-
-  Jetty 10 (which Dropwizard 3 brings in) ships
-  org.eclipse.jetty.toolchain:jetty-servlet-api as a transitive dependency.
-  Its classes overlap with jakarta.servlet:jakarta.servlet-api (both
-  declare classes in the javax.servlet.* package under Jakarta EE 8),
-  causing BanDuplicateClasses enforcer failures. Exclude jetty-servlet-api
-  so jakarta.servlet-api is the single source of those classes.
+    Jetty 10 (which Dropwizard 3 brings in) ships
+    org.eclipse.jetty.toolchain:jetty-servlet-api as a transitive dependency.
+    Its classes overlap with jakarta.servlet:jakarta.servlet-api (both
+    declare classes in the javax.servlet.* package under Jakarta EE 8),
+    causing BanDuplicateClasses enforcer failures. Exclude jetty-servlet-api
+    so jakarta.servlet-api is the single source of those classes.
 recipeList:
-  - org.openrewrite.maven.ExcludeDependency:
-      groupId: org.eclipse.jetty.toolchain
-      artifactId: jetty-servlet-api
+    - org.openrewrite.maven.ExcludeDependency:
+          groupId: org.eclipse.jetty.toolchain
+          artifactId: jetty-servlet-api

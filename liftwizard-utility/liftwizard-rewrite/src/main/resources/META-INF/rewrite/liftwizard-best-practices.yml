@@ -19,32 +19,32 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.LiftwizardBestPractices
 displayName: Liftwizard best practices
 description: >-
-  Composite recipe that includes all Liftwizard best practices recipes.
-  Rules that are meant to always pass. They can run in CI with dryRun, or one-off for rewrites.
+    Composite recipe that includes all Liftwizard best practices recipes.
+    Rules that are meant to always pass. They can run in CI with dryRun, or one-off for rewrites.
 recipeList:
-  - io.liftwizard.UpdateCopyrightYear
-  - io.liftwizard.rewrite.LiftwizardRecommendations
-  - io.liftwizard.rewrite.assertj.AssertJMigration
-  - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
-  - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
-  - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval
-  - org.openrewrite.staticanalysis.ExplicitThis
-  - io.liftwizard.staticanalysis.CodeCleanup
-  - io.liftwizard.staticanalysis.CommonStaticAnalysis
-  - org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64
-  - org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes
-  - org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes
-  - org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass
-  - org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant
-  - org.openrewrite.java.recipes.JavaRecipeBestPractices
-  - org.openrewrite.java.migrate.nio.file.PathsGetToPathOf
-  - org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent
-  - org.openrewrite.java.migrate.util.OptionalNotPresentToIsEmpty
-  - org.openrewrite.java.migrate.util.ReplaceMathRandomWithThreadLocalRandomRecipe
-  - org.openrewrite.java.migrate.util.SequencedCollection
-  - org.openrewrite.staticanalysis.InstanceOfPatternMatch
-  - io.liftwizard.rewrite.LoggingBestPractices
-  - io.liftwizard.maven.BestPractices
-  - io.liftwizard.testing.junit.JupiterBestPractices
-  - org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements
-  - org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions
+    - io.liftwizard.UpdateCopyrightYear
+    - io.liftwizard.rewrite.LiftwizardRecommendations
+    - io.liftwizard.rewrite.assertj.AssertJMigration
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsAdoption
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsBestPractices
+    - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsRemoval
+    - org.openrewrite.staticanalysis.ExplicitThis
+    - io.liftwizard.staticanalysis.CodeCleanup
+    - io.liftwizard.staticanalysis.CommonStaticAnalysis
+    - org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64
+    - org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes
+    - org.openrewrite.apache.commons.lang.ApacheCommonsStringUtilsRecipes
+    - org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass
+    - org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant
+    - org.openrewrite.java.recipes.JavaRecipeBestPractices
+    - org.openrewrite.java.migrate.nio.file.PathsGetToPathOf
+    - org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent
+    - org.openrewrite.java.migrate.util.OptionalNotPresentToIsEmpty
+    - org.openrewrite.java.migrate.util.ReplaceMathRandomWithThreadLocalRandomRecipe
+    - org.openrewrite.java.migrate.util.SequencedCollection
+    - org.openrewrite.staticanalysis.InstanceOfPatternMatch
+    - io.liftwizard.rewrite.LoggingBestPractices
+    - io.liftwizard.maven.BestPractices
+    - io.liftwizard.testing.junit.JupiterBestPractices
+    - org.openrewrite.java.testing.assertj.CollapseConsecutiveAssertThatStatements
+    - org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions

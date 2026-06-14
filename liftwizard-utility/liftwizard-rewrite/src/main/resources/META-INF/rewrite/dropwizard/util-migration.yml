@@ -19,10 +19,10 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
 displayName: Migrate dropwizard-util removed classes
 description: >-
-  Migrate removed utility classes from dropwizard-util.
-  Replaces io.dropwizard.util.Sets with java.util.Set,
-  since Sets.of() is replaced by Set.of() in Java 9+.
+    Migrate removed utility classes from dropwizard-util.
+    Replaces io.dropwizard.util.Sets with java.util.Set,
+    since Sets.of() is replaced by Set.of() in Java 9+.
 recipeList:
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: io.dropwizard.util.Sets
-      newFullyQualifiedTypeName: java.util.Set
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.util.Sets
+          newFullyQualifiedTypeName: java.util.Set

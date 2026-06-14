@@ -13,14 +13,14 @@ INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingB
 
 ```json5 {title: "Output configuration"}
 {
-	template: "Hello, %s!",
-	defaultName: "Stranger",
+	template: 'Hello, %s!',
+	defaultName: 'Stranger',
 	configLogging: {
 		enabled: true,
 	},
 	// ...
 	metrics: {
-		frequency: "1 minute",
+		frequency: '1 minute',
 		reporters: [],
 	},
 }

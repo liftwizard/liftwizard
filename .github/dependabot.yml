@@ -1,40 +1,40 @@
 version: 2
 updates:
-  - package-ecosystem: "maven"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "07:00"
-      timezone: America/New_York
-    open-pull-requests-limit: 99
-    target-branch: main
-    groups:
-      openrewrite:
-        patterns:
-          - "org.openrewrite*"
-      jackson:
-        patterns:
-          - "com.fasterxml.jackson*"
-      error-prone:
-        patterns:
-          - "com.google.errorprone*"
-          - "tech.picnic.error-prone-support*"
-      junit:
-        patterns:
-          - "org.junit*"
-      dropwizard:
-        patterns:
-          - "io.dropwizard*"
-      logging:
-        patterns:
-          - "org.slf4j*"
-          - "ch.qos.logback*"
-          - "net.logstash.logback*"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "07:00"
-      timezone: America/New_York
-    open-pull-requests-limit: 99
-    target-branch: main
+    - package-ecosystem: 'maven'
+      directory: '/'
+      schedule:
+          interval: 'daily'
+          time: '07:00'
+          timezone: America/New_York
+      open-pull-requests-limit: 99
+      target-branch: main
+      groups:
+          openrewrite:
+              patterns:
+                  - 'org.openrewrite*'
+          jackson:
+              patterns:
+                  - 'com.fasterxml.jackson*'
+          error-prone:
+              patterns:
+                  - 'com.google.errorprone*'
+                  - 'tech.picnic.error-prone-support*'
+          junit:
+              patterns:
+                  - 'org.junit*'
+          dropwizard:
+              patterns:
+                  - 'io.dropwizard*'
+          logging:
+              patterns:
+                  - 'org.slf4j*'
+                  - 'ch.qos.logback*'
+                  - 'net.logstash.logback*'
+    - package-ecosystem: 'github-actions'
+      directory: '/'
+      schedule:
+          interval: 'daily'
+          time: '07:00'
+          timezone: America/New_York
+      open-pull-requests-limit: 99
+      target-branch: main

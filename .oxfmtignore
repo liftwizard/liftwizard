@@ -1,0 +1,10 @@
+# Files oxfmt cannot format. Everything else (including html, css, and the valid
+# ReladomoAttribute.graphqls) is formatted normally.
+
+# Declares an empty root `type Query {}`, which is invalid GraphQL syntax (an object
+# type's field block must contain at least one field). It is a placeholder schema
+# extended at runtime; oxfmt's parser correctly rejects it.
+/liftwizard-graphql/liftwizard-graphql-query-schema/src/main/resources/io/liftwizard/graphql/schema/query/QuerySchema.graphqls
+
+# Minified CSS must stay minified; oxfmt would expand it.
+/liftwizard-example/src/main/resources/assets/pure-min.css

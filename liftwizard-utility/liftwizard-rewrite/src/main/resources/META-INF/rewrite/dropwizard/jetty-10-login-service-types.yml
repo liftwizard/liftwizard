@@ -19,17 +19,17 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
 displayName: Promote Jetty AbstractLoginService nested types to top-level
 description: >-
-  In Jetty 10, UserPrincipal and RolePrincipal were promoted from nested
-  classes inside AbstractLoginService to top-level classes in the
-  org.eclipse.jetty.security package. This recipe rewrites references to
-  the old nested-type names so imports resolve under Jetty 10/Dropwizard 3.
-  Note: this only handles the type rename; it does NOT change the return
-  type of AbstractLoginService.loadRoleInfo (was String[], now
-  List<RolePrincipal>) — that signature change requires a custom recipe.
+    In Jetty 10, UserPrincipal and RolePrincipal were promoted from nested
+    classes inside AbstractLoginService to top-level classes in the
+    org.eclipse.jetty.security package. This recipe rewrites references to
+    the old nested-type names so imports resolve under Jetty 10/Dropwizard 3.
+    Note: this only handles the type rename; it does NOT change the return
+    type of AbstractLoginService.loadRoleInfo (was String[], now
+    List<RolePrincipal>) — that signature change requires a custom recipe.
 recipeList:
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$UserPrincipal
-      newFullyQualifiedTypeName: org.eclipse.jetty.security.UserPrincipal
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$RolePrincipal
-      newFullyQualifiedTypeName: org.eclipse.jetty.security.RolePrincipal
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$UserPrincipal
+          newFullyQualifiedTypeName: org.eclipse.jetty.security.UserPrincipal
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: org.eclipse.jetty.security.AbstractLoginService$RolePrincipal
+          newFullyQualifiedTypeName: org.eclipse.jetty.security.RolePrincipal

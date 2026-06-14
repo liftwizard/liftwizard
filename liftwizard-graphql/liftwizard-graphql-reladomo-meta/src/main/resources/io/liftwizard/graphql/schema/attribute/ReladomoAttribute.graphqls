@@ -5,141 +5,141 @@ scalar LocalDate
 scalar Long
 
 input _StringAttribute {
-    eq: String
-    notEq: String
-    in: [String]
-    notIn: [String]
+	eq: String
+	notEq: String
+	in: [String]
+	notIn: [String]
 
-    greaterThan: String
-    greaterThanEquals: String
-    lessThan: String
-    lessThanEquals: String
+	greaterThan: String
+	greaterThanEquals: String
+	lessThan: String
+	lessThanEquals: String
 
-    startsWith: String
-    notStartsWith: String
-    endsWith: String
-    notEndsWith: String
-    contains: String
-    notContains: String
-    toLowerCase: _StringAttribute
+	startsWith: String
+	notStartsWith: String
+	endsWith: String
+	notEndsWith: String
+	contains: String
+	notContains: String
+	toLowerCase: _StringAttribute
 
-    wildCardEq: String
-    wildCardEquals: String
-    wildCardIn: [String]
-    wildCardNotEq: String
-    wildCardNotEquals: String
+	wildCardEq: String
+	wildCardEquals: String
+	wildCardIn: [String]
+	wildCardNotEq: String
+	wildCardNotEquals: String
 
-    lower: _StringAttribute
-    # Parameters not allowed in input types
-    # subString(start: Int, end: Int): StringAttribute
+	lower: _StringAttribute
+	# Parameters not allowed in input types
+	# subString(start: Int, end: Int): StringAttribute
 }
 
 input _BooleanAttribute {
-    eq: Boolean
-    notEq: Boolean
-    in: [Boolean]
-    notIn: [Boolean]
+	eq: Boolean
+	notEq: Boolean
+	in: [Boolean]
+	notIn: [Boolean]
 }
 
 input _IntegerAttribute {
-    eq: Int
-    notEq: Int
-    in: [Int]
-    notIn: [Int]
+	eq: Int
+	notEq: Int
+	in: [Int]
+	notIn: [Int]
 
-    greaterThan: Int
-    greaterThanEquals: Int
-    lessThan: Int
-    lessThanEquals: Int
+	greaterThan: Int
+	greaterThanEquals: Int
+	lessThan: Int
+	lessThanEquals: Int
 
-    abs: _IntegerAttribute
+	abs: _IntegerAttribute
 }
 
 input _LongAttribute {
-    eq: Long
-    notEq: Long
-    in: [Long]
-    notIn: [Long]
+	eq: Long
+	notEq: Long
+	in: [Long]
+	notIn: [Long]
 
-    greaterThan: Long
-    greaterThanEquals: Long
-    lessThan: Long
-    lessThanEquals: Long
+	greaterThan: Long
+	greaterThanEquals: Long
+	lessThan: Long
+	lessThanEquals: Long
 
-    abs: _LongAttribute
+	abs: _LongAttribute
 }
 
 input _DoubleAttribute {
-    eq: Float
-    notEq: Float
-    in: [Float]
-    notIn: [Float]
+	eq: Float
+	notEq: Float
+	in: [Float]
+	notIn: [Float]
 
-    greaterThan: Float
-    greaterThanEquals: Float
-    lessThan: Float
-    lessThanEquals: Float
+	greaterThan: Float
+	greaterThanEquals: Float
+	lessThan: Float
+	lessThanEquals: Float
 
-    abs: _DoubleAttribute
+	abs: _DoubleAttribute
 }
 
 input _FloatAttribute {
-    eq: Float
-    notEq: Float
-    in: [Float]
-    notIn: [Float]
+	eq: Float
+	notEq: Float
+	in: [Float]
+	notIn: [Float]
 
-    greaterThan: Float
-    greaterThanEquals: Float
-    lessThan: Float
-    lessThanEquals: Float
+	greaterThan: Float
+	greaterThanEquals: Float
+	lessThan: Float
+	lessThanEquals: Float
 
-    abs: _FloatAttribute
+	abs: _FloatAttribute
 }
 
 input _DateAttribute {
-    eq: String
-    notEq: String
-    in: [String]
-    notIn: [String]
+	eq: String
+	notEq: String
+	in: [String]
+	notIn: [String]
 
-    greaterThan: String
-    greaterThanEquals: String
-    lessThan: String
-    lessThanEquals: String
+	greaterThan: String
+	greaterThanEquals: String
+	lessThan: String
+	lessThanEquals: String
 
-    year: _IntegerAttribute
-    month: _IntegerAttribute
-    dayOfMonth: _IntegerAttribute
+	year: _IntegerAttribute
+	month: _IntegerAttribute
+	dayOfMonth: _IntegerAttribute
 }
 
 input _TimestampAttribute {
-    eq: String
-    notEq: String
-    in: [String]
-    notIn: [String]
+	eq: String
+	notEq: String
+	in: [String]
+	notIn: [String]
 
-    greaterThan: String
-    greaterThanEquals: String
-    lessThan: String
-    lessThanEquals: String
+	greaterThan: String
+	greaterThanEquals: String
+	lessThan: String
+	lessThanEquals: String
 
-    year: _IntegerAttribute
-    month: _IntegerAttribute
-    dayOfMonth: _IntegerAttribute
+	year: _IntegerAttribute
+	month: _IntegerAttribute
+	dayOfMonth: _IntegerAttribute
 }
 
 input _AsOfAttribute {
-    eq: String
-    notEq: String
-    equalsEdgePoint: _Empty
+	eq: String
+	notEq: String
+	equalsEdgePoint: _Empty
 }
 
 input _Empty {
-    dummyFieldDoNotUse: String
+	dummyFieldDoNotUse: String
 }
 
 enum _OrderByDirection {
-    ASCENDING
-    DESCENDING
+	ASCENDING
+	DESCENDING
 }

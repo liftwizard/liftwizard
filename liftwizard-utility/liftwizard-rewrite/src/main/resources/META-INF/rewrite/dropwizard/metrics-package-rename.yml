@@ -19,9 +19,9 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3MetricsPackageRename
 displayName: Rename io.dropwizard.metrics to io.dropwizard.metrics.common
 description: >-
-  Rename io.dropwizard.metrics to io.dropwizard.metrics.common for JPMS compliance.
+    Rename io.dropwizard.metrics to io.dropwizard.metrics.common for JPMS compliance.
 recipeList:
-  - org.openrewrite.java.ChangePackage:
-      oldPackageName: io.dropwizard.metrics
-      newPackageName: io.dropwizard.metrics.common
-      recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.metrics
+          newPackageName: io.dropwizard.metrics.common
+          recursive: true

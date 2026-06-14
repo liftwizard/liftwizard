@@ -19,40 +19,40 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
 displayName: Migrate Dropwizard logback conversion words
 description: >-
-  Migrate Dropwizard-specific logback conversion words to their renamed equivalents
-  in Dropwizard 3. The old standard logback names are reclaimed, and Dropwizard's
-  custom conversion words are prefixed with 'dw'.
-  Ordered longest-first to prevent partial matches.
+    Migrate Dropwizard-specific logback conversion words to their renamed equivalents
+    in Dropwizard 3. The old standard logback names are reclaimed, and Dropwizard's
+    custom conversion words are prefixed with 'dw'.
+    Ordered longest-first to prevent partial matches.
 recipeList:
-  - org.openrewrite.text.FindAndReplace:
-      find: "%rootException"
-      replace: "%dwRootException"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%rEx"
-      replace: "%dwREx"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%xException"
-      replace: "%dwXException"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%xThrowable"
-      replace: "%dwXThrowable"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%xEx"
-      replace: "%dwXEx"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%exception"
-      replace: "%dwException"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%throwable"
-      replace: "%dwThrowable"
-      filePattern: "**/logback*.xml"
-  - org.openrewrite.text.FindAndReplace:
-      find: "%ex"
-      replace: "%dwEx"
-      filePattern: "**/logback*.xml"
+    - org.openrewrite.text.FindAndReplace:
+          find: '%rootException'
+          replace: '%dwRootException'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%rEx'
+          replace: '%dwREx'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%xException'
+          replace: '%dwXException'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%xThrowable'
+          replace: '%dwXThrowable'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%xEx'
+          replace: '%dwXEx'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%exception'
+          replace: '%dwException'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%throwable'
+          replace: '%dwThrowable'
+          filePattern: '**/logback*.xml'
+    - org.openrewrite.text.FindAndReplace:
+          find: '%ex'
+          replace: '%dwEx'
+          filePattern: '**/logback*.xml'

@@ -20,9 +20,9 @@ name: io.liftwizard.rewrite.LiftwizardRecommendations
 displayName: Liftwizard recommended recipes
 description: Liftwizard recommended OpenRewrite recipes for improved code quality and maintainability.
 recipeList:
-  - io.liftwizard.rewrite.bestpractices.NullSafeEqualsRecipes
-  - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
-  - io.liftwizard.rewrite.java.style.UseVarForPrimitiveLiterals
-  - org.openrewrite.java.migrate.lang.var.UseVarForConstructors
-  - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast
-  - io.liftwizard.rewrite.eclipse.collections.HideUtilityClassConstructor
+    - io.liftwizard.rewrite.bestpractices.NullSafeEqualsRecipes
+    - io.liftwizard.rewrite.bestpractices.NullSafeHashCodeRecipes
+    - io.liftwizard.rewrite.java.style.UseVarForPrimitiveLiterals
+    - org.openrewrite.java.migrate.lang.var.UseVarForConstructors
+    - org.openrewrite.java.migrate.lang.var.UseVarForTypeCast
+    - io.liftwizard.rewrite.eclipse.collections.HideUtilityClassConstructor

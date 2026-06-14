@@ -19,9 +19,9 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3ViewsPackageRename
 displayName: Rename io.dropwizard.views to io.dropwizard.views.common
 description: >-
-  Rename io.dropwizard.views to io.dropwizard.views.common for JPMS compliance.
+    Rename io.dropwizard.views to io.dropwizard.views.common for JPMS compliance.
 recipeList:
-  - org.openrewrite.java.ChangePackage:
-      oldPackageName: io.dropwizard.views
-      newPackageName: io.dropwizard.views.common
-      recursive: true
+    - org.openrewrite.java.ChangePackage:
+          oldPackageName: io.dropwizard.views
+          newPackageName: io.dropwizard.views.common
+          recursive: true

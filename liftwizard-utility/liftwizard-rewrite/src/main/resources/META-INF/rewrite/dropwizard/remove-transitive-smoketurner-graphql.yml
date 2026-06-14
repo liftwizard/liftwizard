@@ -19,13 +19,13 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL
 displayName: Remove explicit smoketurner graphql-core dependency
 description: >-
-  Remove the explicit com.smoketurner.dropwizard:graphql-core dependency from
-  poms where it is now available transitively via
-  io.liftwizard:liftwizard-smoketurner-graphql. Intended to run after
-  Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL so the inline fork has
-  already taken over upstream modules and the explicit declaration is
-  redundant.
+    Remove the explicit com.smoketurner.dropwizard:graphql-core dependency from
+    poms where it is now available transitively via
+    io.liftwizard:liftwizard-smoketurner-graphql. Intended to run after
+    Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL so the inline fork has
+    already taken over upstream modules and the explicit declaration is
+    redundant.
 recipeList:
-  - org.openrewrite.maven.RemoveDependency:
-      groupId: com.smoketurner.dropwizard
-      artifactId: graphql-core
+    - org.openrewrite.maven.RemoveDependency:
+          groupId: com.smoketurner.dropwizard
+          artifactId: graphql-core

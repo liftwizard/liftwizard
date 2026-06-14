@@ -19,25 +19,25 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.Dropwizard2To3Migration
 displayName: Migrate Dropwizard 2 to Dropwizard 3
 description: >-
-  Comprehensive migration from Dropwizard 2.1.x to Dropwizard 3.0.x.
-  Includes JPMS-compliant package renames, Jetty 10 API changes, Apache HttpClient 5 migration,
-  dropwizard-util removals, JUnit 4 testing module reorganization,
-  logback conversion word updates, and dependency version upgrades.
-  Does NOT include javax to jakarta migration, which is the Dropwizard 3 to 4 change.
+    Comprehensive migration from Dropwizard 2.1.x to Dropwizard 3.0.x.
+    Includes JPMS-compliant package renames, Jetty 10 API changes, Apache HttpClient 5 migration,
+    dropwizard-util removals, JUnit 4 testing module reorganization,
+    logback conversion word updates, and dependency version upgrades.
+    Does NOT include javax to jakarta migration, which is the Dropwizard 3 to 4 change.
 recipeList:
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
-  - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3LoadRoleInfoSignature
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
-  - org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
-  - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3IAccessEventGetSequenceNumber
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL
-  - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes
+    - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3LoadRoleInfoSignature
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveStaleJettyBom
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi
+    - org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords
+    - io.liftwizard.rewrite.dropwizard.migration.Dropwizard3IAccessEventGetSequenceNumber
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3DependencyUpgrade
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3TestingJUnit4Removed
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardSmoketurnerGraphQL
+    - io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL

@@ -19,11 +19,11 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.testing.DropwizardAppRuleToLiftwizardAppExtension
 displayName: Replace DropwizardAppRule with LiftwizardAppExtension
 description: >-
-  Replace DropwizardAppRule with LiftwizardAppExtension, change @ClassRule/@Rule to @RegisterExtension,
-  and add @ExtendWith(DropwizardExtensionsSupport.class) to the test class.
+    Replace DropwizardAppRule with LiftwizardAppExtension, change @ClassRule/@Rule to @RegisterExtension,
+    and add @ExtendWith(DropwizardExtensionsSupport.class) to the test class.
 recipeList:
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: io.dropwizard.testing.junit.DropwizardAppRule
-      newFullyQualifiedTypeName: io.liftwizard.junit.extension.app.LiftwizardAppExtension
-  - io.liftwizard.rewrite.dropwizard.testing.DropwizardRuleAnnotations:
-      extensionTypeFqn: io.liftwizard.junit.extension.app.LiftwizardAppExtension
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.testing.junit.DropwizardAppRule
+          newFullyQualifiedTypeName: io.liftwizard.junit.extension.app.LiftwizardAppExtension
+    - io.liftwizard.rewrite.dropwizard.testing.DropwizardRuleAnnotations:
+          extensionTypeFqn: io.liftwizard.junit.extension.app.LiftwizardAppExtension

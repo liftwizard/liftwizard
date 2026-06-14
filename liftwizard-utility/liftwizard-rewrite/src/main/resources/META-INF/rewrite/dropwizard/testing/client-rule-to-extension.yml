@@ -19,11 +19,11 @@ type: specs.openrewrite.org/v1beta/recipe
 name: io.liftwizard.rewrite.dropwizard.testing.DropwizardClientRuleToExtension
 displayName: Replace DropwizardClientRule with DropwizardClientExtension
 description: >-
-  Replace DropwizardClientRule with DropwizardClientExtension, change @ClassRule/@Rule to @RegisterExtension,
-  and add @ExtendWith(DropwizardExtensionsSupport.class) to the test class.
+    Replace DropwizardClientRule with DropwizardClientExtension, change @ClassRule/@Rule to @RegisterExtension,
+    and add @ExtendWith(DropwizardExtensionsSupport.class) to the test class.
 recipeList:
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: io.dropwizard.testing.junit.DropwizardClientRule
-      newFullyQualifiedTypeName: io.dropwizard.testing.junit5.DropwizardClientExtension
-  - io.liftwizard.rewrite.dropwizard.testing.DropwizardRuleAnnotations:
-      extensionTypeFqn: io.dropwizard.testing.junit5.DropwizardClientExtension
+    - org.openrewrite.java.ChangeType:
+          oldFullyQualifiedTypeName: io.dropwizard.testing.junit.DropwizardClientRule
+          newFullyQualifiedTypeName: io.dropwizard.testing.junit5.DropwizardClientExtension
+    - io.liftwizard.rewrite.dropwizard.testing.DropwizardRuleAnnotations:
+          extensionTypeFqn: io.dropwizard.testing.junit5.DropwizardClientExtension

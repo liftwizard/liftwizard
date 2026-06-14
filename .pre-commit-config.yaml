@@ -1,37 +1,37 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
-    hooks:
-      - id: check-yaml
-        args: ["--allow-multiple-documents"]
-      - id: check-json
-        # Exclude JSONC files (JSON with Comments) as they need comment support
-        exclude: "biome\\.jsonc"
-      - id: check-toml
-      - id: check-xml
-      - id: end-of-file-fixer
-        exclude: ^\.idea/
-      - id: trailing-whitespace
-        exclude: ^\.idea/
-      - id: check-added-large-files
-        args: ["--maxkb=1000"]
-      - id: check-case-conflict
-      - id: check-merge-conflict
-      - id: detect-private-key
-      - id: mixed-line-ending
-        args: ["--fix=lf"]
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v6.0.0
+      hooks:
+          - id: check-yaml
+            args: ['--allow-multiple-documents']
+          - id: check-json
+            # Exclude JSONC files (JSON with Comments) as they need comment support
+            exclude: "markdownlint.*\\.jsonc|markdownlint-cli2.*\\.jsonc"
+          - id: check-toml
+          - id: check-xml
+          - id: end-of-file-fixer
+            exclude: ^\.idea/
+          - id: trailing-whitespace
+            exclude: ^\.idea/
+          - id: check-added-large-files
+            args: ['--maxkb=1000']
+          - id: check-case-conflict
+          - id: check-merge-conflict
+          - id: detect-private-key
+          - id: mixed-line-ending
+            args: ['--fix=no']
 
-  - repo: local
-    hooks:
-      - id: biome
-        name: biome
-        entry: npx @biomejs/biome format --write
-        language: system
-        types: [file]
-        files: \.(json|jsonc)$
-
-      - id: prettier
-        name: prettier
-        entry: npx prettier --write --ignore-unknown
-        language: system
-        types: [file]
+    - repo: local
+      hooks:
+          - id: oxfmt
+            name: vp fmt
+            # Formats json, json5, jsonc, yaml, markdown, html, css, and graphql via oxfmt.
+            # --no-error-on-unmatched-pattern skips file types with no matches instead of erroring.
+            # --ignore-path .oxfmtignore skips two specific files oxfmt can't handle (see that file).
+            entry: vp fmt --no-error-on-unmatched-pattern --ignore-path .oxfmtignore
+            language: system
+          - id: markdownlint-cli2
+            name: markdownlint-cli2
+            entry: markdownlint-cli2
+            language: system
+            types: [markdown]
