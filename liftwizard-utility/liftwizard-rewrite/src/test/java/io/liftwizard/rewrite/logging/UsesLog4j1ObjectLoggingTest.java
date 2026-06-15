@@ -42,6 +42,8 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					"""
 					import org.apache.log4j.Logger;
 
+					import java.util.function.Consumer;
+
 					class MyEvent {
 					    String name;
 					}
@@ -64,10 +66,24 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        LOGGER.error(obj);
 					        LOGGER.fatal(obj);
 					    }
+
+					    void detectsObjectMethodReference() {
+					        take(LOGGER::trace);
+					        take(LOGGER::debug);
+					        take(LOGGER::info);
+					        take(LOGGER::warn);
+					        take(LOGGER::error);
+					        take(LOGGER::fatal);
+					    }
+
+					    void take(Consumer<MyEvent> sink) {
+					    }
 					}
 					""",
 					"""
 					import org.apache.log4j.Logger;
+
+					import java.util.function.Consumer;
 
 					class MyEvent {
 					    String name;
@@ -91,6 +107,18 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 					        /*~~>*/LOGGER.error(obj);
 					        /*~~>*/LOGGER.fatal(obj);
 					    }
+
+					    void detectsObjectMethodReference() {
+					        take(/*~~>*/LOGGER::trace);
+					        take(/*~~>*/LOGGER::debug);
+					        take(/*~~>*/LOGGER::info);
+					        take(/*~~>*/LOGGER::warn);
+					        take(/*~~>*/LOGGER::error);
+					        take(/*~~>*/LOGGER::fatal);
+					    }
+
+					    void take(Consumer<MyEvent> sink) {
+					    }
 					}
 					"""
 				)
@@ -103,6 +131,8 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 				java(
 					"""
 					import org.apache.log4j.Logger;
+
+					import java.util.function.Consumer;
 
 					class Test {
 					    private static final Logger LOGGER = Logger.getLogger(Test.class);
@@ -126,6 +156,18 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 
 					    void doesNotDetectStringBuilder(StringBuilder builder) {
 					        LOGGER.info(builder);
+					    }
+
+					    void doesNotDetectStringMethodReference() {
+					        take(LOGGER::trace);
+					        take(LOGGER::debug);
+					        take(LOGGER::info);
+					        take(LOGGER::warn);
+					        take(LOGGER::error);
+					        take(LOGGER::fatal);
+					    }
+
+					    void take(Consumer<String> sink) {
 					    }
 					}
 					"""
