@@ -23,12 +23,15 @@ description: >-
   Unlike the upstream recipe, this version skips files that pass non-String
   Objects to Log4j 1 logging methods (e.g., LOGGER.info(myObject)),
   preserving structured logging capabilities. It also skips files that log at
-  the FATAL level (e.g., LOGGER.fatal(message)), which has no SLF4J equivalent.
-  Files with object logging or fatal logging remain on Log4j 1 and must be
-  migrated manually.
+  the FATAL level (e.g., LOGGER.fatal(message)), which has no SLF4J equivalent,
+  and files that call the generic log(Priority, ..) method
+  (e.g., LOGGER.log(Level.INFO, message)), which SLF4J cannot express.
+  Files with object logging, fatal logging, or log(Priority, ..) calls remain
+  on Log4j 1 and must be migrated manually.
 preconditions:
   - io.liftwizard.rewrite.logging.DoesNotUseLog4j1ObjectLogging
   - io.liftwizard.rewrite.logging.DoesNotUseLog4jFatal
+  - io.liftwizard.rewrite.logging.DoesNotUseLog4j1LogWithPriority
 recipeList:
   - org.openrewrite.java.ChangeType:
       oldFullyQualifiedTypeName: org.apache.log4j.MDC
