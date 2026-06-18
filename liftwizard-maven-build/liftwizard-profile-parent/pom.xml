@@ -855,6 +855,10 @@
 
                                 <prettier>
                                     <configFile>.prettierrc.json5</configFile>
+                                    <config>
+                                        <tabWidth>2</tabWidth>
+                                        <useTabs>false</useTabs>
+                                    </config>
                                 </prettier>
                             </yaml>
                         </configuration>
