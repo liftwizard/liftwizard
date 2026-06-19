@@ -51,8 +51,7 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 	}
 
 	@Override
-	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
-		throws JsonProcessingException {
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
 		ConfigLoggingFactoryProvider configLoggingFactoryProvider = this.safeCastConfiguration(
 			ConfigLoggingFactoryProvider.class,
 			configuration
@@ -71,11 +70,24 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
-	private static void logConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
-		throws JsonProcessingException {
-		String fullConfigurationString = objectMapper.writeValueAsString(configuration);
-		LOGGER.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
+	// Configuration logging is a best-effort diagnostic, so a failure here must never prevent the application from starting.
+	static void logConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper) {
+		try {
+			String fullConfigurationString = objectMapper.writeValueAsString(configuration);
+			LOGGER.info("Dropwizard configuration (full):\n{}", fullConfigurationString);
+		} catch (Exception e) {
+			LOGGER.warn("Skipped logging the full Dropwizard configuration because of an error.", e);
+		}
 
+		try {
+			ConfigLoggingBundle.logMinimizedConfiguration(configuration, objectMapper);
+		} catch (Exception e) {
+			LOGGER.warn("Skipped logging the minimized Dropwizard configuration because of an error.", e);
+		}
+	}
+
+	private static void logMinimizedConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
+		throws JsonProcessingException {
 		Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration).flatMap(
 			ConfigLoggingBundle::getDefaultConfiguration
 		);
