@@ -16,12 +16,22 @@
 
 package io.liftwizard.dropwizard.bundle.config.logging;
 
+import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
 import io.dropwizard.Configuration;
 import io.dropwizard.jackson.Jackson;
+import io.dropwizard.request.logging.LogbackAccessRequestLogFactory;
+import io.dropwizard.server.AbstractServerFactory;
+import io.dropwizard.server.DefaultServerFactory;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 class ConfigLoggingBundleTest {
@@ -62,6 +72,61 @@ class ConfigLoggingBundleTest {
 		).doesNotThrowAnyException();
 	}
 
+	@Test
+	void ignoredPropertyNamesAnnotationIntrospectorRemovesRequestLog() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		ObjectNode withRequestLog = objectMapper.valueToTree(new DefaultServerFactory());
+		assertThat(withRequestLog.has("requestLog")).isTrue();
+
+		ObjectMapper ignoringObjectMapper = Jackson.newObjectMapper();
+		AnnotationIntrospector existingIntrospector = ignoringObjectMapper
+			.getSerializationConfig()
+			.getAnnotationIntrospector();
+		ignoringObjectMapper.setAnnotationIntrospector(
+			AnnotationIntrospectorPair.pair(
+				new IgnoredPropertyNamesAnnotationIntrospector(AbstractServerFactory.class, "requestLog"),
+				existingIntrospector
+			)
+		);
+		ObjectNode withoutRequestLog = ignoringObjectMapper.valueToTree(new DefaultServerFactory());
+		assertThat(withoutRequestLog.has("requestLog")).isFalse();
+	}
+
+	@Test
+	void ignoredPropertyNamesAnnotationIntrospectorIsScopedToDeclaringType() {
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		AnnotationIntrospector existingIntrospector = objectMapper.getSerializationConfig().getAnnotationIntrospector();
+		objectMapper.setAnnotationIntrospector(
+			AnnotationIntrospectorPair.pair(
+				new IgnoredPropertyNamesAnnotationIntrospector(AbstractServerFactory.class, "requestLog"),
+				existingIntrospector
+			)
+		);
+
+		ObjectNode node = objectMapper.valueToTree(new UnrelatedRequestLogHolder());
+		assertThat(node.has("requestLog")).isTrue();
+	}
+
+	@Test
+	void fallbackMinimizationKeepsServerButOmitsRequestLog() {
+		Configuration configuration = new Configuration();
+		DefaultServerFactory serverFactory = (DefaultServerFactory) configuration.getServerFactory();
+		serverFactory.setMaxThreads(999);
+		LogbackAccessRequestLogFactory requestLogFactory = new LogbackAccessRequestLogFactory();
+		requestLogFactory.setAppenders(List.of());
+		serverFactory.setRequestLogFactory(requestLogFactory);
+
+		ObjectMapper objectMapper = Jackson.newObjectMapper();
+		Optional<ObjectNode> fallback = ConfigLoggingBundle.minimizeConfigurationIgnoringRequestLog(
+			configuration,
+			objectMapper
+		);
+
+		assertThat(fallback).isPresent();
+		assertThat(fallback.get().path("server").has("maxThreads")).isTrue();
+		assertThat(fallback.get().path("server").has("requestLog")).isFalse();
+	}
+
 	/**
 	 * An {@link ObjectMapper} that serializes normally but fails when copied. The minimized-configuration logic copies
 	 * the mapper before installing its mix-in, so this triggers a failure only on the minimization path, leaving the
@@ -92,6 +157,17 @@ class ConfigLoggingBundleTest {
 		@Override
 		public String writeValueAsString(Object value) {
 			throw new IllegalStateException("Forced full-configuration serialization failure for test.");
+		}
+	}
+
+	/**
+	 * An unrelated type that also has a {@code requestLog} property, used to confirm the introspector only ignores the
+	 * property on the configured declaring type.
+	 */
+	public static final class UnrelatedRequestLogHolder {
+
+		public String getRequestLog() {
+			return "kept";
 		}
 	}
 }
