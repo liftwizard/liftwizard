@@ -35,7 +35,7 @@ class ConfigLoggingBundleTest {
 	@Test
 	void minimizationFailureDoesNotPreventStartup() {
 		ObjectMapper objectMapper = new FailingCopyObjectMapper(Jackson.newObjectMapper());
-		Configuration configuration = new Configuration();
+		var configuration = new Configuration();
 
 		assertThatCode(() ->
 			ConfigLoggingBundle.logConfiguration(configuration, objectMapper)
@@ -45,7 +45,7 @@ class ConfigLoggingBundleTest {
 	@Test
 	void logsConfigurationWithBlackbirdRegistered() {
 		ObjectMapper objectMapper = Jackson.newObjectMapper().registerModule(new BlackbirdModule());
-		Configuration configuration = new Configuration();
+		var configuration = new Configuration();
 
 		assertThatCode(() ->
 			ConfigLoggingBundle.logConfiguration(configuration, objectMapper)
@@ -55,7 +55,7 @@ class ConfigLoggingBundleTest {
 	@Test
 	void fullConfigurationFailureDoesNotPreventStartup() {
 		ObjectMapper objectMapper = new FailingWriteObjectMapper(Jackson.newObjectMapper());
-		Configuration configuration = new Configuration();
+		var configuration = new Configuration();
 
 		assertThatCode(() ->
 			ConfigLoggingBundle.logConfiguration(configuration, objectMapper)
