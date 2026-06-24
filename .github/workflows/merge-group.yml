@@ -11,6 +11,9 @@ concurrency:
 env:
   GROUP_ID: "io/liftwizard"
 
+permissions:
+  contents: read
+
 jobs:
   maven-test:
     runs-on: ubuntu-latest
@@ -178,6 +181,9 @@ jobs:
   checkstyle-semantics:
     name: checkstyle xml (semantics)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -209,6 +215,9 @@ jobs:
   checkstyle-semantics-strict:
     name: checkstyle xml (semantics strict)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -240,6 +249,9 @@ jobs:
   checkstyle-formatting:
     name: checkstyle xml (formatting)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -516,6 +528,9 @@ jobs:
 
   reviewdog-markdownlint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
 
@@ -527,6 +542,9 @@ jobs:
 
   reviewdog-yamllint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
 
@@ -538,6 +556,9 @@ jobs:
 
   reviewdog-actionlint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
 
@@ -549,6 +570,9 @@ jobs:
 
   reviewdog-shellcheck:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v7
 
