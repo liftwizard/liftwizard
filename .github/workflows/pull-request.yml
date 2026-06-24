@@ -10,9 +10,15 @@ concurrency:
 env:
   GROUP_ID: "io/liftwizard"
 
+permissions:
+  contents: read
+
 jobs:
   maven-coverage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
 

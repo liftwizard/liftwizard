@@ -12,6 +12,9 @@ concurrency:
 env:
   GROUP_ID: "io/liftwizard"
 
+permissions:
+  contents: read
+
 jobs:
   maven:
     runs-on: ubuntu-latest
