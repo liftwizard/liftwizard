@@ -18,18 +18,18 @@ jobs:
   maven-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - run: just test
 
@@ -40,18 +40,18 @@ jobs:
   maven-spotbugs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - run: just spotbugs
 
@@ -62,18 +62,18 @@ jobs:
   maven-errorprone:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Add Error Prone problem matcher
         run: echo "::add-matcher::.github/errorprone.json"
@@ -87,18 +87,18 @@ jobs:
   maven-errorprone-strict:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Add Error Prone problem matcher
         run: echo "::add-matcher::.github/errorprone.json"
@@ -112,18 +112,18 @@ jobs:
   maven-enforcer:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Run maven-enforcer-plugin
         run: just enforcer
@@ -135,18 +135,18 @@ jobs:
   maven-dependency:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Run maven-dependency-plugin
         run: just dependency
@@ -158,18 +158,18 @@ jobs:
   maven-javadoc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Run maven-javadoc-plugin
         run: just javadoc
@@ -185,11 +185,11 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -197,14 +197,14 @@ jobs:
             maven-checkstyle-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Produce Checkstyle XML: Semantics"
         run: just checkstyle-profile checkstyle-semantics false
 
-      - uses: motlin/checkstyle-results@v1
+      - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
@@ -219,11 +219,11 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -231,14 +231,14 @@ jobs:
             maven-checkstyle-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Produce Checkstyle XML: Strict Semantics"
         run: just checkstyle-profile checkstyle-semantics-strict false
 
-      - uses: motlin/checkstyle-results@v1
+      - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
@@ -253,11 +253,11 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -265,14 +265,14 @@ jobs:
             maven-checkstyle-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Produce Checkstyle XML: Formatting"
         run: just checkstyle-profile checkstyle-formatting false
 
-      - uses: motlin/checkstyle-results@v1
+      - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
@@ -283,9 +283,9 @@ jobs:
   maven-rewrite:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -293,9 +293,9 @@ jobs:
             maven-rewrite-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Run rewrite-maven-plugin (dry run)
         run: just rewrite-dry-run
@@ -308,18 +308,18 @@ jobs:
   maven-reproducible:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Run artifact:check-buildplan
         run: just reproducible
@@ -331,11 +331,11 @@ jobs:
   spotless-formats:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-spotless-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -343,9 +343,9 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Spotless Check: Formats"
         run: just spotless formats
@@ -360,11 +360,11 @@ jobs:
   spotless-java-cleanthat:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-spotless-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -372,9 +372,9 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Spotless Check: Java cleanthat"
         run: just spotless java-cleanthat
@@ -389,11 +389,11 @@ jobs:
   spotless-java:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-spotless-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -401,9 +401,9 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Spotless Check: Java"
         run: just spotless java
@@ -418,11 +418,11 @@ jobs:
   spotless-prettier-java-sort-imports:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-spotless-prettier-java-sort-imports-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -430,9 +430,9 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Spotless Check: Prettier Java (with sorted imports)"
         run: just spotless prettier-java-sort-imports
@@ -447,11 +447,11 @@ jobs:
   spotless-sql:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-spotless-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -459,9 +459,9 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Spotless Check: Sql"
         run: just spotless sql
@@ -476,11 +476,11 @@ jobs:
   spotless-pom:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-spotless-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
@@ -488,9 +488,9 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Spotless Check: Pom"
         run: just spotless pom
@@ -505,11 +505,11 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Prettier Format Check"
         run: npx prettier --check .
@@ -517,11 +517,11 @@ jobs:
   biome:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: "Biome Format Check"
         run: npx @biomejs/biome ci
@@ -532,9 +532,9 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: reviewdog/action-markdownlint@v0.27.0
+      - uses: reviewdog/action-markdownlint@844fd04b127b0d78328653f182d32988ad41d3d7 # v0.27.0
         with:
           reporter: github-pr-check
           fail_on_error: true
@@ -546,9 +546,9 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: reviewdog/action-yamllint@v1.22.0
+      - uses: reviewdog/action-yamllint@b5f7217d8c815ae374d1d55840d5e569d82f01f0 # v1.22.0
         with:
           reporter: github-pr-check
           fail_on_error: true
@@ -560,9 +560,9 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: reviewdog/action-actionlint@v1.72.0
+      - uses: reviewdog/action-actionlint@6fb7acc99f4a1008869fa8a0f09cfca740837d9d # v1.72.0
         with:
           reporter: github-pr-check
           fail_on_error: true
@@ -574,9 +574,9 @@ jobs:
       contents: read
       checks: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: reviewdog/action-shellcheck@v1.32.0
+      - uses: reviewdog/action-shellcheck@4c07458293ac342d477251099501a718ae5ef86e # v1.32.0
         with:
           reporter: github-pr-check
           filter_mode: nofilter
@@ -613,6 +613,6 @@ jobs:
       ]
     runs-on: ubuntu-latest
     steps:
-      - uses: re-actors/alls-green@release/v1
+      - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # release/v1
         with:
           jobs: ${{ toJSON(needs) }}
