@@ -27,7 +27,7 @@ jobs:
             maven-znai-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v1
+      - uses: twosigma/maven-cache-cleaner@v2
 
       - uses: jdx/mise-action@v4
 
