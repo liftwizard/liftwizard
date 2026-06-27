@@ -19,18 +19,18 @@ jobs:
   maven:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: maven-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@v2
+      - uses: twosigma/maven-cache-cleaner@0f3e445b9beae1b63bd0ca4fa347f9f91e0a59b3 # v2.1.0
 
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - run: just mvn
 
