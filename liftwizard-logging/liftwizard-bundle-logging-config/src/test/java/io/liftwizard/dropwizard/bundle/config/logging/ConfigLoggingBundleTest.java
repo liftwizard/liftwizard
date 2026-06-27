@@ -109,10 +109,10 @@ class ConfigLoggingBundleTest {
 
 	@Test
 	void fallbackMinimizationKeepsServerButOmitsRequestLog() {
-		Configuration configuration = new Configuration();
-		DefaultServerFactory serverFactory = (DefaultServerFactory) configuration.getServerFactory();
+		var configuration = new Configuration();
+		var serverFactory = (DefaultServerFactory) configuration.getServerFactory();
 		serverFactory.setMaxThreads(999);
-		LogbackAccessRequestLogFactory requestLogFactory = new LogbackAccessRequestLogFactory();
+		var requestLogFactory = new LogbackAccessRequestLogFactory();
 		requestLogFactory.setAppenders(List.of());
 		serverFactory.setRequestLogFactory(requestLogFactory);
 
