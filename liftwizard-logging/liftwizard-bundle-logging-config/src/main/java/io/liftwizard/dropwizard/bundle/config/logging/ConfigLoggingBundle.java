@@ -23,11 +23,14 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.auto.service.AutoService;
+import io.dropwizard.server.AbstractServerFactory;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.config.logging.ConfigLoggingFactoryProvider;
@@ -80,33 +83,91 @@ public class ConfigLoggingBundle implements PrioritizedBundle {
 		}
 
 		try {
-			ConfigLoggingBundle.logMinimizedConfiguration(configuration, objectMapper);
+			Optional<ObjectNode> minimized = ConfigLoggingBundle.minimizeConfiguration(configuration, objectMapper);
+			if (minimized.isPresent()) {
+				LOGGER.info(
+					"Dropwizard configuration (minimized):\n{}",
+					objectMapper.writeValueAsString(minimized.get())
+				);
+			}
 		} catch (Exception e) {
-			LOGGER.warn("Skipped logging the minimized Dropwizard configuration because of an error.", e);
+			// The usual cause is a Dropwizard default factory that cannot be serialized in this application, such as the
+			// logback request log factory in an application that runs log4j without logback on the classpath. Retry while
+			// ignoring the known-problematic request log factory before giving up on the minimized configuration.
+			LOGGER.warn(
+				"Retrying the minimized Dropwizard configuration while ignoring the request log factory because of an error.",
+				e
+			);
+			try {
+				Optional<ObjectNode> minimized = ConfigLoggingBundle.minimizeConfigurationIgnoringRequestLog(
+					configuration,
+					objectMapper
+				);
+				if (minimized.isPresent()) {
+					LOGGER.info(
+						"Dropwizard configuration (minimized, ignoring the request log factory):\n{}",
+						objectMapper.writeValueAsString(minimized.get())
+					);
+				}
+			} catch (Exception fallbackException) {
+				LOGGER.warn(
+					"Skipped logging the minimized Dropwizard configuration because of an error.",
+					fallbackException
+				);
+			}
 		}
 	}
 
-	private static void logMinimizedConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
-		throws JsonProcessingException {
+	static Optional<ObjectNode> minimizeConfiguration(
+		@Nonnull Object configuration,
+		@Nonnull ObjectMapper objectMapper
+	) {
+		ObjectMapper minimizationMapper = objectMapper.copy();
+		minimizationMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
+		return ConfigLoggingBundle.buildMinimizedConfigurationNode(configuration, minimizationMapper);
+	}
+
+	static Optional<ObjectNode> minimizeConfigurationIgnoringRequestLog(
+		@Nonnull Object configuration,
+		@Nonnull ObjectMapper objectMapper
+	) {
+		// A MixInResolver that returns the same mix-in for every type would override the mapper's own introspector, so
+		// apply NON_DEFAULT through the serialization inclusion and ignore the request log factory (the requestLog
+		// property on AbstractServerFactory) through a paired introspector that leaves every other annotation intact.
+		ObjectMapper minimizationMapper = objectMapper.copy();
+		minimizationMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+		AnnotationIntrospector existingIntrospector = minimizationMapper
+			.getSerializationConfig()
+			.getAnnotationIntrospector();
+		AnnotationIntrospector ignoreRequestLogIntrospector = new IgnoredPropertyNamesAnnotationIntrospector(
+			AbstractServerFactory.class,
+			"requestLog"
+		);
+		minimizationMapper.setAnnotationIntrospector(
+			AnnotationIntrospectorPair.pair(ignoreRequestLogIntrospector, existingIntrospector)
+		);
+		return ConfigLoggingBundle.buildMinimizedConfigurationNode(configuration, minimizationMapper);
+	}
+
+	private static Optional<ObjectNode> buildMinimizedConfigurationNode(
+		@Nonnull Object configuration,
+		@Nonnull ObjectMapper minimizationMapper
+	) {
 		Optional<Object> maybeDefaultConfiguration = ConfigLoggingBundle.getConstructor(configuration).flatMap(
 			ConfigLoggingBundle::getDefaultConfiguration
 		);
 		if (maybeDefaultConfiguration.isEmpty()) {
-			return;
+			return Optional.empty();
 		}
 		Object defaultConfiguration = maybeDefaultConfiguration.get();
 
-		ObjectMapper nonDefaultObjectMapper = objectMapper.copy();
-		nonDefaultObjectMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());
-
-		ObjectNode configurationJsonNode = nonDefaultObjectMapper.valueToTree(configuration);
-		ObjectNode defaultConfigurationJsonNode = nonDefaultObjectMapper.valueToTree(defaultConfiguration);
+		ObjectNode configurationJsonNode = minimizationMapper.valueToTree(configuration);
+		ObjectNode defaultConfigurationJsonNode = minimizationMapper.valueToTree(defaultConfiguration);
 
 		subtractObjectNode(configurationJsonNode, defaultConfigurationJsonNode);
 		removeEmptyNodes(configurationJsonNode);
 
-		String configurationString = objectMapper.writeValueAsString(configurationJsonNode);
-		LOGGER.info("Dropwizard configuration (minimized):\n{}", configurationString);
+		return Optional.of(configurationJsonNode);
 	}
 
 	private static void removeEmptyNodes(@Nonnull ObjectNode node) {
