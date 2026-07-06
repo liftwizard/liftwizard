@@ -32,6 +32,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.OrderImports;
+import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
@@ -184,7 +185,6 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
 			this.maybeRemoveImport("java.util." + this.sourceTypeSimpleName);
 			this.maybeAddImport("org.eclipse.collections.api.factory." + this.targetFactorySimpleName);
-			this.doAfterVisit(new OrderImports(false, null).getVisitor());
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
@@ -201,10 +201,16 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
+			J replacement;
 			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
-				return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
+				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
+			} else {
+				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace());
 			}
-			return template.apply(this.getCursor(), nc.getCoordinates().replace());
+
+			this.doAfterVisit(ShortenFullyQualifiedTypeReferences.modifyOnly(replacement));
+			this.doAfterVisit(new OrderImports(false, null).getVisitor());
+			return replacement;
 		}
 
 		private String getTemplateSource(
