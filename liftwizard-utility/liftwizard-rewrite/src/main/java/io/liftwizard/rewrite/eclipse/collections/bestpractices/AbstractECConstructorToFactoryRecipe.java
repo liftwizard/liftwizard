@@ -33,6 +33,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.OrderImports;
+import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
@@ -176,7 +177,6 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 
 			this.maybeRemoveImport(implementationClass);
 			this.maybeAddImport(factoryClass);
-			this.doAfterVisit(new OrderImports(false, null).getVisitor());
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.factoryClassName + "." + this.factoryMethod + "." + typeParamsTemplate;
@@ -195,18 +195,23 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
 				.build();
 
+			J replacement;
 			if (isComparatorWithIterableConstructor) {
-				return template.apply(
+				replacement = template.apply(
 					this.getCursor(),
 					nc.getCoordinates().replace(),
 					arguments.get(0),
 					arguments.get(1)
 				);
+			} else if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
+				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
+			} else {
+				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace());
 			}
-			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
-				return template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
-			}
-			return template.apply(this.getCursor(), nc.getCoordinates().replace());
+
+			this.doAfterVisit(ShortenFullyQualifiedTypeReferences.modifyOnly(replacement));
+			this.doAfterVisit(new OrderImports(false, null).getVisitor());
+			return replacement;
 		}
 
 		private String getTemplateSource(

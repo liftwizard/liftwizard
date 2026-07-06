@@ -29,6 +29,7 @@ import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.MethodMatcher;
+import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
 import org.openrewrite.java.tree.J;
 
 public class CollectionsEmptyToFactory extends Recipe {
@@ -112,7 +113,9 @@ public class CollectionsEmptyToFactory extends Recipe {
 				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
 				.build();
 
-			return template.apply(this.getCursor(), mi.getCoordinates().replace());
+			J.MethodInvocation replacement = template.apply(this.getCursor(), mi.getCoordinates().replace());
+			this.doAfterVisit(ShortenFullyQualifiedTypeReferences.modifyOnly(replacement));
+			return replacement;
 		}
 
 		private String extractTypeParameters(J.MethodInvocation mi) {
