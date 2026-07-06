@@ -112,7 +112,7 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 				this.getCursor(),
 				mi.getCoordinates().replace(),
 				mi.getSelect(),
-				result.capturedExpression(),
+				GarbageFreeLambdaVisitor.spaceBefore(result.capturedExpression()),
 				defaultFunction
 			);
 		}
