@@ -73,6 +73,7 @@ class ECGarbageFreeLambdasTest extends AbstractEclipseCollectionsTest {
 					        strings.removeIf(s -> s.startsWith(prefix));
 					        entries.anySatisfy(e -> e.equals(value));
 					        entries.forEach(e -> e.setValue(value));
+					        entries.forEach((entry) -> entry.setValue(value));
 					    }
 					}
 					""",
@@ -112,6 +113,7 @@ class ECGarbageFreeLambdasTest extends AbstractEclipseCollectionsTest {
 					        builders.forEachWith(StringBuilder::append, text);
 					        strings.removeIfWith(String::startsWith, prefix);
 					        entries.anySatisfyWith(Object::equals, value);
+					        entries.forEachWith(Entry::setValue, value);
 					        entries.forEachWith(Entry::setValue, value);
 					    }
 					}

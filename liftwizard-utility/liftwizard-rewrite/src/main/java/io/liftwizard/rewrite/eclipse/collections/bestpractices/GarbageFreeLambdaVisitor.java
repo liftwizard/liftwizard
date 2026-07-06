@@ -96,8 +96,12 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 			this.getCursor(),
 			mi.getCoordinates().replace(),
 			mi.getSelect(),
-			result.capturedExpression()
+			spaceBefore(result.capturedExpression())
 		);
+	}
+
+	static Expression spaceBefore(Expression expression) {
+		return expression.withPrefix(expression.getPrefix().withWhitespace(" "));
 	}
 
 	static Result detect(Expression argument) {
