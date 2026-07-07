@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -34,6 +35,8 @@ import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
 public class ECArraysAsListToWith extends Recipe {
+
+	private static final String[] STUBS = EclipseCollectionsTemplateStubs.FACTORIES;
 
 	@Override
 	public String getDisplayName() {
@@ -177,7 +180,7 @@ public class ECArraysAsListToWith extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			Object[] templateArguments;

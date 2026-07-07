@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.ExecutionContext;
@@ -33,6 +34,8 @@ import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
 import org.openrewrite.java.tree.J;
 
 public class CollectionsEmptyToFactory extends Recipe {
+
+	private static final String[] STUBS = EclipseCollectionsTemplateStubs.FACTORIES;
 
 	@Override
 	public String getDisplayName() {
@@ -110,7 +113,7 @@ public class CollectionsEmptyToFactory extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			J.MethodInvocation replacement = template.apply(this.getCursor(), mi.getCoordinates().replace());

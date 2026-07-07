@@ -29,6 +29,8 @@ import org.openrewrite.java.tree.J;
 
 public class AssertionsStaticImport extends Recipe {
 
+	private static final String[] STUBS = AssertJTemplateStubs.STUBS;
+
 	private static final MethodMatcher ASSERTIONS_STATIC_METHOD_MATCHER = new MethodMatcher(
 		"org.assertj.core.api.Assertions *(..)"
 	);
@@ -83,7 +85,7 @@ public class AssertionsStaticImport extends Recipe {
 
 			JavaTemplate template = JavaTemplate.builder(templatePattern.toString())
 				.staticImports("org.assertj.core.api.Assertions." + methodName)
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "assertj-core"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			this.maybeRemoveImport("org.assertj.core.api.Assertions");

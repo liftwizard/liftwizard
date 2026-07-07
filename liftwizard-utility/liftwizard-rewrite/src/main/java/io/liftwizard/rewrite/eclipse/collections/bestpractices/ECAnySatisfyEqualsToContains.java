@@ -18,6 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.util.List;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
@@ -31,6 +32,8 @@ import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
 public class ECAnySatisfyEqualsToContains extends Recipe {
+
+	private static final String[] STUBS = EclipseCollectionsTemplateStubs.RICH_ITERABLE;
 
 	private static final MethodMatcher ANY_SATISFY_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.api.RichIterable anySatisfy(org.eclipse.collections.api.block.predicate.Predicate)"
@@ -76,8 +79,10 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 			Expression select = mi.getSelect();
 			Expression value = memberRef.getContaining();
 
-			JavaTemplate template = JavaTemplate.builder("#{any()}.contains(#{any()})")
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
+			JavaTemplate template = JavaTemplate.builder(
+				"#{any(org.eclipse.collections.api.RichIterable)}.contains(#{any()})"
+			)
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			return template.apply(getCursor(), mi.getCoordinates().replace(), select, value);

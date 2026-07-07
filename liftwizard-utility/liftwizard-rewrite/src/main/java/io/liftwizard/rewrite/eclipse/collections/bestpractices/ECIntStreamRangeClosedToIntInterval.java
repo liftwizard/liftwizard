@@ -17,6 +17,7 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.collections.api.factory.Sets;
@@ -55,8 +56,16 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 	);
 	private static final String INT_INTERVAL_TYPE = "org.eclipse.collections.impl.list.primitive.IntInterval";
 	private static final String INT_INTERVAL_FROM_TO = "IntInterval.fromTo(#{any(int)}, #{any(int)})";
-	private static final String ECLIPSE_COLLECTIONS_API = "eclipse-collections-api";
-	private static final String ECLIPSE_COLLECTIONS_IMPL = "eclipse-collections-impl";
+	private static final List<String> STUBS = List.of(
+		"""
+		package org.eclipse.collections.impl.list.primitive;
+		public final class IntInterval {
+		    public static IntInterval fromTo(int from, int to) { return null; }
+		    public void forEach(java.util.function.IntConsumer procedure) {}
+		    public long sum() { return 0L; }
+		}
+		"""
+	);
 
 	@Override
 	public String getDisplayName() {
@@ -104,7 +113,7 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 			this.maybeRemoveImport("java.util.stream.IntStream");
 			this.maybeAddImport(INT_INTERVAL_TYPE);
 
-			JavaTemplate intIntervalFromTo = intIntervalFromToTemplate(ctx);
+			JavaTemplate intIntervalFromTo = intIntervalFromToTemplate();
 
 			return intIntervalFromTo.apply(
 				this.getCursor(),
@@ -114,16 +123,10 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 			);
 		}
 
-		private static JavaTemplate intIntervalFromToTemplate(ExecutionContext ctx) {
+		private static JavaTemplate intIntervalFromToTemplate() {
 			return JavaTemplate.builder(INT_INTERVAL_FROM_TO)
 				.imports(INT_INTERVAL_TYPE)
-				.javaParser(
-					JavaParser.fromJavaVersion().classpathFromResources(
-						ctx,
-						ECLIPSE_COLLECTIONS_API,
-						ECLIPSE_COLLECTIONS_IMPL
-					)
-				)
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 		}
 	}

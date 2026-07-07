@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
@@ -28,6 +29,7 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JavaType;
 
 /**
  * Converts {@code richIterable.detectIfNone(x -> x.foo(captured), defaultFn)} to
@@ -40,6 +42,8 @@ import org.openrewrite.java.tree.J;
  * <p>See {@link GarbageFreeLambdaRecipe} for the lambda shape rules.
  */
 public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
+
+	private static final String[] STUBS = EclipseCollectionsTemplateStubs.RICH_ITERABLE;
 
 	private static final MethodMatcher DETECT_IF_NONE_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.api.RichIterable detectIfNone(org.eclipse.collections.api.block.predicate.Predicate, org.eclipse.collections.api.block.function.Function0)",
@@ -91,8 +95,10 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 
 			Expression defaultFunction = mi.getArguments().get(1);
 
+			String selectPlaceholder = "#{any(org.eclipse.collections.api.RichIterable<" + result.typeFqn() + ">)}";
 			String templateSource =
-				"#{any()}.detectWithIfNone("
+				selectPlaceholder
+				+ ".detectWithIfNone("
 				+ result.simpleName()
 				+ "::"
 				+ result.methodName()
@@ -101,20 +107,26 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(result.typeFqn())
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			if (!result.typeFqn().startsWith("java.lang.")) {
 				this.doAfterVisit(new AddImport<>(result.typeFqn(), null, false));
 			}
 
-			return template.apply(
+			J.MethodInvocation replacement = template.apply(
 				this.getCursor(),
 				mi.getCoordinates().replace(),
 				mi.getSelect(),
 				GarbageFreeLambdaVisitor.spaceBefore(result.capturedExpression()),
 				defaultFunction
 			);
+			replacement = result.withTypedMemberReferences(replacement);
+			if (mi.getMethodType() == null) {
+				return replacement;
+			}
+			JavaType.Method methodType = mi.getMethodType().withName("detectWithIfNone");
+			return replacement.withMethodType(methodType).withName(replacement.getName().withType(methodType));
 		}
 	}
 }
