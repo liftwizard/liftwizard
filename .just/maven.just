@@ -2,6 +2,9 @@ default_mvn      := env('MVN_BINARY',   "mvn")
 default_target   := env('MVN_TARGET',   "verify")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
+rewrite_flags := "--threads 1 -DskipTests"
+rewrite_project_exclusions := "!liftwizard-generator-plugins/liftwizard-generator-rewrite,!liftwizard-generator-plugins/liftwizard-generator-rewrite-plugin,!liftwizard-utility/liftwizard-rewrite"
+rewrite_projects := "--projects '" + rewrite_project_exclusions + "'"
 
 default_verify_profiles := env('MVN_VERIFY_PROFILES', "spotless-preserve-cache,errorprone-strict,maven-enforcer-plugin,maven-dependency-plugin,maven-javadoc-plugin")
 default_checkstyle_profiles := env('MVN_CHECKSTYLE_PROFILES', "checkstyle-semantics,checkstyle-semantics-strict")
@@ -106,13 +109,13 @@ spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizar
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags)
 
 # `mvn` rewrite dry run
-rewrite-dry-run MVN=default_mvn: (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:dryRun" "--activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun" skip_tests_flags)
+rewrite-dry-run MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun") rewrite_flags)
 
 # `mvn` rewrite run
-rewrite-run MVN=default_mvn: clean (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run" "--activate-profiles rewrite-maven-plugin" skip_tests_flags)
+rewrite-run MVN=default_mvn: clean (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" (rewrite_projects + " --activate-profiles rewrite-maven-plugin") rewrite_flags)
 
 # `mvn` with rewrite-maven-plugin for single recipe
-rewrite RECIPE MVN=default_mvn: (mvn MVN "install org.openrewrite.maven:rewrite-maven-plugin:run --projects '!liftwizard-example'" ("--activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) skip_tests_flags)
+rewrite RECIPE MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" ("--projects '" + rewrite_project_exclusions + ",!liftwizard-example' --activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) rewrite_flags)
 
 # display available updates (dependencies, plugins, properties)
 @display-updates:
