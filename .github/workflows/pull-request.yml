@@ -55,7 +55,7 @@ jobs:
   forbid-merge-commits:
     runs-on: ubuntu-latest
     steps:
-      - uses: motlin/forbid-merge-commits-action@e79f9ed1c54b0bfb9e8a4ecaa8acfabfd01c1953 # main
+      - uses: motlin/forbid-merge-commits-action@e3c5d3f2eac047da10def5c0b7c2d26e09540472 # main
 
   automerge-dependabot:
     if: github.event.pull_request.user.login == 'dependabot[bot]'
