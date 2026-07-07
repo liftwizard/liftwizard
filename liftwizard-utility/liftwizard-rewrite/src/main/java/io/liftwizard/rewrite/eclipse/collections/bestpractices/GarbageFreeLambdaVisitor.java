@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.java.AddImport;
 import org.openrewrite.java.JavaIsoVisitor;
@@ -46,6 +47,8 @@ import org.openrewrite.java.tree.TypeUtils;
  */
 final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 
+	private static final String[] STUBS = EclipseCollectionsTemplateStubs.RICH_ITERABLE;
+
 	private final MethodMatcher matcher;
 	private final String targetMethodName;
 
@@ -73,8 +76,10 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 			return mi;
 		}
 
+		String selectPlaceholder = "#{any(org.eclipse.collections.api.RichIterable<" + result.typeFqn() + ">)}";
 		String templateSource =
-			"#{any()}."
+			selectPlaceholder
+			+ "."
 			+ this.targetMethodName
 			+ "("
 			+ result.simpleName()
@@ -85,19 +90,25 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 		JavaTemplate template = JavaTemplate.builder(templateSource)
 			.imports(result.typeFqn())
 			.contextSensitive()
-			.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
+			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 			.build();
 
 		if (!result.typeFqn().startsWith("java.lang.")) {
 			this.doAfterVisit(new AddImport<>(result.typeFqn(), null, false));
 		}
 
-		return template.apply(
+		J.MethodInvocation replacement = template.apply(
 			this.getCursor(),
 			mi.getCoordinates().replace(),
 			mi.getSelect(),
 			spaceBefore(result.capturedExpression())
 		);
+		replacement = result.withTypedMemberReferences(replacement);
+		if (mi.getMethodType() == null) {
+			return replacement;
+		}
+		JavaType.Method methodType = mi.getMethodType().withName(this.targetMethodName);
+		return replacement.withMethodType(methodType).withName(replacement.getName().withType(methodType));
 	}
 
 	static Expression spaceBefore(Expression expression) {
@@ -173,14 +184,15 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 		}
 
 		String methodName = innerCall.getSimpleName();
+		JavaType.Method methodType = innerCall.getMethodType();
 
 		if (methodName.equals("equals")) {
-			return new Result("java.lang.Object", "Object", "equals", capturedExpression);
+			return new Result("java.lang.Object", "Object", "equals", capturedExpression, methodType);
 		}
 
 		String className = paramFqn.getClassName();
 		String leafName = className.substring(className.lastIndexOf('.') + 1);
-		return new Result(paramFqn.getFullyQualifiedName(), leafName, methodName, capturedExpression);
+		return new Result(paramFqn.getFullyQualifiedName(), leafName, methodName, capturedExpression, methodType);
 	}
 
 	private static boolean referencesParameter(Expression expression, String paramName) {
@@ -207,5 +219,28 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 		}
 	}
 
-	record Result(String typeFqn, String simpleName, String methodName, Expression capturedExpression) {}
+	record Result(
+		String typeFqn,
+		String simpleName,
+		String methodName,
+		Expression capturedExpression,
+		JavaType.Method methodType
+	) {
+		J.MethodInvocation withTypedMemberReferences(J.MethodInvocation methodInvocation) {
+			if (this.methodType == null) {
+				return methodInvocation;
+			}
+			return (J.MethodInvocation) new JavaIsoVisitor<Integer>() {
+				@Override
+				public J.MemberReference visitMemberReference(J.MemberReference memberReference, Integer ignored) {
+					J.MemberReference mr = super.visitMemberReference(memberReference, ignored);
+					if (Result.this.methodName.equals(mr.getReference().getSimpleName())) {
+						return mr.withMethodType(Result.this.methodType).withType(Result.this.methodType);
+					}
+					return mr;
+				}
+			}
+				.visit(methodInvocation, 0);
+		}
+	}
 }

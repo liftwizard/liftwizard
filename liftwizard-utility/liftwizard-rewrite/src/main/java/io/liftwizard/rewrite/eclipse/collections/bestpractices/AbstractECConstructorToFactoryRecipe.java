@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.Cursor;
@@ -41,6 +42,8 @@ import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.java.tree.VariableDeclarator;
 
 public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
+
+	private static final String[] STUBS = EclipseCollectionsTemplateStubs.FACTORIES;
 
 	private final String implementationClassName;
 	private final String implementationPackagePath;
@@ -192,7 +195,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryClass)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "eclipse-collections-api"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			J replacement;

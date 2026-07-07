@@ -30,6 +30,8 @@ import org.openrewrite.java.tree.J;
 
 public class VerifyAssertThrowsToAssertJ extends Recipe {
 
+	private static final String[] STUBS = AssertJTemplateStubs.STUBS;
+
 	private static final MethodMatcher VERIFY_ASSERT_THROWS_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.impl.test.Verify assertThrows(java.lang.Class, *)"
 	);
@@ -66,7 +68,7 @@ public class VerifyAssertThrowsToAssertJ extends Recipe {
 				: "assertThatThrownBy(#{any(java.util.concurrent.Callable)}::call).isInstanceOf(#{any(java.lang.Class)})";
 			JavaTemplate template = JavaTemplate.builder(templateSourceCode)
 				.staticImports("org.assertj.core.api.Assertions.assertThatThrownBy")
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "assertj-core"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build();
 
 			this.maybeRemoveImport("org.eclipse.collections.impl.test.Verify");

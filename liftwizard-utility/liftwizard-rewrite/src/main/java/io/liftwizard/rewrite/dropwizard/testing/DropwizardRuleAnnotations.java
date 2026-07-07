@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.liftwizard.rewrite.junit.JUnitJupiterTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Option;
 import org.openrewrite.Preconditions;
@@ -35,6 +36,18 @@ import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
 public class DropwizardRuleAnnotations extends Recipe {
+
+	private static final String[] STUBS = {
+		JUnitJupiterTemplateStubs.STUBS[0],
+		JUnitJupiterTemplateStubs.STUBS[1],
+		JUnitJupiterTemplateStubs.STUBS[2],
+		"""
+			package io.dropwizard.testing.junit5;
+
+			public class DropwizardExtensionsSupport {
+			}
+			""",
+	};
 
 	@Option(
 		displayName = "Extension type",
@@ -112,18 +125,7 @@ public class DropwizardRuleAnnotations extends Recipe {
 					"org.junit.jupiter.api.extension.ExtendWith",
 					"io.dropwizard.testing.junit5.DropwizardExtensionsSupport"
 				)
-				.javaParser(
-					JavaParser.fromJavaVersion()
-						.classpathFromResources(ctx, "junit-jupiter-api")
-						.dependsOn(
-							"""
-							package io.dropwizard.testing.junit5;
-
-							public class DropwizardExtensionsSupport {
-							}
-							"""
-						)
-				)
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build()
 				.apply(
 					this.getCursor(),
@@ -169,7 +171,7 @@ public class DropwizardRuleAnnotations extends Recipe {
 
 			return JavaTemplate.builder("@RegisterExtension")
 				.imports("org.junit.jupiter.api.extension.RegisterExtension")
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "junit-jupiter-api"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build()
 				.apply(
 					this.getCursor(),

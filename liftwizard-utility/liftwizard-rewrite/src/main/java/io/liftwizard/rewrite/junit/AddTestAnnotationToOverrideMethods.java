@@ -29,6 +29,8 @@ import org.openrewrite.java.tree.JavaType;
 
 public class AddTestAnnotationToOverrideMethods extends Recipe {
 
+	private static final String[] STUBS = JUnitJupiterTemplateStubs.STUBS;
+
 	@Override
 	public String getDisplayName() {
 		return "Add `@Test` to `@Override` methods whose parent has `@Test`";
@@ -88,7 +90,7 @@ public class AddTestAnnotationToOverrideMethods extends Recipe {
 
 			return JavaTemplate.builder("@Test")
 				.imports("org.junit.jupiter.api.Test")
-				.javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "junit-jupiter-api"))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
 				.build()
 				.apply(
 					this.getCursor(),
