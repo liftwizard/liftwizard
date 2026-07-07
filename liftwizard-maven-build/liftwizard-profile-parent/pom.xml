@@ -136,6 +136,7 @@
                             <version>6.44.0</version>
                             <configuration>
                                 <exclusions>
+                                    <exclusion>liftwizard-utility/liftwizard-rewrite/**</exclusion>
                                     <exclusion>**/liftwizard-utility/liftwizard-rewrite/**</exclusion>
                                 </exclusions>
                                 <activeRecipes>
@@ -182,6 +183,7 @@
                             <version>6.44.0</version>
                             <configuration>
                                 <exclusions>
+                                    <exclusion>liftwizard-utility/liftwizard-rewrite/**</exclusion>
                                     <exclusion>**/liftwizard-utility/liftwizard-rewrite/**</exclusion>
                                 </exclusions>
                                 <activeRecipes>
@@ -238,6 +240,7 @@
                             <version>6.44.0</version>
                             <configuration>
                                 <exclusions>
+                                    <exclusion>liftwizard-utility/liftwizard-rewrite/**</exclusion>
                                     <exclusion>**/liftwizard-utility/liftwizard-rewrite/**</exclusion>
                                 </exclusions>
                                 <activeRecipes>
