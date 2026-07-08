@@ -23,6 +23,7 @@ import org.eclipse.collections.api.list.MutableList;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.java.JavaIsoVisitor;
+import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
@@ -37,10 +38,11 @@ import org.openrewrite.java.tree.TypeUtils;
  *
  * <p>Intermediate operations are renamed to their Eclipse Collections equivalents
  * ({@code skip} → {@code drop}, {@code limit} → {@code take}, {@code filter} → {@code select},
- * {@code map} → {@code collect}, {@code distinct} unchanged) and the chain must end in a terminal
- * whose result type is compatible in both worlds ({@code toList()}, {@code toArray()},
- * {@code iterator()}, {@code forEach}, {@code anyMatch} → {@code anySatisfy},
- * {@code allMatch} → {@code allSatisfy}, {@code noneMatch} → {@code noneSatisfy}).
+ * {@code map} → {@code collect}, {@code sorted} → {@code toSortedList}, {@code distinct}
+ * unchanged) and the chain must end in a terminal whose result type is compatible in both worlds
+ * ({@code toList()}, {@code collect(Collectors.toList())}, {@code toArray()}, {@code iterator()},
+ * {@code forEach}, {@code anyMatch} → {@code anySatisfy}, {@code allMatch} →
+ * {@code allSatisfy}, {@code noneMatch} → {@code noneSatisfy}).
  *
  * <p>Guards shared by all chain sources:
  * <ul>
@@ -49,12 +51,30 @@ import org.openrewrite.java.tree.TypeUtils;
  * functional interfaces.</li>
  * <li>{@code skip}/{@code limit} arguments must be {@code int}; {@code Stream.skip(long)} has no
  * {@code drop(long)} equivalent.</li>
- * <li>Stream-typed usages (assignment, argument, return) and untranslatable links
- * ({@code collect(Collector)}, {@code count()}, {@code sorted()}, ...) leave the whole chain
- * untouched.</li>
+ * <li>Collector terminals must be known {@code Collectors} factory calls.</li>
+ * <li>{@code count()} only translates to {@code size()} in literal comparisons where the
+ * {@code long} to {@code int} return-type difference cannot change assignment or inference.</li>
+ * <li>Stream-typed usages (assignment, argument, return) and other untranslatable links leave the
+ * whole chain untouched.</li>
  * </ul>
  */
 abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionContext> {
+
+	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
+		"java.util.stream.Stream collect(java.util.stream.Collector)"
+	);
+
+	private static final MethodMatcher TO_LIST_MATCHER = new MethodMatcher("java.util.stream.Collectors toList()");
+
+	private static final MethodMatcher TO_SET_MATCHER = new MethodMatcher("java.util.stream.Collectors toSet()");
+
+	private static final MethodMatcher TO_UNMODIFIABLE_LIST_MATCHER = new MethodMatcher(
+		"java.util.stream.Collectors toUnmodifiableList()"
+	);
+
+	private static final MethodMatcher TO_UNMODIFIABLE_SET_MATCHER = new MethodMatcher(
+		"java.util.stream.Collectors toUnmodifiableSet()"
+	);
 
 	/**
 	 * Whether this invocation is the source of a translatable chain, e.g. {@code Arrays.stream(array)}
@@ -89,8 +109,7 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 	public final J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
 		boolean isRoot = this.isChainRoot(method);
 		boolean isNamedLink =
-			intermediateTranslation(method.getSimpleName()) != null
-			|| terminalTranslation(method.getSimpleName()) != null;
+			intermediateTranslation(method.getSimpleName()) != null || terminalTranslation(method) != null;
 
 		// Validate against the original subtree, before super.visitMethodInvocation transforms descendants
 		boolean translatable = (isRoot || isNamedLink) && this.isInTranslatableChain(method, isRoot);
@@ -111,17 +130,38 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 		}
 
 		String streamName = method.getSimpleName();
+		String ecName = intermediateTranslation(streamName) != null
+			? intermediateTranslation(streamName)
+			: terminalTranslation(method);
+		boolean isCollectorTerminal = "collect".equals(streamName) && terminalTranslation(method) != null;
+		if (isCollectorTerminal) {
+			this.maybeRemoveImport("java.util.stream.Collectors");
+		}
 
 		// Stream.toList() is the materialization step, but every translated intermediate (drop, take,
 		// select, collect, distinct) already returns a fresh MutableList, so a trailing toList() would
 		// copy the list a second time. Elide it. With no intermediates the toList() stays: it is the
 		// defensive copy that keeps the result independent of the source.
-		if ("toList".equals(streamName) && !selectIsRoot) {
+		if ("toList".equals(ecName) && !selectIsRoot) {
 			return ((J.MethodInvocation) mi.getSelect()).withPrefix(mi.getPrefix());
 		}
-		String ecName = intermediateTranslation(streamName) != null
-			? intermediateTranslation(streamName)
-			: terminalTranslation(streamName);
+
+		if (isCollectorTerminal) {
+			if (mi.getMethodType() != null) {
+				JavaType.Method methodType = mi
+					.getMethodType()
+					.withName(ecName)
+					.withParameterNames(List.of())
+					.withParameterTypes(List.of());
+				mi = mi.withName(mi.getName().withType(methodType)).withMethodType(methodType);
+			}
+			mi = mi.withArguments(List.of());
+		}
+
+		if ("findFirst".equals(streamName)) {
+			return collapseFilterTerminal(mi, "detectOptional").withPrefix(mi.getPrefix());
+		}
+
 		if (streamName.equals(ecName)) {
 			return mi;
 		}
@@ -166,7 +206,7 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 		// Ascend until the chain reaches a valid terminal or leaves method-invocation territory
 		Cursor cursor = this.getCursor();
 		J.MethodInvocation current = node;
-		while (chain.isEmpty() || !isValidTerminal(chain.getLast())) {
+		while (chain.isEmpty() || !isValidTerminal(chain.getLast(), cursor)) {
 			Cursor parentCursor = cursor.getParentTreeCursor();
 			if (!(parentCursor.getValue() instanceof J.MethodInvocation parentInvocation)) {
 				return false;
@@ -180,7 +220,7 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 			cursor = parentCursor;
 		}
 
-		int terminalIndex = chain.detectIndex(AbstractECStreamChainVisitor::isValidTerminal);
+		int terminalIndex = chain.size() - 1;
 		if (nodeIndex > terminalIndex) {
 			return false;
 		}
@@ -194,8 +234,8 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 		return true;
 	}
 
-	private static boolean isValidTerminal(J.MethodInvocation link) {
-		return terminalTranslation(link.getSimpleName()) != null && argumentsAreTranslatable(link);
+	private static boolean isValidTerminal(J.MethodInvocation link, Cursor cursor) {
+		return terminalTranslation(link) != null && terminalArgumentsAreTranslatable(link, cursor);
 	}
 
 	private static String intermediateTranslation(String streamName) {
@@ -205,16 +245,21 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 			case "filter" -> "select";
 			case "map" -> "collect";
 			case "distinct" -> "distinct";
+			case "sorted" -> "toSortedList";
+			case "findFirst" -> "findFirst";
 			default -> null;
 		};
 	}
 
-	private static String terminalTranslation(String streamName) {
-		return switch (streamName) {
+	private static String terminalTranslation(J.MethodInvocation link) {
+		return switch (link.getSimpleName()) {
 			case "anyMatch" -> "anySatisfy";
 			case "allMatch" -> "allSatisfy";
 			case "noneMatch" -> "noneSatisfy";
-			case "toList", "toArray", "iterator", "forEach" -> streamName;
+			case "toList", "toArray", "iterator", "forEach" -> link.getSimpleName();
+			case "collect" -> collectorTerminalTranslation(link);
+			case "count" -> "size";
+			case "findFirst" -> "detectOptional";
 			default -> null;
 		};
 	}
@@ -228,9 +273,93 @@ abstract class AbstractECStreamChainVisitor extends JavaIsoVisitor<ExecutionCont
 			// variable of a java.util.function type would not
 			case "filter", "map", "anyMatch", "allMatch", "noneMatch", "forEach" -> arguments.size() == 1
 			&& (arguments.get(0) instanceof J.Lambda || arguments.get(0) instanceof J.MemberReference);
-			case "distinct", "toList", "toArray", "iterator" -> arguments.isEmpty();
+			case "sorted" -> arguments.size() <= 1;
+			case "findFirst", "distinct", "toList", "toArray", "iterator" -> arguments.isEmpty();
 			default -> false;
 		};
+	}
+
+	private static boolean terminalArgumentsAreTranslatable(J.MethodInvocation link, Cursor cursor) {
+		List<Expression> arguments = realArguments(link);
+		return switch (link.getSimpleName()) {
+			case "collect" -> collectorTerminalTranslation(link) != null;
+			case "count" -> arguments.isEmpty() && isSafeCountContext(cursor);
+			case "findFirst" -> arguments.isEmpty() && isFilterCall(link.getSelect());
+			default -> argumentsAreTranslatable(link);
+		};
+	}
+
+	private static String collectorTerminalTranslation(J.MethodInvocation link) {
+		if (!COLLECT_MATCHER.matches(link)) {
+			return null;
+		}
+
+		List<Expression> arguments = realArguments(link);
+		if (arguments.size() != 1 || !(arguments.get(0) instanceof J.MethodInvocation collectorCall)) {
+			return null;
+		}
+
+		if (TO_LIST_MATCHER.matches(collectorCall)) {
+			return "toList";
+		}
+		if (TO_SET_MATCHER.matches(collectorCall)) {
+			return "toSet";
+		}
+		if (TO_UNMODIFIABLE_LIST_MATCHER.matches(collectorCall)) {
+			return "toImmutableList";
+		}
+		if (TO_UNMODIFIABLE_SET_MATCHER.matches(collectorCall)) {
+			return "toImmutableSet";
+		}
+		return null;
+	}
+
+	private static boolean isSafeCountContext(Cursor cursor) {
+		Cursor parentCursor = cursor.getParentTreeCursor();
+		if (!(parentCursor.getValue() instanceof J.Binary binary)) {
+			return false;
+		}
+		if (!isComparison(binary.getOperator())) {
+			return false;
+		}
+		J.MethodInvocation count = (J.MethodInvocation) cursor.getValue();
+		if (binary.getLeft().getId().equals(count.getId())) {
+			return isNumericLiteral(binary.getRight());
+		}
+		return binary.getRight().getId().equals(count.getId()) && isNumericLiteral(binary.getLeft());
+	}
+
+	private static boolean isComparison(J.Binary.Type operator) {
+		return switch (operator) {
+			case Equal, NotEqual, LessThan, LessThanOrEqual, GreaterThan, GreaterThanOrEqual -> true;
+			default -> false;
+		};
+	}
+
+	private static boolean isNumericLiteral(Expression expression) {
+		if (!(expression instanceof J.Literal literal)) {
+			return false;
+		}
+		return literal.getValue() instanceof Number;
+	}
+
+	private static boolean isFilterCall(Expression expression) {
+		return (
+			expression instanceof J.MethodInvocation methodInvocation
+			&& "filter".equals(methodInvocation.getSimpleName())
+		);
+	}
+
+	private static J.MethodInvocation collapseFilterTerminal(J.MethodInvocation method, String methodName) {
+		J.MethodInvocation selectCall = (J.MethodInvocation) method.getSelect();
+		JavaType.Method renamedType = method.getMethodType() == null
+			? null
+			: method.getMethodType().withName(methodName);
+		return method
+			.withSelect(selectCall.getSelect())
+			.withName(method.getName().withSimpleName(methodName).withType(renamedType))
+			.withArguments(selectCall.getArguments())
+			.withMethodType(renamedType);
 	}
 
 	private static boolean isIntTyped(Expression expression) {
