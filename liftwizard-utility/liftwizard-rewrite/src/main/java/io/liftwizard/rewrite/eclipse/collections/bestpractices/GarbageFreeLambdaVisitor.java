@@ -16,6 +16,8 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import java.util.List;
+
 import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.java.AddImport;
@@ -47,7 +49,7 @@ import org.openrewrite.java.tree.TypeUtils;
  */
 final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 
-	private static final String[] STUBS = EclipseCollectionsTemplateStubs.RICH_ITERABLE;
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.richIterable();
 
 	private final MethodMatcher matcher;
 	private final String targetMethodName;
@@ -90,7 +92,7 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 		JavaTemplate template = JavaTemplate.builder(templateSource)
 			.imports(result.typeFqn())
 			.contextSensitive()
-			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 			.build();
 
 		if (!result.typeFqn().startsWith("java.lang.")) {

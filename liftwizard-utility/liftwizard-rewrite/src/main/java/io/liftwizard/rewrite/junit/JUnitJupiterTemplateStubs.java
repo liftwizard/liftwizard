@@ -16,29 +16,47 @@
 
 package io.liftwizard.rewrite.junit;
 
+import java.util.List;
+
 public final class JUnitJupiterTemplateStubs {
 
-	public static final String[] STUBS = {
+	private static final List<String> STUBS = List.of(
 		"""
-			package org.junit.jupiter.api;
+		package org.junit.jupiter.api;
 
-			public @interface Test {
-			}
-			""",
+		public @interface Test {
+		}
+		""",
 		"""
-			package org.junit.jupiter.api.extension;
+		package org.junit.jupiter.api.extension;
 
-			public @interface ExtendWith {
-			    Class<?>[] value();
-			}
-			""",
+		public @interface ExtendWith {
+		    Class<?>[] value();
+		}
+		""",
 		"""
-			package org.junit.jupiter.api.extension;
+		package org.junit.jupiter.api.extension;
 
-			public @interface RegisterExtension {
-			}
-			""",
-	};
+		public @interface RegisterExtension {
+		}
+		"""
+	);
 
 	private JUnitJupiterTemplateStubs() {}
+
+	public static List<String> stubs() {
+		return STUBS;
+	}
+
+	public static String testStub() {
+		return STUBS.get(0);
+	}
+
+	public static String extendWithStub() {
+		return STUBS.get(1);
+	}
+
+	public static String registerExtensionStub() {
+		return STUBS.get(2);
+	}
 }

@@ -17,6 +17,7 @@
 package io.liftwizard.rewrite.junit;
 
 import java.util.Comparator;
+import java.util.List;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
@@ -29,7 +30,7 @@ import org.openrewrite.java.tree.JavaType;
 
 public class AddTestAnnotationToOverrideMethods extends Recipe {
 
-	private static final String[] STUBS = JUnitJupiterTemplateStubs.STUBS;
+	private static final List<String> STUBS = JUnitJupiterTemplateStubs.stubs();
 
 	@Override
 	public String getDisplayName() {
@@ -90,7 +91,7 @@ public class AddTestAnnotationToOverrideMethods extends Recipe {
 
 			return JavaTemplate.builder("@Test")
 				.imports("org.junit.jupiter.api.Test")
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build()
 				.apply(
 					this.getCursor(),

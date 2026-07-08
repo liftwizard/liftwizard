@@ -16,86 +16,92 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import java.util.List;
+
 public final class AssertJTemplateStubs {
 
-	public static final String[] STUBS = {
+	private static final List<String> STUBS = List.of(
 		"""
-			package org.assertj.core.api;
+		package org.assertj.core.api;
 
-			public final class Assertions {
-			    public static <T> GenericAssert<T> assertThat(T actual) {
-			        return null;
-			    }
+		public final class Assertions {
+		    public static <T> GenericAssert<T> assertThat(T actual) {
+		        return null;
+		    }
 
-			    public static GenericAssert<Boolean> assertThat(boolean actual) {
-			        return null;
-			    }
+		    public static GenericAssert<Boolean> assertThat(boolean actual) {
+		        return null;
+		    }
 
-			    public static GenericAssert<Integer> assertThat(int actual) {
-			        return null;
-			    }
+		    public static GenericAssert<Integer> assertThat(int actual) {
+		        return null;
+		    }
 
-			    public static ThrowableAssert assertThatThrownBy(ThrowableAssert.ThrowingCallable callable) {
-			        return null;
-			    }
+		    public static ThrowableAssert assertThatThrownBy(ThrowableAssert.ThrowingCallable callable) {
+		        return null;
+		    }
 
-			    public static ThrowableTypeAssert assertThatExceptionOfType(Class<? extends Throwable> type) {
-			        return null;
-			    }
+		    public static ThrowableTypeAssert assertThatExceptionOfType(Class<? extends Throwable> type) {
+		        return null;
+		    }
 
-			    public static void fail(String message) {
-			    }
+		    public static void fail(String message) {
+		    }
 
-			    public static void useDefaultDateFormatsOnly() {
-			    }
+		    public static void useDefaultDateFormatsOnly() {
+		    }
 
-			    public static class GenericAssert<T> {
-			        public GenericAssert<T> containsKey(Object key) {
-			            return this;
-			        }
+		    public static class GenericAssert<T> {
+		        public GenericAssert<T> containsKey(Object key) {
+		            return this;
+		        }
 
-			        public GenericAssert<T> hasSize(int size) {
-			            return this;
-			        }
+		        public GenericAssert<T> hasSize(int size) {
+		            return this;
+		        }
 
-			        public GenericAssert<T> isEmpty() {
-			            return this;
-			        }
+		        public GenericAssert<T> isEmpty() {
+		            return this;
+		        }
 
-			        public GenericAssert<T> isEqualTo(Object expected) {
-			            return this;
-			        }
+		        public GenericAssert<T> isEqualTo(Object expected) {
+		            return this;
+		        }
 
-			        public GenericAssert<T> isGreaterThan(Object expected) {
-			            return this;
-			        }
+		        public GenericAssert<T> isGreaterThan(Object expected) {
+		            return this;
+		        }
 
-			        public GenericAssert<T> isNotEmpty() {
-			            return this;
-			        }
+		        public GenericAssert<T> isNotEmpty() {
+		            return this;
+		        }
 
-			        public GenericAssert<T> isTrue() {
-			            return this;
-			        }
-			    }
+		        public GenericAssert<T> isTrue() {
+		            return this;
+		        }
+		    }
 
-			    public static class ThrowableAssert {
-			        public ThrowableAssert isInstanceOf(Class<?> type) {
-			            return this;
-			        }
+		    public static class ThrowableAssert {
+		        public ThrowableAssert isInstanceOf(Class<?> type) {
+		            return this;
+		        }
 
-			        public interface ThrowingCallable {
-			            void call() throws Throwable;
-			        }
-			    }
+		        public interface ThrowingCallable {
+		            void call() throws Throwable;
+		        }
+		    }
 
-			    public static class ThrowableTypeAssert {
-			        public void isThrownBy(ThrowableAssert.ThrowingCallable callable) {
-			        }
-			    }
-			}
-			""",
-	};
+		    public static class ThrowableTypeAssert {
+		        public void isThrownBy(ThrowableAssert.ThrowingCallable callable) {
+		        }
+		    }
+		}
+		"""
+	);
 
 	private AssertJTemplateStubs() {}
+
+	public static List<String> stubs() {
+		return STUBS;
+	}
 }

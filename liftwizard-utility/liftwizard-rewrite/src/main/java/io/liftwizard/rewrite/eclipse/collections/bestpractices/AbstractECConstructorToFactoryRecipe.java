@@ -43,7 +43,7 @@ import org.openrewrite.java.tree.VariableDeclarator;
 
 public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 
-	private static final String[] STUBS = EclipseCollectionsTemplateStubs.FACTORIES;
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	private final String implementationClassName;
 	private final String implementationPackagePath;
@@ -195,7 +195,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryClass)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
 			J replacement;

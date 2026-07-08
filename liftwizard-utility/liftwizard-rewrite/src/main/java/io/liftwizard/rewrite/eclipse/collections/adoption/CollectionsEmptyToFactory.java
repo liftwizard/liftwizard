@@ -17,6 +17,7 @@
 package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ import org.openrewrite.java.tree.J;
 
 public class CollectionsEmptyToFactory extends Recipe {
 
-	private static final String[] STUBS = EclipseCollectionsTemplateStubs.FACTORIES;
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	@Override
 	public String getDisplayName() {
@@ -113,7 +114,7 @@ public class CollectionsEmptyToFactory extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
 			J.MethodInvocation replacement = template.apply(this.getCursor(), mi.getCoordinates().replace());

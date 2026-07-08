@@ -17,6 +17,7 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.collections.api.factory.Sets;
@@ -60,14 +61,14 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 
 	private static final MethodMatcher ARRAYS_STREAM_MATCHER = new MethodMatcher("java.util.Arrays stream(..)");
 
-	private static final String[] STUBS = {
+	private static final List<String> STUBS = List.of(
 		"""
-			package org.eclipse.collections.impl.list.fixed;
-			public final class ArrayAdapter<T> {
-			    public static <T> ArrayAdapter<T> adapt(T... array) { return null; }
-			}
-			""",
-	};
+		package org.eclipse.collections.impl.list.fixed;
+		public final class ArrayAdapter<T> {
+		    public static <T> ArrayAdapter<T> adapt(T[] array) { return null; }
+		}
+		"""
+	);
 
 	@Override
 	public String getDisplayName() {
@@ -104,7 +105,7 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 
 		private static final JavaTemplate ARRAY_ADAPTER_ADAPT = JavaTemplate.builder("ArrayAdapter.adapt(#{any()})")
 			.imports("org.eclipse.collections.impl.list.fixed.ArrayAdapter")
-			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 			.build();
 
 		@Override
