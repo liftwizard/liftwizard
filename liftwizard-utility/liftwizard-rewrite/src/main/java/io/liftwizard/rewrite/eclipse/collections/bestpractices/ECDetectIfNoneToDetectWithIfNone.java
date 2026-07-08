@@ -16,6 +16,8 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import java.util.List;
+
 import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
@@ -43,7 +45,7 @@ import org.openrewrite.java.tree.JavaType;
  */
 public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 
-	private static final String[] STUBS = EclipseCollectionsTemplateStubs.RICH_ITERABLE;
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.richIterable();
 
 	private static final MethodMatcher DETECT_IF_NONE_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.api.RichIterable detectIfNone(org.eclipse.collections.api.block.predicate.Predicate, org.eclipse.collections.api.block.function.Function0)",
@@ -107,7 +109,7 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(result.typeFqn())
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
 			if (!result.typeFqn().startsWith("java.lang.")) {

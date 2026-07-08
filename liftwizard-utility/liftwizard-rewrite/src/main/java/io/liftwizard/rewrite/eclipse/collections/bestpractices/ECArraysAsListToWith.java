@@ -36,7 +36,7 @@ import org.openrewrite.java.tree.J;
 
 public class ECArraysAsListToWith extends Recipe {
 
-	private static final String[] STUBS = EclipseCollectionsTemplateStubs.FACTORIES;
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	@Override
 	public String getDisplayName() {
@@ -180,7 +180,7 @@ public class ECArraysAsListToWith extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
 			Object[] templateArguments;

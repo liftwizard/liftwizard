@@ -16,6 +16,8 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import java.util.List;
+
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
@@ -30,7 +32,7 @@ import org.openrewrite.java.tree.J;
 
 public class VerifyAssertThrowsToAssertJ extends Recipe {
 
-	private static final String[] STUBS = AssertJTemplateStubs.STUBS;
+	private static final List<String> STUBS = AssertJTemplateStubs.stubs();
 
 	private static final MethodMatcher VERIFY_ASSERT_THROWS_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.impl.test.Verify assertThrows(java.lang.Class, *)"
@@ -68,7 +70,7 @@ public class VerifyAssertThrowsToAssertJ extends Recipe {
 				: "assertThatThrownBy(#{any(java.util.concurrent.Callable)}::call).isInstanceOf(#{any(java.lang.Class)})";
 			JavaTemplate template = JavaTemplate.builder(templateSourceCode)
 				.staticImports("org.assertj.core.api.Assertions.assertThatThrownBy")
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
 			this.maybeRemoveImport("org.eclipse.collections.impl.test.Verify");

@@ -25,6 +25,7 @@ recipeList:
   - io.liftwizard.rewrite.bestpractices.IfElseToTernary
   - io.liftwizard.rewrite.dropwizard.Dropwizard2To3Migration
   - io.liftwizard.rewrite.eclipse.collections.adoption.unsafe.EclipseCollectionsAdoptionUnsafe
+  - io.liftwizard.LiftwizardBestPracticesManualReview
   - org.openrewrite.github.PreferTemurinDistributions
   - org.openrewrite.java.logging.slf4j.Slf4jBestPractices
   - org.openrewrite.java.migrate.lombok.LombokBestPractices

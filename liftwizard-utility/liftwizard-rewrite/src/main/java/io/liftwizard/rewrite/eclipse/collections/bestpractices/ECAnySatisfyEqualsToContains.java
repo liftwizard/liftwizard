@@ -33,7 +33,7 @@ import org.openrewrite.java.tree.J;
 
 public class ECAnySatisfyEqualsToContains extends Recipe {
 
-	private static final String[] STUBS = EclipseCollectionsTemplateStubs.RICH_ITERABLE;
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.richIterable();
 
 	private static final MethodMatcher ANY_SATISFY_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.api.RichIterable anySatisfy(org.eclipse.collections.api.block.predicate.Predicate)"
@@ -82,7 +82,7 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 			JavaTemplate template = JavaTemplate.builder(
 				"#{any(org.eclipse.collections.api.RichIterable)}.contains(#{any()})"
 			)
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS))
+				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
 			return template.apply(getCursor(), mi.getCoordinates().replace(), select, value);
