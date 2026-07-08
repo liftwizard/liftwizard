@@ -105,6 +105,90 @@ class ECStreamChainToListIterableTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
+	void translateCollectorTerminals() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.List;
+					import java.util.Set;
+					import java.util.stream.Collectors;
+
+					import org.eclipse.collections.api.list.MutableList;
+
+					class Test {
+					    void test(MutableList<String> list) {
+					        List<String> result1 = list.stream().collect(Collectors.toList());
+					        Set<String> result2 = list.stream().map(String::trim).collect(Collectors.toSet());
+					        var result3 = list.stream().filter(each -> !each.isEmpty()).collect(Collectors.toUnmodifiableList());
+					        var result4 = list.stream().map(String::trim).collect(Collectors.toUnmodifiableSet());
+					    }
+					}
+					""",
+					"""
+					import java.util.List;
+					import java.util.Set;
+
+					import org.eclipse.collections.api.list.MutableList;
+
+					class Test {
+					    void test(MutableList<String> list) {
+					        List<String> result1 = list.toList();
+					        Set<String> result2 = list.collect(String::trim).toSet();
+					        var result3 = list.select(each -> !each.isEmpty()).toImmutableList();
+					        var result4 = list.collect(String::trim).toImmutableSet();
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
+	void translateSortedCountAndFindFirstTerminals() {
+		this.rewriteRun(
+				java(
+					"""
+					import java.util.Comparator;
+					import java.util.List;
+					import java.util.Optional;
+					import java.util.stream.Collectors;
+
+					import org.eclipse.collections.api.list.MutableList;
+
+					class Test {
+					    void test(MutableList<String> list) {
+					        List<String> result1 = list.stream().sorted().collect(Collectors.toList());
+					        List<String> result2 = list.stream().sorted(Comparator.naturalOrder()).toList();
+					        boolean result3 = list.stream().count() > 2;
+					        boolean result4 = 2 < list.stream().filter(each -> !each.isEmpty()).count();
+					        Optional<String> result5 = list.stream().filter(String::isEmpty).findFirst();
+					        String result6 = list.stream().filter(String::isEmpty).findFirst().orElse("fallback");
+					    }
+					}
+					""",
+					"""
+					import java.util.Comparator;
+					import java.util.List;
+					import java.util.Optional;
+
+					import org.eclipse.collections.api.list.MutableList;
+
+					class Test {
+					    void test(MutableList<String> list) {
+					        List<String> result1 = list.toSortedList();
+					        List<String> result2 = list.toSortedList(Comparator.naturalOrder());
+					        boolean result3 = list.size() > 2;
+					        boolean result4 = 2 < list.select(each -> !each.isEmpty()).size();
+					        Optional<String> result5 = list.detectOptional(String::isEmpty);
+					        String result6 = list.detectOptional(String::isEmpty).orElse("fallback");
+					    }
+					}
+					"""
+				)
+			);
+	}
+
+	@Test
 	void doNotReplaceUntranslatableReceivers() {
 		this.rewriteRun(
 				java(
@@ -138,12 +222,12 @@ class ECStreamChainToListIterableTest extends AbstractEclipseCollectionsTest {
 
 					class Test {
 					    void test(MutableList<String> list, Predicate<String> predicate, long n) {
-					        var result1 = list.stream().collect(Collectors.toSet());
+					        var result1 = list.stream().collect(Collectors.groupingBy(String::length));
 					        var result2 = list.stream().count();
 					        var result3 = list.stream().toArray(String[]::new);
 					        var result4 = list.stream().filter(predicate).toList();
 					        var result5 = list.stream().skip(n).toArray();
-					        var result6 = list.stream().sorted().toList();
+					        var result6 = list.stream().findFirst();
 					        var result7 = list.stream().skip(1);
 					        Stream<String> stream = list.stream();
 					    }
