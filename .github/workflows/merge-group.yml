@@ -29,7 +29,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -53,7 +53,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -77,7 +77,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -104,7 +104,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -131,7 +131,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -156,7 +156,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -181,7 +181,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -212,7 +212,7 @@ jobs:
             maven-checkstyle-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -247,7 +247,7 @@ jobs:
             maven-checkstyle-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -282,7 +282,7 @@ jobs:
             maven-checkstyle-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -312,7 +312,7 @@ jobs:
             maven-rewrite-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -338,7 +338,7 @@ jobs:
           restore-keys: |
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -365,7 +365,7 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -395,7 +395,7 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -425,7 +425,7 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -455,7 +455,7 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -485,7 +485,7 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
@@ -515,7 +515,7 @@ jobs:
             maven-spotless-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@2266da8435da28d9f5c631137a4a9ca6ef59ea9a # v2.2.0
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
