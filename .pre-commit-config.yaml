@@ -1,12 +1,10 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
         args: ["--allow-multiple-documents"]
       - id: check-json
-        # Exclude JSONC files (JSON with Comments) as they need comment support
-        exclude: "biome\\.jsonc"
       - id: check-toml
       - id: check-xml
       - id: end-of-file-fixer
@@ -23,15 +21,12 @@ repos:
 
   - repo: local
     hooks:
-      - id: biome
-        name: biome
-        entry: npx @biomejs/biome format --write
+      - id: oxfmt
+        name: vp fmt
+        entry: vp fmt --no-error-on-unmatched-pattern
         language: system
-        types: [file]
-        files: \.(json|jsonc)$
-
-      - id: prettier
-        name: prettier
-        entry: npx prettier --write --ignore-unknown
+      - id: markdownlint-cli2
+        name: markdownlint-cli2
+        entry: markdownlint-cli2
         language: system
-        types: [file]
+        types: [markdown]

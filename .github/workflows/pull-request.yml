@@ -173,7 +173,7 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  prettier-fix:
+  oxfmt-fix:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -192,59 +192,22 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@github.com"
 
-      - name: Run Prettier Format
+      - name: Run oxfmt
         run: |
-          npx prettier --write . '!.github/workflows/**'
+          vp fmt
 
           if [[ -n $(git status --porcelain) ]]; then
-            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-prettier"
+            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-oxfmt"
             git switch --create $FIX_BRANCH
 
             git add --all
-            git commit --message "Apply Prettier formatting."
+            git commit --message "Apply oxfmt formatting."
             git push --force origin $FIX_BRANCH
 
-            echo "Prettier formatting fixes have been pushed to the $FIX_BRANCH branch."
+            echo "oxfmt fixes have been pushed to the $FIX_BRANCH branch."
             exit 1
           else
-            echo "No changes needed by Prettier"
-          fi
-
-  biome-fix:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
-
-      - name: Configure Git
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "github-actions@github.com"
-
-      - name: Run Biome Format
-        run: |
-          npx @biomejs/biome format --write
-
-          if [[ -n $(git status --porcelain) ]]; then
-            FIX_BRANCH="fix-${{ github.event.pull_request.number }}-biome"
-            git switch --create $FIX_BRANCH
-
-            git add --all
-            git commit --message "Apply Biome formatting."
-            git push --force origin $FIX_BRANCH
-
-            echo "Biome formatting fixes have been pushed to the $FIX_BRANCH branch."
-            exit 1
-          else
-            echo "No changes needed by Biome"
+            echo "No changes needed by oxfmt"
           fi
 
   spotless-formats-fix:
@@ -542,8 +505,7 @@ jobs:
         run: |
           just test
 
-          npx @biomejs/biome format --write
-          npx prettier --write . '!.github/workflows/**'
+          vp fmt
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-liftwizard-file-match-rerecord"

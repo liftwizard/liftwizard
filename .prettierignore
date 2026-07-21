@@ -1,7 +1,4 @@
+# oxfmt rejects valid schemas with empty root types (e.g. `type Query {}`).
 *.graphqls
-**/*.jsonc
-**/*.json
-**/*.just
-**/pom.xml
-.prettierignore
-**/*-min.css
+
+*-min.css

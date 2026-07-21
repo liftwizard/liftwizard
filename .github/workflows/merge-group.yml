@@ -529,7 +529,7 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  prettier:
+  oxfmt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -539,21 +539,8 @@ jobs:
 
       - uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
 
-      - name: "Prettier Format Check"
-        run: npx prettier --check .
-
-  biome:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
-
-      - name: "Biome Format Check"
-        run: npx @biomejs/biome ci
+      - name: "oxfmt Check"
+        run: vp fmt --check
 
   reviewdog-markdownlint:
     runs-on: ubuntu-latest
@@ -641,8 +628,7 @@ jobs:
         spotless-java-cleanthat,
         spotless-sql,
         spotless-pom,
-        prettier,
-        biome,
+        oxfmt,
         reviewdog-markdownlint,
         reviewdog-yamllint,
         reviewdog-actionlint,

@@ -27,8 +27,8 @@
 
 	// MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md007.md
 	"MD007": {
-		// Spaces for indent
-		"indent": 2,
+		// Spaces for indent (4 to match oxfmt's markdown list formatting)
+		"indent": 4,
 		// Whether to indent the first level of the list
 		"start_indented": false,
 		// Spaces for first level indent (when start_indented is set)
@@ -46,7 +46,14 @@
 	},
 
 	// MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md010.md
-	"MD010": false,
+	"MD010": {
+		// Don't check code blocks: oxfmt uses useTabs: true (including in markdown content)
+		"code_blocks": false,
+		// Don't set ignore_code_languages here: with code_blocks false it acts as a
+		// whitelist, re-enabling tab checks inside every fence not in the list
+		// Number of spaces for each hard tab
+		"spaces_per_tab": 1,
+	},
 
 	// MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md011.md
 	"MD011": true,
@@ -236,9 +243,7 @@
 	// MD053/link-image-reference-definitions : Link and image reference definitions should be needed : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md053.md
 	"MD053": {
 		// Ignored definitions
-		"ignored_definitions": [
-			"//",
-		],
+		"ignored_definitions": ["//"],
 	},
 
 	// MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md054.md
