@@ -20,16 +20,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-final class ProtectedClassResourceTest {
-
-	private static final BasicCredentialAuthFilter<User> BASIC_AUTH_HANDLER = new BasicCredentialAuthFilter.Builder<
-		User
-	>()
-		.setAuthenticator(new ExampleAuthenticator())
-		.setAuthorizer(new ExampleAuthorizer())
-		.setPrefix("Basic")
-		.setRealm("SUPER SECRET STUFF")
-		.buildAuthFilter();
+final class ProtectedClassResourceTest
+{
+	private static final BasicCredentialAuthFilter<User> BASIC_AUTH_HANDLER =
+		new BasicCredentialAuthFilter.Builder<User>()
+			.setAuthenticator(new ExampleAuthenticator())
+			.setAuthorizer(new ExampleAuthorizer())
+			.setPrefix("Basic")
+			.setRealm("SUPER SECRET STUFF")
+			.buildAuthFilter();
 
 	public static final ResourceExtension RULE = ResourceExtension.builder()
 		.addProvider(RolesAllowedDynamicFeature.class)
@@ -40,7 +39,8 @@ final class ProtectedClassResourceTest {
 		.build();
 
 	@Test
-	void protectedAdminEndpoint() {
+	void protectedAdminEndpoint()
+	{
 		String secret = RULE.target("/protected/admin")
 			.request()
 			.header(HttpHeaders.AUTHORIZATION, "Basic Y2hpZWYtd2l6YXJkOnNlY3JldA==")
@@ -49,7 +49,8 @@ final class ProtectedClassResourceTest {
 	}
 
 	@Test
-	void protectedBasicUserEndpoint() {
+	void protectedBasicUserEndpoint()
+	{
 		String secret = RULE.target("/protected")
 			.request()
 			.header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0")
@@ -58,7 +59,8 @@ final class ProtectedClassResourceTest {
 	}
 
 	@Test
-	void protectedBasicUserEndpointAsAdmin() {
+	void protectedBasicUserEndpointAsAdmin()
+	{
 		String secret = RULE.target("/protected")
 			.request()
 			.header(HttpHeaders.AUTHORIZATION, "Basic Y2hpZWYtd2l6YXJkOnNlY3JldA==")
@@ -67,7 +69,8 @@ final class ProtectedClassResourceTest {
 	}
 
 	@Test
-	void protectedGuestEndpoint() {
+	void protectedGuestEndpoint()
+	{
 		String secret = RULE.target("/protected/guest")
 			.request()
 			.header(HttpHeaders.AUTHORIZATION, "Basic Z3Vlc3Q6c2VjcmV0")
@@ -76,14 +79,18 @@ final class ProtectedClassResourceTest {
 	}
 
 	@Test
-	void protectedBasicUserEndpointPrincipalIsNotAuthorized403() {
-		try {
+	void protectedBasicUserEndpointPrincipalIsNotAuthorized403()
+	{
+		try
+		{
 			RULE.target("/protected")
 				.request()
 				.header(HttpHeaders.AUTHORIZATION, "Basic Z3Vlc3Q6c2VjcmV0")
 				.get(String.class);
 			failBecauseExceptionWasNotThrown(ForbiddenException.class);
-		} catch (ForbiddenException e) {
+		}
+		catch (ForbiddenException e)
+		{
 			assertThat(e.getResponse().getStatus()).isEqualTo(403);
 		}
 	}

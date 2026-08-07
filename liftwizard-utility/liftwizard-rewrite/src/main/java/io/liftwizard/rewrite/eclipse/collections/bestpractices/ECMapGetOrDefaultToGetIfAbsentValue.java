@@ -46,20 +46,23 @@ import org.openrewrite.java.tree.TypeUtils;
  * {@code MapIterable.getIfAbsentValue()}, which has the same eager evaluation semantics
  * but uses the Eclipse Collections API idiom.
  */
-public class ECMapGetOrDefaultToGetIfAbsentValue extends Recipe {
-
+public class ECMapGetOrDefaultToGetIfAbsentValue
+	extends Recipe
+{
 	private static final MethodMatcher GET_OR_DEFAULT_MATCHER = new MethodMatcher(
 		"java.util.Map getOrDefault(..)",
 		true
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`map.getOrDefault(key, value)` -> `map.getIfAbsentValue(key, value)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `map.getOrDefault(key, value)` to `map.getIfAbsentValue(key, value)` "
 			+ "for Eclipse Collections map types. This replaces the JDK Map method with the "
@@ -68,34 +71,41 @@ public class ECMapGetOrDefaultToGetIfAbsentValue extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(GET_OR_DEFAULT_MATCHER),
 			new GetOrDefaultToGetIfAbsentValueVisitor()
 		);
 	}
 
-	private static final class GetOrDefaultToGetIfAbsentValueVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class GetOrDefaultToGetIfAbsentValueVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!GET_OR_DEFAULT_MATCHER.matches(methodInvocation)) {
+			if (!GET_OR_DEFAULT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> arguments = methodInvocation.getArguments();
-			if (arguments.size() != 2) {
+			if (arguments.size() != 2)
+			{
 				return methodInvocation;
 			}
 
 			Expression select = methodInvocation.getSelect();
-			if (select == null) {
+			if (select == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!this.isEclipseCollectionsMapType(select)) {
+			if (!this.isEclipseCollectionsMapType(select))
+			{
 				return methodInvocation;
 			}
 
@@ -104,7 +114,8 @@ public class ECMapGetOrDefaultToGetIfAbsentValue extends Recipe {
 			return methodInvocation.withName(newMethodName);
 		}
 
-		private boolean isEclipseCollectionsMapType(Expression expression) {
+		private boolean isEclipseCollectionsMapType(Expression expression)
+		{
 			return TypeUtils.isAssignableTo("org.eclipse.collections.api.map.MapIterable", expression.getType());
 		}
 	}

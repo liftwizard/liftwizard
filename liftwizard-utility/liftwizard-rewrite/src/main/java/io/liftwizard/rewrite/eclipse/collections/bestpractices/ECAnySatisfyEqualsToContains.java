@@ -31,8 +31,9 @@ import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class ECAnySatisfyEqualsToContains extends Recipe {
-
+public class ECAnySatisfyEqualsToContains
+	extends Recipe
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.richIterable();
 
 	private static final MethodMatcher ANY_SATISFY_MATCHER = new MethodMatcher(
@@ -40,12 +41,14 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`anySatisfy(value::equals)` to `contains(value)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Converts `iterable.anySatisfy(value::equals)` to `iterable.contains(value)` for Eclipse Collections types. "
 			+ "The contains() method is simpler and more readable, and may be faster for indexed collections."
@@ -53,26 +56,32 @@ public class ECAnySatisfyEqualsToContains extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(ANY_SATISFY_MATCHER), new AnySatisfyEqualsToContainsVisitor());
 	}
 
-	private static final class AnySatisfyEqualsToContainsVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class AnySatisfyEqualsToContainsVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		@Override
-		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			var mi = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
-			if (!ANY_SATISFY_MATCHER.matches(mi)) {
+			if (!ANY_SATISFY_MATCHER.matches(mi))
+			{
 				return mi;
 			}
 
 			List<Expression> args = mi.getArguments();
-			if (args.size() != 1 || !(args.get(0) instanceof J.MemberReference memberRef)) {
+			if (args.size() != 1 || !(args.get(0) instanceof J.MemberReference memberRef))
+			{
 				return mi;
 			}
 
-			if (!"equals".equals(memberRef.getReference().getSimpleName())) {
+			if (!"equals".equals(memberRef.getReference().getSimpleName()))
+			{
 				return mi;
 			}
 

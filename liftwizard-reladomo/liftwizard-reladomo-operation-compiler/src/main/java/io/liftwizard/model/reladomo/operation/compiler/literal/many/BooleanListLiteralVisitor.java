@@ -24,22 +24,26 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.BooleanLitera
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class BooleanListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Boolean>> {
-
+public class BooleanListLiteralVisitor
+	extends AbstractLiteralVisitor<ImmutableList<Boolean>>
+{
 	private final BooleanLiteralVisitor booleanLiteralVisitor;
 
-	public BooleanListLiteralVisitor(RelatedFinder finder, String errorContext) {
+	public BooleanListLiteralVisitor(RelatedFinder finder, String errorContext)
+	{
 		super(finder, errorContext);
 		this.booleanLiteralVisitor = new BooleanLiteralVisitor(this.finder, this.errorContext);
 	}
 
 	@Override
-	protected String getExpectedType() {
+	protected String getExpectedType()
+	{
 		return "Boolean list";
 	}
 
 	@Override
-	public ImmutableList<Boolean> visitBooleanListLiteral(BooleanListLiteralContext ctx) {
+	public ImmutableList<Boolean> visitBooleanListLiteral(BooleanListLiteralContext ctx)
+	{
 		return ListAdapter.adapt(ctx.booleanLiteral())
 			.collectWith(BooleanLiteralContext::accept, this.booleanLiteralVisitor)
 			.toImmutable();

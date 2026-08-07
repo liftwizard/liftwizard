@@ -54,8 +54,9 @@ import org.openrewrite.marker.SearchResult;
  * unresolved message type is treated as an object, so the recipe (and the
  * {@link DoesNotUseLog4j1ObjectLogging} precondition built on it) errs toward <em>not</em> migrating.
  */
-public final class UsesLog4j1ObjectLogging extends Recipe {
-
+public final class UsesLog4j1ObjectLogging
+	extends Recipe
+{
 	private static final Set<String> METHOD_NAMES = Set.of("trace", "debug", "info", "warn", "error", "fatal");
 
 	/** Level methods whose message is the first argument. Both {@code Category} and {@code Logger} variants are matched so detection survives unresolvable {@code Logger extends Category} inheritance. */
@@ -74,12 +75,14 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Find Log4j 1.x object logging calls";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Finds Log4j 1.x logging where the message argument is not a CharSequence. "
 			+ "These pass an Object directly (e.g., `LOGGER.info(myObject)` "
@@ -92,48 +95,59 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new Log4j1ObjectLoggingVisitor();
 	}
 
-	static final class Log4j1ObjectLoggingVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	static final class Log4j1ObjectLoggingVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
 			Expression message = messageArgument(m);
-			if (message != null && isObjectMessage(message.getType())) {
+			if (message != null && isObjectMessage(message.getType()))
+			{
 				return SearchResult.found(m);
 			}
 			return m;
 		}
 
 		@Override
-		public J.MemberReference visitMemberReference(J.MemberReference memberReference, ExecutionContext ctx) {
+		public J.MemberReference visitMemberReference(J.MemberReference memberReference, ExecutionContext ctx)
+		{
 			J.MemberReference mr = super.visitMemberReference(memberReference, ctx);
-			if (isLoggingReference(mr) && isObjectMessage(consumedMessageType(mr))) {
+			if (isLoggingReference(mr) && isObjectMessage(consumedMessageType(mr)))
+			{
 				return SearchResult.found(mr);
 			}
 			return mr;
 		}
 
 		/** The message argument of a Log4j 1 logging invocation, or {@code null} if {@code m} is not one. */
-		private static @Nullable Expression messageArgument(J.MethodInvocation m) {
-			if (!METHOD_NAMES.contains(m.getSimpleName())) {
+		private static @Nullable Expression messageArgument(J.MethodInvocation m)
+		{
+			if (!METHOD_NAMES.contains(m.getSimpleName()))
+			{
 				return null;
 			}
-			if (m.getArguments().isEmpty() || m.getArguments().get(0) instanceof J.Empty) {
+			if (m.getArguments().isEmpty() || m.getArguments().get(0) instanceof J.Empty)
+			{
 				return null;
 			}
-			if (matchesAny(LEVEL_MATCHERS, m)) {
+			if (matchesAny(LEVEL_MATCHERS, m))
+			{
 				return m.getArguments().get(0);
 			}
 			return null;
 		}
 
 		/** Whether {@code mr} is a reference to a Log4j 1 logging method (e.g. {@code LOGGER::info}). */
-		private static boolean isLoggingReference(J.MemberReference mr) {
-			return (METHOD_NAMES.contains(mr.getReference().getSimpleName()) && matchesAny(LEVEL_MATCHERS, mr));
+		private static boolean isLoggingReference(J.MemberReference mr)
+		{
+			return METHOD_NAMES.contains(mr.getReference().getSimpleName()) && matchesAny(LEVEL_MATCHERS, mr);
 		}
 
 		/**
@@ -141,19 +155,24 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 		 * implements. Only a single-type-parameter SAM ({@code Consumer<T>}-shaped) identifies the consumed
 		 * type unambiguously; raw types, multi-parameter SAMs, and unresolved types return {@code null}.
 		 */
-		private static @Nullable JavaType consumedMessageType(J.MemberReference mr) {
+		private static @Nullable JavaType consumedMessageType(J.MemberReference mr)
+		{
 			if (
 				mr.getType() instanceof JavaType.Parameterized functionalInterface
 				&& functionalInterface.getTypeParameters().size() == 1
-			) {
+			)
+			{
 				return functionalInterface.getTypeParameters().get(0);
 			}
 			return null;
 		}
 
-		private static boolean matchesAny(List<MethodMatcher> matchers, Expression expression) {
-			for (MethodMatcher matcher : matchers) {
-				if (matcher.matches(expression)) {
+		private static boolean matchesAny(List<MethodMatcher> matchers, Expression expression)
+		{
+			for (MethodMatcher matcher : matchers)
+			{
+				if (matcher.matches(expression))
+				{
 					return true;
 				}
 			}
@@ -165,7 +184,8 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 		 * that does not migrate safely to SLF4J. An unresolved ({@code null}) type is treated as an object
 		 * so the precondition errs toward not migrating.
 		 */
-		private static boolean isObjectMessage(@Nullable JavaType type) {
+		private static boolean isObjectMessage(@Nullable JavaType type)
+		{
 			return !isCharSequence(type) && !TypeUtils.isAssignableTo("java.lang.Throwable", type);
 		}
 
@@ -176,7 +196,8 @@ public final class UsesLog4j1ObjectLogging extends Recipe {
 		 * does not match, while {@code StringBuilder} and {@code StringBuffer} are matched only by the
 		 * assignability check.
 		 */
-		private static boolean isCharSequence(@Nullable JavaType type) {
+		private static boolean isCharSequence(@Nullable JavaType type)
+		{
 			return TypeUtils.isString(type) || TypeUtils.isAssignableTo("java.lang.CharSequence", type);
 		}
 	}

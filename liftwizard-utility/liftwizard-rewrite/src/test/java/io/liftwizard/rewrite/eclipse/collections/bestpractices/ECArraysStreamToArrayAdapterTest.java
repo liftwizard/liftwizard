@@ -21,28 +21,32 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-class ECArraysStreamToArrayAdapterTest extends AbstractEclipseCollectionsTest {
-
+class ECArraysStreamToArrayAdapterTest
+	extends AbstractEclipseCollectionsTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new ECArraysStreamToArrayAdapter());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				//language=java
-				this.javaFixture("replacePatterns/01")
-			);
+			//language=java
+			this.javaFixture("replacePatterns/01")
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				//language=java
-				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01")
-			);
+			//language=java
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01")
+		);
 	}
 }

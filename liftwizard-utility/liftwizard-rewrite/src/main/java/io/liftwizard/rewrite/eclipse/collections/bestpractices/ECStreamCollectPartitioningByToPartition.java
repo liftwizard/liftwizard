@@ -45,8 +45,9 @@ import org.openrewrite.java.tree.J;
  * The method returns a {@code PartitionIterable} with {@code getSelected()} and {@code getRejected()}
  * instead of {@code Map<Boolean, List<T>>} with {@code get(true)}/{@code get(false)}.
  */
-public class ECStreamCollectPartitioningByToPartition extends Recipe {
-
+public class ECStreamCollectPartitioningByToPartition
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -56,12 +57,14 @@ public class ECStreamCollectPartitioningByToPartition extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.partitioningBy(pred))` to `partition(pred)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.partitioningBy(pred))` "
 			+ "to `collection.partition(pred)`. "
@@ -72,57 +75,69 @@ public class ECStreamCollectPartitioningByToPartition extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(COLLECT_MATCHER),
 			new StreamCollectPartitioningByToPartitionVisitor()
 		);
 	}
 
-	private static final class StreamCollectPartitioningByToPartitionVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamCollectPartitioningByToPartitionVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!PARTITIONING_BY_MATCHER.matches(collectorCall)) {
+			if (!PARTITIONING_BY_MATCHER.matches(collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> partitioningByArgs = collectorCall.getArguments();
-			if (partitioningByArgs.size() != 1) {
+			if (partitioningByArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 

@@ -34,8 +34,9 @@ import org.openrewrite.java.search.UsesMethod;
  * and {@code targetMethodName} (the {@code *With} method to rewrite to). Intended to be instantiated from
  * a YAML composite — see {@code META-INF/rewrite/eclipse-collections/bestpractices/garbage-free-lambdas.yml}.
  */
-public class GarbageFreeLambdaRecipe extends Recipe {
-
+public class GarbageFreeLambdaRecipe
+	extends Recipe
+{
 	@Option(
 		displayName = "Matcher pattern",
 		description = "The MethodMatcher pattern identifying the source method to rewrite.",
@@ -54,18 +55,21 @@ public class GarbageFreeLambdaRecipe extends Recipe {
 	public GarbageFreeLambdaRecipe(
 		@JsonProperty("matcherPattern") String matcherPattern,
 		@JsonProperty("targetMethodName") String targetMethodName
-	) {
+	)
+	{
 		this.matcherPattern = matcherPattern;
 		this.targetMethodName = targetMethodName;
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Convert Eclipse Collections capturing lambda to `*With` method reference";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Rewrites a single-arg Eclipse Collections call like `richIterable.select(x -> x.foo(captured))` "
 			+ "to its non-capturing `*With` form `richIterable.selectWith(Type::foo, captured)`. "
@@ -74,7 +78,8 @@ public class GarbageFreeLambdaRecipe extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		MethodMatcher matcher = new MethodMatcher(this.matcherPattern, true);
 		return Preconditions.check(
 			new UsesMethod<>(matcher),

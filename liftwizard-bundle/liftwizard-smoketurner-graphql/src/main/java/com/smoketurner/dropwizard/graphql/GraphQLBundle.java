@@ -28,15 +28,19 @@ import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 
-public abstract class GraphQLBundle<C extends Configuration> implements ConfiguredBundle<C>, GraphQLConfiguration<C> {
-
+public abstract class GraphQLBundle<C extends Configuration>
+	implements ConfiguredBundle<C>, GraphQLConfiguration<C>
+{
 	@Override
-	public void initialize(Bootstrap<?> bootstrap) {
+	public void initialize(Bootstrap<?> bootstrap)
+	{
 		bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.htm", "graphql-playground"));
 	}
 
 	@Override
-	public void run(final C configuration, final Environment environment) throws Exception {
+	public void run(final C configuration, final Environment environment)
+		throws Exception
+	{
 		final GraphQLFactory factory = this.getGraphQLFactory(configuration);
 
 		final PreparsedDocumentProvider provider = new CachingPreparsedDocumentProvider(
@@ -56,6 +60,9 @@ public abstract class GraphQLBundle<C extends Configuration> implements Configur
 
 		final GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
 
-		environment.servlets().addServlet("graphql", (Servlet) servlet).addMapping("/graphql", "/schema.json");
+		environment
+			.servlets()
+			.addServlet("graphql", (Servlet) servlet)
+			.addMapping("/graphql", "/schema.json");
 	}
 }

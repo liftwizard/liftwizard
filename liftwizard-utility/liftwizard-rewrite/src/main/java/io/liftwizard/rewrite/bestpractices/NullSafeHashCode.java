@@ -26,26 +26,29 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "Null-safe hashCode → `Objects.hashCode()`",
 	description = "Replace null-safe hashCode patterns with `Objects.hashCode()`."
 )
-public class NullSafeHashCode {
-
+public class NullSafeHashCode
+{
 	@RecipeDescriptor(
 		name = "`object == null ? 0 : object.hashCode()` → `Objects.hashCode(object)`",
 		description = "Replace ternary null check with hashCode with `Objects.hashCode(object)`."
 	)
-	public static class TernaryHashCode<T> {
-
+	public static class TernaryHashCode<T>
+	{
 		@BeforeTemplate
-		int before(T object) {
+		int before(T object)
+		{
 			return object == null ? 0 : object.hashCode();
 		}
 
 		@BeforeTemplate
-		int beforeInverted(T object) {
+		int beforeInverted(T object)
+		{
 			return object != null ? object.hashCode() : 0;
 		}
 
 		@AfterTemplate
-		int after(T object) {
+		int after(T object)
+		{
 			return Objects.hashCode(object);
 		}
 	}

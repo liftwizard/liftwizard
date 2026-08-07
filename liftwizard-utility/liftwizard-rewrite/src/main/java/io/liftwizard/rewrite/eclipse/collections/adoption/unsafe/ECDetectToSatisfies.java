@@ -25,29 +25,32 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "`detect() != null` → `anySatisfy()`",
 	description = "Converts `iterable.detect(predicate) != null` to `iterable.anySatisfy(predicate)` and "
-	+ "`iterable.detect(predicate) == null` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types. "
-	+ "Warning: This transformation can change semantics if the collection contains null values."
+		+ "`iterable.detect(predicate) == null` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types. "
+		+ "Warning: This transformation can change semantics if the collection contains null values."
 )
-public class ECDetectToSatisfies {
-
+public class ECDetectToSatisfies
+{
 	@RecipeDescriptor(
 		name = "`detect(predicate) != null` → `anySatisfy(predicate)`",
 		description = "Converts `iterable.detect(predicate) != null` and `null != iterable.detect(predicate)` to `iterable.anySatisfy(predicate)`."
 	)
-	public static final class DetectNotNullToAnySatisfy<T> {
-
+	public static final class DetectNotNullToAnySatisfy<T>
+	{
 		@BeforeTemplate
-		boolean beforeDetectNotNull(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean beforeDetectNotNull(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.detect(predicate) != null;
 		}
 
 		@BeforeTemplate
-		boolean beforeNullNotEqualsDetect(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean beforeNullNotEqualsDetect(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return null != iterable.detect(predicate);
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.anySatisfy(predicate);
 		}
 	}
@@ -56,20 +59,23 @@ public class ECDetectToSatisfies {
 		name = "`detect(predicate) == null` → `noneSatisfy(predicate)`",
 		description = "Converts `iterable.detect(predicate) == null` and `null == iterable.detect(predicate)` to `iterable.noneSatisfy(predicate)`."
 	)
-	public static final class DetectEqualsNullToNoneSatisfy<T> {
-
+	public static final class DetectEqualsNullToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean beforeDetectEqualsNull(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean beforeDetectEqualsNull(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.detect(predicate) == null;
 		}
 
 		@BeforeTemplate
-		boolean beforeNullEqualsDetect(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean beforeNullEqualsDetect(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return null == iterable.detect(predicate);
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.noneSatisfy(predicate);
 		}
 	}

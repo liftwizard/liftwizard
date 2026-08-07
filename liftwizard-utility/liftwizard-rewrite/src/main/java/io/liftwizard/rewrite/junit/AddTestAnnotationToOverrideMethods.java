@@ -28,17 +28,20 @@ import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 
-public class AddTestAnnotationToOverrideMethods extends Recipe {
-
+public class AddTestAnnotationToOverrideMethods
+	extends Recipe
+{
 	private static final List<String> STUBS = JUnitJupiterTemplateStubs.stubs();
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Add `@Test` to `@Override` methods whose parent has `@Test`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Add `@Test` annotation to `@Override` methods in test classes when the "
 			+ "overridden parent method has `@Test`. This prevents test methods from "
@@ -48,31 +51,38 @@ public class AddTestAnnotationToOverrideMethods extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new AddTestAnnotationVisitor();
 	}
 
-	private static final class AddTestAnnotationVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class AddTestAnnotationVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+		public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx)
+		{
 			J.MethodDeclaration md = super.visitMethodDeclaration(method, ctx);
 
-			if (!hasAnnotation(md, "Override")) {
+			if (!hasAnnotation(md, "Override"))
+			{
 				return md;
 			}
 
-			if (hasAnnotation(md, "Test")) {
+			if (hasAnnotation(md, "Test"))
+			{
 				return md;
 			}
 
 			JavaType.Method methodType = md.getMethodType();
-			if (methodType == null) {
+			if (methodType == null)
+			{
 				return md;
 			}
 
 			JavaType.Method overridden = methodType.getOverride();
-			if (overridden == null) {
+			if (overridden == null)
+			{
 				return md;
 			}
 
@@ -81,7 +91,8 @@ public class AddTestAnnotationToOverrideMethods extends Recipe {
 				.stream()
 				.anyMatch((a) -> "org.junit.jupiter.api.Test".equals(a.getFullyQualifiedName()));
 
-			if (!parentHasTest) {
+			if (!parentHasTest)
+			{
 				return md;
 			}
 
@@ -99,7 +110,8 @@ public class AddTestAnnotationToOverrideMethods extends Recipe {
 				);
 		}
 
-		private static boolean hasAnnotation(J.MethodDeclaration md, String simpleName) {
+		private static boolean hasAnnotation(J.MethodDeclaration md, String simpleName)
+		{
 			return md
 				.getLeadingAnnotations()
 				.stream()

@@ -28,8 +28,8 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-class IntegrationTest {
-
+class IntegrationTest
+{
 	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
 	@RegisterExtension
@@ -59,8 +59,11 @@ class IntegrationTest {
 	private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
 	@Test
-	void helloWorld() throws Exception {
-		Response response = this.dropwizardAppExtension.client()
+	void helloWorld()
+		throws Exception
+	{
+		Response response = this.dropwizardAppExtension
+			.client()
 			.target("http://localhost:{port}/hello-world")
 			.resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
 			.queryParam("name", "Dr. IntegrationTest")
@@ -73,23 +76,26 @@ class IntegrationTest {
 		String jsonResponse = response.readEntity(String.class);
 		// language=JSON
 		var expected = """
-			{
-			  "id"     : 1,
-			  "content": "Hello, Dr. IntegrationTest!"
-			}
-			""";
+		{
+			"id": 1,
+			"content": "Hello, Dr. IntegrationTest!"
+		}
+		""";
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}
 
-	protected void assertResponseStatus(@Nonnull Response response, Status status) {
+	protected void assertResponseStatus(@Nonnull Response response, Status status)
+	{
 		response.bufferEntity();
 		String entityAsString = response.readEntity(String.class);
 		assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
 	}
 
 	@Test
-	void validDateParameter() {
-		String date = this.dropwizardAppExtension.client()
+	void validDateParameter()
+	{
+		String date = this.dropwizardAppExtension
+			.client()
 			.target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
 			.queryParam("date", "2022-01-20")
 			.request()
@@ -98,9 +104,11 @@ class IntegrationTest {
 	}
 
 	@Test
-	void invalidDateParameter() {
+	void invalidDateParameter()
+	{
 		assertThatExceptionOfType(BadRequestException.class).isThrownBy(() ->
-			this.dropwizardAppExtension.client()
+			this.dropwizardAppExtension
+				.client()
 				.target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
 				.queryParam("date", "abc")
 				.request()
@@ -109,8 +117,10 @@ class IntegrationTest {
 	}
 
 	@Test
-	void noDateParameter() {
-		String date = this.dropwizardAppExtension.client()
+	void noDateParameter()
+	{
+		String date = this.dropwizardAppExtension
+			.client()
 			.target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/hello-world/date")
 			.request()
 			.get(String.class);
@@ -118,7 +128,8 @@ class IntegrationTest {
 	}
 
 	@Test
-	void postPerson() {
+	void postPerson()
+	{
 		var person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
 		PersonDTO newPerson = this.postPerson(person);
 		assertThat(newPerson.getId()).isNotNull();
@@ -127,16 +138,21 @@ class IntegrationTest {
 	}
 
 	@Test
-	void renderingPersonFreemarker() throws Exception {
+	void renderingPersonFreemarker()
+		throws Exception
+	{
 		this.testRenderingPerson("view_freemarker");
 	}
 
 	@Test
-	void renderingPersonMustache() throws Exception {
+	void renderingPersonMustache()
+		throws Exception
+	{
 		this.testRenderingPerson("view_mustache");
 	}
 
-	private void testRenderingPerson(String viewName) {
+	private void testRenderingPerson(String viewName)
+	{
 		var person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
 		PersonDTO newPerson = this.postPerson(person);
 		String url = "http://localhost:%d/people/%d/%s".formatted(
@@ -148,8 +164,10 @@ class IntegrationTest {
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200.getStatusCode());
 	}
 
-	private PersonDTO postPerson(PersonDTO person) {
-		return this.dropwizardAppExtension.client()
+	private PersonDTO postPerson(PersonDTO person)
+	{
+		return this.dropwizardAppExtension
+			.client()
 			.target("http://localhost:" + this.dropwizardAppExtension.getLocalPort() + "/people")
 			.request()
 			.post(Entity.entity(person, MediaType.APPLICATION_JSON_TYPE))
@@ -157,7 +175,9 @@ class IntegrationTest {
 	}
 
 	@Test
-	void logFileWritten() throws IOException {
+	void logFileWritten()
+		throws IOException
+	{
 		// The log file is using a size and time based policy, which used to silently
 		// fail (and not write to a log file). This test ensures not only that the
 		// log file exists, but also contains the log line that jetty prints on startup

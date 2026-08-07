@@ -21,8 +21,8 @@ import java.util.List;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 
-public final class EclipseCollectionsTemplateStubs {
-
+public final class EclipseCollectionsTemplateStubs
+{
 	private static final String API_FACTORY_PACKAGE_DECLARATION = "package org.eclipse.collections.api.factory;";
 	private static final String IMPL_FACTORY_PACKAGE_DECLARATION = "package org.eclipse.collections.impl.factory;";
 
@@ -414,13 +414,17 @@ public final class EclipseCollectionsTemplateStubs {
 		"""
 	);
 
-	private EclipseCollectionsTemplateStubs() {}
+	private EclipseCollectionsTemplateStubs()
+	{
+	}
 
-	public static List<String> factories() {
+	public static List<String> factories()
+	{
 		return FACTORIES.castToList();
 	}
 
-	public static List<String> richIterable() {
+	public static List<String> richIterable()
+	{
 		return RICH_ITERABLE;
 	}
 }

@@ -34,35 +34,38 @@ import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeTree;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class Dropwizard3LoadRoleInfoSignature extends Recipe {
-
+public class Dropwizard3LoadRoleInfoSignature
+	extends Recipe
+{
 	private static final String USER_PRINCIPAL = "org.eclipse.jetty.security.UserPrincipal";
 	private static final String ROLE_PRINCIPAL = "org.eclipse.jetty.security.RolePrincipal";
 	private static final String LIST = "java.util.List";
 	private static final String ABSTRACT_LOGIN_SERVICE = "org.eclipse.jetty.security.AbstractLoginService";
 	private static final String JETTY_SECURITY_STUB = """
-		package org.eclipse.jetty.security;
+	package org.eclipse.jetty.security;
 
-		public class UserPrincipal {
-		    public UserPrincipal(String name, Object credential) {}
-		    public String getName() { return null; }
-		}
-		""";
+	public class UserPrincipal {
+	    public UserPrincipal(String name, Object credential) {}
+	    public String getName() { return null; }
+	}
+	""";
 	private static final String ROLE_PRINCIPAL_STUB = """
-		package org.eclipse.jetty.security;
+	package org.eclipse.jetty.security;
 
-		public class RolePrincipal {
-		    public RolePrincipal(String name) {}
-		}
-		""";
+	public class RolePrincipal {
+	    public RolePrincipal(String name) {}
+	}
+	""";
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Migrate AbstractLoginService.loadRoleInfo override to List<RolePrincipal>";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"In Jetty 10, AbstractLoginService.loadRoleInfo's return type changed from "
 			+ "String[] to List<RolePrincipal>. This recipe rewrites overrides accordingly: "
@@ -73,26 +76,33 @@ public class Dropwizard3LoadRoleInfoSignature extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesType<>(ABSTRACT_LOGIN_SERVICE, false), new LoadRoleInfoVisitor());
 	}
 
-	private static boolean isLoadRoleInfoOverride(J.MethodDeclaration method) {
-		if (!"loadRoleInfo".equals(method.getSimpleName())) {
+	private static boolean isLoadRoleInfoOverride(J.MethodDeclaration method)
+	{
+		if (!"loadRoleInfo".equals(method.getSimpleName()))
+		{
 			return false;
 		}
-		if (method.getParameters().size() != 1) {
+		if (method.getParameters().size() != 1)
+		{
 			return false;
 		}
 		J firstParam = method.getParameters().get(0);
-		if (!(firstParam instanceof J.VariableDeclarations vd)) {
+		if (!(firstParam instanceof J.VariableDeclarations vd))
+		{
 			return false;
 		}
-		if (!isUserPrincipalType(vd.getTypeExpression())) {
+		if (!isUserPrincipalType(vd.getTypeExpression()))
+		{
 			return false;
 		}
 		J returnTypeExpression = method.getReturnTypeExpression();
-		if (!(returnTypeExpression instanceof J.ArrayType arrayType)) {
+		if (!(returnTypeExpression instanceof J.ArrayType arrayType))
+		{
 			return false;
 		}
 		return TypeUtils.isOfClassType(arrayType.getElementType().getType(), "java.lang.String");
@@ -104,22 +114,28 @@ public class Dropwizard3LoadRoleInfoSignature extends Recipe {
 	 * source often referenced UserPrincipal via inherited nested-class scope without an explicit
 	 * import; under Jetty 10's classpath that reference is unresolved until imports are added.
 	 */
-	private static boolean isUserPrincipalType(J typeExpression) {
-		if (!(typeExpression instanceof TypeTree typeTree)) {
+	private static boolean isUserPrincipalType(J typeExpression)
+	{
+		if (!(typeExpression instanceof TypeTree typeTree))
+		{
 			return false;
 		}
-		if (TypeUtils.isOfClassType(typeTree.getType(), USER_PRINCIPAL)) {
+		if (TypeUtils.isOfClassType(typeTree.getType(), USER_PRINCIPAL))
+		{
 			return true;
 		}
 		return typeExpression instanceof J.Identifier id && "UserPrincipal".equals(id.getSimpleName());
 	}
 
-	private static final class LoadRoleInfoVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class LoadRoleInfoVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+		public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx)
+		{
 			J.MethodDeclaration md = super.visitMethodDeclaration(method, ctx);
-			if (!isLoadRoleInfoOverride(md)) {
+			if (!isLoadRoleInfoOverride(md))
+			{
 				return md;
 			}
 
@@ -128,7 +144,8 @@ public class Dropwizard3LoadRoleInfoSignature extends Recipe {
 			this.maybeAddImport(USER_PRINCIPAL, false);
 
 			TypeTree existingReturnType = md.getReturnTypeExpression();
-			if (existingReturnType == null) {
+			if (existingReturnType == null)
+			{
 				return md;
 			}
 			TypeTree newReturnType = TypeTree.build("List<RolePrincipal>").withPrefix(existingReturnType.getPrefix());
@@ -136,19 +153,23 @@ public class Dropwizard3LoadRoleInfoSignature extends Recipe {
 		}
 
 		@Override
-		public J.Return visitReturn(J.Return retn, ExecutionContext ctx) {
+		public J.Return visitReturn(J.Return retn, ExecutionContext ctx)
+		{
 			J.Return processed = super.visitReturn(retn, ctx);
-			if (!this.isInsideLoadRoleInfoOverride()) {
+			if (!this.isInsideLoadRoleInfoOverride())
+			{
 				return processed;
 			}
 			Expression expr = processed.getExpression();
-			if (!(expr instanceof J.NewArray newArray) || !isStringArrayCreation(newArray)) {
+			if (!(expr instanceof J.NewArray newArray) || !isStringArrayCreation(newArray))
+			{
 				return processed;
 			}
 			return this.rewriteAsListOfRolePrincipal(processed, newArray, ctx);
 		}
 
-		private boolean isInsideLoadRoleInfoOverride() {
+		private boolean isInsideLoadRoleInfoOverride()
+		{
 			Cursor parent = this.getCursor().dropParentUntil(
 				(value) -> value instanceof J.MethodDeclaration || value instanceof J.CompilationUnit
 			);
@@ -156,7 +177,8 @@ public class Dropwizard3LoadRoleInfoSignature extends Recipe {
 			return parentValue instanceof J.MethodDeclaration enclosing && isLoadRoleInfoOverride(enclosing);
 		}
 
-		private J.Return rewriteAsListOfRolePrincipal(J.Return retn, J.NewArray newArray, ExecutionContext ctx) {
+		private J.Return rewriteAsListOfRolePrincipal(J.Return retn, J.NewArray newArray, ExecutionContext ctx)
+		{
 			List<Expression> elements = newArray.getInitializer() == null ? List.of() : newArray.getInitializer();
 
 			String placeholders = String.join(
@@ -172,9 +194,11 @@ public class Dropwizard3LoadRoleInfoSignature extends Recipe {
 				.apply(this.updateCursor(retn), retn.getCoordinates().replace(), elements.toArray());
 		}
 
-		private static boolean isStringArrayCreation(J.NewArray newArray) {
+		private static boolean isStringArrayCreation(J.NewArray newArray)
+		{
 			JavaType elementType = newArray.getType();
-			if (elementType instanceof JavaType.Array array) {
+			if (elementType instanceof JavaType.Array array)
+			{
 				return TypeUtils.isOfClassType(array.getElemType(), "java.lang.String");
 			}
 			return false;

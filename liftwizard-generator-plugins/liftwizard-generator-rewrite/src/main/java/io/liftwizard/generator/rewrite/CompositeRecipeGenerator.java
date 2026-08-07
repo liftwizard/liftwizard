@@ -34,33 +34,38 @@ import org.openrewrite.config.Environment;
 import org.openrewrite.config.OptionDescriptor;
 import org.openrewrite.config.RecipeDescriptor;
 
-public class CompositeRecipeGenerator {
-
+public class CompositeRecipeGenerator
+{
 	private final String indent;
 
-	public CompositeRecipeGenerator() {
+	public CompositeRecipeGenerator()
+	{
 		this("    ");
 	}
 
-	public CompositeRecipeGenerator(String indent) {
+	public CompositeRecipeGenerator(String indent)
+	{
 		this.indent = indent;
 	}
 
-	public String generate(Environment env, FilteredRecipeSpec spec) {
-		if (spec.getExclusions().isEmpty()) {
+	public String generate(Environment env, FilteredRecipeSpec spec)
+	{
+		if (spec.getExclusions().isEmpty())
+		{
 			throw new IllegalArgumentException(
 				"FilteredRecipeSpec '"
-				+ spec.getGeneratedRecipeName()
-				+ "' has no exclusions; a filtered recipe must exclude at least one recipe. Reference the base recipe '"
-				+ spec.getBaseRecipeName()
-				+ "' directly instead."
+					+ spec.getGeneratedRecipeName()
+					+ "' has no exclusions; a filtered recipe must exclude at least one recipe. Reference the base recipe '"
+					+ spec.getBaseRecipeName()
+					+ "' directly instead."
 			);
 		}
 
 		RecipeDescriptor root = this.findDescriptor(env, spec.getBaseRecipeName());
 
 		MutableMap<String, String> exclusionReasons = MapAdapter.adapt(new LinkedHashMap<>());
-		for (RecipeExclusion exclusion : spec.getExclusions()) {
+		for (RecipeExclusion exclusion : spec.getExclusions())
+		{
 			exclusionReasons.put(exclusion.getRecipeName(), exclusion.getReason());
 		}
 
@@ -69,7 +74,8 @@ public class CompositeRecipeGenerator {
 
 		Set<String> unmatchedExclusions = SortedSets.mutable.withAll(exclusionReasons.keySet());
 		unmatchedExclusions.removeAll(matchedExclusions);
-		if (!unmatchedExclusions.isEmpty()) {
+		if (!unmatchedExclusions.isEmpty())
+		{
 			throw new IllegalArgumentException(
 				"Exclusions not found in recipe tree of '" + spec.getBaseRecipeName() + "': " + unmatchedExclusions
 			);
@@ -78,7 +84,8 @@ public class CompositeRecipeGenerator {
 		return this.renderHeader(spec) + this.renderYaml(spec, filteredEntries);
 	}
 
-	private RecipeDescriptor findDescriptor(Environment env, String recipeName) {
+	private RecipeDescriptor findDescriptor(Environment env, String recipeName)
+	{
 		return env
 			.listRecipeDescriptors()
 			.stream()
@@ -87,8 +94,10 @@ public class CompositeRecipeGenerator {
 			.orElseThrow(() -> new IllegalArgumentException("Recipe not found: " + recipeName));
 	}
 
-	private boolean needsExplosion(RecipeDescriptor descriptor, Set<String> exclusions) {
-		if (exclusions.contains(descriptor.getName())) {
+	private boolean needsExplosion(RecipeDescriptor descriptor, Set<String> exclusions)
+	{
+		if (exclusions.contains(descriptor.getName()))
+		{
 			return true;
 		}
 		return descriptor
@@ -101,40 +110,51 @@ public class CompositeRecipeGenerator {
 		List<RecipeDescriptor> recipeList,
 		MutableMap<String, String> exclusionReasons,
 		MutableSet<String> matchedExclusions
-	) {
+	)
+	{
 		MutableList<Object> result = Lists.mutable.empty();
-		for (RecipeDescriptor descriptor : recipeList) {
-			if (exclusionReasons.containsKey(descriptor.getName())) {
+		for (RecipeDescriptor descriptor : recipeList)
+		{
+			if (exclusionReasons.containsKey(descriptor.getName()))
+			{
 				matchedExclusions.add(descriptor.getName());
 				result.add(new ExcludedRecipe(descriptor.getName(), exclusionReasons.get(descriptor.getName())));
 				continue;
 			}
-			if (!this.needsExplosion(descriptor, exclusionReasons.keySet())) {
+			if (!this.needsExplosion(descriptor, exclusionReasons.keySet()))
+			{
 				result.add(this.toYamlEntry(descriptor));
-			} else {
+			}
+			else
+			{
 				result.addAll(this.filterRecipeList(descriptor.getRecipeList(), exclusionReasons, matchedExclusions));
 			}
 		}
 		return result;
 	}
 
-	private Object toYamlEntry(RecipeDescriptor descriptor) {
+	private Object toYamlEntry(RecipeDescriptor descriptor)
+	{
 		List<OptionDescriptor> options = descriptor.getOptions();
 		MutableMap<String, Object> nonNullOptions = MapAdapter.adapt(new LinkedHashMap<>());
-		for (OptionDescriptor option : options) {
-			if (option.getValue() != null) {
+		for (OptionDescriptor option : options)
+		{
+			if (option.getValue() != null)
+			{
 				nonNullOptions.put(option.getName(), option.getValue());
 			}
 		}
 
-		if (nonNullOptions.isEmpty()) {
+		if (nonNullOptions.isEmpty())
+		{
 			return descriptor.getName();
 		}
 
 		return new ParameterizedEntry(descriptor.getName(), nonNullOptions);
 	}
 
-	private String renderHeader(FilteredRecipeSpec spec) {
+	private String renderHeader(FilteredRecipeSpec spec)
+	{
 		// @formatter:off
 		//language=yaml
 		return ""
@@ -147,7 +167,8 @@ public class CompositeRecipeGenerator {
 		// @formatter:on
 	}
 
-	private String renderYaml(FilteredRecipeSpec spec, List<Object> entries) {
+	private String renderYaml(FilteredRecipeSpec spec, List<Object> entries)
+	{
 		// @formatter:off
 		//language=yaml
 		String header = ""
@@ -162,21 +183,29 @@ public class CompositeRecipeGenerator {
 		return header + entries.stream().map(this::renderEntry).collect(Collectors.joining());
 	}
 
-	private String renderEntry(Object entry) {
-		if (entry instanceof ExcludedRecipe excluded) {
-			String comment = excluded.reason() != null && !excluded.reason().isBlank()
-				? this.indent + "# " + excluded.reason() + "\n"
-				: "";
+	private String renderEntry(Object entry)
+	{
+		if (entry instanceof ExcludedRecipe excluded)
+		{
+			String comment =
+				excluded.reason() != null && !excluded.reason().isBlank()
+					? this.indent + "# " + excluded.reason() + "\n"
+					: "";
 			return comment + this.indent + "# - " + excluded.recipeName() + "\n";
-		} else if (entry instanceof String name) {
+		}
+		else if (entry instanceof String name)
+		{
 			return this.indent + "- " + name + "\n";
-		} else if (entry instanceof ParameterizedEntry parameterized) {
+		}
+		else if (entry instanceof ParameterizedEntry parameterized)
+		{
 			return this.renderMapEntry(parameterized);
 		}
 		throw new IllegalArgumentException("Unexpected entry type: " + entry.getClass());
 	}
 
-	private String renderMapEntry(ParameterizedEntry parameterized) {
+	private String renderMapEntry(ParameterizedEntry parameterized)
+	{
 		return (
 			this.indent
 			+ "- "
@@ -191,7 +220,11 @@ public class CompositeRecipeGenerator {
 		);
 	}
 
-	private record ExcludedRecipe(String recipeName, String reason) {}
+	private record ExcludedRecipe(String recipeName, String reason)
+	{
+	}
 
-	private record ParameterizedEntry(String name, Map<String, Object> options) {}
+	private record ParameterizedEntry(String name, Map<String, Object> options)
+	{
+	}
 }

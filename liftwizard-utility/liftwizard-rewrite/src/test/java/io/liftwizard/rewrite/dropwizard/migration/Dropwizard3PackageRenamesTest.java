@@ -24,131 +24,133 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3PackageRenamesTest implements AbstractRewriteFixtures, RewriteTest {
-
+class Dropwizard3PackageRenamesTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames")
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package io.dropwizard;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames").parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package io.dropwizard;
 
-						public class Application<T> {
-						    public void run(String... args) {}
-						}
-						""",
-						"""
-						package io.dropwizard;
+					public class Application<T> {
+					    public void run(String... args) {}
+					}
+					""",
+					"""
+					package io.dropwizard;
 
-						public interface Bundle {
-						}
-						""",
-						"""
-						package io.dropwizard;
+					public interface Bundle {
+					}
+					""",
+					"""
+					package io.dropwizard;
 
-						public class Configuration {
-						}
-						""",
-						"""
-						package io.dropwizard;
+					public class Configuration {
+					}
+					""",
+					"""
+					package io.dropwizard;
 
-						public interface ConfiguredBundle<T> {
-						    void initialize(Object bootstrap);
-						    void run(T configuration, Object environment);
-						}
-						""",
-						"""
-						package io.dropwizard.server;
+					public interface ConfiguredBundle<T> {
+					    void initialize(Object bootstrap);
+					    void run(T configuration, Object environment);
+					}
+					""",
+					"""
+					package io.dropwizard.server;
 
-						public interface ServerFactory {
-						}
-						""",
-						"""
-						package io.dropwizard.setup;
+					public interface ServerFactory {
+					}
+					""",
+					"""
+					package io.dropwizard.setup;
 
-						public class Bootstrap<T> {
-						    public void addBundle(Object bundle) {}
-						}
-						""",
-						"""
-						package io.dropwizard.setup;
+					public class Bootstrap<T> {
+					    public void addBundle(Object bundle) {}
+					}
+					""",
+					"""
+					package io.dropwizard.setup;
 
-						public class Environment {
-						    public String getName() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.cli;
+					public class Environment {
+					    public String getName() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.cli;
 
-						public abstract class Command {
-						    public abstract void run(Object environment, Object namespace);
-						}
-						""",
-						"""
-						package io.dropwizard.cli;
+					public abstract class Command {
+					    public abstract void run(Object environment, Object namespace);
+					}
+					""",
+					"""
+					package io.dropwizard.cli;
 
-						public abstract class ConfiguredCommand<T> extends Command {
-						}
-						""",
-						"""
-						package io.dropwizard.logging;
+					public abstract class ConfiguredCommand<T> extends Command {
+					}
+					""",
+					"""
+					package io.dropwizard.logging;
 
-						public abstract class AbstractAppenderFactory<E> {
-						}
-						""",
-						"""
-						package io.dropwizard.logging.filter;
+					public abstract class AbstractAppenderFactory<E> {
+					}
+					""",
+					"""
+					package io.dropwizard.logging.filter;
 
-						public interface FilterFactory<E> {
-						}
-						""",
-						"""
-						package io.dropwizard.logging.layout;
+					public interface FilterFactory<E> {
+					}
+					""",
+					"""
+					package io.dropwizard.logging.layout;
 
-						public interface LayoutFactory<E> {
-						}
-						""",
-						"""
-						package io.dropwizard.metrics;
+					public interface LayoutFactory<E> {
+					}
+					""",
+					"""
+					package io.dropwizard.metrics;
 
-						public interface ReporterFactory {
-						}
-						""",
-						"""
-						package io.dropwizard.views;
+					public interface ReporterFactory {
+					}
+					""",
+					"""
+					package io.dropwizard.views;
 
-						public abstract class View {
-						    protected View(String templateName) {}
-						}
-						""",
-						"""
-						package io.dropwizard.auth;
+					public abstract class View {
+					    protected View(String templateName) {}
+					}
+					""",
+					"""
+					package io.dropwizard.auth;
 
-						public class AuthFilter {
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.setup;
+					public class AuthFilter {
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.setup;
 
-						public class JerseyEnvironment {
-						}
-						"""
-					)
-			);
+					public class JerseyEnvironment {
+					}
+					"""
+				)
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

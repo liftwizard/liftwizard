@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-public interface ConnectionManagerProvider {
+public interface ConnectionManagerProvider
+{
 	ConnectionManagersFactory getConnectionManagersFactory();
 }

@@ -24,10 +24,12 @@ import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.logging.slf4j.uncaught.exception.handler.Slf4jUncaughtExceptionHandler;
 
 @AutoService(PrioritizedBundle.class)
-public class Slf4jUncaughtExceptionHandlerBundle implements PrioritizedBundle {
-
+public class Slf4jUncaughtExceptionHandlerBundle
+	implements PrioritizedBundle
+{
 	@Override
-	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+	{
 		Thread.setDefaultUncaughtExceptionHandler(new Slf4jUncaughtExceptionHandler());
 	}
 }

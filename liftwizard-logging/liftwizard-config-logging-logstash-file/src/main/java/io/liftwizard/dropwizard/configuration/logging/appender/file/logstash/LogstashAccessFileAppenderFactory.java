@@ -55,8 +55,9 @@ import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashAccessEnc
 
 @JsonTypeName("file-access-logstash")
 @AutoService(AppenderFactory.class)
-public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<IAccessEvent> {
-
+public class LogstashAccessFileAppenderFactory
+	extends AbstractAppenderFactory<IAccessEvent>
+{
 	@Nullable
 	private String currentLogFilename;
 
@@ -79,111 +80,132 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 
 	@JsonProperty
 	@Nullable
-	public String getCurrentLogFilename() {
+	public String getCurrentLogFilename()
+	{
 		return this.currentLogFilename;
 	}
 
 	@JsonProperty
-	public void setCurrentLogFilename(@Nullable String currentLogFilename) {
+	public void setCurrentLogFilename(@Nullable String currentLogFilename)
+	{
 		this.currentLogFilename = currentLogFilename;
 	}
 
 	@JsonProperty
-	public boolean isArchive() {
+	public boolean isArchive()
+	{
 		return this.archive;
 	}
 
 	@JsonProperty
-	public void setArchive(boolean archive) {
+	public void setArchive(boolean archive)
+	{
 		this.archive = archive;
 	}
 
 	@JsonProperty
 	@Nullable
-	public String getArchivedLogFilenamePattern() {
+	public String getArchivedLogFilenamePattern()
+	{
 		return this.archivedLogFilenamePattern;
 	}
 
 	@JsonProperty
-	public void setArchivedLogFilenamePattern(@Nullable String archivedLogFilenamePattern) {
+	public void setArchivedLogFilenamePattern(@Nullable String archivedLogFilenamePattern)
+	{
 		this.archivedLogFilenamePattern = archivedLogFilenamePattern;
 	}
 
 	@JsonProperty
-	public int getArchivedFileCount() {
+	public int getArchivedFileCount()
+	{
 		return this.archivedFileCount;
 	}
 
 	@JsonProperty
-	public void setArchivedFileCount(int archivedFileCount) {
+	public void setArchivedFileCount(int archivedFileCount)
+	{
 		this.archivedFileCount = archivedFileCount;
 	}
 
 	@JsonProperty
 	@Nullable
-	public DataSize getMaxFileSize() {
+	public DataSize getMaxFileSize()
+	{
 		return this.maxFileSize;
 	}
 
 	@JsonProperty
-	public void setMaxFileSize(@Nullable DataSize maxFileSize) {
+	public void setMaxFileSize(@Nullable DataSize maxFileSize)
+	{
 		this.maxFileSize = maxFileSize;
 	}
 
 	@JsonProperty
-	public DataSize getBufferSize() {
+	public DataSize getBufferSize()
+	{
 		return this.bufferSize;
 	}
 
 	@JsonProperty
-	public void setBufferSize(DataSize bufferSize) {
+	public void setBufferSize(DataSize bufferSize)
+	{
 		this.bufferSize = bufferSize;
 	}
 
-	public boolean isImmediateFlush() {
+	public boolean isImmediateFlush()
+	{
 		return this.immediateFlush;
 	}
 
 	@JsonProperty
-	public void setImmediateFlush(boolean immediateFlush) {
+	public void setImmediateFlush(boolean immediateFlush)
+	{
 		this.immediateFlush = immediateFlush;
 	}
 
 	@JsonProperty
-	public LogstashAccessEncoderFactory getEncoder() {
+	public LogstashAccessEncoderFactory getEncoder()
+	{
 		return this.encoderFactory;
 	}
 
 	@JsonProperty
-	public void setEncoder(LogstashAccessEncoderFactory newEncoderFactory) {
+	public void setEncoder(LogstashAccessEncoderFactory newEncoderFactory)
+	{
 		this.encoderFactory = newEncoderFactory;
 	}
 
 	@JsonIgnore
 	@ValidationMethod(message = "must have archivedLogFilenamePattern if archive is true")
-	public boolean isValidArchiveConfiguration() {
+	public boolean isValidArchiveConfiguration()
+	{
 		return !this.archive || this.archivedLogFilenamePattern != null;
 	}
 
 	@JsonIgnore
 	@ValidationMethod(message = "when specifying maxFileSize, archivedLogFilenamePattern must contain %i")
-	public boolean isValidForMaxFileSizeSetting() {
+	public boolean isValidForMaxFileSizeSetting()
+	{
 		return !this.archive || this.maxFileSize == null || this.isValidMaxFileSizePattern();
 	}
 
 	@JsonIgnore
 	@ValidationMethod(message = "when archivedLogFilenamePattern contains %i, maxFileSize must be specified")
-	public boolean isMaxFileSizeSettingSpecified() {
+	public boolean isMaxFileSizeSettingSpecified()
+	{
 		return !this.archive || !this.isValidMaxFileSizePattern() || this.maxFileSize != null;
 	}
 
-	private boolean isValidMaxFileSizePattern() {
+	private boolean isValidMaxFileSizePattern()
+	{
 		return this.archivedLogFilenamePattern != null && this.archivedLogFilenamePattern.contains("%i");
 	}
 
 	@JsonIgnore
 	@ValidationMethod(message = "currentLogFilename can only be null when archiving is enabled")
-	public boolean isValidFileConfiguration() {
+	public boolean isValidFileConfiguration()
+	{
 		return this.archive || this.currentLogFilename != null;
 	}
 
@@ -194,7 +216,8 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 		LayoutFactory<IAccessEvent> layoutFactory,
 		LevelFilterFactory<IAccessEvent> levelFilterFactory,
 		AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory
-	) {
+	)
+	{
 		Encoder<IAccessEvent> encoder = this.encoderFactory.build(this.getTimeZone());
 		OutputStreamAppender<IAccessEvent> appender = this.appender(context);
 		appender.setEncoder(encoder);
@@ -206,7 +229,8 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 		return this.wrapAsync(appender, asyncAppenderFactory);
 	}
 
-	private FileAppender<IAccessEvent> appender(LoggerContext context) {
+	private FileAppender<IAccessEvent> appender(LoggerContext context)
+	{
 		FileAppender<IAccessEvent> appender = this.buildAppender(context);
 		appender.setName("file-access-logstash-appender");
 		appender.setAppend(true);
@@ -216,8 +240,10 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 		return appender;
 	}
 
-	private FileAppender<IAccessEvent> buildAppender(LoggerContext context) {
-		if (!this.archive) {
+	private FileAppender<IAccessEvent> buildAppender(LoggerContext context)
+	{
+		if (!this.archive)
+		{
 			var appender = new FileAppender<IAccessEvent>();
 			this.configureAppender(appender, context);
 			return appender;
@@ -234,10 +260,12 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 	private RollingFileAppender<IAccessEvent> configurePolicyWithDefaults(
 		RollingFileAppender<IAccessEvent> appender,
 		Context context
-	) {
-		TimeBasedRollingPolicy<IAccessEvent> rollingPolicy = this.maxFileSize == null
-			? this.getTimeBasedRollingPolicy(appender, context)
-			: this.getSizeAndTimeBasedRollingPolicy();
+	)
+	{
+		TimeBasedRollingPolicy<IAccessEvent> rollingPolicy =
+			this.maxFileSize == null
+				? this.getTimeBasedRollingPolicy(appender, context)
+				: this.getSizeAndTimeBasedRollingPolicy();
 
 		rollingPolicy.setContext(context);
 		rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);
@@ -249,10 +277,12 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 	}
 
 	@Nonnull
-	private TimeBasedRollingPolicy<IAccessEvent> getSizeAndTimeBasedRollingPolicy() {
+	private TimeBasedRollingPolicy<IAccessEvent> getSizeAndTimeBasedRollingPolicy()
+	{
 		// Creating a size and time policy does not need a separate triggering policy set on the appender
 		// because this policy registers the trigger policy
-		if (this.maxFileSize == null) {
+		if (this.maxFileSize == null)
+		{
 			throw new AssertionError();
 		}
 		var fileSize = new FileSize(this.maxFileSize.toBytes());
@@ -265,7 +295,8 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 	private TimeBasedRollingPolicy<IAccessEvent> getTimeBasedRollingPolicy(
 		RollingFileAppender<IAccessEvent> appender,
 		Context context
-	) {
+	)
+	{
 		TimeBasedFileNamingAndTriggeringPolicy<IAccessEvent> triggeringPolicy =
 			new DefaultTimeBasedFileNamingAndTriggeringPolicy<>();
 		triggeringPolicy.setContext(context);
@@ -279,7 +310,8 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 	private RollingFileAppender<IAccessEvent> dateAndSizeSpecifiedPolicy(
 		RollingFileAppender<IAccessEvent> appender,
 		Context context
-	) {
+	)
+	{
 		var rollingPolicy = new FixedWindowRollingPolicy();
 		rollingPolicy.setContext(context);
 		rollingPolicy.setMaxIndex(this.archivedFileCount);
@@ -288,7 +320,8 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 		rollingPolicy.start();
 		appender.setRollingPolicy(rollingPolicy);
 
-		if (this.maxFileSize == null) {
+		if (this.maxFileSize == null)
+		{
 			throw new AssertionError();
 		}
 		var fileSize = new FileSize(this.maxFileSize.toBytes());
@@ -300,7 +333,8 @@ public class LogstashAccessFileAppenderFactory extends AbstractAppenderFactory<I
 		return appender;
 	}
 
-	private void configureAppender(FileAppender<IAccessEvent> appender, Context context) {
+	private void configureAppender(FileAppender<IAccessEvent> appender, Context context)
+	{
 		var fileSize = new FileSize(this.bufferSize.toBytes());
 
 		appender.setContext(context);

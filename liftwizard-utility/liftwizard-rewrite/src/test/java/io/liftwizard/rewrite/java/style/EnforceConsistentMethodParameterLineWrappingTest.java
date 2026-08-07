@@ -23,128 +23,132 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentMethodParameterLineWrappingTest implements RewriteTest {
-
+class EnforceConsistentMethodParameterLineWrappingTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new EnforceConsistentMethodParameterLineWrapping());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					abstract class Test<K, V> {
-					    void partiallyWrapped(String a,
-					            String b,
-					            String c) {}
+			java(
+				"""
+				abstract class Test<K, V> {
+				    void partiallyWrapped(String a,
+				            String b,
+				            String c) {}
 
-					    void twoParamsPartiallyWrapped(String a,
-					            String b) {}
+				    void twoParamsPartiallyWrapped(String a,
+				            String b) {}
 
-					    void firstParamWrappedOthersNot(
-					            String a, String b, String c) {}
+				    void firstParamWrappedOthersNot(
+				            String a, String b, String c) {}
 
-					    abstract String abstractMethod(String a,
-					            String b);
+				    abstract String abstractMethod(String a,
+				            String b);
 
-					    void fiveParams(
-					            String a, String b,
-					            String c, String d,
-					            String e) {}
+				    void fiveParams(
+				            String a, String b,
+				            String c, String d,
+				            String e) {}
 
-					    void sevenParams(
-					            String a, String b,
-					            String c, String d,
-					            String e, String f, String g) {}
+				    void sevenParams(
+				            String a, String b,
+				            String c, String d,
+				            String e, String f, String g) {}
 
-					    void lineBreakInsideParameter(
-					            K key1, V value1, K
-					            key2, V value2) {}
-					}""",
-					"""
-					abstract class Test<K, V> {
-					    void partiallyWrapped(
-					            String a,
-					            String b,
-					            String c) {}
+				    void lineBreakInsideParameter(
+				            K key1, V value1, K
+				            key2, V value2) {}
+				}""",
+				"""
+				abstract class Test<K, V> {
+				    void partiallyWrapped(
+				            String a,
+				            String b,
+				            String c) {}
 
-					    void twoParamsPartiallyWrapped(
-					            String a,
-					            String b) {}
+				    void twoParamsPartiallyWrapped(
+				            String a,
+				            String b) {}
 
-					    void firstParamWrappedOthersNot(
-					            String a,
-					            String b,
-					            String c) {}
+				    void firstParamWrappedOthersNot(
+				            String a,
+				            String b,
+				            String c) {}
 
-					    abstract String abstractMethod(
-					            String a,
-					            String b);
+				    abstract String abstractMethod(
+				            String a,
+				            String b);
 
-					    void fiveParams(
-					            String a,
-					            String b,
-					            String c,
-					            String d,
-					            String e) {}
+				    void fiveParams(
+				            String a,
+				            String b,
+				            String c,
+				            String d,
+				            String e) {}
 
-					    void sevenParams(
-					            String a,
-					            String b,
-					            String c,
-					            String d,
-					            String e,
-					            String f,
-					            String g) {}
+				    void sevenParams(
+				            String a,
+				            String b,
+				            String c,
+				            String d,
+				            String e,
+				            String f,
+				            String g) {}
 
-					    void lineBreakInsideParameter(
-					            K key1,
-					            V value1,
-					            K key2,
-					            V value2) {}
-					}"""
-				)
-			);
+				    void lineBreakInsideParameter(
+				            K key1,
+				            V value1,
+				            K key2,
+				            V value2) {}
+				}"""
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					class Test {
-					    void singleLineCall(String a, String b, String c) {}
+			java(
+				"""
+				class Test {
+				    void singleLineCall(String a, String b, String c) {}
 
-					    void alreadyFullyWrapped(
-					            String a,
-					            String b,
-					            String c) {}
+				    void alreadyFullyWrapped(
+				            String a,
+				            String b,
+				            String c) {}
 
-					    void singleParam(String a) {}
+				    void singleParam(String a) {}
 
-					    void singleParamWrapped(
-					            String a) {}
+				    void singleParamWrapped(
+				            String a) {}
 
-					    void noParams() {}
+				    void noParams() {}
 
-					    void sixParamsTwoPerLine(
-					            String a, String b,
-					            String c, String d,
-					            String e, String f) {}
+				    void sixParamsTwoPerLine(
+				            String a, String b,
+				            String c, String d,
+				            String e, String f) {}
 
-					    void nineParamsThreePerLine(
-					            String a, String b, String c,
-					            String d, String e, String f,
-					            String g, String h, String i) {}
+				    void nineParamsThreePerLine(
+				            String a, String b, String c,
+				            String d, String e, String f,
+				            String g, String h, String i) {}
 
-					    void eightParamsFourPerLine(
-					            String a, String b, String c, String d,
-					            String e, String f, String g, String h) {}
-					}"""
-				)
-			);
+				    void eightParamsFourPerLine(
+				            String a, String b, String c, String d,
+				            String e, String f, String g, String h) {}
+				}"""
+			)
+		);
 	}
 }

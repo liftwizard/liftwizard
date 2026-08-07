@@ -58,8 +58,9 @@ import org.openrewrite.java.tree.Space;
  * <p>Note: This recipe does NOT convert toUnmodifiableList() or toUnmodifiableSet() because
  * unmodifiable and immutable are different concepts.
  */
-public class ECStreamFlatMapCollectToFlatCollect extends Recipe {
-
+public class ECStreamFlatMapCollectToFlatCollect
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -73,12 +74,14 @@ public class ECStreamFlatMapCollectToFlatCollect extends Recipe {
 	private static final MethodMatcher TO_SET_MATCHER = new MethodMatcher("java.util.stream.Collectors toSet()");
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().flatMap(fn).collect(Collectors.toList())` to `flatCollect(fn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().flatMap(fn).collect(Collectors.toList())` to `collection.flatCollect(fn)` "
 			+ "and `collection.stream().flatMap(fn).collect(Collectors.toSet())` to `collection.flatCollect(fn).toSet()`. "
@@ -90,72 +93,87 @@ public class ECStreamFlatMapCollectToFlatCollect extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COLLECT_MATCHER), new StreamFlatMapCollectToFlatCollectVisitor());
 	}
 
-	private static final class StreamFlatMapCollectToFlatCollectVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamFlatMapCollectToFlatCollectVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			boolean isToList = TO_LIST_MATCHER.matches(collectorCall);
 			boolean isToSet = TO_SET_MATCHER.matches(collectorCall);
 
-			if (!isToList && !isToSet) {
+			if (!isToList && !isToSet)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation flatMapCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation flatMapCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!FLAT_MAP_MATCHER.matches(flatMapCall)) {
+			if (!FLAT_MAP_MATCHER.matches(flatMapCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression flatMapSelect = flatMapCall.getSelect();
-			if (!(flatMapSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(flatMapSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> flatMapArguments = flatMapCall.getArguments();
-			if (flatMapArguments.isEmpty()) {
+			if (flatMapArguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 
 			Expression flatMapArg = flatMapArguments.get(0);
 			Expression transformedArg = this.stripStreamFromLambda(flatMapArg);
-			if (transformedArg == null) {
+			if (transformedArg == null)
+			{
 				return methodInvocation;
 			}
 
@@ -163,7 +181,8 @@ public class ECStreamFlatMapCollectToFlatCollect extends Recipe {
 
 			J.Identifier flatCollectMethodName = methodInvocation.getName().withSimpleName("flatCollect");
 
-			if (isToSet) {
+			if (isToSet)
+			{
 				J.MethodInvocation flatCollectCall = flatMapCall
 					.withSelect(collectionExpr.withPrefix(Space.EMPTY))
 					.withName(flatMapCall.getName().withSimpleName("flatCollect"))
@@ -189,31 +208,39 @@ public class ECStreamFlatMapCollectToFlatCollect extends Recipe {
 		 *
 		 * @return the transformed lambda, or null if the lambda body does not end with .stream()
 		 */
-		private Expression stripStreamFromLambda(Expression expression) {
-			if (!(expression instanceof J.Lambda lambda)) {
+		private Expression stripStreamFromLambda(Expression expression)
+		{
+			if (!(expression instanceof J.Lambda lambda))
+			{
 				return null;
 			}
 
 			J body = lambda.getBody();
-			if (!(body instanceof J.MethodInvocation bodyMethodInvocation)) {
+			if (!(body instanceof J.MethodInvocation bodyMethodInvocation))
+			{
 				return null;
 			}
 
-			if (!"stream".equals(bodyMethodInvocation.getSimpleName())) {
+			if (!"stream".equals(bodyMethodInvocation.getSimpleName()))
+			{
 				return null;
 			}
 
-			if (!bodyMethodInvocation.getArguments().isEmpty()) {
-				if (bodyMethodInvocation.getArguments().size() != 1) {
+			if (!bodyMethodInvocation.getArguments().isEmpty())
+			{
+				if (bodyMethodInvocation.getArguments().size() != 1)
+				{
 					return null;
 				}
-				if (!(bodyMethodInvocation.getArguments().get(0) instanceof J.Empty)) {
+				if (!(bodyMethodInvocation.getArguments().get(0) instanceof J.Empty))
+				{
 					return null;
 				}
 			}
 
 			Expression streamSelect = bodyMethodInvocation.getSelect();
-			if (streamSelect == null) {
+			if (streamSelect == null)
+			{
 				return null;
 			}
 

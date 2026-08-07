@@ -40,17 +40,20 @@ import io.liftwizard.logging.logback.appender.buffered.BufferedAppender;
  */
 @JsonTypeName("buffered")
 @AutoService(AppenderFactory.class)
-public class BufferedAppenderFactory<E extends DeferredProcessingAware> extends AbstractAppenderFactory<E> {
-
+public class BufferedAppenderFactory<E extends DeferredProcessingAware>
+	extends AbstractAppenderFactory<E>
+{
 	private String appenderName = "buffered-appender";
 
 	@JsonProperty
-	public String getAppenderName() {
+	public String getAppenderName()
+	{
 		return this.appenderName;
 	}
 
 	@JsonProperty
-	public void setAppenderName(String appenderName) {
+	public void setAppenderName(String appenderName)
+	{
 		this.appenderName = appenderName;
 	}
 
@@ -61,7 +64,8 @@ public class BufferedAppenderFactory<E extends DeferredProcessingAware> extends 
 		LayoutFactory<E> layoutFactory,
 		LevelFilterFactory<E> levelFilterFactory,
 		AsyncAppenderFactory<E> asyncAppenderFactory
-	) {
+	)
+	{
 		var consoleAppender = new ConsoleAppender<E>();
 		consoleAppender.setName(this.appenderName);
 		consoleAppender.setContext(loggerContext);

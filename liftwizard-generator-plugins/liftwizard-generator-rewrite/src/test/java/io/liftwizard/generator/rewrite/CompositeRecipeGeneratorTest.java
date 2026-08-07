@@ -21,10 +21,11 @@ import org.openrewrite.config.Environment;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CompositeRecipeGeneratorTest {
-
+class CompositeRecipeGeneratorTest
+{
 	@Test
-	void emptyExclusionsThrows() {
+	void emptyExclusionsThrows()
+	{
 		var spec = new FilteredRecipeSpec();
 		spec.setGeneratedRecipeName("io.liftwizard.migrate.UpgradeToJava21");
 		spec.setBaseRecipeName("org.openrewrite.java.migrate.UpgradeToJava21");

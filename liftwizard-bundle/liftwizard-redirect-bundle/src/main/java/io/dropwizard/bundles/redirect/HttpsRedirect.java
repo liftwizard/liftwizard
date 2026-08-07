@@ -18,37 +18,45 @@ package io.dropwizard.bundles.redirect;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HttpsRedirect implements Redirect {
-
+public class HttpsRedirect
+	implements Redirect
+{
 	private final boolean allowPrivateIps;
 
-	public HttpsRedirect() {
+	public HttpsRedirect()
+	{
 		this(true);
 	}
 
-	public HttpsRedirect(boolean allowPrivateIps) {
+	public HttpsRedirect(boolean allowPrivateIps)
+	{
 		this.allowPrivateIps = allowPrivateIps;
 	}
 
 	@Override
-	public String getRedirect(HttpServletRequest request) {
-		if ("https".equalsIgnoreCase(request.getScheme())) {
+	public String getRedirect(HttpServletRequest request)
+	{
+		if ("https".equalsIgnoreCase(request.getScheme()))
+		{
 			return null;
 		}
 
 		String forwardedProto = request.getHeader("X-Forwarded-Proto");
-		if ("https".equalsIgnoreCase(forwardedProto)) {
+		if ("https".equalsIgnoreCase(forwardedProto))
+		{
 			return null;
 		}
 
-		if (this.allowPrivateIps && this.isPrivateIp(request.getRemoteAddr())) {
+		if (this.allowPrivateIps && this.isPrivateIp(request.getRemoteAddr()))
+		{
 			return null;
 		}
 
 		return this.getRedirectUrl(request, "https");
 	}
 
-	private boolean isPrivateIp(String remoteAddr) {
+	private boolean isPrivateIp(String remoteAddr)
+	{
 		return (
 			remoteAddr.startsWith("10.")
 			|| remoteAddr.startsWith("192.168.")
@@ -57,20 +65,23 @@ public class HttpsRedirect implements Redirect {
 		);
 	}
 
-	private String getRedirectUrl(HttpServletRequest request, String scheme) {
+	private String getRedirectUrl(HttpServletRequest request, String scheme)
+	{
 		var url = new StringBuilder(scheme);
 		url.append("://");
 		url.append(request.getServerName());
 
 		int port = request.getServerPort();
-		if (port != 80 && port != 443) {
+		if (port != 80 && port != 443)
+		{
 			url.append(':').append(port);
 		}
 
 		url.append(request.getRequestURI());
 
 		String queryString = request.getQueryString();
-		if (queryString != null) {
+		if (queryString != null)
+		{
 			url.append('?').append(queryString);
 		}
 

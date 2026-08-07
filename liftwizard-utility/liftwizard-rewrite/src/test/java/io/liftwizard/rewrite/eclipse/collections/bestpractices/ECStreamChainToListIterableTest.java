@@ -21,42 +21,50 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-class ECStreamChainToListIterableTest extends AbstractEclipseCollectionsTest {
-
+class ECStreamChainToListIterableTest
+	extends AbstractEclipseCollectionsTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new ECStreamChainToListIterable());
 	}
 
 	@DocumentExample
 	@Test
-	void translateStreamChains() {
+	void translateStreamChains()
+	{
 		this.rewriteRun(this.javaFixture("translateStreamChains/01"));
 	}
 
 	@Test
-	void translateMatchTerminals() {
+	void translateMatchTerminals()
+	{
 		this.rewriteRun(this.javaFixture("translateMatchTerminals/01"));
 	}
 
 	@Test
-	void translateCollectorTerminals() {
+	void translateCollectorTerminals()
+	{
 		this.rewriteRun(this.javaFixture("translateCollectorTerminals/01"));
 	}
 
 	@Test
-	void translateSortedCountAndFindFirstTerminals() {
+	void translateSortedCountAndFindFirstTerminals()
+	{
 		this.rewriteRun(this.javaFixture("translateSortedCountAndFindFirstTerminals/01"));
 	}
 
 	@Test
-	void doNotReplaceUntranslatableReceivers() {
+	void doNotReplaceUntranslatableReceivers()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceUntranslatableReceivers/01"));
 	}
 
 	@Test
-	void doNotReplaceUntranslatableChains() {
+	void doNotReplaceUntranslatableChains()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceUntranslatableChains/01"));
 	}
 }

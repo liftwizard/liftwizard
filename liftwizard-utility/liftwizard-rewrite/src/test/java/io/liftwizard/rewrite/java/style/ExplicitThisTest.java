@@ -25,21 +25,25 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 @SuppressWarnings("deprecation")
-class ExplicitThisTest implements AbstractRewriteFixtures, RewriteTest {
-
+class ExplicitThisTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new ExplicitThis()).parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()));
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

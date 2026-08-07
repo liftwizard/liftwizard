@@ -30,13 +30,15 @@ import graphql.execution.preparsed.PreparsedDocumentProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CachingPreparsedDocumentProvider implements PreparsedDocumentProvider {
-
+public class CachingPreparsedDocumentProvider
+	implements PreparsedDocumentProvider
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(CachingPreparsedDocumentProvider.class);
 	private final Cache<String, PreparsedDocumentEntry> cache;
 	private final Meter cacheMisses;
 
-	public CachingPreparsedDocumentProvider(CacheBuilderSpec spec, MetricRegistry registry) {
+	public CachingPreparsedDocumentProvider(CacheBuilderSpec spec, MetricRegistry registry)
+	{
 		LOGGER.info("Query Cache: {}", spec);
 		this.cache = CacheBuilder.from(spec).build();
 
@@ -47,16 +49,21 @@ public class CachingPreparsedDocumentProvider implements PreparsedDocumentProvid
 	public PreparsedDocumentEntry getDocument(
 		ExecutionInput executionInput,
 		Function<ExecutionInput, PreparsedDocumentEntry> computeFunction
-	) {
+	)
+	{
 		final String query = executionInput.getQuery();
 
-		try {
-			return this.cache.get(query, () -> {
-					LOGGER.debug("Query cache miss: {}", query);
-					this.cacheMisses.mark();
-					return computeFunction.apply(executionInput);
-				});
-		} catch (ExecutionException e) {
+		try
+		{
+			return this.cache.get(query, () ->
+			{
+				LOGGER.debug("Query cache miss: {}", query);
+				this.cacheMisses.mark();
+				return computeFunction.apply(executionInput);
+			});
+		}
+		catch (ExecutionException e)
+		{
 			LOGGER.error("Unable to get document from cache", e);
 		}
 

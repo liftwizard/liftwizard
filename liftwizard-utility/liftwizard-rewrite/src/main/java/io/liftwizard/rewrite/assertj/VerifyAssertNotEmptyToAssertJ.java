@@ -29,21 +29,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 	name = "Replace `Verify.assertNotEmpty()` with AssertJ",
 	description = "Replace Eclipse Collections `Verify.assertNotEmpty()` with AssertJ `assertThat().isNotEmpty()`."
 )
-public class VerifyAssertNotEmptyToAssertJ {
-
+public class VerifyAssertNotEmptyToAssertJ
+{
 	@RecipeDescriptor(
 		name = "`Verify.assertNotEmpty(message, iterable)` → `assertThat(iterable).as(message).isNotEmpty()`",
 		description = "Replace `Verify.assertNotEmpty(message, iterable)` with `assertThat(iterable).as(message).isNotEmpty()`."
 	)
-	public static class VerifyAssertNotEmptyIterableWithMessage {
-
+	public static class VerifyAssertNotEmptyIterableWithMessage
+	{
 		@BeforeTemplate
-		void before(String message, Iterable<?> iterable) {
+		void before(String message, Iterable<?> iterable)
+		{
 			Verify.assertNotEmpty(message, iterable);
 		}
 
 		@AfterTemplate
-		void after(String message, Iterable<?> iterable) {
+		void after(String message, Iterable<?> iterable)
+		{
 			assertThat(iterable).as(message).isNotEmpty();
 		}
 	}
@@ -52,15 +54,17 @@ public class VerifyAssertNotEmptyToAssertJ {
 		name = "`Verify.assertNotEmpty(iterable)` → `assertThat(iterable).isNotEmpty()`",
 		description = "Replace `Verify.assertNotEmpty(iterable)` with `assertThat(iterable).isNotEmpty()`."
 	)
-	public static class VerifyAssertNotEmptyIterable {
-
+	public static class VerifyAssertNotEmptyIterable
+	{
 		@BeforeTemplate
-		void before(Iterable<?> iterable) {
+		void before(Iterable<?> iterable)
+		{
 			Verify.assertNotEmpty(iterable);
 		}
 
 		@AfterTemplate
-		void after(Iterable<?> iterable) {
+		void after(Iterable<?> iterable)
+		{
 			assertThat(iterable).isNotEmpty();
 		}
 	}
@@ -69,15 +73,17 @@ public class VerifyAssertNotEmptyToAssertJ {
 		name = "`Verify.assertNotEmpty(message, map)` → `assertThat(map).as(message).isNotEmpty()`",
 		description = "Replace `Verify.assertNotEmpty(message, map)` with `assertThat(map).as(message).isNotEmpty()`."
 	)
-	public static class VerifyAssertNotEmptyMapWithMessage {
-
+	public static class VerifyAssertNotEmptyMapWithMessage
+	{
 		@BeforeTemplate
-		void before(String message, Map<?, ?> map) {
+		void before(String message, Map<?, ?> map)
+		{
 			Verify.assertNotEmpty(message, map);
 		}
 
 		@AfterTemplate
-		void after(String message, Map<?, ?> map) {
+		void after(String message, Map<?, ?> map)
+		{
 			assertThat(map).as(message).isNotEmpty();
 		}
 	}
@@ -86,15 +92,17 @@ public class VerifyAssertNotEmptyToAssertJ {
 		name = "`Verify.assertNotEmpty(map)` → `assertThat(map).isNotEmpty()`",
 		description = "Replace `Verify.assertNotEmpty(map)` with `assertThat(map).isNotEmpty()`."
 	)
-	public static class VerifyAssertNotEmptyMap {
-
+	public static class VerifyAssertNotEmptyMap
+	{
 		@BeforeTemplate
-		void before(Map<?, ?> map) {
+		void before(Map<?, ?> map)
+		{
 			Verify.assertNotEmpty(map);
 		}
 
 		@AfterTemplate
-		void after(Map<?, ?> map) {
+		void after(Map<?, ?> map)
+		{
 			assertThat(map).isNotEmpty();
 		}
 	}
@@ -103,15 +111,17 @@ public class VerifyAssertNotEmptyToAssertJ {
 		name = "`Verify.assertNotEmpty(message, array)` → `assertThat(array).as(message).isNotEmpty()`",
 		description = "Replace `Verify.assertNotEmpty(message, array)` with `assertThat(array).as(message).isNotEmpty()`."
 	)
-	public static class VerifyAssertNotEmptyArrayWithMessage<T> {
-
+	public static class VerifyAssertNotEmptyArrayWithMessage<T>
+	{
 		@BeforeTemplate
-		void before(String message, T[] array) {
+		void before(String message, T[] array)
+		{
 			Verify.assertNotEmpty(message, array);
 		}
 
 		@AfterTemplate
-		void after(String message, T[] array) {
+		void after(String message, T[] array)
+		{
 			assertThat(array).as(message).isNotEmpty();
 		}
 	}
@@ -120,15 +130,17 @@ public class VerifyAssertNotEmptyToAssertJ {
 		name = "`Verify.assertNotEmpty(array)` → `assertThat(array).isNotEmpty()`",
 		description = "Replace `Verify.assertNotEmpty(array)` with `assertThat(array).isNotEmpty()`."
 	)
-	public static class VerifyAssertNotEmptyArray<T> {
-
+	public static class VerifyAssertNotEmptyArray<T>
+	{
 		@BeforeTemplate
-		void before(T[] array) {
+		void before(T[] array)
+		{
 			Verify.assertNotEmpty(array);
 		}
 
 		@AfterTemplate
-		void after(T[] array) {
+		void after(T[] array)
+		{
 			assertThat(array).isNotEmpty();
 		}
 	}

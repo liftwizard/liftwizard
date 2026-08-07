@@ -27,24 +27,27 @@ import org.openrewrite.java.search.UsesType;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class Dropwizard3IAccessEventGetSequenceNumber extends Recipe {
-
+public class Dropwizard3IAccessEventGetSequenceNumber
+	extends Recipe
+{
 	private static final String I_ACCESS_EVENT = "ch.qos.logback.access.spi.IAccessEvent";
 	private static final String I_ACCESS_EVENT_STUB = """
-		package ch.qos.logback.access.spi;
+	package ch.qos.logback.access.spi;
 
-		public interface IAccessEvent {
-		    long getSequenceNumber();
-		}
-		""";
+	public interface IAccessEvent {
+	    long getSequenceNumber();
+	}
+	""";
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Add getSequenceNumber() stub to IAccessEvent implementations";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Logback 1.5.x added `long getSequenceNumber()` to `ch.qos.logback.access.spi.IAccessEvent`. "
 			+ "Classes implementing IAccessEvent without overriding it will fail to compile. "
@@ -55,23 +58,29 @@ public class Dropwizard3IAccessEventGetSequenceNumber extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesType<>(I_ACCESS_EVENT, false), new GetSequenceNumberVisitor());
 	}
 
-	private static final class GetSequenceNumberVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class GetSequenceNumberVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+		{
 			J.ClassDeclaration cd = super.visitClassDeclaration(classDecl, ctx);
 
-			if (cd.getKind() == J.ClassDeclaration.Kind.Type.Interface) {
+			if (cd.getKind() == J.ClassDeclaration.Kind.Type.Interface)
+			{
 				return cd;
 			}
-			if (!implementsIAccessEvent(cd)) {
+			if (!implementsIAccessEvent(cd))
+			{
 				return cd;
 			}
-			if (alreadyDeclaresGetSequenceNumber(cd)) {
+			if (alreadyDeclaresGetSequenceNumber(cd))
+			{
 				return cd;
 			}
 
@@ -90,8 +99,10 @@ public class Dropwizard3IAccessEventGetSequenceNumber extends Recipe {
 				.apply(this.updateCursor(cd), cd.getBody().getCoordinates().lastStatement());
 		}
 
-		private static boolean implementsIAccessEvent(J.ClassDeclaration cd) {
-			if (cd.getImplements() == null) {
+		private static boolean implementsIAccessEvent(J.ClassDeclaration cd)
+		{
+			if (cd.getImplements() == null)
+			{
 				return false;
 			}
 			return cd
@@ -100,7 +111,8 @@ public class Dropwizard3IAccessEventGetSequenceNumber extends Recipe {
 				.anyMatch((typeTree) -> TypeUtils.isOfClassType(typeTree.getType(), I_ACCESS_EVENT));
 		}
 
-		private static boolean alreadyDeclaresGetSequenceNumber(J.ClassDeclaration cd) {
+		private static boolean alreadyDeclaresGetSequenceNumber(J.ClassDeclaration cd)
+		{
 			return cd
 				.getBody()
 				.getStatements()
@@ -110,7 +122,8 @@ public class Dropwizard3IAccessEventGetSequenceNumber extends Recipe {
 				.anyMatch(GetSequenceNumberVisitor::isGetSequenceNumber);
 		}
 
-		private static boolean isGetSequenceNumber(J.MethodDeclaration method) {
+		private static boolean isGetSequenceNumber(J.MethodDeclaration method)
+		{
 			return "getSequenceNumber".equals(method.getSimpleName()) && method.getParameters().size() == 1;
 		}
 	}

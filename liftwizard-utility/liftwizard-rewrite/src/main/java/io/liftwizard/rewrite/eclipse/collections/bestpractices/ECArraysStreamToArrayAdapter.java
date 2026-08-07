@@ -57,8 +57,9 @@ import org.openrewrite.java.tree.JavaType;
  * overloads ({@code int[]}, {@code long[]}, {@code double[]}) or the range overload — and the
  * root is replaced with {@code ArrayAdapter.adapt(array)}.
  */
-public class ECArraysStreamToArrayAdapter extends Recipe {
-
+public class ECArraysStreamToArrayAdapter
+	extends Recipe
+{
 	private static final MethodMatcher ARRAYS_STREAM_MATCHER = new MethodMatcher("java.util.Arrays stream(..)");
 
 	private static final List<String> STUBS = List.of(
@@ -71,12 +72,14 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`Arrays.stream(array)` -> `ArrayAdapter.adapt(array)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `Arrays.stream(array)` chains to `ArrayAdapter.adapt(array)` chains, "
 			+ "renaming intermediate operations to their Eclipse Collections equivalents "
@@ -87,48 +90,57 @@ public class ECArraysStreamToArrayAdapter extends Recipe {
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(15);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(ARRAYS_STREAM_MATCHER), new ECArraysStreamToArrayAdapterVisitor());
 	}
 
-	private static final class ECArraysStreamToArrayAdapterVisitor extends AbstractECStreamChainVisitor {
-
+	private static final class ECArraysStreamToArrayAdapterVisitor
+		extends AbstractECStreamChainVisitor
+	{
 		private static final JavaTemplate ARRAY_ADAPTER_ADAPT = JavaTemplate.builder("ArrayAdapter.adapt(#{any()})")
 			.imports("org.eclipse.collections.impl.list.fixed.ArrayAdapter")
 			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 			.build();
 
 		@Override
-		protected boolean isChainRoot(J.MethodInvocation invocation) {
+		protected boolean isChainRoot(J.MethodInvocation invocation)
+		{
 			return ARRAYS_STREAM_MATCHER.matches(invocation);
 		}
 
 		@Override
-		protected boolean isRootTranslatable(J.MethodInvocation root) {
-			if (root.getArguments().size() != 1) {
+		protected boolean isRootTranslatable(J.MethodInvocation root)
+		{
+			if (root.getArguments().size() != 1)
+			{
 				return false;
 			}
 
 			// Only match Object[] arrays, not primitive arrays (int[], long[], double[])
 			JavaType argType = root.getArguments().get(0).getType();
-			if (argType instanceof JavaType.Array arrayType && arrayType.getElemType() instanceof JavaType.Primitive) {
+			if (argType instanceof JavaType.Array arrayType && arrayType.getElemType() instanceof JavaType.Primitive)
+			{
 				return false;
 			}
 			return true;
 		}
 
 		@Override
-		protected J.MethodInvocation visitTranslatableRoot(J.MethodInvocation root) {
+		protected J.MethodInvocation visitTranslatableRoot(J.MethodInvocation root)
+		{
 			this.maybeRemoveImport("java.util.Arrays");
 			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
 			return ARRAY_ADAPTER_ADAPT.apply(

@@ -54,17 +54,20 @@ import org.openrewrite.java.tree.TypeUtils;
  * container kind, so on a set {@code collect} deduplicates mapped values while
  * {@code stream().map} does not. List receivers keep order and duplicates in both worlds.
  */
-public class ECStreamChainToListIterable extends Recipe {
-
+public class ECStreamChainToListIterable
+	extends Recipe
+{
 	private static final MethodMatcher STREAM_MATCHER = new MethodMatcher("java.util.Collection stream()", true);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`ecList.stream()` chains to Eclipse Collections call chains";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `stream()` chains on Eclipse Collections lists to direct Eclipse Collections call chains, "
 			+ "renaming intermediate operations to their Eclipse Collections equivalents "
@@ -75,29 +78,35 @@ public class ECStreamChainToListIterable extends Recipe {
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(15);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(STREAM_MATCHER), new ECStreamChainToListIterableVisitor());
 	}
 
-	private static final class ECStreamChainToListIterableVisitor extends AbstractECStreamChainVisitor {
-
+	private static final class ECStreamChainToListIterableVisitor
+		extends AbstractECStreamChainVisitor
+	{
 		@Override
-		protected boolean isChainRoot(J.MethodInvocation invocation) {
+		protected boolean isChainRoot(J.MethodInvocation invocation)
+		{
 			return STREAM_MATCHER.matches(invocation);
 		}
 
 		@Override
-		protected boolean isRootTranslatable(J.MethodInvocation root) {
+		protected boolean isRootTranslatable(J.MethodInvocation root)
+		{
 			Expression receiver = root.getSelect();
 			return (
 				receiver != null
@@ -106,7 +115,8 @@ public class ECStreamChainToListIterable extends Recipe {
 		}
 
 		@Override
-		protected J.MethodInvocation replaceRootIn(J.MethodInvocation linkAboveRoot) {
+		protected J.MethodInvocation replaceRootIn(J.MethodInvocation linkAboveRoot)
+		{
 			J.MethodInvocation streamCall = (J.MethodInvocation) linkAboveRoot.getSelect();
 			return linkAboveRoot.withSelect(streamCall.getSelect().withPrefix(streamCall.getPrefix()));
 		}

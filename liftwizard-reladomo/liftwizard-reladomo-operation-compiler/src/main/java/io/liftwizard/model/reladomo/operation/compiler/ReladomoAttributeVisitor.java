@@ -41,26 +41,31 @@ import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<Attribute> {
-
+public class ReladomoAttributeVisitor
+	extends ReladomoOperationThrowingVisitor<Attribute>
+{
 	private final RelatedFinder finder;
 	private final String errorContext;
 
-	public ReladomoAttributeVisitor(RelatedFinder finder, String errorContext) {
+	public ReladomoAttributeVisitor(RelatedFinder finder, String errorContext)
+	{
 		this.finder = Objects.requireNonNull(finder);
 		this.errorContext = Objects.requireNonNull(errorContext);
 	}
 
 	@Override
-	public Attribute visitAttribute(AttributeContext ctx) {
+	public Attribute visitAttribute(AttributeContext ctx)
+	{
 		return this.visitChildren(ctx);
 	}
 
 	@Override
-	public Attribute visitFunctionToLowerCase(FunctionToLowerCaseContext ctx) {
+	public Attribute visitFunctionToLowerCase(FunctionToLowerCaseContext ctx)
+	{
 		Attribute attribute = ctx.attribute().accept(this);
 
-		if (!(attribute instanceof StringAttribute)) {
+		if (!(attribute instanceof StringAttribute))
+		{
 			String error = "Function '%s' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
 				ctx.functionName.getText(),
 				attribute.getAttributeName(),
@@ -75,10 +80,12 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	}
 
 	@Override
-	public Attribute visitFunctionToSubstring(FunctionToSubstringContext ctx) {
+	public Attribute visitFunctionToSubstring(FunctionToSubstringContext ctx)
+	{
 		Attribute attribute = ctx.attribute().accept(this);
 
-		if (!(attribute instanceof StringAttribute)) {
+		if (!(attribute instanceof StringAttribute))
+		{
 			String error =
 				"Function 'substring' applies to StringAttributes but attribute '%s' is a %s in %s".formatted(
 					attribute.getAttributeName(),
@@ -97,10 +104,12 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	}
 
 	@Override
-	public Attribute visitFunctionAbsoluteValue(FunctionAbsoluteValueContext ctx) {
+	public Attribute visitFunctionAbsoluteValue(FunctionAbsoluteValueContext ctx)
+	{
 		Attribute attribute = ctx.attribute().accept(this);
 
-		if (!(attribute instanceof NumericAttribute)) {
+		if (!(attribute instanceof NumericAttribute))
+		{
 			String error = "Function '%s' applies to NumericAttributes but attribute '%s' is a %s in %s".formatted(
 				ctx.functionName.getText(),
 				attribute.getAttributeName(),
@@ -115,13 +124,16 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	}
 
 	@Override
-	public Attribute visitFunctionYear(FunctionYearContext ctx) {
+	public Attribute visitFunctionYear(FunctionYearContext ctx)
+	{
 		Attribute attribute = ctx.attribute().accept(this);
 
-		if (attribute instanceof TimestampAttribute timestampAttribute) {
+		if (attribute instanceof TimestampAttribute timestampAttribute)
+		{
 			return timestampAttribute.year();
 		}
-		if (attribute instanceof DateAttribute dateAttribute) {
+		if (attribute instanceof DateAttribute dateAttribute)
+		{
 			return dateAttribute.year();
 		}
 
@@ -136,13 +148,16 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	}
 
 	@Override
-	public Attribute visitFunctionMonth(FunctionMonthContext ctx) {
+	public Attribute visitFunctionMonth(FunctionMonthContext ctx)
+	{
 		Attribute attribute = ctx.attribute().accept(this);
 
-		if (attribute instanceof TimestampAttribute timestampAttribute) {
+		if (attribute instanceof TimestampAttribute timestampAttribute)
+		{
 			return timestampAttribute.month();
 		}
-		if (attribute instanceof DateAttribute dateAttribute) {
+		if (attribute instanceof DateAttribute dateAttribute)
+		{
 			return dateAttribute.month();
 		}
 
@@ -157,13 +172,16 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	}
 
 	@Override
-	public Attribute visitFunctionDayOfMonth(FunctionDayOfMonthContext ctx) {
+	public Attribute visitFunctionDayOfMonth(FunctionDayOfMonthContext ctx)
+	{
 		Attribute attribute = ctx.attribute().accept(this);
 
-		if (attribute instanceof TimestampAttribute timestampAttribute) {
+		if (attribute instanceof TimestampAttribute timestampAttribute)
+		{
 			return timestampAttribute.dayOfMonth();
 		}
-		if (attribute instanceof DateAttribute dateAttribute) {
+		if (attribute instanceof DateAttribute dateAttribute)
+		{
 			return dateAttribute.dayOfMonth();
 		}
 
@@ -178,18 +196,21 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 	}
 
 	@Override
-	public Attribute visitFunctionUnknown(FunctionUnknownContext ctx) {
+	public Attribute visitFunctionUnknown(FunctionUnknownContext ctx)
+	{
 		String error = "Unknown function '%s' in %s".formatted(ctx.functionName.getText(), this.errorContext);
 
 		throw new IllegalArgumentException(error);
 	}
 
 	@Override
-	public Attribute visitSimpleAttribute(SimpleAttributeContext ctx) {
+	public Attribute visitSimpleAttribute(SimpleAttributeContext ctx)
+	{
 		if (
 			ctx.className() != null
 			&& !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
-		) {
+		)
+		{
 			String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(
 				this.getExpectedClassName(this.finder),
 				ctx.className().getText(),
@@ -200,9 +221,11 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
 		RelatedFinder currentFinder = this.finder;
 		MutableList<String> relationshipNames = ListAdapter.adapt(ctx.relationshipName()).collect(RuleContext::getText);
-		for (String relationshipName : relationshipNames) {
+		for (String relationshipName : relationshipNames)
+		{
 			RelatedFinder nextFinder = currentFinder.getRelationshipFinderByName(relationshipName);
-			if (nextFinder == null) {
+			if (nextFinder == null)
+			{
 				List<RelatedFinder> relationshipFinders = currentFinder.getRelationshipFinders();
 				MutableList<String> validRelationshipNames = ListAdapter.adapt(relationshipFinders)
 					.selectInstancesOf(AbstractRelatedFinder.class)
@@ -221,7 +244,8 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 
 		String attributeName = ctx.attributeName().getText();
 		Attribute attribute = currentFinder.getAttributeByName(attributeName);
-		if (attribute == null) {
+		if (attribute == null)
+		{
 			Attribute[] persistentAttributes = currentFinder
 				.getMithraObjectPortal()
 				.getFinder()
@@ -240,7 +264,8 @@ public class ReladomoAttributeVisitor extends ReladomoOperationThrowingVisitor<A
 		return attribute;
 	}
 
-	public String getExpectedClassName(RelatedFinder relatedFinder) {
+	public String getExpectedClassName(RelatedFinder relatedFinder)
+	{
 		return relatedFinder.getMithraObjectPortal().getClassMetaData().getBusinessOrInterfaceClass().getSimpleName();
 	}
 }

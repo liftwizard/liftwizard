@@ -29,21 +29,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "`Iterate.collect(mutableCollection, function)` -> `mutableCollection.collect(function)`",
 	description = "Transforms `Iterate.collect(mutableCollection, function)` to `mutableCollection.collect(function)` when the iterable is already an Eclipse Collections MutableCollection. The Iterate utility is for JCF interop; it is redundant when used with EC types."
 )
-public class IterateCollectRedundant {
-
+public class IterateCollectRedundant
+{
 	@RecipeDescriptor(
 		name = "`Iterate.collect(mutableCollection, function)` -> `mutableCollection.collect(function)`",
 		description = "Converts `Iterate.collect(mutableCollection, function)` to `mutableCollection.collect(function)` when the iterable is a MutableCollection."
 	)
-	public static final class IterateCollectToMutableCollectionCollect<T, V> {
-
+	public static final class IterateCollectToMutableCollectionCollect<T, V>
+	{
 		@BeforeTemplate
-		Collection<V> before(MutableCollection<T> iterable, Function<? super T, ? extends V> function) {
+		Collection<V> before(MutableCollection<T> iterable, Function<? super T, ? extends V> function)
+		{
 			return Iterate.collect(iterable, function);
 		}
 
 		@AfterTemplate
-		MutableCollection<V> after(MutableCollection<T> iterable, Function<? super T, ? extends V> function) {
+		MutableCollection<V> after(MutableCollection<T> iterable, Function<? super T, ? extends V> function)
+		{
 			return iterable.collect(function);
 		}
 	}

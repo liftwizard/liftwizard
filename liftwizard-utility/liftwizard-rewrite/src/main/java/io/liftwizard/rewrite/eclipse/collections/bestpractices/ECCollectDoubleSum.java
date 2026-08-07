@@ -26,21 +26,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "`collectDouble(fn).sum()` -> `sumOfDouble(fn)`",
 	description = "Transforms `iterable.collectDouble(fn).sum()` to `iterable.sumOfDouble(fn)` for Eclipse Collections types. This avoids the intermediate primitive collection allocation."
 )
-public class ECCollectDoubleSum {
-
+public class ECCollectDoubleSum
+{
 	@RecipeDescriptor(
 		name = "`collectDouble(fn).sum()` -> `sumOfDouble(fn)`",
 		description = "Converts `iterable.collectDouble(fn).sum()` to `iterable.sumOfDouble(fn)`."
 	)
-	public static final class CollectDoubleSumToSumOfDouble<T> {
-
+	public static final class CollectDoubleSumToSumOfDouble<T>
+	{
 		@BeforeTemplate
-		double before(RichIterable<T> iterable, DoubleFunction<? super T> function) {
+		double before(RichIterable<T> iterable, DoubleFunction<? super T> function)
+		{
 			return iterable.collectDouble(function).sum();
 		}
 
 		@AfterTemplate
-		double after(RichIterable<T> iterable, DoubleFunction<? super T> function) {
+		double after(RichIterable<T> iterable, DoubleFunction<? super T> function)
+		{
 			return iterable.sumOfDouble(function);
 		}
 	}

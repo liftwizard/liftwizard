@@ -28,15 +28,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 	name = "`Verify.assertCount(expectedCount, iterable, predicate)` → `assertThat(iterable).filteredOn(predicate).hasSize(expectedCount)`",
 	description = "Replace `Verify.assertCount(expectedCount, iterable, predicate)` with `assertThat(iterable).filteredOn(predicate).hasSize(expectedCount)`."
 )
-public class VerifyAssertCountToAssertJ<T> {
-
+public class VerifyAssertCountToAssertJ<T>
+{
 	@BeforeTemplate
-	void before(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {
+	void before(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate)
+	{
 		Verify.assertCount(expectedCount, iterable, predicate);
 	}
 
 	@AfterTemplate
-	void after(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {
+	void after(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate)
+	{
 		assertThat(iterable).filteredOn(predicate).hasSize(expectedCount);
 	}
 }

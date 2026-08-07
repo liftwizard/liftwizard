@@ -4,19 +4,25 @@ import java.util.Collection;
 
 import com.gs.fw.finder.Operation;
 
-public class PersonList extends PersonListAbstract {
+public class PersonList
+	extends PersonListAbstract
+{
+	public PersonList()
+	{
+	}
 
-	public PersonList() {}
-
-	public PersonList(int initialSize) {
+	public PersonList(int initialSize)
+	{
 		super(initialSize);
 	}
 
-	public PersonList(Collection c) {
+	public PersonList(Collection c)
+	{
 		super(c);
 	}
 
-	public PersonList(Operation operation) {
+	public PersonList(Operation operation)
+	{
 		super(operation);
 	}
 }

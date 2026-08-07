@@ -31,8 +31,9 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class UnwrapDropwizardParam extends Recipe {
-
+public class UnwrapDropwizardParam
+	extends Recipe
+{
 	@Option(
 		displayName = "Old param type",
 		description = "Fully qualified name of the Dropwizard *Param class to unwrap.",
@@ -51,13 +52,15 @@ public class UnwrapDropwizardParam extends Recipe {
 	public UnwrapDropwizardParam(
 		@JsonProperty("oldParamType") String oldParamType,
 		@JsonProperty("newType") String newType
-	) {
+	)
+	{
 		this.oldParamType = oldParamType;
 		this.newType = newType;
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return MessageFormat.format(
 			"Unwrap `{0}` to `{1}`",
 			getSimpleName(this.oldParamType),
@@ -66,58 +69,70 @@ public class UnwrapDropwizardParam extends Recipe {
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return MessageFormat.format(
 			"Replaces `{0}` with `{1}` and removes `.get()` calls, "
-			+ "since the Dropwizard *Param wrapper is no longer needed.",
+				+ "since the Dropwizard *Param wrapper is no longer needed.",
 			this.oldParamType,
 			this.newType
 		);
 	}
 
 	@Override
-	public List<Recipe> getRecipeList() {
+	public List<Recipe> getRecipeList()
+	{
 		return List.of(new UnwrapGetCalls(this.oldParamType), new ChangeType(this.oldParamType, this.newType, true));
 	}
 
-	private static String getSimpleName(String fqn) {
+	private static String getSimpleName(String fqn)
+	{
 		int lastDot = fqn.lastIndexOf('.');
 		return lastDot >= 0 ? fqn.substring(lastDot + 1) : fqn;
 	}
 
-	private static class UnwrapGetCalls extends Recipe {
-
+	private static class UnwrapGetCalls
+		extends Recipe
+	{
 		private final String oldParamType;
 		private final MethodMatcher getMatcher;
 
-		UnwrapGetCalls(String oldParamType) {
+		UnwrapGetCalls(String oldParamType)
+		{
 			this.oldParamType = oldParamType;
 			this.getMatcher = new MethodMatcher(oldParamType + " get()");
 		}
 
 		@Override
-		public String getDisplayName() {
+		public String getDisplayName()
+		{
 			return "Remove `.get()` calls on `" + getSimpleName(this.oldParamType) + '`';
 		}
 
 		@Override
-		public String getDescription() {
+		public String getDescription()
+		{
 			return "Replaces `param.get()` with `param` for " + this.oldParamType + " instances.";
 		}
 
 		@Override
-		public TreeVisitor<?, ExecutionContext> getVisitor() {
-			return new JavaVisitor<>() {
+		public TreeVisitor<?, ExecutionContext> getVisitor()
+		{
+			return new JavaVisitor<>()
+			{
 				@Override
-				public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+				public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+				{
 					J.MethodInvocation mi = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
-					if (!UnwrapGetCalls.this.getMatcher.matches(mi)) {
+					if (!UnwrapGetCalls.this.getMatcher.matches(mi))
+					{
 						return mi;
 					}
 
 					Expression select = mi.getSelect();
-					if (select == null) {
+					if (select == null)
+					{
 						return mi;
 					}
 

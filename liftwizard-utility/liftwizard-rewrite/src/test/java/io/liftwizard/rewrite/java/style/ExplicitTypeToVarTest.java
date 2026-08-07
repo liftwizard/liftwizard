@@ -24,20 +24,24 @@ import org.openrewrite.test.RewriteTest;
 import static org.openrewrite.java.Assertions.javaVersion;
 
 @SuppressWarnings("deprecation")
-class ExplicitTypeToVarTest implements AbstractRewriteFixtures, RewriteTest {
-
+class ExplicitTypeToVarTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new ExplicitTypeToVar()).allSources((src) -> src.markers(javaVersion(17)));
 	}
 
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

@@ -28,25 +28,33 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class DeleteAllFilesVisitor extends SimpleFileVisitor<Path> {
-
+final class DeleteAllFilesVisitor
+	extends SimpleFileVisitor<Path>
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteAllFilesVisitor.class);
 
 	@Override
-	public FileVisitResult visitFile(@Nonnull Path path, @Nonnull BasicFileAttributes attributes) throws IOException {
+	public FileVisitResult visitFile(@Nonnull Path path, @Nonnull BasicFileAttributes attributes)
+		throws IOException
+	{
 		Files.delete(path);
 		return FileVisitResult.CONTINUE;
 	}
 
 	@Override
-	public FileVisitResult visitFileFailed(@Nonnull Path path, @Nonnull IOException exception) throws IOException {
+	public FileVisitResult visitFileFailed(@Nonnull Path path, @Nonnull IOException exception)
+		throws IOException
+	{
 		LOGGER.warn("Failed to visit path {}: {}", path, exception.getMessage());
 		throw exception;
 	}
 
 	@Override
-	public FileVisitResult postVisitDirectory(@Nonnull Path path, IOException exception) throws IOException {
-		if (exception != null) {
+	public FileVisitResult postVisitDirectory(@Nonnull Path path, IOException exception)
+		throws IOException
+	{
+		if (exception != null)
+		{
 			LOGGER.warn("Error occurred while traversing directory {}: {}", path, exception.getMessage());
 			throw exception;
 		}

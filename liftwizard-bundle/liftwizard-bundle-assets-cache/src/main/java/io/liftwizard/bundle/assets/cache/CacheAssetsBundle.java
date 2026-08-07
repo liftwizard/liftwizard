@@ -8,8 +8,9 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.servlets.assets.AssetServlet;
 import io.liftwizard.servlet.assets.cache.CacheAssetServlet;
 
-public class CacheAssetsBundle extends AssetsBundle {
-
+public class CacheAssetsBundle
+	extends AssetsBundle
+{
 	private final long amountToAdd;
 	private final TemporalUnit temporalUnit;
 	private final Clock clock;
@@ -22,7 +23,8 @@ public class CacheAssetsBundle extends AssetsBundle {
 		long amountToAdd,
 		TemporalUnit temporalUnit,
 		Clock clock
-	) {
+	)
+	{
 		super(resourcePath, uriPath, indexFile, assetsName);
 		this.amountToAdd = amountToAdd;
 		this.temporalUnit = temporalUnit;
@@ -36,12 +38,14 @@ public class CacheAssetsBundle extends AssetsBundle {
 		String assetsName,
 		long amountToAdd,
 		TemporalUnit temporalUnit
-	) {
+	)
+	{
 		this(resourcePath, uriPath, indexFile, assetsName, amountToAdd, temporalUnit, Clock.systemUTC());
 	}
 
 	@Override
-	protected AssetServlet createServlet() {
+	protected AssetServlet createServlet()
+	{
 		return new CacheAssetServlet(
 			this.getResourcePath(),
 			this.getUriPath(),

@@ -24,28 +24,33 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class ParameterizedLoggingTest implements AbstractRewriteFixtures, RewriteTest {
-
+class ParameterizedLoggingTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", null))
-			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("slf4j-api"));
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", null)).parser(
+			JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("slf4j-api")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 
 	@Test
-	void removeToStringWhenEnabled() {
+	void removeToStringWhenEnabled()
+	{
 		this.rewriteRun(
 			(spec) -> spec.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", true)),
 			this.javaFixture("removeToStringWhenEnabled/01")

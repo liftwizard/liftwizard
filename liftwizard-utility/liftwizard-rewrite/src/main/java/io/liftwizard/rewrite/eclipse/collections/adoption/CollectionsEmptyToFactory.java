@@ -35,37 +35,44 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
 import org.openrewrite.java.tree.J;
 
-public class CollectionsEmptyToFactory extends Recipe {
-
+public class CollectionsEmptyToFactory
+	extends Recipe
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Replace Collections.empty*() with Eclipse Collections factories";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Replace `Collections.emptyList()`, `Collections.emptySet()`, `Collections.emptyMap()`, `Collections.emptySortedSet()`, and `Collections.emptySortedMap()` with Eclipse Collections factory methods.";
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(15);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new CollectionsEmptyToFactoryVisitor();
 	}
 
-	private static final class CollectionsEmptyToFactoryVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class CollectionsEmptyToFactoryVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private static final MethodMatcher EMPTY_LIST = new MethodMatcher("java.util.Collections emptyList()");
 		private static final MethodMatcher EMPTY_SET = new MethodMatcher("java.util.Collections emptySet()");
 		private static final MethodMatcher EMPTY_MAP = new MethodMatcher("java.util.Collections emptyMap()");
@@ -77,35 +84,47 @@ public class CollectionsEmptyToFactory extends Recipe {
 		);
 
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
 			String factoryClass = null;
 			String factoryMethod = null;
 
-			if (EMPTY_LIST.matches(mi)) {
+			if (EMPTY_LIST.matches(mi))
+			{
 				factoryClass = "Lists";
 				factoryMethod = "fixedSize";
-			} else if (EMPTY_SET.matches(mi)) {
+			}
+			else if (EMPTY_SET.matches(mi))
+			{
 				factoryClass = "Sets";
 				factoryMethod = "fixedSize";
-			} else if (EMPTY_MAP.matches(mi)) {
+			}
+			else if (EMPTY_MAP.matches(mi))
+			{
 				factoryClass = "Maps";
 				factoryMethod = "fixedSize";
-			} else if (EMPTY_SORTED_SET.matches(mi)) {
+			}
+			else if (EMPTY_SORTED_SET.matches(mi))
+			{
 				factoryClass = "SortedSets";
 				factoryMethod = "mutable";
-			} else if (EMPTY_SORTED_MAP.matches(mi)) {
+			}
+			else if (EMPTY_SORTED_MAP.matches(mi))
+			{
 				factoryClass = "SortedMaps";
 				factoryMethod = "mutable";
 			}
 
-			if (factoryClass == null) {
+			if (factoryClass == null)
+			{
 				return mi;
 			}
 
 			Optional<String> factoryType = FactoryTypeResolver.resolve(this.getCursor(), factoryClass);
-			if (factoryType.isEmpty()) {
+			if (factoryType.isEmpty())
+			{
 				return mi;
 			}
 			String factoryImport = factoryType.get();
@@ -128,8 +147,10 @@ public class CollectionsEmptyToFactory extends Recipe {
 			return replacement;
 		}
 
-		private String extractTypeParameters(J.MethodInvocation mi) {
-			if (Iterate.notEmpty(mi.getTypeParameters())) {
+		private String extractTypeParameters(J.MethodInvocation mi)
+		{
+			if (Iterate.notEmpty(mi.getTypeParameters()))
+			{
 				return mi
 					.getTypeParameters()
 					.stream()
@@ -139,13 +160,17 @@ public class CollectionsEmptyToFactory extends Recipe {
 			return "";
 		}
 
-		private String formatTypeTree(Object tree) {
-			if (tree instanceof J.Identifier identifier) {
+		private String formatTypeTree(Object tree)
+		{
+			if (tree instanceof J.Identifier identifier)
+			{
 				return identifier.getSimpleName();
 			}
-			if (tree instanceof J.ParameterizedType paramType) {
+			if (tree instanceof J.ParameterizedType paramType)
+			{
 				String base = this.formatTypeTree(paramType.getClazz());
-				if (Iterate.notEmpty(paramType.getTypeParameters())) {
+				if (Iterate.notEmpty(paramType.getTypeParameters()))
+				{
 					String params = paramType
 						.getTypeParameters()
 						.stream()

@@ -24,121 +24,123 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class DropwizardTestingJUnit5MigrationTest implements AbstractRewriteFixtures, RewriteTest {
-
+class DropwizardTestingJUnit5MigrationTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration")
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package io.dropwizard.testing.junit;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration").parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package io.dropwizard.testing.junit;
 
-						public class DropwizardAppRule<C> {
-							public DropwizardAppRule(Class<?> applicationClass, String configPath) {}
+					public class DropwizardAppRule<C> {
+						public DropwizardAppRule(Class<?> applicationClass, String configPath) {}
+					}
+					""",
+					"""
+					package io.dropwizard.testing.junit;
+
+					public class DropwizardClientRule {
+						public DropwizardClientRule(Object... resources) {}
+					}
+					""",
+					"""
+					package io.dropwizard.testing.junit;
+
+					public class ResourceTestRule {
+						public static Builder builder() {
+							return new Builder();
 						}
-						""",
-						"""
-						package io.dropwizard.testing.junit;
 
-						public class DropwizardClientRule {
-							public DropwizardClientRule(Object... resources) {}
-						}
-						""",
-						"""
-						package io.dropwizard.testing.junit;
-
-						public class ResourceTestRule {
-							public static Builder builder() {
-								return new Builder();
+						public static class Builder {
+							public Builder addResource(Object resource) {
+								return this;
 							}
 
-							public static class Builder {
-								public Builder addResource(Object resource) {
-									return this;
-								}
-
-								public ResourceTestRule build() {
-									return new ResourceTestRule();
-								}
+							public ResourceTestRule build() {
+								return new ResourceTestRule();
 							}
 						}
-						""",
-						"""
-						package io.liftwizard.junit.extension.app;
+					}
+					""",
+					"""
+					package io.liftwizard.junit.extension.app;
 
-						public class LiftwizardAppExtension<C> {
-							public LiftwizardAppExtension(Class<?> applicationClass, String configPath) {}
+					public class LiftwizardAppExtension<C> {
+						public LiftwizardAppExtension(Class<?> applicationClass, String configPath) {}
+					}
+					""",
+					"""
+					package io.dropwizard.testing.junit5;
+
+					public class DropwizardClientExtension {
+						public DropwizardClientExtension(Object... resources) {}
+					}
+					""",
+					"""
+					package io.dropwizard.testing.junit5;
+
+					public class ResourceExtension {
+						public static Builder builder() {
+							return new Builder();
 						}
-						""",
-						"""
-						package io.dropwizard.testing.junit5;
 
-						public class DropwizardClientExtension {
-							public DropwizardClientExtension(Object... resources) {}
-						}
-						""",
-						"""
-						package io.dropwizard.testing.junit5;
-
-						public class ResourceExtension {
-							public static Builder builder() {
-								return new Builder();
+						public static class Builder {
+							public Builder addResource(Object resource) {
+								return this;
 							}
 
-							public static class Builder {
-								public Builder addResource(Object resource) {
-									return this;
-								}
-
-								public ResourceExtension build() {
-									return new ResourceExtension();
-								}
+							public ResourceExtension build() {
+								return new ResourceExtension();
 							}
 						}
-						""",
-						"""
-						package io.dropwizard.testing.junit5;
+					}
+					""",
+					"""
+					package io.dropwizard.testing.junit5;
 
-						public class DropwizardExtensionsSupport {
-						}
-						""",
-						"""
-						package org.junit;
+					public class DropwizardExtensionsSupport {
+					}
+					""",
+					"""
+					package org.junit;
 
-						import java.lang.annotation.*;
+					import java.lang.annotation.*;
 
-						@Retention(RetentionPolicy.RUNTIME)
-						@Target({ElementType.FIELD})
-						public @interface ClassRule {
-						}
-						""",
-						"""
-						package org.junit;
+					@Retention(RetentionPolicy.RUNTIME)
+					@Target({ElementType.FIELD})
+					public @interface ClassRule {
+					}
+					""",
+					"""
+					package org.junit;
 
-						import java.lang.annotation.*;
+					import java.lang.annotation.*;
 
-						@Retention(RetentionPolicy.RUNTIME)
-						@Target({ElementType.FIELD})
-						public @interface Rule {
-						}
-						"""
-					)
-					.classpath("junit-jupiter-api")
-			);
+					@Retention(RetentionPolicy.RUNTIME)
+					@Target({ElementType.FIELD})
+					public @interface Rule {
+					}
+					"""
+				)
+				.classpath("junit-jupiter-api")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

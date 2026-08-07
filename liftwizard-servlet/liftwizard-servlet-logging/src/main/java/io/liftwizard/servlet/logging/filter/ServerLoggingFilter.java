@@ -52,8 +52,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
-public class ServerLoggingFilter implements Filter {
-
+public class ServerLoggingFilter
+	implements Filter
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerLoggingFilter.class);
 
 	private final LoggingConfig loggingConfig;
@@ -64,25 +65,32 @@ public class ServerLoggingFilter implements Filter {
 		LoggingConfig loggingConfig,
 		Consumer<StructuredArguments> structuredLogger,
 		Clock clock
-	) {
+	)
+	{
 		this.loggingConfig = Objects.requireNonNull(loggingConfig);
 		this.structuredLogger = Objects.requireNonNull(structuredLogger);
 		this.clock = Objects.requireNonNull(clock);
 	}
 
 	@Override
-	public void init(FilterConfig filterConfig) {}
+	public void init(FilterConfig filterConfig)
+	{
+	}
 
 	@Override
-	public void destroy() {}
+	public void destroy()
+	{
+	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-		throws IOException, ServletException {
+		throws IOException, ServletException
+	{
 		if (
 			!(request instanceof HttpServletRequest httpServletRequest)
 			|| !(response instanceof HttpServletResponse httpServletResponse)
-		) {
+		)
+		{
 			chain.doFilter(request, response);
 			return;
 		}
@@ -98,9 +106,12 @@ public class ServerLoggingFilter implements Filter {
 
 		var requestWrapper = new ContentCachingRequestWrapper(httpServletRequest, maxEntitySize);
 		var responseWrapper = new BodyCaptureResponseWrapper(httpServletResponse, maxEntitySize);
-		try {
+		try
+		{
 			chain.doFilter(requestWrapper, responseWrapper);
-		} finally {
+		}
+		finally
+		{
 			Instant endTime = this.clock.instant();
 			Duration duration = Duration.between(startTime, endTime);
 			this.addFinalRequestAttributes(structuredArguments, requestWrapper);
@@ -113,9 +124,11 @@ public class ServerLoggingFilter implements Filter {
 	private void addInitialRequestAttributes(
 		StructuredArguments structuredArguments,
 		@Nonnull HttpServletRequest httpServletRequest
-	) {
+	)
+	{
 		String authType = httpServletRequest.getAuthType();
-		if (authType != null) {
+		if (authType != null)
+		{
 			LOGGER.trace("authType: {}", authType);
 		}
 
@@ -150,22 +163,26 @@ public class ServerLoggingFilter implements Filter {
 		MutableList<String> newExcludedHeaders = logExcludedRequestHeaderNames ? Lists.mutable.empty() : null;
 
 		Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-		headerNames
-			.asIterator()
-			.forEachRemaining((headerName) -> {
-				String headerValue = httpServletRequest.getHeader(headerName);
+		headerNames.asIterator().forEachRemaining((headerName) ->
+		{
+			String headerValue = httpServletRequest.getHeader(headerName);
 
-				if (this.loggingConfig.getIncludedRequestHeaders().contains(headerName)) {
-					newHeaders.put(headerName, headerValue);
-				} else if (logExcludedRequestHeaderNames) {
-					newExcludedHeaders.add(headerName);
-				}
-			});
+			if (this.loggingConfig.getIncludedRequestHeaders().contains(headerName))
+			{
+				newHeaders.put(headerName, headerValue);
+			}
+			else if (logExcludedRequestHeaderNames)
+			{
+				newExcludedHeaders.add(headerName);
+			}
+		});
 
-		if (this.loggingConfig.isLogRequestHeaderNames()) {
+		if (this.loggingConfig.isLogRequestHeaderNames())
+		{
 			http.setHeaders(newHeaders);
 		}
-		if (logExcludedRequestHeaderNames) {
+		if (logExcludedRequestHeaderNames)
+		{
 			http.setExcludedHeaders(newExcludedHeaders.toImmutable());
 		}
 	}
@@ -173,12 +190,14 @@ public class ServerLoggingFilter implements Filter {
 	private void addFinalRequestAttributes(
 		StructuredArguments structuredArguments,
 		ContentCachingRequestWrapper requestWrapper
-	) {
+	)
+	{
 		if (
 			!this.loggingConfig.isLogRequestBodies()
 			|| requestWrapper == null
 			|| requestWrapper.getContentLengthLong() <= 0
-		) {
+		)
+		{
 			return;
 		}
 
@@ -197,13 +216,15 @@ public class ServerLoggingFilter implements Filter {
 		@Nonnull BodyCaptureResponseWrapper responseWrapper,
 		@Nonnull HttpServletResponse httpServletResponse,
 		@Nonnull Duration elapsed
-	) {
+	)
+	{
 		StructuredArgumentsResponseHttp http = structuredArguments.getResponse().getHttp();
 
 		http.setElapsed(elapsed);
 
 		String contentType = httpServletResponse.getContentType();
-		if (contentType != null) {
+		if (contentType != null)
+		{
 			http.setContentType(contentType);
 		}
 
@@ -211,13 +232,15 @@ public class ServerLoggingFilter implements Filter {
 
 		this.addResponseHeaders(httpServletResponse, http);
 
-		if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getCapturedSize() > 0) {
+		if (this.loggingConfig.isLogResponseBodies() && responseWrapper.getCapturedSize() > 0)
+		{
 			String payload = this.getPayloadFromByteArray(
 				responseWrapper.getCapturedBody(),
 				responseWrapper.getCharacterEncoding()
 			);
 
-			if (responseWrapper.isTruncated()) {
+			if (responseWrapper.isTruncated())
+			{
 				payload += "...more...";
 			}
 
@@ -226,9 +249,11 @@ public class ServerLoggingFilter implements Filter {
 	}
 
 	@Nonnull
-	private String getTruncatedPayload(@Nonnull String payload) {
+	private String getTruncatedPayload(@Nonnull String payload)
+	{
 		int maxEntitySize = this.loggingConfig.getMaxEntitySize();
-		if (payload.length() <= maxEntitySize) {
+		if (payload.length() <= maxEntitySize)
+		{
 			return payload;
 		}
 
@@ -238,34 +263,45 @@ public class ServerLoggingFilter implements Filter {
 	private void addResponseHeaders(
 		@Nonnull HttpServletResponse httpServletResponse,
 		StructuredArgumentsResponseHttp http
-	) {
+	)
+	{
 		MutableMap<String, String> newHeaders = MapAdapter.adapt(new LinkedHashMap<>());
 		boolean logExcludedResponseHeaderNames = this.loggingConfig.isLogExcludedResponseHeaderNames();
 		MutableList<String> newExcludedHeaders = logExcludedResponseHeaderNames ? Lists.mutable.empty() : null;
 
-		for (String headerName : httpServletResponse.getHeaderNames()) {
+		for (String headerName : httpServletResponse.getHeaderNames())
+		{
 			String headerValue = httpServletResponse.getHeader(headerName);
 
-			if (this.loggingConfig.getIncludedResponseHeaders().contains(headerName)) {
+			if (this.loggingConfig.getIncludedResponseHeaders().contains(headerName))
+			{
 				newHeaders.put(headerName, headerValue);
-			} else if (logExcludedResponseHeaderNames) {
+			}
+			else if (logExcludedResponseHeaderNames)
+			{
 				newExcludedHeaders.add(headerName);
 			}
 		}
 
-		if (this.loggingConfig.isLogResponseHeaderNames()) {
+		if (this.loggingConfig.isLogResponseHeaderNames())
+		{
 			http.setHeaders(newHeaders);
 		}
-		if (logExcludedResponseHeaderNames) {
+		if (logExcludedResponseHeaderNames)
+		{
 			http.setExcludedHeaders(newExcludedHeaders.toImmutable());
 		}
 	}
 
 	@Nonnull
-	private String getPayloadFromByteArray(byte[] requestBuffer, String charEncoding) {
-		try {
+	private String getPayloadFromByteArray(byte[] requestBuffer, String charEncoding)
+	{
+		try
+		{
 			return new String(requestBuffer, charEncoding);
-		} catch (UnsupportedEncodingException unsupportedEncodingException) {
+		}
+		catch (UnsupportedEncodingException unsupportedEncodingException)
+		{
 			return "Unsupported-Encoding";
 		}
 	}

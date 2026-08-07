@@ -24,9 +24,10 @@ import org.openrewrite.java.tree.TypeUtils;
  * Shared matching helpers for the {@code ECStream*} recipes, which detect
  * {@code collection.stream()} bridges on Eclipse Collections receivers.
  */
-final class ECStreamSupport {
-
-	private ECStreamSupport() {
+final class ECStreamSupport
+{
+	private ECStreamSupport()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 
@@ -34,20 +35,25 @@ final class ECStreamSupport {
 	 * Whether this invocation is a no-argument {@code stream()} call. Matched by name and shape
 	 * only; callers check the receiver's type separately with {@link #isEclipseCollectionsType}.
 	 */
-	static boolean isStreamMethod(J.MethodInvocation method) {
-		if (!"stream".equals(method.getSimpleName())) {
+	static boolean isStreamMethod(J.MethodInvocation method)
+	{
+		if (!"stream".equals(method.getSimpleName()))
+		{
 			return false;
 		}
-		if (method.getArguments().isEmpty()) {
+		if (method.getArguments().isEmpty())
+		{
 			return true;
 		}
-		if (method.getArguments().size() != 1) {
+		if (method.getArguments().size() != 1)
+		{
 			return false;
 		}
 		return method.getArguments().get(0) instanceof J.Empty;
 	}
 
-	static boolean isEclipseCollectionsType(Expression expression) {
+	static boolean isEclipseCollectionsType(Expression expression)
+	{
 		return TypeUtils.isAssignableTo("org.eclipse.collections.api.RichIterable", expression.getType());
 	}
 }

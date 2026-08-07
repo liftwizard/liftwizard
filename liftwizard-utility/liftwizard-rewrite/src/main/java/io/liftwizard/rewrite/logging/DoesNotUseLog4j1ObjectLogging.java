@@ -28,15 +28,18 @@ import org.openrewrite.TreeVisitor;
  * YAML {@code preconditions} entry so that a composite migration recipe (e.g., Log4j 1 to SLF4J)
  * skips files that pass Objects to logging methods, preserving structured logging capabilities.
  */
-public final class DoesNotUseLog4j1ObjectLogging extends Recipe {
-
+public final class DoesNotUseLog4j1ObjectLogging
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Does not use Log4j 1.x object logging";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Precondition that matches source files which do not pass non-String Objects to "
 			+ "Log4j 1.x logging methods. Files that use object logging (e.g., `LOGGER.info(myObject)`) "
@@ -45,7 +48,8 @@ public final class DoesNotUseLog4j1ObjectLogging extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.not(new UsesLog4j1ObjectLogging.Log4j1ObjectLoggingVisitor());
 	}
 }

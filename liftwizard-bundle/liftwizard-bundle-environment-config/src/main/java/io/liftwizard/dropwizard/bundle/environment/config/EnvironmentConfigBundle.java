@@ -32,26 +32,32 @@ import org.slf4j.MDC.MDCCloseable;
  * @see SubstitutingSourceProvider
  * @see <a href="https://liftwizard.io/docs/configuration/environment-variables#environmentconfigbundle">https://liftwizard.io/docs/configuration/environment-variables#environmentconfigbundle</a>
  */
-public class EnvironmentConfigBundle implements ConfiguredBundle<Object> {
-
+public class EnvironmentConfigBundle
+	implements ConfiguredBundle<Object>
+{
 	private final boolean strict;
 
-	public EnvironmentConfigBundle() {
+	public EnvironmentConfigBundle()
+	{
 		this(false);
 	}
 
-	public EnvironmentConfigBundle(boolean strict) {
+	public EnvironmentConfigBundle(boolean strict)
+	{
 		this.strict = strict;
 	}
 
 	@Override
-	public void initialize(Bootstrap<?> bootstrap) {
-		try (MDCCloseable ignored = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
+	public void initialize(Bootstrap<?> bootstrap)
+	{
+		try (MDCCloseable ignored = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
+		{
 			this.initializeWithMdc(bootstrap);
 		}
 	}
 
-	private void initializeWithMdc(Bootstrap<?> bootstrap) {
+	private void initializeWithMdc(Bootstrap<?> bootstrap)
+	{
 		ConfigurationSourceProvider configurationSourceProvider = bootstrap.getConfigurationSourceProvider();
 
 		var environmentVariableSubstitutor = new EnvironmentVariableSubstitutor(this.strict);
@@ -66,5 +72,7 @@ public class EnvironmentConfigBundle implements ConfiguredBundle<Object> {
 	}
 
 	@Override
-	public void run(Object configuration, Environment environment) {}
+	public void run(Object configuration, Environment environment)
+	{
+	}
 }

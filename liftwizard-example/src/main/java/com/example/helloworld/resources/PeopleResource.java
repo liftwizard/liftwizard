@@ -16,17 +16,19 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
 @Path("/people")
 @Produces(MediaType.APPLICATION_JSON)
-public class PeopleResource {
-
+public class PeopleResource
+{
 	private final PersonDAO peopleDAO;
 
-	public PeopleResource(PersonDAO peopleDAO) {
+	public PeopleResource(PersonDAO peopleDAO)
+	{
 		this.peopleDAO = peopleDAO;
 	}
 
 	@POST
 	@UnitOfWork
-	public PersonDTO createPerson(PersonDTO personDTO) {
+	public PersonDTO createPerson(PersonDTO personDTO)
+	{
 		var person = new Person();
 		person.setFullName(personDTO.getFullName());
 		person.setJobTitle(personDTO.getJobTitle());
@@ -36,7 +38,8 @@ public class PeopleResource {
 
 	@GET
 	@UnitOfWork
-	public List<PersonDTO> listPeople() {
+	public List<PersonDTO> listPeople()
+	{
 		return ListAdapter.adapt(this.peopleDAO.findAll()).collect((each) ->
 			new PersonDTO(each.getId(), each.getFullName(), each.getJobTitle())
 		);

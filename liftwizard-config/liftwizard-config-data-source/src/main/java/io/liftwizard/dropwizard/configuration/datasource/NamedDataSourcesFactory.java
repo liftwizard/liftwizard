@@ -36,8 +36,8 @@ import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
 import org.eclipse.collections.api.factory.Lists;
 
-public class NamedDataSourcesFactory {
-
+public class NamedDataSourcesFactory
+{
 	private @Valid @NotNull List<NamedDataSourceFactory> namedDataSourceFactories = Lists.mutable.empty();
 
 	private Map<String, NamedDataSourceFactory> namedDataSourceFactoriesByName = new LinkedHashMap<>();
@@ -45,23 +45,28 @@ public class NamedDataSourcesFactory {
 	private final Map<String, ManagedDataSource> dataSourcesByName = new LinkedHashMap<>();
 
 	@JsonProperty("dataSources")
-	public List<NamedDataSourceFactory> getNamedDataSourceFactories() {
+	public List<NamedDataSourceFactory> getNamedDataSourceFactories()
+	{
 		return this.namedDataSourceFactories;
 	}
 
 	@JsonProperty("dataSources")
-	public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories) {
+	public void setNamedDataSourceFactories(List<NamedDataSourceFactory> namedDataSourceFactories)
+	{
 		this.namedDataSourceFactories = namedDataSourceFactories;
 		this.namedDataSourceFactoriesByName = new LinkedHashMap<>();
-		for (NamedDataSourceFactory namedDataSourceFactory : namedDataSourceFactories) {
+		for (NamedDataSourceFactory namedDataSourceFactory : namedDataSourceFactories)
+		{
 			this.namedDataSourceFactoriesByName.put(namedDataSourceFactory.getName(), namedDataSourceFactory);
 		}
 	}
 
 	@ValidationMethod
 	@JsonIgnore
-	public boolean isValidDataSourceNames() {
-		List<String> orderedDataSourceNames = this.namedDataSourceFactories.stream()
+	public boolean isValidDataSourceNames()
+	{
+		List<String> orderedDataSourceNames = this.namedDataSourceFactories
+			.stream()
 			.map(NamedDataSourceFactory::getName)
 			.toList();
 		Map<String, Long> frequencies = orderedDataSourceNames
@@ -75,7 +80,8 @@ public class NamedDataSourcesFactory {
 			.map(Entry::getKey)
 			.toList();
 
-		if (duplicateDataSourceNames.isEmpty()) {
+		if (duplicateDataSourceNames.isEmpty())
+		{
 			return true;
 		}
 
@@ -85,8 +91,10 @@ public class NamedDataSourcesFactory {
 
 	@Nonnull
 	@JsonIgnore
-	public NamedDataSourceFactory getNamedDataSourceFactoryByName(String name) {
-		return this.namedDataSourceFactories.stream()
+	public NamedDataSourceFactory getNamedDataSourceFactoryByName(String name)
+	{
+		return this.namedDataSourceFactories
+			.stream()
 			.filter((namedDataSourceFactory) -> namedDataSourceFactory.getName().equals(name))
 			.findFirst()
 			.orElseThrow(() -> new IllegalStateException("Unknown data source name: " + name));
@@ -97,12 +105,15 @@ public class NamedDataSourcesFactory {
 		@Nonnull String name,
 		@Nonnull MetricRegistry metricRegistry,
 		@Nonnull LifecycleEnvironment lifecycle
-	) {
-		if (this.dataSourcesByName.containsKey(name)) {
+	)
+	{
+		if (this.dataSourcesByName.containsKey(name))
+		{
 			return this.dataSourcesByName.get(name);
 		}
 
-		if (!this.namedDataSourceFactoriesByName.containsKey(name)) {
+		if (!this.namedDataSourceFactoriesByName.containsKey(name))
+		{
 			String message = "No data source named: '%s'. Known data sources: %s".formatted(
 				name,
 				this.namedDataSourceFactoriesByName.keySet()

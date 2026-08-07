@@ -31,31 +31,33 @@ import org.openrewrite.test.TypeValidation;
  * we provide stub classes for {@code Gatherer} and {@code Gatherers} and disable
  * type validation because {@code Stream.gather()} does not exist in the Java 17 JDK.
  */
-class ECStreamGatherWindowFixedToChunkTest extends AbstractEclipseCollectionsTest {
-
+class ECStreamGatherWindowFixedToChunkTest
+	extends AbstractEclipseCollectionsTest
+{
 	// Stub for java.util.stream.Gatherer (Java 24+)
 	private static final String GATHERER_STUB = """
-		package java.util.stream;
+	package java.util.stream;
 
-		public interface Gatherer<T, A, R> {
-		}
-		""";
+	public interface Gatherer<T, A, R> {
+	}
+	""";
 
 	// Stub for java.util.stream.Gatherers (Java 24+)
 	private static final String GATHERERS_STUB = """
-		package java.util.stream;
+	package java.util.stream;
 
-		import java.util.List;
+	import java.util.List;
 
-		public class Gatherers {
-		    public static <T> Gatherer<T, ?, List<T>> windowFixed(int windowSize) {
-		        return null;
-		    }
-		}
-		""";
+	public class Gatherers {
+	    public static <T> Gatherer<T, ?, List<T>> windowFixed(int windowSize) {
+	        return null;
+	    }
+	}
+	""";
 
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new ECStreamGatherWindowFixedToChunk());
 		spec.typeValidationOptions(TypeValidation.none());
@@ -69,12 +71,14 @@ class ECStreamGatherWindowFixedToChunkTest extends AbstractEclipseCollectionsTes
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

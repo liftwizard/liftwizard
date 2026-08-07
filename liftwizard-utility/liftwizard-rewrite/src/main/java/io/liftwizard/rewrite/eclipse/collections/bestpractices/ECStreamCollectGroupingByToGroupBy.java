@@ -51,8 +51,9 @@ import org.openrewrite.java.tree.J;
  *   <li>{@code Collectors.groupingBy(fn, Collectors.toSet())}</li>
  * </ul>
  */
-public class ECStreamCollectGroupingByToGroupBy extends Recipe {
-
+public class ECStreamCollectGroupingByToGroupBy
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -70,12 +71,14 @@ public class ECStreamCollectGroupingByToGroupBy extends Recipe {
 	private static final MethodMatcher TO_SET_MATCHER = new MethodMatcher("java.util.stream.Collectors toSet()");
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.groupingBy(fn, ...))` to `groupBy(fn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.groupingBy(fn))` and "
 			+ "`collection.stream().collect(Collectors.groupingBy(fn, Collectors.toSet()))` "
@@ -86,50 +89,61 @@ public class ECStreamCollectGroupingByToGroupBy extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COLLECT_MATCHER), new StreamCollectGroupingByToGroupByVisitor());
 	}
 
-	private static final class StreamCollectGroupingByToGroupByVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamCollectGroupingByToGroupByVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression classifyingFunction = this.extractClassifyingFunction(collectorCall);
-			if (classifyingFunction == null) {
+			if (classifyingFunction == null)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -146,30 +160,37 @@ public class ECStreamCollectGroupingByToGroupBy extends Recipe {
 		 * Extracts the classifying function from a groupingBy call, returning null if the call
 		 * is not a supported form of groupingBy.
 		 */
-		private Expression extractClassifyingFunction(J.MethodInvocation collectorCall) {
+		private Expression extractClassifyingFunction(J.MethodInvocation collectorCall)
+		{
 			// One-arg form: Collectors.groupingBy(fn)
-			if (GROUPING_BY_ONE_ARG_MATCHER.matches(collectorCall)) {
+			if (GROUPING_BY_ONE_ARG_MATCHER.matches(collectorCall))
+			{
 				List<Expression> args = collectorCall.getArguments();
-				if (args.size() == 1) {
+				if (args.size() == 1)
+				{
 					return args.get(0);
 				}
 				return null;
 			}
 
 			// Two-arg form: Collectors.groupingBy(fn, downstream)
-			if (GROUPING_BY_TWO_ARG_MATCHER.matches(collectorCall)) {
+			if (GROUPING_BY_TWO_ARG_MATCHER.matches(collectorCall))
+			{
 				List<Expression> args = collectorCall.getArguments();
-				if (args.size() != 2) {
+				if (args.size() != 2)
+				{
 					return null;
 				}
 
 				Expression downstream = args.get(1);
-				if (!(downstream instanceof J.MethodInvocation downstreamCall)) {
+				if (!(downstream instanceof J.MethodInvocation downstreamCall))
+				{
 					return null;
 				}
 
 				// Only match if downstream is toList() or toSet()
-				if (!TO_LIST_MATCHER.matches(downstreamCall) && !TO_SET_MATCHER.matches(downstreamCall)) {
+				if (!TO_LIST_MATCHER.matches(downstreamCall) && !TO_SET_MATCHER.matches(downstreamCall))
+				{
 					return null;
 				}
 

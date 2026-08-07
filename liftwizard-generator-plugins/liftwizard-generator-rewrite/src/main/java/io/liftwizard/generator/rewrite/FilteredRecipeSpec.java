@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.eclipse.collections.api.factory.Lists;
 
-public class FilteredRecipeSpec {
-
+public class FilteredRecipeSpec
+{
 	private String generatedRecipeName;
 	private String displayName;
 	private String description;
@@ -29,53 +29,67 @@ public class FilteredRecipeSpec {
 	private List<RecipeExclusion> exclusions = Lists.mutable.empty();
 	private String outputFileName;
 
-	public FilteredRecipeSpec() {}
+	public FilteredRecipeSpec()
+	{
+	}
 
-	public String getGeneratedRecipeName() {
+	public String getGeneratedRecipeName()
+	{
 		return this.generatedRecipeName;
 	}
 
-	public void setGeneratedRecipeName(String generatedRecipeName) {
+	public void setGeneratedRecipeName(String generatedRecipeName)
+	{
 		this.generatedRecipeName = generatedRecipeName;
 	}
 
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return this.displayName;
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(String displayName)
+	{
 		this.displayName = displayName;
 	}
 
-	public String getDescription() {
+	public String getDescription()
+	{
 		return this.description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(String description)
+	{
 		this.description = description;
 	}
 
-	public String getBaseRecipeName() {
+	public String getBaseRecipeName()
+	{
 		return this.baseRecipeName;
 	}
 
-	public void setBaseRecipeName(String baseRecipeName) {
+	public void setBaseRecipeName(String baseRecipeName)
+	{
 		this.baseRecipeName = baseRecipeName;
 	}
 
-	public List<RecipeExclusion> getExclusions() {
+	public List<RecipeExclusion> getExclusions()
+	{
 		return this.exclusions;
 	}
 
-	public void setExclusions(List<RecipeExclusion> exclusions) {
+	public void setExclusions(List<RecipeExclusion> exclusions)
+	{
 		this.exclusions = exclusions;
 	}
 
-	public String getOutputFileName() {
+	public String getOutputFileName()
+	{
 		return this.outputFileName;
 	}
 
-	public void setOutputFileName(String outputFileName) {
+	public void setOutputFileName(String outputFileName)
+	{
 		this.outputFileName = outputFileName;
 	}
 }

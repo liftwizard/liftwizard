@@ -26,26 +26,29 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "Null-safe equality checks → `Objects.equals()`",
 	description = "Replace complex null-safe equality checks with `Objects.equals()`."
 )
-public class NullSafeEquals {
-
+public class NullSafeEquals
+{
 	@RecipeDescriptor(
 		name = "Null-safe not-equals patterns → `!Objects.equals(left, right)`",
 		description = "Replace null-safe not-equals patterns with `!Objects.equals(left, right)`."
 	)
-	public static class NotEqualsPatterns<T> {
-
+	public static class NotEqualsPatterns<T>
+	{
 		@BeforeTemplate
-		boolean pattern1(T left, T right) {
+		boolean pattern1(T left, T right)
+		{
 			return left == null ? right != null : !left.equals(right);
 		}
 
 		@BeforeTemplate
-		boolean pattern2(T left, T right) {
+		boolean pattern2(T left, T right)
+		{
 			return right == null ? left != null : !right.equals(left);
 		}
 
 		@AfterTemplate
-		boolean after(T left, T right) {
+		boolean after(T left, T right)
+		{
 			return !Objects.equals(left, right);
 		}
 	}
@@ -54,35 +57,41 @@ public class NullSafeEquals {
 		name = "Null-safe equality patterns → `Objects.equals(left, right)`",
 		description = "Replace null-safe equality patterns with `Objects.equals(left, right)`."
 	)
-	public static class EqualsPatterns<T> {
-
+	public static class EqualsPatterns<T>
+	{
 		@BeforeTemplate
-		boolean pattern2(T left, T right) {
+		boolean pattern2(T left, T right)
+		{
 			return left == null ? right == null : left.equals(right);
 		}
 
 		@BeforeTemplate
-		boolean pattern3(T left, T right) {
+		boolean pattern3(T left, T right)
+		{
 			return left == null ? right == null : left == right || left.equals(right);
 		}
 
 		@BeforeTemplate
-		boolean pattern4(T left, T right) {
+		boolean pattern4(T left, T right)
+		{
 			return left == right || (left != null && left.equals(right));
 		}
 
 		@BeforeTemplate
-		boolean pattern5(T left, T right) {
+		boolean pattern5(T left, T right)
+		{
 			return right == left || (left != null && left.equals(right));
 		}
 
 		@BeforeTemplate
-		boolean pattern6(T left, T right) {
+		boolean pattern6(T left, T right)
+		{
 			return left == null || right == null ? left == right : left.equals(right);
 		}
 
 		@AfterTemplate
-		boolean after(T left, T right) {
+		boolean after(T left, T right)
+		{
 			return Objects.equals(left, right);
 		}
 	}

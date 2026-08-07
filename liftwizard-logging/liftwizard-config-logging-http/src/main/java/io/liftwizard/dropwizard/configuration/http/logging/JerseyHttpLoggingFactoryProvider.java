@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.http.logging;
 
-public interface JerseyHttpLoggingFactoryProvider {
+public interface JerseyHttpLoggingFactoryProvider
+{
 	JerseyHttpLoggingFactory getJerseyHttpLoggingFactory();
 }

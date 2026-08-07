@@ -24,23 +24,27 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class NullSafeEqualsTest implements AbstractRewriteFixtures, RewriteTest {
-
+class NullSafeEqualsTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new NullSafeEqualsRecipes())
-			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()));
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new NullSafeEqualsRecipes()).parser(
+			JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles())
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

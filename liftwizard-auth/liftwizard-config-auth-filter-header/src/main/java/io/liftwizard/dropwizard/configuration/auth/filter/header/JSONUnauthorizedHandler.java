@@ -24,10 +24,12 @@ import javax.ws.rs.core.Response.Status;
 import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.jersey.errors.ErrorMessage;
 
-public class JSONUnauthorizedHandler implements UnauthorizedHandler {
-
+public class JSONUnauthorizedHandler
+	implements UnauthorizedHandler
+{
 	@Override
-	public Response buildResponse(String headerName, String prefixName) {
+	public Response buildResponse(String headerName, String prefixName)
+	{
 		String message = "Single value header '%s' with prefix '%s' is required.".formatted(headerName, prefixName);
 		var errorMessage = new ErrorMessage(Status.UNAUTHORIZED.getStatusCode(), message);
 		return Response.status(errorMessage.getCode())

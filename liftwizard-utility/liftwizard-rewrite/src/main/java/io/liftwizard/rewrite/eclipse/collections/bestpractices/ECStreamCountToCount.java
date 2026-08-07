@@ -48,8 +48,9 @@ import org.openrewrite.java.tree.J;
  * {@code stream().filter().count()} returns {@code long}. This transformation is safe when
  * the count value fits in an int (up to 2^31-1 elements).
  */
-public class ECStreamCountToCount extends Recipe {
-
+public class ECStreamCountToCount
+	extends Recipe
+{
 	private static final MethodMatcher COUNT_MATCHER = new MethodMatcher("java.util.stream.Stream count()");
 
 	private static final MethodMatcher FILTER_MATCHER = new MethodMatcher(
@@ -57,12 +58,14 @@ public class ECStreamCountToCount extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().filter(pred).count()` -> `count(pred)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().filter(pred).count()` to `collection.count(pred)`. "
 			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has the count method directly."
@@ -70,49 +73,60 @@ public class ECStreamCountToCount extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COUNT_MATCHER), new StreamFilterCountVisitor());
 	}
 
-	private static final class StreamFilterCountVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamFilterCountVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COUNT_MATCHER.matches(methodInvocation)) {
+			if (!COUNT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			Expression countSelect = methodInvocation.getSelect();
-			if (!(countSelect instanceof J.MethodInvocation filterCall)) {
+			if (!(countSelect instanceof J.MethodInvocation filterCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!FILTER_MATCHER.matches(filterCall)) {
+			if (!FILTER_MATCHER.matches(filterCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression filterSelect = filterCall.getSelect();
-			if (!(filterSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(filterSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> filterArguments = filterCall.getArguments();
-			if (filterArguments.isEmpty()) {
+			if (filterArguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 

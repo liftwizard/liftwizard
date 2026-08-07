@@ -43,8 +43,9 @@ import org.openrewrite.java.tree.J;
  * <p>This recipe eliminates unnecessary Stream intermediary operations for Eclipse Collections types,
  * since Eclipse Collections has the {@code detectOptional} method directly on {@code RichIterable}.
  */
-public class ECStreamFindFirstToDetectOptional extends Recipe {
-
+public class ECStreamFindFirstToDetectOptional
+	extends Recipe
+{
 	private static final MethodMatcher FIND_FIRST_MATCHER = new MethodMatcher("java.util.stream.Stream findFirst()");
 
 	private static final MethodMatcher FILTER_MATCHER = new MethodMatcher(
@@ -52,12 +53,14 @@ public class ECStreamFindFirstToDetectOptional extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().filter(pred).findFirst()` to `detectOptional(pred)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().filter(pred).findFirst()` to `collection.detectOptional(pred)`. "
 			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
@@ -66,52 +69,63 @@ public class ECStreamFindFirstToDetectOptional extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(FIND_FIRST_MATCHER),
 			new StreamFilterFindFirstToDetectOptionalVisitor()
 		);
 	}
 
-	private static final class StreamFilterFindFirstToDetectOptionalVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamFilterFindFirstToDetectOptionalVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!FIND_FIRST_MATCHER.matches(methodInvocation)) {
+			if (!FIND_FIRST_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			Expression findFirstSelect = methodInvocation.getSelect();
-			if (!(findFirstSelect instanceof J.MethodInvocation filterCall)) {
+			if (!(findFirstSelect instanceof J.MethodInvocation filterCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!FILTER_MATCHER.matches(filterCall)) {
+			if (!FILTER_MATCHER.matches(filterCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression filterSelect = filterCall.getSelect();
-			if (!(filterSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(filterSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> filterArguments = filterCall.getArguments();
-			if (filterArguments.isEmpty()) {
+			if (filterArguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 

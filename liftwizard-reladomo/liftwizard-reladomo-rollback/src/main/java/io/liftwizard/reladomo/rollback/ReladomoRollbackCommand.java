@@ -43,24 +43,28 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T> the configuration type
  */
-public class ReladomoRollbackCommand<T extends Configuration> extends EnvironmentCommand<T> {
-
+public class ReladomoRollbackCommand<T extends Configuration>
+	extends EnvironmentCommand<T>
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoRollbackCommand.class);
 
 	private final Application<T> application;
 
-	public ReladomoRollbackCommand(Application<T> application) {
+	public ReladomoRollbackCommand(Application<T> application)
+	{
 		super(application, "rollback-temporal", "Roll back all bitemporal tables to a specified point in time");
 		this.application = application;
 	}
 
 	@Override
-	protected Class<T> getConfigurationClass() {
+	protected Class<T> getConfigurationClass()
+	{
 		return this.application.getConfigurationClass();
 	}
 
 	@Override
-	public void configure(Subparser subparser) {
+	public void configure(Subparser subparser)
+	{
 		super.configure(subparser);
 		subparser
 			.addArgument("--date")
@@ -70,7 +74,9 @@ public class ReladomoRollbackCommand<T extends Configuration> extends Environmen
 	}
 
 	@Override
-	protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
+	protected void run(Environment environment, Namespace namespace, T configuration)
+		throws Exception
+	{
 		String dateString = namespace.getString("date");
 		Instant targetDate = this.parseDate(dateString);
 
@@ -82,10 +88,14 @@ public class ReladomoRollbackCommand<T extends Configuration> extends Environmen
 		LOGGER.info("Temporal rollback completed successfully");
 	}
 
-	private Instant parseDate(String dateString) {
-		try {
+	private Instant parseDate(String dateString)
+	{
+		try
+		{
 			return Instant.parse(dateString);
-		} catch (DateTimeParseException e) {
+		}
+		catch (DateTimeParseException e)
+		{
 			throw new IllegalArgumentException(
 				"Invalid date format: " + dateString + ". Expected ISO-8601 format (e.g., 2026-01-18T00:00:00Z)",
 				e

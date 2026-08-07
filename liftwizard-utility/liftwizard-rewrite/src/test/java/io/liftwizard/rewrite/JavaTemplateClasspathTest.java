@@ -25,13 +25,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JavaTemplateClasspathTest {
-
+class JavaTemplateClasspathTest
+{
 	@Test
-	void mainSourcesDoNotUseRuntimeClasspathForJavaTemplates() throws IOException {
+	void mainSourcesDoNotUseRuntimeClasspathForJavaTemplates()
+		throws IOException
+	{
 		Path mainSources = Path.of("src/main/java");
 
-		try (var paths = Files.walk(mainSources)) {
+		try (var paths = Files.walk(mainSources))
+		{
 			List<Path> offenders = paths
 				.filter((path) -> path.toString().endsWith(".java"))
 				.filter(JavaTemplateClasspathTest::containsJavaParserClasspathCall)
@@ -41,11 +44,15 @@ class JavaTemplateClasspathTest {
 		}
 	}
 
-	private static boolean containsJavaParserClasspathCall(Path path) {
-		try {
+	private static boolean containsJavaParserClasspathCall(Path path)
+	{
+		try
+		{
 			String source = Files.readString(path);
 			return source.contains(".classpath(") || source.contains(".classpathFromResources(");
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new IllegalStateException(e);
 		}
 	}

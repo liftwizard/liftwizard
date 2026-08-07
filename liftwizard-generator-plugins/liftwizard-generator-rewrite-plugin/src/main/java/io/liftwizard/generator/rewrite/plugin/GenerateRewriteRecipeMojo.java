@@ -35,8 +35,9 @@ import org.apache.maven.project.MavenProject;
 import org.openrewrite.config.Environment;
 
 @Mojo(name = "generate-rewrite-recipes", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, threadSafe = true)
-public class GenerateRewriteRecipeMojo extends AbstractMojo {
-
+public class GenerateRewriteRecipeMojo
+	extends AbstractMojo
+{
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	private MavenProject mavenProject;
 
@@ -50,23 +51,32 @@ public class GenerateRewriteRecipeMojo extends AbstractMojo {
 	private String indent;
 
 	@Override
-	public void execute() throws MojoExecutionException {
+	public void execute()
+		throws MojoExecutionException
+	{
 		Environment env = Environment.builder().scanRuntimeClasspath().build();
 		var generator = new CompositeRecipeGenerator(this.indent);
 
 		Path metaInfRewrite = this.outputDirectory.toPath().resolve("META-INF/rewrite");
-		try {
+		try
+		{
 			Files.createDirectories(metaInfRewrite);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new MojoExecutionException("Failed to create output directory: " + metaInfRewrite, e);
 		}
 
-		for (FilteredRecipeSpec spec : this.filteredRecipeSpecs) {
+		for (FilteredRecipeSpec spec : this.filteredRecipeSpecs)
+		{
 			String yaml = generator.generate(env, spec);
 			Path outputFile = metaInfRewrite.resolve(spec.getOutputFileName());
-			try {
+			try
+			{
 				Files.writeString(outputFile, yaml, StandardCharsets.UTF_8);
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				throw new MojoExecutionException("Failed to write: " + outputFile, e);
 			}
 			this.getLog().info("Generated: " + outputFile);

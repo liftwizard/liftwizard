@@ -24,23 +24,27 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class AddTestAnnotationToOverrideMethodsTest implements AbstractRewriteFixtures, RewriteTest {
-
+class AddTestAnnotationToOverrideMethodsTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(final RecipeSpec spec) {
-		spec
-			.recipe(new AddTestAnnotationToOverrideMethods())
-			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("junit-jupiter-api"));
+	public void defaults(final RecipeSpec spec)
+	{
+		spec.recipe(new AddTestAnnotationToOverrideMethods()).parser(
+			JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("junit-jupiter-api")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("replacePatterns/01"), this.javaFixture("replacePatterns/02"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
 			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
 			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02")

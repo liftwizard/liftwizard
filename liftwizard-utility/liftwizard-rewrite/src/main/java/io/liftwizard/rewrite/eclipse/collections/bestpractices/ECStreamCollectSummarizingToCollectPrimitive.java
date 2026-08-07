@@ -52,8 +52,9 @@ import org.openrewrite.marker.Markers;
  * since Eclipse Collections has the {@code collectDouble/collectInt/collectLong} methods directly
  * on {@code RichIterable}, and the resulting primitive collections have {@code summaryStatistics()}.
  */
-public class ECStreamCollectSummarizingToCollectPrimitive extends Recipe {
-
+public class ECStreamCollectSummarizingToCollectPrimitive
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -71,12 +72,14 @@ public class ECStreamCollectSummarizingToCollectPrimitive extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.summarizing*(fn))` to `collect*(fn).summaryStatistics()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.summarizingDouble(fn))` "
 			+ "to `collection.collectDouble(fn).summaryStatistics()`. "
@@ -87,7 +90,8 @@ public class ECStreamCollectSummarizingToCollectPrimitive extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(COLLECT_MATCHER),
 			new StreamCollectSummarizingToCollectPrimitiveVisitor()
@@ -95,51 +99,61 @@ public class ECStreamCollectSummarizingToCollectPrimitive extends Recipe {
 	}
 
 	private static final class StreamCollectSummarizingToCollectPrimitiveVisitor
-		extends JavaIsoVisitor<ExecutionContext> {
-
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation summarizingCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation summarizingCall))
+			{
 				return methodInvocation;
 			}
 
 			String collectMethodName = this.getCollectMethodName(summarizingCall);
-			if (collectMethodName == null) {
+			if (collectMethodName == null)
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> summarizingArgs = summarizingCall.getArguments();
-			if (summarizingArgs.size() != 1) {
+			if (summarizingArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -147,15 +161,13 @@ public class ECStreamCollectSummarizingToCollectPrimitive extends Recipe {
 
 			// Reuse the collect() method type (1 arg) for the collectDouble(fn) call
 			JavaType.Method collectMethodType = methodInvocation.getMethodType();
-			JavaType.Method collectPrimitiveMethodType = collectMethodType != null
-				? collectMethodType.withName(collectMethodName)
-				: null;
+			JavaType.Method collectPrimitiveMethodType =
+				collectMethodType != null ? collectMethodType.withName(collectMethodName) : null;
 
 			// Reuse the stream() method type (0 args) for the summaryStatistics() call
 			JavaType.Method streamMethodType = streamCall.getMethodType();
-			JavaType.Method summaryStatsMethodType = streamMethodType != null
-				? streamMethodType.withName("summaryStatistics")
-				: null;
+			JavaType.Method summaryStatsMethodType =
+				streamMethodType != null ? streamMethodType.withName("summaryStatistics") : null;
 
 			Expression mapperFunction = summarizingArgs.get(0);
 
@@ -188,14 +200,18 @@ public class ECStreamCollectSummarizingToCollectPrimitive extends Recipe {
 		 * Returns the Eclipse Collections collect method name for the matching summarizing call,
 		 * or null if the call is not a supported form.
 		 */
-		private String getCollectMethodName(J.MethodInvocation summarizingCall) {
-			if (SUMMARIZING_DOUBLE_MATCHER.matches(summarizingCall)) {
+		private String getCollectMethodName(J.MethodInvocation summarizingCall)
+		{
+			if (SUMMARIZING_DOUBLE_MATCHER.matches(summarizingCall))
+			{
 				return "collectDouble";
 			}
-			if (SUMMARIZING_INT_MATCHER.matches(summarizingCall)) {
+			if (SUMMARIZING_INT_MATCHER.matches(summarizingCall))
+			{
 				return "collectInt";
 			}
-			if (SUMMARIZING_LONG_MATCHER.matches(summarizingCall)) {
+			if (SUMMARIZING_LONG_MATCHER.matches(summarizingCall))
+			{
 				return "collectLong";
 			}
 			return null;

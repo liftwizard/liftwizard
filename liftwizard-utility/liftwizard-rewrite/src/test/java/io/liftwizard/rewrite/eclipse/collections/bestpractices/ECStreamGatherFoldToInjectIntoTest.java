@@ -31,32 +31,34 @@ import org.openrewrite.test.TypeValidation;
  * we provide stub classes for {@code Gatherer} and {@code Gatherers} and disable
  * type validation because {@code Stream.gather()} does not exist in the Java 17 JDK.
  */
-class ECStreamGatherFoldToInjectIntoTest extends AbstractEclipseCollectionsTest {
-
+class ECStreamGatherFoldToInjectIntoTest
+	extends AbstractEclipseCollectionsTest
+{
 	// Stub for java.util.stream.Gatherer (Java 24+)
 	private static final String GATHERER_STUB = """
-		package java.util.stream;
+	package java.util.stream;
 
-		public interface Gatherer<T, A, R> {
-		}
-		""";
+	public interface Gatherer<T, A, R> {
+	}
+	""";
 
 	// Stub for java.util.stream.Gatherers (Java 24+)
 	private static final String GATHERERS_STUB = """
-		package java.util.stream;
+	package java.util.stream;
 
-		import java.util.function.BiFunction;
-		import java.util.function.Supplier;
+	import java.util.function.BiFunction;
+	import java.util.function.Supplier;
 
-		public class Gatherers {
-		    public static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder) {
-		        return null;
-		    }
-		}
-		""";
+	public class Gatherers {
+	    public static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder) {
+	        return null;
+	    }
+	}
+	""";
 
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new ECStreamGatherFoldToInjectInto());
 		spec.typeValidationOptions(TypeValidation.none());
@@ -70,12 +72,14 @@ class ECStreamGatherFoldToInjectIntoTest extends AbstractEclipseCollectionsTest 
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

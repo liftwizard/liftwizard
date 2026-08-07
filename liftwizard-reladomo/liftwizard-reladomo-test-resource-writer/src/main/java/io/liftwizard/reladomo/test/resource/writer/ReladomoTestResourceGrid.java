@@ -30,21 +30,24 @@ import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.list.Interval;
 import org.eclipse.collections.impl.set.mutable.SetAdapter;
 
-public class ReladomoTestResourceGrid {
-
+public class ReladomoTestResourceGrid
+{
 	private final ReladomoClassMetaData metaData;
 	private final ImmutableList<ReladomoTestResourceColumn> columns;
 	private final MithraList<?> mithraList;
 
 	private boolean frozen;
 
-	public ReladomoTestResourceGrid(ReladomoClassMetaData metaData, MithraList<?> mithraList) {
+	public ReladomoTestResourceGrid(ReladomoClassMetaData metaData, MithraList<?> mithraList)
+	{
 		this.metaData = Objects.requireNonNull(metaData);
 		this.mithraList = Objects.requireNonNull(mithraList);
 
 		MutableSet<Attribute> attributes = SetAdapter.adapt(new LinkedHashSet<>());
-		if (metaData.getAsOfAttributes() != null) {
-			for (AsOfAttribute asOfAttribute : metaData.getAsOfAttributes()) {
+		if (metaData.getAsOfAttributes() != null)
+		{
+			for (AsOfAttribute asOfAttribute : metaData.getAsOfAttributes())
+			{
 				attributes.add(asOfAttribute.getFromAttribute());
 				attributes.add(asOfAttribute.getToAttribute());
 			}
@@ -55,20 +58,25 @@ public class ReladomoTestResourceGrid {
 		this.columns = attributes.toList().collect(ReladomoTestResourceColumn::new).toImmutable();
 
 		Class<?> aClass = metaData.getBusinessOrInterfaceClass();
-		for (Object mithraObject : mithraList) {
-			for (ReladomoTestResourceColumn column : this.columns) {
+		for (Object mithraObject : mithraList)
+		{
+			for (ReladomoTestResourceColumn column : this.columns)
+			{
 				Object cast = aClass.cast(mithraObject);
 				column.addMithraObject(cast);
 			}
 		}
 	}
 
-	public boolean isEmpty() {
+	public boolean isEmpty()
+	{
 		return this.mithraList.isEmpty();
 	}
 
-	public void freeze() {
-		if (this.frozen) {
+	public void freeze()
+	{
+		if (this.frozen)
+		{
 			throw new IllegalStateException();
 		}
 
@@ -77,8 +85,10 @@ public class ReladomoTestResourceGrid {
 	}
 
 	@Override
-	public String toString() {
-		if (!this.frozen) {
+	public String toString()
+	{
+		if (!this.frozen)
+		{
 			return "";
 		}
 
@@ -90,12 +100,13 @@ public class ReladomoTestResourceGrid {
 		return classString + headerRowString + bodyString;
 	}
 
-	private String getRowString(int index) {
+	private String getRowString(int index)
+	{
 		return (
-			this.columns.collectWith(ReladomoTestResourceColumn::getPaddedValueString, index)
+			this.columns
+				.collectWith(ReladomoTestResourceColumn::getPaddedValueString, index)
 				.makeString()
-				.stripTrailing()
-			+ "\n"
+				.stripTrailing() + "\n"
 		);
 	}
 }

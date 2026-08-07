@@ -53,12 +53,14 @@ import org.eclipse.collections.impl.list.mutable.ListAdapter;
 import org.eclipse.collections.impl.utility.Iterate;
 
 @SuppressWarnings("unchecked")
-public class GraphQLQueryToOperationConverter {
-
+public class GraphQLQueryToOperationConverter
+{
 	private final MutableStack<String> context = Stacks.mutable.empty();
 
-	public Operation convert(AbstractRelatedFinder finder, Map<?, ?> inputOperation) {
-		if (inputOperation.size() > 1 && (inputOperation.containsKey("AND") || inputOperation.containsKey("OR"))) {
+	public Operation convert(AbstractRelatedFinder finder, Map<?, ?> inputOperation)
+	{
+		if (inputOperation.size() > 1 && (inputOperation.containsKey("AND") || inputOperation.containsKey("OR")))
+		{
 			throw new LiftwizardGraphQLContextException(
 				"AND and OR cannot be combined with other criteria. Did you mean to nest the other criteria inside?",
 				this.getContext()
@@ -75,17 +77,22 @@ public class GraphQLQueryToOperationConverter {
 	}
 
 	@SuppressWarnings("IfCanBeSwitch")
-	private Operation convert(AbstractRelatedFinder finder, String key, Object graphQlOperation) {
-		if (key.equals("AND")) {
+	private Operation convert(AbstractRelatedFinder finder, String key, Object graphQlOperation)
+	{
+		if (key.equals("AND"))
+		{
 			return this.convertConjunction(finder, graphQlOperation, "AND", Operation::and);
 		}
 
-		if (key.equals("OR")) {
+		if (key.equals("OR"))
+		{
 			return this.convertConjunction(finder, graphQlOperation, "OR", Operation::or);
 		}
 
-		if (key.equals("exists")) {
-			if (!graphQlOperation.equals(Maps.immutable.empty())) {
+		if (key.equals("exists"))
+		{
+			if (!graphQlOperation.equals(Maps.immutable.empty()))
+			{
 				String message = "Expected empty criteria node for exists but found " + graphQlOperation;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -93,8 +100,10 @@ public class GraphQLQueryToOperationConverter {
 			return finder.exists();
 		}
 
-		if (key.equals("notExists")) {
-			if (!graphQlOperation.equals(Maps.immutable.empty())) {
+		if (key.equals("notExists"))
+		{
+			if (!graphQlOperation.equals(Maps.immutable.empty()))
+			{
 				var converter = new GraphQLQueryToOperationConverter();
 				Operation nestedOperation = converter.convert(finder.zWithoutParent(), (Map<?, ?>) graphQlOperation);
 				return finder.notExists(nestedOperation);
@@ -103,8 +112,10 @@ public class GraphQLQueryToOperationConverter {
 			return finder.notExists();
 		}
 
-		if (key.equals("recursiveNotExists")) {
-			if (!graphQlOperation.equals(Maps.immutable.empty())) {
+		if (key.equals("recursiveNotExists"))
+		{
+			if (!graphQlOperation.equals(Maps.immutable.empty()))
+			{
 				var converter = new GraphQLQueryToOperationConverter();
 				Operation nestedOperation = converter.convert(finder.zWithoutParent(), (Map<?, ?>) graphQlOperation);
 				return finder.recursiveNotExists(nestedOperation);
@@ -121,50 +132,66 @@ public class GraphQLQueryToOperationConverter {
 		Object graphQlOperation,
 		String conjunctionName,
 		BinaryOperator<Operation> conjunctionFunction
-	) {
-		if (graphQlOperation.equals(Lists.immutable.empty())) {
+	)
+	{
+		if (graphQlOperation.equals(Lists.immutable.empty()))
+		{
 			this.context.push(conjunctionName);
-			try {
+			try
+			{
 				throw new LiftwizardGraphQLContextException("Empty criteria node.", this.getContext());
-			} finally {
+			}
+			finally
+			{
 				this.context.pop();
 			}
 		}
 
 		var nestedGraphQlOperations = (List<?>) graphQlOperation;
 		MutableList<Operation> nestedOperations = ListAdapter.adapt(nestedGraphQlOperations).collectWithIndex(
-				(nestedGraphQlOperation, index) -> {
-					this.context.push(conjunctionName + "[" + index + "]");
-					try {
-						return this.convert(finder, (Map<?, ?>) nestedGraphQlOperation);
-					} finally {
-						this.context.pop();
-					}
+			(nestedGraphQlOperation, index) ->
+			{
+				this.context.push(conjunctionName + "[" + index + "]");
+				try
+				{
+					return this.convert(finder, (Map<?, ?>) nestedGraphQlOperation);
 				}
-			);
+				finally
+				{
+					this.context.pop();
+				}
+			}
+		);
 		return nestedOperations.reduce(conjunctionFunction).orElseGet(finder::all);
 	}
 
-	private Operation convertField(RelatedFinder<?> finder, String key, Object graphQlOperation) {
+	private Operation convertField(RelatedFinder<?> finder, String key, Object graphQlOperation)
+	{
 		this.context.push(key);
 
-		try {
-			if (graphQlOperation.equals(Lists.immutable.empty()) || graphQlOperation.equals(Maps.immutable.empty())) {
+		try
+		{
+			if (graphQlOperation.equals(Lists.immutable.empty()) || graphQlOperation.equals(Maps.immutable.empty()))
+			{
 				throw new LiftwizardGraphQLContextException("Empty criteria node.", this.getContext());
 			}
 
 			Attribute attributeByName = finder.getAttributeByName(key);
-			if (attributeByName != null) {
+			if (attributeByName != null)
+			{
 				return this.convertAttribute(finder, attributeByName, (Map<String, ?>) graphQlOperation);
 			}
 
 			var relationshipFinderByName = (AbstractRelatedFinder) finder.getRelationshipFinderByName(key);
-			if (relationshipFinderByName != null) {
+			if (relationshipFinderByName != null)
+			{
 				return this.convertRelationship(relationshipFinderByName, (Map<String, ?>) graphQlOperation);
 			}
 
 			throw new LiftwizardGraphQLContextException("Could not find field " + key, this.getContext());
-		} finally {
+		}
+		finally
+		{
 			this.context.pop();
 		}
 	}
@@ -173,32 +200,42 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		Attribute attribute,
 		Map<String, ?> graphQlOperation
-	) {
-		if (attribute instanceof StringAttribute<?> stringAttribute) {
+	)
+	{
+		if (attribute instanceof StringAttribute<?> stringAttribute)
+		{
 			return this.convertStringAttribute(finderInstance, stringAttribute, graphQlOperation);
 		}
-		if (attribute instanceof BooleanAttribute<?> booleanAttribute) {
+		if (attribute instanceof BooleanAttribute<?> booleanAttribute)
+		{
 			return this.convertBooleanAttribute(finderInstance, booleanAttribute, graphQlOperation);
 		}
-		if (attribute instanceof IntegerAttribute<?> integerAttribute) {
+		if (attribute instanceof IntegerAttribute<?> integerAttribute)
+		{
 			return this.convertIntegerAttribute(finderInstance, integerAttribute, graphQlOperation);
 		}
-		if (attribute instanceof LongAttribute<?> longAttribute) {
+		if (attribute instanceof LongAttribute<?> longAttribute)
+		{
 			return this.convertLongAttribute(finderInstance, longAttribute, graphQlOperation);
 		}
-		if (attribute instanceof DoubleAttribute<?> doubleAttribute) {
+		if (attribute instanceof DoubleAttribute<?> doubleAttribute)
+		{
 			return this.convertDoubleAttribute(finderInstance, doubleAttribute, graphQlOperation);
 		}
-		if (attribute instanceof FloatAttribute<?> floatAttribute) {
+		if (attribute instanceof FloatAttribute<?> floatAttribute)
+		{
 			return this.convertFloatAttribute(finderInstance, floatAttribute, graphQlOperation);
 		}
-		if (attribute instanceof DateAttribute<?> dateAttribute) {
+		if (attribute instanceof DateAttribute<?> dateAttribute)
+		{
 			return this.convertDateAttribute(finderInstance, dateAttribute, graphQlOperation);
 		}
-		if (attribute instanceof TimestampAttribute<?> timestampAttribute) {
+		if (attribute instanceof TimestampAttribute<?> timestampAttribute)
+		{
 			return this.convertTimestampAttribute(finderInstance, timestampAttribute, graphQlOperation);
 		}
-		if (attribute instanceof AsOfAttribute<?> asOfAttribute) {
+		if (attribute instanceof AsOfAttribute<?> asOfAttribute)
+		{
 			return this.convertAsOfAttribute(finderInstance, asOfAttribute, graphQlOperation);
 		}
 		throw new AssertionError(attribute.getClass().getSuperclass().getCanonicalName());
@@ -208,7 +245,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		StringAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -222,8 +260,10 @@ public class GraphQLQueryToOperationConverter {
 		StringAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> attribute.eq((String) operationParameter);
 			case "notEq" -> attribute.notEq((String) operationParameter);
 			case "in" -> attribute.in(new LinkedHashSet<>((Collection<String>) operationParameter));
@@ -251,7 +291,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.substring(0, 0),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on StringAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -262,7 +303,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		BooleanAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -276,15 +318,18 @@ public class GraphQLQueryToOperationConverter {
 		BooleanAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Boolean) operationParameter);
 			case "notEq" -> operationParameter == null
 				? attribute.isNotNull()
 				: attribute.notEq((Boolean) operationParameter);
 			case "in" -> attribute.in(BooleanSets.immutable.withAll((Iterable<Boolean>) operationParameter));
 			case "notIn" -> attribute.notIn(BooleanSets.immutable.withAll((Iterable<Boolean>) operationParameter));
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on StringAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -295,7 +340,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		IntegerAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -309,8 +355,10 @@ public class GraphQLQueryToOperationConverter {
 		IntegerAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Integer) operationParameter);
 			case "notEq" -> operationParameter == null
 				? attribute.isNotNull()
@@ -326,7 +374,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.absoluteValue(),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on IntegerAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -337,7 +386,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		LongAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -351,8 +401,10 @@ public class GraphQLQueryToOperationConverter {
 		LongAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Long) operationParameter);
 			case "notEq" -> operationParameter == null
 				? attribute.isNotNull()
@@ -368,7 +420,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.absoluteValue(),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on LongAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -379,7 +432,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		DoubleAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -393,8 +447,10 @@ public class GraphQLQueryToOperationConverter {
 		DoubleAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Double) operationParameter);
 			case "notEq" -> operationParameter == null
 				? attribute.isNotNull()
@@ -410,7 +466,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.absoluteValue(),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on DoubleAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -421,7 +478,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		FloatAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -435,8 +493,10 @@ public class GraphQLQueryToOperationConverter {
 		FloatAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null
 				? attribute.isNull()
 				: attribute.eq(((Double) operationParameter).floatValue());
@@ -462,7 +522,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.absoluteValue(),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on FloatAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -473,7 +534,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		DateAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -487,8 +549,10 @@ public class GraphQLQueryToOperationConverter {
 		DateAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null
 				? attribute.isNull()
 				: attribute.eq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
@@ -524,7 +588,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.dayOfMonth(),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				String message = "Unknown operation on IntegerAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -535,7 +600,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		TimestampAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -549,8 +615,10 @@ public class GraphQLQueryToOperationConverter {
 		TimestampAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		return switch (operationName) {
+	)
+	{
+		return switch (operationName)
+		{
 			case "eq" -> operationParameter == null
 				? attribute.isNull()
 				: attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
@@ -586,7 +654,8 @@ public class GraphQLQueryToOperationConverter {
 				attribute.dayOfMonth(),
 				(Map<String, ?>) operationParameter
 			);
-			default -> {
+			default ->
+			{
 				var message = "Unknown operation on IntegerAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
@@ -597,7 +666,8 @@ public class GraphQLQueryToOperationConverter {
 		RelatedFinder<?> finderInstance,
 		AsOfAttribute<?> attribute,
 		Map<String, ?> graphQlOperation
-	) {
+	)
+	{
 		List<Operation> nestedOperations = graphQlOperation
 			.entrySet()
 			.stream()
@@ -611,51 +681,64 @@ public class GraphQLQueryToOperationConverter {
 		AsOfAttribute<?> attribute,
 		String operationName,
 		Object operationParameter
-	) {
-		switch (operationName) {
-			case "eq": {
-				if (operationParameter == null) {
+	)
+	{
+		switch (operationName)
+		{
+			case "eq":
+			{
+				if (operationParameter == null)
+				{
 					return attribute.isNull();
 				}
 				return attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
 			}
-			case "notEq": {
-				if (operationParameter == null) {
+			case "notEq":
+			{
+				if (operationParameter == null)
+				{
 					return attribute.isNotNull();
 				}
 				var message =
 					"notEq operation on AsOfAttribute only supported with null but found: " + operationParameter;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
-			case "equalsEdgePoint": {
-				if (!operationParameter.equals(Maps.immutable.empty())) {
+			case "equalsEdgePoint":
+			{
+				if (!operationParameter.equals(Maps.immutable.empty()))
+				{
 					var message =
 						"equalsEdgePoint takes an empty object as its argument but found: " + operationParameter;
 					throw new LiftwizardGraphQLContextException(message, this.getContext());
 				}
 				return attribute.equalsEdgePoint();
 			}
-			default: {
+			default:
+			{
 				var message = "Unknown operation on AsOfAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
 		}
 	}
 
-	private Operation convertRelationship(AbstractRelatedFinder relatedFinder, Map<String, ?> graphQlOperation) {
+	private Operation convertRelationship(AbstractRelatedFinder relatedFinder, Map<String, ?> graphQlOperation)
+	{
 		return this.convert(relatedFinder, graphQlOperation);
 	}
 
-	private ImmutableList<String> getContext() {
+	private ImmutableList<String> getContext()
+	{
 		return this.context.toList().toReversed().toImmutable();
 	}
 
-	private static Timestamp getDate(String operationParameter) {
+	private static Timestamp getDate(String operationParameter)
+	{
 		LocalDate localDate = LocalDate.parse(operationParameter);
 		return Timestamp.valueOf(localDate.atStartOfDay());
 	}
 
-	private static Timestamp getTimestamp(String operationParameter) {
+	private static Timestamp getTimestamp(String operationParameter)
+	{
 		Instant instant = Instant.parse(operationParameter);
 		return Timestamp.from(instant);
 	}

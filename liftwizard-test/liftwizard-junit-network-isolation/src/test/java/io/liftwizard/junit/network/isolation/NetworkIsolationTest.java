@@ -29,8 +29,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class NetworkIsolationTest {
-
+class NetworkIsolationTest
+{
 	/**
 	 * Verifies that network isolation blocks external connections.
 	 *
@@ -46,9 +46,12 @@ class NetworkIsolationTest {
 	 * consistently blocks the connection with a SocketException on all platforms.
 	 */
 	@Test
-	void shouldFailToConnectWhenNetworkIsDisabled() {
-		assertThatThrownBy(() -> {
-			try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+	void shouldFailToConnectWhenNetworkIsDisabled()
+	{
+		assertThatThrownBy(() ->
+		{
+			try (CloseableHttpClient httpClient = HttpClients.createDefault())
+			{
 				// Use IP address to skip DNS resolution and ensure consistent cross-platform behavior
 				var request = new HttpGet("http://8.8.8.8");
 				httpClient.execute(request, (response) -> EntityUtils.toString(response.getEntity()));

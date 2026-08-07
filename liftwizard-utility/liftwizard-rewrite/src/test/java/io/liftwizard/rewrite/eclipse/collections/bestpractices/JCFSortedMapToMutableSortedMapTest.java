@@ -21,17 +21,20 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-class JCFSortedMapToMutableSortedMapTest extends AbstractEclipseCollectionsTest {
-
+class JCFSortedMapToMutableSortedMapTest
+	extends AbstractEclipseCollectionsTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new JCFSortedMapToMutableSortedMap());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 }

@@ -21,40 +21,44 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-class ECSelectNotEmptyToAnySatisfyTest extends AbstractEclipseCollectionsTest {
-
+class ECSelectNotEmptyToAnySatisfyTest
+	extends AbstractEclipseCollectionsTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new ECSelectNotEmptyToAnySatisfyRecipes());
 	}
 
 	@Test
 	@DocumentExample
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				// Pattern 1: RichIterable select().notEmpty() -> anySatisfy()
-				this.javaFixture("replacePatterns/01"),
-				// Pattern 1: ImmutableList
-				this.javaFixture("replacePatterns/02"),
-				// Pattern 1: MutableSet
-				this.javaFixture("replacePatterns/03"),
-				// Pattern 2: ArrayIterate.select().notEmpty() -> ArrayIterate.anySatisfy()
-				this.javaFixture("replacePatterns/04"),
-				// Pattern 2: ListIterate.select().notEmpty() -> ListIterate.anySatisfy()
-				this.javaFixture("replacePatterns/05")
-			);
+			// Pattern 1: RichIterable select().notEmpty() -> anySatisfy()
+			this.javaFixture("replacePatterns/01"),
+			// Pattern 1: ImmutableList
+			this.javaFixture("replacePatterns/02"),
+			// Pattern 1: MutableSet
+			this.javaFixture("replacePatterns/03"),
+			// Pattern 2: ArrayIterate.select().notEmpty() -> ArrayIterate.anySatisfy()
+			this.javaFixture("replacePatterns/04"),
+			// Pattern 2: ListIterate.select().notEmpty() -> ListIterate.anySatisfy()
+			this.javaFixture("replacePatterns/05")
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				// Do not replace when notEmpty is not called on select result
-				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
-				// Do not replace when select has intermediate operations
-				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02"),
-				// Do not replace for non-EC types
-				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/03")
-			);
+			// Do not replace when notEmpty is not called on select result
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
+			// Do not replace when select has intermediate operations
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02"),
+			// Do not replace for non-EC types
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/03")
+		);
 	}
 }

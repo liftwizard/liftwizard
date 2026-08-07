@@ -33,23 +33,28 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * does not buffer the entire response in memory. The response is written to the real output
  * stream as it arrives, so there is no need to call {@code copyBodyToResponse()}.
  */
-public class BodyCaptureResponseWrapper extends HttpServletResponseWrapper {
-
+public class BodyCaptureResponseWrapper
+	extends HttpServletResponseWrapper
+{
 	private final int maxCapture;
 	private final byte[] captureBuffer;
 	private int capturedBytes;
 	private ServletOutputStream wrappedStream;
 	private PrintWriter wrappedWriter;
 
-	public BodyCaptureResponseWrapper(HttpServletResponse response, int maxCapture) {
+	public BodyCaptureResponseWrapper(HttpServletResponse response, int maxCapture)
+	{
 		super(response);
 		this.maxCapture = maxCapture;
 		this.captureBuffer = new byte[maxCapture];
 	}
 
 	@Override
-	public ServletOutputStream getOutputStream() throws IOException {
-		if (this.wrappedStream == null) {
+	public ServletOutputStream getOutputStream()
+		throws IOException
+	{
+		if (this.wrappedStream == null)
+		{
 			ServletOutputStream delegate = super.getOutputStream();
 			this.wrappedStream = new TeeServletOutputStream(delegate);
 		}
@@ -57,8 +62,11 @@ public class BodyCaptureResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	@Override
-	public PrintWriter getWriter() throws IOException {
-		if (this.wrappedWriter == null) {
+	public PrintWriter getWriter()
+		throws IOException
+	{
+		if (this.wrappedWriter == null)
+		{
 			String encoding = this.getCharacterEncoding();
 			this.wrappedWriter = new PrintWriter(new OutputStreamWriter(this.getOutputStream(), encoding));
 		}
@@ -66,33 +74,42 @@ public class BodyCaptureResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	@Override
-	public void flushBuffer() throws IOException {
-		if (this.wrappedWriter != null) {
+	public void flushBuffer()
+		throws IOException
+	{
+		if (this.wrappedWriter != null)
+		{
 			this.wrappedWriter.flush();
 		}
-		if (this.wrappedStream != null) {
+		if (this.wrappedStream != null)
+		{
 			this.wrappedStream.flush();
 		}
 		super.flushBuffer();
 	}
 
-	public byte[] getCapturedBody() {
+	public byte[] getCapturedBody()
+	{
 		byte[] result = new byte[this.capturedBytes];
 		System.arraycopy(this.captureBuffer, 0, result, 0, this.capturedBytes);
 		return result;
 	}
 
-	public int getCapturedSize() {
+	public int getCapturedSize()
+	{
 		return this.capturedBytes;
 	}
 
-	public boolean isTruncated() {
+	public boolean isTruncated()
+	{
 		return this.capturedBytes >= this.maxCapture;
 	}
 
-	private void capture(byte[] data, int offset, int length) {
+	private void capture(byte[] data, int offset, int length)
+	{
 		int remaining = this.maxCapture - this.capturedBytes;
-		if (remaining <= 0) {
+		if (remaining <= 0)
+		{
 			return;
 		}
 		int toCopy = Math.min(length, remaining);
@@ -100,50 +117,64 @@ public class BodyCaptureResponseWrapper extends HttpServletResponseWrapper {
 		this.capturedBytes += toCopy;
 	}
 
-	private void capture(int b) {
-		if (this.capturedBytes < this.maxCapture) {
+	private void capture(int b)
+	{
+		if (this.capturedBytes < this.maxCapture)
+		{
 			this.captureBuffer[this.capturedBytes] = (byte) b;
 			this.capturedBytes++;
 		}
 	}
 
-	private class TeeServletOutputStream extends ServletOutputStream {
-
+	private class TeeServletOutputStream
+		extends ServletOutputStream
+	{
 		private final ServletOutputStream delegate;
 
-		TeeServletOutputStream(ServletOutputStream delegate) {
+		TeeServletOutputStream(ServletOutputStream delegate)
+		{
 			this.delegate = delegate;
 		}
 
 		@Override
-		public void write(int b) throws IOException {
+		public void write(int b)
+			throws IOException
+		{
 			this.delegate.write(b);
 			BodyCaptureResponseWrapper.this.capture(b);
 		}
 
 		@Override
-		public void write(byte[] b, int off, int len) throws IOException {
+		public void write(byte[] b, int off, int len)
+			throws IOException
+		{
 			this.delegate.write(b, off, len);
 			BodyCaptureResponseWrapper.this.capture(b, off, len);
 		}
 
 		@Override
-		public boolean isReady() {
+		public boolean isReady()
+		{
 			return this.delegate.isReady();
 		}
 
 		@Override
-		public void setWriteListener(WriteListener writeListener) {
+		public void setWriteListener(WriteListener writeListener)
+		{
 			this.delegate.setWriteListener(writeListener);
 		}
 
 		@Override
-		public void flush() throws IOException {
+		public void flush()
+			throws IOException
+		{
 			this.delegate.flush();
 		}
 
 		@Override
-		public void close() throws IOException {
+		public void close()
+			throws IOException
+		{
 			this.delegate.close();
 		}
 	}

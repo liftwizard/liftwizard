@@ -54,23 +54,25 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "`select(pred).size()` to `count(pred)`",
 	description = "Transforms `collection.select(pred).size()` to `collection.count(pred)`. "
-	+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
+		+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
 )
-public class ECSelectSizeToCount {
-
+public class ECSelectSizeToCount
+{
 	@RecipeDescriptor(
 		name = "`select(pred).size()` to `count(pred)`",
 		description = "Transforms `collection.select(pred).size()` to `collection.count(pred)`."
 	)
-	public static final class SelectSizeToCount<T> {
-
+	public static final class SelectSizeToCount<T>
+	{
 		@BeforeTemplate
-		int before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		int before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.select(predicate).size();
 		}
 
 		@AfterTemplate
-		int after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		int after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.count(predicate);
 		}
 	}
@@ -79,15 +81,17 @@ public class ECSelectSizeToCount {
 		name = "`ArrayIterate.select(array, pred).size()` to `ArrayIterate.count(array, pred)`",
 		description = "Transforms `ArrayIterate.select(array, pred).size()` to `ArrayIterate.count(array, pred)`."
 	)
-	public static final class ArrayIterateSelectSizeToCount<T> {
-
+	public static final class ArrayIterateSelectSizeToCount<T>
+	{
 		@BeforeTemplate
-		int before(T[] array, Predicate<? super T> predicate) {
+		int before(T[] array, Predicate<? super T> predicate)
+		{
 			return ArrayIterate.select(array, predicate).size();
 		}
 
 		@AfterTemplate
-		int after(T[] array, Predicate<? super T> predicate) {
+		int after(T[] array, Predicate<? super T> predicate)
+		{
 			return ArrayIterate.count(array, predicate);
 		}
 	}
@@ -96,15 +100,17 @@ public class ECSelectSizeToCount {
 		name = "`ListIterate.select(list, pred).size()` to `ListIterate.count(list, pred)`",
 		description = "Transforms `ListIterate.select(list, pred).size()` to `ListIterate.count(list, pred)`."
 	)
-	public static final class ListIterateSelectSizeToCount<T> {
-
+	public static final class ListIterateSelectSizeToCount<T>
+	{
 		@BeforeTemplate
-		int before(java.util.List<T> list, Predicate<? super T> predicate) {
+		int before(java.util.List<T> list, Predicate<? super T> predicate)
+		{
 			return ListIterate.select(list, predicate).size();
 		}
 
 		@AfterTemplate
-		int after(java.util.List<T> list, Predicate<? super T> predicate) {
+		int after(java.util.List<T> list, Predicate<? super T> predicate)
+		{
 			return ListIterate.count(list, predicate);
 		}
 	}

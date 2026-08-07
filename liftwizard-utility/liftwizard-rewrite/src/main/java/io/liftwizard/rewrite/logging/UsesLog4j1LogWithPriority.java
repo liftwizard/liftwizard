@@ -40,15 +40,18 @@ import org.openrewrite.java.search.UsesMethod;
  * <p>This recipe is the basis for the {@link DoesNotUseLog4j1LogWithPriority} precondition, which
  * prevents the Log4j 1 to SLF4J migration from running on files that use this pattern.
  */
-public final class UsesLog4j1LogWithPriority extends Recipe {
-
+public final class UsesLog4j1LogWithPriority
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Find Log4j 1.x log(Priority, ..) usage";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Finds Log4j 1.x calls to the generic `log(Priority, ..)` method "
 			+ "(e.g., `LOGGER.log(Level.INFO, message)` or `LOGGER::log`). SLF4J has no generic "
@@ -58,7 +61,8 @@ public final class UsesLog4j1LogWithPriority extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return logWithPriorityUsage();
 	}
 
@@ -68,7 +72,8 @@ public final class UsesLog4j1LogWithPriority extends Recipe {
 	 * detection. {@code Logger extends Category} and inherits {@code log(..)}, so matching the
 	 * declaring type with overrides covers both.
 	 */
-	static TreeVisitor<?, ExecutionContext> logWithPriorityUsage() {
+	static TreeVisitor<?, ExecutionContext> logWithPriorityUsage()
+	{
 		return new UsesMethod<>("org.apache.log4j.Category log(..)", true);
 	}
 }

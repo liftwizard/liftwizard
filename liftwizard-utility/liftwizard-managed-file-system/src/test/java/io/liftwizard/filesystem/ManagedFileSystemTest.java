@@ -27,10 +27,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class ManagedFileSystemTest {
-
+class ManagedFileSystemTest
+{
 	@Test
-	void smokeTest() throws URISyntaxException {
+	void smokeTest()
+		throws URISyntaxException
+	{
 		Path path1 = ManagedFileSystem.get(new URI("file:///"));
 		assertTrue(path1.isAbsolute());
 		assertTrue(path1.toFile().exists());

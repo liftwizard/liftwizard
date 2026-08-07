@@ -31,8 +31,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JsonTestDataExtensionTest {
-
+class JsonTestDataExtensionTest
+{
 	@RegisterExtension
 	@Order(1)
 	final ExecuteSqlExtension executeSqlExtension = new ExecuteSqlExtension();
@@ -54,7 +54,8 @@ class JsonTestDataExtensionTest {
 	);
 
 	@Test
-	void loadsTestDataFromJson() {
+	void loadsTestDataFromJson()
+	{
 		MithraList<Person> allPersons = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
 
 		assertThat(allPersons)
@@ -66,7 +67,8 @@ class JsonTestDataExtensionTest {
 	}
 
 	@Test
-	void loadedDataHasCorrectValues() {
+	void loadedDataHasCorrectValues()
+	{
 		Person alice = PersonFinder.findOne(PersonFinder.id().eq(1L).and(PersonFinder.system().equalsEdgePoint()));
 		Person bob = PersonFinder.findOne(PersonFinder.id().eq(2L).and(PersonFinder.system().equalsEdgePoint()));
 

@@ -32,32 +32,38 @@ import org.slf4j.LoggerFactory;
 import static java.util.Objects.requireNonNull;
 
 @Provider
-public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
-
+public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable>
+	implements ExceptionMapper<E>
+{
 	protected final Logger logger;
 
 	/**
 	 * @since 2.0
 	 */
-	protected LiftwizardLoggingExceptionMapper(Logger logger) {
+	protected LiftwizardLoggingExceptionMapper(Logger logger)
+	{
 		this.logger = requireNonNull(logger, "logger");
 	}
 
 	/**
 	 * @since 2.0
 	 */
-	protected LiftwizardLoggingExceptionMapper() {
+	protected LiftwizardLoggingExceptionMapper()
+	{
 		this(LoggerFactory.getLogger(LiftwizardLoggingExceptionMapper.class));
 	}
 
 	@Override
-	public Response toResponse(E exception) {
+	public Response toResponse(E exception)
+	{
 		// If we're dealing with a web exception, we can service certain types of request (like
 		// redirection or server errors) better and also propagate properties of the inner response.
-		if (exception instanceof WebApplicationException applicationException) {
+		if (exception instanceof WebApplicationException applicationException)
+		{
 			final Response response = applicationException.getResponse();
 			Response.Status.Family family = response.getStatusInfo().getFamily();
-			if (family == Response.Status.Family.REDIRECTION) {
+			if (family == Response.Status.Family.REDIRECTION)
+			{
 				return response;
 			}
 			/*
@@ -84,7 +90,8 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 	}
 
 	@SuppressWarnings("UnusedParameters")
-	protected String formatErrorMessage(long id, E exception) {
+	protected String formatErrorMessage(long id, E exception)
+	{
 		return String.format(
 			Locale.ROOT,
 			"There was an error processing your request. It has been logged (ID %016x).",
@@ -92,19 +99,22 @@ public abstract class LiftwizardLoggingExceptionMapper<E extends Throwable> impl
 		);
 	}
 
-	protected long logException(E exception) {
+	protected long logException(E exception)
+	{
 		final long id = ThreadLocalRandom.current().nextLong();
 		this.logException(id, exception);
 		return id;
 	}
 
 	@SuppressWarnings("Slf4jFormatShouldBeConst")
-	protected void logException(long id, E exception) {
+	protected void logException(long id, E exception)
+	{
 		this.logger.error(this.formatLogMessage(id, exception), exception);
 	}
 
 	@SuppressWarnings("UnusedParameters")
-	protected String formatLogMessage(long id, Throwable exception) {
+	protected String formatLogMessage(long id, Throwable exception)
+	{
 		return String.format(Locale.ROOT, "Error handling a request: %016x", id);
 	}
 }

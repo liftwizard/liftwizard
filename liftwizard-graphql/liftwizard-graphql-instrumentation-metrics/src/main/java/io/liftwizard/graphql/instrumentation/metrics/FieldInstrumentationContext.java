@@ -26,8 +26,9 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import graphql.execution.instrumentation.InstrumentationContext;
 
-public class FieldInstrumentationContext implements InstrumentationContext<Object> {
-
+public class FieldInstrumentationContext
+	implements InstrumentationContext<Object>
+{
 	private final Meter allFieldsExceptionsMeter;
 
 	private final Context allFieldsSyncClock;
@@ -37,7 +38,8 @@ public class FieldInstrumentationContext implements InstrumentationContext<Objec
 		@Nonnull Timer allFieldsSyncTimer,
 		@Nonnull Timer allFieldsAsyncTimer,
 		@Nonnull Meter allFieldsExceptionsMeter
-	) {
+	)
+	{
 		this.allFieldsExceptionsMeter = Objects.requireNonNull(allFieldsExceptionsMeter);
 
 		this.allFieldsSyncClock = allFieldsSyncTimer.time();
@@ -45,13 +47,16 @@ public class FieldInstrumentationContext implements InstrumentationContext<Objec
 	}
 
 	@Override
-	public void onDispatched(CompletableFuture<Object> result) {
+	public void onDispatched(CompletableFuture<Object> result)
+	{
 		this.allFieldsSyncClock.stop();
 	}
 
 	@Override
-	public void onCompleted(Object result, Throwable throwable) {
-		if (throwable != null) {
+	public void onCompleted(Object result, Throwable throwable)
+	{
+		if (throwable != null)
+		{
 			this.allFieldsExceptionsMeter.mark();
 		}
 

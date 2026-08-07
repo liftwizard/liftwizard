@@ -25,44 +25,47 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class UsesLog4j1ObjectLoggingTest implements AbstractRewriteFixtures, RewriteTest {
-
+class UsesLog4j1ObjectLoggingTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new UsesLog4j1ObjectLogging())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
-			);
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new UsesLog4j1ObjectLogging()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 
 	@Test
-	void detectsObjectArgumentWhenLoggerInheritanceIsSevered() {
+	void detectsObjectArgumentWhenLoggerInheritanceIsSevered()
+	{
 		String severedLoggerStub = """
-			package org.apache.log4j;
-			public class Logger {
-			    public static Logger getLogger(Class clazz) { return null; }
-			    public void trace(Object message) {}
-			    public void debug(Object message) {}
-			    public void info(Object message) {}
-			    public void warn(Object message) {}
-			    public void error(Object message) {}
-			    public void fatal(Object message) {}
-			}
-			""";
+		package org.apache.log4j;
+		public class Logger {
+		    public static Logger getLogger(Class clazz) { return null; }
+		    public void trace(Object message) {}
+		    public void debug(Object message) {}
+		    public void info(Object message) {}
+		    public void warn(Object message) {}
+		    public void error(Object message) {}
+		    public void fatal(Object message) {}
+		}
+		""";
 
 		this.rewriteRun(
 			(spec) ->

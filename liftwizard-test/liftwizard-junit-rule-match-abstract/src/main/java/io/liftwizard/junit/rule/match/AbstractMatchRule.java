@@ -38,8 +38,9 @@ import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.junit.rules.ErrorCollector;
 
-public abstract class AbstractMatchRule extends ErrorCollector {
-
+public abstract class AbstractMatchRule
+	extends ErrorCollector
+{
 	protected static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
 	protected final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
@@ -48,12 +49,14 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 
 	protected final boolean rerecordEnabled;
 
-	protected AbstractMatchRule(@Nonnull Class<?> callingClass) {
+	protected AbstractMatchRule(@Nonnull Class<?> callingClass)
+	{
 		this.callingClass = Objects.requireNonNull(callingClass);
 		this.rerecordEnabled = Boolean.parseBoolean(System.getenv("LIFTWIZARD_FILE_MATCH_RULE_RERECORD"));
 	}
 
-	public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass) {
+	public static String slurp(@Nonnull String resourceClassPathLocation, @Nonnull Class<?> callingClass)
+	{
 		return AbstractMatchRule.slurp(resourceClassPathLocation, callingClass, StandardCharsets.UTF_8);
 	}
 
@@ -61,22 +64,29 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 		@Nonnull String resourceClassPathLocation,
 		@Nonnull Class<?> callingClass,
 		Charset charset
-	) {
+	)
+	{
 		InputStream inputStream = callingClass.getResourceAsStream(resourceClassPathLocation);
 		Objects.requireNonNull(inputStream, resourceClassPathLocation);
 		return AbstractMatchRule.slurp(inputStream, charset);
 	}
 
-	public static String slurp(@Nonnull InputStream inputStream, Charset charset) {
-		try (var scanner = new Scanner(inputStream, charset)) {
+	public static String slurp(@Nonnull InputStream inputStream, Charset charset)
+	{
+		try (var scanner = new Scanner(inputStream, charset))
+		{
 			return scanner.useDelimiter("\\A").next();
 		}
 	}
 
-	public void assertFileContents(@Nonnull String resourceClassPathLocation, @Nonnull String actualString) {
-		try {
+	public void assertFileContents(@Nonnull String resourceClassPathLocation, @Nonnull String actualString)
+	{
+		try
+		{
 			this.assertFileContentsOrThrow(resourceClassPathLocation, actualString);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			throw new RuntimeException(resourceClassPathLocation, e);
 		}
 	}
@@ -84,24 +94,32 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 	protected abstract void assertFileContentsOrThrow(
 		@Nonnull String resourceClassPathLocation,
 		@Nonnull String actualString
-	) throws Exception;
+	)
+		throws Exception;
 
-	protected static void deleteDirectoryRecursively(@Nonnull Path directory) throws IOException {
-		if (!directory.toFile().exists()) {
+	protected static void deleteDirectoryRecursively(@Nonnull Path directory)
+		throws IOException
+	{
+		if (!directory.toFile().exists())
+		{
 			return;
 		}
 		Files.walkFileTree(
 			directory,
-			new SimpleFileVisitor<>() {
+			new SimpleFileVisitor<>()
+			{
 				@Override
 				public FileVisitResult visitFile(@Nonnull Path file, @Nonnull BasicFileAttributes attrs)
-					throws IOException {
+					throws IOException
+				{
 					Files.delete(file);
 					return super.visitFile(file, attrs);
 				}
 
 				@Override
-				public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc) throws IOException {
+				public FileVisitResult postVisitDirectory(@Nonnull Path dir, IOException exc)
+					throws IOException
+				{
 					Files.delete(dir);
 					return super.postVisitDirectory(dir, exc);
 				}
@@ -109,7 +127,8 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 		);
 	}
 
-	protected static Path getPackagePath(@Nonnull Class<?> callingClass) {
+	protected static Path getPackagePath(@Nonnull Class<?> callingClass)
+	{
 		String packageName = callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
 		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
@@ -120,14 +139,18 @@ public abstract class AbstractMatchRule extends ErrorCollector {
 		@Nonnull String resourceClassPathLocation,
 		@Nonnull String string,
 		@Nonnull File file
-	) throws IOException {
+	)
+		throws IOException
+	{
 		this.rerecordedPaths.add(resourceClassPathLocation);
 
-		if (!file.exists()) {
+		if (!file.exists())
+		{
 			file.getParentFile().mkdirs();
 		}
 
-		try (var printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
+		try (var printWriter = new PrintWriter(file, StandardCharsets.UTF_8))
+		{
 			String prettyPrintedString = this.getPrettyPrintedString(string);
 			printWriter.print(prettyPrintedString);
 		}

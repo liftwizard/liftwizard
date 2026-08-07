@@ -25,25 +25,27 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "`detectOptional().isPresent()` → `anySatisfy()`",
 	description = "Converts `iterable.detectOptional(predicate).isPresent()` to `iterable.anySatisfy(predicate)`, "
-	+ "`!iterable.detectOptional(predicate).isPresent()` to `iterable.noneSatisfy(predicate)`, "
-	+ "`iterable.detectOptional(predicate).isEmpty()` to `iterable.noneSatisfy(predicate)`, and "
-	+ "`!iterable.detectOptional(predicate).isEmpty()` to `iterable.anySatisfy(predicate)` for Eclipse Collections types."
+		+ "`!iterable.detectOptional(predicate).isPresent()` to `iterable.noneSatisfy(predicate)`, "
+		+ "`iterable.detectOptional(predicate).isEmpty()` to `iterable.noneSatisfy(predicate)`, and "
+		+ "`!iterable.detectOptional(predicate).isEmpty()` to `iterable.anySatisfy(predicate)` for Eclipse Collections types."
 )
-public class ECDetectOptionalToSatisfies {
-
+public class ECDetectOptionalToSatisfies
+{
 	@RecipeDescriptor(
 		name = "`!detectOptional(predicate).isPresent()` → `noneSatisfy(predicate)`",
 		description = "Converts `!iterable.detectOptional(predicate).isPresent()` to `iterable.noneSatisfy(predicate)`."
 	)
-	public static final class NegatedDetectOptionalIsPresentToNoneSatisfy<T> {
-
+	public static final class NegatedDetectOptionalIsPresentToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return !iterable.detectOptional(predicate).isPresent();
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.noneSatisfy(predicate);
 		}
 	}
@@ -52,15 +54,17 @@ public class ECDetectOptionalToSatisfies {
 		name = "`!detectOptional(predicate).isEmpty()` → `anySatisfy(predicate)`",
 		description = "Converts `!iterable.detectOptional(predicate).isEmpty()` to `iterable.anySatisfy(predicate)`."
 	)
-	public static final class NegatedDetectOptionalIsEmptyToAnySatisfy<T> {
-
+	public static final class NegatedDetectOptionalIsEmptyToAnySatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return !iterable.detectOptional(predicate).isEmpty();
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.anySatisfy(predicate);
 		}
 	}
@@ -69,15 +73,17 @@ public class ECDetectOptionalToSatisfies {
 		name = "`detectOptional(predicate).isPresent()` → `anySatisfy(predicate)`",
 		description = "Converts `iterable.detectOptional(predicate).isPresent()` to `iterable.anySatisfy(predicate)`."
 	)
-	public static final class DetectOptionalIsPresentToAnySatisfy<T> {
-
+	public static final class DetectOptionalIsPresentToAnySatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.detectOptional(predicate).isPresent();
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.anySatisfy(predicate);
 		}
 	}
@@ -86,15 +92,17 @@ public class ECDetectOptionalToSatisfies {
 		name = "`detectOptional(predicate).isEmpty()` → `noneSatisfy(predicate)`",
 		description = "Converts `iterable.detectOptional(predicate).isEmpty()` to `iterable.noneSatisfy(predicate)`."
 	)
-	public static final class DetectOptionalIsEmptyToNoneSatisfy<T> {
-
+	public static final class DetectOptionalIsEmptyToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.detectOptional(predicate).isEmpty();
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.noneSatisfy(predicate);
 		}
 	}

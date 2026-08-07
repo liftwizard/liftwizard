@@ -46,19 +46,22 @@ import org.openrewrite.java.tree.Space;
  * list.noneSatisfy(s -> s.isEmpty())
  * }</pre>
  */
-public class ECAllSatisfyNegatedLambda extends Recipe {
-
+public class ECAllSatisfyNegatedLambda
+	extends Recipe
+{
 	private static final MethodMatcher ALL_SATISFY_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.api.RichIterable allSatisfy(org.eclipse.collections.api.block.predicate.Predicate)"
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`allSatisfy(x -> !pred(x))` to `noneSatisfy(x -> pred(x))`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `iterable.allSatisfy(x -> !pred(x))` to `iterable.noneSatisfy(x -> pred(x))` "
 			+ "for Eclipse Collections types, eliminating the double negation pattern."
@@ -66,35 +69,43 @@ public class ECAllSatisfyNegatedLambda extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(ALL_SATISFY_MATCHER), new AllSatisfyNegatedLambdaVisitor());
 	}
 
-	private static final class AllSatisfyNegatedLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class AllSatisfyNegatedLambdaVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!ALL_SATISFY_MATCHER.matches(methodInvocation)) {
+			if (!ALL_SATISFY_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
-			if (methodInvocation.getArguments().isEmpty()) {
+			if (methodInvocation.getArguments().isEmpty())
+			{
 				return methodInvocation;
 			}
 
 			Expression argument = methodInvocation.getArguments().get(0);
-			if (!(argument instanceof J.Lambda lambda)) {
+			if (!(argument instanceof J.Lambda lambda))
+			{
 				return methodInvocation;
 			}
 
 			J lambdaBody = lambda.getBody();
-			if (!(lambdaBody instanceof J.Unary unary)) {
+			if (!(lambdaBody instanceof J.Unary unary))
+			{
 				return methodInvocation;
 			}
 
-			if (unary.getOperator() != J.Unary.Type.Not) {
+			if (unary.getOperator() != J.Unary.Type.Not)
+			{
 				return methodInvocation;
 			}
 
@@ -111,10 +122,13 @@ public class ECAllSatisfyNegatedLambda extends Recipe {
 			return methodInvocation.withName(newMethodName).withArguments(Lists.fixedSize.with(newLambda));
 		}
 
-		private Expression unwrapParentheses(Expression expression) {
-			if (expression instanceof J.Parentheses<?> parens) {
+		private Expression unwrapParentheses(Expression expression)
+		{
+			if (expression instanceof J.Parentheses<?> parens)
+			{
 				J inner = parens.getTree();
-				if (inner instanceof Expression innerExpr) {
+				if (inner instanceof Expression innerExpr)
+				{
 					return innerExpr;
 				}
 			}

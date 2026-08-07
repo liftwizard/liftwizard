@@ -23,101 +23,105 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentArrayInitializerLineWrappingTest implements RewriteTest {
-
+class EnforceConsistentArrayInitializerLineWrappingTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new EnforceConsistentArrayInitializerLineWrapping());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					class Test {
-					    void test() {
-					        String[] a = new String[] { "first",
-					                "second",
-					                "third" };
-					        String[] b = new String[] { "first",
-					                "second" };
-					        String[] c = new String[] {
-					                "first", "second", "third" };
-					        String[] d = new String[] {
-					                "a", "b",
-					                "c", "d",
-					                "e" };
-					        String[] e = new String[] {
-					                "a", "b",
-					                "c", "d",
-					                "e", "f", "g" };
-					    }
-					}""",
-					"""
-					class Test {
-					    void test() {
-					        String[] a = new String[] {
-					                "first",
-					                "second",
-					                "third" };
-					        String[] b = new String[] {
-					                "first",
-					                "second" };
-					        String[] c = new String[] {
-					                "first",
-					                "second",
-					                "third" };
-					        String[] d = new String[] {
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e" };
-					        String[] e = new String[] {
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e",
-					                "f",
-					                "g" };
-					    }
-					}"""
-				)
-			);
+			java(
+				"""
+				class Test {
+				    void test() {
+				        String[] a = new String[] { "first",
+				                "second",
+				                "third" };
+				        String[] b = new String[] { "first",
+				                "second" };
+				        String[] c = new String[] {
+				                "first", "second", "third" };
+				        String[] d = new String[] {
+				                "a", "b",
+				                "c", "d",
+				                "e" };
+				        String[] e = new String[] {
+				                "a", "b",
+				                "c", "d",
+				                "e", "f", "g" };
+				    }
+				}""",
+				"""
+				class Test {
+				    void test() {
+				        String[] a = new String[] {
+				                "first",
+				                "second",
+				                "third" };
+				        String[] b = new String[] {
+				                "first",
+				                "second" };
+				        String[] c = new String[] {
+				                "first",
+				                "second",
+				                "third" };
+				        String[] d = new String[] {
+				                "a",
+				                "b",
+				                "c",
+				                "d",
+				                "e" };
+				        String[] e = new String[] {
+				                "a",
+				                "b",
+				                "c",
+				                "d",
+				                "e",
+				                "f",
+				                "g" };
+				    }
+				}"""
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					class Test {
-					    void test() {
-					        String[] a = new String[] { "first", "second", "third" };
-					        String[] b = new String[] {
-					                "first",
-					                "second",
-					                "third" };
-					        String[] c = new String[] { "first" };
-					        String[] d = new String[] {
-					                "first" };
-					        String[] e = new String[] {
-					                "a", "b",
-					                "c", "d",
-					                "e", "f" };
-					        String[] f = new String[] {
-					                "a", "b", "c",
-					                "d", "e", "f" };
-					        String[] g = new String[] {
-					                "a", "b", "c",
-					                "d", "e", "f",
-					                "g", "h", "i" };
-					    }
-					}"""
-				)
-			);
+			java(
+				"""
+				class Test {
+				    void test() {
+				        String[] a = new String[] { "first", "second", "third" };
+				        String[] b = new String[] {
+				                "first",
+				                "second",
+				                "third" };
+				        String[] c = new String[] { "first" };
+				        String[] d = new String[] {
+				                "first" };
+				        String[] e = new String[] {
+				                "a", "b",
+				                "c", "d",
+				                "e", "f" };
+				        String[] f = new String[] {
+				                "a", "b", "c",
+				                "d", "e", "f" };
+				        String[] g = new String[] {
+				                "a", "b", "c",
+				                "d", "e", "f",
+				                "g", "h", "i" };
+				    }
+				}"""
+			)
+		);
 	}
 }

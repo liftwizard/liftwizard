@@ -55,8 +55,9 @@ import org.openrewrite.java.tree.Space;
  * list.select(s -> s.isEmpty())
  * }</pre>
  */
-public class ECSimplifyNegatedSelectReject extends Recipe {
-
+public class ECSimplifyNegatedSelectReject
+	extends Recipe
+{
 	private static final MethodMatcher SELECT_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.api.RichIterable select(org.eclipse.collections.api.block.predicate.Predicate)",
 		true
@@ -68,12 +69,14 @@ public class ECSimplifyNegatedSelectReject extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`select(x -> !pred(x))` to `reject(x -> pred(x))`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `iterable.select(x -> !pred(x))` to `iterable.reject(x -> pred(x))` "
 			+ "and `iterable.reject(x -> !pred(x))` to `iterable.select(x -> pred(x))` "
@@ -82,39 +85,46 @@ public class ECSimplifyNegatedSelectReject extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			Preconditions.or(new UsesMethod<>(SELECT_MATCHER), new UsesMethod<>(REJECT_MATCHER)),
 			new SelectRejectNegatedLambdaVisitor()
 		);
 	}
 
-	private static final class SelectRejectNegatedLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class SelectRejectNegatedLambdaVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
 			boolean isSelect = SELECT_MATCHER.matches(methodInvocation);
 			boolean isReject = REJECT_MATCHER.matches(methodInvocation);
 
-			if (!isSelect && !isReject) {
+			if (!isSelect && !isReject)
+			{
 				return methodInvocation;
 			}
 
-			if (methodInvocation.getArguments().isEmpty()) {
+			if (methodInvocation.getArguments().isEmpty())
+			{
 				return methodInvocation;
 			}
 
 			Expression argument = methodInvocation.getArguments().get(0);
-			if (!(argument instanceof J.Lambda lambda)) {
+			if (!(argument instanceof J.Lambda lambda))
+			{
 				return methodInvocation;
 			}
 
 			J lambdaBody = lambda.getBody();
 
 			NegationResult negationResult = this.extractNegatedExpression(lambdaBody);
-			if (negationResult == null) {
+			if (negationResult == null)
+			{
 				return methodInvocation;
 			}
 
@@ -135,9 +145,11 @@ public class ECSimplifyNegatedSelectReject extends Recipe {
 		 * @param expression the expression to analyze
 		 * @return a NegationResult containing the non-negated expression, or null if not a negation pattern
 		 */
-		private NegationResult extractNegatedExpression(J expression) {
+		private NegationResult extractNegatedExpression(J expression)
+		{
 			// Pattern 1: !expr
-			if (expression instanceof J.Unary unary && unary.getOperator() == J.Unary.Type.Not) {
+			if (expression instanceof J.Unary unary && unary.getOperator() == J.Unary.Type.Not)
+			{
 				Expression negatedExpression = unary.getExpression();
 				Space unaryPrefix = unary.getPrefix();
 				Expression newBody = this.unwrapParentheses(negatedExpression).withPrefix(unaryPrefix);
@@ -145,7 +157,8 @@ public class ECSimplifyNegatedSelectReject extends Recipe {
 			}
 
 			// Pattern 2: expr != value
-			if (expression instanceof J.Binary binary && binary.getOperator() == J.Binary.Type.NotEqual) {
+			if (expression instanceof J.Binary binary && binary.getOperator() == J.Binary.Type.NotEqual)
+			{
 				J.Binary flippedBinary = binary.withOperator(J.Binary.Type.Equal);
 				return new NegationResult(flippedBinary);
 			}
@@ -153,16 +166,21 @@ public class ECSimplifyNegatedSelectReject extends Recipe {
 			return null;
 		}
 
-		private Expression unwrapParentheses(Expression expression) {
-			if (expression instanceof J.Parentheses<?> parens) {
+		private Expression unwrapParentheses(Expression expression)
+		{
+			if (expression instanceof J.Parentheses<?> parens)
+			{
 				J inner = parens.getTree();
-				if (inner instanceof Expression innerExpr) {
+				if (inner instanceof Expression innerExpr)
+				{
 					return innerExpr;
 				}
 			}
 			return expression;
 		}
 
-		private record NegationResult(Expression nonNegatedExpression) {}
+		private record NegationResult(Expression nonNegatedExpression)
+		{
+		}
 	}
 }

@@ -27,23 +27,27 @@ import org.eclipse.collections.api.factory.primitive.IntSets;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.set.primitive.ImmutableIntSet;
 
-public class IntegerListBinaryOperatorVisitor extends AbstractBinaryOperatorVisitor {
-
+public class IntegerListBinaryOperatorVisitor
+	extends AbstractBinaryOperatorVisitor
+{
 	private final IntegerAttribute<?> attribute;
 	private final ImmutableIntSet intSet;
 
-	public IntegerListBinaryOperatorVisitor(IntegerAttribute<?> attribute, ImmutableList<Integer> parameter) {
+	public IntegerListBinaryOperatorVisitor(IntegerAttribute<?> attribute, ImmutableList<Integer> parameter)
+	{
 		this.attribute = Objects.requireNonNull(attribute);
 		this.intSet = IntSets.immutable.withAll(parameter);
 	}
 
 	@Override
-	public Operation visitOperatorIn(OperatorInContext ctx) {
+	public Operation visitOperatorIn(OperatorInContext ctx)
+	{
 		return this.attribute.in(this.intSet);
 	}
 
 	@Override
-	public Operation visitOperatorNotIn(OperatorNotInContext ctx) {
+	public Operation visitOperatorNotIn(OperatorNotInContext ctx)
+	{
 		return this.attribute.notIn(this.intSet);
 	}
 }

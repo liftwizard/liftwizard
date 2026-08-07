@@ -30,12 +30,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JsonPrettyPrinterTest {
-
+class JsonPrettyPrinterTest
+{
 	private final ObjectMapper mapper = JsonPrettyPrinterTest.getObjectMapper();
 
 	@Nonnull
-	private static ObjectMapper getObjectMapper() {
+	private static ObjectMapper getObjectMapper()
+	{
 		PrettyPrinter jsonPrettyPrinter = new JsonPrettyPrinter();
 
 		var objectMapper = new ObjectMapper();
@@ -45,7 +46,9 @@ class JsonPrettyPrinterTest {
 	}
 
 	@Test
-	void smokeTest() throws JsonProcessingException {
+	void smokeTest()
+		throws JsonProcessingException
+	{
 		Map<String, List<String>> map = new LinkedHashMap<>();
 		map.put("a", List.of("b", "c"));
 		map.put("d", List.of("e", "f"));
@@ -53,6 +56,7 @@ class JsonPrettyPrinterTest {
 		String actualJson = this.mapper.writeValueAsString(map);
 
 		// language=JSON
+		// prettier-ignore
 		var expectedJson = """
 			{
 				"a": [
@@ -70,7 +74,9 @@ class JsonPrettyPrinterTest {
 	}
 
 	@Test
-	void emptyArray() throws JsonProcessingException {
+	void emptyArray()
+		throws JsonProcessingException
+	{
 		List<String> emptyList = List.of();
 		String actualJson = this.mapper.writeValueAsString(emptyList);
 		var expectedJson = "[]\n";
@@ -78,7 +84,9 @@ class JsonPrettyPrinterTest {
 	}
 
 	@Test
-	void emptyObject() throws JsonProcessingException {
+	void emptyObject()
+		throws JsonProcessingException
+	{
 		Map<String, Object> emptyMap = Map.of();
 		String actualJson = this.mapper.writeValueAsString(emptyMap);
 		var expectedJson = "{}\n";

@@ -34,8 +34,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class JsonTestDataParserTest {
-
+class JsonTestDataParserTest
+{
 	@RegisterExtension
 	@Order(1)
 	final ExecuteSqlExtension executeSqlExtension = new ExecuteSqlExtension();
@@ -51,28 +51,32 @@ class JsonTestDataParserTest {
 	final ReladomoPurgeAllExtension purgeAllExtension = new ReladomoPurgeAllExtension();
 
 	@Test
-	void extractsClassNameFromFilename() {
+	void extractsClassNameFromFilename()
+	{
 		var parser = new JsonTestDataParser("test-data/com.example.helloworld.core.Person.json");
 
 		assertThat(parser.getClassName()).isEqualTo("com.example.helloworld.core.Person");
 	}
 
 	@Test
-	void throwsExceptionForNonJsonFile() {
+	void throwsExceptionForNonJsonFile()
+	{
 		assertThatThrownBy(() -> new JsonTestDataParser("test-data/com.example.SomeClass.txt"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining("Filename must end with .json");
 	}
 
 	@Test
-	void throwsExceptionForMissingFile() {
+	void throwsExceptionForMissingFile()
+	{
 		assertThatThrownBy(() -> new JsonTestDataParser("test-data/com.example.NonExistent.json"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining("Could not find file");
 	}
 
 	@Test
-	void createsDataObjects() {
+	void createsDataObjects()
+	{
 		var parser = new JsonTestDataParser("test-data/com.example.helloworld.core.Person.json");
 
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
@@ -83,14 +87,16 @@ class JsonTestDataParserTest {
 	}
 
 	@Test
-	void throwsExceptionForJsonObject() {
+	void throwsExceptionForJsonObject()
+	{
 		assertThatThrownBy(() -> new JsonTestDataParser("test-data/com.example.Object.json"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining("Expected a JSON array but found");
 	}
 
 	@Test
-	void populatesDataObjectsWithCorrectValues() {
+	void populatesDataObjectsWithCorrectValues()
+	{
 		var parser = new JsonTestDataParser("test-data/com.example.helloworld.core.Person.json");
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
 

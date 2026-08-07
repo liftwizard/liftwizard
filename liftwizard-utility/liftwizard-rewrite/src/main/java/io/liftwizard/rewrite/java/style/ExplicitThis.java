@@ -39,30 +39,36 @@ import org.openrewrite.marker.Markers;
  *     This recipe was contributed upstream (PR #791, merged 2026-03-21).
  */
 @Deprecated(forRemoval = true)
-public class ExplicitThis extends Recipe {
-
+public class ExplicitThis
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`field` → `this.field`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Add explicit 'this.' prefix to field and method access.";
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new ExplicitThisVisitor();
 	}
 
-	private static final class ExplicitThisVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class ExplicitThisVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private boolean isStatic;
 		private boolean isInsideFieldAccess;
 
 		@Override
-		public J visitFieldAccess(FieldAccess fieldAccess, ExecutionContext ctx) {
+		public J visitFieldAccess(FieldAccess fieldAccess, ExecutionContext ctx)
+		{
 			boolean previousIsInsideFieldAccess = this.isInsideFieldAccess;
 			this.isInsideFieldAccess = true;
 
@@ -73,43 +79,51 @@ public class ExplicitThis extends Recipe {
 		}
 
 		@Override
-		public J visitIdentifier(J.Identifier identifier, ExecutionContext ctx) {
+		public J visitIdentifier(J.Identifier identifier, ExecutionContext ctx)
+		{
 			var id = (J.Identifier) super.visitIdentifier(identifier, ctx);
 
 			// In static context, no "this." allowed
-			if (this.isStatic) {
+			if (this.isStatic)
+			{
 				return id;
 			}
 
 			// Skip if already qualified
-			if (this.isInsideFieldAccess) {
+			if (this.isInsideFieldAccess)
+			{
 				return id;
 			}
 
 			JavaType.Variable fieldType = id.getFieldType();
-			if (fieldType == null) {
+			if (fieldType == null)
+			{
 				return id;
 			}
 
 			// Check if this is actually a field of the class (not a parameter or local variable)
-			if (fieldType.getOwner() == null || !(fieldType.getOwner() instanceof JavaType.Class)) {
+			if (fieldType.getOwner() == null || !(fieldType.getOwner() instanceof JavaType.Class))
+			{
 				return id;
 			}
 
 			// Skip static fields
 			// 0x0008 is the static flag in Java
-			if ((fieldType.getFlagsBitMap() & 0x0008L) != 0) {
+			if ((fieldType.getFlagsBitMap() & 0x0008L) != 0)
+			{
 				return id;
 			}
 
 			// Skip keywords
 			String name = id.getSimpleName();
-			if ("this".equals(name) || "super".equals(name)) {
+			if ("this".equals(name) || "super".equals(name))
+			{
 				return id;
 			}
 
 			// Skip declarations
-			if (this.isPartOfDeclaration()) {
+			if (this.isPartOfDeclaration())
+			{
 				return id;
 			}
 
@@ -118,8 +132,10 @@ public class ExplicitThis extends Recipe {
 		}
 
 		@Override
-		public J visitBlock(J.Block block, ExecutionContext ctx) {
-			if (!block.isStatic()) {
+		public J visitBlock(J.Block block, ExecutionContext ctx)
+		{
+			if (!block.isStatic())
+			{
 				return super.visitBlock(block, ctx);
 			}
 
@@ -133,12 +149,14 @@ public class ExplicitThis extends Recipe {
 		}
 
 		@Override
-		public J visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+		public J visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx)
+		{
 			boolean previousStatic = this.isStatic;
 
 			// Check if method is static using flag bits (0x0008 is the static flag)
 			JavaType.Method methodType = method.getMethodType();
-			if (methodType != null) {
+			if (methodType != null)
+			{
 				this.isStatic = (methodType.getFlagsBitMap() & 0x0008L) != 0;
 			}
 
@@ -151,16 +169,19 @@ public class ExplicitThis extends Recipe {
 		}
 
 		@Override
-		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			var m = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
 			// Fast path: in static context, no "this." allowed
-			if (this.isStatic) {
+			if (this.isStatic)
+			{
 				return m;
 			}
 
 			// Skip constructor invocations (super() or this())
-			if (m.getName().getSimpleName().equals("super") || m.getName().getSimpleName().equals("this")) {
+			if (m.getName().getSimpleName().equals("super") || m.getName().getSimpleName().equals("this"))
+			{
 				return m;
 			}
 
@@ -170,14 +191,16 @@ public class ExplicitThis extends Recipe {
 				|| methodType == null
 				// Check if method is static using flag bits (0x0008 is the static flag)
 				|| (methodType.getFlagsBitMap() & 0x0008L) != 0
-			) {
+			)
+			{
 				return m;
 			}
 
 			Cursor classDeclarationCursor = this.getCursor().dropParentUntil(
 				(p) -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE
 			);
-			if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration)) {
+			if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration))
+			{
 				return m;
 			}
 
@@ -196,20 +219,24 @@ public class ExplicitThis extends Recipe {
 			return m.withSelect(identifier);
 		}
 
-		private boolean isPartOfDeclaration() {
+		private boolean isPartOfDeclaration()
+		{
 			Cursor parent = this.getCursor().getParent();
-			if (parent == null || !(parent.getValue() instanceof J.VariableDeclarations.NamedVariable)) {
+			if (parent == null || !(parent.getValue() instanceof J.VariableDeclarations.NamedVariable))
+			{
 				return false;
 			}
 			var namedVar = (J.VariableDeclarations.NamedVariable) parent.getValue();
 			return namedVar.getName() == this.getCursor().getValue();
 		}
 
-		private J.FieldAccess createFieldAccess(J.Identifier identifier) {
+		private J.FieldAccess createFieldAccess(J.Identifier identifier)
+		{
 			Cursor classDeclarationCursor = this.getCursor().dropParentUntil(
 				(p) -> p instanceof J.ClassDeclaration || p == Cursor.ROOT_VALUE
 			);
-			if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration)) {
+			if (!(classDeclarationCursor.getValue() instanceof J.ClassDeclaration))
+			{
 				return null;
 			}
 

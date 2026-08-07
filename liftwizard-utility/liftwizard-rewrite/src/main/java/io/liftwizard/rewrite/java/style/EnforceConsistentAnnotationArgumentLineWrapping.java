@@ -37,15 +37,18 @@ import org.openrewrite.java.tree.JRightPadded;
  * are also left unchanged. Valid fixed-multiple groupings (e.g., key-value pairs)
  * are also left unchanged.
  */
-public class EnforceConsistentAnnotationArgumentLineWrapping extends AbstractEnforceConsistentLineWrapping {
-
+public class EnforceConsistentAnnotationArgumentLineWrapping
+	extends AbstractEnforceConsistentLineWrapping
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Enforce consistent annotation argument line wrapping";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"When an annotation has multiple arguments and any argument is line-wrapped, "
 			+ "enforce that all arguments use line wrapping for consistency. "
@@ -54,25 +57,31 @@ public class EnforceConsistentAnnotationArgumentLineWrapping extends AbstractEnf
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.Annotation visitAnnotation(J.Annotation annotation, ExecutionContext ctx) {
+			public J.Annotation visitAnnotation(J.Annotation annotation, ExecutionContext ctx)
+			{
 				J.Annotation a = super.visitAnnotation(annotation, ctx);
 
 				JContainer<Expression> argsContainer = a.getPadding().getArguments();
-				if (argsContainer == null) {
+				if (argsContainer == null)
+				{
 					return a;
 				}
 
 				List<JRightPadded<Expression>> args = argsContainer.getPadding().getElements();
 
-				if (!shouldEnforceWrapping(args)) {
+				if (!shouldEnforceWrapping(args))
+				{
 					return a;
 				}
 
 				String wrappedIndent = findWrappedIndent(args);
-				if (wrappedIndent == null) {
+				if (wrappedIndent == null)
+				{
 					return a;
 				}
 

@@ -40,10 +40,12 @@ import static org.openrewrite.java.Assertions.java;
  * expected fixtures with whatever the recipes actually emit, which is how expected fixtures are regenerated after a
  * recipe or style change.
  */
-public interface AbstractRewriteFixtures {
+public interface AbstractRewriteFixtures
+{
 	String RERECORD_ENVIRONMENT_VARIABLE = "LIFTWIZARD_FILE_MATCH_RULE_RERECORD";
 
-	default boolean isRerecordEnabled() {
+	default boolean isRerecordEnabled()
+	{
 		return Boolean.parseBoolean(System.getenv(RERECORD_ENVIRONMENT_VARIABLE));
 	}
 
@@ -52,17 +54,24 @@ public interface AbstractRewriteFixtures {
 	 * base name. For example {@code javaFixture("replacePatterns/01")} reads {@code replacePatterns/01-before.java} and
 	 * {@code replacePatterns/01-after.java}.
 	 */
-	default SourceSpecs javaFixture(String name) {
-		return this.javaFixture(name, (spec) -> {});
+	default SourceSpecs javaFixture(String name)
+	{
+		return this.javaFixture(name, (spec) ->
+		{
+		});
 	}
 
 	/** Like {@link #javaFixture(String)}, with extra assertions such as {@link SourceSpec#afterRecipe} on the spec. */
-	default SourceSpecs javaFixture(String name, Consumer<SourceSpec<J.CompilationUnit>> customizer) {
+	default SourceSpecs javaFixture(String name, Consumer<SourceSpec<J.CompilationUnit>> customizer)
+	{
 		String before = this.fixture(name + "-before.java");
 
-		if (this.isRerecordEnabled()) {
-			return java(before, before, (spec) -> {
-				spec.after((actual) -> {
+		if (this.isRerecordEnabled())
+		{
+			return java(before, before, (spec) ->
+			{
+				spec.after((actual) ->
+				{
 					this.rerecordFixture(name + "-after.java", actual);
 					return actual;
 				});
@@ -74,37 +83,47 @@ public interface AbstractRewriteFixtures {
 	}
 
 	/** A source file that a recipe must leave alone. */
-	default SourceSpecs javaFixtureUnchanged(String name) {
+	default SourceSpecs javaFixtureUnchanged(String name)
+	{
 		return java(this.fixture(name + "-unchanged.java"));
 	}
 
 	/** A Groovy source file that a recipe must leave alone. */
-	default SourceSpecs groovyFixtureUnchanged(String name) {
+	default SourceSpecs groovyFixtureUnchanged(String name)
+	{
 		return groovy(this.fixture(name + "-unchanged.groovy"));
 	}
 
-	default String fixture(String name) {
+	default String fixture(String name)
+	{
 		String resourcePath = this.getClass().getSimpleName() + "/" + name;
 		InputStream inputStream = this.getClass().getResourceAsStream(resourcePath);
 		Objects.requireNonNull(inputStream, resourcePath);
-		try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8)) {
+		try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8))
+		{
 			return scanner.useDelimiter("\\A").next();
 		}
 	}
 
-	private void rerecordFixture(String name, String contents) {
+	private void rerecordFixture(String name, String contents)
+	{
 		Path path = this.fixturePath(name);
-		try {
+		try
+		{
 			Files.createDirectories(path.getParent());
 			Files.writeString(path, contents.endsWith("\n") ? contents : contents + "\n", StandardCharsets.UTF_8);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new UncheckedIOException("Rerecording fixture: " + path, e);
 		}
 	}
 
-	private Path fixturePath(String name) {
+	private Path fixturePath(String name)
+	{
 		Path result = Path.of("src", "test", "resources").toAbsolutePath();
-		for (String packagePart : this.getClass().getPackageName().split("\\.")) {
+		for (String packagePart : this.getClass().getPackageName().split("\\."))
+		{
 			result = result.resolve(packagePart);
 		}
 		return result.resolve(this.getClass().getSimpleName()).resolve(name);

@@ -53,15 +53,18 @@ import org.openrewrite.style.Style;
  * throw new AssertionError("Suppress default constructor for noninstantiability");
  * }</pre>
  */
-public class HideUtilityClassConstructor extends Recipe {
-
+public class HideUtilityClassConstructor
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Hide utility class constructor with AssertionError";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Ensures utility classes (classes containing only static methods or fields in their API) "
 			+ "do not have a public constructor. Adds a private constructor that throws AssertionError "
@@ -70,17 +73,20 @@ public class HideUtilityClassConstructor extends Recipe {
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Collections.singleton("RSPEC-S1118");
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new HideUtilityClassConstructorVisitor();
 	}
 
-	private static final class HideUtilityClassConstructorVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class HideUtilityClassConstructorVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private static final Set<J.ClassDeclaration.Kind.Type> EXCLUDE_CLASS_TYPES = EnumSet.of(
 			J.ClassDeclaration.Kind.Type.Interface,
 			J.ClassDeclaration.Kind.Type.Record
@@ -93,8 +99,10 @@ public class HideUtilityClassConstructor extends Recipe {
 		private HideUtilityClassConstructorStyle style;
 
 		@Override
-		public @Nullable J visit(@Nullable Tree tree, ExecutionContext ctx) {
-			if (style == null && tree instanceof SourceFile) {
+		public @Nullable J visit(@Nullable Tree tree, ExecutionContext ctx)
+		{
+			if (style == null && tree instanceof SourceFile)
+			{
 				style = Style.from(
 					HideUtilityClassConstructorStyle.class,
 					(SourceFile) tree,
@@ -107,13 +115,15 @@ public class HideUtilityClassConstructor extends Recipe {
 
 		@Override
 		@SuppressWarnings("ConstantConditions")
-		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+		{
 			J.ClassDeclaration c = super.visitClassDeclaration(classDecl, ctx);
 			if (
 				!EXCLUDE_CLASS_TYPES.contains(c.getKind())
 				&& !c.hasModifier(J.Modifier.Type.Abstract)
 				&& utilityClassMatcher.isRefactorableUtilityClass(getCursor())
-			) {
+			)
+			{
 				c = (J.ClassDeclaration) new AddPrivateConstructorVisitor().visit(
 					c,
 					ctx,
@@ -137,18 +147,21 @@ public class HideUtilityClassConstructor extends Recipe {
 		 * Adds a private constructor with AssertionError body when the class
 		 * has no explicit constructors (implicit default constructor).
 		 */
-		private final class AddPrivateConstructorVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+		private final class AddPrivateConstructorVisitor
+			extends JavaIsoVisitor<ExecutionContext>
+		{
 			@Override
-			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+			{
 				if (
 					utilityClassMatcher.hasImplicitDefaultConstructor(classDecl)
 					&& J.ClassDeclaration.Kind.Type.Enum != classDecl.getKind()
-				) {
+				)
+				{
 					return JavaTemplate.builder(
 						"private #{}() {\n"
-						+ "    throw new AssertionError(\"Suppress default constructor for noninstantiability\");\n"
-						+ "}"
+							+ "    throw new AssertionError(\"Suppress default constructor for noninstantiability\");\n"
+							+ "}"
 					)
 						.contextSensitive()
 						.build()
@@ -165,21 +178,25 @@ public class HideUtilityClassConstructor extends Recipe {
 		/**
 		 * Changes public/package-private constructors to private.
 		 */
-		private static final class ChangeExposedConstructorVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+		private static final class ChangeExposedConstructorVisitor
+			extends JavaIsoVisitor<ExecutionContext>
+		{
 			private final J.ClassDeclaration utilityClass;
 
-			private ChangeExposedConstructorVisitor(J.ClassDeclaration utilityClass) {
+			private ChangeExposedConstructorVisitor(J.ClassDeclaration utilityClass)
+			{
 				this.utilityClass = utilityClass;
 			}
 
 			@Override
-			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+			{
 				return classDecl == utilityClass ? super.visitClassDeclaration(classDecl, ctx) : classDecl;
 			}
 
 			@Override
-			public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+			public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx)
+			{
 				J.MethodDeclaration md = super.visitMethodDeclaration(method, ctx);
 				if (
 					md.getMethodType() == null
@@ -187,7 +204,8 @@ public class HideUtilityClassConstructor extends Recipe {
 					|| md.hasModifier(J.Modifier.Type.Private)
 					|| md.hasModifier(J.Modifier.Type.Protected)
 					|| md.getMethodType().getDeclaringType().getKind() == JavaType.Class.Kind.Enum
-				) {
+				)
+				{
 					return md;
 				}
 
@@ -204,26 +222,32 @@ public class HideUtilityClassConstructor extends Recipe {
 		 * Adds {@code throw new AssertionError(...)} to constructor bodies that
 		 * don't already contain it.
 		 */
-		private static final class AddAssertionErrorToConstructorVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+		private static final class AddAssertionErrorToConstructorVisitor
+			extends JavaIsoVisitor<ExecutionContext>
+		{
 			private final J.ClassDeclaration utilityClass;
 
-			private AddAssertionErrorToConstructorVisitor(J.ClassDeclaration utilityClass) {
+			private AddAssertionErrorToConstructorVisitor(J.ClassDeclaration utilityClass)
+			{
 				this.utilityClass = utilityClass;
 			}
 
 			@Override
-			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+			{
 				return classDecl == utilityClass ? super.visitClassDeclaration(classDecl, ctx) : classDecl;
 			}
 
 			@Override
-			public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+			public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx)
+			{
 				J.MethodDeclaration md = super.visitMethodDeclaration(method, ctx);
-				if (!md.isConstructor() || md.getBody() == null || !md.hasModifier(J.Modifier.Type.Private)) {
+				if (!md.isConstructor() || md.getBody() == null || !md.hasModifier(J.Modifier.Type.Private))
+				{
 					return md;
 				}
-				if (hasAssertionErrorThrow(md.getBody())) {
+				if (hasAssertionErrorThrow(md.getBody()))
+				{
 					return md;
 				}
 				return JavaTemplate.builder(
@@ -234,13 +258,16 @@ public class HideUtilityClassConstructor extends Recipe {
 					.apply(getCursor(), md.getBody().getCoordinates().lastStatement());
 			}
 
-			private static boolean hasAssertionErrorThrow(J.Block body) {
-				for (Statement statement : body.getStatements()) {
-					if (statement instanceof J.Throw throwStatement) {
-						if (throwStatement.getException() instanceof J.NewClass newClass) {
-							if (
-								newClass.getClazz() != null && newClass.getClazz().toString().equals("AssertionError")
-							) {
+			private static boolean hasAssertionErrorThrow(J.Block body)
+			{
+				for (Statement statement : body.getStatements())
+				{
+					if (statement instanceof J.Throw throwStatement)
+					{
+						if (throwStatement.getException() instanceof J.NewClass newClass)
+						{
+							if (newClass.getClazz() != null && newClass.getClazz().toString().equals("AssertionError"))
+							{
 								return true;
 							}
 						}
@@ -250,33 +277,42 @@ public class HideUtilityClassConstructor extends Recipe {
 			}
 		}
 
-		private final class UtilityClassMatcher {
-
+		private final class UtilityClassMatcher
+		{
 			private final Collection<AnnotationMatcher> ignorableAnnotations;
 
-			private UtilityClassMatcher(Collection<String> ignorableAnnotations) {
+			private UtilityClassMatcher(Collection<String> ignorableAnnotations)
+			{
 				this.ignorableAnnotations = new ArrayList<>(ignorableAnnotations.size());
-				for (String ignorableAnnotation : ignorableAnnotations) {
+				for (String ignorableAnnotation : ignorableAnnotations)
+				{
 					this.ignorableAnnotations.add(new AnnotationMatcher(ignorableAnnotation));
 				}
 			}
 
-			boolean hasIgnorableAnnotation(Cursor cursor) {
+			boolean hasIgnorableAnnotation(Cursor cursor)
+			{
 				AnnotationService service = service(AnnotationService.class);
-				for (AnnotationMatcher ignorableAnn : ignorableAnnotations) {
-					if (service.matches(cursor, ignorableAnn)) {
+				for (AnnotationMatcher ignorableAnn : ignorableAnnotations)
+				{
+					if (service.matches(cursor, ignorableAnn))
+					{
 						return true;
 					}
 				}
 				return false;
 			}
 
-			boolean hasMainMethod(J.ClassDeclaration c) {
-				if (c.getType() == null) {
+			boolean hasMainMethod(J.ClassDeclaration c)
+			{
+				if (c.getType() == null)
+				{
 					return false;
 				}
-				for (Statement statement : c.getBody().getStatements()) {
-					if (statement instanceof J.MethodDeclaration md) {
+				for (Statement statement : c.getBody().getStatements())
+				{
+					if (statement instanceof J.MethodDeclaration md)
+					{
 						if (
 							!md.isConstructor()
 							&& md.hasModifier(J.Modifier.Type.Public)
@@ -284,7 +320,8 @@ public class HideUtilityClassConstructor extends Recipe {
 							&& md.getReturnTypeExpression() != null
 							&& JavaType.Primitive.Void == md.getReturnTypeExpression().getType()
 							&& new MethodMatcher(c.getType().getFullyQualifiedName() + " main(String[])").matches(md, c)
-						) {
+						)
+						{
 							return true;
 						}
 					}
@@ -292,10 +329,14 @@ public class HideUtilityClassConstructor extends Recipe {
 				return false;
 			}
 
-			boolean hasImplicitDefaultConstructor(J.ClassDeclaration c) {
-				for (Statement statement : c.getBody().getStatements()) {
-					if (statement instanceof J.MethodDeclaration md) {
-						if (md.isConstructor()) {
+			boolean hasImplicitDefaultConstructor(J.ClassDeclaration c)
+			{
+				for (Statement statement : c.getBody().getStatements())
+				{
+					if (statement instanceof J.MethodDeclaration md)
+					{
+						if (md.isConstructor())
+						{
 							return false;
 						}
 					}
@@ -303,39 +344,49 @@ public class HideUtilityClassConstructor extends Recipe {
 				return true;
 			}
 
-			boolean isRefactorableUtilityClass(Cursor cursor) {
+			boolean isRefactorableUtilityClass(Cursor cursor)
+			{
 				J.ClassDeclaration c = cursor.getValue();
 				return isUtilityClass(c) && !hasIgnorableAnnotation(cursor) && !hasMainMethod(c);
 			}
 
-			boolean isUtilityClass(J.ClassDeclaration c) {
-				if (c.getImplements() != null || c.getExtends() != null) {
+			boolean isUtilityClass(J.ClassDeclaration c)
+			{
+				if (c.getImplements() != null || c.getExtends() != null)
+				{
 					return false;
 				}
 
 				int staticMethodCount = countStaticMethods(c);
-				if (staticMethodCount < 0) {
+				if (staticMethodCount < 0)
+				{
 					return false;
 				}
 
 				int staticFieldCount = countStaticFields(c);
-				if (staticFieldCount < 0) {
+				if (staticFieldCount < 0)
+				{
 					return false;
 				}
 
 				return staticMethodCount != 0 || staticFieldCount != 0;
 			}
 
-			private int countStaticFields(J.ClassDeclaration classDeclaration) {
+			private int countStaticFields(J.ClassDeclaration classDeclaration)
+			{
 				int count = 0;
-				for (Statement statement : classDeclaration.getBody().getStatements()) {
-					if (!(statement instanceof J.VariableDeclarations field)) {
+				for (Statement statement : classDeclaration.getBody().getStatements())
+				{
+					if (!(statement instanceof J.VariableDeclarations field))
+					{
 						continue;
 					}
-					if (!field.hasModifier(J.Modifier.Type.Static)) {
+					if (!field.hasModifier(J.Modifier.Type.Static))
+					{
 						return -1;
 					}
-					if (field.hasModifier(J.Modifier.Type.Private)) {
+					if (field.hasModifier(J.Modifier.Type.Private))
+					{
 						continue;
 					}
 					count++;
@@ -343,19 +394,25 @@ public class HideUtilityClassConstructor extends Recipe {
 				return count;
 			}
 
-			private int countStaticMethods(J.ClassDeclaration classDeclaration) {
+			private int countStaticMethods(J.ClassDeclaration classDeclaration)
+			{
 				int count = 0;
-				for (Statement statement : classDeclaration.getBody().getStatements()) {
-					if (!(statement instanceof J.MethodDeclaration method)) {
+				for (Statement statement : classDeclaration.getBody().getStatements())
+				{
+					if (!(statement instanceof J.MethodDeclaration method))
+					{
 						continue;
 					}
-					if (method.isConstructor()) {
+					if (method.isConstructor())
+					{
 						continue;
 					}
-					if (!method.hasModifier(J.Modifier.Type.Static)) {
+					if (!method.hasModifier(J.Modifier.Type.Static))
+					{
 						return -1;
 					}
-					if (method.hasModifier(J.Modifier.Type.Private)) {
+					if (method.hasModifier(J.Modifier.Type.Private))
+					{
 						continue;
 					}
 					count++;

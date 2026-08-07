@@ -27,235 +27,271 @@ import javax.servlet.http.HttpServletResponse;
 import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.access.spi.ServerAdapter;
 
-public class FakeAccessEvent implements IAccessEvent {
-
+public class FakeAccessEvent
+	implements IAccessEvent
+{
 	private final String requestURL;
 
-	public FakeAccessEvent(String requestURL) {
+	public FakeAccessEvent(String requestURL)
+	{
 		this.requestURL = Objects.requireNonNull(requestURL);
 	}
 
 	@Override
-	public String getRequestURL() {
+	public String getRequestURL()
+	{
 		return this.requestURL;
 	}
 
 	@Override
-	public HttpServletRequest getRequest() {
+	public HttpServletRequest getRequest()
+	{
 		throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".getRequest() not implemented yet");
 	}
 
 	@Override
-	public HttpServletResponse getResponse() {
+	public HttpServletResponse getResponse()
+	{
 		throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".getResponse() not implemented yet");
 	}
 
 	@Override
-	public long getTimeStamp() {
+	public long getTimeStamp()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getTimeStamp() not implemented yet"
 		);
 	}
 
 	@Override
-	public long getElapsedTime() {
+	public long getElapsedTime()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getElapsedTime() not implemented yet"
 		);
 	}
 
 	@Override
-	public long getElapsedSeconds() {
+	public long getElapsedSeconds()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getElapsedSeconds() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getRequestURI() {
+	public String getRequestURI()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestURI() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getRemoteHost() {
+	public String getRemoteHost()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRemoteHost() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getRemoteUser() {
+	public String getRemoteUser()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRemoteUser() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getProtocol() {
+	public String getProtocol()
+	{
 		throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".getProtocol() not implemented yet");
 	}
 
 	@Override
-	public String getMethod() {
+	public String getMethod()
+	{
 		throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".getMethod() not implemented yet");
 	}
 
 	@Override
-	public String getServerName() {
+	public String getServerName()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getServerName() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getSessionID() {
+	public String getSessionID()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getSessionID() not implemented yet"
 		);
 	}
 
 	@Override
-	public void setThreadName(String threadName) {
+	public void setThreadName(String threadName)
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".setThreadName() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getThreadName() {
+	public String getThreadName()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getThreadName() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getQueryString() {
+	public String getQueryString()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getQueryString() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getRemoteAddr() {
+	public String getRemoteAddr()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRemoteAddr() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getRequestHeader(String key) {
+	public String getRequestHeader(String key)
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestHeader() not implemented yet"
 		);
 	}
 
 	@Override
-	public Enumeration<String> getRequestHeaderNames() {
+	public Enumeration<String> getRequestHeaderNames()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestHeaderNames() not implemented yet"
 		);
 	}
 
 	@Override
-	public Map<String, String> getRequestHeaderMap() {
+	public Map<String, String> getRequestHeaderMap()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestHeaderMap() not implemented yet"
 		);
 	}
 
 	@Override
-	public Map<String, String[]> getRequestParameterMap() {
+	public Map<String, String[]> getRequestParameterMap()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestParameterMap() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getAttribute(String key) {
+	public String getAttribute(String key)
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getAttribute() not implemented yet"
 		);
 	}
 
 	@Override
-	public String[] getRequestParameter(String key) {
+	public String[] getRequestParameter(String key)
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestParameter() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getCookie(String key) {
+	public String getCookie(String key)
+	{
 		throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".getCookie() not implemented yet");
 	}
 
 	@Override
-	public long getContentLength() {
+	public long getContentLength()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getContentLength() not implemented yet"
 		);
 	}
 
 	@Override
-	public int getStatusCode() {
+	public int getStatusCode()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getStatusCode() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getRequestContent() {
+	public String getRequestContent()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getRequestContent() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getResponseContent() {
+	public String getResponseContent()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getResponseContent() not implemented yet"
 		);
 	}
 
 	@Override
-	public int getLocalPort() {
+	public int getLocalPort()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getLocalPort() not implemented yet"
 		);
 	}
 
 	@Override
-	public ServerAdapter getServerAdapter() {
+	public ServerAdapter getServerAdapter()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getServerAdapter() not implemented yet"
 		);
 	}
 
 	@Override
-	public String getResponseHeader(String key) {
+	public String getResponseHeader(String key)
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getResponseHeader() not implemented yet"
 		);
 	}
 
 	@Override
-	public Map<String, String> getResponseHeaderMap() {
+	public Map<String, String> getResponseHeaderMap()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getResponseHeaderMap() not implemented yet"
 		);
 	}
 
 	@Override
-	public List<String> getResponseHeaderNameList() {
+	public List<String> getResponseHeaderNameList()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".getResponseHeaderNameList() not implemented yet"
 		);
 	}
 
 	@Override
-	public void prepareForDeferredProcessing() {
+	public void prepareForDeferredProcessing()
+	{
 		throw new UnsupportedOperationException(
 			this.getClass().getSimpleName() + ".prepareForDeferredProcessing() not implemented yet"
 		);

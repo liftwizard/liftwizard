@@ -37,8 +37,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ImpersonationAuthFilterFactoryTest {
-
+class ImpersonationAuthFilterFactoryTest
+{
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
@@ -53,7 +53,8 @@ class ImpersonationAuthFilterFactoryTest {
 	);
 
 	@Test
-	void isDiscoverable() {
+	void isDiscoverable()
+	{
 		// Make sure the types we specified in META-INF gets picked up
 		var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
 		List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
@@ -61,7 +62,9 @@ class ImpersonationAuthFilterFactoryTest {
 	}
 
 	@Test
-	void impersonationAuthFilter() throws Exception {
+	void impersonationAuthFilter()
+		throws Exception
+	{
 		AuthFilterFactory authFilterFactory = this.factory.build(
 			new ResourceConfigurationSourceProvider(),
 			"config-test.json5"
@@ -71,7 +74,8 @@ class ImpersonationAuthFilterFactoryTest {
 		assertThat(authFilter).isInstanceOf(OAuthCredentialAuthFilter.class);
 	}
 
-	private static ObjectMapper newObjectMapper() {
+	private static ObjectMapper newObjectMapper()
+	{
 		ObjectMapper objectMapper = Jackson.newObjectMapper();
 		ObjectMapperConfig.configure(objectMapper);
 		return objectMapper;

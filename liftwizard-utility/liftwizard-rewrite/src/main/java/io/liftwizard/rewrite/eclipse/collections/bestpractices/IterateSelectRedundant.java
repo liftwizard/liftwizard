@@ -29,21 +29,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "`Iterate.select(mutableCollection, predicate)` -> `mutableCollection.select(predicate)`",
 	description = "Transforms `Iterate.select(mutableCollection, predicate)` to `mutableCollection.select(predicate)` when the iterable is already an Eclipse Collections MutableCollection. The Iterate utility is for JCF interop; it is redundant when used with EC types."
 )
-public class IterateSelectRedundant {
-
+public class IterateSelectRedundant
+{
 	@RecipeDescriptor(
 		name = "`Iterate.select(mutableCollection, predicate)` -> `mutableCollection.select(predicate)`",
 		description = "Converts `Iterate.select(mutableCollection, predicate)` to `mutableCollection.select(predicate)` when the iterable is a MutableCollection."
 	)
-	public static final class IterateSelectToMutableCollectionSelect<T> {
-
+	public static final class IterateSelectToMutableCollectionSelect<T>
+	{
 		@BeforeTemplate
-		Collection<T> before(MutableCollection<T> iterable, Predicate<? super T> predicate) {
+		Collection<T> before(MutableCollection<T> iterable, Predicate<? super T> predicate)
+		{
 			return Iterate.select(iterable, predicate);
 		}
 
 		@AfterTemplate
-		MutableCollection<T> after(MutableCollection<T> iterable, Predicate<? super T> predicate) {
+		MutableCollection<T> after(MutableCollection<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.select(predicate);
 		}
 	}

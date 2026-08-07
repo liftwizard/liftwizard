@@ -37,15 +37,18 @@ import org.openrewrite.java.tree.Statement;
  * <p>Single-line method declarations are left unchanged. Declarations with only one parameter
  * are also left unchanged. Valid fixed-multiple groupings are also left unchanged.
  */
-public class EnforceConsistentMethodParameterLineWrapping extends AbstractEnforceConsistentLineWrapping {
-
+public class EnforceConsistentMethodParameterLineWrapping
+	extends AbstractEnforceConsistentLineWrapping
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Enforce consistent method parameter line wrapping";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"When a method declaration has multiple parameters and any parameter is line-wrapped, "
 			+ "enforce that all parameters use line wrapping for consistency. "
@@ -54,21 +57,26 @@ public class EnforceConsistentMethodParameterLineWrapping extends AbstractEnforc
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+			public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx)
+			{
 				J.MethodDeclaration m = super.visitMethodDeclaration(method, ctx);
 
 				JContainer<Statement> paramsContainer = m.getPadding().getParameters();
 				List<JRightPadded<Statement>> params = paramsContainer.getPadding().getElements();
 
-				if (!shouldEnforceWrapping(params)) {
+				if (!shouldEnforceWrapping(params))
+				{
 					return m;
 				}
 
 				String wrappedIndent = findWrappedIndent(params);
-				if (wrappedIndent == null) {
+				if (wrappedIndent == null)
+				{
 					return m;
 				}
 
@@ -80,30 +88,38 @@ public class EnforceConsistentMethodParameterLineWrapping extends AbstractEnforc
 		};
 	}
 
-	private static List<JRightPadded<Statement>> normalizeInternalNewlines(List<JRightPadded<Statement>> params) {
+	private static List<JRightPadded<Statement>> normalizeInternalNewlines(List<JRightPadded<Statement>> params)
+	{
 		List<JRightPadded<Statement>> result = new ArrayList<>(params.size());
-		for (JRightPadded<Statement> param : params) {
+		for (JRightPadded<Statement> param : params)
+		{
 			result.add(normalizeParam(param));
 		}
 		return result;
 	}
 
-	private static JRightPadded<Statement> normalizeParam(JRightPadded<Statement> param) {
-		if (param.getElement() instanceof J.VariableDeclarations varDecls) {
+	private static JRightPadded<Statement> normalizeParam(JRightPadded<Statement> param)
+	{
+		if (param.getElement() instanceof J.VariableDeclarations varDecls)
+		{
 			J.VariableDeclarations normalized = normalizeVariableDeclaration(varDecls);
-			if (normalized != varDecls) {
+			if (normalized != varDecls)
+			{
 				return param.withElement(normalized);
 			}
 		}
 		return param;
 	}
 
-	private static J.VariableDeclarations normalizeVariableDeclaration(J.VariableDeclarations varDecls) {
+	private static J.VariableDeclarations normalizeVariableDeclaration(J.VariableDeclarations varDecls)
+	{
 		List<JRightPadded<J.VariableDeclarations.NamedVariable>> paddedVars = varDecls.getPadding().getVariables();
-		for (int i = 0; i < paddedVars.size(); i++) {
+		for (int i = 0; i < paddedVars.size(); i++)
+		{
 			JRightPadded<J.VariableDeclarations.NamedVariable> paddedVar = paddedVars.get(i);
 			J.VariableDeclarations.NamedVariable namedVar = paddedVar.getElement();
-			if (containsNewline(namedVar.getPrefix())) {
+			if (containsNewline(namedVar.getPrefix()))
+			{
 				namedVar = namedVar.withPrefix(namedVar.getPrefix().withWhitespace(" "));
 				List<JRightPadded<J.VariableDeclarations.NamedVariable>> newVars = new ArrayList<>(paddedVars);
 				newVars.set(i, paddedVar.withElement(namedVar));

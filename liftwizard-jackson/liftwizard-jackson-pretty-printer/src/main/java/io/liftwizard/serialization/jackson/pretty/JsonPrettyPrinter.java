@@ -25,11 +25,13 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.Separators;
 
-public class JsonPrettyPrinter extends DefaultPrettyPrinter {
-
+public class JsonPrettyPrinter
+	extends DefaultPrettyPrinter
+{
 	private static final DefaultIndenter TAB_INDENTER = new DefaultIndenter("\t", DefaultIndenter.SYS_LF);
 
-	public JsonPrettyPrinter() {
+	public JsonPrettyPrinter()
+	{
 		this._arrayIndenter = TAB_INDENTER;
 		this._objectIndenter = TAB_INDENTER;
 		this._separators = Separators.createDefaultInstance().withObjectEmptySeparator("").withArrayEmptySeparator("");
@@ -39,27 +41,36 @@ public class JsonPrettyPrinter extends DefaultPrettyPrinter {
 
 	@Nonnull
 	@Override
-	public DefaultPrettyPrinter createInstance() {
+	public DefaultPrettyPrinter createInstance()
+	{
 		return this;
 	}
 
 	@Override
-	public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator) throws IOException {
+	public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator)
+		throws IOException
+	{
 		jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
 	}
 
 	@Override
-	public void writeEndObject(@Nonnull JsonGenerator jsonGenerator, int nrOfEntries) throws IOException {
+	public void writeEndObject(@Nonnull JsonGenerator jsonGenerator, int nrOfEntries)
+		throws IOException
+	{
 		super.writeEndObject(jsonGenerator, nrOfEntries);
-		if (this._nesting == 0) {
+		if (this._nesting == 0)
+		{
 			jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
 		}
 	}
 
 	@Override
-	public void writeEndArray(@Nonnull JsonGenerator jsonGenerator, int nrOfValues) throws IOException {
+	public void writeEndArray(@Nonnull JsonGenerator jsonGenerator, int nrOfValues)
+		throws IOException
+	{
 		super.writeEndArray(jsonGenerator, nrOfValues);
-		if (this._nesting == 0) {
+		if (this._nesting == 0)
+		{
 			jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
 		}
 	}

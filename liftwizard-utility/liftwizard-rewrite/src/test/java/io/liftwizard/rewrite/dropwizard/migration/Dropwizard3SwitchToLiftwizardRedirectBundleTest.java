@@ -25,78 +25,81 @@ import org.openrewrite.test.TypeValidation;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3SwitchToLiftwizardRedirectBundleTest implements RewriteTest {
-
+class Dropwizard3SwitchToLiftwizardRedirectBundleTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle")
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3SwitchToLiftwizardRedirectBundle")
 			.typeValidationOptions(TypeValidation.builder().dependencyModel(false).build())
 			.markerPrinter(PrintOutputCapture.MarkerPrinter.SANITIZED);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard-bundles</groupId>
-					            <artifactId>dropwizard-redirect-bundle</artifactId>
-					            <version>1.3.5</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					""",
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.liftwizard</groupId>
-					            <artifactId>liftwizard-redirect-bundle</artifactId>
-					            <version>${project.version}</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>io.dropwizard-bundles</groupId>
+				            <artifactId>dropwizard-redirect-bundle</artifactId>
+				            <version>1.3.5</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				""",
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>io.liftwizard</groupId>
+				            <artifactId>liftwizard-redirect-bundle</artifactId>
+				            <version>${project.version}</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				"""
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard</groupId>
-					            <artifactId>dropwizard-core</artifactId>
-					            <version>3.0.17</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>io.dropwizard</groupId>
+				            <artifactId>dropwizard-core</artifactId>
+				            <version>3.0.17</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				"""
+			)
+		);
 	}
 }

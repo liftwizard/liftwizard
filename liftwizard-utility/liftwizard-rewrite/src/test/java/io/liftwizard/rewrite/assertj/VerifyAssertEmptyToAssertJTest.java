@@ -24,36 +24,37 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class VerifyAssertEmptyToAssertJTest implements AbstractRewriteFixtures, RewriteTest {
-
+class VerifyAssertEmptyToAssertJTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new VerifyAssertEmptyToAssertJRecipes())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.collections.impl.test;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new VerifyAssertEmptyToAssertJRecipes()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.collections.impl.test;
 
-						import java.util.Map;
+					import java.util.Map;
 
-						public final class Verify {
-							public static void assertEmpty(String message, Iterable<?> iterable) {}
-							public static void assertEmpty(Iterable<?> iterable) {}
-							public static void assertEmpty(String message, Map<?, ?> map) {}
-							public static void assertEmpty(Map<?, ?> map) {}
-						}
-						"""
-					)
-					.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-			);
+					public final class Verify {
+						public static void assertEmpty(String message, Iterable<?> iterable) {}
+						public static void assertEmpty(Iterable<?> iterable) {}
+						public static void assertEmpty(String message, Map<?, ?> map) {}
+						public static void assertEmpty(Map<?, ?> map) {}
+					}
+					"""
+				)
+				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 }

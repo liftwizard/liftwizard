@@ -51,11 +51,12 @@ import org.slf4j.LoggerFactory;
  * }
  * }</pre>
  */
-public final class LiquibaseRollbackVerifier {
-
+public final class LiquibaseRollbackVerifier
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseRollbackVerifier.class);
 
-	private LiquibaseRollbackVerifier() {
+	private LiquibaseRollbackVerifier()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 
@@ -80,21 +81,29 @@ public final class LiquibaseRollbackVerifier {
 	 * @param migrationsFile the path to the Liquibase migrations XML file (e.g., "migrations.xml")
 	 * @throws RuntimeException if any changeset fails to apply, rollback, or reapply
 	 */
-	public static void verifyAllChangesets(String migrationsFile) {
+	public static void verifyAllChangesets(String migrationsFile)
+	{
 		Objects.requireNonNull(migrationsFile, "migrationsFile is required");
 
-		try {
+		try
+		{
 			Scope.child(Attr.ui, new LoggerUIService(), () -> runVerification(migrationsFile));
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			throw new RuntimeException("Failed to verify changesets in " + migrationsFile, e);
 		}
 	}
 
-	private static void runVerification(String migrationsFile) throws SQLException, LiquibaseException {
-		try (Connection connection = H2InMemoryConnectionManager.getInstance().getConnection()) {
+	private static void runVerification(String migrationsFile)
+		throws SQLException, LiquibaseException
+	{
+		try (Connection connection = H2InMemoryConnectionManager.getInstance().getConnection())
+		{
 			Database database = createDatabase(connection);
 
-			try (Liquibase liquibase = createLiquibase(migrationsFile, database)) {
+			try (Liquibase liquibase = createLiquibase(migrationsFile, database))
+			{
 				liquibase.dropAll();
 
 				DatabaseChangeLog databaseChangeLog = liquibase.getDatabaseChangeLog();
@@ -102,7 +111,8 @@ public final class LiquibaseRollbackVerifier {
 
 				LOGGER.info("Verifying {} changesets from {}", changeSets.size(), migrationsFile);
 
-				for (var i = 0; i < changeSets.size(); i++) {
+				for (var i = 0; i < changeSets.size(); i++)
+				{
 					ChangeSet changeSet = changeSets.get(i);
 					String changeSetId = changeSet.getId();
 					String author = changeSet.getAuthor();
@@ -117,7 +127,9 @@ public final class LiquibaseRollbackVerifier {
 		}
 	}
 
-	private static void verifyChangeset(Liquibase liquibase, ChangeSet changeSet) throws LiquibaseException {
+	private static void verifyChangeset(Liquibase liquibase, ChangeSet changeSet)
+		throws LiquibaseException
+	{
 		String changeSetId = changeSet.getId();
 		String author = changeSet.getAuthor();
 
@@ -131,13 +143,17 @@ public final class LiquibaseRollbackVerifier {
 		liquibase.update(1, "");
 	}
 
-	private static Liquibase createLiquibase(String migrationsFile, Database database) throws LiquibaseException {
+	private static Liquibase createLiquibase(String migrationsFile, Database database)
+		throws LiquibaseException
+	{
 		var liquibase = new Liquibase(migrationsFile, new ClassLoaderResourceAccessor(), database);
 		liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
 		return liquibase;
 	}
 
-	private static Database createDatabase(Connection connection) throws LiquibaseException {
+	private static Database createDatabase(Connection connection)
+		throws LiquibaseException
+	{
 		DatabaseConnection jdbcConnection = new JdbcConnection(connection);
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
 		database.supportsCatalogs();

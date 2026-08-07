@@ -49,8 +49,9 @@ import org.openrewrite.java.tree.J;
  * list.anySatisfy(s -> s.isEmpty());
  * }</pre>
  */
-public class ECStreamMatchToSatisfy extends Recipe {
-
+public class ECStreamMatchToSatisfy
+	extends Recipe
+{
 	private static final MethodMatcher ANY_MATCH_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream anyMatch(java.util.function.Predicate)"
 	);
@@ -64,12 +65,14 @@ public class ECStreamMatchToSatisfy extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().anyMatch/allMatch/noneMatch(pred)` to `anySatisfy/allSatisfy/noneSatisfy(pred)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().anyMatch(pred)` to `collection.anySatisfy(pred)`, "
 			+ "`stream().allMatch(pred)` to `allSatisfy(pred)`, and `stream().noneMatch(pred)` to `noneSatisfy(pred)`. "
@@ -78,7 +81,8 @@ public class ECStreamMatchToSatisfy extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			Preconditions.or(
 				new UsesMethod<>(ANY_MATCH_MATCHER),
@@ -89,37 +93,45 @@ public class ECStreamMatchToSatisfy extends Recipe {
 		);
 	}
 
-	private static final class StreamMatchToSatisfyVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamMatchToSatisfyVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
 			String satisfyMethod = this.getSatisfyMethod(methodInvocation);
-			if (satisfyMethod == null) {
+			if (satisfyMethod == null)
+			{
 				return methodInvocation;
 			}
 
 			Expression select = methodInvocation.getSelect();
-			if (!(select instanceof J.MethodInvocation streamCall)) {
+			if (!(select instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> arguments = methodInvocation.getArguments();
-			if (arguments.isEmpty()) {
+			if (arguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 
@@ -133,14 +145,18 @@ public class ECStreamMatchToSatisfy extends Recipe {
 				.withArguments(List.of(predicate));
 		}
 
-		private String getSatisfyMethod(J.MethodInvocation method) {
-			if (ANY_MATCH_MATCHER.matches(method)) {
+		private String getSatisfyMethod(J.MethodInvocation method)
+		{
+			if (ANY_MATCH_MATCHER.matches(method))
+			{
 				return "anySatisfy";
 			}
-			if (ALL_MATCH_MATCHER.matches(method)) {
+			if (ALL_MATCH_MATCHER.matches(method))
+			{
 				return "allSatisfy";
 			}
-			if (NONE_MATCH_MATCHER.matches(method)) {
+			if (NONE_MATCH_MATCHER.matches(method))
+			{
 				return "noneSatisfy";
 			}
 			return null;

@@ -30,11 +30,13 @@ import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.security.Constraint;
 
-public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
-
+public class AdminConstraintSecurityHandler
+	extends ConstraintSecurityHandler
+{
 	public static final String ADMIN_ROLE = "admin";
 
-	public AdminConstraintSecurityHandler(String userName, String password) {
+	public AdminConstraintSecurityHandler(String userName, String password)
+	{
 		this.setAuthenticator(new BasicAuthenticator());
 
 		Constraint constraint = this.getConstraint();
@@ -46,15 +48,20 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 	}
 
 	@Nonnull
-	private Constraint getConstraint() {
+	private Constraint getConstraint()
+	{
 		var constraint = new Constraint(Constraint.__BASIC_AUTH, ADMIN_ROLE);
 		constraint.setAuthenticate(true);
-		constraint.setRoles(new String[] { ADMIN_ROLE });
+		constraint.setRoles(new String[]
+		{
+			ADMIN_ROLE,
+		});
 		return constraint;
 	}
 
 	@Nonnull
-	private ConstraintMapping getConstraintMapping(Constraint constraint) {
+	private ConstraintMapping getConstraintMapping(Constraint constraint)
+	{
 		var constraintMapping = new ConstraintMapping();
 		constraintMapping.setConstraint(constraint);
 		constraintMapping.setPathSpec("/*");
@@ -62,7 +69,8 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 	}
 
 	@Nonnull
-	private AdminLoginService getAdminLoginService(String userName, String password) {
+	private AdminLoginService getAdminLoginService(String userName, String password)
+	{
 		return new AdminLoginService(userName, password);
 	}
 
@@ -73,7 +81,9 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler {
 		Request baseRequest,
 		HttpServletRequest request,
 		HttpServletResponse response
-	) throws IOException, ServletException {
+	)
+		throws IOException, ServletException
+	{
 		Objects.requireNonNull(request);
 		super.handle(pathInContext, baseRequest, request, response);
 	}

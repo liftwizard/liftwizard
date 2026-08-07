@@ -16,26 +16,32 @@
 
 package io.liftwizard.generator.rewrite;
 
-public class RecipeExclusion {
-
+public class RecipeExclusion
+{
 	private String recipeName;
 	private String reason;
 
-	public RecipeExclusion() {}
+	public RecipeExclusion()
+	{
+	}
 
-	public String getRecipeName() {
+	public String getRecipeName()
+	{
 		return this.recipeName;
 	}
 
-	public void setRecipeName(String recipeName) {
+	public void setRecipeName(String recipeName)
+	{
 		this.recipeName = recipeName;
 	}
 
-	public String getReason() {
+	public String getReason()
+	{
 		return this.reason;
 	}
 
-	public void setReason(String reason) {
+	public void setReason(String reason)
+	{
 		this.reason = reason;
 	}
 }

@@ -56,8 +56,9 @@ import org.openrewrite.java.tree.Space;
  * <p>Note: This recipe does NOT convert toUnmodifiableList() or toUnmodifiableSet() because
  * unmodifiable and immutable are different concepts.
  */
-public class ECStreamMapCollectToCollect extends Recipe {
-
+public class ECStreamMapCollectToCollect
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -71,12 +72,14 @@ public class ECStreamMapCollectToCollect extends Recipe {
 	private static final MethodMatcher TO_SET_MATCHER = new MethodMatcher("java.util.stream.Collectors toSet()");
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().map(fn).collect(Collectors.toList())` to `collect(fn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().map(fn).collect(Collectors.toList())` to `collection.collect(fn)` "
 			+ "and `collection.stream().map(fn).collect(Collectors.toSet())` to `collection.collect(fn).toSet()`. "
@@ -86,72 +89,87 @@ public class ECStreamMapCollectToCollect extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COLLECT_MATCHER), new StreamMapCollectToCollectVisitor());
 	}
 
-	private static final class StreamMapCollectToCollectVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamMapCollectToCollectVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			boolean isToList = TO_LIST_MATCHER.matches(collectorCall);
 			boolean isToSet = TO_SET_MATCHER.matches(collectorCall);
 
-			if (!isToList && !isToSet) {
+			if (!isToList && !isToSet)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation mapCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation mapCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!MAP_MATCHER.matches(mapCall)) {
+			if (!MAP_MATCHER.matches(mapCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression mapSelect = mapCall.getSelect();
-			if (!(mapSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(mapSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> mapArguments = mapCall.getArguments();
-			if (mapArguments.isEmpty()) {
+			if (mapArguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 
 			J.Identifier collectMethodName = methodInvocation.getName().withSimpleName("collect");
 
-			if (isToSet) {
+			if (isToSet)
+			{
 				J.MethodInvocation collectCall = mapCall
 					.withSelect(collectionExpr.withPrefix(Space.EMPTY))
 					.withName(mapCall.getName().withSimpleName("collect"));

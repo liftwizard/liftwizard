@@ -23,82 +23,86 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentRecordComponentLineWrappingTest implements RewriteTest {
-
+class EnforceConsistentRecordComponentLineWrappingTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new EnforceConsistentRecordComponentLineWrapping());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					record PartiallyWrapped(String first,
-					        String second,
-					        String third) {}
+			java(
+				"""
+				record PartiallyWrapped(String first,
+				        String second,
+				        String third) {}
 
-					record TwoComponentsPartiallyWrapped(String first,
-					        String second) {}
+				record TwoComponentsPartiallyWrapped(String first,
+				        String second) {}
 
-					record FirstWrappedOthersNot(
-					        String first, String second, String third) {}
-					""",
-					"""
-					record PartiallyWrapped(
-					        String first,
-					        String second,
-					        String third) {}
+				record FirstWrappedOthersNot(
+				        String first, String second, String third) {}
+				""",
+				"""
+				record PartiallyWrapped(
+				        String first,
+				        String second,
+				        String third) {}
 
-					record TwoComponentsPartiallyWrapped(
-					        String first,
-					        String second) {}
+				record TwoComponentsPartiallyWrapped(
+				        String first,
+				        String second) {}
 
-					record FirstWrappedOthersNot(
-					        String first,
-					        String second,
-					        String third) {}
-					"""
-				)
-			);
+				record FirstWrappedOthersNot(
+				        String first,
+				        String second,
+				        String third) {}
+				"""
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					record SingleLine(String first, String second, String third) {}
+			java(
+				"""
+				record SingleLine(String first, String second, String third) {}
 
-					record AlreadyFullyWrapped(
-					        String first,
-					        String second,
-					        String third) {}
+				record AlreadyFullyWrapped(
+				        String first,
+				        String second,
+				        String third) {}
 
-					record SingleComponent(String first) {}
+				record SingleComponent(String first) {}
 
-					record SingleComponentWrapped(
-					        String first) {}
+				record SingleComponentWrapped(
+				        String first) {}
 
-					record SixComponentsTwoPerLine(
-					        String a, String b,
-					        String c, String d,
-					        String e, String f) {}
+				record SixComponentsTwoPerLine(
+				        String a, String b,
+				        String c, String d,
+				        String e, String f) {}
 
-					class RegularClass {
-					    private final String first;
-					    private final String second;
+				class RegularClass {
+				    private final String first;
+				    private final String second;
 
-					    RegularClass(String first,
-					            String second) {
-					        this.first = first;
-					        this.second = second;
-					    }
-					}
-					"""
-				)
-			);
+				    RegularClass(String first,
+				            String second) {
+				        this.first = first;
+				        this.second = second;
+				    }
+				}
+				"""
+			)
+		);
 	}
 }

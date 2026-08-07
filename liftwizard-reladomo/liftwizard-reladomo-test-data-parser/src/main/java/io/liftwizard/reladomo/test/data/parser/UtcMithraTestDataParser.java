@@ -30,18 +30,22 @@ import com.gs.fw.common.mithra.test.MithraTestDataParser;
  * @see MithraTestDataParser
  * @see UtcMithraParsedData
  */
-public class UtcMithraTestDataParser extends MithraTestDataParser {
-
-	public UtcMithraTestDataParser(String filename) {
+public class UtcMithraTestDataParser
+	extends MithraTestDataParser
+{
+	public UtcMithraTestDataParser(String filename)
+	{
 		super(filename);
 	}
 
-	public UtcMithraTestDataParser(URL streamLocation, InputStream is) {
+	public UtcMithraTestDataParser(URL streamLocation, InputStream is)
+	{
 		super(streamLocation, is);
 	}
 
 	@Override
-	protected void addNewMithraParsedData() {
+	protected void addNewMithraParsedData()
+	{
 		var utcParsedData = new UtcMithraParsedData();
 		this.setCurrentParsedData(utcParsedData);
 		this.getResults().add(utcParsedData);

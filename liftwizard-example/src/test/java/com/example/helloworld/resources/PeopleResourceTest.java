@@ -29,8 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Unit tests for {@link PeopleResource}.
  */
-class PeopleResourceTest {
-
+class PeopleResourceTest
+{
 	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
 	@RegisterExtension
@@ -66,8 +66,11 @@ class PeopleResourceTest {
 	private final PersonDTO personDTO = new PersonDTO("Full Name", "Job Title");
 
 	@Test
-	void createPerson() throws JSONException {
+	void createPerson()
+		throws JSONException
+	{
 		Client client = this.dropwizardAppExtension.client();
+
 
 		{
 			Response response = client
@@ -82,15 +85,16 @@ class PeopleResourceTest {
 			// <editor-fold desc="Expected JSON">
 			// language=JSON
 			var expected = """
-				{
-				  "id"      : 1,
-				  "fullName": "Full Name",
-				  "jobTitle": "Job Title"
-				}
-				""";
+			{
+				"id": 1,
+				"fullName": "Full Name",
+				"jobTitle": "Job Title"
+			}
+			""";
 			// </editor-fold>
 			JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 		}
+
 
 		{
 			Response response = client
@@ -105,20 +109,21 @@ class PeopleResourceTest {
 			// <editor-fold desc="Expected JSON">
 			// language=JSON
 			var expected = """
-				[
-				  {
-				    "id"      : 1,
-				    "fullName": "Full Name",
-				    "jobTitle": "Job Title"
-				  }
-				]
-				""";
+			[
+				{
+					"id": 1,
+					"fullName": "Full Name",
+					"jobTitle": "Job Title"
+				}
+			]
+			""";
 			// </editor-fold>
 			JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 		}
 	}
 
-	private void assertResponseStatus(@Nonnull Response response, Status status) {
+	private void assertResponseStatus(@Nonnull Response response, Status status)
+	{
 		response.bufferEntity();
 		String entityAsString = response.readEntity(String.class);
 		assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);

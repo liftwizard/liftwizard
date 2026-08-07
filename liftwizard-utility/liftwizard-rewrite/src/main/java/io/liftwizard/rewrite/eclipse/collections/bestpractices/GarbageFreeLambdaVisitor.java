@@ -47,34 +47,41 @@ import org.openrewrite.java.tree.TypeUtils;
  * <p>The static {@link #detect} method is reused by {@link ECDetectIfNoneToDetectWithIfNone} for the
  * structurally different 3-arg {@code detectIfNone} overload.
  */
-final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+final class GarbageFreeLambdaVisitor
+	extends JavaIsoVisitor<ExecutionContext>
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.richIterable();
 
 	private final MethodMatcher matcher;
 	private final String targetMethodName;
 
-	GarbageFreeLambdaVisitor(MethodMatcher matcher, String targetMethodName) {
+	GarbageFreeLambdaVisitor(MethodMatcher matcher, String targetMethodName)
+	{
 		this.matcher = matcher;
 		this.targetMethodName = targetMethodName;
 	}
 
 	@Override
-	public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+	public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+	{
 		J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
-		if (!this.matcher.matches(mi)) {
+		if (!this.matcher.matches(mi))
+		{
 			return mi;
 		}
-		if (mi.getArguments().size() != 1) {
+		if (mi.getArguments().size() != 1)
+		{
 			return mi;
 		}
-		if (mi.getSelect() == null) {
+		if (mi.getSelect() == null)
+		{
 			return mi;
 		}
 
 		Result result = detect(mi.getArguments().get(0));
-		if (result == null) {
+		if (result == null)
+		{
 			return mi;
 		}
 
@@ -95,7 +102,8 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 			.build();
 
-		if (!result.typeFqn().startsWith("java.lang.")) {
+		if (!result.typeFqn().startsWith("java.lang."))
+		{
 			this.doAfterVisit(new AddImport<>(result.typeFqn(), null, false));
 		}
 
@@ -106,89 +114,109 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 			spaceBefore(result.capturedExpression())
 		);
 		replacement = result.withTypedMemberReferences(replacement);
-		if (mi.getMethodType() == null) {
+		if (mi.getMethodType() == null)
+		{
 			return replacement;
 		}
 		JavaType.Method methodType = mi.getMethodType().withName(this.targetMethodName);
 		return replacement.withMethodType(methodType).withName(replacement.getName().withType(methodType));
 	}
 
-	static Expression spaceBefore(Expression expression) {
+	static Expression spaceBefore(Expression expression)
+	{
 		return expression.withPrefix(expression.getPrefix().withWhitespace(" "));
 	}
 
-	static Result detect(Expression argument) {
-		if (!(argument instanceof J.Lambda lambda)) {
+	static Result detect(Expression argument)
+	{
+		if (!(argument instanceof J.Lambda lambda))
+		{
 			return null;
 		}
 
-		if (lambda.getParameters().getParameters().size() != 1) {
+		if (lambda.getParameters().getParameters().size() != 1)
+		{
 			return null;
 		}
 
 		J firstParameter = lambda.getParameters().getParameters().get(0);
-		if (!(firstParameter instanceof J.VariableDeclarations varDecls)) {
+		if (!(firstParameter instanceof J.VariableDeclarations varDecls))
+		{
 			return null;
 		}
-		if (varDecls.getVariables().size() != 1) {
+		if (varDecls.getVariables().size() != 1)
+		{
 			return null;
 		}
 		J.VariableDeclarations.NamedVariable namedVariable = varDecls.getVariables().get(0);
 		JavaType paramType = namedVariable.getType();
-		if (paramType == null) {
+		if (paramType == null)
+		{
 			return null;
 		}
 
 		J body = lambda.getBody();
-		if (body instanceof J.Block block) {
-			if (block.getStatements().size() != 1) {
+		if (body instanceof J.Block block)
+		{
+			if (block.getStatements().size() != 1)
+			{
 				return null;
 			}
 			Statement onlyStatement = block.getStatements().get(0);
-			if (!(onlyStatement instanceof J.Return returnStatement)) {
+			if (!(onlyStatement instanceof J.Return returnStatement))
+			{
 				return null;
 			}
 			Expression returned = returnStatement.getExpression();
-			if (returned == null) {
+			if (returned == null)
+			{
 				return null;
 			}
 			body = returned;
 		}
 
-		if (!(body instanceof J.MethodInvocation innerCall)) {
+		if (!(body instanceof J.MethodInvocation innerCall))
+		{
 			return null;
 		}
 
 		Expression select = innerCall.getSelect();
-		if (!(select instanceof J.Identifier selectIdentifier)) {
+		if (!(select instanceof J.Identifier selectIdentifier))
+		{
 			return null;
 		}
 		String paramName = namedVariable.getSimpleName();
-		if (!selectIdentifier.getSimpleName().equals(paramName)) {
+		if (!selectIdentifier.getSimpleName().equals(paramName))
+		{
 			return null;
 		}
 
-		if (innerCall.getArguments().size() != 1) {
+		if (innerCall.getArguments().size() != 1)
+		{
 			return null;
 		}
 		Expression capturedExpression = innerCall.getArguments().get(0);
-		if (capturedExpression instanceof J.Empty) {
+		if (capturedExpression instanceof J.Empty)
+		{
 			return null;
 		}
 
-		if (referencesParameter(capturedExpression, paramName)) {
+		if (referencesParameter(capturedExpression, paramName))
+		{
 			return null;
 		}
 
 		FullyQualified paramFqn = TypeUtils.asFullyQualified(paramType);
-		if (paramFqn == null) {
+		if (paramFqn == null)
+		{
 			return null;
 		}
 
 		String methodName = innerCall.getSimpleName();
 		JavaType.Method methodType = innerCall.getMethodType();
 
-		if (methodName.equals("equals")) {
+		if (methodName.equals("equals"))
+		{
 			return new Result("java.lang.Object", "Object", "equals", capturedExpression, methodType);
 		}
 
@@ -197,24 +225,29 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 		return new Result(paramFqn.getFullyQualifiedName(), leafName, methodName, capturedExpression, methodType);
 	}
 
-	private static boolean referencesParameter(Expression expression, String paramName) {
+	private static boolean referencesParameter(Expression expression, String paramName)
+	{
 		ReferenceChecker checker = new ReferenceChecker(paramName);
 		checker.visit(expression, null);
 		return checker.found;
 	}
 
-	private static final class ReferenceChecker extends JavaIsoVisitor<Object> {
-
+	private static final class ReferenceChecker
+		extends JavaIsoVisitor<Object>
+	{
 		private final String paramName;
 		private boolean found;
 
-		ReferenceChecker(String paramName) {
+		ReferenceChecker(String paramName)
+		{
 			this.paramName = paramName;
 		}
 
 		@Override
-		public J.Identifier visitIdentifier(J.Identifier identifier, Object ignored) {
-			if (!this.found && identifier.getSimpleName().equals(this.paramName)) {
+		public J.Identifier visitIdentifier(J.Identifier identifier, Object ignored)
+		{
+			if (!this.found && identifier.getSimpleName().equals(this.paramName))
+			{
 				this.found = true;
 			}
 			return identifier;
@@ -227,22 +260,27 @@ final class GarbageFreeLambdaVisitor extends JavaIsoVisitor<ExecutionContext> {
 		String methodName,
 		Expression capturedExpression,
 		JavaType.Method methodType
-	) {
-		J.MethodInvocation withTypedMemberReferences(J.MethodInvocation methodInvocation) {
-			if (this.methodType == null) {
+	)
+	{
+		J.MethodInvocation withTypedMemberReferences(J.MethodInvocation methodInvocation)
+		{
+			if (this.methodType == null)
+			{
 				return methodInvocation;
 			}
-			return (J.MethodInvocation) new JavaIsoVisitor<Integer>() {
+			return (J.MethodInvocation) new JavaIsoVisitor<Integer>()
+			{
 				@Override
-				public J.MemberReference visitMemberReference(J.MemberReference memberReference, Integer ignored) {
+				public J.MemberReference visitMemberReference(J.MemberReference memberReference, Integer ignored)
+				{
 					J.MemberReference mr = super.visitMemberReference(memberReference, ignored);
-					if (Result.this.methodName.equals(mr.getReference().getSimpleName())) {
+					if (Result.this.methodName.equals(mr.getReference().getSimpleName()))
+					{
 						return mr.withMethodType(Result.this.methodType).withType(Result.this.methodType);
 					}
 					return mr;
 				}
-			}
-				.visit(methodInvocation, 0);
+			}.visit(methodInvocation, 0);
 		}
 	}
 }

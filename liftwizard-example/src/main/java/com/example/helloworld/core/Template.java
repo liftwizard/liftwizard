@@ -4,17 +4,19 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
-public class Template {
-
+public class Template
+{
 	private final String content;
 	private final String defaultName;
 
-	public Template(String content, String defaultName) {
+	public Template(String content, String defaultName)
+	{
 		this.content = content;
 		this.defaultName = defaultName;
 	}
 
-	public String render(Optional<String> name) {
+	public String render(Optional<String> name)
+	{
 		return format(this.content, name.orElse(this.defaultName));
 	}
 }

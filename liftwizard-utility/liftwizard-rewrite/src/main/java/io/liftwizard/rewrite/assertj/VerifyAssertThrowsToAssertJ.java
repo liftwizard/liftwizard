@@ -30,8 +30,9 @@ import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class VerifyAssertThrowsToAssertJ extends Recipe {
-
+public class VerifyAssertThrowsToAssertJ
+	extends Recipe
+{
 	private static final List<String> STUBS = AssertJTemplateStubs.stubs();
 
 	private static final MethodMatcher VERIFY_ASSERT_THROWS_MATCHER = new MethodMatcher(
@@ -39,27 +40,33 @@ public class VerifyAssertThrowsToAssertJ extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Replace `Verify.assertThrows()` with AssertJ";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Replace Eclipse Collections `Verify.assertThrows()` with AssertJ `assertThatThrownBy().isInstanceOf()`.";
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(VERIFY_ASSERT_THROWS_MATCHER), new VerifyAssertThrowsVisitor());
 	}
 
-	private static final class VerifyAssertThrowsVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class VerifyAssertThrowsVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!VERIFY_ASSERT_THROWS_MATCHER.matches(methodInvocation)) {
+			if (!VERIFY_ASSERT_THROWS_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
@@ -85,7 +92,8 @@ public class VerifyAssertThrowsToAssertJ extends Recipe {
 			);
 		}
 
-		private boolean isLambdaOrMethodReference(Expression expression) {
+		private boolean isLambdaOrMethodReference(Expression expression)
+		{
 			return expression instanceof J.Lambda || expression instanceof J.MemberReference;
 		}
 	}

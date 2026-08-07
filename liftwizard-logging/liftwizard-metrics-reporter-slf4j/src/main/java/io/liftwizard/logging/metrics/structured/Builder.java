@@ -41,8 +41,8 @@ import org.slf4j.Marker;
 /**
  * A builder for {@link StructuredSlf4jReporter} instances. Defaults to logging to {@code metrics}, not using a marker, converting rates to events/second, converting durations to milliseconds, and not filtering metrics.
  */
-public class Builder {
-
+public class Builder
+{
 	private final MetricRegistry registry;
 
 	private Logger logger = LoggerFactory.getLogger("metrics");
@@ -58,7 +58,8 @@ public class Builder {
 	private Function<Map<String, Object>, ?> mapToStructuredObjectFunction = Function.identity();
 	private String message = "metrics";
 
-	public Builder(MetricRegistry registry) {
+	public Builder(MetricRegistry registry)
+	{
 		this.registry = Objects.requireNonNull(registry);
 	}
 
@@ -70,7 +71,8 @@ public class Builder {
 	 * @param newShutdownExecutorOnStop if true, then executor will be stopped in same time with this reporter
 	 * @return {@code this}
 	 */
-	public Builder shutdownExecutorOnStop(boolean newShutdownExecutorOnStop) {
+	public Builder shutdownExecutorOnStop(boolean newShutdownExecutorOnStop)
+	{
 		this.shutdownExecutorOnStop = newShutdownExecutorOnStop;
 		return this;
 	}
@@ -83,7 +85,8 @@ public class Builder {
 	 * @param newExecutor the executor to use while scheduling reporting of metrics.
 	 * @return {@code this}
 	 */
-	public Builder scheduleOn(ScheduledExecutorService newExecutor) {
+	public Builder scheduleOn(ScheduledExecutorService newExecutor)
+	{
 		this.executor = newExecutor;
 		return this;
 	}
@@ -94,7 +97,8 @@ public class Builder {
 	 * @param newLogger an SLF4J {@link Logger}
 	 * @return {@code this}
 	 */
-	public Builder outputTo(Logger newLogger) {
+	public Builder outputTo(Logger newLogger)
+	{
 		this.logger = newLogger;
 		return this;
 	}
@@ -105,7 +109,8 @@ public class Builder {
 	 * @param newMarker an SLF4J {@link Marker}
 	 * @return {@code this}
 	 */
-	public Builder markWith(Marker newMarker) {
+	public Builder markWith(Marker newMarker)
+	{
 		this.marker = newMarker;
 		return this;
 	}
@@ -116,7 +121,8 @@ public class Builder {
 	 * @param newPrefix the prefix for all metric names
 	 * @return {@code this}
 	 */
-	public Builder prefixedWith(String newPrefix) {
+	public Builder prefixedWith(String newPrefix)
+	{
 		this.prefix = newPrefix;
 		return this;
 	}
@@ -127,7 +133,8 @@ public class Builder {
 	 * @param newRateUnit a unit of time
 	 * @return {@code this}
 	 */
-	public Builder convertRatesTo(TimeUnit newRateUnit) {
+	public Builder convertRatesTo(TimeUnit newRateUnit)
+	{
 		this.rateUnit = newRateUnit;
 		return this;
 	}
@@ -138,7 +145,8 @@ public class Builder {
 	 * @param newDurationUnit a unit of time
 	 * @return {@code this}
 	 */
-	public Builder convertDurationsTo(TimeUnit newDurationUnit) {
+	public Builder convertDurationsTo(TimeUnit newDurationUnit)
+	{
 		this.durationUnit = newDurationUnit;
 		return this;
 	}
@@ -149,7 +157,8 @@ public class Builder {
 	 * @param newFilter a {@link MetricFilter}
 	 * @return {@code this}
 	 */
-	public Builder filter(MetricFilter newFilter) {
+	public Builder filter(MetricFilter newFilter)
+	{
 		this.filter = newFilter;
 		return this;
 	}
@@ -160,7 +169,8 @@ public class Builder {
 	 * @param newLoggingLevel a {@link LoggingLevel}
 	 * @return {@code this}
 	 */
-	public Builder withLoggingLevel(LoggingLevel newLoggingLevel) {
+	public Builder withLoggingLevel(LoggingLevel newLoggingLevel)
+	{
 		this.loggingLevel = newLoggingLevel;
 		return this;
 	}
@@ -172,7 +182,8 @@ public class Builder {
 	 * @param newDisabledMetricAttributes a set of {@link MetricAttribute}
 	 * @return {@code this}
 	 */
-	public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes) {
+	public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes)
+	{
 		this.disabledMetricAttributes = Sets.mutable.withAll(newDisabledMetricAttributes);
 		return this;
 	}
@@ -183,7 +194,8 @@ public class Builder {
 	 * @param newToStructuredObjectFunction A function such as {@code Markers::appendEntries} or {@code StructuredArguments::entries}
 	 * @return {@code this}
 	 */
-	public Builder mapToStructuredObjectFunction(Function<Map<String, Object>, ?> newToStructuredObjectFunction) {
+	public Builder mapToStructuredObjectFunction(Function<Map<String, Object>, ?> newToStructuredObjectFunction)
+	{
 		this.mapToStructuredObjectFunction = newToStructuredObjectFunction;
 		return this;
 	}
@@ -194,7 +206,8 @@ public class Builder {
 	 * @param newMessage A String such as {@code "metrics"} or {@code "metrics: {}"}
 	 * @return {@code this}
 	 */
-	public Builder message(String newMessage) {
+	public Builder message(String newMessage)
+	{
 		this.message = newMessage;
 		return this;
 	}
@@ -204,7 +217,8 @@ public class Builder {
 	 *
 	 * @return a {@link StructuredSlf4jReporter}
 	 */
-	public StructuredSlf4jReporter build() {
+	public StructuredSlf4jReporter build()
+	{
 		AbstractLoggerProxy loggerProxy = this.getLoggerProxy();
 		return new StructuredSlf4jReporter(
 			this.registry,
@@ -222,8 +236,10 @@ public class Builder {
 		);
 	}
 
-	private AbstractLoggerProxy getLoggerProxy() {
-		return switch (this.loggingLevel) {
+	private AbstractLoggerProxy getLoggerProxy()
+	{
+		return switch (this.loggingLevel)
+		{
 			case TRACE -> new TraceLoggerProxy(this.logger);
 			case DEBUG -> new DebugLoggerProxy(this.logger);
 			case INFO -> new InfoLoggerProxy(this.logger);

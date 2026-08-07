@@ -24,38 +24,39 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class VerifyAssertNotEmptyToAssertJTest implements AbstractRewriteFixtures, RewriteTest {
-
+class VerifyAssertNotEmptyToAssertJTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new VerifyAssertNotEmptyToAssertJRecipes())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.collections.impl.test;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new VerifyAssertNotEmptyToAssertJRecipes()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.collections.impl.test;
 
-						import java.util.Map;
+					import java.util.Map;
 
-						public final class Verify {
-							public static void assertNotEmpty(String message, Iterable<?> iterable) {}
-							public static void assertNotEmpty(Iterable<?> iterable) {}
-							public static void assertNotEmpty(String message, Map<?, ?> map) {}
-							public static void assertNotEmpty(Map<?, ?> map) {}
-							public static <T> void assertNotEmpty(String message, T[] array) {}
-							public static <T> void assertNotEmpty(T[] array) {}
-						}
-						"""
-					)
-					.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-			);
+					public final class Verify {
+						public static void assertNotEmpty(String message, Iterable<?> iterable) {}
+						public static void assertNotEmpty(Iterable<?> iterable) {}
+						public static void assertNotEmpty(String message, Map<?, ?> map) {}
+						public static void assertNotEmpty(Map<?, ?> map) {}
+						public static <T> void assertNotEmpty(String message, T[] array) {}
+						public static <T> void assertNotEmpty(T[] array) {}
+					}
+					"""
+				)
+				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 }

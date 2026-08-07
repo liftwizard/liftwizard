@@ -49,8 +49,9 @@ import org.openrewrite.java.tree.J;
  * <p>Eclipse Collections immutable types provide a richer API than JDK unmodifiable wrappers,
  * so this is a safe and beneficial transformation.
  */
-public class ECStreamCollectToUnmodifiableToToImmutable extends Recipe {
-
+public class ECStreamCollectToUnmodifiableToToImmutable
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -64,12 +65,14 @@ public class ECStreamCollectToUnmodifiableToToImmutable extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.toUnmodifiableList/Set())` to `toImmutableList/Set()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.toUnmodifiableList())` to `collection.toImmutableList()` "
 			+ "and `collection.stream().collect(Collectors.toUnmodifiableSet())` to `collection.toImmutableSet()`. "
@@ -79,54 +82,69 @@ public class ECStreamCollectToUnmodifiableToToImmutable extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COLLECT_MATCHER), new StreamCollectToUnmodifiableVisitor());
 	}
 
-	private static final class StreamCollectToUnmodifiableVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamCollectToUnmodifiableVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			String targetMethodName;
-			if (TO_UNMODIFIABLE_LIST_MATCHER.matches(collectorCall)) {
+			if (TO_UNMODIFIABLE_LIST_MATCHER.matches(collectorCall))
+			{
 				targetMethodName = "toImmutableList";
-			} else if (TO_UNMODIFIABLE_SET_MATCHER.matches(collectorCall)) {
+			}
+			else if (TO_UNMODIFIABLE_SET_MATCHER.matches(collectorCall))
+			{
 				targetMethodName = "toImmutableSet";
-			} else {
+			}
+			else
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 

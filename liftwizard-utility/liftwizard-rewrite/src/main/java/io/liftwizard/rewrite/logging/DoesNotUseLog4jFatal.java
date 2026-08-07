@@ -28,15 +28,18 @@ import org.openrewrite.TreeVisitor;
  * {@code preconditions} entry so that a composite migration recipe (e.g., Log4j 1 to SLF4J)
  * skips files that log at the {@code FATAL} level, which has no SLF4J equivalent.
  */
-public final class DoesNotUseLog4jFatal extends Recipe {
-
+public final class DoesNotUseLog4jFatal
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Does not use Log4j 1.x fatal logging";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Precondition that matches source files which do not use the Log4j 1.x `fatal` level "
 			+ "(e.g., `LOGGER.fatal(message)`). Files that use fatal logging are excluded, preventing "
@@ -45,7 +48,8 @@ public final class DoesNotUseLog4jFatal extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.not(UsesLog4jFatal.fatalUsage());
 	}
 }

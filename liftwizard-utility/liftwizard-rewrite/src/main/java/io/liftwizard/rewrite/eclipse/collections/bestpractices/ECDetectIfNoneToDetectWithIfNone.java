@@ -43,8 +43,9 @@ import org.openrewrite.java.tree.JavaType;
  *
  * <p>See {@link GarbageFreeLambdaRecipe} for the lambda shape rules.
  */
-public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
-
+public class ECDetectIfNoneToDetectWithIfNone
+	extends Recipe
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.richIterable();
 
 	private static final MethodMatcher DETECT_IF_NONE_MATCHER = new MethodMatcher(
@@ -53,12 +54,14 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`detectIfNone(x -> x.foo(captured), defaultFn)` → `detectWithIfNone(Type::foo, captured, defaultFn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Converts `richIterable.detectIfNone(x -> x.foo(captured), defaultFn)` to "
 			+ "`richIterable.detectWithIfNone(Type::foo, captured, defaultFn)` for Eclipse Collections types. "
@@ -67,31 +70,38 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(DETECT_IF_NONE_MATCHER),
 			new DetectIfNoneToDetectWithIfNoneVisitor()
 		);
 	}
 
-	private static final class DetectIfNoneToDetectWithIfNoneVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class DetectIfNoneToDetectWithIfNoneVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
-			if (!DETECT_IF_NONE_MATCHER.matches(mi)) {
+			if (!DETECT_IF_NONE_MATCHER.matches(mi))
+			{
 				return mi;
 			}
-			if (mi.getArguments().size() != 2) {
+			if (mi.getArguments().size() != 2)
+			{
 				return mi;
 			}
-			if (mi.getSelect() == null) {
+			if (mi.getSelect() == null)
+			{
 				return mi;
 			}
 
 			GarbageFreeLambdaVisitor.Result result = GarbageFreeLambdaVisitor.detect(mi.getArguments().get(0));
-			if (result == null) {
+			if (result == null)
+			{
 				return mi;
 			}
 
@@ -112,7 +122,8 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();
 
-			if (!result.typeFqn().startsWith("java.lang.")) {
+			if (!result.typeFqn().startsWith("java.lang."))
+			{
 				this.doAfterVisit(new AddImport<>(result.typeFqn(), null, false));
 			}
 
@@ -124,7 +135,8 @@ public class ECDetectIfNoneToDetectWithIfNone extends Recipe {
 				defaultFunction
 			);
 			replacement = result.withTypedMemberReferences(replacement);
-			if (mi.getMethodType() == null) {
+			if (mi.getMethodType() == null)
+			{
 				return replacement;
 			}
 			JavaType.Method methodType = mi.getMethodType().withName("detectWithIfNone");

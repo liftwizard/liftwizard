@@ -55,21 +55,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "`select(pred).isEmpty()` to `noneSatisfy(pred)`",
 	description = "Transforms select().isEmpty() to noneSatisfy(). " + "Also handles ArrayIterate and ListIterate."
 )
-public class ECSelectIsEmptyToNoneSatisfy {
-
+public class ECSelectIsEmptyToNoneSatisfy
+{
 	@RecipeDescriptor(
 		name = "`select(pred).isEmpty()` to `noneSatisfy(pred)`",
 		description = "Transforms select(pred).isEmpty() to noneSatisfy(pred)."
 	)
-	public static final class SelectIsEmptyToNoneSatisfy<T> {
-
+	public static final class SelectIsEmptyToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(final RichIterable<T> iterable, final Predicate<? super T> predicate) {
+		boolean before(final RichIterable<T> iterable, final Predicate<? super T> predicate)
+		{
 			return iterable.select(predicate).isEmpty();
 		}
 
 		@AfterTemplate
-		boolean after(final RichIterable<T> iterable, final Predicate<? super T> predicate) {
+		boolean after(final RichIterable<T> iterable, final Predicate<? super T> predicate)
+		{
 			return iterable.noneSatisfy(predicate);
 		}
 	}
@@ -78,15 +80,17 @@ public class ECSelectIsEmptyToNoneSatisfy {
 		name = "`ArrayIterate.select(array, pred).isEmpty()` " + "to `ArrayIterate.noneSatisfy(array, pred)`",
 		description = "Transforms ArrayIterate.select().isEmpty() " + "to ArrayIterate.noneSatisfy()."
 	)
-	public static final class ArrayIterateSelectIsEmptyToNoneSatisfy<T> {
-
+	public static final class ArrayIterateSelectIsEmptyToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(final T[] array, final Predicate<? super T> predicate) {
+		boolean before(final T[] array, final Predicate<? super T> predicate)
+		{
 			return ArrayIterate.select(array, predicate).isEmpty();
 		}
 
 		@AfterTemplate
-		boolean after(final T[] array, final Predicate<? super T> predicate) {
+		boolean after(final T[] array, final Predicate<? super T> predicate)
+		{
 			return ArrayIterate.noneSatisfy(array, predicate);
 		}
 	}
@@ -95,15 +99,17 @@ public class ECSelectIsEmptyToNoneSatisfy {
 		name = "`ListIterate.select(list, pred).isEmpty()` " + "to `ListIterate.noneSatisfy(list, pred)`",
 		description = "Transforms ListIterate.select().isEmpty() " + "to ListIterate.noneSatisfy()."
 	)
-	public static final class ListIterateSelectIsEmptyToNoneSatisfy<T> {
-
+	public static final class ListIterateSelectIsEmptyToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(final java.util.List<T> list, final Predicate<? super T> predicate) {
+		boolean before(final java.util.List<T> list, final Predicate<? super T> predicate)
+		{
 			return ListIterate.select(list, predicate).isEmpty();
 		}
 
 		@AfterTemplate
-		boolean after(final java.util.List<T> list, final Predicate<? super T> predicate) {
+		boolean after(final java.util.List<T> list, final Predicate<? super T> predicate)
+		{
 			return ListIterate.noneSatisfy(list, predicate);
 		}
 	}

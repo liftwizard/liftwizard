@@ -34,8 +34,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CsvTestDataParserTest {
-
+class CsvTestDataParserTest
+{
 	@RegisterExtension
 	@Order(1)
 	final ExecuteSqlExtension executeSqlExtension = new ExecuteSqlExtension();
@@ -51,28 +51,32 @@ class CsvTestDataParserTest {
 	final ReladomoPurgeAllExtension purgeAllExtension = new ReladomoPurgeAllExtension();
 
 	@Test
-	void extractsClassNameFromFilename() {
+	void extractsClassNameFromFilename()
+	{
 		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
 
 		assertThat(parser.getClassName()).isEqualTo("com.example.helloworld.core.Person");
 	}
 
 	@Test
-	void throwsExceptionForNonCsvFile() {
+	void throwsExceptionForNonCsvFile()
+	{
 		assertThatThrownBy(() -> new CsvTestDataParser("test-data/com.example.SomeClass.txt"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining("Filename must end with .csv");
 	}
 
 	@Test
-	void throwsExceptionForMissingFile() {
+	void throwsExceptionForMissingFile()
+	{
 		assertThatThrownBy(() -> new CsvTestDataParser("test-data/com.example.NonExistent.csv"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining("Could not find file");
 	}
 
 	@Test
-	void parsesAttributesFromHeaders() {
+	void parsesAttributesFromHeaders()
+	{
 		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
 
 		List<Attribute<?, ?>> attributes = parser.getAttributes();
@@ -87,7 +91,8 @@ class CsvTestDataParserTest {
 	}
 
 	@Test
-	void createsDataObjects() {
+	void createsDataObjects()
+	{
 		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
 
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
@@ -98,7 +103,8 @@ class CsvTestDataParserTest {
 	}
 
 	@Test
-	void populatesDataObjectsWithCorrectValues() {
+	void populatesDataObjectsWithCorrectValues()
+	{
 		var expectedAlice = new PersonData();
 		expectedAlice.setId(1L);
 		expectedAlice.setFullName("Alice Smith");

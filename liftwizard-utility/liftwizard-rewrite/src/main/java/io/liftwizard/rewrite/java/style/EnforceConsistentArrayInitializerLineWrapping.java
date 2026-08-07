@@ -38,15 +38,18 @@ import org.openrewrite.java.tree.JRightPadded;
  * element are also left unchanged. Valid fixed-multiple groupings (e.g., key-value
  * pairs) are also left unchanged.
  */
-public class EnforceConsistentArrayInitializerLineWrapping extends AbstractEnforceConsistentLineWrapping {
-
+public class EnforceConsistentArrayInitializerLineWrapping
+	extends AbstractEnforceConsistentLineWrapping
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Enforce consistent array initializer line wrapping";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"When an array initializer has multiple elements and any element is line-wrapped, "
 			+ "enforce that all elements use line wrapping for consistency. "
@@ -55,25 +58,31 @@ public class EnforceConsistentArrayInitializerLineWrapping extends AbstractEnfor
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.NewArray visitNewArray(J.NewArray newArray, ExecutionContext ctx) {
+			public J.NewArray visitNewArray(J.NewArray newArray, ExecutionContext ctx)
+			{
 				J.NewArray na = super.visitNewArray(newArray, ctx);
 
 				JContainer<Expression> initContainer = na.getPadding().getInitializer();
-				if (initContainer == null) {
+				if (initContainer == null)
+				{
 					return na;
 				}
 
 				List<JRightPadded<Expression>> elements = initContainer.getPadding().getElements();
 
-				if (!shouldEnforceWrapping(elements)) {
+				if (!shouldEnforceWrapping(elements))
+				{
 					return na;
 				}
 
 				String wrappedIndent = findWrappedIndent(elements);
-				if (wrappedIndent == null) {
+				if (wrappedIndent == null)
+				{
 					return na;
 				}
 

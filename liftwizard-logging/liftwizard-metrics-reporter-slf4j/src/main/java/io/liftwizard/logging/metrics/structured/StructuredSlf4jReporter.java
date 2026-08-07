@@ -48,8 +48,9 @@ import org.slf4j.Marker;
  *
  * @see Slf4jReporter
  */
-public class StructuredSlf4jReporter extends ScheduledReporter {
-
+public class StructuredSlf4jReporter
+	extends ScheduledReporter
+{
 	private final AbstractLoggerProxy loggerProxy;
 	private final Marker marker;
 	private final String prefix;
@@ -69,7 +70,8 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		Set<MetricAttribute> disabledMetricAttributes,
 		Function<Map<String, Object>, ?> mapToStructuredObjectFunction,
 		String message
-	) {
+	)
+	{
 		super(
 			registry,
 			"structured-logger-reporter",
@@ -93,7 +95,8 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 	 * @param registry the registry to report
 	 * @return a {@link Builder} instance for a {@link StructuredSlf4jReporter}
 	 */
-	public static Builder forRegistry(MetricRegistry registry) {
+	public static Builder forRegistry(MetricRegistry registry)
+	{
 		return new Builder(registry);
 	}
 
@@ -104,8 +107,10 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		SortedMap<String, Histogram> histograms,
 		SortedMap<String, Meter> meters,
 		SortedMap<String, Timer> timers
-	) {
-		if (!this.loggerProxy.isEnabled(this.marker)) {
+	)
+	{
+		if (!this.loggerProxy.isEnabled(this.marker))
+		{
 			return;
 		}
 
@@ -116,7 +121,8 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		timers.forEach(this::logTimer);
 	}
 
-	private void logTimer(String name, Timer timer) {
+	private void logTimer(String name, Timer timer)
+	{
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("metric_type", "TIMER");
 		map.put("metric_name", this.prefix(name));
@@ -138,7 +144,8 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		this.log(map);
 	}
 
-	private void logMeter(String name, Metered meter) {
+	private void logMeter(String name, Metered meter)
+	{
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("metric_type", "METER");
 		map.put("metric_name", this.prefix(name));
@@ -148,7 +155,8 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		this.log(map);
 	}
 
-	private void logHistogram(String name, Histogram histogram) {
+	private void logHistogram(String name, Histogram histogram)
+	{
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("metric_type", "HISTOGRAM");
 		map.put("metric_name", this.prefix(name));
@@ -167,7 +175,8 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		this.log(map);
 	}
 
-	private void logCounter(String name, Counter counter) {
+	private void logCounter(String name, Counter counter)
+	{
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("metric_type", "COUNTER");
 		map.put("metric_name", this.prefix(name));
@@ -175,9 +184,11 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		this.log(map);
 	}
 
-	private void logGauge(String name, Gauge<?> gauge) {
+	private void logGauge(String name, Gauge<?> gauge)
+	{
 		Object value = gauge.getValue();
-		if (!(value instanceof Number)) {
+		if (!(value instanceof Number))
+		{
 			return;
 		}
 
@@ -192,8 +203,10 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		Map<String, Object> map,
 		MetricAttribute metricAttribute,
 		Supplier<Long> durationSupplier
-	) {
-		if (!this.getDisabledMetricAttributes().contains(metricAttribute)) {
+	)
+	{
+		if (!this.getDisabledMetricAttributes().contains(metricAttribute))
+		{
 			map.put(metricAttribute.getCode(), this.convertDuration(durationSupplier.get()));
 		}
 	}
@@ -202,8 +215,10 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		Map<String, Object> map,
 		MetricAttribute metricAttribute,
 		Supplier<Double> durationSupplier
-	) {
-		if (!this.getDisabledMetricAttributes().contains(metricAttribute)) {
+	)
+	{
+		if (!this.getDisabledMetricAttributes().contains(metricAttribute))
+		{
 			map.put(metricAttribute.getCode(), this.convertDuration(durationSupplier.get()));
 		}
 	}
@@ -212,8 +227,10 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		Map<String, Object> map,
 		MetricAttribute metricAttribute,
 		Supplier<Long> valueSupplier
-	) {
-		if (!this.getDisabledMetricAttributes().contains(metricAttribute)) {
+	)
+	{
+		if (!this.getDisabledMetricAttributes().contains(metricAttribute))
+		{
 			map.put(metricAttribute.getCode(), valueSupplier.get());
 		}
 	}
@@ -222,19 +239,24 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		Map<String, Object> map,
 		MetricAttribute metricAttribute,
 		Supplier<Double> valueSupplier
-	) {
-		if (!this.getDisabledMetricAttributes().contains(metricAttribute)) {
+	)
+	{
+		if (!this.getDisabledMetricAttributes().contains(metricAttribute))
+		{
 			map.put(metricAttribute.getCode(), valueSupplier.get());
 		}
 	}
 
-	private void appendCountIfEnabled(Map<String, Object> map, Counting counting) {
-		if (!this.getDisabledMetricAttributes().contains(MetricAttribute.COUNT)) {
+	private void appendCountIfEnabled(Map<String, Object> map, Counting counting)
+	{
+		if (!this.getDisabledMetricAttributes().contains(MetricAttribute.COUNT))
+		{
 			map.put(MetricAttribute.COUNT.getCode(), counting.getCount());
 		}
 	}
 
-	private void appendMetered(Map<String, Object> map, Metered meter) {
+	private void appendMetered(Map<String, Object> map, Metered meter)
+	{
 		this.appendRateIfEnabled(map, MetricAttribute.M1_RATE, meter::getOneMinuteRate);
 		this.appendRateIfEnabled(map, MetricAttribute.M5_RATE, meter::getFiveMinuteRate);
 		this.appendRateIfEnabled(map, MetricAttribute.M15_RATE, meter::getFifteenMinuteRate);
@@ -245,22 +267,27 @@ public class StructuredSlf4jReporter extends ScheduledReporter {
 		Map<String, Object> map,
 		MetricAttribute metricAttribute,
 		Supplier<Double> rateSupplier
-	) {
-		if (!this.getDisabledMetricAttributes().contains(metricAttribute)) {
+	)
+	{
+		if (!this.getDisabledMetricAttributes().contains(metricAttribute))
+		{
 			map.put(metricAttribute.getCode(), this.convertRate(rateSupplier.get()));
 		}
 	}
 
 	@Override
-	protected String getRateUnit() {
+	protected String getRateUnit()
+	{
 		return "events/" + super.getRateUnit();
 	}
 
-	private String prefix(String... components) {
+	private String prefix(String... components)
+	{
 		return MetricRegistry.name(this.prefix, components);
 	}
 
-	private void log(Map<String, Object> map) {
+	private void log(Map<String, Object> map)
+	{
 		Object structuredObject = this.mapToStructuredObjectFunction.apply(map);
 		this.loggerProxy.log(this.marker, this.message, structuredObject);
 	}

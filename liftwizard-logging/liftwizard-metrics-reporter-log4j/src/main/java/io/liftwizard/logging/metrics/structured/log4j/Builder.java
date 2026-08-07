@@ -38,8 +38,8 @@ import org.eclipse.collections.api.set.MutableSet;
 /**
  * A builder for {@link StructuredLog4jReporter} instances. Defaults to logging to {@code metrics}, not using a marker, converting rates to events/second, converting durations to milliseconds, and not filtering metrics.
  */
-public class Builder {
-
+public class Builder
+{
 	private final MetricRegistry registry;
 
 	private Logger logger = Logger.getLogger("metrics");
@@ -52,7 +52,8 @@ public class Builder {
 	private boolean shutdownExecutorOnStop = true;
 	private MutableSet<MetricAttribute> disabledMetricAttributes = Sets.fixedSize.empty();
 
-	public Builder(MetricRegistry registry) {
+	public Builder(MetricRegistry registry)
+	{
 		this.registry = registry;
 	}
 
@@ -64,7 +65,8 @@ public class Builder {
 	 * @param newShutdownExecutorOnStop if true, then executor will be stopped in same time with this reporter
 	 * @return {@code this}
 	 */
-	public Builder shutdownExecutorOnStop(boolean newShutdownExecutorOnStop) {
+	public Builder shutdownExecutorOnStop(boolean newShutdownExecutorOnStop)
+	{
 		this.shutdownExecutorOnStop = newShutdownExecutorOnStop;
 		return this;
 	}
@@ -77,7 +79,8 @@ public class Builder {
 	 * @param newExecutor the executor to use while scheduling reporting of metrics.
 	 * @return {@code this}
 	 */
-	public Builder scheduleOn(ScheduledExecutorService newExecutor) {
+	public Builder scheduleOn(ScheduledExecutorService newExecutor)
+	{
 		this.executor = newExecutor;
 		return this;
 	}
@@ -88,7 +91,8 @@ public class Builder {
 	 * @param newLogger an log4j {@link Logger}
 	 * @return {@code this}
 	 */
-	public Builder outputTo(Logger newLogger) {
+	public Builder outputTo(Logger newLogger)
+	{
 		this.logger = newLogger;
 		return this;
 	}
@@ -99,7 +103,8 @@ public class Builder {
 	 * @param newPrefix the prefix for all metric names
 	 * @return {@code this}
 	 */
-	public Builder prefixedWith(String newPrefix) {
+	public Builder prefixedWith(String newPrefix)
+	{
 		this.prefix = newPrefix;
 		return this;
 	}
@@ -110,7 +115,8 @@ public class Builder {
 	 * @param newRateUnit a unit of time
 	 * @return {@code this}
 	 */
-	public Builder convertRatesTo(TimeUnit newRateUnit) {
+	public Builder convertRatesTo(TimeUnit newRateUnit)
+	{
 		this.rateUnit = newRateUnit;
 		return this;
 	}
@@ -121,7 +127,8 @@ public class Builder {
 	 * @param newDurationUnit a unit of time
 	 * @return {@code this}
 	 */
-	public Builder convertDurationsTo(TimeUnit newDurationUnit) {
+	public Builder convertDurationsTo(TimeUnit newDurationUnit)
+	{
 		this.durationUnit = newDurationUnit;
 		return this;
 	}
@@ -132,7 +139,8 @@ public class Builder {
 	 * @param newFilter a {@link MetricFilter}
 	 * @return {@code this}
 	 */
-	public Builder filter(MetricFilter newFilter) {
+	public Builder filter(MetricFilter newFilter)
+	{
 		this.filter = newFilter;
 		return this;
 	}
@@ -143,7 +151,8 @@ public class Builder {
 	 * @param newLoggingLevel a {@link LoggingLevel}
 	 * @return {@code this}
 	 */
-	public Builder withLoggingLevel(LoggingLevel newLoggingLevel) {
+	public Builder withLoggingLevel(LoggingLevel newLoggingLevel)
+	{
 		this.loggingLevel = newLoggingLevel;
 		return this;
 	}
@@ -155,7 +164,8 @@ public class Builder {
 	 * @param newDisabledMetricAttributes a set of {@link MetricAttribute}
 	 * @return {@code this}
 	 */
-	public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes) {
+	public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes)
+	{
 		this.disabledMetricAttributes = Sets.mutable.withAll(newDisabledMetricAttributes);
 		return this;
 	}
@@ -166,7 +176,8 @@ public class Builder {
 	 * @param newToStructuredObjectFunction A function such as {@code Markers::appendEntries} or {@code StructuredArguments::entries}
 	 * @return {@code this}
 	 */
-	public Builder mapToStructuredObjectFunction(Function<Map<String, Object>, ?> newToStructuredObjectFunction) {
+	public Builder mapToStructuredObjectFunction(Function<Map<String, Object>, ?> newToStructuredObjectFunction)
+	{
 		return this;
 	}
 
@@ -175,7 +186,8 @@ public class Builder {
 	 *
 	 * @return a {@link StructuredLog4jReporter}
 	 */
-	public StructuredLog4jReporter build() {
+	public StructuredLog4jReporter build()
+	{
 		AbstractLoggerProxy loggerProxy = this.getLoggerProxy();
 		return new StructuredLog4jReporter(
 			this.registry,
@@ -190,8 +202,10 @@ public class Builder {
 		);
 	}
 
-	private AbstractLoggerProxy getLoggerProxy() {
-		return switch (this.loggingLevel) {
+	private AbstractLoggerProxy getLoggerProxy()
+	{
+		return switch (this.loggingLevel)
+		{
 			case TRACE -> new TraceLoggerProxy(this.logger);
 			case DEBUG -> new DebugLoggerProxy(this.logger);
 			case INFO -> new InfoLoggerProxy(this.logger);

@@ -45,23 +45,27 @@ import org.openrewrite.java.tree.TypeUtils;
  *
  * <p>All other transformations are preserved, including string concatenation to parameterized logging.
  */
-public final class ParameterizedLogging extends Recipe {
-
+public final class ParameterizedLogging
+	extends Recipe
+{
 	private final String methodPattern;
 	private final @Nullable Boolean removeToString;
 
-	public ParameterizedLogging(String methodPattern, @Nullable Boolean removeToString) {
+	public ParameterizedLogging(String methodPattern, @Nullable Boolean removeToString)
+	{
 		this.methodPattern = methodPattern;
 		this.removeToString = removeToString;
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Parameterize logging statements (excluding simple object arguments)";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transform logging statements using concatenation for messages and variables into a parameterized format. "
 			+ "For example, `logger.info(\"hi \" + userName)` becomes `logger.info(\"hi {}\", userName)`. "
@@ -71,15 +75,18 @@ public final class ParameterizedLogging extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(this.methodPattern, true),
 			new ParameterizedLoggingVisitor(this.methodPattern, this.removeToString)
 		);
 	}
 
-	private static MessageAndArguments concatenationToLiteral(Expression message, MessageAndArguments result) {
-		if (!(message instanceof J.Binary)) {
+	private static MessageAndArguments concatenationToLiteral(Expression message, MessageAndArguments result)
+	{
+		if (!(message instanceof J.Binary))
+		{
 			result.arguments.add(message);
 			return result;
 		}
@@ -88,12 +95,17 @@ public final class ParameterizedLogging extends Recipe {
 		if (
 			concat.getLeft() instanceof J.Binary
 			&& ((J.Binary) concat.getLeft()).getOperator() == J.Binary.Type.Addition
-		) {
+		)
+		{
 			concatenationToLiteral(concat.getLeft(), result);
-		} else if (concat.getLeft() instanceof J.Literal left) {
+		}
+		else if (concat.getLeft() instanceof J.Literal left)
+		{
 			result.message = getLiteralValue(left) + result.message;
 			result.previousMessageWasStringLiteral = left.getType() == JavaType.Primitive.String;
-		} else {
+		}
+		else
+		{
 			result.message = "{}" + result.message;
 			result.arguments.add(concat.getLeft());
 			result.previousMessageWasStringLiteral = false;
@@ -102,19 +114,28 @@ public final class ParameterizedLogging extends Recipe {
 		if (
 			concat.getRight() instanceof J.Binary
 			&& ((J.Binary) concat.getRight()).getOperator() == J.Binary.Type.Addition
-		) {
+		)
+		{
 			concatenationToLiteral(concat.getRight(), result);
-		} else if (concat.getRight() instanceof J.Literal right) {
+		}
+		else if (concat.getRight() instanceof J.Literal right)
+		{
 			boolean rightIsStringLiteral = right.getType() == JavaType.Primitive.String;
-			if (result.previousMessageWasStringLiteral && rightIsStringLiteral) {
+			if (result.previousMessageWasStringLiteral && rightIsStringLiteral)
+			{
 				result.message += "\" +" + right.getPrefix().getWhitespace() + "\"" + getLiteralValue(right);
-			} else {
+			}
+			else
+			{
 				result.message += getLiteralValue(right);
 			}
 			result.previousMessageWasStringLiteral = rightIsStringLiteral;
-		} else {
+		}
+		else
+		{
 			// Prevent inadvertently appending {} to # to create #{}, which creates an additional JavaTemplate argument
-			if (result.message.endsWith("#")) {
+			if (result.message.endsWith("#"))
+			{
 				result.message += "\\";
 			}
 			result.message += "{}";
@@ -125,64 +146,82 @@ public final class ParameterizedLogging extends Recipe {
 		return result;
 	}
 
-	private static @Nullable Object getLiteralValue(J.Literal literal) {
-		if (literal.getValueSource() == null || literal.getType() != JavaType.Primitive.String) {
+	private static @Nullable Object getLiteralValue(J.Literal literal)
+	{
+		if (literal.getValueSource() == null || literal.getType() != JavaType.Primitive.String)
+		{
 			return literal.getValue();
 		}
-		return literal.getValueSource().substring(1, literal.getValueSource().length() - 1).replace("\\", "\\\\");
+		return literal
+			.getValueSource()
+			.substring(1, literal.getValueSource().length() - 1)
+			.replace("\\", "\\\\");
 	}
 
-	private static String escapeDollarSign(String value) {
+	private static String escapeDollarSign(String value)
+	{
 		return value.replaceAll("\\$", "\\\\\\$");
 	}
 
-	private static final class ParameterizedLoggingVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class ParameterizedLoggingVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private final MethodMatcher matcher;
 		private final @Nullable Boolean removeToString;
 		private final RemoveToStringVisitor removeToStringVisitor = new RemoveToStringVisitor();
 
-		private ParameterizedLoggingVisitor(String methodPattern, @Nullable Boolean removeToString) {
+		private ParameterizedLoggingVisitor(String methodPattern, @Nullable Boolean removeToString)
+		{
 			this.matcher = new MethodMatcher(methodPattern, true);
 			this.removeToString = removeToString;
 		}
 
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
-			if (!this.matcher.matches(m) || m.getArguments().isEmpty() || m.getArguments().get(0) instanceof J.Empty) {
+			if (!this.matcher.matches(m) || m.getArguments().isEmpty() || m.getArguments().get(0) instanceof J.Empty)
+			{
 				return m;
 			}
 
 			int logMsgIndex = isMarker(m.getArguments().get(0)) ? 1 : 0;
 
 			// Only process if we have at most 2 arguments after accounting for marker
-			if (m.getArguments().size() - logMsgIndex > 2) {
+			if (m.getArguments().size() - logMsgIndex > 2)
+			{
 				return m;
 			}
 
 			Expression logMsg = m.getArguments().get(logMsgIndex);
-			if (logMsg instanceof J.Binary) {
+			if (logMsg instanceof J.Binary)
+			{
 				var messageBuilder = new StringBuilder();
 				List<Expression> concatenationArgs = new ArrayList<>();
 				List<Expression> regularArgs = new ArrayList<>();
 				Expression possibleThrowable = null;
 
 				// Process all arguments
-				for (int index = 0; index < m.getArguments().size(); index++) {
+				for (int index = 0; index < m.getArguments().size(); index++)
+				{
 					Expression arg = m.getArguments().get(index);
-					if (index == logMsgIndex && arg instanceof J.Binary) {
+					if (index == logMsgIndex && arg instanceof J.Binary)
+					{
 						MessageAndArguments literalAndArgs = concatenationToLiteral(
 							arg,
 							new MessageAndArguments("", new ArrayList<>())
 						);
 						concatenationArgs.addAll(literalAndArgs.arguments);
-					} else if (
+					}
+					else if (
 						index == m.getArguments().size() - 1
 						&& TypeUtils.isAssignableTo("java.lang.Throwable", arg.getType())
-					) {
+					)
+					{
 						possibleThrowable = arg;
-					} else {
+					}
+					else
+					{
 						regularArgs.add(arg);
 					}
 				}
@@ -191,16 +230,20 @@ public final class ParameterizedLogging extends Recipe {
 				boolean hasThrowableInConcatenation = concatenationArgs
 					.stream()
 					.anyMatch((arg) -> TypeUtils.isAssignableTo("java.lang.Throwable", arg.getType()));
-				if (hasThrowableInConcatenation) {
+				if (hasThrowableInConcatenation)
+				{
 					return m;
 				}
 
 				// Build the message template
-				ListUtils.map(m.getArguments(), (index, message) -> {
-					if (index > 0) {
+				ListUtils.map(m.getArguments(), (index, message) ->
+				{
+					if (index > 0)
+					{
 						messageBuilder.append(", ");
 					}
-					if (index == logMsgIndex && message instanceof J.Binary) {
+					if (index == logMsgIndex && message instanceof J.Binary)
+					{
 						messageBuilder.append("\"");
 						MessageAndArguments literalAndArgs = concatenationToLiteral(
 							message,
@@ -209,7 +252,9 @@ public final class ParameterizedLogging extends Recipe {
 						messageBuilder.append(literalAndArgs.message);
 						messageBuilder.append("\"");
 						literalAndArgs.arguments.forEach((arg) -> messageBuilder.append(", #{any()}"));
-					} else {
+					}
+					else
+					{
 						messageBuilder.append("#{any()}");
 					}
 					return message;
@@ -218,7 +263,8 @@ public final class ParameterizedLogging extends Recipe {
 				// Assemble arguments in correct order: regular args, concatenation args, throwable
 				List<Expression> newArgList = new ArrayList<>(regularArgs);
 				newArgList.addAll(concatenationArgs);
-				if (possibleThrowable != null) {
+				if (possibleThrowable != null)
+				{
 					newArgList.add(possibleThrowable);
 				}
 
@@ -236,10 +282,12 @@ public final class ParameterizedLogging extends Recipe {
 			// while info("{}", myObject) reduces it to a formatted string.
 			// See DoesNotUseLog4j1ObjectLogging for the precondition that skips files with this pattern.
 
-			if (Boolean.TRUE.equals(this.removeToString)) {
+			if (Boolean.TRUE.equals(this.removeToString))
+			{
 				m = m.withArguments(
-					ListUtils.map(m.getArguments(), (arg) ->
-						(Expression) this.removeToStringVisitor.visitNonNull(arg, ctx, this.getCursor())
+					ListUtils.map(
+						m.getArguments(),
+						(arg) -> (Expression) this.removeToStringVisitor.visitNonNull(arg, ctx, this.getCursor())
 					)
 				);
 			}
@@ -250,13 +298,15 @@ public final class ParameterizedLogging extends Recipe {
 				&& m
 					.print(this.getCursor().getParentTreeCursor())
 					.equals(method.print(this.getCursor().getParentTreeCursor()))
-			) {
+			)
+			{
 				return method;
 			}
 			return m;
 		}
 
-		private static boolean isMarker(Expression expression) {
+		private static boolean isMarker(Expression expression)
+		{
 			JavaType expressionType = expression.getType();
 			return (
 				TypeUtils.isAssignableTo("org.slf4j.Marker", expressionType)
@@ -267,31 +317,38 @@ public final class ParameterizedLogging extends Recipe {
 		}
 	}
 
-	private static final class RemoveToStringVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class RemoveToStringVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private static final MethodMatcher TO_STRING = new MethodMatcher("*..* toString()");
 
 		@Override
-		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-			if (this.getCursor().getNearestMessage("DO_NOT_REMOVE", Boolean.FALSE)) {
+		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
+			if (this.getCursor().getNearestMessage("DO_NOT_REMOVE", Boolean.FALSE))
+			{
 				return method;
 			}
-			if (TO_STRING.matches(method.getSelect())) {
+			if (TO_STRING.matches(method.getSelect()))
+			{
 				this.getCursor().putMessage("DO_NOT_REMOVE", Boolean.TRUE);
-			} else if (TO_STRING.matches(method) && method.getSelect() != null) {
+			}
+			else if (TO_STRING.matches(method) && method.getSelect() != null)
+			{
 				return method.getSelect().withPrefix(method.getPrefix());
 			}
 			return super.visitMethodInvocation(method, ctx);
 		}
 	}
 
-	private static final class MessageAndArguments {
-
+	private static final class MessageAndArguments
+	{
 		private final List<Expression> arguments;
 		private String message;
 		private boolean previousMessageWasStringLiteral;
 
-		private MessageAndArguments(String message, List<Expression> arguments) {
+		private MessageAndArguments(String message, List<Expression> arguments)
+		{
 			this.message = message;
 			this.arguments = arguments;
 		}

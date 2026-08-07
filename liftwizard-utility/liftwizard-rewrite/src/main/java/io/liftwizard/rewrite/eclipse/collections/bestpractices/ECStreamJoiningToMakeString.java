@@ -45,8 +45,9 @@ import org.openrewrite.java.tree.J;
  * <p>This recipe eliminates unnecessary Stream intermediary operations for Eclipse Collections types,
  * since Eclipse Collections has the {@code makeString} method directly on {@code RichIterable}.
  */
-public class ECStreamJoiningToMakeString extends Recipe {
-
+public class ECStreamJoiningToMakeString
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -60,12 +61,14 @@ public class ECStreamJoiningToMakeString extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.joining())` to `makeString()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.joining(delimiter))` to `collection.makeString(delimiter)`. "
 			+ "Also handles `collection.stream().map(Object::toString).collect(Collectors.joining(delimiter))`. "
@@ -75,65 +78,83 @@ public class ECStreamJoiningToMakeString extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COLLECT_MATCHER), new StreamJoiningToMakeStringVisitor());
 	}
 
-	private static final class StreamJoiningToMakeStringVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamJoiningToMakeStringVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation joiningCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation joiningCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!JOINING_ONE_ARG_MATCHER.matches(joiningCall)) {
+			if (!JOINING_ONE_ARG_MATCHER.matches(joiningCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (collectSelect == null) {
+			if (collectSelect == null)
+			{
 				return methodInvocation;
 			}
 
 			Expression streamOrMapSelect;
-			if (collectSelect instanceof J.MethodInvocation mapCall && MAP_MATCHER.matches(mapCall)) {
+			if (collectSelect instanceof J.MethodInvocation mapCall && MAP_MATCHER.matches(mapCall))
+			{
 				List<Expression> mapArgs = mapCall.getArguments();
-				if (mapArgs.size() == 1 && this.isToStringMapper(mapArgs.get(0))) {
+				if (mapArgs.size() == 1 && this.isToStringMapper(mapArgs.get(0)))
+				{
 					streamOrMapSelect = mapCall.getSelect();
-				} else {
+				}
+				else
+				{
 					return methodInvocation;
 				}
-			} else {
+			}
+			else
+			{
 				streamOrMapSelect = collectSelect;
 			}
 
-			if (!(streamOrMapSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(streamOrMapSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -147,13 +168,17 @@ public class ECStreamJoiningToMakeString extends Recipe {
 				.withArguments(joiningArgs);
 		}
 
-		private boolean isToStringMapper(Expression mapFunction) {
-			if (mapFunction instanceof J.MemberReference memberRef) {
+		private boolean isToStringMapper(Expression mapFunction)
+		{
+			if (mapFunction instanceof J.MemberReference memberRef)
+			{
 				String methodName = memberRef.getReference().getSimpleName();
 				return "toString".equals(methodName);
 			}
-			if (mapFunction instanceof J.Lambda lambda) {
-				if (lambda.getBody() instanceof J.MethodInvocation lambdaBody) {
+			if (mapFunction instanceof J.Lambda lambda)
+			{
+				if (lambda.getBody() instanceof J.MethodInvocation lambdaBody)
+				{
 					return (
 						("toString".equals(lambdaBody.getSimpleName()) && lambdaBody.getArguments().isEmpty())
 						|| (lambdaBody.getArguments().size() == 1

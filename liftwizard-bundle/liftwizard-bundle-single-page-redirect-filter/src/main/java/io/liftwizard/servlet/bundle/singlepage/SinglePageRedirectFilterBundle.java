@@ -29,14 +29,16 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class SinglePageRedirectFilterBundle<T> implements ConfiguredBundle<T> {
-
+public abstract class SinglePageRedirectFilterBundle<T>
+	implements ConfiguredBundle<T>
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(SinglePageRedirectFilterBundle.class);
 
 	public abstract SinglePageRedirectFilterFactory getSinglePageRedirectFilterFactory(T configuration);
 
 	@Override
-	public void run(T configuration, Environment environment) {
+	public void run(T configuration, Environment environment)
+	{
 		SinglePageRedirectFilterFactory factory = this.getSinglePageRedirectFilterFactory(configuration);
 		handleRegistration(this, environment, factory);
 	}
@@ -45,8 +47,10 @@ public abstract class SinglePageRedirectFilterBundle<T> implements ConfiguredBun
 		Object bundle,
 		Environment environment,
 		SinglePageRedirectFilterFactory factory
-	) {
-		if (factory == null || !factory.isEnabled()) {
+	)
+	{
+		if (factory == null || !factory.isEnabled())
+		{
 			LOGGER.info("{} disabled.", bundle.getClass().getSimpleName());
 			return;
 		}

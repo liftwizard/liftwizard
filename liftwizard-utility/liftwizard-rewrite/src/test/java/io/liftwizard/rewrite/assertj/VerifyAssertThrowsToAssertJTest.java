@@ -25,34 +25,35 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-class VerifyAssertThrowsToAssertJTest implements AbstractRewriteFixtures, RewriteTest {
-
+class VerifyAssertThrowsToAssertJTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new VerifyAssertThrowsToAssertJ())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.collections.impl.test;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new VerifyAssertThrowsToAssertJ()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.collections.impl.test;
 
-						import java.util.concurrent.Callable;
+					import java.util.concurrent.Callable;
 
-						public final class Verify {
-							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
-							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
-						}
-						"""
-					)
-					.classpath("assertj-core")
-			);
+					public final class Verify {
+						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
+						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
+					}
+					"""
+				)
+				.classpath("assertj-core")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
 			(spec) ->
 				spec.typeValidationOptions(
@@ -63,7 +64,8 @@ class VerifyAssertThrowsToAssertJTest implements AbstractRewriteFixtures, Rewrit
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

@@ -53,8 +53,8 @@ import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GraphQLFactory {
-
+public class GraphQLFactory
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLFactory.class);
 
 	private List<String> schemaFiles = Lists.mutable.empty();
@@ -77,18 +77,22 @@ public class GraphQLFactory {
 	private Optional<GraphQLSchema> graphQLSchema = Optional.empty();
 
 	@JsonProperty
-	public List<String> getSchemaFiles() {
+	public List<String> getSchemaFiles()
+	{
 		return Collections.unmodifiableList(this.schemaFiles);
 	}
 
 	@JsonProperty
-	public void setSchemaFiles(List<String> files) {
+	public void setSchemaFiles(List<String> files)
+	{
 		this.schemaFiles = Optional.ofNullable(files).orElseGet(ArrayList::new);
 	}
 
 	@JsonProperty
-	public ExecutionStrategy getExecutionStrategy() {
-		switch (this.executionStrategy) {
+	public ExecutionStrategy getExecutionStrategy()
+	{
+		switch (this.executionStrategy)
+		{
 			case "async_serial":
 				return new AsyncSerialExecutionStrategy();
 			case "subscription":
@@ -100,73 +104,90 @@ public class GraphQLFactory {
 	}
 
 	@JsonProperty
-	public void setExecutionStrategy(final String strategy) {
+	public void setExecutionStrategy(final String strategy)
+	{
 		this.executionStrategy = strategy;
 	}
 
 	@JsonIgnore
-	public RuntimeWiring getRuntimeWiring() {
+	public RuntimeWiring getRuntimeWiring()
+	{
 		return this.runtimeWiring;
 	}
 
 	@JsonIgnore
-	public void setRuntimeWiring(final RuntimeWiring wiring) {
+	public void setRuntimeWiring(final RuntimeWiring wiring)
+	{
 		this.runtimeWiring = wiring;
 	}
 
 	@JsonProperty
-	public boolean isEnableTracing() {
+	public boolean isEnableTracing()
+	{
 		return this.enableTracing;
 	}
 
 	@JsonProperty
-	public void setEnableTracing(boolean enabled) {
+	public void setEnableTracing(boolean enabled)
+	{
 		this.enableTracing = enabled;
-		if (enabled) {
+		if (enabled)
+		{
 			this.instrumentations.add(new TracingInstrumentation());
 		}
 	}
 
 	@JsonIgnore
-	public Optional<GraphQLSchema> getGraphQLSchema() {
+	public Optional<GraphQLSchema> getGraphQLSchema()
+	{
 		return this.graphQLSchema;
 	}
 
 	@JsonIgnore
-	public void setGraphQLSchema(@Nullable GraphQLSchema graphQLSchema) {
+	public void setGraphQLSchema(@Nullable GraphQLSchema graphQLSchema)
+	{
 		this.graphQLSchema = Optional.ofNullable(graphQLSchema);
 	}
 
 	@JsonProperty
-	public CacheBuilderSpec getQueryCache() {
+	public CacheBuilderSpec getQueryCache()
+	{
 		return this.queryCache;
 	}
 
 	@JsonProperty
-	public void setQueryCache(String queryCache) {
+	public void setQueryCache(String queryCache)
+	{
 		this.queryCache = CacheBuilderSpec.parse(queryCache);
 	}
 
 	@JsonIgnore
-	public ChainedInstrumentation getInstrumentations() {
+	public ChainedInstrumentation getInstrumentations()
+	{
 		return new ChainedInstrumentation(this.instrumentations);
 	}
 
 	@JsonIgnore
-	public void setInstrumentations(@Nullable List<Instrumentation> instrumentations) {
+	public void setInstrumentations(@Nullable List<Instrumentation> instrumentations)
+	{
 		this.instrumentations = Optional.ofNullable(instrumentations).orElseGet(ArrayList::new);
 	}
 
-	public GraphQLSchema build() throws SchemaProblem {
-		if (this.graphQLSchema.isPresent()) {
+	public GraphQLSchema build()
+		throws SchemaProblem
+	{
+		if (this.graphQLSchema.isPresent())
+		{
 			return this.graphQLSchema.get();
 		}
 
 		final var parser = new SchemaParser();
 		final var registry = new TypeDefinitionRegistry();
 
-		if (!this.schemaFiles.isEmpty()) {
-			this.schemaFiles.stream()
+		if (!this.schemaFiles.isEmpty())
+		{
+			this.schemaFiles
+				.stream()
 				.filter((f) -> !Strings.isNullOrEmpty(f))
 				.map((f) -> getResourceAsReader(f))
 				.map((r) -> parser.parse(r))
@@ -178,7 +199,8 @@ public class GraphQLFactory {
 		return schema;
 	}
 
-	private static BufferedReader getResourceAsReader(final String name) {
+	private static BufferedReader getResourceAsReader(final String name)
+	{
 		LOGGER.info("Loading GraphQL schema file: {}", name);
 
 		final ClassLoader loader = MoreObjects.firstNonNull(

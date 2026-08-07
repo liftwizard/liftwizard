@@ -4,32 +4,38 @@ import java.security.Principal;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class User implements Principal {
-
+public class User
+	implements Principal
+{
 	private final String name;
 
 	private final Set<String> roles;
 
-	public User(String name) {
+	public User(String name)
+	{
 		this.name = name;
 		this.roles = null;
 	}
 
-	public User(String name, Set<String> roles) {
+	public User(String name, Set<String> roles)
+	{
 		this.name = name;
 		this.roles = roles;
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return this.name;
 	}
 
-	public int getId() {
+	public int getId()
+	{
 		return (int) (ThreadLocalRandom.current().nextDouble() * 100.0);
 	}
 
-	public Set<String> getRoles() {
+	public Set<String> getRoles()
+	{
 		return this.roles;
 	}
 }

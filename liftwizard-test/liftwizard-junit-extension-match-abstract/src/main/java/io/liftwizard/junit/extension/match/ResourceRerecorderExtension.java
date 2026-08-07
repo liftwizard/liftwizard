@@ -37,8 +37,9 @@ import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class ResourceRerecorderExtension implements BeforeEachCallback {
-
+public class ResourceRerecorderExtension
+	implements BeforeEachCallback
+{
 	protected static final MutableSet<Path> CLEANED_PATHS = Sets.mutable.empty();
 
 	private final Class<?> callingClass;
@@ -46,56 +47,72 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 
 	private final MutableSet<String> rerecordedPaths = Sets.mutable.empty();
 
-	public ResourceRerecorderExtension(Class<?> callingClass, boolean rerecordEnabled) {
+	public ResourceRerecorderExtension(Class<?> callingClass, boolean rerecordEnabled)
+	{
 		this.callingClass = Objects.requireNonNull(callingClass);
 		this.rerecordEnabled = rerecordEnabled;
 	}
 
 	@Override
-	public void beforeEach(ExtensionContext context) throws IOException {
+	public void beforeEach(ExtensionContext context)
+		throws IOException
+	{
 		Path packagePath = this.getPackagePath();
-		if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath)) {
+		if (this.rerecordEnabled && !CLEANED_PATHS.contains(packagePath))
+		{
 			deleteDirectoryRecursively(packagePath);
 			CLEANED_PATHS.add(packagePath);
 		}
 	}
 
-	public Path getPackagePath() {
+	public Path getPackagePath()
+	{
 		String packageName = this.callingClass.getPackage().getName();
 		ListIterable<String> packageNameParts = ArrayAdapter.adapt(packageName.split("\\."));
 		Path testResources = Path.of("", "src", "test", "resources").toAbsolutePath();
 		return packageNameParts.injectInto(testResources, Path::resolve);
 	}
 
-	public static void deleteDirectoryRecursively(@Nonnull Path directory) throws IOException {
-		if (!directory.toFile().exists()) {
+	public static void deleteDirectoryRecursively(@Nonnull Path directory)
+		throws IOException
+	{
+		if (!directory.toFile().exists())
+		{
 			return;
 		}
 		Files.walkFileTree(directory, new DeleteAllFilesVisitor());
 	}
 
-	public boolean mustRerecord(String resourceClassPathLocation) {
-		if (this.rerecordEnabled && !this.rerecordedPaths.contains(resourceClassPathLocation)) {
+	public boolean mustRerecord(String resourceClassPathLocation)
+	{
+		if (this.rerecordEnabled && !this.rerecordedPaths.contains(resourceClassPathLocation))
+		{
 			return true;
 		}
 
-		if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
+		if (this.rerecordedPaths.contains(resourceClassPathLocation))
+		{
 			return false;
 		}
 
-		try (InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation)) {
+		try (InputStream inputStream = this.callingClass.getResourceAsStream(resourceClassPathLocation))
+		{
 			return inputStream == null;
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
 	public String handleMismatch(String resourceClassPathLocation, String fileContents)
-		throws URISyntaxException, IOException {
+		throws URISyntaxException, IOException
+	{
 		URL resource = Objects.requireNonNull(this.callingClass.getResource(resourceClassPathLocation));
 		URI uri = resource.toURI();
 
-		if (this.rerecordedPaths.contains(resourceClassPathLocation)) {
+		if (this.rerecordedPaths.contains(resourceClassPathLocation))
+		{
 			return "Rerecorded file: %s. Not recording again with contents:%n%s".formatted(uri, fileContents);
 		}
 
@@ -109,14 +126,18 @@ public class ResourceRerecorderExtension implements BeforeEachCallback {
 		@Nonnull String resourceClassPathLocation,
 		@Nonnull String fileContents,
 		@Nonnull File destinationFile
-	) throws IOException {
+	)
+		throws IOException
+	{
 		this.rerecordedPaths.add(resourceClassPathLocation);
 
-		if (!destinationFile.exists()) {
+		if (!destinationFile.exists())
+		{
 			destinationFile.getParentFile().mkdirs();
 		}
 
-		try (var printWriter = new PrintWriter(destinationFile, StandardCharsets.UTF_8)) {
+		try (var printWriter = new PrintWriter(destinationFile, StandardCharsets.UTF_8))
+		{
 			printWriter.print(fileContents);
 		}
 	}

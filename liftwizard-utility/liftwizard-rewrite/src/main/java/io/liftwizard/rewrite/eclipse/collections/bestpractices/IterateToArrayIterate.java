@@ -31,8 +31,9 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class IterateToArrayIterate extends Recipe {
-
+public class IterateToArrayIterate
+	extends Recipe
+{
 	private static final MethodMatcher ITERATE_MATCHER = new MethodMatcher(
 		"org.eclipse.collections.impl.utility.Iterate *(..)",
 		true
@@ -77,50 +78,62 @@ public class IterateToArrayIterate extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`Iterate.method(Arrays.asList(array))` → `ArrayIterate.method(array)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Replace `Iterate.method(Arrays.asList(array), ...)` with `ArrayIterate.method(array, ...)` for better performance when working with arrays.";
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(10);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+			{
 				J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
-				if (!ITERATE_MATCHER.matches(mi)) {
+				if (!ITERATE_MATCHER.matches(mi))
+				{
 					return mi;
 				}
 
-				if (mi.getArguments().isEmpty()) {
+				if (mi.getArguments().isEmpty())
+				{
 					return mi;
 				}
 
 				Expression firstArgument = mi.getArguments().get(0);
-				if (!(firstArgument instanceof J.MethodInvocation arraysAsListCall)) {
+				if (!(firstArgument instanceof J.MethodInvocation arraysAsListCall))
+				{
 					return mi;
 				}
 
-				if (!ARRAYS_AS_LIST.matches(arraysAsListCall)) {
+				if (!ARRAYS_AS_LIST.matches(arraysAsListCall))
+				{
 					return mi;
 				}
 
-				if (arraysAsListCall.getArguments().size() != 1) {
+				if (arraysAsListCall.getArguments().size() != 1)
+				{
 					return mi;
 				}
 
@@ -140,16 +153,19 @@ public class IterateToArrayIterate extends Recipe {
 
 				Object[] templateArguments = new Object[remainingArguments.size() + 1];
 				templateArguments[0] = arrayArgument;
-				for (int i = 0; i < remainingArguments.size(); i++) {
+				for (int i = 0; i < remainingArguments.size(); i++)
+				{
 					templateArguments[i + 1] = remainingArguments.get(i);
 				}
 
 				return template.apply(this.getCursor(), mi.getCoordinates().replace(), templateArguments);
 			}
 
-			private String buildTemplatePattern(String methodName, int additionalArgCount) {
+			private String buildTemplatePattern(String methodName, int additionalArgCount)
+			{
 				StringBuilder pattern = new StringBuilder("ArrayIterate.").append(methodName).append("(#{any()}");
-				for (int i = 0; i < additionalArgCount; i++) {
+				for (int i = 0; i < additionalArgCount; i++)
+				{
 					pattern.append(", #{any()}");
 				}
 				pattern.append(")");

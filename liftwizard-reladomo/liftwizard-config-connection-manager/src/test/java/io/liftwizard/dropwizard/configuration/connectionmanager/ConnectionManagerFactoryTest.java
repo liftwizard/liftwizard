@@ -38,8 +38,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConnectionManagerFactoryTest {
-
+class ConnectionManagerFactoryTest
+{
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
@@ -54,7 +54,9 @@ class ConnectionManagerFactoryTest {
 	);
 
 	@Test
-	void createSourcelessConnectionManager() throws Exception {
+	void createSourcelessConnectionManager()
+		throws Exception
+	{
 		ConnectionManagerFactory connectionManagerFactory = this.factory.build(
 			new ResourceConfigurationSourceProvider(),
 			"config-test.json5"
@@ -73,7 +75,8 @@ class ConnectionManagerFactoryTest {
 		assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(GenericDatabaseType.getInstance());
 	}
 
-	private static ObjectMapper newObjectMapper() {
+	private static ObjectMapper newObjectMapper()
+	{
 		ObjectMapper objectMapper = Jackson.newObjectMapper();
 		ObjectMapperConfig.configure(objectMapper);
 		return objectMapper;

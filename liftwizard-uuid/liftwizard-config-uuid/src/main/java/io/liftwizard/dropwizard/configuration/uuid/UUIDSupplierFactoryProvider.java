@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.uuid;
 
-public interface UUIDSupplierFactoryProvider {
+public interface UUIDSupplierFactoryProvider
+{
 	UUIDSupplierFactory getUuidSupplierFactory();
 }

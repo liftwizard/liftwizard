@@ -28,22 +28,26 @@ import org.openrewrite.style.NamedStyles;
  * <p>The styles are loaded from META-INF/rewrite/styles.yml rather than rebuilt here, so that there is one definition
  * of them rather than a test copy that can drift from the shipped one.
  */
-public interface AbstractRewriteStyles {
+public interface AbstractRewriteStyles
+{
 	String STYLE_NAME = "io.liftwizard.NoStarImports";
 
 	ImmutableList<NamedStyles> STYLES = loadStyles();
 
-	static ImmutableList<NamedStyles> styles(NamedStyles... additionalStyles) {
+	static ImmutableList<NamedStyles> styles(NamedStyles... additionalStyles)
+	{
 		return Lists.immutable.with(additionalStyles).newWithAll(STYLES);
 	}
 
-	private static ImmutableList<NamedStyles> loadStyles() {
+	private static ImmutableList<NamedStyles> loadStyles()
+	{
 		Environment environment = Environment.builder().scanRuntimeClasspath("io.liftwizard").build();
 		ImmutableList<NamedStyles> result = Lists.immutable.withAll(environment.activateStyles(STYLE_NAME));
 
 		// activateStyles skips a style it cannot find rather than failing, which would leave the fixtures passing only
 		// because OpenRewrite autodetected a style from the sources it parses.
-		if (result.isEmpty()) {
+		if (result.isEmpty())
+		{
 			throw new AssertionError(
 				"Found no style named %s on the classpath. It is declared in %s.".formatted(
 					STYLE_NAME,

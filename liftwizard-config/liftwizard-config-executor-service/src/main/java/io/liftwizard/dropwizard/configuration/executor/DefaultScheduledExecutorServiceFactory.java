@@ -36,8 +36,9 @@ import io.dropwizard.validation.MinDuration;
 
 @JsonTypeName("default")
 @AutoService(ScheduledExecutorServiceFactory.class)
-public class DefaultScheduledExecutorServiceFactory implements ScheduledExecutorServiceFactory {
-
+public class DefaultScheduledExecutorServiceFactory
+	implements ScheduledExecutorServiceFactory
+{
 	@Valid
 	@NotNull
 	private String nameFormat;
@@ -55,13 +56,15 @@ public class DefaultScheduledExecutorServiceFactory implements ScheduledExecutor
 
 	@Override
 	@JsonIgnore
-	public ScheduledExecutorService build(Environment environment) {
+	public ScheduledExecutorService build(Environment environment)
+	{
 		return this.build(environment.lifecycle(), environment.metrics());
 	}
 
 	@Override
 	@JsonIgnore
-	public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry) {
+	public ScheduledExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry)
+	{
 		ScheduledExecutorService scheduledExecutorService = environment
 			.scheduledExecutorService(this.nameFormat, this.useDaemonThreads)
 			.threads(this.threads)
@@ -72,52 +75,62 @@ public class DefaultScheduledExecutorServiceFactory implements ScheduledExecutor
 	}
 
 	@JsonProperty
-	public String getNameFormat() {
+	public String getNameFormat()
+	{
 		return this.nameFormat;
 	}
 
 	@JsonProperty
-	public void setNameFormat(String nameFormat) {
+	public void setNameFormat(String nameFormat)
+	{
 		this.nameFormat = nameFormat;
 	}
 
 	@JsonProperty
-	public boolean isUseDaemonThreads() {
+	public boolean isUseDaemonThreads()
+	{
 		return this.useDaemonThreads;
 	}
 
 	@JsonProperty
-	public void setUseDaemonThreads(boolean useDaemonThreads) {
+	public void setUseDaemonThreads(boolean useDaemonThreads)
+	{
 		this.useDaemonThreads = useDaemonThreads;
 	}
 
 	@JsonProperty
-	public int getThreads() {
+	public int getThreads()
+	{
 		return this.threads;
 	}
 
 	@JsonProperty
-	public void setThreads(int threads) {
+	public void setThreads(int threads)
+	{
 		this.threads = threads;
 	}
 
 	@JsonProperty
-	public Duration getShutdownTime() {
+	public Duration getShutdownTime()
+	{
 		return this.shutdownTime;
 	}
 
 	@JsonProperty
-	public void setShutdownTime(Duration shutdownTime) {
+	public void setShutdownTime(Duration shutdownTime)
+	{
 		this.shutdownTime = shutdownTime;
 	}
 
 	@JsonProperty
-	public boolean isRemoveOnCancelPolicy() {
+	public boolean isRemoveOnCancelPolicy()
+	{
 		return this.removeOnCancelPolicy;
 	}
 
 	@JsonProperty
-	public void setRemoveOnCancelPolicy(boolean removeOnCancelPolicy) {
+	public void setRemoveOnCancelPolicy(boolean removeOnCancelPolicy)
+	{
 		this.removeOnCancelPolicy = removeOnCancelPolicy;
 	}
 }

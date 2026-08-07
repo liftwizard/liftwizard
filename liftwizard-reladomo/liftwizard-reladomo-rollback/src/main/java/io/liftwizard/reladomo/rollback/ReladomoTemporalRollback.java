@@ -56,40 +56,46 @@ import org.slf4j.LoggerFactory;
  *
  * @see <a href="https://github.com/goldmansachs/reladomo/issues/261">Reladomo Issue #261</a>
  */
-public class ReladomoTemporalRollback {
-
+public class ReladomoTemporalRollback
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReladomoTemporalRollback.class);
 
 	private final Instant targetDate;
 	private final Timestamp targetTimestamp;
 	private final Timestamp infinityTimestamp;
 
-	public ReladomoTemporalRollback(Instant targetDate) {
+	public ReladomoTemporalRollback(Instant targetDate)
+	{
 		this(targetDate, UtcInfinityTimestamp.getDefaultInfinityInstant());
 	}
 
-	public ReladomoTemporalRollback(Instant targetDate, Instant infinityDate) {
+	public ReladomoTemporalRollback(Instant targetDate, Instant infinityDate)
+	{
 		this.targetDate = Objects.requireNonNull(targetDate);
 		this.targetTimestamp = Timestamp.from(targetDate);
 		this.infinityTimestamp = Timestamp.from(Objects.requireNonNull(infinityDate));
 	}
 
-	public void rollbackAllTables() {
+	public void rollbackAllTables()
+	{
 		LOGGER.info("Rolling back all bitemporal tables to: {}", this.targetDate);
 
-		MithraManagerProvider.getMithraManager().executeTransactionalCommand((tx) -> {
-				MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet().forEach(this::rollbackTable);
-				return null;
-			});
+		MithraManagerProvider.getMithraManager().executeTransactionalCommand((tx) ->
+		{
+			MithraManagerProvider.getMithraManager().getRuntimeCacheControllerSet().forEach(this::rollbackTable);
+			return null;
+		});
 
 		LOGGER.info("Rollback completed for all bitemporal tables");
 	}
 
-	private void rollbackTable(MithraRuntimeCacheController cacheController) {
+	private void rollbackTable(MithraRuntimeCacheController cacheController)
+	{
 		ReladomoClassMetaData metaData = cacheController.getMetaData();
 
 		AsOfAttribute[] asOfAttributes = metaData.getAsOfAttributes();
-		if (ArrayIterate.isEmpty(asOfAttributes)) {
+		if (ArrayIterate.isEmpty(asOfAttributes))
+		{
 			LOGGER.debug("Skipping non-temporal table: {}", metaData.getBusinessOrInterfaceClassName());
 			return;
 		}
@@ -98,7 +104,8 @@ public class ReladomoTemporalRollback {
 			asOfAttributes,
 			AsOfAttribute::isProcessingDate
 		);
-		if (maybeSystemAttribute.isEmpty()) {
+		if (maybeSystemAttribute.isEmpty())
+		{
 			LOGGER.debug("Skipping non-system-temporal table: {}", metaData.getBusinessOrInterfaceClassName());
 			return;
 		}
@@ -129,12 +136,14 @@ public class ReladomoTemporalRollback {
 		RelatedFinder<?> finder,
 		AsOfAttribute systemAttribute,
 		String tableName
-	) {
+	)
+	{
 		TimestampAttribute systemFromAttribute = systemAttribute.getFromAttribute();
 
-		ListIterable<AsOfAttribute> asOfAttributes = metaData.getAsOfAttributes() == null
-			? Lists.immutable.empty()
-			: ArrayAdapter.adapt(metaData.getAsOfAttributes());
+		ListIterable<AsOfAttribute> asOfAttributes =
+			metaData.getAsOfAttributes() == null
+				? Lists.immutable.empty()
+				: ArrayAdapter.adapt(metaData.getAsOfAttributes());
 
 		Operation edgePointOperation = asOfAttributes
 			.collect(AsOfAttribute::equalsEdgePoint)
@@ -148,12 +157,14 @@ public class ReladomoTemporalRollback {
 		MithraList<?> futureVersions = finder.findMany(futureVersionsOperation);
 		int count = futureVersions.size();
 
-		if (count == 0) {
+		if (count == 0)
+		{
 			LOGGER.info("No future versions to purge from {}", tableName);
 			return;
 		}
 
-		if (!(futureVersions instanceof TemporalTransactionalDomainList<?> temporalList)) {
+		if (!(futureVersions instanceof TemporalTransactionalDomainList<?> temporalList))
+		{
 			throw new IllegalStateException("Cannot purge future versions - invalid list type");
 		}
 
@@ -165,7 +176,8 @@ public class ReladomoTemporalRollback {
 	 * Restores superseded versions by setting system_to = infinity for rows
 	 * where system_from &lt;= targetDate AND system_to &gt; targetDate AND system_to &lt; infinity.
 	 */
-	private void restoreSupersededVersions(MithraObjectPortal portal, String tableName, AsOfAttribute systemAttribute) {
+	private void restoreSupersededVersions(MithraObjectPortal portal, String tableName, AsOfAttribute systemAttribute)
+	{
 		String systemFromColumn = systemAttribute.getFromAttribute().getColumnName();
 		String systemToColumn = systemAttribute.getToAttribute().getColumnName();
 
@@ -185,7 +197,8 @@ public class ReladomoTemporalRollback {
 		try (
 			Connection connection = connectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement(sql)
-		) {
+		)
+		{
 			databaseType.setTimestamp(statement, 1, this.infinityTimestamp, false, timeZone);
 			databaseType.setTimestamp(statement, 2, this.targetTimestamp, false, timeZone);
 			databaseType.setTimestamp(statement, 3, this.targetTimestamp, false, timeZone);
@@ -193,12 +206,17 @@ public class ReladomoTemporalRollback {
 
 			int updatedRows = statement.executeUpdate();
 
-			if (updatedRows > 0) {
+			if (updatedRows > 0)
+			{
 				LOGGER.info("Restored {} superseded versions in {}", updatedRows, tableName);
-			} else {
+			}
+			else
+			{
 				LOGGER.info("No superseded versions to restore in {}", tableName);
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			throw new RuntimeException("Failed to execute SQL: " + sql, e);
 		}
 	}

@@ -24,41 +24,43 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3Jetty10LoginServiceTypesTest implements AbstractRewriteFixtures, RewriteTest {
-
+class Dropwizard3Jetty10LoginServiceTypesTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes")
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.jetty.security;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes").parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.jetty.security;
 
-						public abstract class AbstractLoginService {
-						    public static class UserPrincipal {
-						        public UserPrincipal(String name, Object credential) {}
-						        public String getName() { return null; }
-						    }
-						    public static class RolePrincipal {
-						        public RolePrincipal(String name) {}
-						    }
-						}
-						"""
-					)
-			);
+					public abstract class AbstractLoginService {
+					    public static class UserPrincipal {
+					        public UserPrincipal(String name, Object credential) {}
+					        public String getName() { return null; }
+					    }
+					    public static class RolePrincipal {
+					        public RolePrincipal(String name) {}
+					    }
+					}
+					"""
+				)
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

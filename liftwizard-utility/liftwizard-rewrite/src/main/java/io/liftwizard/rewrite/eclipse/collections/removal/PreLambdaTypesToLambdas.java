@@ -43,8 +43,9 @@ import org.openrewrite.java.tree.TypeUtils;
  * a call site with overload ambiguity. Lambda substitutions carry their own
  * functional-interface target type and need no such checks.
  */
-public class PreLambdaTypesToLambdas extends Recipe {
-
+public class PreLambdaTypesToLambdas
+	extends Recipe
+{
 	private static final String ADD_FUNCTION_FQN = "org.eclipse.collections.impl.block.function.AddFunction";
 	private static final String MULTIPLY_FUNCTION_FQN = "org.eclipse.collections.impl.block.function.MultiplyFunction";
 	private static final String SUBTRACT_FUNCTION_FQN = "org.eclipse.collections.impl.block.function.SubtractFunction";
@@ -136,12 +137,14 @@ public class PreLambdaTypesToLambdas extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Replace pre-lambda Eclipse Collections types with lambdas and method references";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Replace Eclipse Collections' pre-lambda utility classes and constants with equivalent Java lambdas"
 			+ " and method references (e.g. `AddFunction.INTEGER` → `Integer::sum`,"
@@ -153,7 +156,8 @@ public class PreLambdaTypesToLambdas extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		TreeVisitor<?, ExecutionContext> precondition = Preconditions.or(
 			new UsesType<>(ADD_FUNCTION_FQN, false),
 			new UsesType<>(MULTIPLY_FUNCTION_FQN, false),
@@ -173,16 +177,20 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		String fieldName,
 		String replacement,
 		int methodReferenceArity
-	) {
-		static FieldSubstitution methodReference(String typeFqn, String fieldName, String replacement, int arity) {
+	)
+	{
+		static FieldSubstitution methodReference(String typeFqn, String fieldName, String replacement, int arity)
+		{
 			return new FieldSubstitution(typeFqn, fieldName, replacement, arity);
 		}
 
-		static FieldSubstitution lambda(String typeFqn, String fieldName, String replacement) {
+		static FieldSubstitution lambda(String typeFqn, String fieldName, String replacement)
+		{
 			return new FieldSubstitution(typeFqn, fieldName, replacement, 0);
 		}
 
-		boolean needsContextChecks() {
+		boolean needsContextChecks()
+		{
 			return methodReferenceArity > 0;
 		}
 	}
@@ -193,7 +201,9 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		String methodSignature,
 		String replacement,
 		int methodReferenceArity
-	) {}
+	)
+	{
+	}
 
 	/**
 	 * Replacement of a {@code SomeType.factory(arg)} static method call. The
@@ -206,7 +216,9 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		String functionalInterfaceFqn,
 		String replacement,
 		int methodReferenceArity
-	) {}
+	)
+	{
+	}
 
 	/**
 	 * Replacement of a {@code new SomeType<>(arg)} constructor call. The first
@@ -219,20 +231,25 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		String argType,
 		String replacement,
 		int methodReferenceArity
-	) {
-		boolean needsContextChecks() {
+	)
+	{
+		boolean needsContextChecks()
+		{
 			return methodReferenceArity > 0;
 		}
 	}
 
-	private static final class Visitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class Visitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private final Map<String, MethodMatcher> methodMatchers = buildMatchers();
 		private final Map<String, MethodMatcher> factoryMatchers = buildFactoryMatchers();
 
-		private static Map<String, MethodMatcher> buildMatchers() {
+		private static Map<String, MethodMatcher> buildMatchers()
+		{
 			Map<String, MethodMatcher> result = new LinkedHashMap<>();
-			for (MethodSubstitution sub : METHOD_SUBSTITUTIONS) {
+			for (MethodSubstitution sub : METHOD_SUBSTITUTIONS)
+			{
 				result.put(
 					sub.declaringTypeFqn() + " " + sub.methodSignature(),
 					new MethodMatcher(sub.declaringTypeFqn() + " " + sub.methodSignature())
@@ -241,9 +258,11 @@ public class PreLambdaTypesToLambdas extends Recipe {
 			return result;
 		}
 
-		private static Map<String, MethodMatcher> buildFactoryMatchers() {
+		private static Map<String, MethodMatcher> buildFactoryMatchers()
+		{
 			Map<String, MethodMatcher> result = new LinkedHashMap<>();
-			for (FactoryMethodSubstitution sub : FACTORY_METHOD_SUBSTITUTIONS) {
+			for (FactoryMethodSubstitution sub : FACTORY_METHOD_SUBSTITUTIONS)
+			{
 				result.put(
 					sub.declaringTypeFqn() + " " + sub.methodSignature(),
 					new MethodMatcher(sub.declaringTypeFqn() + " " + sub.methodSignature())
@@ -253,17 +272,22 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		}
 
 		@Override
-		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
+		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx)
+		{
 			J.NewClass nc = (J.NewClass) super.visitNewClass(newClass, ctx);
-			for (ConstructorSubstitution sub : CONSTRUCTOR_SUBSTITUTIONS) {
-				if (!TypeUtils.isOfClassType(nc.getType(), sub.concreteFqn())) {
+			for (ConstructorSubstitution sub : CONSTRUCTOR_SUBSTITUTIONS)
+			{
+				if (!TypeUtils.isOfClassType(nc.getType(), sub.concreteFqn()))
+				{
 					continue;
 				}
-				if (nc.getArguments() == null || nc.getArguments().isEmpty()) {
+				if (nc.getArguments() == null || nc.getArguments().isEmpty())
+				{
 					return nc;
 				}
 				Expression arg = nc.getArguments().get(0);
-				if (sub.needsContextChecks() && !passesContextChecks(arg, sub)) {
+				if (sub.needsContextChecks() && !passesContextChecks(arg, sub))
+				{
 					return nc;
 				}
 				JavaTemplate template = JavaTemplate.builder(sub.replacement()).build();
@@ -275,16 +299,20 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		}
 
 		@Override
-		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation invocation = (J.MethodInvocation) super.visitMethodInvocation(method, ctx);
 
-			for (FactoryMethodSubstitution sub : FACTORY_METHOD_SUBSTITUTIONS) {
+			for (FactoryMethodSubstitution sub : FACTORY_METHOD_SUBSTITUTIONS)
+			{
 				MethodMatcher matcher = factoryMatchers.get(sub.declaringTypeFqn() + " " + sub.methodSignature());
-				if (matcher == null || !matcher.matches(invocation)) {
+				if (matcher == null || !matcher.matches(invocation))
+				{
 					continue;
 				}
 				Expression arg = invocation.getArguments().get(0);
-				if (!passesContextChecks(arg, sub)) {
+				if (!passesContextChecks(arg, sub))
+				{
 					return invocation;
 				}
 				JavaTemplate template = JavaTemplate.builder(sub.replacement()).build();
@@ -293,12 +321,15 @@ public class PreLambdaTypesToLambdas extends Recipe {
 				return replaced;
 			}
 
-			for (MethodSubstitution sub : METHOD_SUBSTITUTIONS) {
+			for (MethodSubstitution sub : METHOD_SUBSTITUTIONS)
+			{
 				MethodMatcher matcher = methodMatchers.get(sub.declaringTypeFqn() + " " + sub.methodSignature());
-				if (matcher == null || !matcher.matches(invocation)) {
+				if (matcher == null || !matcher.matches(invocation))
+				{
 					continue;
 				}
-				if (!passesMethodReferenceChecks(sub.methodReferenceArity())) {
+				if (!passesMethodReferenceChecks(sub.methodReferenceArity()))
+				{
 					return invocation;
 				}
 				JavaTemplate template = JavaTemplate.builder(sub.replacement()).build();
@@ -311,13 +342,16 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		}
 
 		@Override
-		public J visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx) {
+		public J visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx)
+		{
 			J.FieldAccess fa = (J.FieldAccess) super.visitFieldAccess(fieldAccess, ctx);
 			FieldSubstitution sub = lookupFieldSubstitution(fa.getTarget().getType(), fa.getSimpleName());
-			if (sub == null) {
+			if (sub == null)
+			{
 				return fa;
 			}
-			if (sub.needsContextChecks() && !passesMethodReferenceChecks(sub.methodReferenceArity())) {
+			if (sub.needsContextChecks() && !passesMethodReferenceChecks(sub.methodReferenceArity()))
+			{
 				return fa;
 			}
 			JavaTemplate template = JavaTemplate.builder(sub.replacement()).build();
@@ -327,20 +361,25 @@ public class PreLambdaTypesToLambdas extends Recipe {
 		}
 
 		@Override
-		public J visitIdentifier(J.Identifier identifier, ExecutionContext ctx) {
+		public J visitIdentifier(J.Identifier identifier, ExecutionContext ctx)
+		{
 			J.Identifier id = (J.Identifier) super.visitIdentifier(identifier, ctx);
-			if (isFieldAccessName(this.getCursor())) {
+			if (isFieldAccessName(this.getCursor()))
+			{
 				return id;
 			}
 			JavaType.Variable fieldType = id.getFieldType();
-			if (fieldType == null) {
+			if (fieldType == null)
+			{
 				return id;
 			}
 			FieldSubstitution sub = lookupFieldSubstitution(fieldType.getOwner(), id.getSimpleName());
-			if (sub == null) {
+			if (sub == null)
+			{
 				return id;
 			}
-			if (sub.needsContextChecks() && !passesMethodReferenceChecks(sub.methodReferenceArity())) {
+			if (sub.needsContextChecks() && !passesMethodReferenceChecks(sub.methodReferenceArity()))
+			{
 				return id;
 			}
 			JavaTemplate template = JavaTemplate.builder(sub.replacement()).build();
@@ -349,17 +388,22 @@ public class PreLambdaTypesToLambdas extends Recipe {
 			return replaced;
 		}
 
-		private static FieldSubstitution lookupFieldSubstitution(JavaType owner, String fieldName) {
-			for (FieldSubstitution sub : FIELD_SUBSTITUTIONS) {
-				if (sub.fieldName().equals(fieldName) && TypeUtils.isOfClassType(owner, sub.declaringTypeFqn())) {
+		private static FieldSubstitution lookupFieldSubstitution(JavaType owner, String fieldName)
+		{
+			for (FieldSubstitution sub : FIELD_SUBSTITUTIONS)
+			{
+				if (sub.fieldName().equals(fieldName) && TypeUtils.isOfClassType(owner, sub.declaringTypeFqn()))
+				{
 					return sub;
 				}
 			}
 			return null;
 		}
 
-		private boolean passesContextChecks(Expression arg, ConstructorSubstitution sub) {
-			if (MethodReferenceContextChecks.isNullLiteral(arg)) {
+		private boolean passesContextChecks(Expression arg, ConstructorSubstitution sub)
+		{
+			if (MethodReferenceContextChecks.isNullLiteral(arg))
+			{
 				return false;
 			}
 			if (
@@ -368,14 +412,17 @@ public class PreLambdaTypesToLambdas extends Recipe {
 					sub.concreteFqn(),
 					sub.functionalInterfaceFqn()
 				)
-			) {
+			)
+			{
 				return false;
 			}
 			return passesMethodReferenceChecks(sub.methodReferenceArity());
 		}
 
-		private boolean passesContextChecks(Expression arg, FactoryMethodSubstitution sub) {
-			if (MethodReferenceContextChecks.isNullLiteral(arg)) {
+		private boolean passesContextChecks(Expression arg, FactoryMethodSubstitution sub)
+		{
+			if (MethodReferenceContextChecks.isNullLiteral(arg))
+			{
 				return false;
 			}
 			if (
@@ -384,28 +431,35 @@ public class PreLambdaTypesToLambdas extends Recipe {
 					sub.concreteFqn(),
 					sub.functionalInterfaceFqn()
 				)
-			) {
+			)
+			{
 				return false;
 			}
 			return passesMethodReferenceChecks(sub.methodReferenceArity());
 		}
 
-		private boolean passesMethodReferenceChecks(int arity) {
-			if (MethodReferenceContextChecks.targetIsObject(this.getCursor())) {
+		private boolean passesMethodReferenceChecks(int arity)
+		{
+			if (MethodReferenceContextChecks.targetIsObject(this.getCursor()))
+			{
 				return false;
 			}
-			if (MethodReferenceContextChecks.wouldBeAmbiguousAtCallSite(this.getCursor(), arity)) {
+			if (MethodReferenceContextChecks.wouldBeAmbiguousAtCallSite(this.getCursor(), arity))
+			{
 				return false;
 			}
 			return true;
 		}
 
-		private static boolean isFieldAccessName(org.openrewrite.Cursor cursor) {
+		private static boolean isFieldAccessName(org.openrewrite.Cursor cursor)
+		{
 			org.openrewrite.Cursor parent = cursor.getParent();
-			while (parent != null && !(parent.getValue() instanceof org.openrewrite.Tree)) {
+			while (parent != null && !(parent.getValue() instanceof org.openrewrite.Tree))
+			{
 				parent = parent.getParent();
 			}
-			if (parent != null && parent.getValue() instanceof J.FieldAccess fa) {
+			if (parent != null && parent.getValue() instanceof J.FieldAccess fa)
+			{
 				return fa.getName() == cursor.getValue();
 			}
 			return false;

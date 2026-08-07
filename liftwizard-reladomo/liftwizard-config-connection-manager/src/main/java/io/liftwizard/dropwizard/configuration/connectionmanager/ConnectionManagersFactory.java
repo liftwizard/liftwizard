@@ -33,8 +33,8 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
 
-public class ConnectionManagersFactory {
-
+public class ConnectionManagersFactory
+{
 	private @Valid @NotNull List<ConnectionManagerFactory> connectionManagerFactories = List.of();
 
 	private Map<String, ConnectionManagerFactory> connectionManagerFactoriesByName = new LinkedHashMap<>();
@@ -42,15 +42,18 @@ public class ConnectionManagersFactory {
 	private final Map<String, SourcelessConnectionManager> connectionManagersByName = new LinkedHashMap<>();
 
 	@JsonProperty("connectionManagers")
-	public List<ConnectionManagerFactory> getConnectionManagerFactories() {
+	public List<ConnectionManagerFactory> getConnectionManagerFactories()
+	{
 		return this.connectionManagerFactories;
 	}
 
 	@JsonProperty("connectionManagers")
-	public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories) {
+	public void setConnectionManagerFactories(List<ConnectionManagerFactory> connectionManagerFactories)
+	{
 		this.connectionManagerFactories = connectionManagerFactories;
 		this.connectionManagerFactoriesByName = new LinkedHashMap<>();
-		for (ConnectionManagerFactory connectionManagerFactory : connectionManagerFactories) {
+		for (ConnectionManagerFactory connectionManagerFactory : connectionManagerFactories)
+		{
 			this.connectionManagerFactoriesByName.put(
 				connectionManagerFactory.getConnectionManagerName(),
 				connectionManagerFactory
@@ -60,8 +63,10 @@ public class ConnectionManagersFactory {
 
 	@ValidationMethod
 	@JsonIgnore
-	public boolean isValidConnectionManagerNames() {
-		List<String> orderedConnectionManagerNames = this.connectionManagerFactories.stream()
+	public boolean isValidConnectionManagerNames()
+	{
+		List<String> orderedConnectionManagerNames = this.connectionManagerFactories
+			.stream()
 			.map(ConnectionManagerFactory::getConnectionManagerName)
 			.toList();
 		List<String> duplicateConnectionManagerNames = orderedConnectionManagerNames
@@ -72,29 +77,33 @@ public class ConnectionManagersFactory {
 			.filter((p) -> p.getValue() > 1)
 			.map(Map.Entry::getKey)
 			.toList();
-		if (!duplicateConnectionManagerNames.isEmpty()) {
+		if (!duplicateConnectionManagerNames.isEmpty())
+		{
 			String errorMessage = "Duplicate names found in connectionManagers: " + duplicateConnectionManagerNames;
 			throw new IllegalStateException(errorMessage);
 		}
 
 		// Validate that connection managers sharing the same data source have compatible configurations
-		Map<String, List<ConnectionManagerFactory>> managersByDataSource =
-			this.connectionManagerFactories.stream().collect(
-				Collectors.groupingBy(ConnectionManagerFactory::getDataSourceName)
-			);
+		Map<String, List<ConnectionManagerFactory>> managersByDataSource = this.connectionManagerFactories
+			.stream()
+			.collect(Collectors.groupingBy(ConnectionManagerFactory::getDataSourceName));
 
-		for (List<ConnectionManagerFactory> managersWithSameDataSource : managersByDataSource.values()) {
-			if (managersWithSameDataSource.size() <= 1) {
+		for (List<ConnectionManagerFactory> managersWithSameDataSource : managersByDataSource.values())
+		{
+			if (managersWithSameDataSource.size() <= 1)
+			{
 				continue;
 			}
 
 			// For managers sharing a data source, verify that they have the same configuration except schema
 			ConnectionManagerFactory firstManager = managersWithSameDataSource.getFirst();
-			for (var i = 1; i < managersWithSameDataSource.size(); i++) {
+			for (var i = 1; i < managersWithSameDataSource.size(); i++)
+			{
 				ConnectionManagerFactory currentManager = managersWithSameDataSource.get(i);
 
 				// Verify that database type matches
-				if (firstManager.getDatabaseType() != currentManager.getDatabaseType()) {
+				if (firstManager.getDatabaseType() != currentManager.getDatabaseType())
+				{
 					String errorMessage =
 						"Connection managers '%s' and '%s' share data source '%s' but have different database types: %s vs %s".formatted(
 							firstManager.getConnectionManagerName(),
@@ -107,7 +116,8 @@ public class ConnectionManagersFactory {
 				}
 
 				// Verify that time zone matches
-				if (!firstManager.getTimeZoneName().equals(currentManager.getTimeZoneName())) {
+				if (!firstManager.getTimeZoneName().equals(currentManager.getTimeZoneName()))
+				{
 					String errorMessage =
 						"Connection managers '%s' and '%s' share data source '%s' but have different time zones: %s vs %s".formatted(
 							firstManager.getConnectionManagerName(),
@@ -120,7 +130,8 @@ public class ConnectionManagersFactory {
 				}
 
 				// Verify that schemas are different
-				if (firstManager.getSchemaName().equals(currentManager.getSchemaName())) {
+				if (firstManager.getSchemaName().equals(currentManager.getSchemaName()))
+				{
 					String errorMessage =
 						"Connection managers '%s' and '%s' share data source '%s' but also have the same schema: %s".formatted(
 							firstManager.getConnectionManagerName(),
@@ -141,8 +152,10 @@ public class ConnectionManagersFactory {
 	public Map<String, SourcelessConnectionManager> getConnectionManagersByName(
 		NamedDataSourceProvider dataSourceProvider,
 		@Nonnull Environment environment
-	) {
-		for (ConnectionManagerFactory connectionManagerFactory : this.connectionManagerFactories) {
+	)
+	{
+		for (ConnectionManagerFactory connectionManagerFactory : this.connectionManagerFactories)
+		{
 			this.getConnectionManagerByName(dataSourceProvider, environment, connectionManagerFactory);
 		}
 		return this.connectionManagersByName;
@@ -153,14 +166,17 @@ public class ConnectionManagersFactory {
 		NamedDataSourceProvider dataSourceProvider,
 		@Nonnull Environment environment,
 		ConnectionManagerFactory connectionManagerFactory
-	) {
+	)
+	{
 		String connectionManagerName = connectionManagerFactory.getConnectionManagerName();
 
-		if (this.connectionManagersByName.containsKey(connectionManagerName)) {
+		if (this.connectionManagersByName.containsKey(connectionManagerName))
+		{
 			return this.connectionManagersByName.get(connectionManagerName);
 		}
 
-		if (!this.connectionManagerFactoriesByName.containsKey(connectionManagerName)) {
+		if (!this.connectionManagerFactoriesByName.containsKey(connectionManagerName))
+		{
 			String message = "No connection manager named: '%s'. Known connection managers: %s".formatted(
 				connectionManagerName,
 				this.connectionManagerFactoriesByName.keySet()
@@ -176,9 +192,9 @@ public class ConnectionManagersFactory {
 				environment.lifecycle()
 			);
 
-		SourcelessConnectionManager sourcelessConnectionManager = this.connectionManagerFactoriesByName.get(
-			connectionManagerName
-		).createSourcelessConnectionManager(managedDataSource);
+		SourcelessConnectionManager sourcelessConnectionManager = this.connectionManagerFactoriesByName
+			.get(connectionManagerName)
+			.createSourcelessConnectionManager(managedDataSource);
 		this.connectionManagersByName.put(connectionManagerName, sourcelessConnectionManager);
 		return sourcelessConnectionManager;
 	}

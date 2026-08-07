@@ -41,58 +41,69 @@ import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.java.tree.VariableDeclarator;
 
-public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
-
+public abstract class AbstractJCFConstructorToFactoryRecipe
+	extends Recipe
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	private final String sourceTypeSimpleName;
 	private final String targetFactorySimpleName;
 
-	protected AbstractJCFConstructorToFactoryRecipe(String sourceTypeSimpleName, String targetFactorySimpleName) {
+	protected AbstractJCFConstructorToFactoryRecipe(String sourceTypeSimpleName, String targetFactorySimpleName)
+	{
 		this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
 		this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
 	}
 
 	@Override
-	public final Set<String> getTags() {
+	public final Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public final Duration getEstimatedEffortPerOccurrence() {
+	public final Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(10);
 	}
 
 	@Override
-	public final TreeVisitor<?, ExecutionContext> getVisitor() {
+	public final TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new ConstructorToFactoryVisitor(this.sourceTypeSimpleName, this.targetFactorySimpleName);
 	}
 
-	private static final class ConstructorToFactoryVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class ConstructorToFactoryVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private final String sourceTypeSimpleName;
 		private final String targetFactorySimpleName;
 
-		private ConstructorToFactoryVisitor(String sourceTypeSimpleName, String targetFactorySimpleName) {
+		private ConstructorToFactoryVisitor(String sourceTypeSimpleName, String targetFactorySimpleName)
+		{
 			this.sourceTypeSimpleName = Objects.requireNonNull(sourceTypeSimpleName);
 			this.targetFactorySimpleName = Objects.requireNonNull(targetFactorySimpleName);
 		}
 
 		@Override
-		public J visitVariable(J.VariableDeclarations.NamedVariable variable, ExecutionContext ctx) {
+		public J visitVariable(J.VariableDeclarations.NamedVariable variable, ExecutionContext ctx)
+		{
 			VariableDeclarator declarator = variable.getDeclarator();
-			if (!(declarator instanceof J.Identifier) && !(declarator instanceof J.Literal)) {
+			if (!(declarator instanceof J.Identifier) && !(declarator instanceof J.Literal))
+			{
 				return variable;
 			}
 			return super.visitVariable(variable, ctx);
 		}
 
 		@Override
-		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
+		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx)
+		{
 			var nc = (J.NewClass) super.visitNewClass(newClass, ctx);
 
 			JavaType.FullyQualified type = TypeUtils.asFullyQualified(nc.getType());
-			if (type == null || !("java.util." + this.sourceTypeSimpleName).equals(type.getFullyQualifiedName())) {
+			if (type == null || !("java.util." + this.sourceTypeSimpleName).equals(type.getFullyQualifiedName()))
+			{
 				return nc;
 			}
 
@@ -119,16 +130,19 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 				&& !isInitialCapacityConstructor
 				&& !isComparatorConstructor
 				&& !isCollectionConstructor
-			) {
+			)
+			{
 				return nc;
 			}
 
-			if (this.isVariableTypeConcreteClass()) {
+			if (this.isVariableTypeConcreteClass())
+			{
 				return nc;
 			}
 
 			Optional<String> factoryType = FactoryTypeResolver.resolve(this.getCursor(), this.targetFactorySimpleName);
-			if (factoryType.isEmpty()) {
+			if (factoryType.isEmpty())
+			{
 				return nc;
 			}
 			String factoryImport = factoryType.get();
@@ -154,9 +168,12 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 				.build();
 
 			J replacement;
-			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
+			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor)
+			{
 				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
-			} else {
+			}
+			else
+			{
 				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace());
 			}
 
@@ -169,83 +186,103 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 			boolean isInitialCapacityConstructor,
 			boolean isComparatorConstructor,
 			boolean isCollectionConstructor
-		) {
-			if (isInitialCapacityConstructor) {
+		)
+		{
+			if (isInitialCapacityConstructor)
+			{
 				return "withInitialCapacity(#{any(int)})";
 			}
 
-			if (isComparatorConstructor) {
+			if (isComparatorConstructor)
+			{
 				return "with(#{any(java.util.Comparator)})";
 			}
 
-			if (!isCollectionConstructor) {
+			if (!isCollectionConstructor)
+			{
 				return "empty()";
 			}
 
 			return this.getMethodName() + "(#{any(" + this.getParamType() + ")})";
 		}
 
-		private String getMethodName() {
-			if (this.sourceTypeSimpleName.equals("TreeMap")) {
+		private String getMethodName()
+		{
+			if (this.sourceTypeSimpleName.equals("TreeMap"))
+			{
 				return "withSortedMap";
 			}
-			if (this.sourceTypeSimpleName.contains("Map")) {
+			if (this.sourceTypeSimpleName.contains("Map"))
+			{
 				return "withMap";
 			}
 			return "withAll";
 		}
 
-		private String getParamType() {
+		private String getParamType()
+		{
 			return this.sourceTypeSimpleName.equals("TreeMap") || this.sourceTypeSimpleName.contains("Map")
 				? "java.util.Map"
 				: "java.lang.Iterable";
 		}
 
-		private static boolean isNumericType(JavaType type) {
-			if (!(type instanceof JavaType.Primitive primitive)) {
+		private static boolean isNumericType(JavaType type)
+		{
+			if (!(type instanceof JavaType.Primitive primitive))
+			{
 				return false;
 			}
-			return switch (primitive) {
+			return switch (primitive)
+			{
 				case Int, Long, Short, Byte -> true;
 				default -> false;
 			};
 		}
 
-		private static boolean isComparatorType(JavaType type) {
+		private static boolean isComparatorType(JavaType type)
+		{
 			JavaType.FullyQualified fullyQualified = TypeUtils.asFullyQualified(type);
 			return fullyQualified != null && "java.util.Comparator".equals(fullyQualified.getFullyQualifiedName());
 		}
 
-		private String extractTypeParameterString(J.NewClass nc) {
-			if (!(nc.getClazz() instanceof J.ParameterizedType parameterizedType)) {
+		private String extractTypeParameterString(J.NewClass nc)
+		{
+			if (!(nc.getClazz() instanceof J.ParameterizedType parameterizedType))
+			{
 				return "";
 			}
 
 			List<Expression> typeParameters = parameterizedType.getTypeParameters();
-			if (Iterate.isEmpty(typeParameters)) {
+			if (Iterate.isEmpty(typeParameters))
+			{
 				return "";
 			}
 
 			boolean hasActualTypeParams = typeParameters.stream().anyMatch((tp) -> !(tp instanceof J.Empty));
-			if (!hasActualTypeParams) {
+			if (!hasActualTypeParams)
+			{
 				return "";
 			}
 
 			return typeParameters.stream().map(Expression::toString).collect(Collectors.joining(", "));
 		}
 
-		private boolean isVariableTypeConcreteClass() {
+		private boolean isVariableTypeConcreteClass()
+		{
 			Cursor parentTreeCursor = this.getCursor().getParentTreeCursor();
-			if (!(parentTreeCursor.getValue() instanceof J.VariableDeclarations.NamedVariable)) {
+			if (!(parentTreeCursor.getValue() instanceof J.VariableDeclarations.NamedVariable))
+			{
 				return false;
 			}
 
-			if (!(parentTreeCursor.getParentTreeCursor().getValue() instanceof J.VariableDeclarations variableDecls)) {
+			if (!(parentTreeCursor.getParentTreeCursor().getValue() instanceof J.VariableDeclarations variableDecls))
+			{
 				return false;
 			}
 
 			JavaType.FullyQualified variableType = TypeUtils.asFullyQualified(variableDecls.getType());
-			if (variableType == null) {
+			if (variableType == null)
+			{
 				return false;
 			}
 

@@ -44,26 +44,30 @@ import org.openrewrite.java.tree.TypeUtils;
  * This transformation requires semantic analysis of the type system via JavaIsoVisitor,
  * not structural pattern matching.
  */
-public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
-
+public abstract class AbstractJCFTypeToMutableTypeRecipe
+	extends Recipe
+{
 	private final String jcfInterface;
 	private final String ecPackage;
 	private final String ecInterface;
 
-	protected AbstractJCFTypeToMutableTypeRecipe(String jcfInterface, String ecPackage, String ecInterface) {
+	protected AbstractJCFTypeToMutableTypeRecipe(String jcfInterface, String ecPackage, String ecInterface)
+	{
 		this.jcfInterface = Objects.requireNonNull(jcfInterface);
 		this.ecPackage = Objects.requireNonNull(ecPackage);
 		this.ecInterface = Objects.requireNonNull(ecInterface);
 	}
 
 	@Override
-	public final String getDisplayName() {
+	public final String getDisplayName()
+	{
 		String typeParams = this.jcfInterface.equals("Map") ? "<K, V>" : "<T>";
 		return '`' + this.jcfInterface + typeParams + "` → `" + this.ecInterface + typeParams + '`';
 	}
 
 	@Override
-	public final String getDescription() {
+	public final String getDescription()
+	{
 		String typeParams = this.jcfInterface.equals("Map") ? "<K, V>" : "<T>";
 		return MessageFormat.format(
 			"Replace `java.util.{0}{1}` with `org.eclipse.collections.api.{2}.{3}{1}` when the variable is initialized with a {3}.",
@@ -75,27 +79,32 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 	}
 
 	@Override
-	public final Set<String> getTags() {
+	public final Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public final Duration getEstimatedEffortPerOccurrence() {
+	public final Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(10);
 	}
 
 	@Override
-	public final TreeVisitor<?, ExecutionContext> getVisitor() {
+	public final TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new JCFTypeToMutableTypeVisitor(this.jcfInterface, this.ecPackage, this.ecInterface);
 	}
 
-	private static final class JCFTypeToMutableTypeVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class JCFTypeToMutableTypeVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private final String jcfInterface;
 		private final String ecPackage;
 		private final String ecInterface;
 
-		private JCFTypeToMutableTypeVisitor(String jcfInterface, String ecPackage, String ecInterface) {
+		private JCFTypeToMutableTypeVisitor(String jcfInterface, String ecPackage, String ecInterface)
+		{
 			this.jcfInterface = Objects.requireNonNull(jcfInterface);
 			this.ecPackage = Objects.requireNonNull(ecPackage);
 			this.ecInterface = Objects.requireNonNull(ecInterface);
@@ -105,7 +114,8 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 		public J.VariableDeclarations visitVariableDeclarations(
 			J.VariableDeclarations multiVariable,
 			ExecutionContext ctx
-		) {
+		)
+		{
 			boolean isField = multiVariable
 				.getVariables()
 				.stream()
@@ -114,11 +124,13 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 
 			J.VariableDeclarations vd = super.visitVariableDeclarations(multiVariable, ctx);
 
-			if (vd.getTypeExpression() == null || !this.isJavaUtilType(vd.getTypeExpression())) {
+			if (vd.getTypeExpression() == null || !this.isJavaUtilType(vd.getTypeExpression()))
+			{
 				return vd;
 			}
 
-			if (isField && !isFinal) {
+			if (isField && !isFinal)
+			{
 				return vd;
 			}
 
@@ -131,14 +143,16 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 				.filter(Objects::nonNull)
 				.anyMatch((initializerType) -> TypeUtils.isAssignableTo(fullyQualifiedName, initializerType));
 
-			if (!shouldTransform) {
+			if (!shouldTransform)
+			{
 				return vd;
 			}
 
 			TypeTree typeExpr = vd.getTypeExpression();
 			TypeTree newTypeExpr = this.getNewTypeExpr(typeExpr, fullyQualifiedName);
 
-			if (newTypeExpr == null) {
+			if (newTypeExpr == null)
+			{
 				throw new AssertionError("Unexpected type expression: " + typeExpr.getClass().getSimpleName());
 			}
 
@@ -147,14 +161,17 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 			return vd.withTypeExpression(newTypeExpr);
 		}
 
-		private TypeTree getNewTypeExpr(TypeTree typeExpr, String fullyQualifiedName) {
-			if (typeExpr instanceof J.Identifier) {
-				return ((J.Identifier) typeExpr).withSimpleName(this.ecInterface).withType(
-					JavaType.buildType(fullyQualifiedName)
-				);
+		private TypeTree getNewTypeExpr(TypeTree typeExpr, String fullyQualifiedName)
+		{
+			if (typeExpr instanceof J.Identifier)
+			{
+				return ((J.Identifier) typeExpr)
+					.withSimpleName(this.ecInterface)
+					.withType(JavaType.buildType(fullyQualifiedName));
 			}
 
-			if (typeExpr instanceof J.FieldAccess) {
+			if (typeExpr instanceof J.FieldAccess)
+			{
 				return new J.Identifier(
 					Tree.randomId(),
 					typeExpr.getPrefix(),
@@ -166,20 +183,23 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 				);
 			}
 
-			if (!(typeExpr instanceof J.ParameterizedType paramType)) {
+			if (!(typeExpr instanceof J.ParameterizedType paramType))
+			{
 				throw new AssertionError("Unexpected type expression: " + typeExpr.getClass().getSimpleName());
 			}
 
 			J clazz = paramType.getClazz();
 
-			if (clazz instanceof J.Identifier) {
-				J.Identifier newClazz = ((J.Identifier) clazz).withSimpleName(this.ecInterface).withType(
-					JavaType.buildType(fullyQualifiedName)
-				);
+			if (clazz instanceof J.Identifier)
+			{
+				J.Identifier newClazz = ((J.Identifier) clazz)
+					.withSimpleName(this.ecInterface)
+					.withType(JavaType.buildType(fullyQualifiedName));
 				return paramType.withClazz(newClazz);
 			}
 
-			if (clazz instanceof J.FieldAccess) {
+			if (clazz instanceof J.FieldAccess)
+			{
 				J.Identifier mutableTypeIdent = new J.Identifier(
 					Tree.randomId(),
 					clazz.getPrefix(),
@@ -195,19 +215,24 @@ public abstract class AbstractJCFTypeToMutableTypeRecipe extends Recipe {
 			throw new AssertionError("Unexpected parameterized type class: " + clazz.getClass().getSimpleName());
 		}
 
-		private boolean isJavaUtilType(J typeExpression) {
+		private boolean isJavaUtilType(J typeExpression)
+		{
 			J currentExpression = typeExpression;
-			while (true) {
+			while (true)
+			{
 				String javaUtilTypeName = this.jcfInterface;
-				if (currentExpression instanceof J.Identifier identifier) {
+				if (currentExpression instanceof J.Identifier identifier)
+				{
 					JavaType.FullyQualified type = TypeUtils.asFullyQualified(identifier.getType());
 					return type != null && javaUtilTypeName.equals(type.getFullyQualifiedName());
 				}
-				if (currentExpression instanceof J.ParameterizedType paramType) {
+				if (currentExpression instanceof J.ParameterizedType paramType)
+				{
 					currentExpression = paramType.getClazz();
 					continue;
 				}
-				if (currentExpression instanceof J.FieldAccess fieldAccess) {
+				if (currentExpression instanceof J.FieldAccess fieldAccess)
+				{
 					JavaType.FullyQualified type = TypeUtils.asFullyQualified(fieldAccess.getType());
 					return type != null && javaUtilTypeName.equals(type.getFullyQualifiedName());
 				}
