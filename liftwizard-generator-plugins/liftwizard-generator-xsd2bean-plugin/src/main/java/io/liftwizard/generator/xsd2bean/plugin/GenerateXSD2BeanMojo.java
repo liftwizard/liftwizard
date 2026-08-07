@@ -54,8 +54,9 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 	threadSafe = true,
 	requiresDependencyResolution = ResolutionScope.RUNTIME
 )
-public class GenerateXSD2BeanMojo extends AbstractMojo {
-
+public class GenerateXSD2BeanMojo
+	extends AbstractMojo
+{
 	@Component
 	private BuildContext buildContext;
 
@@ -102,32 +103,42 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 	@Parameter(property = "generateTopLevelSubstitutionElements")
 	private boolean generateTopLevelSubstitutionElements;
 
-	private void addSourceRoot(@Nonnull File outputDir) {
+	private void addSourceRoot(@Nonnull File outputDir)
+	{
 		String outputPath = outputDir.getPath();
-		if (this.generateTestSources) {
+		if (this.generateTestSources)
+		{
 			this.mavenProject.addTestCompileSourceRoot(outputPath);
-		} else {
+		}
+		else
+		{
 			this.mavenProject.addCompileSourceRoot(outputPath);
 		}
 	}
 
 	@Override
-	public void execute() throws MojoExecutionException {
-		if (!this.outputDirectory.exists()) {
+	public void execute()
+		throws MojoExecutionException
+	{
+		if (!this.outputDirectory.exists())
+		{
 			this.outputDirectory.mkdirs();
 		}
 
-		if (!this.nonGeneratedSourcesDir.exists()) {
+		if (!this.nonGeneratedSourcesDir.exists())
+		{
 			this.nonGeneratedSourcesDir.mkdirs();
 		}
 
-		if (!this.sourceDirectory.isDirectory()) {
+		if (!this.sourceDirectory.isDirectory())
+		{
 			throw new MojoExecutionException("No such directory " + this.sourceDirectory.getAbsolutePath());
 		}
 
 		File outputDir = this.outputDirectory;
 
-		if (!outputDir.exists()) {
+		if (!outputDir.exists())
+		{
 			outputDir.mkdirs();
 		}
 
@@ -136,12 +147,16 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 		this.getLog().debug("Output directory base will be " + this.outputDirectory.getAbsolutePath());
 		this.getLog().info("Processing source directory " + this.sourceDirectory.getAbsolutePath());
 
-		for (File schemaFile : schemaFiles) {
+		for (File schemaFile : schemaFiles)
+		{
 			FreyaXmlGenerator generator = this.getFreyaXmlGenerator(schemaFile);
 
-			try {
+			try
+			{
 				generator.generate();
-			} catch (@Nonnull FreyaXmlException | IOException e) {
+			}
+			catch (@Nonnull FreyaXmlException | IOException e)
+			{
 				throw new MojoExecutionException(e.getMessage(), e);
 			}
 		}
@@ -150,7 +165,8 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 	}
 
 	@Nonnull
-	private FreyaXmlGenerator getFreyaXmlGenerator(File schemaFile) {
+	private FreyaXmlGenerator getFreyaXmlGenerator(File schemaFile)
+	{
 		var generator = new FreyaXmlGenerator();
 		generator.setLogger(new FreyaMavenLogger(this.getLog()));
 
@@ -167,12 +183,17 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 		return generator;
 	}
 
-	private Set<File> getSchemaFiles() throws MojoExecutionException {
-		try {
+	private Set<File> getSchemaFiles()
+		throws MojoExecutionException
+	{
+		try
+		{
 			Set<File> schemaFiles = this.scanSchemaFiles();
 			this.processSchemaFiles(schemaFiles);
 			return schemaFiles;
-		} catch (@Nonnull MojoExecutionException | InclusionScanException e) {
+		}
+		catch (@Nonnull MojoExecutionException | InclusionScanException e)
+		{
 			this.getLog().error(e);
 			throw new MojoExecutionException(
 				"Fatal error occurred while evaluating the names of the xsd files to analyze",
@@ -181,7 +202,9 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 		}
 	}
 
-	private Set<File> scanSchemaFiles() throws InclusionScanException {
+	private Set<File> scanSchemaFiles()
+		throws InclusionScanException
+	{
 		Set<String> includesPatterns = this.getIncludesPatterns();
 		SourceInclusionScanner scan = new SimpleSourceInclusionScanner(includesPatterns, this.excludes);
 		SourceMapping suffixMapping = new SuffixMapping("xsd", Sets.fixedSize.empty());
@@ -189,19 +212,25 @@ public class GenerateXSD2BeanMojo extends AbstractMojo {
 		return scan.getIncludedSources(this.sourceDirectory, null);
 	}
 
-	private Set<String> getIncludesPatterns() {
-		if (Iterate.isEmpty(this.includes)) {
+	private Set<String> getIncludesPatterns()
+	{
+		if (Iterate.isEmpty(this.includes))
+		{
 			return Sets.mutable.with("**/*.xsd");
 		}
 		return this.includes;
 	}
 
-	private void processSchemaFiles(@Nonnull Collection<File> schemaFiles) throws MojoExecutionException {
-		if (schemaFiles.isEmpty()) {
+	private void processSchemaFiles(@Nonnull Collection<File> schemaFiles)
+		throws MojoExecutionException
+	{
+		if (schemaFiles.isEmpty())
+		{
 			throw new MojoExecutionException("No schemas found.");
 		}
 
-		for (File schemaFile : schemaFiles) {
+		for (File schemaFile : schemaFiles)
+		{
 			this.buildContext.refresh(schemaFile);
 			this.buildContext.removeMessages(schemaFile);
 			this.getLog().debug("Schema file '" + schemaFile.getPath() + "' detected.");

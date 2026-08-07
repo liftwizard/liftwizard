@@ -36,8 +36,9 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class DropwizardRuleAnnotations extends Recipe {
-
+public class DropwizardRuleAnnotations
+	extends Recipe
+{
 	private static final List<String> STUBS = List.of(
 		JUnitJupiterTemplateStubs.testStub(),
 		JUnitJupiterTemplateStubs.extendWithStub(),
@@ -58,17 +59,20 @@ public class DropwizardRuleAnnotations extends Recipe {
 	private final String extensionTypeFqn;
 
 	@JsonCreator
-	public DropwizardRuleAnnotations(@JsonProperty("extensionTypeFqn") String extensionTypeFqn) {
+	public DropwizardRuleAnnotations(@JsonProperty("extensionTypeFqn") String extensionTypeFqn)
+	{
 		this.extensionTypeFqn = extensionTypeFqn;
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Replace `@ClassRule`/`@Rule` with `@RegisterExtension` and add `@ExtendWith`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Replace JUnit 4 `@ClassRule`/`@Rule` annotations with JUnit 5 `@RegisterExtension` "
 			+ "and add `@ExtendWith(DropwizardExtensionsSupport.class)` to the test class."
@@ -76,23 +80,27 @@ public class DropwizardRuleAnnotations extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesType<>(this.extensionTypeFqn, false),
 			new DropwizardRuleAnnotationsVisitor(this.extensionTypeFqn)
 		);
 	}
 
-	private static final class DropwizardRuleAnnotationsVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class DropwizardRuleAnnotationsVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private final String extensionTypeFqn;
 
-		private DropwizardRuleAnnotationsVisitor(String extensionTypeFqn) {
+		private DropwizardRuleAnnotationsVisitor(String extensionTypeFqn)
+		{
 			this.extensionTypeFqn = Objects.requireNonNull(extensionTypeFqn);
 		}
 
 		@Override
-		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+		public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+		{
 			J.ClassDeclaration cd = super.visitClassDeclaration(classDecl, ctx);
 
 			boolean hasExtensionField = cd
@@ -103,7 +111,8 @@ public class DropwizardRuleAnnotations extends Recipe {
 				.map(J.VariableDeclarations.class::cast)
 				.anyMatch(this::isExtensionType);
 
-			if (!hasExtensionField) {
+			if (!hasExtensionField)
+			{
 				return cd;
 			}
 
@@ -112,7 +121,8 @@ public class DropwizardRuleAnnotations extends Recipe {
 				.stream()
 				.anyMatch(this::isExtendWithDropwizardExtensionsSupport);
 
-			if (alreadyHasExtendWith) {
+			if (alreadyHasExtendWith)
+			{
 				return cd;
 			}
 
@@ -138,21 +148,25 @@ public class DropwizardRuleAnnotations extends Recipe {
 		public J.VariableDeclarations visitVariableDeclarations(
 			J.VariableDeclarations multiVariable,
 			ExecutionContext ctx
-		) {
+		)
+		{
 			J.VariableDeclarations vd = super.visitVariableDeclarations(multiVariable, ctx);
 
-			if (!this.isExtensionType(vd)) {
+			if (!this.isExtensionType(vd))
+			{
 				return vd;
 			}
 
 			boolean hasClassRule = this.hasAnnotationByName(vd, "ClassRule");
 			boolean hasRule = this.hasAnnotationByName(vd, "Rule");
 
-			if (!hasClassRule && !hasRule) {
+			if (!hasClassRule && !hasRule)
+			{
 				return vd;
 			}
 
-			if (this.hasAnnotationByName(vd, "RegisterExtension")) {
+			if (this.hasAnnotationByName(vd, "RegisterExtension"))
+			{
 				return vd;
 			}
 
@@ -180,38 +194,47 @@ public class DropwizardRuleAnnotations extends Recipe {
 				);
 		}
 
-		private boolean hasAnnotationByName(J.VariableDeclarations vd, String simpleName) {
+		private boolean hasAnnotationByName(J.VariableDeclarations vd, String simpleName)
+		{
 			return vd
 				.getLeadingAnnotations()
 				.stream()
 				.anyMatch((ann) -> simpleName.equals(ann.getSimpleName()));
 		}
 
-		private boolean isExtensionType(J.VariableDeclarations vd) {
+		private boolean isExtensionType(J.VariableDeclarations vd)
+		{
 			J typeExpr = vd.getTypeExpression();
-			if (typeExpr == null) {
+			if (typeExpr == null)
+			{
 				return false;
 			}
 			return this.matchesExtensionType(typeExpr);
 		}
 
-		private boolean matchesExtensionType(J tree) {
-			if (tree instanceof J.Identifier identifier) {
+		private boolean matchesExtensionType(J tree)
+		{
+			if (tree instanceof J.Identifier identifier)
+			{
 				JavaType.FullyQualified type = TypeUtils.asFullyQualified(identifier.getType());
 				return type != null && this.extensionTypeFqn.equals(type.getFullyQualifiedName());
 			}
-			if (tree instanceof J.ParameterizedType paramType) {
+			if (tree instanceof J.ParameterizedType paramType)
+			{
 				return this.matchesExtensionType(paramType.getClazz());
 			}
 			return false;
 		}
 
-		private boolean isExtendWithDropwizardExtensionsSupport(J.Annotation annotation) {
+		private boolean isExtendWithDropwizardExtensionsSupport(J.Annotation annotation)
+		{
 			JavaType.FullyQualified type = TypeUtils.asFullyQualified(annotation.getType());
-			if (type == null || !"org.junit.jupiter.api.extension.ExtendWith".equals(type.getFullyQualifiedName())) {
+			if (type == null || !"org.junit.jupiter.api.extension.ExtendWith".equals(type.getFullyQualifiedName()))
+			{
 				return false;
 			}
-			if (annotation.getArguments() == null) {
+			if (annotation.getArguments() == null)
+			{
 				return false;
 			}
 			return annotation
@@ -220,7 +243,8 @@ public class DropwizardRuleAnnotations extends Recipe {
 				.filter(J.FieldAccess.class::isInstance)
 				.map(J.FieldAccess.class::cast)
 				.filter((fa) -> "class".equals(fa.getSimpleName()))
-				.anyMatch((fa) -> {
+				.anyMatch((fa) ->
+				{
 					JavaType targetType = fa.getTarget().getType();
 					return TypeUtils.isOfClassType(
 						targetType,

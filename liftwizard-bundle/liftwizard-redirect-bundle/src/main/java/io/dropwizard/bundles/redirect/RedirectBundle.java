@@ -35,35 +35,47 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.eclipse.collections.api.factory.Lists;
 
-public class RedirectBundle implements ConfiguredBundle<Configuration> {
-
+public class RedirectBundle
+	implements ConfiguredBundle<Configuration>
+{
 	private final List<Redirect> redirects;
 
-	public RedirectBundle(Redirect... redirects) {
+	public RedirectBundle(Redirect... redirects)
+	{
 		this.redirects = Lists.mutable.empty();
 		Collections.addAll(this.redirects, redirects);
 	}
 
 	@Override
-	public void initialize(Bootstrap<?> bootstrap) {}
+	public void initialize(Bootstrap<?> bootstrap)
+	{
+	}
 
 	@Override
-	public void run(Configuration configuration, Environment environment) {
+	public void run(Configuration configuration, Environment environment)
+	{
 		environment.servlets().addFilter("redirect", new RedirectFilter()).addMappingForUrlPatterns(null, false, "*");
 	}
 
-	private final class RedirectFilter implements Filter {
-
+	private final class RedirectFilter
+		implements Filter
+	{
 		@Override
-		public void init(FilterConfig filterConfig) {}
+		public void init(FilterConfig filterConfig)
+		{
+		}
 
 		@Override
 		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-			if (request instanceof HttpServletRequest httpRequest) {
-				for (Redirect redirect : RedirectBundle.this.redirects) {
+			throws IOException, ServletException
+		{
+			if (request instanceof HttpServletRequest httpRequest)
+			{
+				for (Redirect redirect : RedirectBundle.this.redirects)
+				{
 					String redirectUrl = redirect.getRedirect(httpRequest);
-					if (redirectUrl != null) {
+					if (redirectUrl != null)
+					{
 						((HttpServletResponse) response).sendRedirect(redirectUrl);
 						return;
 					}
@@ -74,6 +86,8 @@ public class RedirectBundle implements ConfiguredBundle<Configuration> {
 		}
 
 		@Override
-		public void destroy() {}
+		public void destroy()
+		{
+		}
 	}
 }

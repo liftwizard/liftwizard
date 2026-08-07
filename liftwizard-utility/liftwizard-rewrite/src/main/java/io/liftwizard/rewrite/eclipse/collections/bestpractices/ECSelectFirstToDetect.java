@@ -61,25 +61,27 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "`select(pred).getFirstOptional()` to `detectOptional(pred)`",
 	description = "Transforms `collection.select(pred).getFirstOptional()` to `collection.detectOptional(pred)` "
-	+ "and `collection.select(pred).getFirst()` to `collection.detect(pred)`. "
-	+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
+		+ "and `collection.select(pred).getFirst()` to `collection.detect(pred)`. "
+		+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
 )
-public class ECSelectFirstToDetect {
-
+public class ECSelectFirstToDetect
+{
 	@RecipeDescriptor(
 		name = "`select(pred).getFirstOptional()` to `detectOptional(pred)`",
 		description = "Transforms `collection.select(pred).getFirstOptional()` to `collection.detectOptional(pred)`. "
-		+ "Only applies to OrderedIterable types (lists, sorted sets)."
+			+ "Only applies to OrderedIterable types (lists, sorted sets)."
 	)
-	public static final class SelectGetFirstOptionalToDetectOptional<T> {
-
+	public static final class SelectGetFirstOptionalToDetectOptional<T>
+	{
 		@BeforeTemplate
-		Optional<T> before(OrderedIterable<T> iterable, Predicate<? super T> predicate) {
+		Optional<T> before(OrderedIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.select(predicate).getFirstOptional();
 		}
 
 		@AfterTemplate
-		Optional<T> after(OrderedIterable<T> iterable, Predicate<? super T> predicate) {
+		Optional<T> after(OrderedIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.detectOptional(predicate);
 		}
 	}
@@ -88,15 +90,17 @@ public class ECSelectFirstToDetect {
 		name = "`select(pred).getFirst()` to `detect(pred)`",
 		description = "Transforms `collection.select(pred).getFirst()` to `collection.detect(pred)`."
 	)
-	public static final class SelectGetFirstToDetect<T> {
-
+	public static final class SelectGetFirstToDetect<T>
+	{
 		@BeforeTemplate
-		T before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		T before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.select(predicate).getFirst();
 		}
 
 		@AfterTemplate
-		T after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		T after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.detect(predicate);
 		}
 	}
@@ -105,15 +109,17 @@ public class ECSelectFirstToDetect {
 		name = "`ArrayIterate.select(array, pred).getFirstOptional()` to `ArrayIterate.detectOptional(array, pred)`",
 		description = "Transforms `ArrayIterate.select(array, pred).getFirstOptional()` to `ArrayIterate.detectOptional(array, pred)`."
 	)
-	public static final class ArrayIterateSelectGetFirstOptionalToDetectOptional<T> {
-
+	public static final class ArrayIterateSelectGetFirstOptionalToDetectOptional<T>
+	{
 		@BeforeTemplate
-		Optional<T> before(T[] array, Predicate<? super T> predicate) {
+		Optional<T> before(T[] array, Predicate<? super T> predicate)
+		{
 			return ArrayIterate.select(array, predicate).getFirstOptional();
 		}
 
 		@AfterTemplate
-		Optional<T> after(T[] array, Predicate<? super T> predicate) {
+		Optional<T> after(T[] array, Predicate<? super T> predicate)
+		{
 			return ArrayIterate.detectOptional(array, predicate);
 		}
 	}
@@ -122,15 +128,17 @@ public class ECSelectFirstToDetect {
 		name = "`ArrayIterate.select(array, pred).getFirst()` to `ArrayIterate.detect(array, pred)`",
 		description = "Transforms `ArrayIterate.select(array, pred).getFirst()` to `ArrayIterate.detect(array, pred)`."
 	)
-	public static final class ArrayIterateSelectGetFirstToDetect<T> {
-
+	public static final class ArrayIterateSelectGetFirstToDetect<T>
+	{
 		@BeforeTemplate
-		T before(T[] array, Predicate<? super T> predicate) {
+		T before(T[] array, Predicate<? super T> predicate)
+		{
 			return ArrayIterate.select(array, predicate).getFirst();
 		}
 
 		@AfterTemplate
-		T after(T[] array, Predicate<? super T> predicate) {
+		T after(T[] array, Predicate<? super T> predicate)
+		{
 			return ArrayIterate.detect(array, predicate);
 		}
 	}
@@ -139,15 +147,17 @@ public class ECSelectFirstToDetect {
 		name = "`ListIterate.select(list, pred).getFirstOptional()` to `ListIterate.detectOptional(list, pred)`",
 		description = "Transforms `ListIterate.select(list, pred).getFirstOptional()` to `ListIterate.detectOptional(list, pred)`."
 	)
-	public static final class ListIterateSelectGetFirstOptionalToDetectOptional<T> {
-
+	public static final class ListIterateSelectGetFirstOptionalToDetectOptional<T>
+	{
 		@BeforeTemplate
-		Optional<T> before(java.util.List<T> list, Predicate<? super T> predicate) {
+		Optional<T> before(java.util.List<T> list, Predicate<? super T> predicate)
+		{
 			return ListIterate.select(list, predicate).getFirstOptional();
 		}
 
 		@AfterTemplate
-		Optional<T> after(java.util.List<T> list, Predicate<? super T> predicate) {
+		Optional<T> after(java.util.List<T> list, Predicate<? super T> predicate)
+		{
 			return ListIterate.detectOptional(list, predicate);
 		}
 	}
@@ -156,15 +166,17 @@ public class ECSelectFirstToDetect {
 		name = "`ListIterate.select(list, pred).getFirst()` to `ListIterate.detect(list, pred)`",
 		description = "Transforms `ListIterate.select(list, pred).getFirst()` to `ListIterate.detect(list, pred)`."
 	)
-	public static final class ListIterateSelectGetFirstToDetect<T> {
-
+	public static final class ListIterateSelectGetFirstToDetect<T>
+	{
 		@BeforeTemplate
-		T before(java.util.List<T> list, Predicate<? super T> predicate) {
+		T before(java.util.List<T> list, Predicate<? super T> predicate)
+		{
 			return ListIterate.select(list, predicate).getFirst();
 		}
 
 		@AfterTemplate
-		T after(java.util.List<T> list, Predicate<? super T> predicate) {
+		T after(java.util.List<T> list, Predicate<? super T> predicate)
+		{
 			return ListIterate.detect(list, predicate);
 		}
 	}

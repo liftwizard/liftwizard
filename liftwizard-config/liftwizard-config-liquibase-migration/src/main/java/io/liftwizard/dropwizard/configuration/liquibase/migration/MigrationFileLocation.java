@@ -18,9 +18,11 @@ package io.liftwizard.dropwizard.configuration.liquibase.migration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum MigrationFileLocation {
+public enum MigrationFileLocation
+{
 	@JsonProperty("classpath")
 	CLASSPATH,
+
 	@JsonProperty("filesystem")
 	FILESYSTEM,
 }

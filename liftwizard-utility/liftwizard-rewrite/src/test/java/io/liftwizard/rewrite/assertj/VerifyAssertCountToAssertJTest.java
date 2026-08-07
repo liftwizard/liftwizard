@@ -24,33 +24,34 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class VerifyAssertCountToAssertJTest implements AbstractRewriteFixtures, RewriteTest {
-
+class VerifyAssertCountToAssertJTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new VerifyAssertCountToAssertJRecipe())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.collections.impl.test;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new VerifyAssertCountToAssertJRecipe()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.collections.impl.test;
 
-						import org.eclipse.collections.api.block.predicate.Predicate;
+					import org.eclipse.collections.api.block.predicate.Predicate;
 
-						public final class Verify {
-							public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
-						}
-						"""
-					)
-					.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-			);
+					public final class Verify {
+						public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
+					}
+					"""
+				)
+				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 }

@@ -10,12 +10,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class DateNotSpecifiedFilter implements ContainerRequestFilter {
-
+public class DateNotSpecifiedFilter
+	implements ContainerRequestFilter
+{
 	@Override
-	public void filter(ContainerRequestContext requestContext) throws IOException {
+	public void filter(ContainerRequestContext requestContext)
+		throws IOException
+	{
 		final String dateHeader = requestContext.getHeaderString(HttpHeaders.DATE);
-		if (dateHeader == null) {
+		if (dateHeader == null)
+		{
 			throw new WebApplicationException(
 				new IllegalArgumentException("Date Header was not specified"),
 				Response.Status.BAD_REQUEST

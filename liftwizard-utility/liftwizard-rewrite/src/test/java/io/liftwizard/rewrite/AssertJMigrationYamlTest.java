@@ -22,70 +22,75 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-class AssertJMigrationYamlTest implements AbstractRewriteFixtures, RewriteTest {
-
+class AssertJMigrationYamlTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.assertj.AssertJMigration")
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.collections.impl.test;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.assertj.AssertJMigration").parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.collections.impl.test;
 
-						import java.util.Map;
-						import java.util.concurrent.Callable;
-						import org.eclipse.collections.api.block.predicate.Predicate;
+					import java.util.Map;
+					import java.util.concurrent.Callable;
+					import org.eclipse.collections.api.block.predicate.Predicate;
 
-						public final class Verify {
-							public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
-							public static void assertEmpty(String message, Iterable<?> iterable) {}
-							public static void assertEmpty(Iterable<?> iterable) {}
-							public static void assertEmpty(String message, Map<?, ?> map) {}
-							public static void assertEmpty(Map<?, ?> map) {}
-							public static void assertNotEmpty(String message, Iterable<?> iterable) {}
-							public static void assertNotEmpty(Iterable<?> iterable) {}
-							public static void assertNotEmpty(String message, Map<?, ?> map) {}
-							public static void assertNotEmpty(Map<?, ?> map) {}
-							public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
-							public static void assertSize(int expectedSize, Iterable<?> iterable) {}
-							public static void assertSize(String message, int expectedSize, Object[] array) {}
-							public static void assertSize(int expectedSize, Object[] array) {}
-							public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
-							public static void assertSize(int expectedSize, Map<?, ?> map) {}
-							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
-							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
-						}
-						"""
-					)
-					.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-			);
+					public final class Verify {
+						public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
+						public static void assertEmpty(String message, Iterable<?> iterable) {}
+						public static void assertEmpty(Iterable<?> iterable) {}
+						public static void assertEmpty(String message, Map<?, ?> map) {}
+						public static void assertEmpty(Map<?, ?> map) {}
+						public static void assertNotEmpty(String message, Iterable<?> iterable) {}
+						public static void assertNotEmpty(Iterable<?> iterable) {}
+						public static void assertNotEmpty(String message, Map<?, ?> map) {}
+						public static void assertNotEmpty(Map<?, ?> map) {}
+						public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
+						public static void assertSize(int expectedSize, Iterable<?> iterable) {}
+						public static void assertSize(String message, int expectedSize, Object[] array) {}
+						public static void assertSize(int expectedSize, Object[] array) {}
+						public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
+						public static void assertSize(int expectedSize, Map<?, ?> map) {}
+						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
+						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
+					}
+					"""
+				)
+				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
+		);
 	}
 
 	@Test
-	void transformsVerifyAssertCount() {
+	void transformsVerifyAssertCount()
+	{
 		this.rewriteRun(this.javaFixture("transformsVerifyAssertCount/01"));
 	}
 
 	@Test
-	void transformsVerifyAssertEmpty() {
+	void transformsVerifyAssertEmpty()
+	{
 		this.rewriteRun(this.javaFixture("transformsVerifyAssertEmpty/01"));
 	}
 
 	@Test
-	void transformsVerifyAssertNotEmpty() {
+	void transformsVerifyAssertNotEmpty()
+	{
 		this.rewriteRun(this.javaFixture("transformsVerifyAssertNotEmpty/01"));
 	}
 
 	@Test
-	void transformsVerifyAssertSize() {
+	void transformsVerifyAssertSize()
+	{
 		this.rewriteRun(this.javaFixture("transformsVerifyAssertSize/01"));
 	}
 
 	@Test
-	void transformsVerifyAssertThrows() {
+	void transformsVerifyAssertThrows()
+	{
 		this.rewriteRun(
 			(spec) ->
 				spec.typeValidationOptions(
@@ -96,7 +101,8 @@ class AssertJMigrationYamlTest implements AbstractRewriteFixtures, RewriteTest {
 	}
 
 	@Test
-	void appliesStaticImportOptimization() {
+	void appliesStaticImportOptimization()
+	{
 		this.rewriteRun(this.javaFixture("appliesStaticImportOptimization/01"));
 	}
 }

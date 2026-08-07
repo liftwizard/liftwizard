@@ -29,8 +29,9 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.search.UsesType;
 import org.openrewrite.java.tree.J;
 
-public class AssertionsStaticImport extends Recipe {
-
+public class AssertionsStaticImport
+	extends Recipe
+{
 	private static final List<String> STUBS = AssertJTemplateStubs.stubs();
 
 	private static final MethodMatcher ASSERTIONS_STATIC_METHOD_MATCHER = new MethodMatcher(
@@ -38,38 +39,46 @@ public class AssertionsStaticImport extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Convert `Assertions.*()` to static import";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Convert `org.assertj.core.api.Assertions.*()` calls to use static import.";
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesType<>("org.assertj.core.api.Assertions", false),
 			new AssertionsStaticImportVisitor()
 		);
 	}
 
-	private static final class AssertionsStaticImportVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class AssertionsStaticImportVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!ASSERTIONS_STATIC_METHOD_MATCHER.matches(methodInvocation)) {
+			if (!ASSERTIONS_STATIC_METHOD_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
-			if (!(methodInvocation.getSelect() instanceof J.Identifier identifier)) {
+			if (!(methodInvocation.getSelect() instanceof J.Identifier identifier))
+			{
 				return methodInvocation;
 			}
 
-			if (!"Assertions".equals(identifier.getSimpleName())) {
+			if (!"Assertions".equals(identifier.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
@@ -77,8 +86,10 @@ public class AssertionsStaticImport extends Recipe {
 			int argumentCount = methodInvocation.getArguments().size();
 
 			StringBuilder templatePattern = new StringBuilder(methodName).append('(');
-			for (int i = 0; i < argumentCount; i++) {
-				if (i > 0) {
+			for (int i = 0; i < argumentCount; i++)
+			{
+				if (i > 0)
+				{
 					templatePattern.append(", ");
 				}
 				templatePattern.append("#{any()}");

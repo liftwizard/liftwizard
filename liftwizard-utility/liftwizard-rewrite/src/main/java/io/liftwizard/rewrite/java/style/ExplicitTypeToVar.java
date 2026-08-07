@@ -50,15 +50,18 @@ import org.openrewrite.marker.Markers;
  *     This recipe was contributed upstream (PR #1009, merged 2026-03-21).
  */
 @Deprecated(forRemoval = true)
-public class ExplicitTypeToVar extends Recipe {
-
+public class ExplicitTypeToVar
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Explicit type → `var` for constructor assignments";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Replace explicit type declarations with `var` when the variable is initialized with a "
 			+ "constructor call of exactly the same type. Does not transform when declared type "
@@ -67,27 +70,33 @@ public class ExplicitTypeToVar extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesJavaVersion<>(10), new ExplicitTypeToVarVisitor());
 	}
 
-	private static final class ExplicitTypeToVarVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class ExplicitTypeToVarVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public VariableDeclarations visitVariableDeclarations(VariableDeclarations vd, ExecutionContext ctx) {
+		public VariableDeclarations visitVariableDeclarations(VariableDeclarations vd, ExecutionContext ctx)
+		{
 			VariableDeclarations result = super.visitVariableDeclarations(vd, ctx);
 
-			if (!this.isApplicable(result)) {
+			if (!this.isApplicable(result))
+			{
 				return result;
 			}
 
 			return this.transformToVar(result);
 		}
 
-		private boolean isApplicable(VariableDeclarations vd) {
+		private boolean isApplicable(VariableDeclarations vd)
+		{
 			// Must have exactly one variable
 			List<NamedVariable> variables = vd.getVariables();
-			if (variables.size() != 1) {
+			if (variables.size() != 1)
+			{
 				return false;
 			}
 
@@ -95,33 +104,39 @@ public class ExplicitTypeToVar extends Recipe {
 
 			// Must have an initializer
 			Expression initializer = variable.getInitializer();
-			if (initializer == null) {
+			if (initializer == null)
+			{
 				return false;
 			}
 
 			// Skip null literal initializers
-			if (Literal.isLiteralValue(initializer, null)) {
+			if (Literal.isLiteralValue(initializer, null))
+			{
 				return false;
 			}
 
 			// Initializer must be a constructor call (NewClass)
-			if (!(initializer instanceof NewClass)) {
+			if (!(initializer instanceof NewClass))
+			{
 				return false;
 			}
 
 			// Must have a type expression (not already var)
 			TypeTree typeTree = vd.getTypeExpression();
-			if (typeTree == null) {
+			if (typeTree == null)
+			{
 				return false;
 			}
 
 			// Skip if already using var
-			if (typeTree instanceof Identifier varId && "var".equals(varId.getSimpleName())) {
+			if (typeTree instanceof Identifier varId && "var".equals(varId.getSimpleName()))
+			{
 				return false;
 			}
 
 			// Skip field declarations - var is only allowed for local variables
-			if (this.isFieldDeclaration()) {
+			if (this.isFieldDeclaration())
+			{
 				return false;
 			}
 
@@ -129,9 +144,11 @@ public class ExplicitTypeToVar extends Recipe {
 			return this.typesMatch(vd, (NewClass) initializer);
 		}
 
-		private boolean isFieldDeclaration() {
+		private boolean isFieldDeclaration()
+		{
 			Cursor parent = this.getCursor().getParentTreeCursor();
-			if (parent.getParent() == null) {
+			if (parent.getParent() == null)
+			{
 				return false;
 			}
 			Cursor grandparent = parent.getParentTreeCursor();
@@ -141,32 +158,38 @@ public class ExplicitTypeToVar extends Recipe {
 			);
 		}
 
-		private boolean typesMatch(VariableDeclarations vd, NewClass newClass) {
+		private boolean typesMatch(VariableDeclarations vd, NewClass newClass)
+		{
 			JavaType declaredType = vd.getType();
 			JavaType constructorType = newClass.getType();
 
-			if (declaredType == null || constructorType == null) {
+			if (declaredType == null || constructorType == null)
+			{
 				return false;
 			}
 
 			String declaredFqn = this.getFullyQualifiedName(declaredType);
 			String constructorFqn = this.getFullyQualifiedName(constructorType);
 
-			if (declaredFqn == null || constructorFqn == null) {
+			if (declaredFqn == null || constructorFqn == null)
+			{
 				return false;
 			}
 
 			return declaredFqn.equals(constructorFqn);
 		}
 
-		private String getFullyQualifiedName(JavaType type) {
-			if (!(type instanceof JavaType.FullyQualified fq)) {
+		private String getFullyQualifiedName(JavaType type)
+		{
+			if (!(type instanceof JavaType.FullyQualified fq))
+			{
 				return null;
 			}
 			return fq.getFullyQualifiedName();
 		}
 
-		private VariableDeclarations transformToVar(VariableDeclarations vd) {
+		private VariableDeclarations transformToVar(VariableDeclarations vd)
+		{
 			NamedVariable variable = vd.getVariables().get(0);
 			var initializer = (NewClass) variable.getInitializer();
 
@@ -184,7 +207,8 @@ public class ExplicitTypeToVar extends Recipe {
 
 			// Check if we need to transfer type arguments from declared type to constructor
 			NewClass newInitializer = this.maybeTransferTypeArguments(vd, initializer);
-			if (newInitializer != initializer) {
+			if (newInitializer != initializer)
+			{
 				NamedVariable newVariable = variable.withInitializer(newInitializer);
 				return vd.withTypeExpression(varIdentifier).withVariables(Lists.fixedSize.of(newVariable));
 			}
@@ -192,27 +216,32 @@ public class ExplicitTypeToVar extends Recipe {
 			return vd.withTypeExpression(varIdentifier);
 		}
 
-		private NewClass maybeTransferTypeArguments(VariableDeclarations vd, NewClass initializer) {
+		private NewClass maybeTransferTypeArguments(VariableDeclarations vd, NewClass initializer)
+		{
 			TypeTree typeExpression = vd.getTypeExpression();
 
 			// Check if declared type has type parameters
-			if (!(typeExpression instanceof ParameterizedType paramType)) {
+			if (!(typeExpression instanceof ParameterizedType paramType))
+			{
 				return initializer;
 			}
 
 			List<Expression> declaredTypeParams = paramType.getTypeParameters();
-			if (declaredTypeParams == null || declaredTypeParams.isEmpty()) {
+			if (declaredTypeParams == null || declaredTypeParams.isEmpty())
+			{
 				return initializer;
 			}
 
 			// Check if constructor uses diamond operator (empty type args)
 			TypeTree constructorClazz = initializer.getClazz();
-			if (!(constructorClazz instanceof ParameterizedType constructorParamType)) {
+			if (!(constructorClazz instanceof ParameterizedType constructorParamType))
+			{
 				return initializer;
 			}
 
 			List<Expression> constructorTypeParams = constructorParamType.getTypeParameters();
-			if (constructorTypeParams == null || !this.isDiamondOperator(constructorTypeParams)) {
+			if (constructorTypeParams == null || !this.isDiamondOperator(constructorTypeParams))
+			{
 				// Not using diamond, or already has explicit type args
 				return initializer;
 			}
@@ -222,7 +251,8 @@ public class ExplicitTypeToVar extends Recipe {
 			return initializer.withClazz(newClazz);
 		}
 
-		private boolean isDiamondOperator(List<Expression> typeParams) {
+		private boolean isDiamondOperator(List<Expression> typeParams)
+		{
 			// Diamond operator <> is represented as a list with a single J.Empty element or as an empty list
 			return typeParams.isEmpty() || typeParams.stream().allMatch(Empty.class::isInstance);
 		}

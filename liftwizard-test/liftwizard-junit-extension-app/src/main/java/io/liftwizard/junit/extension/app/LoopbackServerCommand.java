@@ -37,29 +37,38 @@ import net.sourceforge.argparse4j.inf.Namespace;
  * silently reach the wrong server. Binding to loopback makes the kernel see the conflict and pick a
  * different ephemeral port.
  */
-public class LoopbackServerCommand<C extends Configuration> extends ServerCommand<C> {
-
-	public LoopbackServerCommand(Application<C> application) {
+public class LoopbackServerCommand<C extends Configuration>
+	extends ServerCommand<C>
+{
+	public LoopbackServerCommand(Application<C> application)
+	{
 		super(application);
 	}
 
 	@Override
-	protected void run(Environment environment, Namespace namespace, C configuration) throws Exception {
+	protected void run(Environment environment, Namespace namespace, C configuration)
+		throws Exception
+	{
 		ServerFactory serverFactory = configuration.getServerFactory();
-		if (serverFactory instanceof DefaultServerFactory defaultServerFactory) {
+		if (serverFactory instanceof DefaultServerFactory defaultServerFactory)
+		{
 			defaultServerFactory.getApplicationConnectors().forEach(LoopbackServerCommand::bindToLoopback);
 			defaultServerFactory.getAdminConnectors().forEach(LoopbackServerCommand::bindToLoopback);
-		} else if (serverFactory instanceof SimpleServerFactory simpleServerFactory) {
+		}
+		else if (serverFactory instanceof SimpleServerFactory simpleServerFactory)
+		{
 			bindToLoopback(simpleServerFactory.getConnector());
 		}
 		super.run(environment, namespace, configuration);
 	}
 
-	private static void bindToLoopback(ConnectorFactory connectorFactory) {
+	private static void bindToLoopback(ConnectorFactory connectorFactory)
+	{
 		if (
 			connectorFactory instanceof HttpConnectorFactory httpConnectorFactory
 			&& httpConnectorFactory.getBindHost() == null
-		) {
+		)
+		{
 			httpConnectorFactory.setBindHost("127.0.0.1");
 		}
 	}

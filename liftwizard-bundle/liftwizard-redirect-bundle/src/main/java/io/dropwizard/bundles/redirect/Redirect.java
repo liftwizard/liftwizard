@@ -18,6 +18,7 @@ package io.dropwizard.bundles.redirect;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface Redirect {
+public interface Redirect
+{
 	String getRedirect(HttpServletRequest request);
 }

@@ -36,8 +36,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JsonTestDataExtension implements BeforeEachCallback, AfterEachCallback {
-
+public class JsonTestDataExtension
+	implements BeforeEachCallback, AfterEachCallback
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsonTestDataExtension.class);
 
 	private static final Class<?>[] NO_PARAMS = {};
@@ -46,37 +47,47 @@ public class JsonTestDataExtension implements BeforeEachCallback, AfterEachCallb
 	@Nonnull
 	private final ImmutableList<String> jsonFileNames;
 
-	public JsonTestDataExtension(@Nonnull String... jsonFileNames) {
+	public JsonTestDataExtension(@Nonnull String... jsonFileNames)
+	{
 		this(Lists.immutable.with(jsonFileNames));
 	}
 
-	public JsonTestDataExtension(@Nonnull ImmutableList<String> jsonFileNames) {
+	public JsonTestDataExtension(@Nonnull ImmutableList<String> jsonFileNames)
+	{
 		this.jsonFileNames = jsonFileNames;
 	}
 
 	@Override
-	public void beforeEach(ExtensionContext context) {
-		for (String jsonFileName : this.jsonFileNames) {
-			try {
+	public void beforeEach(ExtensionContext context)
+	{
+		for (String jsonFileName : this.jsonFileNames)
+		{
+			try
+			{
 				this.loadJsonTestData(jsonFileName);
-			} catch (ReflectiveOperationException e) {
+			}
+			catch (ReflectiveOperationException e)
+			{
 				throw new RuntimeException("Error while loading JSON test data file: " + jsonFileName, e);
 			}
 		}
 	}
 
-	private void loadJsonTestData(String jsonFileName) throws ReflectiveOperationException {
+	private void loadJsonTestData(String jsonFileName)
+		throws ReflectiveOperationException
+	{
 		LOGGER.debug("Loading JSON test data from file: {}", jsonFileName);
 
 		var parser = new JsonTestDataParser(jsonFileName);
 		String className = parser.getClassName();
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
 
-		if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(className)) {
+		if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(className))
+		{
 			throw new RuntimeException(
 				"Class "
-				+ className
-				+ " is not configured. Did you remember to initialize Reladomo with a runtime configuration?"
+					+ className
+					+ " is not configured. Did you remember to initialize Reladomo with a runtime configuration?"
 			);
 		}
 
@@ -106,7 +117,8 @@ public class JsonTestDataExtension implements BeforeEachCallback, AfterEachCallb
 	}
 
 	@Override
-	public void afterEach(ExtensionContext context) {
+	public void afterEach(ExtensionContext context)
+	{
 		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
 		MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
 		MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();

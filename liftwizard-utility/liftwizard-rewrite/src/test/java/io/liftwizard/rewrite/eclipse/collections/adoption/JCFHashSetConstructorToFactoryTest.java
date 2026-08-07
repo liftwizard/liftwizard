@@ -24,45 +24,49 @@ import org.openrewrite.test.RecipeSpec;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.java.Assertions.java;
 
-class JCFHashSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
-
+class JCFHashSetConstructorToFactoryTest
+	extends AbstractEclipseCollectionsTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new JCFHashSetConstructorToFactory());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				this.javaFixture("replacePatterns/01"),
-				// Sets is already bound to org.eclipse.collections.impl.factory.Sets, so the recipe must reuse it
-				this.javaFixture("replacePatterns/02", (spec) ->
-					spec.afterRecipe((cu) ->
-						assertThat(collectTypesNamed(cu, "Sets"))
-							.isNotEmpty()
-							.containsOnly("org.eclipse.collections.impl.factory.Sets")
-					)
+			this.javaFixture("replacePatterns/01"),
+			// Sets is already bound to org.eclipse.collections.impl.factory.Sets, so the recipe must reuse it
+			this.javaFixture("replacePatterns/02", (spec) ->
+				spec.afterRecipe((cu) ->
+					assertThat(collectTypesNamed(cu, "Sets"))
+						.isNotEmpty()
+						.containsOnly("org.eclipse.collections.impl.factory.Sets")
 				)
-			);
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
-				// Sets is bound to an unrelated type, so there is no way to import the Eclipse Collections factory
-				java(
-					"""
-					package other;
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
+			// Sets is bound to an unrelated type, so there is no way to import the Eclipse Collections factory
+			java(
+				"""
+				package other;
 
-					public class Sets
-					{
-					}
-					"""
-				),
-				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02")
-			);
+				public class Sets
+				{
+				}
+				"""
+			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02")
+		);
 	}
 }

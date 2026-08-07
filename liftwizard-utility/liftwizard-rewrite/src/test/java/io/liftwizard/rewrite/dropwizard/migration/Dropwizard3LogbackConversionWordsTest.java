@@ -23,17 +23,22 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.test.SourceSpecs.text;
 
-class Dropwizard3LogbackConversionWordsTest implements RewriteTest {
-
+class Dropwizard3LogbackConversionWordsTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3LogbackConversionWords");
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
-		this.rewriteRun(text("""
+	void replacePatterns()
+	{
+		this.rewriteRun(
+			text(
+				"""
 				<?xml version="1.0" encoding="UTF-8"?>
 
 				<configuration>
@@ -78,7 +83,8 @@ class Dropwizard3LogbackConversionWordsTest implements RewriteTest {
 				        </encoder>
 				    </appender>
 				</configuration>
-				""", """
+				""",
+				"""
 				<?xml version="1.0" encoding="UTF-8"?>
 
 				<configuration>
@@ -123,12 +129,18 @@ class Dropwizard3LogbackConversionWordsTest implements RewriteTest {
 				        </encoder>
 				    </appender>
 				</configuration>
-				""", (spec) -> spec.path("logback-test.xml")));
+				""",
+				(spec) -> spec.path("logback-test.xml")
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(text("""
+	void doNotReplaceInvalidPatterns()
+	{
+		this.rewriteRun(
+			text(
+				"""
 				<?xml version="1.0" encoding="UTF-8"?>
 
 				<configuration>
@@ -138,6 +150,9 @@ class Dropwizard3LogbackConversionWordsTest implements RewriteTest {
 				        </encoder>
 				    </appender>
 				</configuration>
-				""", (spec) -> spec.path("logback-test.xml")));
+				""",
+				(spec) -> spec.path("logback-test.xml")
+			)
+		);
 	}
 }

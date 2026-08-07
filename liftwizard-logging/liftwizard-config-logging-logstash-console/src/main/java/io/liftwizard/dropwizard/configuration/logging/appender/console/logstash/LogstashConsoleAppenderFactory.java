@@ -38,8 +38,9 @@ import io.liftwizard.dropwizard.configuration.logging.logstash.LogstashEncoderFa
 
 @JsonTypeName("console-logstash")
 @AutoService(AppenderFactory.class)
-public class LogstashConsoleAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
-
+public class LogstashConsoleAppenderFactory
+	extends AbstractAppenderFactory<ILoggingEvent>
+{
 	@NotNull
 	private ConsoleStream target = ConsoleStream.STDOUT;
 
@@ -47,22 +48,26 @@ public class LogstashConsoleAppenderFactory extends AbstractAppenderFactory<ILog
 	private LogstashEncoderFactory encoderFactory = new LogstashEncoderFactory();
 
 	@JsonProperty
-	public ConsoleStream getTarget() {
+	public ConsoleStream getTarget()
+	{
 		return this.target;
 	}
 
 	@JsonProperty
-	public void setTarget(ConsoleStream target) {
+	public void setTarget(ConsoleStream target)
+	{
 		this.target = target;
 	}
 
 	@JsonProperty
-	public LogstashEncoderFactory getEncoder() {
+	public LogstashEncoderFactory getEncoder()
+	{
 		return this.encoderFactory;
 	}
 
 	@JsonProperty
-	public void setEncoder(LogstashEncoderFactory newEncoderFactory) {
+	public void setEncoder(LogstashEncoderFactory newEncoderFactory)
+	{
 		this.encoderFactory = newEncoderFactory;
 	}
 
@@ -73,7 +78,8 @@ public class LogstashConsoleAppenderFactory extends AbstractAppenderFactory<ILog
 		LayoutFactory<ILoggingEvent> layoutFactory,
 		LevelFilterFactory<ILoggingEvent> levelFilterFactory,
 		AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory
-	) {
+	)
+	{
 		Encoder<ILoggingEvent> encoder = this.encoderFactory.build(this.isIncludeCallerData(), this.getTimeZone());
 		OutputStreamAppender<ILoggingEvent> appender = this.appender(context);
 		appender.setEncoder(encoder);
@@ -85,7 +91,8 @@ public class LogstashConsoleAppenderFactory extends AbstractAppenderFactory<ILog
 		return this.wrapAsync(appender, asyncAppenderFactory);
 	}
 
-	private OutputStreamAppender<ILoggingEvent> appender(Context context) {
+	private OutputStreamAppender<ILoggingEvent> appender(Context context)
+	{
 		var appender = new ConsoleAppender<ILoggingEvent>();
 		appender.setName("console-logstash-appender");
 		appender.setContext(context);
@@ -94,17 +101,20 @@ public class LogstashConsoleAppenderFactory extends AbstractAppenderFactory<ILog
 	}
 
 	@SuppressWarnings("UnusedDeclaration")
-	public enum ConsoleStream {
+	public enum ConsoleStream
+	{
 		STDOUT("System.out"),
 		STDERR("System.err");
 
 		private final String value;
 
-		ConsoleStream(String value) {
+		ConsoleStream(String value)
+		{
 			this.value = value;
 		}
 
-		public String get() {
+		public String get()
+		{
 			return this.value;
 		}
 	}

@@ -29,38 +29,46 @@ import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 
-public class ReladomoTestResourceColumn {
-
+public class ReladomoTestResourceColumn
+{
 	private final Attribute attribute;
 	private final MutableList<Object> values = Lists.mutable.empty();
 
 	private FrozenReladomoTestResourceColumn frozen;
 
-	public ReladomoTestResourceColumn(Attribute attribute) {
+	public ReladomoTestResourceColumn(Attribute attribute)
+	{
 		this.attribute = Objects.requireNonNull(attribute);
 	}
 
-	public void addMithraObject(Object mithraObject) {
+	public void addMithraObject(Object mithraObject)
+	{
 		Object value = this.attribute.valueOf(mithraObject);
 
-		if (this.attribute.valueType() == Timestamp.class) {
+		if (this.attribute.valueType() == Timestamp.class)
+		{
 			var timestamp = (Timestamp) value;
 			Timestamp adjustedTimestamp = this.adjustTimestamp(timestamp);
 			this.values.add(adjustedTimestamp);
-		} else {
+		}
+		else
+		{
 			this.values.add(value);
 		}
 	}
 
-	private Timestamp adjustTimestamp(Timestamp timestamp) {
-		if (timestamp == null) {
+	private Timestamp adjustTimestamp(Timestamp timestamp)
+	{
+		if (timestamp == null)
+		{
 			return null;
 		}
 
 		var timestampAttribute = (TimestampAttribute) this.attribute;
 		Timestamp infinityTimestamp = timestampAttribute.getAsOfAttributeInfinity();
 
-		if (timestamp.equals(infinityTimestamp)) {
+		if (timestamp.equals(infinityTimestamp))
+		{
 			return null;
 		}
 
@@ -69,16 +77,20 @@ public class ReladomoTestResourceColumn {
 		return Timestamp.valueOf(localDateTime);
 	}
 
-	public void freeze() {
-		if (this.frozen != null) {
+	public void freeze()
+	{
+		if (this.frozen != null)
+		{
 			throw new AssertionError();
 		}
 
 		String attributeName = this.attribute.getAttributeName();
 		Class<?> valueType = this.attribute.valueType();
 
-		if (valueType == String.class) {
-			ImmutableList<String> unpaddedValueStrings = this.values.collect(String.class::cast)
+		if (valueType == String.class)
+		{
+			ImmutableList<String> unpaddedValueStrings = this.values
+				.collect(String.class::cast)
 				.collect(ReladomoTestResourceColumn::quote)
 				.toImmutable();
 			int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
@@ -90,18 +102,31 @@ public class ReladomoTestResourceColumn {
 				ReladomoTestResourceColumn.padRight(each, maxLength)
 			);
 			this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
-		} else if (valueType == Long.class) {
+		}
+		else if (valueType == Long.class)
+		{
 			this.handlePrimitive(attributeName, Long.class);
-		} else if (valueType == Integer.class) {
+		}
+		else if (valueType == Integer.class)
+		{
 			this.handlePrimitive(attributeName, Integer.class);
-		} else if (valueType == Double.class) {
+		}
+		else if (valueType == Double.class)
+		{
 			this.handlePrimitive(attributeName, Double.class);
-		} else if (valueType == Float.class) {
+		}
+		else if (valueType == Float.class)
+		{
 			this.handlePrimitive(attributeName, Float.class);
-		} else if (valueType == Boolean.class) {
+		}
+		else if (valueType == Boolean.class)
+		{
 			this.handlePrimitive(attributeName, Boolean.class);
-		} else if (valueType == Timestamp.class) {
-			ImmutableList<String> unpaddedValueStrings = this.values.collect(Timestamp.class::cast)
+		}
+		else if (valueType == Timestamp.class)
+		{
+			ImmutableList<String> unpaddedValueStrings = this.values
+				.collect(Timestamp.class::cast)
 				.collect(ReladomoTestResourceColumn::quote)
 				.toImmutable();
 			int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
@@ -113,8 +138,11 @@ public class ReladomoTestResourceColumn {
 				ReladomoTestResourceColumn.padRight(each, maxLength)
 			);
 			this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
-		} else if (valueType == Date.class) {
-			ImmutableList<String> unpaddedValueStrings = this.values.collect(Date.class::cast)
+		}
+		else if (valueType == Date.class)
+		{
+			ImmutableList<String> unpaddedValueStrings = this.values
+				.collect(Date.class::cast)
 				.collect(ReladomoTestResourceColumn::quote)
 				.toImmutable();
 			int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
@@ -126,13 +154,17 @@ public class ReladomoTestResourceColumn {
 				ReladomoTestResourceColumn.padRight(each, maxLength)
 			);
 			this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
-		} else {
+		}
+		else
+		{
 			throw new AssertionError(valueType);
 		}
 	}
 
-	private void handlePrimitive(String attributeName, Class<?> aClass) {
-		ImmutableList<String> unpaddedValueStrings = this.values.collect(aClass::cast)
+	private void handlePrimitive(String attributeName, Class<?> aClass)
+	{
+		ImmutableList<String> unpaddedValueStrings = this.values
+			.collect(aClass::cast)
 			.collect(String::valueOf)
 			.toImmutable();
 		int maxValueLength = unpaddedValueStrings.asLazy().collectInt(String::length).max();
@@ -145,33 +177,40 @@ public class ReladomoTestResourceColumn {
 		this.frozen = new FrozenReladomoTestResourceColumn(paddedHeader, paddedValueStrings);
 	}
 
-	public String getPaddedHeader() {
+	public String getPaddedHeader()
+	{
 		return this.frozen.getPaddedHeader();
 	}
 
-	public String getPaddedValueString(int index) {
+	public String getPaddedValueString(int index)
+	{
 		return this.frozen.getPaddedValueStrings().get(index);
 	}
 
-	private static String quote(Object object) {
-		if (object == null) {
+	private static String quote(Object object)
+	{
+		if (object == null)
+		{
 			return "null";
 		}
 		return "\"" + object + "\"";
 	}
 
 	// https://stackoverflow.com/a/391978
-	private static String padRight(String string, int length) {
+	private static String padRight(String string, int length)
+	{
 		return ("%-" + length + "s").formatted(string);
 	}
 
 	// https://stackoverflow.com/a/391978
-	private static String padLeft(String string, int length) {
+	private static String padLeft(String string, int length)
+	{
 		return ("%" + length + "s").formatted(string);
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return this.attribute.toString();
 	}
 }

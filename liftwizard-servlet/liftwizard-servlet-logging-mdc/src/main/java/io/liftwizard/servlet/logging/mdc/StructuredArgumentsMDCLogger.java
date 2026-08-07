@@ -34,26 +34,31 @@ import org.eclipse.collections.api.stack.ImmutableStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StructuredArgumentsMDCLogger implements Consumer<StructuredArguments> {
-
+public class StructuredArgumentsMDCLogger
+	implements Consumer<StructuredArguments>
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(StructuredArgumentsMDCLogger.class);
 
 	@Nonnull
 	private final ObjectMapper objectMapper;
 
-	public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper) {
+	public StructuredArgumentsMDCLogger(@Nonnull ObjectMapper objectMapper)
+	{
 		this.objectMapper = Objects.requireNonNull(objectMapper);
 	}
 
 	@Override
-	public void accept(@Nonnull StructuredArguments structuredArguments) {
+	public void accept(@Nonnull StructuredArguments structuredArguments)
+	{
 		ObjectNode objectNode = this.objectMapper.valueToTree(structuredArguments);
-		try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode)) {
+		try (MultiMDCCloseable ignored = this.structuredArgumentsToMDC(objectNode))
+		{
 			LOGGER.debug("Response sent");
 		}
 	}
 
-	private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode) {
+	private MultiMDCCloseable structuredArgumentsToMDC(@Nonnull ObjectNode objectNode)
+	{
 		var result = new MultiMDCCloseable();
 		this.structuredArgumentsToMDC(result, Stacks.immutable.empty(), objectNode);
 		return result;
@@ -63,7 +68,8 @@ public class StructuredArgumentsMDCLogger implements Consumer<StructuredArgument
 		@Nonnull MultiMDCCloseable mdc,
 		@Nonnull ImmutableStack<String> stack,
 		@Nonnull ObjectNode objectNode
-	) {
+	)
+	{
 		objectNode.fields().forEachRemaining((entry) -> this.structuredArgumentToMDC(mdc, stack, entry));
 	}
 
@@ -71,24 +77,34 @@ public class StructuredArgumentsMDCLogger implements Consumer<StructuredArgument
 		@Nonnull MultiMDCCloseable mdc,
 		@Nonnull ImmutableStack<String> stack,
 		@Nonnull Entry<String, JsonNode> entry
-	) {
+	)
+	{
 		String key = entry.getKey();
 		JsonNode value = entry.getValue();
 
-		if (value.isObject()) {
+		if (value.isObject())
+		{
 			ImmutableStack<String> nextStack = stack.push(key);
 			var nextObjectNode = (ObjectNode) value;
 			this.structuredArgumentsToMDC(mdc, nextStack, nextObjectNode);
 			return;
 		}
 
-		String keyString = stack.isEmpty() ? key : stack.toList().toReversed().makeString("", ".", "." + key);
+		String keyString = stack.isEmpty()
+			? key
+			: stack
+					.toList()
+					.toReversed()
+					.makeString("", ".", "." + key);
 
-		if (value.isArray()) {
+		if (value.isArray())
+		{
 			MutableList<String> list = Lists.mutable.empty();
 			value.iterator().forEachRemaining((each) -> list.add(each.textValue()));
 			mdc.put(keyString, list.makeString());
-		} else {
+		}
+		else
+		{
 			mdc.put(keyString, value.asText());
 		}
 	}

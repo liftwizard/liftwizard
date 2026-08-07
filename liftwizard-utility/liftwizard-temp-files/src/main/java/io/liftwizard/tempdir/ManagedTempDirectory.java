@@ -30,8 +30,9 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class ManagedTempDirectory implements AutoCloseable {
-
+public final class ManagedTempDirectory
+	implements AutoCloseable
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ManagedTempDirectory.class);
 
 	private static final Set<ManagedTempDirectory> SHUTDOWN_REGISTRY = ConcurrentHashMap.newKeySet();
@@ -41,76 +42,96 @@ public final class ManagedTempDirectory implements AutoCloseable {
 		"ManagedTempDirectory-Shutdown-Hook"
 	);
 
-	static {
+	static
+	{
 		Runtime.getRuntime().addShutdownHook(SHUTDOWN_HOOK);
 	}
 
 	private final Path path;
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 
-	private ManagedTempDirectory(@Nonnull Path path) {
+	private ManagedTempDirectory(@Nonnull Path path)
+	{
 		this.path = Objects.requireNonNull(path, "path cannot be null");
 	}
 
-	private static void shutdownCleanup() {
+	private static void shutdownCleanup()
+	{
 		LOGGER.debug("Running shutdown hook to clean up {} temporary directories", SHUTDOWN_REGISTRY.size());
 		SHUTDOWN_REGISTRY.forEach(ManagedTempDirectory::close);
 	}
 
-	public static Path createTempDirectory(@Nonnull String prefix) {
+	public static Path createTempDirectory(@Nonnull String prefix)
+	{
 		Objects.requireNonNull(prefix, "prefix cannot be null");
 
-		try {
+		try
+		{
 			Path tempDir = Files.createTempDirectory(prefix);
 			var instance = new ManagedTempDirectory(tempDir);
 			SHUTDOWN_REGISTRY.add(instance);
 
 			LOGGER.debug("Created temporary directory (registered for JVM shutdown cleanup): {}", tempDir);
 			return tempDir;
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException("Failed to create temporary directory with prefix: " + prefix, e);
 		}
 	}
 
-	public static ManagedTempDirectory create(@Nonnull String prefix) {
+	public static ManagedTempDirectory create(@Nonnull String prefix)
+	{
 		return create(prefix, new FileAttribute<?>[0]);
 	}
 
-	public static ManagedTempDirectory create(@Nonnull String prefix, FileAttribute<?>... attrs) {
+	public static ManagedTempDirectory create(@Nonnull String prefix, FileAttribute<?>... attrs)
+	{
 		Objects.requireNonNull(prefix, "prefix cannot be null");
 
-		try {
+		try
+		{
 			Path tempDir = Files.createTempDirectory(prefix, attrs);
 			var instance = new ManagedTempDirectory(tempDir);
 			SHUTDOWN_REGISTRY.add(instance);
 
 			LOGGER.debug("Created managed temporary directory: {}", tempDir);
 			return instance;
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException("Failed to create temporary directory with prefix: " + prefix, e);
 		}
 	}
 
 	@Nonnull
-	public Path getPath() {
+	public Path getPath()
+	{
 		return this.path;
 	}
 
 	@Override
-	public void close() {
-		if (this.closed.compareAndSet(false, true)) {
+	public void close()
+	{
+		if (this.closed.compareAndSet(false, true))
+		{
 			LOGGER.debug("Closing managed temporary directory: {}", this.path);
 			SHUTDOWN_REGISTRY.remove(this);
-			try {
+			try
+			{
 				RecursiveDirectoryDeleter.deleteRecursively(this.path);
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				throw new RuntimeException("Failed to delete temporary directory: " + this.path, e);
 			}
 		}
 	}
 
-	public boolean tryClose() {
-		if (this.closed.compareAndSet(false, true)) {
+	public boolean tryClose()
+	{
+		if (this.closed.compareAndSet(false, true))
+		{
 			LOGGER.debug("Attempting to close managed temporary directory: {}", this.path);
 			SHUTDOWN_REGISTRY.remove(this);
 			return RecursiveDirectoryDeleter.tryDeleteRecursively(this.path);
@@ -119,11 +140,14 @@ public final class ManagedTempDirectory implements AutoCloseable {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
+	public boolean equals(Object o)
+	{
+		if (this == o)
+		{
 			return true;
 		}
-		if (o == null || this.getClass() != o.getClass()) {
+		if (o == null || this.getClass() != o.getClass())
+		{
 			return false;
 		}
 		var that = (ManagedTempDirectory) o;
@@ -131,12 +155,14 @@ public final class ManagedTempDirectory implements AutoCloseable {
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		return this.path.hashCode();
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "ManagedTempDirectory{path=" + this.path + ", closed=" + this.closed.get() + '}';
 	}
 }

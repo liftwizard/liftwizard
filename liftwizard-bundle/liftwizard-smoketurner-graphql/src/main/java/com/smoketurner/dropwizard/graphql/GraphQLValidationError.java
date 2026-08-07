@@ -29,28 +29,34 @@ import graphql.schema.DataFetcher;
  * Generic class to return a validation error message to the user from a {@link DataFetcher} without
  * a stack trace.
  */
-public class GraphQLValidationError extends RuntimeException implements GraphQLError {
-
+public class GraphQLValidationError
+	extends RuntimeException
+	implements GraphQLError
+{
 	private static final long serialVersionUID = 1L;
 
-	public GraphQLValidationError(String message) {
+	public GraphQLValidationError(String message)
+	{
 		super(message);
 	}
 
 	@Nullable
 	@Override
-	public List<SourceLocation> getLocations() {
+	public List<SourceLocation> getLocations()
+	{
 		return null;
 	}
 
 	@Override
-	public ErrorType getErrorType() {
+	public ErrorType getErrorType()
+	{
 		return ErrorType.ValidationError;
 	}
 
 	@Nullable
 	@Override
-	public StackTraceElement[] getStackTrace() {
+	public StackTraceElement[] getStackTrace()
+	{
 		return null;
 	}
 }

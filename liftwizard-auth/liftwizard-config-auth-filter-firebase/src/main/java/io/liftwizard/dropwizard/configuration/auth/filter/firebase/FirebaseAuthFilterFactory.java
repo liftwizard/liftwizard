@@ -38,8 +38,9 @@ import io.liftwizard.firebase.principal.FirebasePrincipal;
 
 @JsonTypeName("firebase")
 @AutoService(AuthFilterFactory.class)
-public class FirebaseAuthFilterFactory implements AuthFilterFactory {
-
+public class FirebaseAuthFilterFactory
+	implements AuthFilterFactory
+{
 	private static final String FIREBASE_CONFIG_ENV_VAR = "FIREBASE_CONFIG";
 
 	private @Valid @NotNull String databaseUrl;
@@ -48,7 +49,8 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 
 	@Nonnull
 	@Override
-	public AuthFilter<?, FirebasePrincipal> createAuthFilter() {
+	public AuthFilter<?, FirebasePrincipal> createAuthFilter()
+	{
 		com.google.firebase.auth.FirebaseAuth firebaseAuth = this.createFirebaseAuth();
 
 		Authenticator<String, FirebasePrincipal> authenticator = new FirebaseOAuthAuthenticator(firebaseAuth);
@@ -59,36 +61,44 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 			.buildAuthFilter();
 	}
 
-	public GoogleCredentials createFirebaseCredentials() {
+	public GoogleCredentials createFirebaseCredentials()
+	{
 		this.initFirebaseAuthFactory();
 		return this.firebaseAuthFactory.getCredentials();
 	}
 
-	public FirebaseApp createFirebaseApp() {
+	public FirebaseApp createFirebaseApp()
+	{
 		this.initFirebaseAuthFactory();
 		return this.firebaseAuthFactory.getFirebaseApp();
 	}
 
-	public com.google.firebase.auth.FirebaseAuth createFirebaseAuth() {
+	public com.google.firebase.auth.FirebaseAuth createFirebaseAuth()
+	{
 		this.initFirebaseAuthFactory();
 		return this.firebaseAuthFactory.getFirebaseAuth();
 	}
 
-	public FirebaseDatabase createFirebaseDatabase() {
+	public FirebaseDatabase createFirebaseDatabase()
+	{
 		this.initFirebaseAuthFactory();
 		return this.firebaseAuthFactory.getFirebaseDatabase();
 	}
 
-	private void initFirebaseAuthFactory() {
-		if (this.firebaseAuthFactory == null) {
+	private void initFirebaseAuthFactory()
+	{
+		if (this.firebaseAuthFactory == null)
+		{
 			String config = this.getFirebaseConfigFromEnv();
 			this.firebaseAuthFactory = new FirebaseAuth(this.databaseUrl, config);
 		}
 	}
 
-	private String getFirebaseConfigFromEnv() {
+	private String getFirebaseConfigFromEnv()
+	{
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
-		if (envValue == null || envValue.isEmpty()) {
+		if (envValue == null || envValue.isEmpty())
+		{
 			throw new IllegalStateException(FIREBASE_CONFIG_ENV_VAR + " environment variable is not set");
 		}
 		return envValue;
@@ -96,33 +106,41 @@ public class FirebaseAuthFilterFactory implements AuthFilterFactory {
 
 	@ValidationMethod(message = "FIREBASE_CONFIG environment variable is not set")
 	@JsonIgnore
-	public boolean isFirebaseConfigEnvSet() {
+	public boolean isFirebaseConfigEnvSet()
+	{
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
 		return envValue != null && !envValue.isEmpty();
 	}
 
 	@ValidationMethod(message = "FIREBASE_CONFIG environment variable does not contain valid JSON")
 	@JsonIgnore
-	public boolean isFirebaseConfigValidJson() {
+	public boolean isFirebaseConfigValidJson()
+	{
 		String envValue = System.getenv(FIREBASE_CONFIG_ENV_VAR);
-		if (envValue == null || envValue.isEmpty()) {
+		if (envValue == null || envValue.isEmpty())
+		{
 			return true;
 		}
-		try {
+		try
+		{
 			new ObjectMapper().readTree(envValue);
 			return true;
-		} catch (JsonProcessingException e) {
+		}
+		catch (JsonProcessingException e)
+		{
 			return false;
 		}
 	}
 
 	@JsonProperty
-	public String getDatabaseUrl() {
+	public String getDatabaseUrl()
+	{
 		return this.databaseUrl;
 	}
 
 	@JsonProperty
-	public void setDatabaseUrl(String databaseUrl) {
+	public void setDatabaseUrl(String databaseUrl)
+	{
 		this.databaseUrl = databaseUrl;
 	}
 }

@@ -27,21 +27,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "Replace `Comparators.nullSafeEquals()` with `Objects.equals()`",
 	description = "Replace `Comparators.nullSafeEquals(a, b)` with `Objects.equals(a, b)`."
 )
-public class ComparatorsNullSafeEqualsToObjectsEquals {
-
+public class ComparatorsNullSafeEqualsToObjectsEquals
+{
 	@RecipeDescriptor(
 		name = "`Comparators.nullSafeEquals()` → `Objects.equals()`",
 		description = "Replace `Comparators.nullSafeEquals(a, b)` with `Objects.equals(a, b)`."
 	)
-	public static class ComparatorsNullSafeEqualsToObjectsEqualsRecipe<T> {
-
+	public static class ComparatorsNullSafeEqualsToObjectsEqualsRecipe<T>
+	{
 		@BeforeTemplate
-		boolean comparatorsNullSafeEquals(T left, T right) {
+		boolean comparatorsNullSafeEquals(T left, T right)
+		{
 			return Comparators.nullSafeEquals(left, right);
 		}
 
 		@AfterTemplate
-		boolean objectsEquals(T left, T right) {
+		boolean objectsEquals(T left, T right)
+		{
 			return Objects.equals(left, right);
 		}
 	}

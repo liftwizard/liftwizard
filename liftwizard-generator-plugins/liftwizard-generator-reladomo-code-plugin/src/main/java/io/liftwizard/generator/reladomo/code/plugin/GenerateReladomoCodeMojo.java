@@ -46,8 +46,9 @@ import org.apache.maven.project.MavenProject;
 	threadSafe = true,
 	requiresDependencyResolution = ResolutionScope.RUNTIME
 )
-public class GenerateReladomoCodeMojo extends AbstractMojo {
-
+public class GenerateReladomoCodeMojo
+	extends AbstractMojo
+{
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	protected MavenProject mavenProject;
 
@@ -73,12 +74,15 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
 	private boolean generateEcListMethod;
 
 	@Override
-	public void execute() {
-		if (!this.generatedDir.exists()) {
+	public void execute()
+	{
+		if (!this.generatedDir.exists())
+		{
 			this.generatedDir.mkdirs();
 		}
 
-		try (var tempFile = this.getTempFile()) {
+		try (var tempFile = this.getTempFile())
+		{
 			CoreMithraGenerator coreGenerator = this.getGenerator(tempFile.getPath());
 			coreGenerator.execute();
 
@@ -88,28 +92,37 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
 		}
 	}
 
-	private void deleteLogFiles() {
-		try (Stream<Path> logFiles = Files.walk(this.generatedDir.toPath())) {
+	private void deleteLogFiles()
+	{
+		try (Stream<Path> logFiles = Files.walk(this.generatedDir.toPath()))
+		{
 			logFiles
 				.filter(Files::isRegularFile)
 				.filter((path) -> path.toString().endsWith(".log"))
 				.forEach(this::deleteLogFile);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			this.getLog().warn("Failed to clean up Reladomo log files", e);
 		}
 	}
 
-	private void deleteLogFile(Path path) {
-		try {
+	private void deleteLogFile(Path path)
+	{
+		try
+		{
 			Files.delete(path);
 			this.getLog().debug("Deleted Reladomo log file: " + path);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			this.getLog().warn("Failed to delete Reladomo log file: " + path, e);
 		}
 	}
 
 	@Nonnull
-	private CoreMithraGenerator getGenerator(Path tempFile) {
+	private CoreMithraGenerator getGenerator(Path tempFile)
+	{
 		Path classListFile = tempFile.resolve(this.definitionsAndClassListDirectory).resolve(this.classListFileName);
 		var coreGenerator = new CoreMithraGenerator();
 		coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
@@ -123,12 +136,15 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
 	}
 
 	@Nonnull
-	private ManagedTempDirectory getTempFile() {
-		if (this.definitionsAndClassListDirectory.startsWith("/")) {
+	private ManagedTempDirectory getTempFile()
+	{
+		if (this.definitionsAndClassListDirectory.startsWith("/"))
+		{
 			throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
 		}
 
-		try {
+		try
+		{
 			URL resource = this.getClass().getResource('/' + this.definitionsAndClassListDirectory);
 			Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
 			URI uri = resource.toURI();
@@ -138,33 +154,48 @@ public class GenerateReladomoCodeMojo extends AbstractMojo {
 
 			this.copyDirectory(from, to);
 			return managedTempDirectory;
-		} catch (URISyntaxException e) {
+		}
+		catch (URISyntaxException e)
+		{
 			throw new RuntimeException(e);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void copyDirectory(Path from, Path to) throws IOException {
-		try (Stream<Path> sources = Files.walk(from)) {
+	private void copyDirectory(Path from, Path to)
+		throws IOException
+	{
+		try (Stream<Path> sources = Files.walk(from))
+		{
 			sources.forEach((src) -> this.handleOneFile(from, src, to));
 		}
 	}
 
 	// Based on https://stackoverflow.com/a/29659925/
-	private void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target) {
+	private void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target)
+	{
 		Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
-		try {
-			if (Files.isDirectory(fileSystemSource)) {
-				if (Files.notExists(copyDestination)) {
+		try
+		{
+			if (Files.isDirectory(fileSystemSource))
+			{
+				if (Files.notExists(copyDestination))
+				{
 					this.getLog().info("Creating directory " + copyDestination);
 					Files.createDirectories(copyDestination);
 				}
-			} else {
+			}
+			else
+			{
 				this.getLog().info("Copying resource " + fileSystemSource + " to " + copyDestination);
 				Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException("Failed target unzip file.", e);
 		}
 	}

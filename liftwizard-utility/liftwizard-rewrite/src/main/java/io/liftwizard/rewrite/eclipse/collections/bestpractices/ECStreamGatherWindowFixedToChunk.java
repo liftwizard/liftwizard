@@ -50,17 +50,20 @@ import org.openrewrite.java.tree.J;
  * with {@link MethodMatcher} requires the receiver type to be resolved, but the return type of
  * the unresolved {@code gather()} call breaks the chain.
  */
-public class ECStreamGatherWindowFixedToChunk extends Recipe {
-
+public class ECStreamGatherWindowFixedToChunk
+	extends Recipe
+{
 	private static final MethodMatcher TO_LIST_MATCHER = new MethodMatcher("java.util.stream.Collectors toList()");
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().gather(Gatherers.windowFixed(n)).collect(toList())` to `chunk(n)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().gather(Gatherers.windowFixed(n)).collect(Collectors.toList())` "
 			+ "to `collection.chunk(n)`. This eliminates the unnecessary Stream intermediary since "
@@ -70,85 +73,103 @@ public class ECStreamGatherWindowFixedToChunk extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new StreamGatherWindowFixedToChunkVisitor();
 	}
 
-	private static final class StreamGatherWindowFixedToChunkVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamGatherWindowFixedToChunkVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
 			// Match: .collect(Collectors.toList()) by name because the receiver
 			// is the return type of gather() which is unresolved on Java < 24
-			if (!"collect".equals(methodInvocation.getSimpleName())) {
+			if (!"collect".equals(methodInvocation.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!TO_LIST_MATCHER.matches(collectorCall)) {
+			if (!TO_LIST_MATCHER.matches(collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			// Match: .gather(Gatherers.windowFixed(n)) by name since it's a Java 24+ API
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation gatherCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation gatherCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!"gather".equals(gatherCall.getSimpleName())) {
+			if (!"gather".equals(gatherCall.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> gatherArguments = gatherCall.getArguments();
-			if (gatherArguments.size() != 1) {
+			if (gatherArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression gathererArg = gatherArguments.get(0);
-			if (!(gathererArg instanceof J.MethodInvocation windowFixedCall)) {
+			if (!(gathererArg instanceof J.MethodInvocation windowFixedCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!"windowFixed".equals(windowFixedCall.getSimpleName())) {
+			if (!"windowFixed".equals(windowFixedCall.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
-			if (!this.isGatherersClass(windowFixedCall)) {
+			if (!this.isGatherersClass(windowFixedCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> windowFixedArguments = windowFixedCall.getArguments();
-			if (windowFixedArguments.size() != 1) {
+			if (windowFixedArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			// Match: .stream()
 			Expression gatherSelect = gatherCall.getSelect();
-			if (!(gatherSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(gatherSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -168,9 +189,11 @@ public class ECStreamGatherWindowFixedToChunk extends Recipe {
 				.withPrefix(methodInvocation.getPrefix());
 		}
 
-		private boolean isGatherersClass(J.MethodInvocation method) {
+		private boolean isGatherersClass(J.MethodInvocation method)
+		{
 			Expression select = method.getSelect();
-			if (select instanceof J.Identifier identifier) {
+			if (select instanceof J.Identifier identifier)
+			{
 				return "Gatherers".equals(identifier.getSimpleName());
 			}
 			return false;

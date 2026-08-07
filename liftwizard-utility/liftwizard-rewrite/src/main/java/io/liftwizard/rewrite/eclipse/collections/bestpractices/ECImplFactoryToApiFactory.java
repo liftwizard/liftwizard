@@ -32,8 +32,9 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class ECImplFactoryToApiFactory extends ScanningRecipe<Map<Path, Set<String>>> {
-
+public class ECImplFactoryToApiFactory
+	extends ScanningRecipe<Map<Path, Set<String>>>
+{
 	private static final Set<String> IMPL_FACTORY_CLASSES = Set.of(
 		"org.eclipse.collections.impl.factory.Lists",
 		"org.eclipse.collections.impl.factory.Sets",
@@ -48,12 +49,14 @@ public class ECImplFactoryToApiFactory extends ScanningRecipe<Map<Path, Set<Stri
 	private static final Set<String> FACTORY_FIELDS = Set.of("mutable", "immutable", "fixedSize");
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Replace impl.factory with api.factory";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Replace org.eclipse.collections.impl.factory.* factory field access "
 			+ "with api.factory equivalents. Does not transform static utility methods like "
@@ -62,35 +65,44 @@ public class ECImplFactoryToApiFactory extends ScanningRecipe<Map<Path, Set<Stri
 	}
 
 	@Override
-	public Map<Path, Set<String>> getInitialValue(ExecutionContext ctx) {
+	public Map<Path, Set<String>> getInitialValue(ExecutionContext ctx)
+	{
 		return new HashMap<>();
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getScanner(Map<Path, Set<String>> acc) {
-		return new JavaIsoVisitor<ExecutionContext>() {
+	public TreeVisitor<?, ExecutionContext> getScanner(Map<Path, Set<String>> acc)
+	{
+		return new JavaIsoVisitor<ExecutionContext>()
+		{
 			@Override
-			public J.FieldAccess visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx) {
+			public J.FieldAccess visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx)
+			{
 				if (
 					!FACTORY_FIELDS.contains(fieldAccess.getSimpleName())
 					&& fieldAccess.getTarget() instanceof J.Identifier id
-				) {
+				)
+				{
 					addIfImplFactory(id, acc);
 				}
 				return super.visitFieldAccess(fieldAccess, ctx);
 			}
 
 			@Override
-			public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-				if (method.getSelect() instanceof J.Identifier id) {
+			public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+			{
+				if (method.getSelect() instanceof J.Identifier id)
+				{
 					addIfImplFactory(id, acc);
 				}
 				return super.visitMethodInvocation(method, ctx);
 			}
 
-			private void addIfImplFactory(J.Identifier id, Map<Path, Set<String>> acc) {
+			private void addIfImplFactory(J.Identifier id, Map<Path, Set<String>> acc)
+			{
 				JavaType.FullyQualified type = TypeUtils.asFullyQualified(id.getType());
-				if (type == null || !IMPL_FACTORY_CLASSES.contains(type.getFullyQualifiedName())) {
+				if (type == null || !IMPL_FACTORY_CLASSES.contains(type.getFullyQualifiedName()))
+				{
 					return;
 				}
 				Path sourcePath = getCursor().firstEnclosingOrThrow(J.CompilationUnit.class).getSourcePath();
@@ -100,53 +112,64 @@ public class ECImplFactoryToApiFactory extends ScanningRecipe<Map<Path, Set<Stri
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor(Map<Path, Set<String>> acc) {
+	public TreeVisitor<?, ExecutionContext> getVisitor(Map<Path, Set<String>> acc)
+	{
 		return new ECImplFactoryToApiFactoryVisitor(acc);
 	}
 
-	private static final class ECImplFactoryToApiFactoryVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class ECImplFactoryToApiFactoryVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private final Map<Path, Set<String>> nonFactoryByPath;
 
-		private ECImplFactoryToApiFactoryVisitor(Map<Path, Set<String>> nonFactoryByPath) {
+		private ECImplFactoryToApiFactoryVisitor(Map<Path, Set<String>> nonFactoryByPath)
+		{
 			this.nonFactoryByPath = nonFactoryByPath;
 		}
 
 		@Override
-		public J visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx) {
+		public J visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx)
+		{
 			var fa = (J.FieldAccess) super.visitFieldAccess(fieldAccess, ctx);
 
 			String fieldName = fa.getSimpleName();
-			if (!FACTORY_FIELDS.contains(fieldName)) {
+			if (!FACTORY_FIELDS.contains(fieldName))
+			{
 				return fa;
 			}
 
 			Expression target = fa.getTarget();
-			if (!(target instanceof J.Identifier id)) {
+			if (!(target instanceof J.Identifier id))
+			{
 				return fa;
 			}
 
 			JavaType.FullyQualified targetType = TypeUtils.asFullyQualified(id.getType());
-			if (targetType == null) {
+			if (targetType == null)
+			{
 				return fa;
 			}
 
 			String implClassName = targetType.getFullyQualifiedName();
-			if (!IMPL_FACTORY_CLASSES.contains(implClassName)) {
+			if (!IMPL_FACTORY_CLASSES.contains(implClassName))
+			{
 				return fa;
 			}
 
 			String implPackage = implClassName.substring(0, implClassName.lastIndexOf('.'));
 			J.CompilationUnit cu = getCursor().firstEnclosingOrThrow(J.CompilationUnit.class);
-			if (cu.getPackageDeclaration() != null) {
+			if (cu.getPackageDeclaration() != null)
+			{
 				String filePackage = cu.getPackageDeclaration().getExpression().printTrimmed(getCursor());
-				if (implPackage.equals(filePackage)) {
+				if (implPackage.equals(filePackage))
+				{
 					return fa;
 				}
 			}
 
 			Set<String> nonFactoryClasses = this.nonFactoryByPath.getOrDefault(cu.getSourcePath(), Set.of());
-			if (nonFactoryClasses.contains(implClassName)) {
+			if (nonFactoryClasses.contains(implClassName))
+			{
 				return fa;
 			}
 

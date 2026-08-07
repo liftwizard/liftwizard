@@ -18,8 +18,8 @@ package io.liftwizard.rewrite.assertj;
 
 import java.util.List;
 
-public final class AssertJTemplateStubs {
-
+public final class AssertJTemplateStubs
+{
 	private static final List<String> STUBS = List.of(
 		"""
 		package org.assertj.core.api;
@@ -99,9 +99,12 @@ public final class AssertJTemplateStubs {
 		"""
 	);
 
-	private AssertJTemplateStubs() {}
+	private AssertJTemplateStubs()
+	{
+	}
 
-	public static List<String> stubs() {
+	public static List<String> stubs()
+	{
 		return STUBS;
 	}
 }

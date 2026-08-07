@@ -30,8 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.collections.api.list.ImmutableList;
 
-public class SinglePageRedirectFilter implements Filter {
-
+public class SinglePageRedirectFilter
+	implements Filter
+{
 	private final String redirectPage;
 	private final String cacheControlHeader;
 	private final ImmutableList<String> wellKnownPathPrefixes;
@@ -40,7 +41,8 @@ public class SinglePageRedirectFilter implements Filter {
 		String redirectPage,
 		String cacheControlHeader,
 		ImmutableList<String> wellKnownPathPrefixes
-	) {
+	)
+	{
 		this.redirectPage = Objects.requireNonNull(redirectPage);
 		this.cacheControlHeader = Objects.requireNonNull(cacheControlHeader);
 		this.wellKnownPathPrefixes = Objects.requireNonNull(wellKnownPathPrefixes);
@@ -48,13 +50,15 @@ public class SinglePageRedirectFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-		throws IOException, ServletException {
+		throws IOException, ServletException
+	{
 		// Let all handlers and filters process before we do anything. That way we can capture if this is a 404.
 		chain.doFilter(request, response);
 		if (
 			!(request instanceof HttpServletRequest httpServletRequest)
 			|| !(response instanceof HttpServletResponse httpServletResponse)
-		) {
+		)
+		{
 			return;
 		}
 
@@ -62,14 +66,16 @@ public class SinglePageRedirectFilter implements Filter {
 
 		// If the requested path is not known (i.e. not reqs for auth, backend, or static files)
 		// then redirect to index.html for single-page-app (SPA) routing, and set the response to 200.
-		if (this.isKnownPath(requestedPath) || httpServletResponse.getStatus() != 404) {
+		if (this.isKnownPath(requestedPath) || httpServletResponse.getStatus() != 404)
+		{
 			return;
 		}
 
-		if (requestedPath.equals(this.redirectPage)) {
+		if (requestedPath.equals(this.redirectPage))
+		{
 			throw new ServletException(
 				"SinglePageRedirectFilter redirectPage cannot be the same as the path being redirected to. Both are: "
-				+ requestedPath
+					+ requestedPath
 			);
 		}
 
@@ -79,7 +85,8 @@ public class SinglePageRedirectFilter implements Filter {
 		requestDispatcher.forward(httpServletRequest, httpServletResponse);
 	}
 
-	private boolean isKnownPath(String requestedPath) {
+	private boolean isKnownPath(String requestedPath)
+	{
 		return this.wellKnownPathPrefixes.anySatisfy(requestedPath::startsWith);
 	}
 }

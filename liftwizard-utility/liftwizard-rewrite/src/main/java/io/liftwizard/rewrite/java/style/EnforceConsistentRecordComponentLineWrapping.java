@@ -37,15 +37,18 @@ import org.openrewrite.java.tree.Statement;
  * are also left unchanged. Valid fixed-multiple groupings (e.g., key-value pairs)
  * are also left unchanged. Non-record class declarations are left unchanged.
  */
-public class EnforceConsistentRecordComponentLineWrapping extends AbstractEnforceConsistentLineWrapping {
-
+public class EnforceConsistentRecordComponentLineWrapping
+	extends AbstractEnforceConsistentLineWrapping
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Enforce consistent record component line wrapping";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"When a record declaration has multiple components and any component is line-wrapped, "
 			+ "enforce that all components use line wrapping for consistency. "
@@ -54,29 +57,36 @@ public class EnforceConsistentRecordComponentLineWrapping extends AbstractEnforc
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
+			{
 				J.ClassDeclaration cd = super.visitClassDeclaration(classDecl, ctx);
 
-				if (cd.getKind() != J.ClassDeclaration.Kind.Type.Record) {
+				if (cd.getKind() != J.ClassDeclaration.Kind.Type.Record)
+				{
 					return cd;
 				}
 
 				JContainer<Statement> primaryConstructor = cd.getPadding().getPrimaryConstructor();
-				if (primaryConstructor == null) {
+				if (primaryConstructor == null)
+				{
 					return cd;
 				}
 
 				List<JRightPadded<Statement>> components = primaryConstructor.getPadding().getElements();
 
-				if (!shouldEnforceWrapping(components)) {
+				if (!shouldEnforceWrapping(components))
+				{
 					return cd;
 				}
 
 				String wrappedIndent = findWrappedIndent(components);
-				if (wrappedIndent == null) {
+				if (wrappedIndent == null)
+				{
 					return cd;
 				}
 

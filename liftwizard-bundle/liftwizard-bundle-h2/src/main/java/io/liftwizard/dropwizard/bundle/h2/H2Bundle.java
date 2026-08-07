@@ -40,20 +40,24 @@ import org.slf4j.LoggerFactory;
  * @see <a href="https://github.com/jhipster/jhipster/blob/master/jhipster-framework/src/main/java/io/github/jhipster/config/h2/H2ConfigurationHelper.java">H2ConfigurationHelper</a>
  */
 @AutoService(PrioritizedBundle.class)
-public class H2Bundle implements PrioritizedBundle {
-
+public class H2Bundle
+	implements PrioritizedBundle
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(H2Bundle.class);
 
 	@Override
-	public int getPriority() {
+	public int getPriority()
+	{
 		return -7;
 	}
 
 	@Override
-	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+	{
 		H2FactoryProvider h2FactoryProvider = this.safeCastConfiguration(H2FactoryProvider.class, configuration);
 		H2Factory h2Factory = h2FactoryProvider.getH2Factory();
-		if (h2Factory == null || !h2Factory.isEnabled()) {
+		if (h2Factory == null || !h2Factory.isEnabled())
+		{
 			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
@@ -90,14 +94,18 @@ public class H2Bundle implements PrioritizedBundle {
 	}
 
 	@Nonnull
-	private Server createTcpServer(List<String> tcpServerArgs) {
+	private Server createTcpServer(List<String> tcpServerArgs)
+	{
 		LOGGER.info("Starting H2 TCP Server with args: {}", tcpServerArgs);
-		try {
+		try
+		{
 			Server server = Server.createTcpServer(tcpServerArgs.toArray(new String[] {}));
 			server.start();
 			LOGGER.info(server.getStatus());
 			return server;
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}

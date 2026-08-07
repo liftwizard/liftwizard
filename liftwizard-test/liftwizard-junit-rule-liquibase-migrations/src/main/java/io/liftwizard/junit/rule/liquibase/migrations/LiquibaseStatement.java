@@ -37,8 +37,9 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.ui.LoggerUIService;
 import org.junit.runners.model.Statement;
 
-public class LiquibaseStatement extends Statement {
-
+public class LiquibaseStatement
+	extends Statement
+{
 	@Nonnull
 	private final Supplier<? extends Connection> connectionSupplier =
 		H2InMemoryConnectionManager.getInstance()::getConnection;
@@ -47,39 +48,50 @@ public class LiquibaseStatement extends Statement {
 	private final String migrationsFile;
 	private final boolean dropAll;
 
-	public LiquibaseStatement(Statement baseStatement, String migrationsFile, boolean dropAll) {
+	public LiquibaseStatement(Statement baseStatement, String migrationsFile, boolean dropAll)
+	{
 		this.baseStatement = Objects.requireNonNull(baseStatement);
 		this.migrationsFile = Objects.requireNonNull(migrationsFile);
 		this.dropAll = dropAll;
 	}
 
 	@Override
-	public void evaluate() throws Throwable {
+	public void evaluate()
+		throws Throwable
+	{
 		Scope.child(Attr.ui, new LoggerUIService(), this::runWithLogger);
 
 		this.baseStatement.evaluate();
 	}
 
-	private void runWithLogger() throws SQLException, LiquibaseException {
+	private void runWithLogger()
+		throws SQLException, LiquibaseException
+	{
 		try (
 			Connection connection = this.connectionSupplier.get();
 			Liquibase liquibase = this.openLiquibase(connection);
-		) {
-			if (this.dropAll) {
+		)
+		{
+			if (this.dropAll)
+			{
 				liquibase.dropAll();
 			}
 			liquibase.update("");
 		}
 	}
 
-	private Liquibase openLiquibase(Connection connection) throws LiquibaseException {
+	private Liquibase openLiquibase(Connection connection)
+		throws LiquibaseException
+	{
 		Database database = this.createDatabase(connection);
 		var liquibase = new Liquibase(this.migrationsFile, new ClassLoaderResourceAccessor(), database);
 		liquibase.setShowSummaryOutput(UpdateSummaryOutputEnum.LOG);
 		return liquibase;
 	}
 
-	private Database createDatabase(Connection connection) throws LiquibaseException {
+	private Database createDatabase(Connection connection)
+		throws LiquibaseException
+	{
 		DatabaseConnection jdbcConnection = new JdbcConnection(connection);
 
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);

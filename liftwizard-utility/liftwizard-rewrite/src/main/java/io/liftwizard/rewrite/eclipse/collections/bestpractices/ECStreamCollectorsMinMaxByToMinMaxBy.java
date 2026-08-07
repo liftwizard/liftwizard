@@ -48,8 +48,9 @@ import org.openrewrite.java.tree.J;
  * list.minBy(Person::getAge);
  * }</pre>
  */
-public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
-
+public class ECStreamCollectorsMinMaxByToMinMaxBy
+	extends Recipe
+{
 	private static final MethodMatcher OR_ELSE_MATCHER = new MethodMatcher("java.util.Optional orElse(..)");
 
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
@@ -69,12 +70,14 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.minBy/maxBy(Comparator.comparing(fn))).orElse(null)` to `minBy/maxBy(fn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.minBy(Comparator.comparing(fn))).orElse(null)` "
 			+ "to `collection.minBy(fn)` and similarly for maxBy. "
@@ -84,81 +87,99 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(OR_ELSE_MATCHER), new StreamCollectorsMinMaxByToMinMaxByVisitor());
 	}
 
-	private static final class StreamCollectorsMinMaxByToMinMaxByVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamCollectorsMinMaxByToMinMaxByVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!OR_ELSE_MATCHER.matches(methodInvocation)) {
+			if (!OR_ELSE_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> orElseArgs = methodInvocation.getArguments();
-			if (orElseArgs.size() != 1 || !isNullLiteral(orElseArgs.getFirst())) {
+			if (orElseArgs.size() != 1 || !isNullLiteral(orElseArgs.getFirst()))
+			{
 				return methodInvocation;
 			}
 
 			Expression orElseSelect = methodInvocation.getSelect();
-			if (!(orElseSelect instanceof J.MethodInvocation collectCall)) {
+			if (!(orElseSelect instanceof J.MethodInvocation collectCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!COLLECT_MATCHER.matches(collectCall)) {
+			if (!COLLECT_MATCHER.matches(collectCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArgs = collectCall.getArguments();
-			if (collectArgs.size() != 1) {
+			if (collectArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
-			if (!(collectArgs.getFirst() instanceof J.MethodInvocation minMaxByCall)) {
+			if (!(collectArgs.getFirst() instanceof J.MethodInvocation minMaxByCall))
+			{
 				return methodInvocation;
 			}
 
 			String targetMethodName = this.getTargetMethodName(minMaxByCall);
-			if (targetMethodName == null) {
+			if (targetMethodName == null)
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> minMaxByArgs = minMaxByCall.getArguments();
-			if (minMaxByArgs.size() != 1) {
+			if (minMaxByArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
-			if (!(minMaxByArgs.getFirst() instanceof J.MethodInvocation comparingCall)) {
+			if (!(minMaxByArgs.getFirst() instanceof J.MethodInvocation comparingCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!COMPARING_MATCHER.matches(comparingCall)) {
+			if (!COMPARING_MATCHER.matches(comparingCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> comparingArgs = comparingCall.getArguments();
-			if (comparingArgs.size() != 1) {
+			if (comparingArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = collectCall.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -171,17 +192,21 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy extends Recipe {
 				.withArguments(List.of(function));
 		}
 
-		private String getTargetMethodName(J.MethodInvocation method) {
-			if (MIN_BY_MATCHER.matches(method)) {
+		private String getTargetMethodName(J.MethodInvocation method)
+		{
+			if (MIN_BY_MATCHER.matches(method))
+			{
 				return "minBy";
 			}
-			if (MAX_BY_MATCHER.matches(method)) {
+			if (MAX_BY_MATCHER.matches(method))
+			{
 				return "maxBy";
 			}
 			return null;
 		}
 
-		private static boolean isNullLiteral(Expression expression) {
+		private static boolean isNullLiteral(Expression expression)
+		{
 			return expression instanceof J.Literal literal && literal.getValue() == null;
 		}
 	}

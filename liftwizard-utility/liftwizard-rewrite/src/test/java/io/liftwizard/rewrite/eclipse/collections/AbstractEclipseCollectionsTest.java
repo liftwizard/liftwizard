@@ -27,10 +27,12 @@ import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-public abstract class AbstractEclipseCollectionsTest implements AbstractRewriteFixtures, RewriteTest {
-
+public abstract class AbstractEclipseCollectionsTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.parser(
 			JavaParser.fromJavaVersion()
 				.styles(AbstractRewriteStyles.styles())
@@ -42,18 +44,21 @@ public abstract class AbstractEclipseCollectionsTest implements AbstractRewriteF
 	 * The fully-qualified type of every identifier spelled {@code simpleName}, so a test can check that emitted code is
 	 * attributed to the same type as the import already in scope and not merely printed the same way.
 	 */
-	protected static MutableList<String> collectTypesNamed(J.CompilationUnit cu, String simpleName) {
+	protected static MutableList<String> collectTypesNamed(J.CompilationUnit cu, String simpleName)
+	{
 		MutableList<String> typeNames = Lists.mutable.empty();
-		new JavaIsoVisitor<MutableList<String>>() {
+		new JavaIsoVisitor<MutableList<String>>()
+		{
 			@Override
-			public J.Identifier visitIdentifier(J.Identifier identifier, MutableList<String> accumulator) {
-				if (identifier.getSimpleName().equals(simpleName)) {
+			public J.Identifier visitIdentifier(J.Identifier identifier, MutableList<String> accumulator)
+			{
+				if (identifier.getSimpleName().equals(simpleName))
+				{
 					accumulator.add(TypeUtils.asFullyQualified(identifier.getType()).getFullyQualifiedName());
 				}
 				return super.visitIdentifier(identifier, accumulator);
 			}
-		}
-			.visit(cu, typeNames);
+		}.visit(cu, typeNames);
 		return typeNames;
 	}
 }

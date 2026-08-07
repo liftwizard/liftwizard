@@ -24,26 +24,31 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.javaVersion;
 
-class UseVarForPrimitiveLiteralsTest implements AbstractRewriteFixtures, RewriteTest {
-
+class UseVarForPrimitiveLiteralsTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new UseVarForPrimitiveLiterals()).allSources((src) -> src.markers(javaVersion(17)));
 	}
 
 	@Test
 	@DocumentExample
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceGroovyDef() {
+	void doNotReplaceGroovyDef()
+	{
 		this.rewriteRun(this.groovyFixtureUnchanged("doNotReplaceGroovyDef/01"));
 	}
 }

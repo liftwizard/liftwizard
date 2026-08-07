@@ -16,19 +16,23 @@
 
 package io.liftwizard.rewrite.eclipse.collections.adoption;
 
-public class JCFHashSetConstructorToFactory extends AbstractJCFConstructorToFactoryRecipe {
-
-	public JCFHashSetConstructorToFactory() {
+public class JCFHashSetConstructorToFactory
+	extends AbstractJCFConstructorToFactoryRecipe
+{
+	public JCFHashSetConstructorToFactory()
+	{
 		super("HashSet", "Sets");
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`new HashSet<>()` → `Sets.mutable.empty()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Replace `new HashSet()` with `Sets.mutable.empty()`.";
 	}
 }

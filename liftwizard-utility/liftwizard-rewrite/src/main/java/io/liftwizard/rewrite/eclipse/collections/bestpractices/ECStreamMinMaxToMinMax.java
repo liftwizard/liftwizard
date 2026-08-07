@@ -49,8 +49,9 @@ import org.openrewrite.java.tree.J;
  * list.minOptional(Comparator.naturalOrder());
  * }</pre>
  */
-public class ECStreamMinMaxToMinMax extends Recipe {
-
+public class ECStreamMinMaxToMinMax
+	extends Recipe
+{
 	private static final MethodMatcher MIN_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream min(java.util.Comparator)"
 	);
@@ -60,12 +61,14 @@ public class ECStreamMinMaxToMinMax extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().min/max(comparator)` to `minOptional/maxOptional(comparator)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().min(comparator)` to `collection.minOptional(comparator)` and "
 			+ "`collection.stream().max(comparator)` to `collection.maxOptional(comparator)`. "
@@ -75,44 +78,53 @@ public class ECStreamMinMaxToMinMax extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			Preconditions.or(new UsesMethod<>(MIN_MATCHER), new UsesMethod<>(MAX_MATCHER)),
 			new StreamMinMaxToMinMaxOptionalVisitor()
 		);
 	}
 
-	private static final class StreamMinMaxToMinMaxOptionalVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamMinMaxToMinMaxOptionalVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
 			String optionalMethod = this.getOptionalMethod(methodInvocation);
-			if (optionalMethod == null) {
+			if (optionalMethod == null)
+			{
 				return methodInvocation;
 			}
 
 			Expression select = methodInvocation.getSelect();
-			if (!(select instanceof J.MethodInvocation streamCall)) {
+			if (!(select instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> arguments = methodInvocation.getArguments();
-			if (arguments.isEmpty()) {
+			if (arguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 
@@ -126,11 +138,14 @@ public class ECStreamMinMaxToMinMax extends Recipe {
 				.withArguments(List.of(comparator));
 		}
 
-		private String getOptionalMethod(J.MethodInvocation method) {
-			if (MIN_MATCHER.matches(method)) {
+		private String getOptionalMethod(J.MethodInvocation method)
+		{
+			if (MIN_MATCHER.matches(method))
+			{
 				return "minOptional";
 			}
-			if (MAX_MATCHER.matches(method)) {
+			if (MAX_MATCHER.matches(method))
+			{
 				return "maxOptional";
 			}
 			return null;

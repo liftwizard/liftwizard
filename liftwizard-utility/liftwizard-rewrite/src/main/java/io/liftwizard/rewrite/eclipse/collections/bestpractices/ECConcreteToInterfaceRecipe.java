@@ -56,8 +56,9 @@ import org.openrewrite.java.tree.TypeUtils;
  * <p>This transformation requires semantic analysis of the type system via JavaIsoVisitor,
  * not structural pattern matching.
  */
-public class ECConcreteToInterfaceRecipe extends Recipe {
-
+public class ECConcreteToInterfaceRecipe
+	extends Recipe
+{
 	@Option(
 		displayName = "Concrete type",
 		description = "Fully qualified name of the concrete Eclipse Collections implementation class.",
@@ -76,13 +77,15 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 	public ECConcreteToInterfaceRecipe(
 		@JsonProperty("concreteTypeFqn") String concreteTypeFqn,
 		@JsonProperty("interfaceTypeFqn") String interfaceTypeFqn
-	) {
+	)
+	{
 		this.concreteTypeFqn = concreteTypeFqn;
 		this.interfaceTypeFqn = interfaceTypeFqn;
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		String concreteSimpleName = this.getSimpleName(this.concreteTypeFqn);
 		String interfaceSimpleName = this.getSimpleName(this.interfaceTypeFqn);
 		String typeParams = concreteSimpleName.contains("Map") ? "<K, V>" : "<T>";
@@ -90,7 +93,8 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		String concreteSimpleName = this.getSimpleName(this.concreteTypeFqn);
 		String interfaceSimpleName = this.getSimpleName(this.interfaceTypeFqn);
 		String typeParams = concreteSimpleName.contains("Map") ? "<K, V>" : "<T>";
@@ -102,33 +106,39 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 		);
 	}
 
-	private String getSimpleName(String fullyQualifiedName) {
+	private String getSimpleName(String fullyQualifiedName)
+	{
 		int lastDot = fullyQualifiedName.lastIndexOf('.');
 		return lastDot >= 0 ? fullyQualifiedName.substring(lastDot + 1) : fullyQualifiedName;
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(10);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new ECConcreteToInterfaceVisitor(this.concreteTypeFqn, this.interfaceTypeFqn);
 	}
 
-	private static final class ECConcreteToInterfaceVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class ECConcreteToInterfaceVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private final String concreteTypeFqn;
 		private final String interfaceTypeFqn;
 		private final String interfaceSimpleName;
 
-		private ECConcreteToInterfaceVisitor(String concreteTypeFqn, String interfaceTypeFqn) {
+		private ECConcreteToInterfaceVisitor(String concreteTypeFqn, String interfaceTypeFqn)
+		{
 			this.concreteTypeFqn = Objects.requireNonNull(concreteTypeFqn);
 			this.interfaceTypeFqn = Objects.requireNonNull(interfaceTypeFqn);
 			int lastDot = interfaceTypeFqn.lastIndexOf('.');
@@ -139,7 +149,8 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 		public J.VariableDeclarations visitVariableDeclarations(
 			J.VariableDeclarations multiVariable,
 			ExecutionContext ctx
-		) {
+		)
+		{
 			boolean isField = multiVariable
 				.getVariables()
 				.stream()
@@ -148,11 +159,13 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 
 			J.VariableDeclarations vd = super.visitVariableDeclarations(multiVariable, ctx);
 
-			if (vd.getTypeExpression() == null || !this.isConcreteType(vd.getTypeExpression())) {
+			if (vd.getTypeExpression() == null || !this.isConcreteType(vd.getTypeExpression()))
+			{
 				return vd;
 			}
 
-			if (isField && !isFinal) {
+			if (isField && !isFinal)
+			{
 				return vd;
 			}
 
@@ -161,14 +174,16 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 				.stream()
 				.anyMatch((variable) -> variable.getInitializer() != null);
 
-			if (!hasInitializer) {
+			if (!hasInitializer)
+			{
 				return vd;
 			}
 
 			TypeTree typeExpr = vd.getTypeExpression();
 			TypeTree newTypeExpr = this.getNewTypeExpr(typeExpr);
 
-			if (newTypeExpr == null) {
+			if (newTypeExpr == null)
+			{
 				throw new AssertionError("Unexpected type expression: " + typeExpr.getClass().getSimpleName());
 			}
 
@@ -177,14 +192,17 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 			return vd.withTypeExpression(newTypeExpr);
 		}
 
-		private TypeTree getNewTypeExpr(TypeTree typeExpr) {
-			if (typeExpr instanceof J.Identifier) {
-				return ((J.Identifier) typeExpr).withSimpleName(this.interfaceSimpleName).withType(
-					JavaType.buildType(this.interfaceTypeFqn)
-				);
+		private TypeTree getNewTypeExpr(TypeTree typeExpr)
+		{
+			if (typeExpr instanceof J.Identifier)
+			{
+				return ((J.Identifier) typeExpr)
+					.withSimpleName(this.interfaceSimpleName)
+					.withType(JavaType.buildType(this.interfaceTypeFqn));
 			}
 
-			if (typeExpr instanceof J.FieldAccess) {
+			if (typeExpr instanceof J.FieldAccess)
+			{
 				return new J.Identifier(
 					Tree.randomId(),
 					typeExpr.getPrefix(),
@@ -196,20 +214,23 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 				);
 			}
 
-			if (!(typeExpr instanceof J.ParameterizedType paramType)) {
+			if (!(typeExpr instanceof J.ParameterizedType paramType))
+			{
 				throw new AssertionError("Unexpected type expression: " + typeExpr.getClass().getSimpleName());
 			}
 
 			J clazz = paramType.getClazz();
 
-			if (clazz instanceof J.Identifier) {
-				J.Identifier newClazz = ((J.Identifier) clazz).withSimpleName(this.interfaceSimpleName).withType(
-					JavaType.buildType(this.interfaceTypeFqn)
-				);
+			if (clazz instanceof J.Identifier)
+			{
+				J.Identifier newClazz = ((J.Identifier) clazz)
+					.withSimpleName(this.interfaceSimpleName)
+					.withType(JavaType.buildType(this.interfaceTypeFqn));
 				return paramType.withClazz(newClazz);
 			}
 
-			if (clazz instanceof J.FieldAccess) {
+			if (clazz instanceof J.FieldAccess)
+			{
 				J.Identifier interfaceTypeIdent = new J.Identifier(
 					Tree.randomId(),
 					clazz.getPrefix(),
@@ -225,18 +246,23 @@ public class ECConcreteToInterfaceRecipe extends Recipe {
 			throw new AssertionError("Unexpected parameterized type class: " + clazz.getClass().getSimpleName());
 		}
 
-		private boolean isConcreteType(J typeExpression) {
+		private boolean isConcreteType(J typeExpression)
+		{
 			J currentExpression = typeExpression;
-			while (true) {
-				if (currentExpression instanceof J.Identifier identifier) {
+			while (true)
+			{
+				if (currentExpression instanceof J.Identifier identifier)
+				{
 					JavaType.FullyQualified type = TypeUtils.asFullyQualified(identifier.getType());
 					return type != null && this.concreteTypeFqn.equals(type.getFullyQualifiedName());
 				}
-				if (currentExpression instanceof J.ParameterizedType paramType) {
+				if (currentExpression instanceof J.ParameterizedType paramType)
+				{
 					currentExpression = paramType.getClazz();
 					continue;
 				}
-				if (currentExpression instanceof J.FieldAccess fieldAccess) {
+				if (currentExpression instanceof J.FieldAccess fieldAccess)
+				{
 					JavaType.FullyQualified type = TypeUtils.asFullyQualified(fieldAccess.getType());
 					return type != null && this.concreteTypeFqn.equals(type.getFullyQualifiedName());
 				}

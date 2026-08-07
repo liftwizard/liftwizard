@@ -50,15 +50,18 @@ import org.openrewrite.marker.Markers;
  * (they look like {@code int} literals). Adds type suffixes ({@code L}, {@code F}, {@code D}) when needed
  * to preserve type information.
  */
-public class UseVarForPrimitiveLiterals extends Recipe {
-
+public class UseVarForPrimitiveLiterals
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Use `var` for primitive and String literal assignments";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Replace explicit type declarations with `var` when the variable is initialized with a "
 			+ "literal value (primitive or String). Does not transform method return values, "
@@ -68,82 +71,100 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesJavaVersion<>(10), new UseVarForPrimitiveLiteralsVisitor());
 	}
 
-	private static final class UseVarForPrimitiveLiteralsVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class UseVarForPrimitiveLiteralsVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public VariableDeclarations visitVariableDeclarations(VariableDeclarations vd, ExecutionContext ctx) {
+		public VariableDeclarations visitVariableDeclarations(VariableDeclarations vd, ExecutionContext ctx)
+		{
 			VariableDeclarations result = super.visitVariableDeclarations(vd, ctx);
 
-			if (!this.isApplicable(result)) {
+			if (!this.isApplicable(result))
+			{
 				return result;
 			}
 
 			return this.transformToVar(result);
 		}
 
-		private boolean isApplicable(VariableDeclarations vd) {
+		private boolean isApplicable(VariableDeclarations vd)
+		{
 			List<NamedVariable> variables = vd.getVariables();
-			if (variables.size() != 1) {
+			if (variables.size() != 1)
+			{
 				return false;
 			}
 
 			NamedVariable variable = variables.get(0);
 
 			Expression initializer = variable.getInitializer();
-			if (initializer == null) {
+			if (initializer == null)
+			{
 				return false;
 			}
 
-			if (!(initializer instanceof Literal)) {
+			if (!(initializer instanceof Literal))
+			{
 				return false;
 			}
 
-			if (Literal.isLiteralValue(initializer, null)) {
+			if (Literal.isLiteralValue(initializer, null))
+			{
 				return false;
 			}
 
 			var typeTree = vd.getTypeExpression();
-			if (typeTree == null) {
+			if (typeTree == null)
+			{
 				return false;
 			}
 
-			if (typeTree instanceof Identifier typeId) {
+			if (typeTree instanceof Identifier typeId)
+			{
 				// Groovy `def x = 1` parses to an empty type identifier plus a RedundantDef marker that prints the
 				// `def` keyword. There is no type to replace, so writing `var` into the type expression splices it
 				// onto the front of the variable name instead: `def varx = 1`.
-				if (typeId.getSimpleName().isEmpty()) {
+				if (typeId.getSimpleName().isEmpty())
+				{
 					return false;
 				}
 
-				if ("var".equals(typeId.getSimpleName())) {
+				if ("var".equals(typeId.getSimpleName()))
+				{
 					return false;
 				}
 			}
 
-			if (this.isFieldDeclaration()) {
+			if (this.isFieldDeclaration())
+			{
 				return false;
 			}
 
 			JavaType type = vd.getType();
-			if (type == null) {
+			if (type == null)
+			{
 				return false;
 			}
 
 			// Skip byte and short: their literals look like int literals
-			if (type == Primitive.Byte || type == Primitive.Short) {
+			if (type == Primitive.Byte || type == Primitive.Short)
+			{
 				return false;
 			}
 
 			return true;
 		}
 
-		private boolean isFieldDeclaration() {
+		private boolean isFieldDeclaration()
+		{
 			Cursor parent = this.getCursor().getParentTreeCursor();
-			if (parent.getParent() == null) {
+			if (parent.getParent() == null)
+			{
 				return false;
 			}
 			Cursor grandparent = parent.getParentTreeCursor();
@@ -153,7 +174,8 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 			);
 		}
 
-		private VariableDeclarations transformToVar(VariableDeclarations vd) {
+		private VariableDeclarations transformToVar(VariableDeclarations vd)
+		{
 			NamedVariable variable = vd.getVariables().get(0);
 			Literal literal = (Literal) variable.getInitializer();
 
@@ -170,7 +192,8 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 			);
 
 			Literal expandedLiteral = this.maybeAddTypeSuffix(vd, literal);
-			if (expandedLiteral != literal) {
+			if (expandedLiteral != literal)
+			{
 				NamedVariable newVariable = variable.withInitializer(expandedLiteral);
 				return vd.withTypeExpression(varIdentifier).withVariables(Lists.fixedSize.of(newVariable));
 			}
@@ -178,19 +201,23 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 			return vd.withTypeExpression(varIdentifier);
 		}
 
-		private Literal maybeAddTypeSuffix(VariableDeclarations vd, Literal literal) {
+		private Literal maybeAddTypeSuffix(VariableDeclarations vd, Literal literal)
+		{
 			String valueSource = literal.getValueSource();
-			if (valueSource == null) {
+			if (valueSource == null)
+			{
 				return literal;
 			}
 
 			JavaType type = vd.getType();
 
-			if (type == Primitive.Long && !valueSource.endsWith("l") && !valueSource.endsWith("L")) {
+			if (type == Primitive.Long && !valueSource.endsWith("l") && !valueSource.endsWith("L"))
+			{
 				return literal.withValueSource(valueSource + "L");
 			}
 
-			if (type == Primitive.Float && !valueSource.endsWith("f") && !valueSource.endsWith("F")) {
+			if (type == Primitive.Float && !valueSource.endsWith("f") && !valueSource.endsWith("F"))
+			{
 				return literal.withValueSource(valueSource + "F");
 			}
 
@@ -199,7 +226,8 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 				&& !valueSource.endsWith("d")
 				&& !valueSource.endsWith("D")
 				&& !valueSource.contains(".")
-			) {
+			)
+			{
 				return literal.withValueSource(valueSource + "D");
 			}
 

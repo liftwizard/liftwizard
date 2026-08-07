@@ -28,10 +28,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class ManagedTempDirectoryTest {
-
+class ManagedTempDirectoryTest
+{
 	@Test
-	void createTempDirectory_shouldCreateDirectoryThatExistsAndIsWritable() throws IOException {
+	void createTempDirectory_shouldCreateDirectoryThatExistsAndIsWritable()
+		throws IOException
+	{
 		Path tempDir = ManagedTempDirectory.createTempDirectory("test-prefix");
 
 		assertThat(tempDir).exists().isDirectory();
@@ -42,8 +44,11 @@ class ManagedTempDirectoryTest {
 	}
 
 	@Test
-	void create_shouldReturnManagedInstanceWithAccessiblePath() throws IOException {
-		try (ManagedTempDirectory managedDir = ManagedTempDirectory.create("managed-test")) {
+	void create_shouldReturnManagedInstanceWithAccessiblePath()
+		throws IOException
+	{
+		try (ManagedTempDirectory managedDir = ManagedTempDirectory.create("managed-test"))
+		{
 			Path tempDir = managedDir.getPath();
 
 			assertThat(tempDir).exists().isDirectory();
@@ -56,7 +61,9 @@ class ManagedTempDirectoryTest {
 	}
 
 	@Test
-	void close_shouldDeleteDirectoryAndContents() throws IOException {
+	void close_shouldDeleteDirectoryAndContents()
+		throws IOException
+	{
 		ManagedTempDirectory managedDir = ManagedTempDirectory.create("close-test");
 		Path tempDir = managedDir.getPath();
 		Path testFile = tempDir.resolve("test-file.txt");
@@ -69,7 +76,9 @@ class ManagedTempDirectoryTest {
 	}
 
 	@Test
-	void close_shouldBeIdempotent() throws IOException {
+	void close_shouldBeIdempotent()
+		throws IOException
+	{
 		ManagedTempDirectory managedDir = ManagedTempDirectory.create("idempotent-test");
 
 		managedDir.close();
@@ -78,7 +87,9 @@ class ManagedTempDirectoryTest {
 	}
 
 	@Test
-	void tryClose_shouldReturnTrueOnSuccess() throws IOException {
+	void tryClose_shouldReturnTrueOnSuccess()
+		throws IOException
+	{
 		ManagedTempDirectory managedDir = ManagedTempDirectory.create("try-close-test");
 
 		boolean result = managedDir.tryClose();

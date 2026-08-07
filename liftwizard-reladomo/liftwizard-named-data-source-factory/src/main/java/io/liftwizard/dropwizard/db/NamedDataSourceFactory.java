@@ -28,8 +28,9 @@ import io.dropwizard.db.ManagedDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NamedDataSourceFactory extends DataSourceFactory {
-
+public class NamedDataSourceFactory
+	extends DataSourceFactory
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(NamedDataSourceFactory.class);
 
 	private @Valid @NotNull String name;
@@ -37,18 +38,22 @@ public class NamedDataSourceFactory extends DataSourceFactory {
 	private ManagedDataSource managedDataSource;
 
 	@JsonProperty
-	public String getName() {
+	public String getName()
+	{
 		return this.name;
 	}
 
 	@JsonProperty
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
 	@Override
-	public final ManagedDataSource build(MetricRegistry metricRegistry, String equalNameParameter) {
-		if (!Objects.equals(this.name, equalNameParameter)) {
+	public final ManagedDataSource build(MetricRegistry metricRegistry, String equalNameParameter)
+	{
+		if (!Objects.equals(this.name, equalNameParameter))
+		{
 			LOGGER.warn(
 				"The name of the data source ({}) does not match the name parameter ({}).",
 				this.name,
@@ -59,8 +64,10 @@ public class NamedDataSourceFactory extends DataSourceFactory {
 		return super.build(metricRegistry, equalNameParameter);
 	}
 
-	public ManagedDataSource build(MetricRegistry metricRegistry) {
-		if (this.managedDataSource == null) {
+	public ManagedDataSource build(MetricRegistry metricRegistry)
+	{
+		if (this.managedDataSource == null)
+		{
 			this.managedDataSource = this.build(metricRegistry, this.name);
 		}
 
@@ -68,7 +75,8 @@ public class NamedDataSourceFactory extends DataSourceFactory {
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return this.name;
 	}
 }

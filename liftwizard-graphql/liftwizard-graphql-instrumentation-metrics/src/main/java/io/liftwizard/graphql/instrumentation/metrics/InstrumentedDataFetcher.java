@@ -41,8 +41,9 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import io.liftwizard.graphql.data.fetcher.async.LiftwizardAsyncDataFetcher;
 
-public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
-
+public class InstrumentedDataFetcher<T>
+	implements DataFetcher<T>
+{
 	@Nonnull
 	private final MetricRegistry metricRegistry;
 
@@ -104,7 +105,8 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 		@Nonnull String fieldName,
 		@Nonnull String typeName,
 		@Nonnull String path
-	) {
+	)
+	{
 		this.metricRegistry = Objects.requireNonNull(metricRegistry);
 		this.clock = Objects.requireNonNull(clock);
 		this.dataFetcher = Objects.requireNonNull(dataFetcher);
@@ -129,22 +131,28 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 		this.exceptionMeterPath = this.getPathExceptionsMeter();
 	}
 
-	private DataFetcher<?> getAnnotatedDataFetcher() {
+	private DataFetcher<?> getAnnotatedDataFetcher()
+	{
 		return this.dataFetcher instanceof LiftwizardAsyncDataFetcher asyncDataFetcher
 			? asyncDataFetcher.getWrappedDataFetcher()
 			: this.dataFetcher;
 	}
 
 	@Nullable
-	private <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+	private <A extends Annotation> A getAnnotation(Class<A> annotationClass)
+	{
 		DataFetcher<?> annotatedDataFetcher = this.getAnnotatedDataFetcher();
-		try {
+		try
+		{
 			Method getMethod = annotatedDataFetcher.getClass().getMethod("get", DataFetchingEnvironment.class);
 			A methodAnnotation = getMethod.getAnnotation(annotationClass);
-			if (methodAnnotation != null) {
+			if (methodAnnotation != null)
+			{
 				return methodAnnotation;
 			}
-		} catch (NoSuchMethodException e) {
+		}
+		catch (NoSuchMethodException e)
+		{
 			throw new RuntimeException(e);
 		}
 
@@ -152,8 +160,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Timer> getTimer(String suffix) {
-		if (this.timedAnnotation == null) {
+	private Optional<Timer> getTimer(String suffix)
+	{
+		if (this.timedAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -168,8 +178,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Timer> getFieldTimer(String suffix) {
-		if (this.timedAnnotation == null) {
+	private Optional<Timer> getFieldTimer(String suffix)
+	{
+		if (this.timedAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -179,8 +191,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Timer> getPathTimer(String suffix) {
-		if (this.timedAnnotation == null) {
+	private Optional<Timer> getPathTimer(String suffix)
+	{
+		if (this.timedAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -190,8 +204,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Meter> getMeter() {
-		if (this.meteredAnnotation == null) {
+	private Optional<Meter> getMeter()
+	{
+		if (this.meteredAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -205,8 +221,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Meter> getFieldMeter() {
-		if (this.meteredAnnotation == null) {
+	private Optional<Meter> getFieldMeter()
+	{
+		if (this.meteredAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -216,8 +234,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Meter> getPathMeter() {
-		if (this.meteredAnnotation == null) {
+	private Optional<Meter> getPathMeter()
+	{
+		if (this.meteredAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -227,8 +247,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Meter> getExceptionsMeter() {
-		if (this.exceptionMeteredAnnotation == null) {
+	private Optional<Meter> getExceptionsMeter()
+	{
+		if (this.exceptionMeteredAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -243,8 +265,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Meter> getFieldExceptionsMeter() {
-		if (this.exceptionMeteredAnnotation == null) {
+	private Optional<Meter> getFieldExceptionsMeter()
+	{
+		if (this.exceptionMeteredAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -261,8 +285,10 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Nonnull
-	private Optional<Meter> getPathExceptionsMeter() {
-		if (this.exceptionMeteredAnnotation == null) {
+	private Optional<Meter> getPathExceptionsMeter()
+	{
+		if (this.exceptionMeteredAnnotation == null)
+		{
 			return Optional.empty();
 		}
 
@@ -278,22 +304,28 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 	}
 
 	@Override
-	public T get(DataFetchingEnvironment environment) throws Exception {
+	public T get(DataFetchingEnvironment environment)
+		throws Exception
+	{
 		Instant startTime = Instant.now();
 		Optional<Context> fetcherSyncClock = this.timerFetcherSync.map(Timer::time);
 		Optional<Context> fieldSyncClock = this.timerFieldSync.map(Timer::time);
 		Optional<Context> pathSyncClock = this.timerPathSync.map(Timer::time);
 
-		try {
+		try
+		{
 			T result = this.dataFetcher.get(environment);
-			if (result instanceof CompletionStage<?> completionStage) {
+			if (result instanceof CompletionStage<?> completionStage)
+			{
 				// If a fetcher never returns CompletionStage, we'll never record async timings
-				completionStage.whenComplete((success, throwable) -> {
+				completionStage.whenComplete((success, throwable) ->
+				{
 					Optional<Timer> timerFetcherAsync = this.getTimer("async");
 					Optional<Timer> timerFieldAsync = this.getFieldTimer("async");
 					Optional<Timer> timerPathAsync = this.getPathTimer("async");
 
-					if (this.timedAnnotation != null) {
+					if (this.timedAnnotation != null)
+					{
 						Instant stopTime = this.clock.instant();
 						Duration duration = Duration.between(startTime, stopTime);
 						timerFetcherAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);
@@ -301,7 +333,8 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 						timerPathAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);
 					}
 
-					if (throwable != null) {
+					if (throwable != null)
+					{
 						this.exceptionMeterFetcher.ifPresent(Meter::mark);
 						this.exceptionMeterField.ifPresent(Meter::mark);
 						this.exceptionMeterPath.ifPresent(Meter::mark);
@@ -312,7 +345,9 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 					this.meterField.ifPresent((meter) -> meter.mark(size));
 					this.meterPath.ifPresent((meter) -> meter.mark(size));
 				});
-			} else {
+			}
+			else
+			{
 				int size = result instanceof Collection collection ? collection.size() : 1;
 				this.meterFetcher.ifPresent((meter) -> meter.mark(size));
 				this.meterField.ifPresent((meter) -> meter.mark(size));
@@ -320,29 +355,37 @@ public class InstrumentedDataFetcher<T> implements DataFetcher<T> {
 			}
 
 			return result;
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			this.exceptionMeterFetcher.ifPresent(Meter::mark);
 			this.exceptionMeterField.ifPresent(Meter::mark);
 			this.exceptionMeterPath.ifPresent(Meter::mark);
 			throw e;
-		} finally {
+		}
+		finally
+		{
 			fetcherSyncClock.ifPresent(Context::stop);
 			fieldSyncClock.ifPresent(Context::stop);
 			pathSyncClock.ifPresent(Context::stop);
 		}
 	}
 
-	private static String chooseName(String explicitName, boolean absolute, Class<?> aClass, String... suffixes) {
+	private static String chooseName(String explicitName, boolean absolute, Class<?> aClass, String... suffixes)
+	{
 		String metricName = InstrumentedDataFetcher.getMetricName(explicitName, absolute, aClass);
 		return MetricRegistry.name(metricName, suffixes);
 	}
 
-	private static String getMetricName(String explicitName, boolean absolute, Class<?> aClass) {
-		if (explicitName == null || explicitName.isEmpty()) {
+	private static String getMetricName(String explicitName, boolean absolute, Class<?> aClass)
+	{
+		if (explicitName == null || explicitName.isEmpty())
+		{
 			return MetricRegistry.name(aClass, "get");
 		}
 
-		if (absolute) {
+		if (absolute)
+		{
 			return explicitName;
 		}
 

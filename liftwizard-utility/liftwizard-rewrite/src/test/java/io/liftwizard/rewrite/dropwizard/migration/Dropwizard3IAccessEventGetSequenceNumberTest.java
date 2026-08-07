@@ -24,36 +24,38 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3IAccessEventGetSequenceNumberTest implements AbstractRewriteFixtures, RewriteTest {
-
+class Dropwizard3IAccessEventGetSequenceNumberTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new Dropwizard3IAccessEventGetSequenceNumber())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package ch.qos.logback.access.spi;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new Dropwizard3IAccessEventGetSequenceNumber()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package ch.qos.logback.access.spi;
 
-						public interface IAccessEvent {
-							String getRequestURL();
-							long getSequenceNumber();
-						}
-						"""
-					)
-			);
+					public interface IAccessEvent {
+						String getRequestURL();
+						long getSequenceNumber();
+					}
+					"""
+				)
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

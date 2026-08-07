@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.clock;
 
-public interface ClockFactoryProvider {
+public interface ClockFactoryProvider
+{
 	ClockFactory getClockFactory();
 }

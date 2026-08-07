@@ -34,17 +34,20 @@ import org.openrewrite.java.ShortenFullyQualifiedTypeReferences;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 
-public class ECArraysAsListToWith extends Recipe {
-
+public class ECArraysAsListToWith
+	extends Recipe
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`FastList.newList(Arrays.asList())` → `Lists.mutable.with()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Replace `FastList.newList(Arrays.asList())`, `UnifiedSet.newSet(Arrays.asList())`, "
 			+ "`HashBag.newBag(Arrays.asList())`, `TreeSortedSet.newSet(Arrays.asList())`, and "
@@ -56,22 +59,26 @@ public class ECArraysAsListToWith extends Recipe {
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(15);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new ArraysAsListToWithVisitor();
 	}
 
-	private static final class ArraysAsListToWithVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class ArraysAsListToWithVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		private static final MethodMatcher FAST_LIST_NEW_LIST = new MethodMatcher(
 			"org.eclipse.collections.impl.list.mutable.FastList newList(java.lang.Iterable)"
 		);
@@ -96,63 +103,85 @@ public class ECArraysAsListToWith extends Recipe {
 		private static final MethodMatcher ARRAYS_AS_LIST = new MethodMatcher("java.util.Arrays asList(..)");
 
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
 			String factoryClass = null;
 			String factoryMethod = null;
 			boolean hasComparator = false;
 
-			if (FAST_LIST_NEW_LIST.matches(mi)) {
+			if (FAST_LIST_NEW_LIST.matches(mi))
+			{
 				factoryClass = "Lists";
 				factoryMethod = "mutable";
-			} else if (UNIFIED_SET_NEW_SET.matches(mi)) {
+			}
+			else if (UNIFIED_SET_NEW_SET.matches(mi))
+			{
 				factoryClass = "Sets";
 				factoryMethod = "mutable";
-			} else if (HASH_BAG_NEW_BAG.matches(mi)) {
+			}
+			else if (HASH_BAG_NEW_BAG.matches(mi))
+			{
 				factoryClass = "Bags";
 				factoryMethod = "mutable";
-			} else if (TREE_SORTED_SET_NEW_SET.matches(mi)) {
+			}
+			else if (TREE_SORTED_SET_NEW_SET.matches(mi))
+			{
 				factoryClass = "SortedSets";
 				factoryMethod = "mutable";
-			} else if (TREE_SORTED_SET_NEW_SET_WITH_COMPARATOR.matches(mi)) {
+			}
+			else if (TREE_SORTED_SET_NEW_SET_WITH_COMPARATOR.matches(mi))
+			{
 				factoryClass = "SortedSets";
 				factoryMethod = "mutable";
 				hasComparator = true;
-			} else if (TREE_BAG_NEW_BAG.matches(mi)) {
+			}
+			else if (TREE_BAG_NEW_BAG.matches(mi))
+			{
 				factoryClass = "SortedBags";
 				factoryMethod = "mutable";
-			} else if (TREE_BAG_NEW_BAG_WITH_COMPARATOR.matches(mi)) {
+			}
+			else if (TREE_BAG_NEW_BAG_WITH_COMPARATOR.matches(mi))
+			{
 				factoryClass = "SortedBags";
 				factoryMethod = "mutable";
 				hasComparator = true;
 			}
 
-			if (factoryClass == null) {
+			if (factoryClass == null)
+			{
 				return mi;
 			}
 
 			Expression argument;
 			Expression comparatorArg = null;
 
-			if (hasComparator) {
-				if (mi.getArguments().size() != 2) {
+			if (hasComparator)
+			{
+				if (mi.getArguments().size() != 2)
+				{
 					return mi;
 				}
 				comparatorArg = mi.getArguments().get(0);
 				argument = mi.getArguments().get(1);
-			} else {
-				if (mi.getArguments().size() != 1) {
+			}
+			else
+			{
+				if (mi.getArguments().size() != 1)
+				{
 					return mi;
 				}
 				argument = mi.getArguments().get(0);
 			}
 
-			if (!(argument instanceof J.MethodInvocation arraysAsListCall)) {
+			if (!(argument instanceof J.MethodInvocation arraysAsListCall))
+			{
 				return mi;
 			}
 
-			if (!ARRAYS_AS_LIST.matches(arraysAsListCall)) {
+			if (!ARRAYS_AS_LIST.matches(arraysAsListCall))
+			{
 				return mi;
 			}
 
@@ -163,7 +192,8 @@ public class ECArraysAsListToWith extends Recipe {
 			this.maybeAddImport(factoryImport);
 
 			String templateSource;
-			if (hasComparator) {
+			if (hasComparator)
+			{
 				String varargsPlaceholder = this.buildVarargsPlaceholder(varargsElements);
 				templateSource =
 					factoryClass
@@ -172,7 +202,9 @@ public class ECArraysAsListToWith extends Recipe {
 					+ ".with(#{any(java.util.Comparator)}"
 					+ (varargsPlaceholder.isEmpty() ? "" : ", " + varargsPlaceholder)
 					+ ")";
-			} else {
+			}
+			else
+			{
 				String varargsPlaceholder = this.buildVarargsPlaceholder(varargsElements);
 				templateSource = factoryClass + "." + factoryMethod + ".with(" + varargsPlaceholder + ")";
 			}
@@ -184,13 +216,17 @@ public class ECArraysAsListToWith extends Recipe {
 				.build();
 
 			Object[] templateArguments;
-			if (hasComparator) {
+			if (hasComparator)
+			{
 				templateArguments = new Object[varargsElements.size() + 1];
 				templateArguments[0] = comparatorArg;
-				for (int i = 0; i < varargsElements.size(); i++) {
+				for (int i = 0; i < varargsElements.size(); i++)
+				{
 					templateArguments[i + 1] = varargsElements.get(i);
 				}
-			} else {
+			}
+			else
+			{
 				templateArguments = varargsElements.toArray();
 			}
 
@@ -203,8 +239,10 @@ public class ECArraysAsListToWith extends Recipe {
 			return replacement;
 		}
 
-		private String buildVarargsPlaceholder(List<Expression> varargsElements) {
-			if (varargsElements.isEmpty()) {
+		private String buildVarargsPlaceholder(List<Expression> varargsElements)
+		{
+			if (varargsElements.isEmpty())
+			{
 				return "";
 			}
 			return varargsElements

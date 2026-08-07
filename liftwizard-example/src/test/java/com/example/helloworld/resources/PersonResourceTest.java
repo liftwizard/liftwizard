@@ -23,8 +23,8 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PersonResourceTest {
-
+class PersonResourceTest
+{
 	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 
 	@RegisterExtension
@@ -59,7 +59,9 @@ class PersonResourceTest {
 
 	@Test
 	@ReladomoTestFile("test-data/person.txt")
-	void getPersonSuccess() throws JSONException {
+	void getPersonSuccess()
+		throws JSONException
+	{
 		Response response = this.getPersonResponse(1);
 		this.assertResponseStatus(response, Status.OK);
 		String jsonResponse = response.readEntity(String.class);
@@ -67,18 +69,21 @@ class PersonResourceTest {
 		// <editor-fold desc="Expected JSON">
 		// language=JSON
 		var expected = """
-			{
-			  "id"      : 1,
-			  "fullName": "Full Name",
-			  "jobTitle": "Job Title"
-			}\s""";
+		{
+			"id": 1,
+			"fullName": "Full Name",
+			"jobTitle": "Job Title"
+		}
+		""";
 		// </editor-fold>
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}
 
 	@Test
 	@ReladomoTestFile("test-data/person.txt")
-	void getPersonNotFound() throws JSONException {
+	void getPersonNotFound()
+		throws JSONException
+	{
 		Response response = this.getPersonResponse(2);
 		this.assertResponseStatus(response, Status.NOT_FOUND);
 		String jsonResponse = response.readEntity(String.class);
@@ -86,16 +91,19 @@ class PersonResourceTest {
 		// <editor-fold desc="Expected JSON">
 		// language=JSON
 		var expected = """
-			{
-			  "code"   : 404,
-			  "message": "No such user."
-			}\s""";
+		{
+			"code": 404,
+			"message": "No such user."
+		}
+		""";
 		// </editor-fold>
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}
 
-	private Response getPersonResponse(int personId) {
-		return this.dropwizardAppExtension.client()
+	private Response getPersonResponse(int personId)
+	{
+		return this.dropwizardAppExtension
+			.client()
 			.target("http://localhost:{port}/people/{personId}")
 			.resolveTemplate("port", this.dropwizardAppExtension.getLocalPort())
 			.resolveTemplate("personId", personId)
@@ -103,7 +111,8 @@ class PersonResourceTest {
 			.get();
 	}
 
-	private void assertResponseStatus(@Nonnull Response response, Status status) {
+	private void assertResponseStatus(@Nonnull Response response, Status status)
+	{
 		response.bufferEntity();
 		String entityAsString = response.readEntity(String.class);
 		assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);

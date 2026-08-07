@@ -26,18 +26,22 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class RecursiveDirectoryDeleter {
-
+public final class RecursiveDirectoryDeleter
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecursiveDirectoryDeleter.class);
 
-	private RecursiveDirectoryDeleter() {
+	private RecursiveDirectoryDeleter()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 
-	public static void deleteRecursively(@Nonnull Path directory) throws IOException {
+	public static void deleteRecursively(@Nonnull Path directory)
+		throws IOException
+	{
 		Objects.requireNonNull(directory, "directory cannot be null");
 
-		if (!Files.exists(directory)) {
+		if (!Files.exists(directory))
+		{
 			LOGGER.debug("Directory {} does not exist, skipping deletion", directory);
 			return;
 		}
@@ -46,18 +50,23 @@ public final class RecursiveDirectoryDeleter {
 		Files.walkFileTree(directory, new DeleteAllFilesVisitor());
 	}
 
-	public static boolean tryDeleteRecursively(@Nonnull Path directory) {
+	public static boolean tryDeleteRecursively(@Nonnull Path directory)
+	{
 		Objects.requireNonNull(directory, "directory cannot be null");
 
-		if (!Files.exists(directory)) {
+		if (!Files.exists(directory))
+		{
 			LOGGER.debug("Directory {} does not exist, skipping deletion", directory);
 			return true;
 		}
 
-		try {
+		try
+		{
 			deleteRecursively(directory);
 			return true;
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			LOGGER.warn("Failed to delete directory {}: {}", directory, e.getMessage());
 			LOGGER.debug("Exception details:", e);
 			return false;

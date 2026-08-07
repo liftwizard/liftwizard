@@ -35,13 +35,16 @@ import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
 
-public class InstantCoercing implements Coercing<Instant, String> {
-
+public class InstantCoercing
+	implements Coercing<Instant, String>
+{
 	public static final InstantCoercing INSTANCE = new InstantCoercing();
 
 	@Nonnull
-	private static String typeName(@Nullable Object input) {
-		if (input == null) {
+	private static String typeName(@Nullable Object input)
+	{
+		if (input == null)
+		{
 			return "null";
 		}
 		return input.getClass().getSimpleName();
@@ -49,11 +52,15 @@ public class InstantCoercing implements Coercing<Instant, String> {
 
 	@Nonnull
 	@Override
-	public String serialize(@Nonnull Object input) {
+	public String serialize(@Nonnull Object input)
+	{
 		Instant instant = InstantCoercing.getInstant(input);
-		try {
+		try
+		{
 			return DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneOffset.UTC).format(instant);
-		} catch (DateTimeException e) {
+		}
+		catch (DateTimeException e)
+		{
 			throw new CoercingSerializeException(
 				"Unable to turn TemporalAccessor into OffsetDateTime because of : '" + e.getMessage() + "'.",
 				e
@@ -61,24 +68,30 @@ public class InstantCoercing implements Coercing<Instant, String> {
 		}
 	}
 
-	private static Instant getInstant(Object input) {
-		if (input instanceof Instant instant) {
+	private static Instant getInstant(Object input)
+	{
+		if (input instanceof Instant instant)
+		{
 			return instant;
 		}
 
-		if (input instanceof OffsetDateTime offsetDateTime) {
+		if (input instanceof OffsetDateTime offsetDateTime)
+		{
 			return offsetDateTime.toInstant();
 		}
 
-		if (input instanceof ZonedDateTime zonedDateTime) {
+		if (input instanceof ZonedDateTime zonedDateTime)
+		{
 			return zonedDateTime.toInstant();
 		}
 
-		if (input instanceof Date date) {
+		if (input instanceof Date date)
+		{
 			return date.toInstant();
 		}
 
-		if (input instanceof String) {
+		if (input instanceof String)
+		{
 			String inputString = input.toString();
 			OffsetDateTime parsedOffsetDateTime = InstantCoercing.parseOffsetDateTime(
 				inputString,
@@ -94,20 +107,25 @@ public class InstantCoercing implements Coercing<Instant, String> {
 	}
 
 	@Override
-	public Instant parseValue(@Nonnull Object input) {
-		if (input instanceof Instant instant) {
+	public Instant parseValue(@Nonnull Object input)
+	{
+		if (input instanceof Instant instant)
+		{
 			return instant;
 		}
 
-		if (input instanceof OffsetDateTime offsetDateTime) {
+		if (input instanceof OffsetDateTime offsetDateTime)
+		{
 			return offsetDateTime.toInstant();
 		}
 
-		if (input instanceof ZonedDateTime zonedDateTime) {
+		if (input instanceof ZonedDateTime zonedDateTime)
+		{
 			return zonedDateTime.toOffsetDateTime().toInstant();
 		}
 
-		if (input instanceof String) {
+		if (input instanceof String)
+		{
 			String inputString = input.toString();
 			OffsetDateTime parsedOffsetDateTime = InstantCoercing.parseOffsetDateTime(
 				inputString,
@@ -121,8 +139,10 @@ public class InstantCoercing implements Coercing<Instant, String> {
 	}
 
 	@Override
-	public Instant parseLiteral(@Nonnull Object input) {
-		if (!(input instanceof StringValue)) {
+	public Instant parseLiteral(@Nonnull Object input)
+	{
+		if (!(input instanceof StringValue))
+		{
 			String error = "Expected AST type 'StringValue' but was '%s'.".formatted(InstantCoercing.typeName(input));
 			throw new CoercingParseLiteralException(error);
 		}
@@ -135,10 +155,14 @@ public class InstantCoercing implements Coercing<Instant, String> {
 	private static OffsetDateTime parseOffsetDateTime(
 		@Nonnull String s,
 		@Nonnull Function<String, RuntimeException> exceptionMaker
-	) {
-		try {
+	)
+	{
+		try
+		{
 			return OffsetDateTime.parse(s, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-		} catch (DateTimeParseException e) {
+		}
+		catch (DateTimeParseException e)
+		{
 			String message = "Invalid RFC3339 value: '%s'. because of: '%s'".formatted(s, e.getMessage());
 			throw exceptionMaker.apply(message);
 		}

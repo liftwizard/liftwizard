@@ -24,37 +24,41 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class ECImplFactoryToApiFactoryTest implements AbstractRewriteFixtures, RewriteTest {
-
+class ECImplFactoryToApiFactoryTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new ECImplFactoryToApiFactory())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.classpath("eclipse-collections-api", "eclipse-collections")
-			);
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new ECImplFactoryToApiFactory()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.classpath("eclipse-collections-api", "eclipse-collections")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceWhenSameFileUsesNonFactoryUtilities() {
+	void doNotReplaceWhenSameFileUsesNonFactoryUtilities()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceWhenSameFileUsesNonFactoryUtilities/01"));
 	}
 
 	@Test
-	void doNotTransformWhenFileIsInImplFactoryPackage() {
+	void doNotTransformWhenFileIsInImplFactoryPackage()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotTransformWhenFileIsInImplFactoryPackage/01"));
 	}
 }

@@ -36,8 +36,8 @@ import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JsonTestDataParser {
-
+public class JsonTestDataParser
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsonTestDataParser.class);
 	private static final Class<?>[] NO_PARAMS = {};
 
@@ -50,29 +50,36 @@ public class JsonTestDataParser {
 	@Nonnull
 	private List<MithraDataObject> dataObjects = List.of();
 
-	public JsonTestDataParser(@Nonnull String filename) {
+	public JsonTestDataParser(@Nonnull String filename)
+	{
 		this.filename = filename;
 		this.className = this.extractClassNameFromFilename(filename);
 		this.parse();
 	}
 
 	@Nonnull
-	private String extractClassNameFromFilename(@Nonnull String filenameParam) {
+	private String extractClassNameFromFilename(@Nonnull String filenameParam)
+	{
 		String baseFilename = filenameParam;
-		if (baseFilename.contains("/")) {
+		if (baseFilename.contains("/"))
+		{
 			baseFilename = baseFilename.substring(baseFilename.lastIndexOf('/') + 1);
 		}
-		if (!baseFilename.endsWith(".json")) {
+		if (!baseFilename.endsWith(".json"))
+		{
 			throw new IllegalArgumentException("Filename must end with .json: " + this.filename);
 		}
 		return baseFilename.substring(0, baseFilename.length() - 5);
 	}
 
-	private void parse() {
+	private void parse()
+	{
 		LOGGER.debug("Parsing JSON file: {}", this.filename);
 
-		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(this.filename)) {
-			if (inputStream == null) {
+		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(this.filename))
+		{
+			if (inputStream == null)
+			{
 				throw new IllegalArgumentException("Could not find file: " + this.filename);
 			}
 
@@ -81,13 +88,15 @@ public class JsonTestDataParser {
 
 			JsonNode rootNode = objectMapper.readTree(inputStream);
 
-			if (!(rootNode instanceof ArrayNode arrayNode)) {
+			if (!(rootNode instanceof ArrayNode arrayNode))
+			{
 				throw new IllegalArgumentException(
 					"Expected a JSON array but found " + rootNode.getNodeType() + " in file: " + this.filename
 				);
 			}
 
-			if (arrayNode.isEmpty()) {
+			if (arrayNode.isEmpty())
+			{
 				return;
 			}
 
@@ -95,23 +104,29 @@ public class JsonTestDataParser {
 			Class<?> dataClass = Class.forName(dataClassName);
 			this.dataObjects = objectMapper.readerForListOf(dataClass).readValue(arrayNode);
 			this.convertTimestampsFromUtc(arrayNode);
-		} catch (IOException | ReflectiveOperationException e) {
+		}
+		catch (IOException | ReflectiveOperationException e)
+		{
 			throw new RuntimeException("Error reading JSON file: " + this.filename, e);
 		}
 	}
 
 	private void convertTimestampsFromUtc(ArrayNode arrayNode)
-		throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException
+	{
 		Class<?> finderClass = Class.forName(this.className + "Finder");
-		for (var rowIndex = 0; rowIndex < arrayNode.size(); rowIndex++) {
+		for (var rowIndex = 0; rowIndex < arrayNode.size(); rowIndex++)
+		{
 			JsonNode row = arrayNode.get(rowIndex);
 			MithraDataObject dataObject = this.dataObjects.get(rowIndex);
 			var fieldNames = row.fieldNames();
-			while (fieldNames.hasNext()) {
+			while (fieldNames.hasNext())
+			{
 				String fieldName = fieldNames.next();
 				Method attributeMethod = finderClass.getMethod(fieldName, NO_PARAMS);
 				Object attribute = attributeMethod.invoke(null);
-				if (attribute instanceof TimestampAttribute timestampAttribute) {
+				if (attribute instanceof TimestampAttribute timestampAttribute)
+				{
 					Timestamp timestamp = timestampAttribute.valueOf(dataObject);
 					timestampAttribute.setTimestampValue(
 						dataObject,
@@ -122,8 +137,10 @@ public class JsonTestDataParser {
 		}
 	}
 
-	private static Timestamp convertTimestampFromUtc(TimestampAttribute<?> timestampAttribute, Timestamp timestamp) {
-		if (timestamp == null) {
+	private static Timestamp convertTimestampFromUtc(TimestampAttribute<?> timestampAttribute, Timestamp timestamp)
+	{
+		if (timestamp == null)
+		{
 			return null;
 		}
 		LocalDateTime utcDateTime = LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC);
@@ -131,19 +148,22 @@ public class JsonTestDataParser {
 			timestampAttribute.isAsOfAttributeTo()
 			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
 				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
-		) {
+		)
+		{
 			return timestampAttribute.getAsOfAttributeInfinity();
 		}
 		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
 	}
 
 	@Nonnull
-	public String getClassName() {
+	public String getClassName()
+	{
 		return this.className;
 	}
 
 	@Nonnull
-	public List<MithraDataObject> getDataObjects() {
+	public List<MithraDataObject> getDataObjects()
+	{
 		return this.dataObjects;
 	}
 }

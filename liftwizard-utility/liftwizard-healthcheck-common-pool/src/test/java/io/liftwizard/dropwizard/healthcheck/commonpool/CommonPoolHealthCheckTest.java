@@ -28,19 +28,21 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CommonPoolHealthCheckTest {
-
+class CommonPoolHealthCheckTest
+{
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
 	@Test
-	void healthy() {
+	void healthy()
+	{
 		Result result = new CommonPoolHealthCheck().check();
 		assertThat(result.isHealthy()).as(result.toString()).isTrue();
 	}
 
 	@Test
-	void unhealthy() {
+	void unhealthy()
+	{
 		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
@@ -53,7 +55,8 @@ class CommonPoolHealthCheckTest {
 	}
 
 	@Test
-	void allow() {
+	void allow()
+	{
 		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
@@ -65,7 +68,8 @@ class CommonPoolHealthCheckTest {
 	}
 
 	@Test
-	void ban() {
+	void ban()
+	{
 		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
@@ -78,7 +82,8 @@ class CommonPoolHealthCheckTest {
 	}
 
 	@Test
-	void both() {
+	void both()
+	{
 		var commonPoolHealthCheck = new CommonPoolHealthCheck(
 			"main",
 			Lists.immutable.with(State.RUNNABLE),
@@ -89,7 +94,8 @@ class CommonPoolHealthCheckTest {
 		assertThat(result.isHealthy()).as(result.toString()).isTrue();
 	}
 
-	private static ImmutableList<Pattern> pattern(String string) {
+	private static ImmutableList<Pattern> pattern(String string)
+	{
 		return Lists.immutable.with(Pattern.compile(string));
 	}
 }

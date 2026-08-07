@@ -47,8 +47,9 @@ import org.openrewrite.java.tree.J;
  * <p>This recipe only matches the two-argument form of {@code Collectors.toMap(keyFn, Function.identity())}
  * where the value mapper is {@code Function.identity()}.
  */
-public class ECStreamCollectToMapToGroupByUniqueKey extends Recipe {
-
+public class ECStreamCollectToMapToGroupByUniqueKey
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -62,12 +63,14 @@ public class ECStreamCollectToMapToGroupByUniqueKey extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.toMap(keyFn, Function.identity()))` to `groupByUniqueKey(keyFn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.toMap(keyFn, Function.identity()))` "
 			+ "to `collection.groupByUniqueKey(keyFn)`. "
@@ -77,66 +80,80 @@ public class ECStreamCollectToMapToGroupByUniqueKey extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(COLLECT_MATCHER),
 			new StreamCollectToMapToGroupByUniqueKeyVisitor()
 		);
 	}
 
-	private static final class StreamCollectToMapToGroupByUniqueKeyVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamCollectToMapToGroupByUniqueKeyVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!TO_MAP_MATCHER.matches(collectorCall)) {
+			if (!TO_MAP_MATCHER.matches(collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> toMapArguments = collectorCall.getArguments();
-			if (toMapArguments.size() != 2) {
+			if (toMapArguments.size() != 2)
+			{
 				return methodInvocation;
 			}
 
 			Expression valueFn = toMapArguments.get(1);
-			if (!(valueFn instanceof J.MethodInvocation identityCall)) {
+			if (!(valueFn instanceof J.MethodInvocation identityCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!FUNCTION_IDENTITY_MATCHER.matches(identityCall)) {
+			if (!FUNCTION_IDENTITY_MATCHER.matches(identityCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 

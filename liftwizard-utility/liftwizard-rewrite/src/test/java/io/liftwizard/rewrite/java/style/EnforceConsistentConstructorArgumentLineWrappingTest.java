@@ -23,120 +23,124 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentConstructorArgumentLineWrappingTest implements RewriteTest {
-
+class EnforceConsistentConstructorArgumentLineWrappingTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipe(new EnforceConsistentConstructorArgumentLineWrapping());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					class Foo {
-					    Foo(String a, String b, String c) {}
-					    Foo(String a, String b) {}
-					    Foo(String a, String b, String c, String d, String e) {}
-					    Foo(String a, String b, String c, String d, String e, String f, String g) {}
+			java(
+				"""
+				class Foo {
+				    Foo(String a, String b, String c) {}
+				    Foo(String a, String b) {}
+				    Foo(String a, String b, String c, String d, String e) {}
+				    Foo(String a, String b, String c, String d, String e, String f, String g) {}
 
-					    void test() {
-					        new Foo("first",
-					                "second",
-					                "third");
-					        new Foo("first",
-					                "second");
-					        new Foo(
-					                "first", "second", "third");
-					        new Foo(
-					                "a", "b",
-					                "c", "d",
-					                "e");
-					        new Foo(
-					                "a", "b",
-					                "c", "d",
-					                "e", "f", "g");
-					    }
-					}""",
-					"""
-					class Foo {
-					    Foo(String a, String b, String c) {}
-					    Foo(String a, String b) {}
-					    Foo(String a, String b, String c, String d, String e) {}
-					    Foo(String a, String b, String c, String d, String e, String f, String g) {}
+				    void test() {
+				        new Foo("first",
+				                "second",
+				                "third");
+				        new Foo("first",
+				                "second");
+				        new Foo(
+				                "first", "second", "third");
+				        new Foo(
+				                "a", "b",
+				                "c", "d",
+				                "e");
+				        new Foo(
+				                "a", "b",
+				                "c", "d",
+				                "e", "f", "g");
+				    }
+				}""",
+				"""
+				class Foo {
+				    Foo(String a, String b, String c) {}
+				    Foo(String a, String b) {}
+				    Foo(String a, String b, String c, String d, String e) {}
+				    Foo(String a, String b, String c, String d, String e, String f, String g) {}
 
-					    void test() {
-					        new Foo(
-					                "first",
-					                "second",
-					                "third");
-					        new Foo(
-					                "first",
-					                "second");
-					        new Foo(
-					                "first",
-					                "second",
-					                "third");
-					        new Foo(
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e");
-					        new Foo(
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e",
-					                "f",
-					                "g");
-					    }
-					}"""
-				)
-			);
+				    void test() {
+				        new Foo(
+				                "first",
+				                "second",
+				                "third");
+				        new Foo(
+				                "first",
+				                "second");
+				        new Foo(
+				                "first",
+				                "second",
+				                "third");
+				        new Foo(
+				                "a",
+				                "b",
+				                "c",
+				                "d",
+				                "e");
+				        new Foo(
+				                "a",
+				                "b",
+				                "c",
+				                "d",
+				                "e",
+				                "f",
+				                "g");
+				    }
+				}"""
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				java(
-					"""
-					class Foo {
-					    Foo(String a, String b, String c) {}
-					    Foo(String a) {}
-					    Foo(String a, String b, String c, String d, String e, String f) {}
-					    Foo(String a, String b, String c, String d, String e, String f, String g, String h) {}
-					    Foo(String a, String b, String c, String d, String e, String f, String g, String h, String i) {}
+			java(
+				"""
+				class Foo {
+				    Foo(String a, String b, String c) {}
+				    Foo(String a) {}
+				    Foo(String a, String b, String c, String d, String e, String f) {}
+				    Foo(String a, String b, String c, String d, String e, String f, String g, String h) {}
+				    Foo(String a, String b, String c, String d, String e, String f, String g, String h, String i) {}
 
-					    void test() {
-					        new Foo("first", "second", "third");
-					        new Foo(
-					                "first",
-					                "second",
-					                "third");
-					        new Foo("first");
-					        new Foo(
-					                "first");
-					        new Foo(
-					                "a", "b",
-					                "c", "d",
-					                "e", "f");
-					        new Foo(
-					                "a", "b", "c",
-					                "d", "e", "f");
-					        new Foo(
-					                "a", "b", "c",
-					                "d", "e", "f",
-					                "g", "h", "i");
-					        new Foo(
-					                "a", "b", "c", "d",
-					                "e", "f", "g", "h");
-					    }
-					}"""
-				)
-			);
+				    void test() {
+				        new Foo("first", "second", "third");
+				        new Foo(
+				                "first",
+				                "second",
+				                "third");
+				        new Foo("first");
+				        new Foo(
+				                "first");
+				        new Foo(
+				                "a", "b",
+				                "c", "d",
+				                "e", "f");
+				        new Foo(
+				                "a", "b", "c",
+				                "d", "e", "f");
+				        new Foo(
+				                "a", "b", "c",
+				                "d", "e", "f",
+				                "g", "h", "i");
+				        new Foo(
+				                "a", "b", "c", "d",
+				                "e", "f", "g", "h");
+				    }
+				}"""
+			)
+		);
 	}
 }

@@ -27,10 +27,12 @@ import net.logstash.logback.argument.StructuredArguments;
 
 @JsonTypeName("structured-logback")
 @AutoService(ReporterFactory.class)
-public class StructuredLogbackReporterFactory extends StructuredSlf4jReporterFactory {
-
+public class StructuredLogbackReporterFactory
+	extends StructuredSlf4jReporterFactory
+{
 	@Override
-	protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction() {
+	protected Function<Map<String, Object>, ?> getMapToStructuredObjectFunction()
+	{
 		return StructuredArguments::entries;
 	}
 }

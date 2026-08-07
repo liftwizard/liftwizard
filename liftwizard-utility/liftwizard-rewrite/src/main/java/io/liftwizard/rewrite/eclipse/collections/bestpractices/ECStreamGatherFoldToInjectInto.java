@@ -58,15 +58,18 @@ import org.openrewrite.java.tree.Space;
  * with {@link MethodMatcher} requires the receiver type to be resolved, but the return type of
  * the unresolved {@code gather()} call breaks the chain.
  */
-public class ECStreamGatherFoldToInjectInto extends Recipe {
-
+public class ECStreamGatherFoldToInjectInto
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().gather(Gatherers.fold(init, folder)).findFirst().orElseThrow()` to `injectInto(init, folder)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().gather(Gatherers.fold(() -> init, folder)).findFirst().orElseThrow()` "
 			+ "to `collection.injectInto(init, folder)`. This eliminates the unnecessary Stream intermediary since "
@@ -76,72 +79,87 @@ public class ECStreamGatherFoldToInjectInto extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new StreamGatherFoldToInjectIntoVisitor();
 	}
 
-	private static final class StreamGatherFoldToInjectIntoVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamGatherFoldToInjectIntoVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
 			// Match: .orElseThrow() or .get() — the unwrap at the end of the chain
 			if (
 				!"orElseThrow".equals(methodInvocation.getSimpleName())
 				&& !"get".equals(methodInvocation.getSimpleName())
-			) {
+			)
+			{
 				return methodInvocation;
 			}
 
-			if (!this.hasNoArguments(methodInvocation)) {
+			if (!this.hasNoArguments(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			// Match: .findFirst()
 			Expression orElseThrowSelect = methodInvocation.getSelect();
-			if (!(orElseThrowSelect instanceof J.MethodInvocation findFirstCall)) {
+			if (!(orElseThrowSelect instanceof J.MethodInvocation findFirstCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!"findFirst".equals(findFirstCall.getSimpleName())) {
+			if (!"findFirst".equals(findFirstCall.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
-			if (!this.hasNoArguments(findFirstCall)) {
+			if (!this.hasNoArguments(findFirstCall))
+			{
 				return methodInvocation;
 			}
 
 			// Match: .gather(Gatherers.fold(initializer, folder))
 			Expression findFirstSelect = findFirstCall.getSelect();
-			if (!(findFirstSelect instanceof J.MethodInvocation gatherCall)) {
+			if (!(findFirstSelect instanceof J.MethodInvocation gatherCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!"gather".equals(gatherCall.getSimpleName())) {
+			if (!"gather".equals(gatherCall.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> gatherArguments = gatherCall.getArguments();
-			if (gatherArguments.size() != 1) {
+			if (gatherArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression gathererArg = gatherArguments.get(0);
-			if (!(gathererArg instanceof J.MethodInvocation foldCall)) {
+			if (!(gathererArg instanceof J.MethodInvocation foldCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!"fold".equals(foldCall.getSimpleName())) {
+			if (!"fold".equals(foldCall.getSimpleName()))
+			{
 				return methodInvocation;
 			}
 
-			if (!this.isGatherersClass(foldCall)) {
+			if (!this.isGatherersClass(foldCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> foldArguments = foldCall.getArguments();
-			if (foldArguments.size() != 2) {
+			if (foldArguments.size() != 2)
+			{
 				return methodInvocation;
 			}
 
@@ -149,26 +167,31 @@ public class ECStreamGatherFoldToInjectInto extends Recipe {
 
 			// Extract the body of the supplier lambda: () -> value
 			Expression initialValueRaw = this.extractSupplierLambdaBody(supplierArg);
-			if (initialValueRaw == null) {
+			if (initialValueRaw == null)
+			{
 				return methodInvocation;
 			}
 
 			// Match: .stream()
 			Expression gatherSelect = gatherCall.getSelect();
-			if (!(gatherSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(gatherSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -188,34 +211,43 @@ public class ECStreamGatherFoldToInjectInto extends Recipe {
 				.withPrefix(methodInvocation.getPrefix());
 		}
 
-		private boolean hasNoArguments(J.MethodInvocation method) {
-			if (method.getArguments().isEmpty()) {
+		private boolean hasNoArguments(J.MethodInvocation method)
+		{
+			if (method.getArguments().isEmpty())
+			{
 				return true;
 			}
 			return method.getArguments().size() == 1 && method.getArguments().get(0) instanceof J.Empty;
 		}
 
-		private Expression extractSupplierLambdaBody(Expression expression) {
-			if (!(expression instanceof J.Lambda lambda)) {
+		private Expression extractSupplierLambdaBody(Expression expression)
+		{
+			if (!(expression instanceof J.Lambda lambda))
+			{
 				return null;
 			}
 			// Must be a zero-argument lambda: () -> value
-			if (!lambda.getParameters().getParameters().isEmpty()) {
+			if (!lambda.getParameters().getParameters().isEmpty())
+			{
 				J firstParam = lambda.getParameters().getParameters().get(0);
-				if (!(firstParam instanceof J.Empty)) {
+				if (!(firstParam instanceof J.Empty))
+				{
 					return null;
 				}
 			}
 			J body = lambda.getBody();
-			if (body instanceof Expression bodyExpr) {
+			if (body instanceof Expression bodyExpr)
+			{
 				return bodyExpr;
 			}
 			return null;
 		}
 
-		private boolean isGatherersClass(J.MethodInvocation method) {
+		private boolean isGatherersClass(J.MethodInvocation method)
+		{
 			Expression select = method.getSelect();
-			if (select instanceof J.Identifier identifier) {
+			if (select instanceof J.Identifier identifier)
+			{
 				return "Gatherers".equals(identifier.getSimpleName());
 			}
 			return false;

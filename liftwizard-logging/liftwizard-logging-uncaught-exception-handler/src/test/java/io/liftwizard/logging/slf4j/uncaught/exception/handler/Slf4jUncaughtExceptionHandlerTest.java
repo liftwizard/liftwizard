@@ -26,25 +26,28 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Slf4jUncaughtExceptionHandlerTest {
-
+class Slf4jUncaughtExceptionHandlerTest
+{
 	private PrintStream originalStderr;
 	private ByteArrayOutputStream stderrCapture;
 
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		this.originalStderr = System.err;
 		this.stderrCapture = new ByteArrayOutputStream();
 		System.setErr(new PrintStream(this.stderrCapture, true, StandardCharsets.UTF_8));
 	}
 
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		System.setErr(this.originalStderr);
 	}
 
 	@Test
-	void uncaughtException() {
+	void uncaughtException()
+	{
 		var causeException = new CauseException("Slf4jUncaughtExceptionHandlerTest cause exception");
 		var rootException = new RootException("Slf4jUncaughtExceptionHandlerTest root exception", causeException);
 
@@ -59,16 +62,20 @@ class Slf4jUncaughtExceptionHandlerTest {
 			.contains("CauseException");
 	}
 
-	private static class CauseException extends RuntimeException {
-
-		CauseException(String message) {
+	private static class CauseException
+		extends RuntimeException
+	{
+		CauseException(String message)
+		{
 			super(message);
 		}
 	}
 
-	private static class RootException extends RuntimeException {
-
-		RootException(String message, Throwable cause) {
+	private static class RootException
+		extends RuntimeException
+	{
+		RootException(String message, Throwable cause)
+		{
 			super(message, cause);
 		}
 	}

@@ -44,19 +44,22 @@ import org.openrewrite.java.tree.J;
  * since Eclipse Collections has the {@code injectInto} method directly on {@code RichIterable}.
  * The injectInto method is Eclipse Collections' native fold operation.
  */
-public class ECStreamReduceToInjectInto extends Recipe {
-
+public class ECStreamReduceToInjectInto
+	extends Recipe
+{
 	private static final MethodMatcher REDUCE_WITH_IDENTITY_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream reduce(*, java.util.function.BinaryOperator)"
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().reduce(identity, accumulator)` to `injectInto(identity, function)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().reduce(identity, accumulator)` to `collection.injectInto(identity, function)`. "
 			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
@@ -65,43 +68,52 @@ public class ECStreamReduceToInjectInto extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(REDUCE_WITH_IDENTITY_MATCHER),
 			new StreamReduceToInjectIntoVisitor()
 		);
 	}
 
-	private static final class StreamReduceToInjectIntoVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamReduceToInjectIntoVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!REDUCE_WITH_IDENTITY_MATCHER.matches(methodInvocation)) {
+			if (!REDUCE_WITH_IDENTITY_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			Expression select = methodInvocation.getSelect();
-			if (!(select instanceof J.MethodInvocation streamCall)) {
+			if (!(select instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> arguments = methodInvocation.getArguments();
-			if (arguments.size() != 2) {
+			if (arguments.size() != 2)
+			{
 				return methodInvocation;
 			}
 

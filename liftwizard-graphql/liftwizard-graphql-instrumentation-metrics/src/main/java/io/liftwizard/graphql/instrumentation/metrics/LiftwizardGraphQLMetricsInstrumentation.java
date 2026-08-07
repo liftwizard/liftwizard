@@ -42,8 +42,9 @@ import io.liftwizard.instrumentation.GraphQLInstrumentationUtils;
  *
  * @see <a href="https://liftwizard.io/docs/graphql/instrumentation-metrics">https://liftwizard.io/docs/graphql/instrumentation-metrics</a>
  */
-public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentation {
-
+public class LiftwizardGraphQLMetricsInstrumentation
+	extends SimpleInstrumentation
+{
 	private final MetricRegistry metricRegistry;
 	private final Clock clock;
 
@@ -57,7 +58,8 @@ public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentati
 	private final Timer validationTimer;
 	private final Meter validationExceptionsMeter;
 
-	public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock) {
+	public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock)
+	{
 		this.metricRegistry = Objects.requireNonNull(metricRegistry);
 		this.clock = Objects.requireNonNull(clock);
 
@@ -82,13 +84,15 @@ public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentati
 
 	@Override
 	@Nonnull
-	public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
+	public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters)
+	{
 		return new GlobalInstrumentationContext<>(this.executionTimer, this.executionExceptionsMeter);
 	}
 
 	@Override
 	@Nonnull
-	public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters) {
+	public InstrumentationContext<Document> beginParse(InstrumentationExecutionParameters parameters)
+	{
 		return new GlobalInstrumentationContext<>(this.parseTimer, this.parseExceptionsMeter);
 	}
 
@@ -96,14 +100,17 @@ public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentati
 	@Nonnull
 	public InstrumentationContext<List<ValidationError>> beginValidation(
 		InstrumentationValidationParameters parameters
-	) {
+	)
+	{
 		return new GlobalInstrumentationContext<>(this.validationTimer, this.validationExceptionsMeter);
 	}
 
 	@Override
 	@Nonnull
-	public InstrumentationContext<Object> beginFieldFetch(@Nonnull InstrumentationFieldFetchParameters parameters) {
-		if (parameters.isTrivialDataFetcher()) {
+	public InstrumentationContext<Object> beginFieldFetch(@Nonnull InstrumentationFieldFetchParameters parameters)
+	{
+		if (parameters.isTrivialDataFetcher())
+		{
 			return super.beginFieldFetch(parameters);
 		}
 
@@ -119,8 +126,10 @@ public class LiftwizardGraphQLMetricsInstrumentation extends SimpleInstrumentati
 	public DataFetcher<?> instrumentDataFetcher(
 		@Nonnull DataFetcher<?> dataFetcher,
 		@Nonnull InstrumentationFieldFetchParameters parameters
-	) {
-		if (parameters.isTrivialDataFetcher()) {
+	)
+	{
+		if (parameters.isTrivialDataFetcher())
+		{
 			return dataFetcher;
 		}
 

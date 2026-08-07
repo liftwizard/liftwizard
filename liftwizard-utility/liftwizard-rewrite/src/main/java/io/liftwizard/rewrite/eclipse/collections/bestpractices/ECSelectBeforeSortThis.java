@@ -27,24 +27,26 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "`sortThis().select(pred)` -> `select(pred).sortThis()`",
 	description = "Transforms `list.sortThis().select(pred)` to `list.select(pred).sortThis()` for Eclipse Collections MutableList types. "
-	+ "This optimization filters before sorting, reducing the number of elements that need to be sorted. "
-	+ "Note: This is only safe when the select predicate does not depend on sorted order."
+		+ "This optimization filters before sorting, reducing the number of elements that need to be sorted. "
+		+ "Note: This is only safe when the select predicate does not depend on sorted order."
 )
-public class ECSelectBeforeSortThis {
-
+public class ECSelectBeforeSortThis
+{
 	@RecipeDescriptor(
 		name = "`sortThis().select(pred)` -> `select(pred).sortThis()`",
 		description = "Converts `list.sortThis().select(pred)` to `list.select(pred).sortThis()` to sort fewer elements."
 	)
-	public static final class SortThisSelectToSelectSortThis<T> {
-
+	public static final class SortThisSelectToSelectSortThis<T>
+	{
 		@BeforeTemplate
-		MutableList<T> before(MutableList<T> list, Predicate<? super T> predicate) {
+		MutableList<T> before(MutableList<T> list, Predicate<? super T> predicate)
+		{
 			return list.sortThis().select(predicate);
 		}
 
 		@AfterTemplate
-		MutableList<T> after(MutableList<T> list, Predicate<? super T> predicate) {
+		MutableList<T> after(MutableList<T> list, Predicate<? super T> predicate)
+		{
 			return list.select(predicate).sortThis();
 		}
 	}
@@ -53,15 +55,17 @@ public class ECSelectBeforeSortThis {
 		name = "`sortThis(comparator).select(pred)` -> `select(pred).sortThis(comparator)`",
 		description = "Converts `list.sortThis(comparator).select(pred)` to `list.select(pred).sortThis(comparator)` to sort fewer elements."
 	)
-	public static final class SortThisWithComparatorSelectToSelectSortThis<T> {
-
+	public static final class SortThisWithComparatorSelectToSelectSortThis<T>
+	{
 		@BeforeTemplate
-		MutableList<T> before(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate) {
+		MutableList<T> before(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate)
+		{
 			return list.sortThis(comparator).select(predicate);
 		}
 
 		@AfterTemplate
-		MutableList<T> after(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate) {
+		MutableList<T> after(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate)
+		{
 			return list.select(predicate).sortThis(comparator);
 		}
 	}
@@ -70,15 +74,17 @@ public class ECSelectBeforeSortThis {
 		name = "`sortThis().reject(pred)` -> `reject(pred).sortThis()`",
 		description = "Converts `list.sortThis().reject(pred)` to `list.reject(pred).sortThis()` to sort fewer elements."
 	)
-	public static final class SortThisRejectToRejectSortThis<T> {
-
+	public static final class SortThisRejectToRejectSortThis<T>
+	{
 		@BeforeTemplate
-		MutableList<T> before(MutableList<T> list, Predicate<? super T> predicate) {
+		MutableList<T> before(MutableList<T> list, Predicate<? super T> predicate)
+		{
 			return list.sortThis().reject(predicate);
 		}
 
 		@AfterTemplate
-		MutableList<T> after(MutableList<T> list, Predicate<? super T> predicate) {
+		MutableList<T> after(MutableList<T> list, Predicate<? super T> predicate)
+		{
 			return list.reject(predicate).sortThis();
 		}
 	}
@@ -87,15 +93,17 @@ public class ECSelectBeforeSortThis {
 		name = "`sortThis(comparator).reject(pred)` -> `reject(pred).sortThis(comparator)`",
 		description = "Converts `list.sortThis(comparator).reject(pred)` to `list.reject(pred).sortThis(comparator)` to sort fewer elements."
 	)
-	public static final class SortThisWithComparatorRejectToRejectSortThis<T> {
-
+	public static final class SortThisWithComparatorRejectToRejectSortThis<T>
+	{
 		@BeforeTemplate
-		MutableList<T> before(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate) {
+		MutableList<T> before(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate)
+		{
 			return list.sortThis(comparator).reject(predicate);
 		}
 
 		@AfterTemplate
-		MutableList<T> after(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate) {
+		MutableList<T> after(MutableList<T> list, Comparator<? super T> comparator, Predicate<? super T> predicate)
+		{
 			return list.reject(predicate).sortThis(comparator);
 		}
 	}

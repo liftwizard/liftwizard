@@ -25,117 +25,121 @@ import org.openrewrite.test.TypeValidation;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3RemoveTransitiveSmoketurnerGraphQLTest implements RewriteTest {
-
+class Dropwizard3RemoveTransitiveSmoketurnerGraphQLTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL")
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3RemoveTransitiveSmoketurnerGraphQL")
 			.typeValidationOptions(TypeValidation.builder().dependencyModel(false).build())
 			.markerPrinter(PrintOutputCapture.MarkerPrinter.SANITIZED);
 	}
 
 	@DocumentExample
 	@Test
-	void removeExplicitGraphQLCoreDependency() {
+	void removeExplicitGraphQLCoreDependency()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>com.smoketurner.dropwizard</groupId>
-					            <artifactId>graphql-core</artifactId>
-					            <version>2.1.6-1</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					""",
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>com.smoketurner.dropwizard</groupId>
+				            <artifactId>graphql-core</artifactId>
+				            <version>2.1.6-1</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				""",
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				</project>
+				"""
+			)
+		);
 	}
 
 	@Test
-	void removeDependencyAlongsideOtherDependencies() {
+	void removeDependencyAlongsideOtherDependencies()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard</groupId>
-					            <artifactId>dropwizard-core</artifactId>
-					            <version>3.0.17</version>
-					        </dependency>
-					        <dependency>
-					            <groupId>com.smoketurner.dropwizard</groupId>
-					            <artifactId>graphql-core</artifactId>
-					            <version>2.1.6-1</version>
-					            <scope>test</scope>
-					        </dependency>
-					    </dependencies>
-					</project>
-					""",
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard</groupId>
-					            <artifactId>dropwizard-core</artifactId>
-					            <version>3.0.17</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>io.dropwizard</groupId>
+				            <artifactId>dropwizard-core</artifactId>
+				            <version>3.0.17</version>
+				        </dependency>
+				        <dependency>
+				            <groupId>com.smoketurner.dropwizard</groupId>
+				            <artifactId>graphql-core</artifactId>
+				            <version>2.1.6-1</version>
+				            <scope>test</scope>
+				        </dependency>
+				    </dependencies>
+				</project>
+				""",
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>io.dropwizard</groupId>
+				            <artifactId>dropwizard-core</artifactId>
+				            <version>3.0.17</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				"""
+			)
+		);
 	}
 
 	@Test
-	void doNotTouchUnrelatedDependency() {
+	void doNotTouchUnrelatedDependency()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard</groupId>
-					            <artifactId>dropwizard-core</artifactId>
-					            <version>3.0.17</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>io.dropwizard</groupId>
+				            <artifactId>dropwizard-core</artifactId>
+				            <version>3.0.17</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				"""
+			)
+		);
 	}
 }

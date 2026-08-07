@@ -36,12 +36,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class AuthFilterBundle implements PrioritizedBundle {
-
+public class AuthFilterBundle
+	implements PrioritizedBundle
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilterBundle.class);
 
 	@Override
-	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+	{
 		AuthFilterFactoryProvider authFilterFactoryProvider = this.safeCastConfiguration(
 			AuthFilterFactoryProvider.class,
 			configuration
@@ -51,7 +53,8 @@ public class AuthFilterBundle implements PrioritizedBundle {
 
 		List<AuthFilter<?, ? extends Principal>> authFilters = this.getAuthFilters(authFilterFactories);
 
-		if (authFilters.isEmpty()) {
+		if (authFilters.isEmpty())
+		{
 			LOGGER.warn("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
@@ -72,7 +75,8 @@ public class AuthFilterBundle implements PrioritizedBundle {
 	}
 
 	@Nonnull
-	private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories) {
+	private List<AuthFilter<?, ? extends Principal>> getAuthFilters(List<AuthFilterFactory> authFilterFactories)
+	{
 		return authFilterFactories
 			.stream()
 			.map(AuthFilterFactory::createAuthFilter)
@@ -80,7 +84,8 @@ public class AuthFilterBundle implements PrioritizedBundle {
 	}
 
 	@Nonnull
-	private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters) {
+	private AuthDynamicFeature getAuthDynamicFeature(List<AuthFilter<?, ? extends Principal>> authFilters)
+	{
 		var chainedAuthFilter = new ChainedAuthFilter(authFilters);
 		return new AuthDynamicFeature(chainedAuthFilter);
 	}

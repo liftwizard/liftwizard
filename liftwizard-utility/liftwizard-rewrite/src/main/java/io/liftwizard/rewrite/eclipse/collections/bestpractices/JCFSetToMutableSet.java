@@ -16,9 +16,11 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
-public class JCFSetToMutableSet extends AbstractJCFTypeToMutableTypeRecipe {
-
-	public JCFSetToMutableSet() {
+public class JCFSetToMutableSet
+	extends AbstractJCFTypeToMutableTypeRecipe
+{
+	public JCFSetToMutableSet()
+	{
 		super("java.util.Set", "org.eclipse.collections.api.set", "MutableSet");
 	}
 }

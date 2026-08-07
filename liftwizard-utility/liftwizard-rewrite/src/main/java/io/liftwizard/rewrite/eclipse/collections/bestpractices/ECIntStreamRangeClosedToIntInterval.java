@@ -49,8 +49,9 @@ import org.openrewrite.java.tree.J;
  * that supports operations like {@code select}, {@code collect}, {@code sum}, etc.
  * without boxing to {@code Integer}.
  */
-public class ECIntStreamRangeClosedToIntInterval extends Recipe {
-
+public class ECIntStreamRangeClosedToIntInterval
+	extends Recipe
+{
 	private static final MethodMatcher RANGE_CLOSED_MATCHER = new MethodMatcher(
 		"java.util.stream.IntStream rangeClosed(int, int)"
 	);
@@ -68,12 +69,14 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`IntStream.rangeClosed(from, to)` -> `IntInterval.fromTo(from, to)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `IntStream.rangeClosed(from, to)` to `IntInterval.fromTo(from, to)`. "
 			+ "Eclipse Collections' `IntInterval` is a memory-efficient, first-class collection "
@@ -82,31 +85,38 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 	}
 
 	@Override
-	public Set<String> getTags() {
+	public Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public Duration getEstimatedEffortPerOccurrence() {
+	public Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(15);
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(RANGE_CLOSED_MATCHER), new IntStreamRangeClosedVisitor());
 	}
 
-	private static final class IntStreamRangeClosedVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class IntStreamRangeClosedVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
 
-			if (!RANGE_CLOSED_MATCHER.matches(mi)) {
+			if (!RANGE_CLOSED_MATCHER.matches(mi))
+			{
 				return mi;
 			}
 
-			if (mi.getArguments().size() != 2) {
+			if (mi.getArguments().size() != 2)
+			{
 				return mi;
 			}
 
@@ -123,7 +133,8 @@ public class ECIntStreamRangeClosedToIntInterval extends Recipe {
 			);
 		}
 
-		private static JavaTemplate intIntervalFromToTemplate() {
+		private static JavaTemplate intIntervalFromToTemplate()
+		{
 			return JavaTemplate.builder(INT_INTERVAL_FROM_TO)
 				.imports(INT_INTERVAL_TYPE)
 				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))

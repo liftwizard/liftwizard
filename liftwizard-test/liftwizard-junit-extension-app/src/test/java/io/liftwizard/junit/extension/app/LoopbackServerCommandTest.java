@@ -28,63 +28,80 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LoopbackServerCommandTest {
-
+class LoopbackServerCommandTest
+{
 	@Test
-	void defaultServerFactoryBindsLoopbackByDefault() throws Exception {
+	void defaultServerFactoryBindsLoopbackByDefault()
+		throws Exception
+	{
 		var extension = new LiftwizardAppExtension<>(
 			TestApplication.class,
 			ResourceHelpers.resourceFilePath("test-config.yml")
 		);
 		extension.before();
-		try {
+		try
+		{
 			var serverFactory = (DefaultServerFactory) extension.getConfiguration().getServerFactory();
 			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().getFirst();
 			var adminConnector = (HttpConnectorFactory) serverFactory.getAdminConnectors().getFirst();
 			assertThat(applicationConnector.getBindHost()).isEqualTo("127.0.0.1");
 			assertThat(adminConnector.getBindHost()).isEqualTo("127.0.0.1");
 			assertThat(extension.getLocalPort()).isPositive();
-		} finally {
+		}
+		finally
+		{
 			extension.after();
 		}
 	}
 
 	@Test
-	void simpleServerFactoryBindsLoopbackByDefault() throws Exception {
+	void simpleServerFactoryBindsLoopbackByDefault()
+		throws Exception
+	{
 		var extension = new LiftwizardAppExtension<>(
 			TestApplication.class,
 			ResourceHelpers.resourceFilePath("test-config-simple.yml")
 		);
 		extension.before();
-		try {
+		try
+		{
 			var serverFactory = (SimpleServerFactory) extension.getConfiguration().getServerFactory();
 			var connector = (HttpConnectorFactory) serverFactory.getConnector();
 			assertThat(connector.getBindHost()).isEqualTo("127.0.0.1");
-		} finally {
+		}
+		finally
+		{
 			extension.after();
 		}
 	}
 
 	@Test
-	void explicitBindHostIsPreserved() throws Exception {
+	void explicitBindHostIsPreserved()
+		throws Exception
+	{
 		var extension = new LiftwizardAppExtension<>(
 			TestApplication.class,
 			ResourceHelpers.resourceFilePath("test-config-bind-host.yml")
 		);
 		extension.before();
-		try {
+		try
+		{
 			var serverFactory = (DefaultServerFactory) extension.getConfiguration().getServerFactory();
 			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().getFirst();
 			var adminConnector = (HttpConnectorFactory) serverFactory.getAdminConnectors().getFirst();
 			assertThat(applicationConnector.getBindHost()).isEqualTo("localhost");
 			assertThat(adminConnector.getBindHost()).isEqualTo("127.0.0.1");
-		} finally {
+		}
+		finally
+		{
 			extension.after();
 		}
 	}
 
 	@Test
-	void explicitCommandInstantiatorIsRespected() throws Exception {
+	void explicitCommandInstantiatorIsRespected()
+		throws Exception
+	{
 		var extension = new LiftwizardAppExtension<>(
 			TestApplication.class,
 			ResourceHelpers.resourceFilePath("test-config.yml"),
@@ -92,19 +109,24 @@ class LoopbackServerCommandTest {
 			ServerCommand::new
 		);
 		extension.before();
-		try {
+		try
+		{
 			var serverFactory = (DefaultServerFactory) extension.getConfiguration().getServerFactory();
 			var applicationConnector = (HttpConnectorFactory) serverFactory.getApplicationConnectors().getFirst();
 			assertThat(applicationConnector.getBindHost()).isNull();
-		} finally {
+		}
+		finally
+		{
 			extension.after();
 		}
 	}
 
-	public static class TestApplication extends Application<Configuration> {
-
+	public static class TestApplication
+		extends Application<Configuration>
+	{
 		@Override
-		public void run(Configuration configuration, Environment environment) {
+		public void run(Configuration configuration, Environment environment)
+		{
 			// Nothing to do
 		}
 	}

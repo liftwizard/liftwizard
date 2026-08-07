@@ -31,27 +31,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class RecursiveDirectoryDeleterTest {
-
+class RecursiveDirectoryDeleterTest
+{
 	@TempDir
 	private Path testDir;
 
 	@BeforeEach
-	void setUp() throws IOException {
+	void setUp()
+		throws IOException
+	{
 		Path nestedDir = Files.createDirectory(this.testDir.resolve("nested"));
 		Files.write(nestedDir.resolve("file1.txt"), "test content".getBytes(StandardCharsets.UTF_8));
 		Files.write(this.testDir.resolve("root-file.txt"), "root content".getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
-	void deleteRecursively_shouldDeleteDirectoryWithContents() throws IOException {
+	void deleteRecursively_shouldDeleteDirectoryWithContents()
+		throws IOException
+	{
 		RecursiveDirectoryDeleter.deleteRecursively(this.testDir);
 
 		assertThat(Files.exists(this.testDir)).isFalse();
 	}
 
 	@Test
-	void deleteRecursively_shouldHandleNonExistentDirectory() throws IOException {
+	void deleteRecursively_shouldHandleNonExistentDirectory()
+		throws IOException
+	{
 		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
 		assertThat(Files.exists(nonExistentDir)).isFalse();
 
@@ -59,7 +65,8 @@ class RecursiveDirectoryDeleterTest {
 	}
 
 	@Test
-	void tryDeleteRecursively_shouldReturnTrueOnSuccess() {
+	void tryDeleteRecursively_shouldReturnTrueOnSuccess()
+	{
 		boolean result = RecursiveDirectoryDeleter.tryDeleteRecursively(this.testDir);
 
 		assertThat(result).isTrue();
@@ -67,7 +74,8 @@ class RecursiveDirectoryDeleterTest {
 	}
 
 	@Test
-	void tryDeleteRecursively_shouldReturnTrueForNonExistentDirectory() {
+	void tryDeleteRecursively_shouldReturnTrueForNonExistentDirectory()
+	{
 		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
 		assertThat(Files.exists(nonExistentDir)).isFalse();
 
@@ -77,7 +85,9 @@ class RecursiveDirectoryDeleterTest {
 	}
 
 	@Test
-	void tryDeleteRecursively_shouldReturnFalseForReadOnlyFile() throws IOException {
+	void tryDeleteRecursively_shouldReturnFalseForReadOnlyFile()
+		throws IOException
+	{
 		Path readOnlyFile = this.testDir.resolve("readonly.txt");
 		Files.write(readOnlyFile, "content".getBytes(StandardCharsets.UTF_8));
 		boolean setReadOnly = readOnlyFile.toFile().setReadOnly();

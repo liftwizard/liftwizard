@@ -30,17 +30,20 @@ import org.openrewrite.java.tree.TypeUtils;
  * for Eclipse Collections {@code RichIterable} types. Skips transformations inside
  * {@code isEmpty()} or {@code notEmpty()} method implementations to prevent infinite recursion.
  */
-public class ECSimplifyNegatedEmptyChecks extends Recipe {
-
+public class ECSimplifyNegatedEmptyChecks
+	extends Recipe
+{
 	private static final String RICH_ITERABLE = "org.eclipse.collections.api.RichIterable";
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`!isEmpty()` → `notEmpty()` and `!notEmpty()` → `isEmpty()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Simplifies negated empty checks: `!iterable.isEmpty()` to `iterable.notEmpty()` "
 			+ "and `!iterable.notEmpty()` to `iterable.isEmpty()` for Eclipse Collections types. "
@@ -50,51 +53,64 @@ public class ECSimplifyNegatedEmptyChecks extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new SimplifyNegatedEmptyChecksVisitor();
 	}
 
-	private static final class SimplifyNegatedEmptyChecksVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class SimplifyNegatedEmptyChecksVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private static final String ISEMPTY_METHOD = "isEmpty";
 		private static final String NOTEMPTY_METHOD = "notEmpty";
 
 		@Override
-		public J visitUnary(J.Unary unary, ExecutionContext ctx) {
+		public J visitUnary(J.Unary unary, ExecutionContext ctx)
+		{
 			J result = super.visitUnary(unary, ctx);
 
-			if (!(result instanceof J.Unary visitedUnary)) {
+			if (!(result instanceof J.Unary visitedUnary))
+			{
 				return result;
 			}
 
-			if (visitedUnary.getOperator() != J.Unary.Type.Not) {
+			if (visitedUnary.getOperator() != J.Unary.Type.Not)
+			{
 				return result;
 			}
 
-			if (!(visitedUnary.getExpression() instanceof J.MethodInvocation methodInv)) {
+			if (!(visitedUnary.getExpression() instanceof J.MethodInvocation methodInv))
+			{
 				return result;
 			}
 
 			String simpleName = methodInv.getSimpleName();
 			String replacement;
-			if (ISEMPTY_METHOD.equals(simpleName)) {
+			if (ISEMPTY_METHOD.equals(simpleName))
+			{
 				replacement = NOTEMPTY_METHOD;
-			} else if (NOTEMPTY_METHOD.equals(simpleName)) {
+			}
+			else if (NOTEMPTY_METHOD.equals(simpleName))
+			{
 				replacement = ISEMPTY_METHOD;
-			} else {
+			}
+			else
+			{
 				return result;
 			}
 
 			if (
 				methodInv.getSelect() == null
 				|| !TypeUtils.isAssignableTo(RICH_ITERABLE, methodInv.getSelect().getType())
-			) {
+			)
+			{
 				return result;
 			}
 
 			// Prevent infinite recursion when isEmpty()/notEmpty() is implemented
 			// in terms of the other, e.g. `boolean isEmpty() { return !this.notEmpty(); }`
-			if (this.isInsideEmptyCheckMethod()) {
+			if (this.isInsideEmptyCheckMethod())
+			{
 				return result;
 			}
 
@@ -103,10 +119,12 @@ public class ECSimplifyNegatedEmptyChecks extends Recipe {
 				.withPrefix(visitedUnary.getPrefix());
 		}
 
-		private boolean isInsideEmptyCheckMethod() {
+		private boolean isInsideEmptyCheckMethod()
+		{
 			J.MethodDeclaration enclosingMethod = this.getCursor().firstEnclosing(J.MethodDeclaration.class);
 
-			if (enclosingMethod == null) {
+			if (enclosingMethod == null)
+			{
 				return false;
 			}
 

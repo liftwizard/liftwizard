@@ -25,10 +25,12 @@ import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactory;
 import io.liftwizard.servlet.config.singlepage.SinglePageRedirectFilterFactoryProvider;
 
 @AutoService(PrioritizedBundle.class)
-public class SinglePageRedirectFilterPrioritizedBundle implements PrioritizedBundle {
-
+public class SinglePageRedirectFilterPrioritizedBundle
+	implements PrioritizedBundle
+{
 	@Override
-	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+	{
 		SinglePageRedirectFilterFactoryProvider factoryProvider = this.safeCastConfiguration(
 			SinglePageRedirectFilterFactoryProvider.class,
 			configuration

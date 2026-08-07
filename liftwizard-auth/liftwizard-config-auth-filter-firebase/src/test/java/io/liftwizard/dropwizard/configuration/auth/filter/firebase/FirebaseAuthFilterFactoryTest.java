@@ -35,8 +35,8 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FirebaseAuthFilterFactoryTest {
-
+class FirebaseAuthFilterFactoryTest
+{
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();
 
@@ -51,7 +51,8 @@ class FirebaseAuthFilterFactoryTest {
 	);
 
 	@Test
-	void isDiscoverable() {
+	void isDiscoverable()
+	{
 		// Make sure the types we specified in META-INF gets picked up
 		var discoverableSubtypeResolver = new DiscoverableSubtypeResolver();
 		List<Class<?>> discoveredSubtypes = discoverableSubtypeResolver.getDiscoveredSubtypes();
@@ -60,7 +61,9 @@ class FirebaseAuthFilterFactoryTest {
 
 	@Test
 	@SetEnvironmentVariable(key = "FIREBASE_CONFIG", value = "{\"type\":\"service_account\"}")
-	void firebaseAuthFilter() throws Exception {
+	void firebaseAuthFilter()
+		throws Exception
+	{
 		AuthFilterFactory authFilterFactory = this.factory.build(
 			new ResourceConfigurationSourceProvider(),
 			"config-test.json5"
@@ -68,7 +71,8 @@ class FirebaseAuthFilterFactoryTest {
 		assertThat(authFilterFactory).isInstanceOf(FirebaseAuthFilterFactory.class);
 	}
 
-	private static ObjectMapper newObjectMapper() {
+	private static ObjectMapper newObjectMapper()
+	{
 		ObjectMapper objectMapper = Jackson.newObjectMapper();
 		ObjectMapperConfig.configure(objectMapper);
 		return objectMapper;

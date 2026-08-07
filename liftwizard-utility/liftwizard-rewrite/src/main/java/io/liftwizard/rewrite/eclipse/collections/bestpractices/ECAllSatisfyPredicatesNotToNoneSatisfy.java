@@ -27,21 +27,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "`allSatisfy(Predicates.not(predicate))` to `noneSatisfy(predicate)`",
 	description = "Converts `iterable.allSatisfy(Predicates.not(predicate))` to `iterable.noneSatisfy(predicate)` for Eclipse Collections types."
 )
-public class ECAllSatisfyPredicatesNotToNoneSatisfy {
-
+public class ECAllSatisfyPredicatesNotToNoneSatisfy
+{
 	@RecipeDescriptor(
 		name = "`allSatisfy(Predicates.not(predicate))` to `noneSatisfy(predicate)`",
 		description = "Converts `iterable.allSatisfy(Predicates.not(predicate))` to `iterable.noneSatisfy(predicate)`."
 	)
-	public static final class AllSatisfyPredicatesNotToNoneSatisfy<T> {
-
+	public static final class AllSatisfyPredicatesNotToNoneSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean before(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.allSatisfy(Predicates.not(predicate));
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.noneSatisfy(predicate);
 		}
 	}

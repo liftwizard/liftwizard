@@ -57,8 +57,9 @@ import org.openrewrite.java.tree.TypeUtils;
  * <p>This applies to both Eclipse Collections functional types (Predicate, Function, Procedure)
  * and JDK functional types (java.util.function.Predicate, Function, Consumer).
  */
-public class ECSimplifyMethodReferences extends Recipe {
-
+public class ECSimplifyMethodReferences
+	extends Recipe
+{
 	private static final Set<String> PREDICATE_METHODS = Sets.fixedSize.with("accept", "test");
 	private static final Set<String> FUNCTION_METHODS = Sets.fixedSize.with("valueOf", "apply");
 	private static final Set<String> PROCEDURE_METHODS = Sets.fixedSize.with("value", "accept");
@@ -72,12 +73,14 @@ public class ECSimplifyMethodReferences extends Recipe {
 	private static final String JDK_CONSUMER = "java.util.function.Consumer";
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Simplify redundant functional method references";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Simplifies `predicate::accept` to `predicate`, `function::valueOf` to `function`, "
 			+ "and similar patterns where a functional interface variable is unnecessarily "
@@ -86,35 +89,43 @@ public class ECSimplifyMethodReferences extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new SimplifyMethodReferencesVisitor();
 	}
 
-	private static final class SimplifyMethodReferencesVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class SimplifyMethodReferencesVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		@Override
-		public J visitMemberReference(J.MemberReference memberRef, ExecutionContext ctx) {
+		public J visitMemberReference(J.MemberReference memberRef, ExecutionContext ctx)
+		{
 			J result = super.visitMemberReference(memberRef, ctx);
 
-			if (!(result instanceof J.MemberReference visitedMemberRef)) {
+			if (!(result instanceof J.MemberReference visitedMemberRef))
+			{
 				return result;
 			}
 
 			Expression containing = visitedMemberRef.getContaining();
-			if (!(containing instanceof J.Identifier identifier)) {
+			if (!(containing instanceof J.Identifier identifier))
+			{
 				return result;
 			}
 
 			String methodName = visitedMemberRef.getReference().getSimpleName();
 			JavaType containingType = identifier.getType();
 
-			if (containingType == null) {
+			if (containingType == null)
+			{
 				return result;
 			}
 
-			if (this.isRedundantMethodReference(containingType, methodName)) {
+			if (this.isRedundantMethodReference(containingType, methodName))
+			{
 				JavaType targetType = this.getExpectedTargetType(visitedMemberRef);
-				if (targetType != null && !this.areTypesCompatible(containingType, targetType)) {
+				if (targetType != null && !this.areTypesCompatible(containingType, targetType))
+				{
 					return result;
 				}
 
@@ -124,7 +135,8 @@ public class ECSimplifyMethodReferences extends Recipe {
 			return result;
 		}
 
-		private boolean isRedundantMethodReference(JavaType type, String methodName) {
+		private boolean isRedundantMethodReference(JavaType type, String methodName)
+		{
 			return (
 				this.isTypeCompatibleWithMethods(type, EC_PREDICATE, PREDICATE_METHODS, methodName)
 				|| this.isTypeCompatibleWithMethods(type, JDK_PREDICATE, PREDICATE_METHODS, methodName)
@@ -140,30 +152,38 @@ public class ECSimplifyMethodReferences extends Recipe {
 			String expectedTypeFqn,
 			Set<String> validMethods,
 			String methodName
-		) {
-			if (!validMethods.contains(methodName)) {
+		)
+		{
+			if (!validMethods.contains(methodName))
+			{
 				return false;
 			}
 			return TypeUtils.isAssignableTo(expectedTypeFqn, type);
 		}
 
-		private JavaType getExpectedTargetType(J.MemberReference memberRef) {
+		private JavaType getExpectedTargetType(J.MemberReference memberRef)
+		{
 			var cursor = this.getCursor().getParent();
-			while (cursor != null) {
+			while (cursor != null)
+			{
 				Object value = cursor.getValue();
 
-				if (value instanceof J.VariableDeclarations varDecls) {
+				if (value instanceof J.VariableDeclarations varDecls)
+				{
 					return varDecls.getTypeAsFullyQualified();
 				}
 
-				if (value instanceof J.MethodInvocation methodInv) {
+				if (value instanceof J.MethodInvocation methodInv)
+				{
 					JavaType paramType = this.getMethodParameterType(memberRef, methodInv);
-					if (paramType != null) {
+					if (paramType != null)
+					{
 						return paramType;
 					}
 				}
 
-				if (value instanceof J.Assignment assignment) {
+				if (value instanceof J.Assignment assignment)
+				{
 					return assignment.getVariable().getType();
 				}
 
@@ -173,24 +193,30 @@ public class ECSimplifyMethodReferences extends Recipe {
 			return null;
 		}
 
-		private JavaType getMethodParameterType(J.MemberReference memberRef, J.MethodInvocation methodInv) {
+		private JavaType getMethodParameterType(J.MemberReference memberRef, J.MethodInvocation methodInv)
+		{
 			java.util.List<Expression> arguments = methodInv.getArguments();
 			int argIndex = -1;
-			for (int i = 0; i < arguments.size(); i++) {
-				if (arguments.get(i) == memberRef) {
+			for (int i = 0; i < arguments.size(); i++)
+			{
+				if (arguments.get(i) == memberRef)
+				{
 					argIndex = i;
 					break;
 				}
 			}
 
-			if (argIndex < 0) {
+			if (argIndex < 0)
+			{
 				return null;
 			}
 
 			JavaType methodType = methodInv.getMethodType();
-			if (methodType instanceof JavaType.Method method) {
+			if (methodType instanceof JavaType.Method method)
+			{
 				java.util.List<JavaType> paramTypes = method.getParameterTypes();
-				if (argIndex < paramTypes.size()) {
+				if (argIndex < paramTypes.size())
+				{
 					return paramTypes.get(argIndex);
 				}
 			}
@@ -198,12 +224,15 @@ public class ECSimplifyMethodReferences extends Recipe {
 			return null;
 		}
 
-		private boolean areTypesCompatible(JavaType sourceType, JavaType targetType) {
-			if (sourceType == null || targetType == null) {
+		private boolean areTypesCompatible(JavaType sourceType, JavaType targetType)
+		{
+			if (sourceType == null || targetType == null)
+			{
 				return true;
 			}
 
-			if (TypeUtils.isAssignableTo(targetType, sourceType)) {
+			if (TypeUtils.isAssignableTo(targetType, sourceType))
+			{
 				return true;
 			}
 
@@ -211,7 +240,8 @@ public class ECSimplifyMethodReferences extends Recipe {
 			FullyQualified sourceFqn = TypeUtils.asFullyQualified(sourceType);
 			FullyQualified targetFqn = TypeUtils.asFullyQualified(targetType);
 
-			if (sourceFqn == null || targetFqn == null) {
+			if (sourceFqn == null || targetFqn == null)
+			{
 				return true;
 			}
 

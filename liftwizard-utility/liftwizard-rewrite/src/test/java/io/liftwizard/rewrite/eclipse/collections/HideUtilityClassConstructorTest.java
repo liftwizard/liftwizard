@@ -24,18 +24,21 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class HideUtilityClassConstructorTest implements AbstractRewriteFixtures, RewriteTest {
-
+class HideUtilityClassConstructorTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new HideUtilityClassConstructor())
-			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()));
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new HideUtilityClassConstructor()).parser(
+			JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles())
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		rewriteRun(
 			//language=java
 			this.javaFixture("replacePatterns/01"),
@@ -51,7 +54,8 @@ class HideUtilityClassConstructorTest implements AbstractRewriteFixtures, Rewrit
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		rewriteRun(
 			//language=java
 			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),

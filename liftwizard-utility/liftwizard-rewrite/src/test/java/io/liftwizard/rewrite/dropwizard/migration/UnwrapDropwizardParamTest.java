@@ -25,41 +25,43 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class UnwrapDropwizardParamTest implements AbstractRewriteFixtures, RewriteTest {
-
+class UnwrapDropwizardParamTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new UnwrapDropwizardParam("io.dropwizard.jersey.params.BooleanParam", "java.lang.Boolean"))
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package io.dropwizard.jersey.params;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new UnwrapDropwizardParam("io.dropwizard.jersey.params.BooleanParam", "java.lang.Boolean")).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class BooleanParam {
-						    private final Boolean value;
-						    public BooleanParam(String input) {
-						        this.value = Boolean.valueOf(input);
-						    }
-						    public Boolean get() {
-						        return this.value;
-						    }
-						}
-						"""
-					)
-			);
+					public class BooleanParam {
+					    private final Boolean value;
+					    public BooleanParam(String input) {
+					        this.value = Boolean.valueOf(input);
+					    }
+					    public Boolean get() {
+					        return this.value;
+					    }
+					}
+					"""
+				)
+		);
 	}
 
 	@Test
 	@DocumentExample
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

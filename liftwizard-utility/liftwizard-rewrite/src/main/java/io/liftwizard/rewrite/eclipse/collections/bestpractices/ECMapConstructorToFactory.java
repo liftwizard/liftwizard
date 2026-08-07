@@ -16,19 +16,23 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
-public class ECMapConstructorToFactory extends AbstractECConstructorToFactoryRecipe {
-
-	public ECMapConstructorToFactory() {
+public class ECMapConstructorToFactory
+	extends AbstractECConstructorToFactoryRecipe
+{
+	public ECMapConstructorToFactory()
+	{
 		super("UnifiedMap", "map", "Maps", "", "mutable");
 	}
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`new UnifiedMap<>()` → `Maps.mutable.empty()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return "Replace `new UnifiedMap()` constructor calls with `Maps.mutable.empty()`.";
 	}
 }

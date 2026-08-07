@@ -23,27 +23,30 @@ import org.openrewrite.test.RecipeSpec;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CollectionsEmptyToFactoryTest extends AbstractEclipseCollectionsTest {
-
+class CollectionsEmptyToFactoryTest
+	extends AbstractEclipseCollectionsTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		super.defaults(spec);
 		spec.recipe(new CollectionsEmptyToFactory());
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				this.javaFixture("replacePatterns/01"),
-				// Lists is already bound to org.eclipse.collections.impl.factory.Lists, so the recipe must reuse it
-				this.javaFixture("replacePatterns/02", (spec) ->
-					spec.afterRecipe((cu) ->
-						assertThat(collectTypesNamed(cu, "Lists"))
-							.isNotEmpty()
-							.containsOnly("org.eclipse.collections.impl.factory.Lists")
-					)
+			this.javaFixture("replacePatterns/01"),
+			// Lists is already bound to org.eclipse.collections.impl.factory.Lists, so the recipe must reuse it
+			this.javaFixture("replacePatterns/02", (spec) ->
+				spec.afterRecipe((cu) ->
+					assertThat(collectTypesNamed(cu, "Lists"))
+						.isNotEmpty()
+						.containsOnly("org.eclipse.collections.impl.factory.Lists")
 				)
-			);
+			)
+		);
 	}
 }

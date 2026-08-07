@@ -24,33 +24,37 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "Array empty checks → `ArrayIterate`",
 	description = "Replace manual array null and length checks with "
-	+ "`ArrayIterate.isEmpty()` and `ArrayIterate.notEmpty()`."
+		+ "`ArrayIterate.isEmpty()` and `ArrayIterate.notEmpty()`."
 )
-public class ArrayIterateEmpty {
-
+public class ArrayIterateEmpty
+{
 	@RecipeDescriptor(
 		name = "`array == null || array.length == 0` → " + "`ArrayIterate.isEmpty(array)`",
 		description = "Replace manual null or empty check with " + "`ArrayIterate.isEmpty(array)`."
 	)
-	public static final class IsEmptyPattern {
-
+	public static final class IsEmptyPattern
+	{
 		@BeforeTemplate
-		boolean beforeLengthEqualsZero(Object[] array) {
+		boolean beforeLengthEqualsZero(Object[] array)
+		{
 			return array == null || array.length == 0;
 		}
 
 		@BeforeTemplate
-		boolean beforeLengthLessOrEqualZero(Object[] array) {
+		boolean beforeLengthLessOrEqualZero(Object[] array)
+		{
 			return array == null || array.length <= 0;
 		}
 
 		@BeforeTemplate
-		boolean beforeLengthLessThanOne(Object[] array) {
+		boolean beforeLengthLessThanOne(Object[] array)
+		{
 			return array == null || array.length < 1;
 		}
 
 		@AfterTemplate
-		boolean after(Object[] array) {
+		boolean after(Object[] array)
+		{
 			return ArrayIterate.isEmpty(array);
 		}
 	}
@@ -59,25 +63,29 @@ public class ArrayIterateEmpty {
 		name = "`array != null && array.length > 0` → " + "`ArrayIterate.notEmpty(array)`",
 		description = "Replace manual not-null and not-empty check with " + "`ArrayIterate.notEmpty(array)`."
 	)
-	public static final class NotEmptyPattern {
-
+	public static final class NotEmptyPattern
+	{
 		@BeforeTemplate
-		boolean beforeLengthGreaterThanZero(Object[] array) {
+		boolean beforeLengthGreaterThanZero(Object[] array)
+		{
 			return array != null && array.length > 0;
 		}
 
 		@BeforeTemplate
-		boolean beforeLengthNotEqualZero(Object[] array) {
+		boolean beforeLengthNotEqualZero(Object[] array)
+		{
 			return array != null && array.length != 0;
 		}
 
 		@BeforeTemplate
-		boolean beforeLengthGreaterOrEqualOne(Object[] array) {
+		boolean beforeLengthGreaterOrEqualOne(Object[] array)
+		{
 			return array != null && array.length >= 1;
 		}
 
 		@AfterTemplate
-		boolean after(Object[] array) {
+		boolean after(Object[] array)
+		{
 			return ArrayIterate.notEmpty(array);
 		}
 	}
@@ -86,15 +94,17 @@ public class ArrayIterateEmpty {
 		name = "`!ArrayIterate.isEmpty()` → `ArrayIterate.notEmpty()`",
 		description = "Converts `!ArrayIterate.isEmpty(array)` to `ArrayIterate.notEmpty(array)`."
 	)
-	public static final class NegatedArrayIterateIsEmptyToNotEmpty {
-
+	public static final class NegatedArrayIterateIsEmptyToNotEmpty
+	{
 		@BeforeTemplate
-		boolean before(Object[] array) {
+		boolean before(Object[] array)
+		{
 			return !ArrayIterate.isEmpty(array);
 		}
 
 		@AfterTemplate
-		boolean after(Object[] array) {
+		boolean after(Object[] array)
+		{
 			return ArrayIterate.notEmpty(array);
 		}
 	}
@@ -103,15 +113,17 @@ public class ArrayIterateEmpty {
 		name = "`!ArrayIterate.notEmpty()` → `ArrayIterate.isEmpty()`",
 		description = "Converts `!ArrayIterate.notEmpty(array)` to `ArrayIterate.isEmpty(array)`."
 	)
-	public static final class NegatedArrayIterateNotEmptyToIsEmpty {
-
+	public static final class NegatedArrayIterateNotEmptyToIsEmpty
+	{
 		@BeforeTemplate
-		boolean before(Object[] array) {
+		boolean before(Object[] array)
+		{
 			return !ArrayIterate.notEmpty(array);
 		}
 
 		@AfterTemplate
-		boolean after(Object[] array) {
+		boolean after(Object[] array)
+		{
 			return ArrayIterate.isEmpty(array);
 		}
 	}

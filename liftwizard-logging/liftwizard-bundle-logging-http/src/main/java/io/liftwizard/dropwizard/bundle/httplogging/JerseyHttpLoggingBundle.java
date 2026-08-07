@@ -46,8 +46,9 @@ import org.slf4j.LoggerFactory;
  *
  * @see <a href="https://liftwizard.io/docs/logging/JerseyHttpLoggingBundle#jerseyhttploggingbundle">https://liftwizard.io/docs/logging/JerseyHttpLoggingBundle#jerseyhttploggingbundle</a>
  */
-public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggingFactoryProvider> {
-
+public class JerseyHttpLoggingBundle
+	implements ConfiguredBundle<JerseyHttpLoggingFactoryProvider>
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(JerseyHttpLoggingBundle.class);
 
 	@Nonnull
@@ -56,25 +57,32 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 	@Nonnull
 	private final Function<? super Principal, ? extends Map<String, Object>> principalBuilder;
 
-	public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger) {
+	public JerseyHttpLoggingBundle(@Nonnull Consumer<StructuredArguments> structuredLogger)
+	{
 		this(structuredLogger, (principal) -> Map.of("name", principal.getName()));
 	}
 
 	public JerseyHttpLoggingBundle(
 		@Nonnull Consumer<StructuredArguments> structuredLogger,
 		@Nonnull Function<? super Principal, ? extends Map<String, Object>> principalBuilder
-	) {
+	)
+	{
 		this.structuredLogger = Objects.requireNonNull(structuredLogger);
 		this.principalBuilder = Objects.requireNonNull(principalBuilder);
 	}
 
 	@Override
-	public void initialize(Bootstrap<?> bootstrap) {}
+	public void initialize(Bootstrap<?> bootstrap)
+	{
+	}
 
 	@Override
-	public void run(JerseyHttpLoggingFactoryProvider configuration, Environment environment) throws Exception {
+	public void run(JerseyHttpLoggingFactoryProvider configuration, Environment environment)
+		throws Exception
+	{
 		JerseyHttpLoggingFactory factory = configuration.getJerseyHttpLoggingFactory();
-		if (!factory.isEnabled()) {
+		if (!factory.isEnabled())
+		{
 			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}
@@ -99,12 +107,14 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 			maxEntitySize
 		);
 
-		if (loggingConfig.isLogRequests()) {
+		if (loggingConfig.isLogRequests())
+		{
 			var loggingRequestFilter = new ServerLoggingRequestFilter(this.principalBuilder);
 			environment.jersey().register(loggingRequestFilter);
 		}
 
-		if (loggingConfig.isLogResponses()) {
+		if (loggingConfig.isLogResponses())
+		{
 			var loggingResponseFilter = new ServerLoggingResponseFilter();
 			environment.jersey().register(loggingResponseFilter);
 		}
@@ -118,8 +128,10 @@ public class JerseyHttpLoggingBundle implements ConfiguredBundle<JerseyHttpLoggi
 		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
-	private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration) {
-		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
+	private static Clock getClock(JerseyHttpLoggingFactoryProvider configuration)
+	{
+		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider))
+		{
 			LOGGER.warn(
 				"Configuration {} does not implement {}. Using system clock.",
 				configuration.getClass().getSimpleName(),

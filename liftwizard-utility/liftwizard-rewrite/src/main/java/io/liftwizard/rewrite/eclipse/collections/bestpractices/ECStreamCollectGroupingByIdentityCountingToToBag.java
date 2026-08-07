@@ -47,8 +47,9 @@ import org.openrewrite.java.tree.J;
  * <p>A {@code Bag<T>} provides {@code occurrencesOf()} and {@code topOccurrences()} out of the box,
  * replacing the need for manual Map-based counting patterns.
  */
-public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
-
+public class ECStreamCollectGroupingByIdentityCountingToToBag
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -64,12 +65,14 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))` to `toBag()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))` "
 			+ "to `collection.toBag()`. "
@@ -80,7 +83,8 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(COLLECT_MATCHER),
 			new StreamCollectGroupingByIdentityCountingToToBagVisitor()
@@ -88,45 +92,54 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 	}
 
 	private static final class StreamCollectGroupingByIdentityCountingToToBagVisitor
-		extends JavaIsoVisitor<ExecutionContext> {
-
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!this.isGroupingByIdentityWithCounting(collectorCall)) {
+			if (!this.isGroupingByIdentityWithCounting(collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -143,27 +156,33 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag extends Recipe {
 		/**
 		 * Checks whether the collector call is {@code Collectors.groupingBy(Function.identity(), Collectors.counting())}.
 		 */
-		private boolean isGroupingByIdentityWithCounting(J.MethodInvocation collectorCall) {
-			if (!GROUPING_BY_TWO_ARG_MATCHER.matches(collectorCall)) {
+		private boolean isGroupingByIdentityWithCounting(J.MethodInvocation collectorCall)
+		{
+			if (!GROUPING_BY_TWO_ARG_MATCHER.matches(collectorCall))
+			{
 				return false;
 			}
 
 			List<Expression> args = collectorCall.getArguments();
-			if (args.size() != 2) {
+			if (args.size() != 2)
+			{
 				return false;
 			}
 
 			Expression classifyingFunction = args.get(0);
-			if (!(classifyingFunction instanceof J.MethodInvocation identityCall)) {
+			if (!(classifyingFunction instanceof J.MethodInvocation identityCall))
+			{
 				return false;
 			}
 
-			if (!FUNCTION_IDENTITY_MATCHER.matches(identityCall)) {
+			if (!FUNCTION_IDENTITY_MATCHER.matches(identityCall))
+			{
 				return false;
 			}
 
 			Expression downstream = args.get(1);
-			if (!(downstream instanceof J.MethodInvocation downstreamCall)) {
+			if (!(downstream instanceof J.MethodInvocation downstreamCall))
+			{
 				return false;
 			}
 

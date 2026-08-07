@@ -24,15 +24,17 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class LiquibaseRollbackVerifierTest {
-
+class LiquibaseRollbackVerifierTest
+{
 	@Test
-	void verifyAllChangesets() {
+	void verifyAllChangesets()
+	{
 		assertDoesNotThrow(() -> LiquibaseRollbackVerifier.verifyAllChangesets("test-migrations.xml"));
 	}
 
 	@Test
-	void verifyAllChangesets_nullMigrationsFile() {
+	void verifyAllChangesets_nullMigrationsFile()
+	{
 		assertThrows(NullPointerException.class, () -> LiquibaseRollbackVerifier.verifyAllChangesets(null));
 	}
 }

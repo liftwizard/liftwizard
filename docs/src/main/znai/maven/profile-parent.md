@@ -129,8 +129,6 @@ See [pull-request.yml](https://github.com/motlin/liftwizard/blob/main/.github/wo
 | `maven-shade-plugin`                  | Build & Packaging     | Create uber-jars                             |
 | `znai-maven-plugin`                   | Build & Packaging     | Generate Znai documentation                  |
 | **Code Formatting**                   |                       |                                              |
-| `prettier-apply`                      | Code Formatting       | Apply Prettier formatting                    |
-| `prettier-check`                      | Code Formatting       | Check code formatting with Prettier          |
 | `spotless-antlr`                      | Code Formatting       | ANTLR grammar formatting                     |
 | `spotless-apply`                      | Code Formatting       | Apply Spotless formatting                    |
 | `spotless-check`                      | Code Formatting       | Check code formatting with Spotless          |

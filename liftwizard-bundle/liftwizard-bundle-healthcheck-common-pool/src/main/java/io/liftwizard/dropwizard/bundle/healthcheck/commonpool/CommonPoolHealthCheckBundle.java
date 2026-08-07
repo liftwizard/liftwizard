@@ -29,18 +29,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoService(PrioritizedBundle.class)
-public class CommonPoolHealthCheckBundle implements PrioritizedBundle {
-
+public class CommonPoolHealthCheckBundle
+	implements PrioritizedBundle
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheckBundle.class);
 
 	@Override
-	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment) {
+	public void runWithMdc(@Nonnull Object configuration, @Nonnull Environment environment)
+	{
 		CommonPoolHealthCheckFactoryProvider factoryProvider = this.safeCastConfiguration(
 			CommonPoolHealthCheckFactoryProvider.class,
 			configuration
 		);
 		CommonPoolHealthCheckFactory factory = factoryProvider.getCommonPoolHealthCheckFactory();
-		if (!factory.isEnabled()) {
+		if (!factory.isEnabled())
+		{
 			LOGGER.info("{} disabled.", this.getClass().getSimpleName());
 			return;
 		}

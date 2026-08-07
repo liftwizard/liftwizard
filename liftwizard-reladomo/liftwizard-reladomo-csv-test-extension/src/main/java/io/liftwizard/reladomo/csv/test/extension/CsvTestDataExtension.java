@@ -35,8 +35,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CsvTestDataExtension implements BeforeEachCallback, AfterEachCallback {
-
+public class CsvTestDataExtension
+	implements BeforeEachCallback, AfterEachCallback
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsvTestDataExtension.class);
 
 	private static final Class<?>[] NO_PARAMS = {};
@@ -45,26 +46,35 @@ public class CsvTestDataExtension implements BeforeEachCallback, AfterEachCallba
 	@Nonnull
 	private final ImmutableList<String> csvFileNames;
 
-	public CsvTestDataExtension(@Nonnull String... csvFileNames) {
+	public CsvTestDataExtension(@Nonnull String... csvFileNames)
+	{
 		this(Lists.immutable.with(csvFileNames));
 	}
 
-	public CsvTestDataExtension(@Nonnull ImmutableList<String> csvFileNames) {
+	public CsvTestDataExtension(@Nonnull ImmutableList<String> csvFileNames)
+	{
 		this.csvFileNames = csvFileNames;
 	}
 
 	@Override
-	public void beforeEach(ExtensionContext context) {
-		for (String csvFileName : this.csvFileNames) {
-			try {
+	public void beforeEach(ExtensionContext context)
+	{
+		for (String csvFileName : this.csvFileNames)
+		{
+			try
+			{
 				this.loadCsvTestData(csvFileName);
-			} catch (ReflectiveOperationException e) {
+			}
+			catch (ReflectiveOperationException e)
+			{
 				throw new RuntimeException("Error while loading CSV test data file: " + csvFileName, e);
 			}
 		}
 	}
 
-	private void loadCsvTestData(String csvFileName) throws ReflectiveOperationException {
+	private void loadCsvTestData(String csvFileName)
+		throws ReflectiveOperationException
+	{
 		LOGGER.debug("Loading CSV test data from file: {}", csvFileName);
 
 		var parser = new CsvTestDataParser(csvFileName);
@@ -72,11 +82,12 @@ public class CsvTestDataExtension implements BeforeEachCallback, AfterEachCallba
 		List<Attribute<?, ?>> attributes = parser.getAttributes();
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
 
-		if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(className)) {
+		if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(className))
+		{
 			throw new RuntimeException(
 				"Class "
-				+ className
-				+ " is not configured. Did you remember to initialize Reladomo with a runtime configuration?"
+					+ className
+					+ " is not configured. Did you remember to initialize Reladomo with a runtime configuration?"
 			);
 		}
 
@@ -101,7 +112,8 @@ public class CsvTestDataExtension implements BeforeEachCallback, AfterEachCallba
 	}
 
 	@Override
-	public void afterEach(ExtensionContext context) {
+	public void afterEach(ExtensionContext context)
+	{
 		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
 		MithraManagerProvider.getMithraManager().cleanUpPrimaryKeyGenerators();
 		MithraManagerProvider.getMithraManager().cleanUpRuntimeCacheControllers();

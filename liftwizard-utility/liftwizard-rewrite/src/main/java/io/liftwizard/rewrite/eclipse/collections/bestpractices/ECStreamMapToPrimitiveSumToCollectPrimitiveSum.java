@@ -50,8 +50,9 @@ import org.openrewrite.java.tree.JavaType;
  * since Eclipse Collections has the {@code collectDouble/collectInt/collectLong} methods directly
  * on {@code RichIterable}, and the resulting primitive collections have {@code sum()}.
  */
-public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
-
+public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum
+	extends Recipe
+{
 	private static final MethodMatcher DOUBLE_STREAM_SUM_MATCHER = new MethodMatcher(
 		"java.util.stream.DoubleStream sum()"
 	);
@@ -73,12 +74,14 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().mapToDouble(fn).sum()` to `collectDouble(fn).sum()`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().mapToDouble(fn).sum()` "
 			+ "to `collection.collectDouble(fn).sum()`. "
@@ -89,7 +92,8 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			Preconditions.or(
 				new UsesMethod<>(DOUBLE_STREAM_SUM_MATCHER),
@@ -100,46 +104,56 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
 		);
 	}
 
-	private static final class StreamMapToPrimitiveSumVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamMapToPrimitiveSumVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!this.isPrimitiveSumMethod(methodInvocation)) {
+			if (!this.isPrimitiveSumMethod(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			Expression sumSelect = methodInvocation.getSelect();
-			if (!(sumSelect instanceof J.MethodInvocation mapToPrimitiveCall)) {
+			if (!(sumSelect instanceof J.MethodInvocation mapToPrimitiveCall))
+			{
 				return methodInvocation;
 			}
 
 			String collectMethodName = this.getCollectMethodName(mapToPrimitiveCall);
-			if (collectMethodName == null) {
+			if (collectMethodName == null)
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> mapToPrimitiveArgs = mapToPrimitiveCall.getArguments();
-			if (mapToPrimitiveArgs.size() != 1) {
+			if (mapToPrimitiveArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression mapToPrimitiveSelect = mapToPrimitiveCall.getSelect();
-			if (!(mapToPrimitiveSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(mapToPrimitiveSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -149,9 +163,8 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
 
 			// Reuse the mapToDouble() method type (1 arg) for the collectDouble(fn) call
 			JavaType.Method mapToPrimitiveMethodType = mapToPrimitiveCall.getMethodType();
-			JavaType.Method collectPrimitiveMethodType = mapToPrimitiveMethodType != null
-				? mapToPrimitiveMethodType.withName(collectMethodName)
-				: null;
+			JavaType.Method collectPrimitiveMethodType =
+				mapToPrimitiveMethodType != null ? mapToPrimitiveMethodType.withName(collectMethodName) : null;
 
 			// Inner call: collection.collectDouble(fn)
 			J.Identifier collectPrimitiveMethodName = mapToPrimitiveCall
@@ -169,7 +182,8 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
 			return methodInvocation.withSelect(collectPrimitiveCall);
 		}
 
-		private boolean isPrimitiveSumMethod(J.MethodInvocation method) {
+		private boolean isPrimitiveSumMethod(J.MethodInvocation method)
+		{
 			return (
 				DOUBLE_STREAM_SUM_MATCHER.matches(method)
 				|| INT_STREAM_SUM_MATCHER.matches(method)
@@ -181,14 +195,18 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum extends Recipe {
 		 * Returns the Eclipse Collections collect method name for the matching mapToPrimitive call,
 		 * or null if the call is not a supported form.
 		 */
-		private String getCollectMethodName(J.MethodInvocation mapToPrimitiveCall) {
-			if (MAP_TO_DOUBLE_MATCHER.matches(mapToPrimitiveCall)) {
+		private String getCollectMethodName(J.MethodInvocation mapToPrimitiveCall)
+		{
+			if (MAP_TO_DOUBLE_MATCHER.matches(mapToPrimitiveCall))
+			{
 				return "collectDouble";
 			}
-			if (MAP_TO_INT_MATCHER.matches(mapToPrimitiveCall)) {
+			if (MAP_TO_INT_MATCHER.matches(mapToPrimitiveCall))
+			{
 				return "collectInt";
 			}
-			if (MAP_TO_LONG_MATCHER.matches(mapToPrimitiveCall)) {
+			if (MAP_TO_LONG_MATCHER.matches(mapToPrimitiveCall))
+			{
 				return "collectLong";
 			}
 			return null;

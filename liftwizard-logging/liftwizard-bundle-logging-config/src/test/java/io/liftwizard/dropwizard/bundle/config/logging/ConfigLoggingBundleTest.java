@@ -34,8 +34,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-class ConfigLoggingBundleTest {
-
+class ConfigLoggingBundleTest
+{
 	/**
 	 * The minimized-configuration log is a best-effort diagnostic. A failure while computing it (for example a Jackson
 	 * serializer that throws under {@code @JsonInclude(NON_DEFAULT)}) must be contained so that it cannot prevent the
@@ -43,7 +43,8 @@ class ConfigLoggingBundleTest {
 	 * still completes normally.
 	 */
 	@Test
-	void minimizationFailureDoesNotPreventStartup() {
+	void minimizationFailureDoesNotPreventStartup()
+	{
 		ObjectMapper objectMapper = new FailingCopyObjectMapper(Jackson.newObjectMapper());
 		var configuration = new Configuration();
 
@@ -53,7 +54,8 @@ class ConfigLoggingBundleTest {
 	}
 
 	@Test
-	void logsConfigurationWithBlackbirdRegistered() {
+	void logsConfigurationWithBlackbirdRegistered()
+	{
 		ObjectMapper objectMapper = Jackson.newObjectMapper().registerModule(new BlackbirdModule());
 		var configuration = new Configuration();
 
@@ -63,7 +65,8 @@ class ConfigLoggingBundleTest {
 	}
 
 	@Test
-	void fullConfigurationFailureDoesNotPreventStartup() {
+	void fullConfigurationFailureDoesNotPreventStartup()
+	{
 		ObjectMapper objectMapper = new FailingWriteObjectMapper(Jackson.newObjectMapper());
 		var configuration = new Configuration();
 
@@ -73,7 +76,8 @@ class ConfigLoggingBundleTest {
 	}
 
 	@Test
-	void ignoredPropertyNamesAnnotationIntrospectorRemovesRequestLog() {
+	void ignoredPropertyNamesAnnotationIntrospectorRemovesRequestLog()
+	{
 		ObjectMapper objectMapper = Jackson.newObjectMapper();
 		ObjectNode withRequestLog = objectMapper.valueToTree(new DefaultServerFactory());
 		assertThat(withRequestLog.has("requestLog")).isTrue();
@@ -93,7 +97,8 @@ class ConfigLoggingBundleTest {
 	}
 
 	@Test
-	void ignoredPropertyNamesAnnotationIntrospectorIsScopedToDeclaringType() {
+	void ignoredPropertyNamesAnnotationIntrospectorIsScopedToDeclaringType()
+	{
 		ObjectMapper objectMapper = Jackson.newObjectMapper();
 		AnnotationIntrospector existingIntrospector = objectMapper.getSerializationConfig().getAnnotationIntrospector();
 		objectMapper.setAnnotationIntrospector(
@@ -108,7 +113,8 @@ class ConfigLoggingBundleTest {
 	}
 
 	@Test
-	void fallbackMinimizationKeepsServerButOmitsRequestLog() {
+	void fallbackMinimizationKeepsServerButOmitsRequestLog()
+	{
 		var configuration = new Configuration();
 		var serverFactory = (DefaultServerFactory) configuration.getServerFactory();
 		serverFactory.setMaxThreads(999);
@@ -132,14 +138,17 @@ class ConfigLoggingBundleTest {
 	 * the mapper before installing its mix-in, so this triggers a failure only on the minimization path, leaving the
 	 * full-configuration serialization (which uses the mapper directly) intact.
 	 */
-	private static final class FailingCopyObjectMapper extends ObjectMapper {
-
-		private FailingCopyObjectMapper(ObjectMapper source) {
+	private static final class FailingCopyObjectMapper
+		extends ObjectMapper
+	{
+		private FailingCopyObjectMapper(ObjectMapper source)
+		{
 			super(source);
 		}
 
 		@Override
-		public ObjectMapper copy() {
+		public ObjectMapper copy()
+		{
 			throw new IllegalStateException("Forced minimization failure for test.");
 		}
 	}
@@ -148,14 +157,17 @@ class ConfigLoggingBundleTest {
 	 * An {@link ObjectMapper} that fails when serializing to a String, exercising the guard around the full-configuration
 	 * log line.
 	 */
-	private static final class FailingWriteObjectMapper extends ObjectMapper {
-
-		private FailingWriteObjectMapper(ObjectMapper source) {
+	private static final class FailingWriteObjectMapper
+		extends ObjectMapper
+	{
+		private FailingWriteObjectMapper(ObjectMapper source)
+		{
 			super(source);
 		}
 
 		@Override
-		public String writeValueAsString(Object value) {
+		public String writeValueAsString(Object value)
+		{
 			throw new IllegalStateException("Forced full-configuration serialization failure for test.");
 		}
 	}
@@ -164,9 +176,10 @@ class ConfigLoggingBundleTest {
 	 * An unrelated type that also has a {@code requestLog} property, used to confirm the introspector only ignores the
 	 * property on the configured declaring type.
 	 */
-	public static final class UnrelatedRequestLogHolder {
-
-		public String getRequestLog() {
+	public static final class UnrelatedRequestLogHolder
+	{
+		public String getRequestLog()
+		{
 			return "kept";
 		}
 	}

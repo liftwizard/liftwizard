@@ -23,15 +23,16 @@ import graphql.schema.GraphQLScalarType;
  * Derived from <a href="https://github.com/graphql-java/graphql-java-extended-scalars">graphql-java-extended-scalars</a> but named LocalDate instead of Date.
  */
 @Internal
-public final class GraphQLLocalDateScalar {
-
+public final class GraphQLLocalDateScalar
+{
 	public static final GraphQLScalarType INSTANCE = GraphQLScalarType.newScalar()
 		.name("LocalDate")
 		.description("An RFC-3339 compliant LocalDate Scalar")
 		.coercing(new LocalDateCoercing())
 		.build();
 
-	private GraphQLLocalDateScalar() {
+	private GraphQLLocalDateScalar()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 }

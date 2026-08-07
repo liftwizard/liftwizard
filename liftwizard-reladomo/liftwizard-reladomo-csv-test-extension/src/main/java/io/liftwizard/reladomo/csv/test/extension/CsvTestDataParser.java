@@ -50,8 +50,8 @@ import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CsvTestDataParser {
-
+public class CsvTestDataParser
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsvTestDataParser.class);
 
 	private static final Class<?>[] NO_PARAMS = {};
@@ -69,7 +69,8 @@ public class CsvTestDataParser {
 	@Nonnull
 	private final List<MithraDataObject> dataObjects;
 
-	public CsvTestDataParser(@Nonnull String filename) {
+	public CsvTestDataParser(@Nonnull String filename)
+	{
 		this.filename = filename;
 		this.className = this.extractClassNameFromFilename(filename);
 		this.attributes = Lists.mutable.empty();
@@ -78,22 +79,28 @@ public class CsvTestDataParser {
 	}
 
 	@Nonnull
-	private String extractClassNameFromFilename(@Nonnull String filenameParam) {
+	private String extractClassNameFromFilename(@Nonnull String filenameParam)
+	{
 		String baseFilename = filenameParam;
-		if (baseFilename.contains("/")) {
+		if (baseFilename.contains("/"))
+		{
 			baseFilename = baseFilename.substring(baseFilename.lastIndexOf('/') + 1);
 		}
-		if (!baseFilename.endsWith(".csv")) {
+		if (!baseFilename.endsWith(".csv"))
+		{
 			throw new IllegalArgumentException("Filename must end with .csv: " + this.filename);
 		}
 		return baseFilename.substring(0, baseFilename.length() - 4);
 	}
 
-	private void parse() {
+	private void parse()
+	{
 		LOGGER.debug("Parsing CSV file: {}", this.filename);
 
-		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(this.filename)) {
-			if (inputStream == null) {
+		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(this.filename))
+		{
+			if (inputStream == null)
+			{
 				throw new IllegalArgumentException("Could not find file: " + this.filename);
 			}
 
@@ -103,91 +110,122 @@ public class CsvTestDataParser {
 					reader,
 					CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).setTrim(true).build()
 				)
-			) {
+			)
+			{
 				this.parseHeaders(csvParser.getHeaderNames());
 				this.parseDataRows(csvParser);
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException("Error reading CSV file: " + this.filename, e);
 		}
 	}
 
-	private void parseHeaders(@Nonnull List<String> headerNames) {
-		try {
+	private void parseHeaders(@Nonnull List<String> headerNames)
+	{
+		try
+		{
 			String finderClassName = this.className + "Finder";
 			Class<?> finderClass = Class.forName(finderClassName);
 
-			for (String headerName : headerNames) {
+			for (String headerName : headerNames)
+			{
 				String getterMethodName = headerName;
 				Method getterMethod = finderClass.getMethod(getterMethodName, NO_PARAMS);
 				var attribute = (Attribute<?, ?>) getterMethod.invoke(null, NO_ARGS);
 				this.attributes.add(attribute);
 			}
-		} catch (
-			ClassNotFoundException
-			| NoSuchMethodException
-			| IllegalAccessException
-			| InvocationTargetException e
-		) {
+		}
+		catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e)
+		{
 			throw new RuntimeException("Error finding attributes for class: " + this.className, e);
 		}
 	}
 
-	private void parseDataRows(@Nonnull CSVParser csvParser) {
-		try {
+	private void parseDataRows(@Nonnull CSVParser csvParser)
+	{
+		try
+		{
 			String dataClassName = this.className + "Data";
 			Class<?> dataClass = Class.forName(dataClassName);
 
-			for (CSVRecord record : csvParser) {
+			for (CSVRecord record : csvParser)
+			{
 				var dataObject = (MithraDataObject) dataClass.getDeclaredConstructor().newInstance();
 				this.populateDataObject(dataObject, record);
 				this.dataObjects.add(dataObject);
 			}
-		} catch (
+		}
+		catch (
 			ClassNotFoundException
 			| NoSuchMethodException
 			| IllegalAccessException
 			| InvocationTargetException
 			| InstantiationException e
-		) {
+		)
+		{
 			throw new RuntimeException("Error creating data objects for class: " + this.className, e);
 		}
 	}
 
-	private void populateDataObject(@Nonnull MithraDataObject dataObject, @Nonnull CSVRecord record) {
-		for (var i = 0; i < this.attributes.size(); i++) {
+	private void populateDataObject(@Nonnull MithraDataObject dataObject, @Nonnull CSVRecord record)
+	{
+		for (var i = 0; i < this.attributes.size(); i++)
+		{
 			Attribute<?, ?> attribute = this.attributes.get(i);
 			String value = record.get(i);
 
-			if (value == null || value.isEmpty()) {
+			if (value == null || value.isEmpty())
+			{
 				this.setNullValue(dataObject, attribute);
-			} else {
+			}
+			else
+			{
 				this.setValue(dataObject, attribute, value);
 			}
 		}
 	}
 
-	private void setNullValue(@Nonnull MithraDataObject dataObject, @Nonnull Attribute<?, ?> attribute) {
-		if (attribute instanceof TimestampAttribute timestampAttribute) {
+	private void setNullValue(@Nonnull MithraDataObject dataObject, @Nonnull Attribute<?, ?> attribute)
+	{
+		if (attribute instanceof TimestampAttribute timestampAttribute)
+		{
 			Timestamp timestamp = timestampAttribute.isAsOfAttributeTo()
 				? timestampAttribute.getAsOfAttributeInfinity()
 				: null;
 			timestampAttribute.setTimestampValue(dataObject, timestamp);
-		} else if (attribute instanceof DateAttribute dateAttribute) {
+		}
+		else if (attribute instanceof DateAttribute dateAttribute)
+		{
 			dateAttribute.setDateValue(dataObject, null);
-		} else if (attribute instanceof StringAttribute stringAttribute) {
+		}
+		else if (attribute instanceof StringAttribute stringAttribute)
+		{
 			stringAttribute.setStringValue(dataObject, null);
-		} else if (attribute instanceof IntegerAttribute integerAttribute) {
+		}
+		else if (attribute instanceof IntegerAttribute integerAttribute)
+		{
 			integerAttribute.setValueNull(dataObject);
-		} else if (attribute instanceof LongAttribute longAttribute) {
+		}
+		else if (attribute instanceof LongAttribute longAttribute)
+		{
 			longAttribute.setValueNull(dataObject);
-		} else if (attribute instanceof DoubleAttribute doubleAttribute) {
+		}
+		else if (attribute instanceof DoubleAttribute doubleAttribute)
+		{
 			doubleAttribute.setValueNull(dataObject);
-		} else if (attribute instanceof FloatAttribute floatAttribute) {
+		}
+		else if (attribute instanceof FloatAttribute floatAttribute)
+		{
 			floatAttribute.setValueNull(dataObject);
-		} else if (attribute instanceof BooleanAttribute booleanAttribute) {
+		}
+		else if (attribute instanceof BooleanAttribute booleanAttribute)
+		{
 			booleanAttribute.setValueNull(dataObject);
-		} else {
+		}
+		else
+		{
 			throw new UnsupportedOperationException("Unsupported attribute type: " + attribute.getClass().getName());
 		}
 	}
@@ -196,32 +234,51 @@ public class CsvTestDataParser {
 		@Nonnull MithraDataObject dataObject,
 		@Nonnull Attribute<?, ?> attribute,
 		@Nonnull String value
-	) {
-		if (attribute instanceof TimestampAttribute timestampAttribute) {
+	)
+	{
+		if (attribute instanceof TimestampAttribute timestampAttribute)
+		{
 			Timestamp timestamp = parseTimestamp(timestampAttribute, value);
 			timestampAttribute.setTimestampValue(dataObject, timestamp);
-		} else if (attribute instanceof DateAttribute dateAttribute) {
+		}
+		else if (attribute instanceof DateAttribute dateAttribute)
+		{
 			LocalDate localDate = LocalDate.parse(value);
 			Date date = Date.valueOf(localDate);
 			dateAttribute.setDateValue(dataObject, date);
-		} else if (attribute instanceof StringAttribute stringAttribute) {
+		}
+		else if (attribute instanceof StringAttribute stringAttribute)
+		{
 			stringAttribute.setStringValue(dataObject, value);
-		} else if (attribute instanceof IntegerAttribute integerAttribute) {
+		}
+		else if (attribute instanceof IntegerAttribute integerAttribute)
+		{
 			integerAttribute.setIntValue(dataObject, Integer.parseInt(value));
-		} else if (attribute instanceof LongAttribute longAttribute) {
+		}
+		else if (attribute instanceof LongAttribute longAttribute)
+		{
 			longAttribute.setLongValue(dataObject, Long.parseLong(value));
-		} else if (attribute instanceof DoubleAttribute doubleAttribute) {
+		}
+		else if (attribute instanceof DoubleAttribute doubleAttribute)
+		{
 			doubleAttribute.setDoubleValue(dataObject, Double.parseDouble(value));
-		} else if (attribute instanceof FloatAttribute floatAttribute) {
+		}
+		else if (attribute instanceof FloatAttribute floatAttribute)
+		{
 			floatAttribute.setFloatValue(dataObject, Float.parseFloat(value));
-		} else if (attribute instanceof BooleanAttribute booleanAttribute) {
+		}
+		else if (attribute instanceof BooleanAttribute booleanAttribute)
+		{
 			booleanAttribute.setBooleanValue(dataObject, Boolean.parseBoolean(value));
-		} else {
+		}
+		else
+		{
 			throw new UnsupportedOperationException("Unsupported attribute type: " + attribute.getClass().getName());
 		}
 	}
 
-	static Timestamp parseTimestamp(TimestampAttribute<?> timestampAttribute, String value) {
+	static Timestamp parseTimestamp(TimestampAttribute<?> timestampAttribute, String value)
+	{
 		Instant instant = Instant.parse(value);
 		Timestamp timestamp = Timestamp.from(instant);
 		LocalDateTime utcDateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
@@ -229,24 +286,28 @@ public class CsvTestDataParser {
 			timestampAttribute.isAsOfAttributeTo()
 			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
 				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
-		) {
+		)
+		{
 			return timestampAttribute.getAsOfAttributeInfinity();
 		}
 		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
 	}
 
 	@Nonnull
-	public String getClassName() {
+	public String getClassName()
+	{
 		return this.className;
 	}
 
 	@Nonnull
-	public List<Attribute<?, ?>> getAttributes() {
+	public List<Attribute<?, ?>> getAttributes()
+	{
 		return this.attributes;
 	}
 
 	@Nonnull
-	public List<MithraDataObject> getDataObjects() {
+	public List<MithraDataObject> getDataObjects()
+	{
 		return this.dataObjects;
 	}
 }

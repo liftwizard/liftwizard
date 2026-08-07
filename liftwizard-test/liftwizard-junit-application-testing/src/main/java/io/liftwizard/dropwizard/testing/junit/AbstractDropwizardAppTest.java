@@ -35,8 +35,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-public abstract class AbstractDropwizardAppTest {
-
+public abstract class AbstractDropwizardAppTest
+{
 	@RegisterExtension
 	protected final JsonMatchExtension jsonMatchExtension = new JsonMatchExtension(this.getClass());
 
@@ -52,7 +52,8 @@ public abstract class AbstractDropwizardAppTest {
 	@Nonnull
 	protected abstract LiftwizardAppExtension<?> getDropwizardAppExtension();
 
-	protected Client getClient(@Nonnull String testName) {
+	protected Client getClient(@Nonnull String testName)
+	{
 		var jerseyClientConfiguration = new JerseyClientConfiguration();
 		jerseyClientConfiguration.setTimeout(Duration.minutes(5));
 
@@ -64,12 +65,14 @@ public abstract class AbstractDropwizardAppTest {
 			.build(clientName);
 	}
 
-	protected void assertEmptyResponse(Status expectedStatus, Response actualResponse) {
+	protected void assertEmptyResponse(Status expectedStatus, Response actualResponse)
+	{
 		assertThat(actualResponse.hasEntity()).isFalse();
 		assertThat(actualResponse.getStatusInfo()).isEqualTo(expectedStatus);
 	}
 
-	protected void assertResponse(String testName, Status expectedStatus, Response actualResponse) {
+	protected void assertResponse(String testName, Status expectedStatus, Response actualResponse)
+	{
 		this.assertResponseStatus(actualResponse, expectedStatus);
 		String actualJsonResponse = actualResponse.readEntity(String.class);
 
@@ -78,7 +81,8 @@ public abstract class AbstractDropwizardAppTest {
 		this.jsonMatchExtension.assertFileContents(expectedResponseClassPathLocation, actualJsonResponse);
 	}
 
-	protected void assertResponseStatus(@Nonnull Response response, Status status) {
+	protected void assertResponseStatus(@Nonnull Response response, Status status)
+	{
 		assertThat(response.hasEntity()).isTrue();
 		response.bufferEntity();
 		String entityAsString = response.readEntity(String.class);

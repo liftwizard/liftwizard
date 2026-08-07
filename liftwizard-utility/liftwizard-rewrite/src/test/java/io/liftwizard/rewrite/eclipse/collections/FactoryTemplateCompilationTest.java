@@ -47,23 +47,30 @@ import org.openrewrite.java.tree.Statement;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.java.Assertions.java;
 
-class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
-
+class FactoryTemplateCompilationTest
+	extends AbstractEclipseCollectionsTest
+{
 	@TempDir
 	Path directory;
 
 	@Test
-	void stubMethodsMatchLibraryInterfaces() throws IOException, ReflectiveOperationException {
+	void stubMethodsMatchLibraryInterfaces()
+		throws IOException, ReflectiveOperationException
+	{
 		MutableList<String> sources = Lists.mutable.empty();
 		var parsed = JavaParser.fromJavaVersion()
 			.build()
 			.parse(EclipseCollectionsTemplateStubs.factories().toArray(String[]::new))
 			.toList();
-		for (var source : parsed) {
+		for (var source : parsed)
+		{
 			var compilationUnit = (J.CompilationUnit) source;
-			for (J.ClassDeclaration factory : compilationUnit.getClasses()) {
-				for (Statement member : factory.getBody().getStatements()) {
-					if (!(member instanceof J.ClassDeclaration nested)) {
+			for (J.ClassDeclaration factory : compilationUnit.getClasses())
+			{
+				for (Statement member : factory.getBody().getStatements())
+				{
+					if (!(member instanceof J.ClassDeclaration nested))
+					{
 						continue;
 					}
 					String fieldName =
@@ -71,19 +78,21 @@ class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
 					Class<?> factoryClass = Class.forName(factory.getType().getFullyQualifiedName());
 					String contract = factoryClass.getField(fieldName).getType().getCanonicalName();
 					StringBuilder body = new StringBuilder();
-					for (Statement statement : nested.getBody().getStatements()) {
-						if (statement instanceof J.MethodDeclaration method) {
+					for (Statement statement : nested.getBody().getStatements())
+					{
+						if (statement instanceof J.MethodDeclaration method)
+						{
 							body.append("@Override\n").append(method.printTrimmed()).append('\n');
 						}
 					}
 					sources.add(
 						"abstract class FactoryContract"
-						+ sources.size()
-						+ " implements "
-						+ contract
-						+ " {\n"
-						+ body
-						+ "}\n"
+							+ sources.size()
+							+ " implements "
+							+ contract
+							+ " {\n"
+							+ body
+							+ "}\n"
 					);
 				}
 			}
@@ -92,16 +101,22 @@ class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
 	}
 
 	@Test
-	void transformedFactoriesCompileAgainstLibrary() throws IOException {
+	void transformedFactoriesCompileAgainstLibrary()
+		throws IOException
+	{
 		this.assertFactoryRewriteCompiles("factories");
 	}
 
 	@Test
-	void transformedImplementationFactoriesCompileAgainstLibrary() throws IOException {
+	void transformedImplementationFactoriesCompileAgainstLibrary()
+		throws IOException
+	{
 		this.assertFactoryRewriteCompiles("implementation-factories");
 	}
 
-	private void assertFactoryRewriteCompiles(String name) throws IOException {
+	private void assertFactoryRewriteCompiles(String name)
+		throws IOException
+	{
 		this.assertCompiles(List.of(this.fixture(name + "-before.java")));
 		this.rewriteRun(
 			(spec) ->
@@ -124,7 +139,9 @@ class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
 		);
 	}
 
-	private void assertCompiles(List<String> sources) throws IOException {
+	private void assertCompiles(List<String> sources)
+		throws IOException
+	{
 		MutableList<String> arguments = Lists.mutable.with(
 			"-proc:none",
 			"-classpath",
@@ -132,7 +149,8 @@ class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
 			"-d",
 			this.directory.toString()
 		);
-		for (int i = 0; i < sources.size(); i++) {
+		for (int i = 0; i < sources.size(); i++)
+		{
 			Path source = this.directory.resolve("FactoryExample" + i + ".java");
 			Files.writeString(source, sources.get(i));
 			arguments.add(source.toString());

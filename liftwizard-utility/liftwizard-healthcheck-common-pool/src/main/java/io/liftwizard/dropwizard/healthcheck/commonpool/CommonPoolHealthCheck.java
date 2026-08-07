@@ -39,8 +39,9 @@ import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CommonPoolHealthCheck extends HealthCheck {
-
+public class CommonPoolHealthCheck
+	extends HealthCheck
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonPoolHealthCheck.class);
 
 	private static final int MAX_STACK_TRACE_DEPTH = 100;
@@ -60,7 +61,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
 	@Nonnull
 	private final ImmutableList<Pattern> bannedPatterns;
 
-	public CommonPoolHealthCheck() {
+	public CommonPoolHealthCheck()
+	{
 		this(
 			"ForkJoinPool.commonPool-worker-",
 			Lists.immutable.with(State.RUNNABLE),
@@ -82,7 +84,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
 		@Nonnull ImmutableList<State> threadStates,
 		@Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
 		@Nonnull ImmutableList<Pattern> bannedPatterns
-	) {
+	)
+	{
 		this(
 			ManagementFactory.getThreadMXBean(),
 			threadNamePrefix,
@@ -98,7 +101,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
 		@Nonnull ImmutableList<State> threadStates,
 		@Nonnull ImmutableList<Pattern> alwaysAllowedPatterns,
 		@Nonnull ImmutableList<Pattern> bannedPatterns
-	) {
+	)
+	{
 		this.threads = Objects.requireNonNull(threads);
 		this.threadNamePrefix = Objects.requireNonNull(threadNamePrefix);
 		this.threadStates = new LinkedHashSet<>(threadStates.castToList());
@@ -108,7 +112,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
 
 	@Nonnull
 	@Override
-	protected Result check() {
+	protected Result check()
+	{
 		ThreadInfo[] threadInfos = this.threads.getThreadInfo(this.threads.getAllThreadIds(), MAX_STACK_TRACE_DEPTH);
 		List<ThreadInfo> badThreadInfos = Stream.of(threadInfos)
 			.filter((threadInfo) -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
@@ -133,18 +138,21 @@ public class CommonPoolHealthCheck extends HealthCheck {
 			)
 			.toList();
 
-		if (badThreadInfos.isEmpty()) {
+		if (badThreadInfos.isEmpty())
+		{
 			return Result.healthy();
 		}
 
 		MutableList<String> badThreadInfoStrings = Lists.mutable.empty();
 
-		for (ThreadInfo badThreadInfo : badThreadInfos) {
+		for (ThreadInfo badThreadInfo : badThreadInfos)
+		{
 			State threadState = badThreadInfo.getThreadState();
 			String threadName = badThreadInfo.getThreadName();
 			String stackTraceString = this.getStackTraceString(badThreadInfo.getStackTrace());
 
-			try (var mdc = new MultiMDCCloseable()) {
+			try (var mdc = new MultiMDCCloseable())
+			{
 				mdc.put("threadState", threadState.name());
 				mdc.put("threadName", threadName);
 				mdc.put("stackTrace", stackTraceString);
@@ -164,12 +172,14 @@ public class CommonPoolHealthCheck extends HealthCheck {
 		return Result.unhealthy(message);
 	}
 
-	private boolean traceMatchesPattern(StackTraceElement stackStrace, Pattern bannedPattern) {
+	private boolean traceMatchesPattern(StackTraceElement stackStrace, Pattern bannedPattern)
+	{
 		return bannedPattern.matcher(stackStrace.getClassName() + "." + stackStrace.getMethodName()).matches();
 	}
 
 	@Nonnull
-	private String getStackTraceString(StackTraceElement[] stackTrace) {
+	private String getStackTraceString(StackTraceElement[] stackTrace)
+	{
 		return Stream.of(stackTrace)
 			.map(StackTraceElement::toString)
 			.collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));

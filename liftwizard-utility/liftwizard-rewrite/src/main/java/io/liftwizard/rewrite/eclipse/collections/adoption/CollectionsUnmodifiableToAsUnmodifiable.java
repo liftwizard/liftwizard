@@ -38,21 +38,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "Replace Collections.unmodifiable*() with Eclipse Collections asUnmodifiable()",
 	description = "Replace `Collections.unmodifiableCollection()`, `Collections.unmodifiableList()`, `Collections.unmodifiableMap()`, `Collections.unmodifiableSet()`, `Collections.unmodifiableSortedMap()`, and `Collections.unmodifiableSortedSet()` with Eclipse Collections `asUnmodifiable()` method."
 )
-public class CollectionsUnmodifiableToAsUnmodifiable {
-
+public class CollectionsUnmodifiableToAsUnmodifiable
+{
 	@RecipeDescriptor(
 		name = "`Collections.unmodifiableCollection()` → `asUnmodifiable()`",
 		description = "Replace `Collections.unmodifiableCollection(collection)` with `collection.asUnmodifiable()`."
 	)
-	public static class CollectionsUnmodifiableCollectionToAsUnmodifiable<T> {
-
+	public static class CollectionsUnmodifiableCollectionToAsUnmodifiable<T>
+	{
 		@BeforeTemplate
-		Collection<T> unmodifiableCollection(MutableCollection<T> collection) {
+		Collection<T> unmodifiableCollection(MutableCollection<T> collection)
+		{
 			return Collections.unmodifiableCollection(collection);
 		}
 
 		@AfterTemplate
-		MutableCollection<T> asUnmodifiable(MutableCollection<T> collection) {
+		MutableCollection<T> asUnmodifiable(MutableCollection<T> collection)
+		{
 			return collection.asUnmodifiable();
 		}
 	}
@@ -61,15 +63,17 @@ public class CollectionsUnmodifiableToAsUnmodifiable {
 		name = "`Collections.unmodifiableList()` → `asUnmodifiable()`",
 		description = "Replace `Collections.unmodifiableList(list)` with `list.asUnmodifiable()`."
 	)
-	public static class CollectionsUnmodifiableListToAsUnmodifiable<T> {
-
+	public static class CollectionsUnmodifiableListToAsUnmodifiable<T>
+	{
 		@BeforeTemplate
-		List<T> unmodifiableList(MutableList<T> list) {
+		List<T> unmodifiableList(MutableList<T> list)
+		{
 			return Collections.unmodifiableList(list);
 		}
 
 		@AfterTemplate
-		MutableList<T> asUnmodifiable(MutableList<T> list) {
+		MutableList<T> asUnmodifiable(MutableList<T> list)
+		{
 			return list.asUnmodifiable();
 		}
 	}
@@ -78,15 +82,17 @@ public class CollectionsUnmodifiableToAsUnmodifiable {
 		name = "`Collections.unmodifiableMap()` → `asUnmodifiable()`",
 		description = "Replace `Collections.unmodifiableMap(map)` with `map.asUnmodifiable()`."
 	)
-	public static class CollectionsUnmodifiableMapToAsUnmodifiable<K, V> {
-
+	public static class CollectionsUnmodifiableMapToAsUnmodifiable<K, V>
+	{
 		@BeforeTemplate
-		Map<K, V> unmodifiableMap(MutableMap<K, V> map) {
+		Map<K, V> unmodifiableMap(MutableMap<K, V> map)
+		{
 			return Collections.unmodifiableMap(map);
 		}
 
 		@AfterTemplate
-		MutableMap<K, V> asUnmodifiable(MutableMap<K, V> map) {
+		MutableMap<K, V> asUnmodifiable(MutableMap<K, V> map)
+		{
 			return map.asUnmodifiable();
 		}
 	}
@@ -95,15 +101,17 @@ public class CollectionsUnmodifiableToAsUnmodifiable {
 		name = "`Collections.unmodifiableSet()` → `asUnmodifiable()`",
 		description = "Replace `Collections.unmodifiableSet(set)` with `set.asUnmodifiable()`."
 	)
-	public static class CollectionsUnmodifiableSetToAsUnmodifiable<T> {
-
+	public static class CollectionsUnmodifiableSetToAsUnmodifiable<T>
+	{
 		@BeforeTemplate
-		Set<T> unmodifiableSet(MutableSet<T> set) {
+		Set<T> unmodifiableSet(MutableSet<T> set)
+		{
 			return Collections.unmodifiableSet(set);
 		}
 
 		@AfterTemplate
-		MutableSet<T> asUnmodifiable(MutableSet<T> set) {
+		MutableSet<T> asUnmodifiable(MutableSet<T> set)
+		{
 			return set.asUnmodifiable();
 		}
 	}
@@ -112,15 +120,17 @@ public class CollectionsUnmodifiableToAsUnmodifiable {
 		name = "`Collections.unmodifiableSortedMap()` → `asUnmodifiable()`",
 		description = "Replace `Collections.unmodifiableSortedMap(sortedMap)` with `sortedMap.asUnmodifiable()`."
 	)
-	public static class CollectionsUnmodifiableSortedMapToAsUnmodifiable<K, V> {
-
+	public static class CollectionsUnmodifiableSortedMapToAsUnmodifiable<K, V>
+	{
 		@BeforeTemplate
-		SortedMap<K, V> unmodifiableSortedMap(MutableSortedMap<K, V> sortedMap) {
+		SortedMap<K, V> unmodifiableSortedMap(MutableSortedMap<K, V> sortedMap)
+		{
 			return Collections.unmodifiableSortedMap(sortedMap);
 		}
 
 		@AfterTemplate
-		MutableSortedMap<K, V> asUnmodifiable(MutableSortedMap<K, V> sortedMap) {
+		MutableSortedMap<K, V> asUnmodifiable(MutableSortedMap<K, V> sortedMap)
+		{
 			return sortedMap.asUnmodifiable();
 		}
 	}
@@ -129,15 +139,17 @@ public class CollectionsUnmodifiableToAsUnmodifiable {
 		name = "`Collections.unmodifiableSortedSet()` → `asUnmodifiable()`",
 		description = "Replace `Collections.unmodifiableSortedSet(sortedSet)` with `sortedSet.asUnmodifiable()`."
 	)
-	public static class CollectionsUnmodifiableSortedSetToAsUnmodifiable<T> {
-
+	public static class CollectionsUnmodifiableSortedSetToAsUnmodifiable<T>
+	{
 		@BeforeTemplate
-		SortedSet<T> unmodifiableSortedSet(MutableSortedSet<T> sortedSet) {
+		SortedSet<T> unmodifiableSortedSet(MutableSortedSet<T> sortedSet)
+		{
 			return Collections.unmodifiableSortedSet(sortedSet);
 		}
 
 		@AfterTemplate
-		MutableSortedSet<T> asUnmodifiable(MutableSortedSet<T> sortedSet) {
+		MutableSortedSet<T> asUnmodifiable(MutableSortedSet<T> sortedSet)
+		{
 			return sortedSet.asUnmodifiable();
 		}
 	}

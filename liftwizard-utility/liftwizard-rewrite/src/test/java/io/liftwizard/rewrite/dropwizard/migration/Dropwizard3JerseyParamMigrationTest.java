@@ -24,104 +24,106 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3JerseyParamMigrationTest implements AbstractRewriteFixtures, RewriteTest {
-
+class Dropwizard3JerseyParamMigrationTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration")
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package io.dropwizard.jersey.params;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration").parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class InstantParam {
-							public java.time.Instant get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.params;
+					public class InstantParam {
+						public java.time.Instant get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class LocalDateParam {
-							public java.time.LocalDate get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.params;
+					public class LocalDateParam {
+						public java.time.LocalDate get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class DateTimeParam {
-							public Object get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.params;
+					public class DateTimeParam {
+						public Object get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class BooleanParam {
-							public Boolean get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.params;
+					public class BooleanParam {
+						public Boolean get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class DurationParam {
-							public java.time.Duration get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.params;
+					public class DurationParam {
+						public java.time.Duration get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class SizeParam {
-							public Object get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.jsr310;
+					public class SizeParam {
+						public Object get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.jsr310;
 
-						public class InstantParam {
-							public java.time.Instant get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.jsr310;
+					public class InstantParam {
+						public java.time.Instant get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.jsr310;
 
-						public class LocalDateParam {
-							public java.time.LocalDate get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.jsr310;
+					public class LocalDateParam {
+						public java.time.LocalDate get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.jsr310;
 
-						public class ZonedDateTimeParam {
-							public java.time.ZonedDateTime get() { return null; }
-						}
-						""",
-						"""
-						package io.dropwizard.util;
+					public class ZonedDateTimeParam {
+						public java.time.ZonedDateTime get() { return null; }
+					}
+					""",
+					"""
+					package io.dropwizard.util;
 
-						public class DataSize {
-						}
-						""",
-						"""
-						package io.dropwizard.jersey.params;
+					public class DataSize {
+					}
+					""",
+					"""
+					package io.dropwizard.jersey.params;
 
-						public class IntParam {
-							public int get() { return 0; }
-						}
-						"""
-					)
-			);
+					public class IntParam {
+						public int get() { return 0; }
+					}
+					"""
+				)
+		);
 	}
 
 	@Test
 	@DocumentExample
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

@@ -49,8 +49,9 @@ import org.slf4j.LoggerFactory;
 	threadSafe = true,
 	requiresDependencyResolution = ResolutionScope.RUNTIME
 )
-public class GenerateReladomoDatabaseMojo extends AbstractMojo {
-
+public class GenerateReladomoDatabaseMojo
+	extends AbstractMojo
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReladomoDatabaseMojo.class);
 
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
@@ -93,14 +94,17 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 	private boolean generateFileHeaders;
 
 	@Override
-	public void execute() {
+	public void execute()
+	{
 		var generatedOutputDirectory = new File(this.generatedResourcesDirectory, this.outputDirectory);
 
-		if (!generatedOutputDirectory.exists()) {
+		if (!generatedOutputDirectory.exists())
+		{
 			generatedOutputDirectory.mkdirs();
 		}
 
-		try (var tempFile = this.getTempFile()) {
+		try (var tempFile = this.getTempFile())
+		{
 			CoreMithraDbDefinitionGenerator coreGenerator = this.getGenerator(
 				tempFile.getPath(),
 				generatedOutputDirectory
@@ -117,28 +121,37 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 		}
 	}
 
-	private void deleteLogFiles(File directory) {
-		try (Stream<Path> logFiles = Files.walk(directory.toPath())) {
+	private void deleteLogFiles(File directory)
+	{
+		try (Stream<Path> logFiles = Files.walk(directory.toPath()))
+		{
 			logFiles
 				.filter(Files::isRegularFile)
 				.filter((path) -> path.toString().endsWith(".log"))
 				.forEach(this::deleteLogFile);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			this.getLog().warn("Failed to clean up Reladomo log files", e);
 		}
 	}
 
-	private void deleteLogFile(Path path) {
-		try {
+	private void deleteLogFile(Path path)
+	{
+		try
+		{
 			Files.delete(path);
 			this.getLog().debug("Deleted Reladomo log file: " + path);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			this.getLog().warn("Failed to delete Reladomo log file: " + path, e);
 		}
 	}
 
 	@Nonnull
-	private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile, File generatedOutputDirectory) {
+	private CoreMithraDbDefinitionGenerator getGenerator(Path tempFile, File generatedOutputDirectory)
+	{
 		Path classListFile = tempFile.resolve(this.definitionsAndClassListDirectory).resolve(this.classListFileName);
 		var coreGenerator = new CoreMithraDbDefinitionGenerator();
 		coreGenerator.setLogger(new MavenReladomoLogger(this.getLog()));
@@ -155,12 +168,15 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 	}
 
 	@Nonnull
-	private ManagedTempDirectory getTempFile() {
-		if (this.definitionsAndClassListDirectory.startsWith("/")) {
+	private ManagedTempDirectory getTempFile()
+	{
+		if (this.definitionsAndClassListDirectory.startsWith("/"))
+		{
 			throw new IllegalArgumentException("definitionsAndClassListDirectory must not start with a /");
 		}
 
-		try {
+		try
+		{
 			URL resource = this.getClass().getResource("/" + this.definitionsAndClassListDirectory);
 			Objects.requireNonNull(resource, () -> "Could not find /" + this.definitionsAndClassListDirectory);
 			URI uri = resource.toURI();
@@ -170,33 +186,48 @@ public class GenerateReladomoDatabaseMojo extends AbstractMojo {
 
 			this.copyDirectory(from, to);
 			return managedTempDirectory;
-		} catch (URISyntaxException e) {
+		}
+		catch (URISyntaxException e)
+		{
 			throw new RuntimeException(e);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void copyDirectory(Path from, Path to) throws IOException {
-		try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory))) {
+	private void copyDirectory(Path from, Path to)
+		throws IOException
+	{
+		try (Stream<Path> sources = Files.walk(from.resolve(this.definitionsAndClassListDirectory)))
+		{
 			sources.forEach((src) -> GenerateReladomoDatabaseMojo.handleOneFile(from, src, to));
 		}
 	}
 
 	// Based on https://stackoverflow.com/a/29659925/
-	private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target) {
+	private static void handleOneFile(Path fileSystemRoot, Path fileSystemSource, Path target)
+	{
 		Path copyDestination = target.resolve(fileSystemRoot.relativize(fileSystemSource).toString());
-		try {
-			if (Files.isDirectory(fileSystemSource)) {
-				if (Files.notExists(copyDestination)) {
+		try
+		{
+			if (Files.isDirectory(fileSystemSource))
+			{
+				if (Files.notExists(copyDestination))
+				{
 					LOGGER.info("Creating directory {}", copyDestination);
 					Files.createDirectories(copyDestination);
 				}
-			} else {
+			}
+			else
+			{
 				LOGGER.info("Copying resource {} to {}", fileSystemSource, copyDestination);
 				Files.copy(fileSystemSource, copyDestination, StandardCopyOption.REPLACE_EXISTING);
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException("Failed target unzip file.", e);
 		}
 	}

@@ -43,8 +43,9 @@ import org.openrewrite.java.tree.J;
  * <p>This recipe eliminates unnecessary Stream intermediary operations for Eclipse Collections types,
  * since Eclipse Collections has the {@code toSortedListBy} method directly on {@code RichIterable}.
  */
-public class ECStreamSortedCollectToSortedListBy extends Recipe {
-
+public class ECStreamSortedCollectToSortedListBy
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -60,12 +61,14 @@ public class ECStreamSortedCollectToSortedListBy extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList())` to `toSortedListBy(fn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList())` "
 			+ "to `collection.toSortedListBy(fn)`. "
@@ -75,79 +78,96 @@ public class ECStreamSortedCollectToSortedListBy extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(COLLECT_MATCHER), new StreamSortedCollectToSortedListByVisitor());
 	}
 
-	private static final class StreamSortedCollectToSortedListByVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamSortedCollectToSortedListByVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
 			// Match .collect(Collectors.toList())
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.getFirst();
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!TO_LIST_MATCHER.matches(collectorCall)) {
+			if (!TO_LIST_MATCHER.matches(collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			// Match .sorted(Comparator.comparing(fn))
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation sortedCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation sortedCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!SORTED_MATCHER.matches(sortedCall)) {
+			if (!SORTED_MATCHER.matches(sortedCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> sortedArgs = sortedCall.getArguments();
-			if (sortedArgs.size() != 1) {
+			if (sortedArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
-			if (!(sortedArgs.getFirst() instanceof J.MethodInvocation comparingCall)) {
+			if (!(sortedArgs.getFirst() instanceof J.MethodInvocation comparingCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!COMPARING_MATCHER.matches(comparingCall)) {
+			if (!COMPARING_MATCHER.matches(comparingCall))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> comparingArgs = comparingCall.getArguments();
-			if (comparingArgs.size() != 1) {
+			if (comparingArgs.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			// Match .stream()
 			Expression sortedSelect = sortedCall.getSelect();
-			if (!(sortedSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(sortedSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 

@@ -47,8 +47,9 @@ import org.openrewrite.java.tree.J;
  * would require transforming to {@code detectIfNone(pred, () -> defaultValue)}, which is not
  * yet supported due to type resolution limitations with JavaTemplate.
  */
-public class ECStreamFindFirstOrElseToDetect extends Recipe {
-
+public class ECStreamFindFirstOrElseToDetect
+	extends Recipe
+{
 	private static final MethodMatcher OR_ELSE_MATCHER = new MethodMatcher("java.util.Optional orElse(..)");
 
 	private static final MethodMatcher FIND_FIRST_MATCHER = new MethodMatcher("java.util.stream.Stream findFirst()");
@@ -58,12 +59,14 @@ public class ECStreamFindFirstOrElseToDetect extends Recipe {
 	);
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().filter(pred).findFirst().orElse(null)` to `detect(pred)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().filter(pred).findFirst().orElse(null)` to `collection.detect(pred)`. "
 			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
@@ -72,68 +75,83 @@ public class ECStreamFindFirstOrElseToDetect extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(new UsesMethod<>(OR_ELSE_MATCHER), new StreamFilterFindFirstOrElseToDetectVisitor());
 	}
 
-	private static final class StreamFilterFindFirstOrElseToDetectVisitor extends JavaIsoVisitor<ExecutionContext> {
-
+	private static final class StreamFilterFindFirstOrElseToDetectVisitor
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!OR_ELSE_MATCHER.matches(methodInvocation)) {
+			if (!OR_ELSE_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> orElseArguments = methodInvocation.getArguments();
-			if (orElseArguments.size() != 1) {
+			if (orElseArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression defaultValue = orElseArguments.get(0);
-			if (!(defaultValue instanceof J.Literal literal) || literal.getValue() != null) {
+			if (!(defaultValue instanceof J.Literal literal) || literal.getValue() != null)
+			{
 				return methodInvocation;
 			}
 
 			Expression orElseSelect = methodInvocation.getSelect();
-			if (!(orElseSelect instanceof J.MethodInvocation findFirstCall)) {
+			if (!(orElseSelect instanceof J.MethodInvocation findFirstCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!FIND_FIRST_MATCHER.matches(findFirstCall)) {
+			if (!FIND_FIRST_MATCHER.matches(findFirstCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression findFirstSelect = findFirstCall.getSelect();
-			if (!(findFirstSelect instanceof J.MethodInvocation filterCall)) {
+			if (!(findFirstSelect instanceof J.MethodInvocation filterCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!FILTER_MATCHER.matches(filterCall)) {
+			if (!FILTER_MATCHER.matches(filterCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression filterSelect = filterCall.getSelect();
-			if (!(filterSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(filterSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> filterArguments = filterCall.getArguments();
-			if (filterArguments.isEmpty()) {
+			if (filterArguments.isEmpty())
+			{
 				return methodInvocation;
 			}
 

@@ -25,20 +25,23 @@ import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.map.ImmutableMap;
 
-public final class ConnectionManagerHolder {
-
+public final class ConnectionManagerHolder
+{
 	private static final String KEY_NAME = "connectionManagerName";
 
 	private static ImmutableMap<String, SourcelessConnectionManager> connectionManagersByName;
 
-	private ConnectionManagerHolder() {
+	private ConnectionManagerHolder()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 
 	@Nonnull
 	@SuppressWarnings("unused")
-	public static SourcelessConnectionManager getInstance(Properties properties) {
-		if (!Sets.immutable.with(KEY_NAME).equals(properties.keySet())) {
+	public static SourcelessConnectionManager getInstance(Properties properties)
+	{
+		if (!Sets.immutable.with(KEY_NAME).equals(properties.keySet()))
+		{
 			throw new IllegalStateException("Expected a single property called name but found " + properties.keySet());
 		}
 
@@ -59,7 +62,8 @@ public final class ConnectionManagerHolder {
 
 	public static void setConnectionManagersByName(
 		ImmutableMap<String, SourcelessConnectionManager> connectionManagersByName
-	) {
+	)
+	{
 		ConnectionManagerHolder.connectionManagersByName = Objects.requireNonNull(connectionManagersByName);
 	}
 }

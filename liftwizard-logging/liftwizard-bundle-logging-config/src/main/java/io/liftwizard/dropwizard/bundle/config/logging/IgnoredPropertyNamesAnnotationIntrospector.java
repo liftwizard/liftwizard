@@ -32,22 +32,26 @@ import com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector;
  * non-logback logging backend without logback-access on the classpath. The ignore is scoped to the declaring type so
  * that a property of the same name on an unrelated type is left untouched.
  */
-public final class IgnoredPropertyNamesAnnotationIntrospector extends NopAnnotationIntrospector {
-
+public final class IgnoredPropertyNamesAnnotationIntrospector
+	extends NopAnnotationIntrospector
+{
 	private final Class<?> declaringType;
 	private final JsonIgnoreProperties.Value ignoredProperties;
 
-	public IgnoredPropertyNamesAnnotationIntrospector(Class<?> declaringType, String... propertyNames) {
+	public IgnoredPropertyNamesAnnotationIntrospector(Class<?> declaringType, String... propertyNames)
+	{
 		this.declaringType = declaringType;
 		this.ignoredProperties = JsonIgnoreProperties.Value.forIgnoredProperties(propertyNames);
 	}
 
 	@Override
-	public JsonIgnoreProperties.Value findPropertyIgnoralByName(MapperConfig<?> config, Annotated annotated) {
+	public JsonIgnoreProperties.Value findPropertyIgnoralByName(MapperConfig<?> config, Annotated annotated)
+	{
 		if (
 			annotated instanceof AnnotatedClass annotatedClass
 			&& this.declaringType.isAssignableFrom(annotatedClass.getRawType())
-		) {
+		)
+		{
 			return this.ignoredProperties;
 		}
 		return super.findPropertyIgnoralByName(config, annotated);

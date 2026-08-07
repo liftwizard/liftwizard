@@ -24,22 +24,26 @@ import io.liftwizard.model.reladomo.operation.compiler.literal.one.IntegerLitera
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.impl.list.mutable.ListAdapter;
 
-public class IntegerListLiteralVisitor extends AbstractLiteralVisitor<ImmutableList<Integer>> {
-
+public class IntegerListLiteralVisitor
+	extends AbstractLiteralVisitor<ImmutableList<Integer>>
+{
 	private final IntegerLiteralVisitor integerLiteralVisitor;
 
-	public IntegerListLiteralVisitor(RelatedFinder finder, String errorContext) {
+	public IntegerListLiteralVisitor(RelatedFinder finder, String errorContext)
+	{
 		super(finder, errorContext);
 		this.integerLiteralVisitor = new IntegerLiteralVisitor(this.finder, this.errorContext);
 	}
 
 	@Override
-	protected String getExpectedType() {
+	protected String getExpectedType()
+	{
 		return "Integer list";
 	}
 
 	@Override
-	public ImmutableList<Integer> visitIntegerListLiteral(IntegerListLiteralContext ctx) {
+	public ImmutableList<Integer> visitIntegerListLiteral(IntegerListLiteralContext ctx)
+	{
 		return ListAdapter.adapt(ctx.integerLiteral())
 			.collectWith(IntegerLiteralContext::accept, this.integerLiteralVisitor)
 			.toImmutable();

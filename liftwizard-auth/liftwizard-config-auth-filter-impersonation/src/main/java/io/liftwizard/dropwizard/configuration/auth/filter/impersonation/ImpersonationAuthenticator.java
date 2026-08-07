@@ -22,11 +22,13 @@ import javax.annotation.Nonnull;
 
 import io.dropwizard.auth.Authenticator;
 
-public class ImpersonationAuthenticator implements Authenticator<String, ImpersonatedPrincipal> {
-
+public class ImpersonationAuthenticator
+	implements Authenticator<String, ImpersonatedPrincipal>
+{
 	@Nonnull
 	@Override
-	public Optional<ImpersonatedPrincipal> authenticate(String principalName) {
+	public Optional<ImpersonatedPrincipal> authenticate(String principalName)
+	{
 		var principal = new ImpersonatedPrincipal(principalName);
 		return Optional.of(principal);
 	}

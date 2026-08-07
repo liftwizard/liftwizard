@@ -37,15 +37,18 @@ import org.openrewrite.java.tree.JRightPadded;
  * are also left unchanged. Valid fixed-multiple groupings (e.g., key-value pairs)
  * are also left unchanged.
  */
-public class EnforceConsistentConstructorArgumentLineWrapping extends AbstractEnforceConsistentLineWrapping {
-
+public class EnforceConsistentConstructorArgumentLineWrapping
+	extends AbstractEnforceConsistentLineWrapping
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Enforce consistent constructor argument line wrapping";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"When a constructor call has multiple arguments and any argument is line-wrapped, "
 			+ "enforce that all arguments use line wrapping for consistency. "
@@ -54,25 +57,31 @@ public class EnforceConsistentConstructorArgumentLineWrapping extends AbstractEn
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.NewClass visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
+			public J.NewClass visitNewClass(J.NewClass newClass, ExecutionContext ctx)
+			{
 				J.NewClass nc = super.visitNewClass(newClass, ctx);
 
 				JContainer<Expression> argsContainer = nc.getPadding().getArguments();
-				if (argsContainer == null) {
+				if (argsContainer == null)
+				{
 					return nc;
 				}
 
 				List<JRightPadded<Expression>> args = argsContainer.getPadding().getElements();
 
-				if (!shouldEnforceWrapping(args)) {
+				if (!shouldEnforceWrapping(args))
+				{
 					return nc;
 				}
 
 				String wrappedIndent = findWrappedIndent(args);
-				if (wrappedIndent == null) {
+				if (wrappedIndent == null)
+				{
 					return nc;
 				}
 

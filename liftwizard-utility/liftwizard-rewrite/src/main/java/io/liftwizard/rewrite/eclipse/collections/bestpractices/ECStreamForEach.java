@@ -28,21 +28,23 @@ import org.openrewrite.java.template.RecipeDescriptor;
 	name = "`stream().forEach(action)` -> `forEach(action)`",
 	description = "Transforms `iterable.stream().forEach(action)` to `iterable.forEach(action)` for Eclipse Collections types. This eliminates the unnecessary stream intermediary since Eclipse Collections has forEach directly."
 )
-public class ECStreamForEach {
-
+public class ECStreamForEach
+{
 	@RecipeDescriptor(
 		name = "`stream().forEach(action)` -> `forEach(action)`",
 		description = "Converts `iterable.stream().forEach(action)` to `iterable.forEach(action)`."
 	)
-	public static final class CollectionStreamForEachToForEach<T> {
-
+	public static final class CollectionStreamForEachToForEach<T>
+	{
 		@BeforeTemplate
-		void before(Collection<T> collection, Consumer<? super T> action) {
+		void before(Collection<T> collection, Consumer<? super T> action)
+		{
 			collection.stream().forEach(action);
 		}
 
 		@AfterTemplate
-		void after(Collection<T> collection, Consumer<? super T> action) {
+		void after(Collection<T> collection, Consumer<? super T> action)
+		{
 			collection.forEach(action);
 		}
 	}
@@ -51,15 +53,17 @@ public class ECStreamForEach {
 		name = "`stream().forEach(action)` -> `forEach(action)` for ImmutableCollection",
 		description = "Converts `collection.stream().forEach(action)` to `collection.forEach(action)` for Eclipse Collections ImmutableCollection types."
 	)
-	public static final class ImmutableCollectionStreamForEachToForEach<T> {
-
+	public static final class ImmutableCollectionStreamForEachToForEach<T>
+	{
 		@BeforeTemplate
-		void before(ImmutableCollection<T> collection, Consumer<? super T> action) {
+		void before(ImmutableCollection<T> collection, Consumer<? super T> action)
+		{
 			collection.stream().forEach(action);
 		}
 
 		@AfterTemplate
-		void after(ImmutableCollection<T> collection, Consumer<? super T> action) {
+		void after(ImmutableCollection<T> collection, Consumer<? super T> action)
+		{
 			collection.forEach(action);
 		}
 	}

@@ -34,8 +34,9 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.FileSystemResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 
-public class LiquibaseDropAllManaged implements Managed {
-
+public class LiquibaseDropAllManaged
+	implements Managed
+{
 	private final ManagedDataSource dataSource;
 
 	@Nullable
@@ -53,7 +54,8 @@ public class LiquibaseDropAllManaged implements Managed {
 		String schemaName,
 		String migrationFile,
 		MigrationFileLocation migrationFileLocation
-	) {
+	)
+	{
 		this.dataSource = Objects.requireNonNull(dataSource);
 		this.catalogName = catalogName;
 		this.schemaName = schemaName;
@@ -62,32 +64,44 @@ public class LiquibaseDropAllManaged implements Managed {
 	}
 
 	@Override
-	public void start() {}
+	public void start()
+	{
+	}
 
 	@Override
-	public void stop() {
-		try (CloseableLiquibase liquibase = this.openLiquibase()) {
+	public void stop()
+	{
+		try (CloseableLiquibase liquibase = this.openLiquibase())
+		{
 			liquibase.dropAll();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private CloseableLiquibase openLiquibase() throws SQLException, LiquibaseException {
+	private CloseableLiquibase openLiquibase()
+		throws SQLException, LiquibaseException
+	{
 		Database database = this.createDatabase();
 		ResourceAccessor resourceAccessor = this.getResourceAccessor();
 		return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
 	}
 
-	private Database createDatabase() throws SQLException, LiquibaseException {
+	private Database createDatabase()
+		throws SQLException, LiquibaseException
+	{
 		DatabaseConnection connection = new JdbcConnection(this.dataSource.getConnection());
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
 
-		if (database.supportsCatalogs() && this.catalogName != null) {
+		if (database.supportsCatalogs() && this.catalogName != null)
+		{
 			database.setDefaultCatalogName(this.catalogName);
 			database.setOutputDefaultCatalog(true);
 		}
-		if (database.supportsSchemas() && this.schemaName != null) {
+		if (database.supportsSchemas() && this.schemaName != null)
+		{
 			database.setDefaultSchemaName(this.schemaName);
 			database.setOutputDefaultSchema(true);
 		}
@@ -96,8 +110,10 @@ public class LiquibaseDropAllManaged implements Managed {
 	}
 
 	@Nonnull
-	private ResourceAccessor getResourceAccessor() {
-		return switch (this.migrationFileLocation) {
+	private ResourceAccessor getResourceAccessor()
+	{
+		return switch (this.migrationFileLocation)
+		{
 			case CLASSPATH -> new ClassLoaderResourceAccessor();
 			case FILESYSTEM -> new FileSystemResourceAccessor();
 		};

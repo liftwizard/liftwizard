@@ -25,12 +25,13 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-class Dropwizard3LoadRoleInfoSignatureTest implements AbstractRewriteFixtures, RewriteTest {
-
+class Dropwizard3LoadRoleInfoSignatureTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new Dropwizard3LoadRoleInfoSignature())
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new Dropwizard3LoadRoleInfoSignature())
 			.typeValidationOptions(TypeValidation.none())
 			.parser(
 				JavaParser.fromJavaVersion()
@@ -65,12 +66,14 @@ class Dropwizard3LoadRoleInfoSignatureTest implements AbstractRewriteFixtures, R
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

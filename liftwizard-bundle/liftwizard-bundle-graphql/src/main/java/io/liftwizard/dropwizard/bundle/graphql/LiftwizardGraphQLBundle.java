@@ -61,8 +61,11 @@ import org.slf4j.MDC.MDCCloseable;
  *
  * @see <a href="https://liftwizard.io/docs/graphql/bundle#liftwizardgraphqlbundle">https://liftwizard.io/docs/graphql/bundle#liftwizardgraphqlbundle</a>
  */
-public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryProvider> extends GraphQLBundle<T> {
-
+public class LiftwizardGraphQLBundle<
+	T extends Configuration & GraphQLFactoryProvider
+>
+	extends GraphQLBundle<T>
+{
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
 
 	@Nonnull
@@ -71,27 +74,32 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 	private MetricRegistry metricRegistry;
 
 	@SafeVarargs
-	public LiftwizardGraphQLBundle(@Nonnull Consumer<RuntimeWiring.Builder>... runtimeWiringBuilders) {
+	public LiftwizardGraphQLBundle(@Nonnull Consumer<RuntimeWiring.Builder>... runtimeWiringBuilders)
+	{
 		this.runtimeWiringBuilders = Lists.immutable.with(runtimeWiringBuilders);
 	}
 
 	@Override
-	public void initialize(@Nonnull Bootstrap<?> bootstrap) {
-		try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName())) {
+	public void initialize(@Nonnull Bootstrap<?> bootstrap)
+	{
+		try (MDCCloseable mdc = MDC.putCloseable("liftwizard.bundle", this.getClass().getSimpleName()))
+		{
 			this.initializeWithMdc(bootstrap);
 		}
 
 		this.metricRegistry = bootstrap.getMetricRegistry();
 	}
 
-	private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap) {
+	private void initializeWithMdc(@Nonnull Bootstrap<?> bootstrap)
+	{
 		bootstrap.addBundle(new AssetsBundle("/graphiql", "/graphiql", "index.htm", "graphiql"));
 
 		bootstrap.addBundle(new AssetsBundle("/assets", "/graphql-playground", "index.htm", "graphql-playground"));
 	}
 
 	@Override
-	public void run(T configuration, Environment environment) {
+	public void run(T configuration, Environment environment)
+	{
 		GraphQLFactory factory = this.getGraphQLFactory(configuration);
 
 		PreparsedDocumentProvider provider = new CachingPreparsedDocumentProvider(
@@ -117,7 +125,8 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 
 	@Nonnull
 	@Override
-	public GraphQLFactory getGraphQLFactory(@Nonnull T configuration) {
+	public GraphQLFactory getGraphQLFactory(@Nonnull T configuration)
+	{
 		// the RuntimeWiring must be configured prior to the run()
 		// methods being called so the schema is connected properly.
 		GraphQLFactory factory = configuration.getGraphQLFactory();
@@ -133,7 +142,8 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 			.scalar(JavaPrimitives.GraphQLLong)
 			.scalar(GraphQLLocalDateScalar.INSTANCE);
 
-		for (Consumer<RuntimeWiring.Builder> runtimeWiringBuilder : this.runtimeWiringBuilders) {
+		for (Consumer<RuntimeWiring.Builder> runtimeWiringBuilder : this.runtimeWiringBuilders)
+		{
 			runtimeWiringBuilder.accept(builder);
 		}
 		RuntimeWiring runtimeWiring = builder.build();
@@ -142,7 +152,8 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 	}
 
 	@Nonnull
-	private List<Instrumentation> getInstrumentations(T configuration) {
+	private List<Instrumentation> getInstrumentations(T configuration)
+	{
 		Clock clock = this.getClock(configuration);
 
 		var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
@@ -153,8 +164,10 @@ public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryPro
 	}
 
 	@Nonnull
-	private Clock getClock(T configuration) {
-		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider)) {
+	private Clock getClock(T configuration)
+	{
+		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider))
+		{
 			LOGGER.warn(
 				"Configuration {} does not implement {}. Using system clock.",
 				configuration.getClass().getSimpleName(),

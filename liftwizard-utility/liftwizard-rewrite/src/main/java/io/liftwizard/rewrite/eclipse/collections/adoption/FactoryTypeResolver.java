@@ -27,12 +27,13 @@ import org.openrewrite.java.tree.J;
  * unit, so a recipe emits {@code Sets.mutable.empty()} typed to match the import that is actually in scope instead of
  * a fully-qualified name.
  */
-final class FactoryTypeResolver {
-
+final class FactoryTypeResolver
+{
 	private static final String API_FACTORY_PACKAGE = "org.eclipse.collections.api.factory";
 	private static final String IMPL_FACTORY_PACKAGE = "org.eclipse.collections.impl.factory";
 
-	private FactoryTypeResolver() {
+	private FactoryTypeResolver()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 
@@ -41,7 +42,8 @@ final class FactoryTypeResolver {
 	 * common when the file also calls impl-only utilities such as {@code Sets.union}. Returns empty when the simple
 	 * name is bound to some other type, in which case the caller should leave the code alone.
 	 */
-	static Optional<String> resolve(Cursor cursor, String factorySimpleName) {
+	static Optional<String> resolve(Cursor cursor, String factorySimpleName)
+	{
 		J.CompilationUnit compilationUnit = cursor.firstEnclosingOrThrow(J.CompilationUnit.class);
 
 		// At most one non-static import can bind a simple name, or the compilation unit would not compile.
@@ -50,19 +52,22 @@ final class FactoryTypeResolver {
 		);
 
 		String apiType = API_FACTORY_PACKAGE + "." + factorySimpleName;
-		if (boundImport.isEmpty()) {
+		if (boundImport.isEmpty())
+		{
 			return Optional.of(apiType);
 		}
 
 		String boundType = boundImport.get().getTypeName();
 		String implType = IMPL_FACTORY_PACKAGE + "." + factorySimpleName;
-		if (boundType.equals(apiType) || boundType.equals(implType)) {
+		if (boundType.equals(apiType) || boundType.equals(implType))
+		{
 			return Optional.of(boundType);
 		}
 		return Optional.empty();
 	}
 
-	private static String getSimpleName(String typeName) {
+	private static String getSimpleName(String typeName)
+	{
 		return typeName.substring(typeName.lastIndexOf('.') + 1);
 	}
 }

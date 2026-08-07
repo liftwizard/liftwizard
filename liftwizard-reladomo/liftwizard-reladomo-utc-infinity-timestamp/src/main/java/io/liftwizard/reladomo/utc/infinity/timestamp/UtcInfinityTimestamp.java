@@ -22,12 +22,13 @@ import java.util.TimeZone;
 
 import com.gs.fw.common.mithra.util.MithraTimestamp;
 
-public final class UtcInfinityTimestamp {
-
+public final class UtcInfinityTimestamp
+{
 	private static final MithraTimestamp DEFAULT_INFINITY;
 	private static final Instant DEFAULT_INFINITY_INSTANT;
 
-	static {
+	static
+	{
 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		calendar.set(Calendar.YEAR, 9999);
 		calendar.set(Calendar.MONTH, 11);
@@ -40,15 +41,18 @@ public final class UtcInfinityTimestamp {
 		DEFAULT_INFINITY_INSTANT = Instant.parse("9999-12-01T23:59:00Z");
 	}
 
-	private UtcInfinityTimestamp() {
+	private UtcInfinityTimestamp()
+	{
 		throw new AssertionError("Suppress default constructor for noninstantiability");
 	}
 
-	public static MithraTimestamp getDefaultInfinity() {
+	public static MithraTimestamp getDefaultInfinity()
+	{
 		return DEFAULT_INFINITY;
 	}
 
-	public static Instant getDefaultInfinityInstant() {
+	public static Instant getDefaultInfinityInstant()
+	{
 		return DEFAULT_INFINITY_INSTANT;
 	}
 }

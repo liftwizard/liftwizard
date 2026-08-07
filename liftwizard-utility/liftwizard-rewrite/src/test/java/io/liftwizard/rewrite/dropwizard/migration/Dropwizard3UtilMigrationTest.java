@@ -24,40 +24,42 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3UtilMigrationTest implements AbstractRewriteFixtures, RewriteTest {
-
+class Dropwizard3UtilMigrationTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration")
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package io.dropwizard.util;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3UtilMigration").parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package io.dropwizard.util;
 
-						import java.util.Collections;
+					import java.util.Collections;
 
-						public final class Sets {
-						    @SafeVarargs
-						    public static <T> java.util.Set<T> of(T... elements) {
-						        return Collections.emptySet();
-						    }
-						}
-						"""
-					)
-			);
+					public final class Sets {
+					    @SafeVarargs
+					    public static <T> java.util.Set<T> of(T... elements) {
+					        return Collections.emptySet();
+					    }
+					}
+					"""
+				)
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

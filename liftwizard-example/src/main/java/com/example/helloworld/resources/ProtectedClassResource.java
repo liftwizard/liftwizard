@@ -17,18 +17,20 @@ import io.dropwizard.auth.Auth;
 
 @Path("/protected")
 @RolesAllowed("BASIC_GUY")
-public final class ProtectedClassResource {
-
+public final class ProtectedClassResource
+{
 	@GET
 	@PermitAll
 	@Path("guest")
-	public String showSecret(@Auth User user) {
+	public String showSecret(@Auth User user)
+	{
 		return String.format("Hey there, %s. You know the secret! %d", user.getName(), user.getId());
 	}
 
 	/* Access to this method is authorized by the class level annotation */
 	@GET
-	public String showBasicUserSecret(@Context SecurityContext context) {
+	public String showBasicUserSecret(@Context SecurityContext context)
+	{
 		var user = (User) context.getUserPrincipal();
 		return String.format("Hey there, %s. You seem to be a basic user. %d", user.getName(), user.getId());
 	}
@@ -36,7 +38,8 @@ public final class ProtectedClassResource {
 	@GET
 	@RolesAllowed("ADMIN")
 	@Path("admin")
-	public String showAdminSecret(@Auth User user) {
+	public String showAdminSecret(@Auth User user)
+	{
 		return String.format("Hey there, %s. It looks like you are an admin. %d", user.getName(), user.getId());
 	}
 }

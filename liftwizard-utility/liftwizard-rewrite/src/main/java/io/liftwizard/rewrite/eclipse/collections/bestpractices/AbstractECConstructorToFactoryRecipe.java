@@ -41,8 +41,9 @@ import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.java.tree.VariableDeclarator;
 
-public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
-
+public abstract class AbstractECConstructorToFactoryRecipe
+	extends Recipe
+{
 	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	private final String implementationClassName;
@@ -57,7 +58,8 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 		String factoryClassName,
 		String factoryPackageSuffix,
 		String factoryMethod
-	) {
+	)
+	{
 		this.implementationClassName = Objects.requireNonNull(implementationClassName);
 		this.implementationPackagePath = Objects.requireNonNull(implementationPackagePath);
 		this.factoryClassName = Objects.requireNonNull(factoryClassName);
@@ -66,17 +68,20 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 	}
 
 	@Override
-	public final Set<String> getTags() {
+	public final Set<String> getTags()
+	{
 		return Sets.fixedSize.with("eclipse-collections");
 	}
 
 	@Override
-	public final Duration getEstimatedEffortPerOccurrence() {
+	public final Duration getEstimatedEffortPerOccurrence()
+	{
 		return Duration.ofSeconds(10);
 	}
 
 	@Override
-	public final TreeVisitor<?, ExecutionContext> getVisitor() {
+	public final TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return new ECConstructorToFactoryVisitor(
 			this.implementationClassName,
 			this.implementationPackagePath,
@@ -86,8 +91,9 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 		);
 	}
 
-	private static final class ECConstructorToFactoryVisitor extends JavaVisitor<ExecutionContext> {
-
+	private static final class ECConstructorToFactoryVisitor
+		extends JavaVisitor<ExecutionContext>
+	{
 		private final String implementationClassName;
 		private final String implementationPackagePath;
 		private final String factoryClassName;
@@ -100,7 +106,8 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			String factoryClassName,
 			String factoryPackageSuffix,
 			String factoryMethod
-		) {
+		)
+		{
 			this.implementationClassName = Objects.requireNonNull(implementationClassName);
 			this.implementationPackagePath = Objects.requireNonNull(implementationPackagePath);
 			this.factoryClassName = Objects.requireNonNull(factoryClassName);
@@ -109,16 +116,19 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 		}
 
 		@Override
-		public J visitVariable(J.VariableDeclarations.NamedVariable variable, ExecutionContext ctx) {
+		public J visitVariable(J.VariableDeclarations.NamedVariable variable, ExecutionContext ctx)
+		{
 			VariableDeclarator declarator = variable.getDeclarator();
-			if (!(declarator instanceof J.Identifier) && !(declarator instanceof J.Literal)) {
+			if (!(declarator instanceof J.Identifier) && !(declarator instanceof J.Literal))
+			{
 				return variable;
 			}
 			return super.visitVariable(variable, ctx);
 		}
 
 		@Override
-		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx) {
+		public J visitNewClass(J.NewClass newClass, ExecutionContext ctx)
+		{
 			var nc = (J.NewClass) super.visitNewClass(newClass, ctx);
 
 			JavaType.FullyQualified type = TypeUtils.asFullyQualified(nc.getType());
@@ -127,7 +137,8 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				this.implementationPackagePath,
 				this.implementationClassName
 			);
-			if (type == null || !implementationClass.equals(type.getFullyQualifiedName())) {
+			if (type == null || !implementationClass.equals(type.getFullyQualifiedName()))
+			{
 				return nc;
 			}
 
@@ -159,16 +170,19 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				&& !isComparatorConstructor
 				&& !isComparatorWithIterableConstructor
 				&& !isCollectionConstructor
-			) {
+			)
+			{
 				return nc;
 			}
 
-			if (this.isVariableTypeConcreteClass(nc)) {
+			if (this.isVariableTypeConcreteClass(nc))
+			{
 				return nc;
 			}
 
 			String typeParams = this.extractTypeParameters(nc);
-			if (typeParams == null) {
+			if (typeParams == null)
+			{
 				return nc;
 			}
 
@@ -199,16 +213,21 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				.build();
 
 			J replacement;
-			if (isComparatorWithIterableConstructor) {
+			if (isComparatorWithIterableConstructor)
+			{
 				replacement = template.apply(
 					this.getCursor(),
 					nc.getCoordinates().replace(),
 					arguments.get(0),
 					arguments.get(1)
 				);
-			} else if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor) {
+			}
+			else if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor)
+			{
 				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
-			} else {
+			}
+			else
+			{
 				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace());
 			}
 
@@ -222,63 +241,79 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			boolean isComparatorConstructor,
 			boolean isComparatorWithIterableConstructor,
 			boolean isCollectionConstructor
-		) {
-			if (isInitialCapacityConstructor) {
+		)
+		{
+			if (isInitialCapacityConstructor)
+			{
 				return "withInitialCapacity(#{any(int)})";
 			}
 
-			if (isComparatorConstructor) {
+			if (isComparatorConstructor)
+			{
 				return "with(#{any(java.util.Comparator)})";
 			}
 
-			if (isComparatorWithIterableConstructor) {
+			if (isComparatorWithIterableConstructor)
+			{
 				return "withAll(#{any(java.util.Comparator)}, #{any(java.lang.Iterable)})";
 			}
 
-			if (!isCollectionConstructor) {
+			if (!isCollectionConstructor)
+			{
 				return "empty()";
 			}
 
 			return this.getMethodName() + "(#{any(" + this.getParamType() + ")})";
 		}
 
-		private String getMethodName() {
-			if (this.factoryClassName.equals("SortedMaps")) {
+		private String getMethodName()
+		{
+			if (this.factoryClassName.equals("SortedMaps"))
+			{
 				return "withSortedMap";
 			}
-			if (this.factoryClassName.contains("Map")) {
+			if (this.factoryClassName.contains("Map"))
+			{
 				return "withMap";
 			}
 			return "withAll";
 		}
 
-		private String getParamType() {
+		private String getParamType()
+		{
 			return this.factoryClassName.equals("SortedMaps") || this.factoryClassName.contains("Map")
 				? "java.util.Map"
 				: "java.lang.Iterable";
 		}
 
-		private static boolean isNumericType(JavaType type) {
-			if (!(type instanceof JavaType.Primitive primitive)) {
+		private static boolean isNumericType(JavaType type)
+		{
+			if (!(type instanceof JavaType.Primitive primitive))
+			{
 				return false;
 			}
-			return switch (primitive) {
+			return switch (primitive)
+			{
 				case Int, Long, Short, Byte -> true;
 				default -> false;
 			};
 		}
 
-		private static boolean isComparatorType(JavaType type) {
+		private static boolean isComparatorType(JavaType type)
+		{
 			JavaType.FullyQualified fqType = TypeUtils.asFullyQualified(type);
-			if (fqType == null) {
+			if (fqType == null)
+			{
 				return false;
 			}
 			return "java.util.Comparator".equals(fqType.getFullyQualifiedName());
 		}
 
-		private static boolean isIterableType(JavaType type) {
+		private static boolean isIterableType(JavaType type)
+		{
 			JavaType.FullyQualified fqType = TypeUtils.asFullyQualified(type);
-			if (fqType == null) {
+			if (fqType == null)
+			{
 				return false;
 			}
 			String typeName = fqType.getFullyQualifiedName();
@@ -291,15 +326,19 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			);
 		}
 
-		private String extractTypeParameters(J.NewClass nc) {
-			if (nc.getClazz() instanceof J.ParameterizedType paramType) {
-				if (Iterate.notEmpty(paramType.getTypeParameters())) {
+		private String extractTypeParameters(J.NewClass nc)
+		{
+			if (nc.getClazz() instanceof J.ParameterizedType paramType)
+			{
+				if (Iterate.notEmpty(paramType.getTypeParameters()))
+				{
 					boolean hasActualTypeParams = paramType
 						.getTypeParameters()
 						.stream()
 						.anyMatch((tp) -> !(tp instanceof J.Empty));
 
-					if (hasActualTypeParams) {
+					if (hasActualTypeParams)
+					{
 						return paramType
 							.getTypeParameters()
 							.stream()
@@ -313,33 +352,43 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			}
 
 			JavaType ncType = nc.getType();
-			if (ncType instanceof JavaType.Parameterized) {
+			if (ncType instanceof JavaType.Parameterized)
+			{
 				return "";
 			}
 
 			return this.inferTypeParametersFromContext(nc);
 		}
 
-		private String inferTypeParametersFromContext(J.NewClass nc) {
+		private String inferTypeParametersFromContext(J.NewClass nc)
+		{
 			Cursor cursor = this.getCursor();
-			while (cursor != null) {
+			while (cursor != null)
+			{
 				Object value = cursor.getValue();
 
-				if (value instanceof J.VariableDeclarations.NamedVariable namedVar) {
+				if (value instanceof J.VariableDeclarations.NamedVariable namedVar)
+				{
 					JavaType varType = namedVar.getType();
-					if (varType instanceof JavaType.Parameterized paramType) {
-						if (!paramType.getTypeParameters().isEmpty()) {
+					if (varType instanceof JavaType.Parameterized paramType)
+					{
+						if (!paramType.getTypeParameters().isEmpty())
+						{
 							return this.buildTypeParameterString(paramType.getTypeParameters());
 						}
 					}
 					return "";
 				}
 
-				if (value instanceof J.MethodDeclaration method) {
-					if (method.getReturnTypeExpression() != null) {
+				if (value instanceof J.MethodDeclaration method)
+				{
+					if (method.getReturnTypeExpression() != null)
+					{
 						JavaType returnType = method.getReturnTypeExpression().getType();
-						if (returnType instanceof JavaType.Parameterized paramType) {
-							if (!paramType.getTypeParameters().isEmpty()) {
+						if (returnType instanceof JavaType.Parameterized paramType)
+						{
+							if (!paramType.getTypeParameters().isEmpty())
+							{
 								return this.buildTypeParameterString(paramType.getTypeParameters());
 							}
 						}
@@ -347,11 +396,15 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 					}
 				}
 
-				if (value instanceof J.VariableDeclarations varDecls) {
-					if (varDecls.getTypeExpression() != null) {
+				if (value instanceof J.VariableDeclarations varDecls)
+				{
+					if (varDecls.getTypeExpression() != null)
+					{
 						JavaType fieldType = varDecls.getTypeExpression().getType();
-						if (fieldType instanceof JavaType.Parameterized paramType) {
-							if (!paramType.getTypeParameters().isEmpty()) {
+						if (fieldType instanceof JavaType.Parameterized paramType)
+						{
+							if (!paramType.getTypeParameters().isEmpty())
+							{
 								return this.buildTypeParameterString(paramType.getTypeParameters());
 							}
 						}
@@ -365,68 +418,86 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 			return "";
 		}
 
-		private String buildTypeParameterString(List<JavaType> typeParameters) {
+		private String buildTypeParameterString(List<JavaType> typeParameters)
+		{
 			return typeParameters.stream().map(this::formatJavaType).collect(Collectors.joining(", "));
 		}
 
-		private String formatJavaType(JavaType javaType) {
-			if (javaType instanceof JavaType.Parameterized pType) {
+		private String formatJavaType(JavaType javaType)
+		{
+			if (javaType instanceof JavaType.Parameterized pType)
+			{
 				String baseType = this.formatJavaType(pType.getType());
-				if (!pType.getTypeParameters().isEmpty()) {
+				if (!pType.getTypeParameters().isEmpty())
+				{
 					String params = this.buildTypeParameterString(pType.getTypeParameters());
 					return baseType + "<" + params + ">";
 				}
 				return baseType;
 			}
-			if (javaType instanceof JavaType.FullyQualified fq) {
+			if (javaType instanceof JavaType.FullyQualified fq)
+			{
 				return fq.getClassName();
 			}
-			if (javaType instanceof JavaType.GenericTypeVariable gtv) {
+			if (javaType instanceof JavaType.GenericTypeVariable gtv)
+			{
 				return gtv.getName();
 			}
-			if (javaType instanceof JavaType.Variable var) {
+			if (javaType instanceof JavaType.Variable var)
+			{
 				return var.getName();
 			}
 			String typeStr = javaType.toString();
-			if (typeStr.equals("Generic{?}")) {
+			if (typeStr.equals("Generic{?}"))
+			{
 				return "?";
 			}
-			if (typeStr.startsWith("Generic{") && typeStr.endsWith("}")) {
+			if (typeStr.startsWith("Generic{") && typeStr.endsWith("}"))
+			{
 				return typeStr.substring(8, typeStr.length() - 1);
 			}
 			return typeStr;
 		}
 
-		private boolean isVariableTypeConcreteClass(J.NewClass newClass) {
+		private boolean isVariableTypeConcreteClass(J.NewClass newClass)
+		{
 			String implementationClass = MessageFormat.format(
 				"org.eclipse.collections.impl.{0}.mutable.{1}",
 				this.implementationPackagePath,
 				this.implementationClassName
 			);
 
-			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.VariableDeclarations.NamedVariable) {
+			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.VariableDeclarations.NamedVariable)
+			{
 				if (
 					this.getCursor().getParentTreeCursor().getParentTreeCursor().getValue()
-					instanceof J.VariableDeclarations variableDecls
-				) {
+						instanceof J.VariableDeclarations variableDecls
+				)
+				{
 					JavaType.FullyQualified variableType = TypeUtils.asFullyQualified(variableDecls.getType());
-					if (variableType != null) {
+					if (variableType != null)
+					{
 						String variableTypeName = variableType.getFullyQualifiedName();
 						return implementationClass.equals(variableTypeName);
 					}
 				}
 			}
 
-			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.Return) {
+			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.Return)
+			{
 				Cursor cursor = this.getCursor();
-				while (cursor != null) {
+				while (cursor != null)
+				{
 					Object value = cursor.getValue();
-					if (value instanceof J.MethodDeclaration method) {
-						if (method.getReturnTypeExpression() != null) {
+					if (value instanceof J.MethodDeclaration method)
+					{
+						if (method.getReturnTypeExpression() != null)
+						{
 							JavaType.FullyQualified returnType = TypeUtils.asFullyQualified(
 								method.getReturnTypeExpression().getType()
 							);
-							if (returnType != null) {
+							if (returnType != null)
+							{
 								String returnTypeName = returnType.getFullyQualifiedName();
 								return implementationClass.equals(returnTypeName);
 							}

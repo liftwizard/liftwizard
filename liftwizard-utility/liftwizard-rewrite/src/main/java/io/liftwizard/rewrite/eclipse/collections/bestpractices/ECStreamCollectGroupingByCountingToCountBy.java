@@ -45,8 +45,9 @@ import org.openrewrite.java.tree.J;
  * The method returns a {@code Bag<K>} which provides {@code occurrencesOf()} and {@code topOccurrences()}
  * instead of {@code Map<K, Long>}.
  */
-public class ECStreamCollectGroupingByCountingToCountBy extends Recipe {
-
+public class ECStreamCollectGroupingByCountingToCountBy
+	extends Recipe
+{
 	private static final MethodMatcher COLLECT_MATCHER = new MethodMatcher(
 		"java.util.stream.Stream collect(java.util.stream.Collector)"
 	);
@@ -58,12 +59,14 @@ public class ECStreamCollectGroupingByCountingToCountBy extends Recipe {
 	private static final MethodMatcher COUNTING_MATCHER = new MethodMatcher("java.util.stream.Collectors counting()");
 
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "`stream().collect(Collectors.groupingBy(fn, Collectors.counting()))` to `countBy(fn)`";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Transforms `collection.stream().collect(Collectors.groupingBy(fn, Collectors.counting()))` "
 			+ "to `collection.countBy(fn)`. "
@@ -73,7 +76,8 @@ public class ECStreamCollectGroupingByCountingToCountBy extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.check(
 			new UsesMethod<>(COLLECT_MATCHER),
 			new StreamCollectGroupingByCountingToCountByVisitor()
@@ -81,46 +85,55 @@ public class ECStreamCollectGroupingByCountingToCountBy extends Recipe {
 	}
 
 	private static final class StreamCollectGroupingByCountingToCountByVisitor
-		extends JavaIsoVisitor<ExecutionContext> {
-
+		extends JavaIsoVisitor<ExecutionContext>
+	{
 		@Override
-		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+		{
 			J.MethodInvocation methodInvocation = super.visitMethodInvocation(method, ctx);
 
-			if (!COLLECT_MATCHER.matches(methodInvocation)) {
+			if (!COLLECT_MATCHER.matches(methodInvocation))
+			{
 				return methodInvocation;
 			}
 
 			List<Expression> collectArguments = methodInvocation.getArguments();
-			if (collectArguments.size() != 1) {
+			if (collectArguments.size() != 1)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectorArg = collectArguments.get(0);
-			if (!(collectorArg instanceof J.MethodInvocation collectorCall)) {
+			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression classifyingFunction = this.extractClassifyingFunction(collectorCall);
-			if (classifyingFunction == null) {
+			if (classifyingFunction == null)
+			{
 				return methodInvocation;
 			}
 
 			Expression collectSelect = methodInvocation.getSelect();
-			if (!(collectSelect instanceof J.MethodInvocation streamCall)) {
+			if (!(collectSelect instanceof J.MethodInvocation streamCall))
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isStreamMethod(streamCall)) {
+			if (!ECStreamSupport.isStreamMethod(streamCall))
+			{
 				return methodInvocation;
 			}
 
 			Expression collectionExpr = streamCall.getSelect();
-			if (collectionExpr == null) {
+			if (collectionExpr == null)
+			{
 				return methodInvocation;
 			}
 
-			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr)) {
+			if (!ECStreamSupport.isEclipseCollectionsType(collectionExpr))
+			{
 				return methodInvocation;
 			}
 
@@ -137,22 +150,27 @@ public class ECStreamCollectGroupingByCountingToCountBy extends Recipe {
 		 * Extracts the classifying function from a groupingBy(fn, Collectors.counting()) call,
 		 * returning null if the call is not a supported form.
 		 */
-		private Expression extractClassifyingFunction(J.MethodInvocation collectorCall) {
-			if (!GROUPING_BY_TWO_ARG_MATCHER.matches(collectorCall)) {
+		private Expression extractClassifyingFunction(J.MethodInvocation collectorCall)
+		{
+			if (!GROUPING_BY_TWO_ARG_MATCHER.matches(collectorCall))
+			{
 				return null;
 			}
 
 			List<Expression> args = collectorCall.getArguments();
-			if (args.size() != 2) {
+			if (args.size() != 2)
+			{
 				return null;
 			}
 
 			Expression downstream = args.get(1);
-			if (!(downstream instanceof J.MethodInvocation downstreamCall)) {
+			if (!(downstream instanceof J.MethodInvocation downstreamCall))
+			{
 				return null;
 			}
 
-			if (!COUNTING_MATCHER.matches(downstreamCall)) {
+			if (!COUNTING_MATCHER.matches(downstreamCall))
+			{
 				return null;
 			}
 

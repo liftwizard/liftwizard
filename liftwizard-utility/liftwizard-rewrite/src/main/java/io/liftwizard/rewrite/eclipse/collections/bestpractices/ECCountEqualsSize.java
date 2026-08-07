@@ -25,30 +25,33 @@ import org.openrewrite.java.template.RecipeDescriptor;
 @RecipeDescriptor(
 	name = "`count(predicate) == size()` to `allSatisfy(predicate)`",
 	description = "Converts count() == size() comparisons to allSatisfy() for Eclipse Collections types. "
-	+ "The allSatisfy() method is more readable and can short-circuit on the first non-matching element, "
-	+ "while count() == size() must scan the entire collection."
+		+ "The allSatisfy() method is more readable and can short-circuit on the first non-matching element, "
+		+ "while count() == size() must scan the entire collection."
 )
-public class ECCountEqualsSize {
-
+public class ECCountEqualsSize
+{
 	@RecipeDescriptor(
 		name = "`count(predicate) == size()` to `allSatisfy(predicate)`",
 		description = "Converts `iterable.count(predicate) == iterable.size()` and "
-		+ "`iterable.size() == iterable.count(predicate)` to `iterable.allSatisfy(predicate)`."
+			+ "`iterable.size() == iterable.count(predicate)` to `iterable.allSatisfy(predicate)`."
 	)
-	public static final class CountEqualsSizeToAllSatisfy<T> {
-
+	public static final class CountEqualsSizeToAllSatisfy<T>
+	{
 		@BeforeTemplate
-		boolean beforeCountEqualsSize(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean beforeCountEqualsSize(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.count(predicate) == iterable.size();
 		}
 
 		@BeforeTemplate
-		boolean beforeSizeEqualsCount(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean beforeSizeEqualsCount(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.size() == iterable.count(predicate);
 		}
 
 		@AfterTemplate
-		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate) {
+		boolean after(RichIterable<T> iterable, Predicate<? super T> predicate)
+		{
 			return iterable.allSatisfy(predicate);
 		}
 	}

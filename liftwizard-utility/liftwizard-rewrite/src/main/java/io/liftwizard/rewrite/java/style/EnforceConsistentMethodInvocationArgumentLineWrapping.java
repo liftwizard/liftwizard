@@ -37,15 +37,18 @@ import org.openrewrite.java.tree.JRightPadded;
  * are also left unchanged. Valid fixed-multiple groupings (e.g., key-value pairs)
  * are also left unchanged.
  */
-public class EnforceConsistentMethodInvocationArgumentLineWrapping extends AbstractEnforceConsistentLineWrapping {
-
+public class EnforceConsistentMethodInvocationArgumentLineWrapping
+	extends AbstractEnforceConsistentLineWrapping
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Enforce consistent method invocation argument line wrapping";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"When a method call has multiple arguments and any argument is line-wrapped, "
 			+ "enforce that all arguments use line wrapping for consistency. "
@@ -54,21 +57,26 @@ public class EnforceConsistentMethodInvocationArgumentLineWrapping extends Abstr
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
-		return new JavaIsoVisitor<>() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
+		return new JavaIsoVisitor<>()
+		{
 			@Override
-			public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+			public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+			{
 				J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
 
 				JContainer<Expression> argsContainer = m.getPadding().getArguments();
 				List<JRightPadded<Expression>> args = argsContainer.getPadding().getElements();
 
-				if (!shouldEnforceWrapping(args)) {
+				if (!shouldEnforceWrapping(args))
+				{
 					return m;
 				}
 
 				String wrappedIndent = findWrappedIndent(args);
-				if (wrappedIndent == null) {
+				if (wrappedIndent == null)
+				{
 					return m;
 				}
 

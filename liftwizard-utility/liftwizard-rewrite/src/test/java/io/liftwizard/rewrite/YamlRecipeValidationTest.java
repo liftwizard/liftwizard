@@ -40,10 +40,12 @@ import org.yaml.snakeyaml.Yaml;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class YamlRecipeValidationTest {
-
+class YamlRecipeValidationTest
+{
 	@Test
-	void allYamlRecipeReferencesResolve() throws IOException {
+	void allYamlRecipeReferencesResolve()
+		throws IOException
+	{
 		Environment env = Environment.builder().scanRuntimeClasspath().build();
 
 		Set<String> knownRecipeNames = env
@@ -61,38 +63,51 @@ class YamlRecipeValidationTest {
 		assertThat(knownRecipeNames).containsAll(liftwizardReferences);
 	}
 
-	private static ImmutableList<String> getReferencedRecipeNames() throws IOException {
+	private static ImmutableList<String> getReferencedRecipeNames()
+		throws IOException
+	{
 		MutableList<String> result = Lists.mutable.empty();
 		Yaml yaml = new Yaml();
 		Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("META-INF/rewrite");
 
-		while (resources.hasMoreElements()) {
+		while (resources.hasMoreElements())
+		{
 			URL url = resources.nextElement();
-			if (!"file".equals(url.getProtocol())) {
+			if (!"file".equals(url.getProtocol()))
+			{
 				continue;
 			}
 
 			File dir = new File(url.getFile());
-			if (!dir.isDirectory()) {
+			if (!dir.isDirectory())
+			{
 				continue;
 			}
 
 			List<Path> ymlFiles;
-			try (Stream<Path> paths = Files.walk(dir.toPath())) {
+			try (Stream<Path> paths = Files.walk(dir.toPath()))
+			{
 				ymlFiles = paths
 					.filter(Files::isRegularFile)
 					.filter((path) -> path.getFileName().toString().endsWith(".yml"))
 					.collect(Collectors.toList());
 			}
 
-			for (Path ymlFile : ymlFiles) {
-				try (InputStream is = Files.newInputStream(ymlFile)) {
-					for (Object document : yaml.loadAll(is)) {
-						if (document instanceof Map<?, ?> map) {
+			for (Path ymlFile : ymlFiles)
+			{
+				try (InputStream is = Files.newInputStream(ymlFile))
+				{
+					for (Object document : yaml.loadAll(is))
+					{
+						if (document instanceof Map<?, ?> map)
+						{
 							Object recipeList = map.get("recipeList");
-							if (recipeList instanceof List<?> list) {
-								for (Object entry : list) {
-									if (entry instanceof String recipeName) {
+							if (recipeList instanceof List<?> list)
+							{
+								for (Object entry : list)
+								{
+									if (entry instanceof String recipeName)
+									{
 										result.add(recipeName);
 									}
 								}

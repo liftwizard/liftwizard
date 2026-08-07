@@ -16,6 +16,7 @@
 
 package io.liftwizard.dropwizard.configuration.reladomo;
 
-public interface ReladomoFactoryProvider {
+public interface ReladomoFactoryProvider
+{
 	ReladomoFactory getReladomoFactory();
 }

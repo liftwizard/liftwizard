@@ -32,29 +32,37 @@ import org.openrewrite.java.tree.Space;
  * line, this ensures ALL elements are line-wrapped for consistency,
  * unless the elements form a valid fixed-multiple grouping (e.g., key-value pairs).
  */
-public abstract class AbstractEnforceConsistentLineWrapping extends Recipe {
-
+public abstract class AbstractEnforceConsistentLineWrapping
+	extends Recipe
+{
 	/**
 	 * Returns true if wrapping should be enforced: the list is partially wrapped
 	 * and does not form a valid fixed-multiple grouping.
 	 */
-	protected static boolean shouldEnforceWrapping(List<? extends JRightPadded<? extends J>> elements) {
-		if (elements.size() < 2) {
+	protected static boolean shouldEnforceWrapping(List<? extends JRightPadded<? extends J>> elements)
+	{
+		if (elements.size() < 2)
+		{
 			return false;
 		}
 
 		boolean anyWrapped = false;
 		boolean allWrapped = true;
 
-		for (JRightPadded<? extends J> element : elements) {
-			if (containsNewline(element.getElement().getPrefix())) {
+		for (JRightPadded<? extends J> element : elements)
+		{
+			if (containsNewline(element.getElement().getPrefix()))
+			{
 				anyWrapped = true;
-			} else {
+			}
+			else
+			{
 				allWrapped = false;
 			}
 		}
 
-		if (!anyWrapped || allWrapped) {
+		if (!anyWrapped || allWrapped)
+		{
 			return false;
 		}
 
@@ -66,10 +74,13 @@ public abstract class AbstractEnforceConsistentLineWrapping extends Recipe {
 	 *
 	 * @return the indent string, or null if no wrapped element is found
 	 */
-	protected static String findWrappedIndent(List<? extends JRightPadded<? extends J>> elements) {
-		for (JRightPadded<? extends J> element : elements) {
+	protected static String findWrappedIndent(List<? extends JRightPadded<? extends J>> elements)
+	{
+		for (JRightPadded<? extends J> element : elements)
+		{
 			Space prefix = element.getElement().getPrefix();
-			if (containsNewline(prefix)) {
+			if (containsNewline(prefix))
+			{
 				return extractIndentAfterLastNewline(prefix.getWhitespace());
 			}
 		}
@@ -81,18 +92,23 @@ public abstract class AbstractEnforceConsistentLineWrapping extends Recipe {
 	 * Elements that already have newlines in their prefix are left unchanged.
 	 */
 	@SuppressWarnings("unchecked")
-	protected static <T extends J> List<JRightPadded<T>> applyWrapping(List<JRightPadded<T>> elements, String indent) {
+	protected static <T extends J> List<JRightPadded<T>> applyWrapping(List<JRightPadded<T>> elements, String indent)
+	{
 		String newlineAndIndent = "\n" + indent;
 		List<JRightPadded<T>> result = new ArrayList<>(elements.size());
 
-		for (JRightPadded<T> element : elements) {
+		for (JRightPadded<T> element : elements)
+		{
 			T tree = element.getElement();
 			Space prefix = tree.getPrefix();
 
-			if (!containsNewline(prefix)) {
+			if (!containsNewline(prefix))
+			{
 				Space newPrefix = prefix.withWhitespace(newlineAndIndent);
 				result.add(element.withElement((T) tree.withPrefix(newPrefix)));
-			} else {
+			}
+			else
+			{
 				result.add(element);
 			}
 		}
@@ -119,13 +135,16 @@ public abstract class AbstractEnforceConsistentLineWrapping extends Recipe {
 	 *         "key3", "value3");
 	 * </pre>
 	 */
-	protected static boolean hasConsistentFixedMultipleGrouping(List<? extends JRightPadded<? extends J>> elements) {
-		if (elements.isEmpty()) {
+	protected static boolean hasConsistentFixedMultipleGrouping(List<? extends JRightPadded<? extends J>> elements)
+	{
+		if (elements.isEmpty())
+		{
 			return false;
 		}
 
 		// First element must have a newline prefix
-		if (!containsNewline(elements.get(0).getElement().getPrefix())) {
+		if (!containsNewline(elements.get(0).getElement().getPrefix()))
+		{
 			return false;
 		}
 
@@ -133,29 +152,37 @@ public abstract class AbstractEnforceConsistentLineWrapping extends Recipe {
 		List<Integer> groupSizes = new ArrayList<>();
 		int currentGroupSize = 1;
 
-		for (int i = 1; i < elements.size(); i++) {
-			if (containsNewline(elements.get(i).getElement().getPrefix())) {
+		for (int i = 1; i < elements.size(); i++)
+		{
+			if (containsNewline(elements.get(i).getElement().getPrefix()))
+			{
 				groupSizes.add(currentGroupSize);
 				currentGroupSize = 1;
-			} else {
+			}
+			else
+			{
 				currentGroupSize++;
 			}
 		}
 		groupSizes.add(currentGroupSize);
 
 		// Need at least 2 groups
-		if (groupSizes.size() < 2) {
+		if (groupSizes.size() < 2)
+		{
 			return false;
 		}
 
 		// All groups must have the same size >= 2
 		int firstGroupSize = groupSizes.get(0);
-		if (firstGroupSize < 2) {
+		if (firstGroupSize < 2)
+		{
 			return false;
 		}
 
-		for (int groupSize : groupSizes) {
-			if (groupSize != firstGroupSize) {
+		for (int groupSize : groupSizes)
+		{
+			if (groupSize != firstGroupSize)
+			{
 				return false;
 			}
 		}
@@ -163,13 +190,16 @@ public abstract class AbstractEnforceConsistentLineWrapping extends Recipe {
 		return true;
 	}
 
-	protected static boolean containsNewline(Space space) {
+	protected static boolean containsNewline(Space space)
+	{
 		return space.getWhitespace().contains("\n");
 	}
 
-	protected static String extractIndentAfterLastNewline(String whitespace) {
+	protected static String extractIndentAfterLastNewline(String whitespace)
+	{
 		int lastNewline = whitespace.lastIndexOf('\n');
-		if (lastNewline < 0) {
+		if (lastNewline < 0)
+		{
 			return whitespace;
 		}
 		return whitespace.substring(lastNewline + 1);

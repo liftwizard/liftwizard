@@ -30,15 +30,18 @@ import org.openrewrite.TreeVisitor;
  * skips files that call the generic {@code log(Priority, ..)} method, which SLF4J cannot express
  * and the upstream migration would otherwise leave as uncompilable code.
  */
-public final class DoesNotUseLog4j1LogWithPriority extends Recipe {
-
+public final class DoesNotUseLog4j1LogWithPriority
+	extends Recipe
+{
 	@Override
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return "Does not use Log4j 1.x log(Priority, ..)";
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return (
 			"Precondition that matches source files which do not call the Log4j 1.x generic "
 			+ "`log(Priority, ..)` method. Files that use it (e.g., `LOGGER.log(Level.INFO, message)`) "
@@ -48,7 +51,8 @@ public final class DoesNotUseLog4j1LogWithPriority extends Recipe {
 	}
 
 	@Override
-	public TreeVisitor<?, ExecutionContext> getVisitor() {
+	public TreeVisitor<?, ExecutionContext> getVisitor()
+	{
 		return Preconditions.not(UsesLog4j1LogWithPriority.logWithPriorityUsage());
 	}
 }

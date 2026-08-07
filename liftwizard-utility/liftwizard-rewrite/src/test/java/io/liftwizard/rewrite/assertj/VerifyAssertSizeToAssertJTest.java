@@ -24,38 +24,39 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class VerifyAssertSizeToAssertJTest implements AbstractRewriteFixtures, RewriteTest {
-
+class VerifyAssertSizeToAssertJTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new VerifyAssertSizeToAssertJRecipes())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.dependsOn(
-						"""
-						package org.eclipse.collections.impl.test;
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new VerifyAssertSizeToAssertJRecipes()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.dependsOn(
+					"""
+					package org.eclipse.collections.impl.test;
 
-						import java.util.Map;
+					import java.util.Map;
 
-						public final class Verify {
-							public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
-							public static void assertSize(int expectedSize, Iterable<?> iterable) {}
-							public static void assertSize(String message, int expectedSize, Object[] array) {}
-							public static void assertSize(int expectedSize, Object[] array) {}
-							public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
-							public static void assertSize(int expectedSize, Map<?, ?> map) {}
-						}
-						"""
-					)
-					.classpath("eclipse-collections-api", "eclipse-collections")
-			);
+					public final class Verify {
+						public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
+						public static void assertSize(int expectedSize, Iterable<?> iterable) {}
+						public static void assertSize(String message, int expectedSize, Object[] array) {}
+						public static void assertSize(int expectedSize, Object[] array) {}
+						public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
+						public static void assertSize(int expectedSize, Map<?, ?> map) {}
+					}
+					"""
+				)
+				.classpath("eclipse-collections-api", "eclipse-collections")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 }

@@ -23,81 +23,85 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3ExcludeStaleJettyServletApiTest implements RewriteTest {
-
+class Dropwizard3ExcludeStaleJettyServletApiTest
+	implements RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
+	public void defaults(RecipeSpec spec)
+	{
 		spec.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3ExcludeStaleJettyServletApi");
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>org.eclipse.jetty</groupId>
-					            <artifactId>jetty-server</artifactId>
-					            <version>10.0.26</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					""",
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>org.eclipse.jetty</groupId>
-					            <artifactId>jetty-server</artifactId>
-					            <version>10.0.26</version>
-					            <exclusions>
-					                <exclusion>
-					                    <groupId>org.eclipse.jetty.toolchain</groupId>
-					                    <artifactId>jetty-servlet-api</artifactId>
-					                </exclusion>
-					            </exclusions>
-					        </dependency>
-					    </dependencies>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>org.eclipse.jetty</groupId>
+				            <artifactId>jetty-server</artifactId>
+				            <version>10.0.26</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				""",
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>org.eclipse.jetty</groupId>
+				            <artifactId>jetty-server</artifactId>
+				            <version>10.0.26</version>
+				            <exclusions>
+				                <exclusion>
+				                    <groupId>org.eclipse.jetty.toolchain</groupId>
+				                    <artifactId>jetty-servlet-api</artifactId>
+				                </exclusion>
+				            </exclusions>
+				        </dependency>
+				    </dependencies>
+				</project>
+				"""
+			)
+		);
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(
-				pomXml(
-					"""
-					<?xml version="1.0" encoding="UTF-8"?>
-					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>com.fasterxml.jackson.core</groupId>
-					            <artifactId>jackson-databind</artifactId>
-					            <version>2.21.3</version>
-					        </dependency>
-					    </dependencies>
-					</project>
-					"""
-				)
-			);
+			pomXml(
+				"""
+				<?xml version="1.0" encoding="UTF-8"?>
+				<project xmlns="http://maven.apache.org/POM/4.0.0">
+				    <modelVersion>4.0.0</modelVersion>
+				    <groupId>com.example</groupId>
+				    <artifactId>example</artifactId>
+				    <version>1.0.0</version>
+				    <dependencies>
+				        <dependency>
+				            <groupId>com.fasterxml.jackson.core</groupId>
+				            <artifactId>jackson-databind</artifactId>
+				            <version>2.21.3</version>
+				        </dependency>
+				    </dependencies>
+				</project>
+				"""
+			)
+		);
 	}
 }

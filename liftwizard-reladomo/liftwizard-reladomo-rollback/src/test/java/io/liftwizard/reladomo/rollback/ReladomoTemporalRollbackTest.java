@@ -37,8 +37,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ReladomoTemporalRollbackTest {
-
+class ReladomoTemporalRollbackTest
+{
 	private static final Instant INFINITY = UtcInfinityTimestamp.getDefaultInfinityInstant();
 
 	private static final Instant ROLLBACK_DATE = LocalDateTime.of(2024, 6, 1, 0, 0, 0).toInstant(ZoneOffset.UTC);
@@ -67,7 +67,8 @@ class ReladomoTemporalRollbackTest {
 
 	@Test
 	@ReladomoTestFile("test-data/rollback-test-data.txt")
-	void rollbackPurgesFutureVersionsAndRestoresSupersededVersions() {
+	void rollbackPurgesFutureVersionsAndRestoresSupersededVersions()
+	{
 		// Verify initial state using edge point to see all versions
 		MithraList<Person> allPersonsBefore = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
 		assertThat(allPersonsBefore).hasSize(3);
@@ -106,7 +107,8 @@ class ReladomoTemporalRollbackTest {
 
 	@Test
 	@ReladomoTestFile("test-data/rollback-test-data.txt")
-	void rollbackWithNoChangesNeeded() {
+	void rollbackWithNoChangesNeeded()
+	{
 		// Rollback to a date in the future - nothing should change
 		Instant futureDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0).toInstant(ZoneOffset.UTC);
 

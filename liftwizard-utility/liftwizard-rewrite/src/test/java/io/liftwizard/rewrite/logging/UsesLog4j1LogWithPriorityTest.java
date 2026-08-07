@@ -25,27 +25,29 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class UsesLog4j1LogWithPriorityTest implements AbstractRewriteFixtures, RewriteTest {
-
+class UsesLog4j1LogWithPriorityTest
+	implements AbstractRewriteFixtures, RewriteTest
+{
 	@Override
-	public void defaults(RecipeSpec spec) {
-		spec
-			.recipe(new UsesLog4j1LogWithPriority())
-			.parser(
-				JavaParser.fromJavaVersion()
-					.styles(AbstractRewriteStyles.styles())
-					.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
-			);
+	public void defaults(RecipeSpec spec)
+	{
+		spec.recipe(new UsesLog4j1LogWithPriority()).parser(
+			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
+				.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
+		);
 	}
 
 	@DocumentExample
 	@Test
-	void replacePatterns() {
+	void replacePatterns()
+	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void doNotReplaceInvalidPatterns() {
+	void doNotReplaceInvalidPatterns()
+	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

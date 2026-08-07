@@ -40,50 +40,61 @@ import com.gs.fw.common.mithra.util.fileparser.MithraParsedData;
  *
  * @see MithraParsedData
  */
-public class UtcMithraParsedData extends MithraParsedData {
-
+public class UtcMithraParsedData
+	extends MithraParsedData
+{
 	protected static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
 	private final SimpleDateFormat utcDateFormat;
 
-	public UtcMithraParsedData() {
+	public UtcMithraParsedData()
+	{
 		this.utcDateFormat = new SimpleDateFormat(DATE_FORMAT);
 		this.utcDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
-	public void parseData(StreamTokenizer st, int attributeNumber, Object currentData) throws ParseException {
+	public void parseData(StreamTokenizer st, int attributeNumber, Object currentData)
+		throws ParseException
+	{
 		List<Attribute> attributes = this.getAttributes();
-		if (attributeNumber >= attributes.size()) {
+		if (attributeNumber >= attributes.size())
+		{
 			throw new ParseException("extra data on line " + st.lineno(), st.lineno());
 		}
 		Attribute attribute = attributes.get(attributeNumber);
 		int token = st.ttype;
-		switch (token) {
+		switch (token)
+		{
 			case StreamTokenizer.TT_NUMBER -> attribute.parseNumberAndSet(st.nval, currentData, st.lineno());
-			case StreamTokenizer.TT_WORD -> {
+			case StreamTokenizer.TT_WORD ->
+			{
 				String word = st.sval;
-				if (!"null".equals(word) && attribute instanceof NumericAttribute) {
+				if (!"null".equals(word) && attribute instanceof NumericAttribute)
+				{
 					attribute.parseStringAndSet(st.sval, currentData, st.lineno(), null);
-				} else {
+				}
+				else
+				{
 					attribute.parseWordAndSet(word, currentData, st.lineno());
 				}
 			}
 			case '"' -> this.parseStringAndSet(attribute, st.sval, currentData, st.lineno());
 			case StreamTokenizer.TT_EOL -> throw new RuntimeException("should never get here");
 			case StreamTokenizer.TT_EOF -> throw new ParseException("Unexpected end of file", st.lineno());
-			default -> {
+			default ->
+			{
 				var ch = (char) st.ttype;
 				throw new ParseException(
 					"unexpected character "
-					+ ch
-					+ " or type "
-					+ st.ttype
-					+ " on line "
-					+ st.lineno()
-					+ " attribute count "
-					+ attributeNumber,
+						+ ch
+						+ " or type "
+						+ st.ttype
+						+ " on line "
+						+ st.lineno()
+						+ " attribute count "
+						+ attributeNumber,
 					st.lineno()
 				);
 			}
@@ -92,8 +103,10 @@ public class UtcMithraParsedData extends MithraParsedData {
 
 	@SuppressWarnings("unchecked")
 	private void parseStringAndSet(Attribute attribute, String value, Object currentData, int lineNumber)
-		throws ParseException {
-		if (attribute instanceof TimestampAttribute timestampAttribute) {
+		throws ParseException
+	{
+		if (attribute instanceof TimestampAttribute timestampAttribute)
+		{
 			Timestamp timestamp = this.parseTimestamp(timestampAttribute, value);
 			timestampAttribute.setTimestampValue(currentData, timestamp);
 			return;
@@ -101,14 +114,17 @@ public class UtcMithraParsedData extends MithraParsedData {
 		attribute.parseStringAndSet(value, currentData, lineNumber, this.utcDateFormat);
 	}
 
-	private Timestamp parseTimestamp(TimestampAttribute<?> timestampAttribute, String value) throws ParseException {
+	private Timestamp parseTimestamp(TimestampAttribute<?> timestampAttribute, String value)
+		throws ParseException
+	{
 		var timestamp = new Timestamp(this.utcDateFormat.parse(value).getTime());
 		LocalDateTime utcDateTime = LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC);
 		if (
 			timestampAttribute.isAsOfAttributeTo()
 			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
 				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
-		) {
+		)
+		{
 			return timestampAttribute.getAsOfAttributeInfinity();
 		}
 		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
