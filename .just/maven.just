@@ -109,7 +109,7 @@ spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizar
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags)
 
 # `mvn` rewrite dry run
-rewrite-dry-run MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun") rewrite_flags)
+rewrite-dry-run MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:dryRun" (rewrite_projects + " --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun") rewrite_flags)
 
 # `mvn` rewrite run
 rewrite-run MVN=default_mvn: clean (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" (rewrite_projects + " --activate-profiles rewrite-maven-plugin") rewrite_flags)
