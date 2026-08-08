@@ -2,7 +2,7 @@ default_mvn      := env('MVN_BINARY',   "mvn")
 default_target   := env('MVN_TARGET',   "verify")
 default_flags    := env('MVN_FLAGS',    "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
-rewrite_flags := "--threads 1 -DskipTests"
+rewrite_flags := "--threads 2C -DskipTests"
 rewrite_project_exclusions := "!liftwizard-generator-plugins/liftwizard-generator-rewrite,!liftwizard-generator-plugins/liftwizard-generator-rewrite-plugin,!liftwizard-utility/liftwizard-rewrite"
 rewrite_projects := "--projects '" + rewrite_project_exclusions + "'"
 
