@@ -404,10 +404,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				this.implementationClassName
 			);
 
-			if (
-				this.getCursor().getParentTreeCursor().getValue()
-				instanceof J.VariableDeclarations.NamedVariable namedVariable
-			) {
+			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.VariableDeclarations.NamedVariable) {
 				if (
 					this.getCursor().getParentTreeCursor().getParentTreeCursor().getValue()
 					instanceof J.VariableDeclarations variableDecls
@@ -420,7 +417,7 @@ public abstract class AbstractECConstructorToFactoryRecipe extends Recipe {
 				}
 			}
 
-			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.Return returnStatement) {
+			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.Return) {
 				Cursor cursor = this.getCursor();
 				while (cursor != null) {
 					Object value = cursor.getValue();

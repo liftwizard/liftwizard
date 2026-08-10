@@ -98,7 +98,7 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 				return false;
 			}
 
-			if (!(initializer instanceof Literal literal)) {
+			if (!(initializer instanceof Literal)) {
 				return false;
 			}
 
