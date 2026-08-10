@@ -1,0 +1,45 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,34 +1,34 @@
+ import java.util.Map;
+ import org.eclipse.collections.impl.utility.MapIterate;
+
+ class Test {
+ 	boolean testIsEmpty(Map<String, Integer> map) {
+-		return map == null || map.isEmpty();
++		return MapIterate.isEmpty(map);
+ 	}
+
+ 	boolean testNotEmpty(Map<String, Integer> map) {
+-		return map != null && !map.isEmpty();
++		return MapIterate.notEmpty(map);
+ 	}
+
+ 	boolean testNegatedMapIterateIsEmpty(Map<String, Integer> map) {
+-		return !MapIterate.isEmpty(map);
++		return MapIterate.notEmpty(map);
+ 	}
+
+ 	boolean testNegatedMapIterateNotEmpty(Map<String, Integer> map) {
+-		return !MapIterate.notEmpty(map);
++		return MapIterate.isEmpty(map);
+ 	}
+
+ 	void testMultiple(Map<String, Integer> map1, Map<String, Object> map2) {
+-		if (map1 == null || map1.isEmpty()) {
++		if (MapIterate.isEmpty(map1)) {
+ 		}
+
+-		if (map2 != null && !map2.isEmpty()) {
++		if (MapIterate.notEmpty(map2)) {
+ 		}
+
+-		if (!MapIterate.isEmpty(map1)) {
++		if (MapIterate.notEmpty(map1)) {
+ 		}
+
+-		if (!MapIterate.notEmpty(map2)) {
++		if (MapIterate.isEmpty(map2)) {
+ 		}
+ 	}
+ }

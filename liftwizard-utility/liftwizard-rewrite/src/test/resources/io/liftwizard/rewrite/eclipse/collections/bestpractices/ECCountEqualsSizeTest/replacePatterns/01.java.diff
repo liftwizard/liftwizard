@@ -1,0 +1,18 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,12 +1,12 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	void test(MutableList<String> list) {
+-		boolean allMatch = list.count(s -> s.length() > 5) == list.size();
+-		boolean reversedAllMatch = list.size() == list.count(s -> s.length() > 5);
++		boolean allMatch = list.allSatisfy(s -> s.length() > 5);
++		boolean reversedAllMatch = list.allSatisfy(s -> s.length() > 5);
+
+-		if (list.count(s -> s.length() > 5) == list.size()) {
++		if (list.allSatisfy(s -> s.length() > 5)) {
+ 			// All satisfy
+ 		}
+ 	}
+ }

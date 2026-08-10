@@ -1,0 +1,34 @@
+--- a/transformsVerifyAssertSize/01-before.java
++++ b/transformsVerifyAssertSize/01-after.java
+@@ -1,23 +1,24 @@
+-import org.eclipse.collections.impl.test.Verify;
+ import org.eclipse.collections.api.list.MutableList;
+ import org.eclipse.collections.impl.factory.Lists;
+ import java.util.Map;
++
++import static org.assertj.core.api.Assertions.assertThat;
+ import java.util.HashMap;
+
+ class Test {
+ 	void test() {
+ 		MutableList<String> list = Lists.mutable.with("a", "b", "c");
+-		Verify.assertSize("list should have size 3", 3, list);
+-		Verify.assertSize(3, list);
++		assertThat(list).as("list should have size 3").hasSize(3);
++		assertThat(list).hasSize(3);
+
+ 		String[] array = new String[]{"a", "b", "c"};
+-		Verify.assertSize("array should have size 3", 3, array);
+-		Verify.assertSize(3, array);
++		assertThat(array).as("array should have size 3").hasSize(3);
++		assertThat(array).hasSize(3);
+
+ 		Map<String, Integer> map = new HashMap<>();
+ 		map.put("a", 1);
+ 		map.put("b", 2);
+-		Verify.assertSize("map should have size 2", 2, map);
+-		Verify.assertSize(2, map);
++		assertThat(map).as("map should have size 2").hasSize(2);
++		assertThat(map).hasSize(2);
+ 	}
+ }

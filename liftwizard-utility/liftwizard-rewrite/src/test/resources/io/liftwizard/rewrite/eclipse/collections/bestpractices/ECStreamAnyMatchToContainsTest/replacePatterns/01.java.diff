@@ -1,0 +1,42 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,33 +1,33 @@
+ import org.eclipse.collections.api.list.ImmutableList;
+ import org.eclipse.collections.api.list.MutableList;
+ import org.eclipse.collections.api.set.MutableSet;
+
+ class Test {
+ 	private final String expected = "hello";
+
+ 	void streamAnyMatchWithContains(MutableList<String> list, String target) {
+-		boolean containsTarget = list.stream().anyMatch(target::equals);
++		boolean containsTarget = list.contains(target);
+
+-		if (list.stream().anyMatch(target::equals)) {
++		if (list.contains(target)) {
+ 			this.doWork();
+ 		}
+ 	}
+
+ 	void withFieldReference(MutableList<String> list) {
+-		boolean containsExpected = list.stream().anyMatch(this.expected::equals);
++		boolean containsExpected = list.contains(this.expected);
+ 	}
+
+ 	void withIntegerType(MutableList<Integer> list, Integer target) {
+-		boolean containsTarget = list.stream().anyMatch(target::equals);
++		boolean containsTarget = list.contains(target);
+ 	}
+
+ 	void withImmutableList(ImmutableList<String> list, String target) {
+-		boolean containsTarget = list.stream().anyMatch(target::equals);
++		boolean containsTarget = list.contains(target);
+ 	}
+
+ 	void withMutableSet(MutableSet<String> set, String target) {
+-		boolean containsTarget = set.stream().anyMatch(target::equals);
++		boolean containsTarget = set.contains(target);
+ 	}
+
+ 	void doWork() {}
+ }

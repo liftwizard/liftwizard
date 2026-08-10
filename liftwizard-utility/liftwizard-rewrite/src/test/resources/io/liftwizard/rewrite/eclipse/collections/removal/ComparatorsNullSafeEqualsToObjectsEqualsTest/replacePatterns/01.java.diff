@@ -1,0 +1,16 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,10 +1,10 @@
+-import org.eclipse.collections.impl.block.factory.Comparators;
++import java.util.Objects;
+
+ class Test {
+ 	void test() {
+ 		String left = "foo";
+ 		String right = "bar";
+-		boolean equal = Comparators.nullSafeEquals(left, right);
+-		boolean notEqual = !Comparators.nullSafeEquals(left, right);
++		boolean equal = Objects.equals(left, right);
++		boolean notEqual = !Objects.equals(left, right);
+ 	}
+ }

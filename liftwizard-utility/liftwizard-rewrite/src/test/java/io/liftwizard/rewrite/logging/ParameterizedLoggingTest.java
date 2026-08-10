@@ -16,126 +16,39 @@
 
 package io.liftwizard.rewrite.logging;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class ParameterizedLoggingTest implements RewriteTest {
+class ParameterizedLoggingTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", null))
-			.parser(JavaParser.fromJavaVersion().classpath("slf4j-api"));
+			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("slf4j-api"));
 	}
 
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.slf4j.Logger;
-					import org.slf4j.LoggerFactory;
-
-					class Test {
-					    private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
-
-					    void stringConcatenationToParameterized(String name) {
-					        LOGGER.info("Hello " + name);
-					    }
-
-					    void multipleVariablesConcatenated(String first, String last) {
-					        LOGGER.info("User " + first + " " + last + " logged in");
-					    }
-
-					    void concatenationWithThrowableAsLastArg(String name, Exception e) {
-					        LOGGER.info("Error for " + name, e);
-					    }
-					}
-					""",
-					"""
-					import org.slf4j.Logger;
-					import org.slf4j.LoggerFactory;
-
-					class Test {
-					    private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
-
-					    void stringConcatenationToParameterized(String name) {
-					        LOGGER.info("Hello {}", name);
-					    }
-
-					    void multipleVariablesConcatenated(String first, String last) {
-					        LOGGER.info("User {} {} logged in", first, last);
-					    }
-
-					    void concatenationWithThrowableAsLastArg(String name, Exception e) {
-					        LOGGER.info("Error for {}", name, e);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.slf4j.Logger;
-					import org.slf4j.LoggerFactory;
-
-					class Test {
-					    private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
-
-					    void doesNotTransformStringArgument() {
-					        LOGGER.info("Simple message");
-					    }
-
-					    void doesNotTransformAlreadyParameterized(String name) {
-					        LOGGER.info("Hello {}", name);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 
 	@Test
 	void removeToStringWhenEnabled() {
 		this.rewriteRun(
-				(spec) -> spec.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", true)),
-				java(
-					"""
-					import org.slf4j.Logger;
-					import org.slf4j.LoggerFactory;
-
-					class Test {
-					    private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
-
-					    void test(Object obj) {
-					        LOGGER.info("Value: " + obj.toString());
-					    }
-					}
-					""",
-					"""
-					import org.slf4j.Logger;
-					import org.slf4j.LoggerFactory;
-
-					class Test {
-					    private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
-
-					    void test(Object obj) {
-					        LOGGER.info("Value: {}", obj);
-					    }
-					}
-					"""
-				)
-			);
+			(spec) -> spec.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", true)),
+			this.javaFixture("removeToStringWhenEnabled/01")
+		);
 	}
 }

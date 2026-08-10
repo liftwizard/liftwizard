@@ -1,0 +1,71 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,52 +1,52 @@
+ import org.eclipse.collections.impl.utility.ArrayIterate;
+
+ class Test {
+ 	void test(String[] strings, Object[] objects) {
+ 		boolean isEmptyNullOrLength =
+-				strings == null || strings.length == 0;
++				ArrayIterate.isEmpty(strings);
+ 		boolean isEmptyNullOrLengthLessOrEqual =
+-				strings == null || strings.length <= 0;
++				ArrayIterate.isEmpty(strings);
+ 		boolean isEmptyNullOrLengthLessThanOne =
+-				strings == null || strings.length < 1;
++				ArrayIterate.isEmpty(strings);
+ 		boolean notEmptyNotNullAndLength =
+-				objects != null && objects.length > 0;
++				ArrayIterate.notEmpty(objects);
+ 		boolean notEmptyNotNullAndLengthNotEqual =
+-				objects != null && objects.length != 0;
++				ArrayIterate.notEmpty(objects);
+ 		boolean notEmptyNotNullAndLengthGreaterOrEqual =
+-				objects != null && objects.length >= 1;
++				ArrayIterate.notEmpty(objects);
+
+-		if (strings == null || strings.length == 0) {
++		if (ArrayIterate.isEmpty(strings)) {
+ 		}
+
+-		if (strings == null || strings.length <= 0) {
++		if (ArrayIterate.isEmpty(strings)) {
+ 		}
+
+-		if (strings == null || strings.length < 1) {
++		if (ArrayIterate.isEmpty(strings)) {
+ 		}
+
+-		if (objects != null && objects.length > 0) {
++		if (ArrayIterate.notEmpty(objects)) {
+ 		}
+
+-		if (objects != null && objects.length != 0) {
++		if (ArrayIterate.notEmpty(objects)) {
+ 		}
+
+-		if (objects != null && objects.length >= 1) {
++		if (ArrayIterate.notEmpty(objects)) {
+ 		}
+ 	}
+
+ 	boolean testNegatedArrayIterateIsEmpty(String[] array) {
+-		return !ArrayIterate.isEmpty(array);
++		return ArrayIterate.notEmpty(array);
+ 	}
+
+ 	boolean testNegatedArrayIterateNotEmpty(String[] array) {
+-		return !ArrayIterate.notEmpty(array);
++		return ArrayIterate.isEmpty(array);
+ 	}
+
+ 	void testMultipleNegated(String[] array1, Object[] array2) {
+-		if (!ArrayIterate.isEmpty(array1)) {
++		if (ArrayIterate.notEmpty(array1)) {
+ 		}
+
+-		if (!ArrayIterate.notEmpty(array2)) {
++		if (ArrayIterate.isEmpty(array2)) {
+ 		}
+ 	}
+ }

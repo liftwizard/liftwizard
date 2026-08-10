@@ -1,0 +1,14 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,7 +1,11 @@
+ public class Math {
+ 	public static final int TWO = 2;
+
+ 	public static int addTwo(int a) {
+ 		return a + TWO;
+ 	}
++
++	private Math() {
++		throw new AssertionError("Suppress default constructor for noninstantiability");
++	}
+ }

@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECSelectFirstToDetectTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -36,184 +34,19 @@ class ECSelectFirstToDetectTest extends AbstractEclipseCollectionsTest {
 	void replacePatterns() {
 		this.rewriteRun(
 				// Pattern 1: OrderedIterable select().getFirstOptional() -> detectOptional()
-				java(
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> test(MutableList<String> list, Predicate<String> predicate) {
-					        return list.select(predicate).getFirstOptional();
-					    }
-					}
-					""",
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> test(MutableList<String> list, Predicate<String> predicate) {
-					        return list.detectOptional(predicate);
-					    }
-					}
-					"""
-				),
+				this.javaFixture("replacePatterns/01"),
 				// Pattern 1: RichIterable select().getFirst() -> detect()
-				java(
-					"""
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.MutableList;
-
-					class TestGetFirst {
-					    String test(MutableList<String> list, Predicate<String> predicate) {
-					        return list.select(predicate).getFirst();
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.MutableList;
-
-					class TestGetFirst {
-					    String test(MutableList<String> list, Predicate<String> predicate) {
-					        return list.detect(predicate);
-					    }
-					}
-					"""
-				),
+				this.javaFixture("replacePatterns/02"),
 				// Pattern 1: ImmutableList
-				java(
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class TestImmutable {
-					    Optional<String> test(ImmutableList<String> list, Predicate<String> predicate) {
-					        return list.select(predicate).getFirstOptional();
-					    }
-					}
-					""",
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.ImmutableList;
-
-					class TestImmutable {
-					    Optional<String> test(ImmutableList<String> list, Predicate<String> predicate) {
-					        return list.detectOptional(predicate);
-					    }
-					}
-					"""
-				),
+				this.javaFixture("replacePatterns/03"),
 				// Pattern 1: MutableSet with getFirst() (not getFirstOptional())
-				java(
-					"""
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class TestSet {
-					    Integer test(MutableSet<Integer> set, Predicate<Integer> predicate) {
-					        return set.select(predicate).getFirst();
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class TestSet {
-					    Integer test(MutableSet<Integer> set, Predicate<Integer> predicate) {
-					        return set.detect(predicate);
-					    }
-					}
-					"""
-				),
+				this.javaFixture("replacePatterns/04"),
 				// Pattern 2: ArrayIterate.select().getFirstOptional() -> ArrayIterate.detectOptional()
-				java(
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.impl.utility.ArrayIterate;
-
-					class TestArrayIterate {
-					    Optional<String> test(String[] array, Predicate<String> predicate) {
-					        return ArrayIterate.select(array, predicate).getFirstOptional();
-					    }
-					}
-					""",
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.impl.utility.ArrayIterate;
-
-					class TestArrayIterate {
-					    Optional<String> test(String[] array, Predicate<String> predicate) {
-					        return ArrayIterate.detectOptional(array, predicate);
-					    }
-					}
-					"""
-				),
+				this.javaFixture("replacePatterns/05"),
 				// Pattern 2: ArrayIterate.select().getFirst() -> ArrayIterate.detect()
-				java(
-					"""
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.impl.utility.ArrayIterate;
-
-					class TestArrayIterateGetFirst {
-					    String test(String[] array, Predicate<String> predicate) {
-					        return ArrayIterate.select(array, predicate).getFirst();
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.impl.utility.ArrayIterate;
-
-					class TestArrayIterateGetFirst {
-					    String test(String[] array, Predicate<String> predicate) {
-					        return ArrayIterate.detect(array, predicate);
-					    }
-					}
-					"""
-				),
+				this.javaFixture("replacePatterns/06"),
 				// Pattern 2: ListIterate.select().getFirstOptional() -> ListIterate.detectOptional()
-				java(
-					"""
-					import java.util.List;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.impl.utility.ListIterate;
-
-					class TestListIterate {
-					    Optional<String> test(List<String> list, Predicate<String> predicate) {
-					        return ListIterate.select(list, predicate).getFirstOptional();
-					    }
-					}
-					""",
-					"""
-					import java.util.List;
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.impl.utility.ListIterate;
-
-					class TestListIterate {
-					    Optional<String> test(List<String> list, Predicate<String> predicate) {
-					        return ListIterate.detectOptional(list, predicate);
-					    }
-					}
-					"""
-				)
+				this.javaFixture("replacePatterns/07")
 			);
 	}
 
@@ -221,60 +54,13 @@ class ECSelectFirstToDetectTest extends AbstractEclipseCollectionsTest {
 	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
 				// Do not replace when getFirstOptional is not called on select result
-				java(
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class TestNoSelect {
-					    Optional<String> test(MutableList<String> list) {
-					        return list.getFirstOptional();
-					    }
-					}
-					"""
-				),
+				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
 				// Do not replace when getFirst is not called on select result
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class TestNoSelectGetFirst {
-					    String test(MutableList<String> list) {
-					        return list.getFirst();
-					    }
-					}
-					"""
-				),
+				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02"),
 				// Do not replace when select has intermediate operations
-				java(
-					"""
-					import java.util.Optional;
-
-					import org.eclipse.collections.api.block.predicate.Predicate;
-					import org.eclipse.collections.api.list.MutableList;
-
-					class TestIntermediate {
-					    Optional<String> test(MutableList<String> list, Predicate<String> predicate) {
-					        return list.select(predicate).collect(String::toUpperCase).getFirstOptional();
-					    }
-					}
-					"""
-				),
+				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/03"),
 				// Do not replace for non-EC types
-				java(
-					"""
-					import java.util.ArrayList;
-					import java.util.List;
-
-					class TestJavaList {
-					    void test() {
-					        List<String> list = new ArrayList<>();
-					        list.stream().filter(s -> s.length() > 5).findFirst();
-					    }
-					}
-					"""
-				)
+				this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/04")
 			);
 	}
 }

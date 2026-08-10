@@ -1,0 +1,44 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,25 +1,26 @@
+ import java.util.Arrays;
+ import java.util.Collection;
+-import java.util.HashSet;
+ import java.util.List;
+ import java.util.Set;
+
++import org.eclipse.collections.api.factory.Sets;
++
+ class Test {
+-	private final Set<String> fieldInterfaceEmpty = new HashSet<>();
+-	private final Set<Integer> fieldInterfaceCapacity = new HashSet<>(10);
+-	private final Set<String> fieldInterfaceCollection = new HashSet<>(Arrays.asList("a", "b"));
++	private final Set<String> fieldInterfaceEmpty = Sets.mutable.empty();
++	private final Set<Integer> fieldInterfaceCapacity = Sets.mutable.withInitialCapacity(10);
++	private final Set<String> fieldInterfaceCollection = Sets.mutable.withAll(Arrays.asList("a", "b"));
+
+ 	void test(Collection<String> inputCollection) {
+-		Collection<String> collection = new HashSet<>();
+-		Set<String> typeInference = new HashSet<>();
+-		Set<List<String>> nestedGenerics = new HashSet<>();
+-		Set<? extends Number> wildcardGenerics = new HashSet<>();
+-		Set<String> explicitSimple = new HashSet<String>();
+-		Set<List<String>> explicitNested = new HashSet<List<String>>();
+-		java.util.Set<String> fullyQualified = new HashSet<>();
+-		Set<String> withCapacity20 = new HashSet<>(20);
+-		Set<String> explicit30 = new HashSet<String>(30);
+-		Set<String> interfaceFromCollection = new HashSet<>(inputCollection);
+-		Set<String> fromList = new HashSet<>(Arrays.asList("x", "y", "z"));
++		Collection<String> collection = Sets.mutable.empty();
++		Set<String> typeInference = Sets.mutable.empty();
++		Set<List<String>> nestedGenerics = Sets.mutable.empty();
++		Set<? extends Number> wildcardGenerics = Sets.mutable.empty();
++		Set<String> explicitSimple = Sets.mutable.<String>empty();
++		Set<List<String>> explicitNested = Sets.mutable.<List<String>>empty();
++		java.util.Set<String> fullyQualified = Sets.mutable.empty();
++		Set<String> withCapacity20 = Sets.mutable.withInitialCapacity(20);
++		Set<String> explicit30 = Sets.mutable.<String>withInitialCapacity(30);
++		Set<String> interfaceFromCollection = Sets.mutable.withAll(inputCollection);
++		Set<String> fromList = Sets.mutable.withAll(Arrays.asList("x", "y", "z"));
+ 	}
+ }

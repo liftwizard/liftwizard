@@ -1,0 +1,90 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,74 +1,74 @@
+ import java.util.function.Consumer;
+
+ class Parent {
+ 	private String parentField;
+
+ 	Parent(String value) {
+-		parentField = value;
++		this.parentField = value;
+ 	}
+ }
+
+ class Test extends Parent {
+ 	private String field;
+ 	private String field1;
+ 	private String field2;
+ 	private static String staticField;
+ 	private String alreadyPrefixed;
+
+ 	private String fieldInit1 = "initial";
+-	private String fieldInit2 = field1;
+-	private String fieldInit3 = field1 + field2;
++	private String fieldInit2 = this.field1;
++	private String fieldInit3 = this.field1 + this.field2;
+
+ 	private static String staticFieldInit = staticField;
+
+ 	static {
+ 		staticField = "static initializer";
+ 		staticHelper();
+ 	}
+
+ 	{
+-		field = "instance initializer";
+-		field1 = field2;
++		this.field = "instance initializer";
++		this.field1 = this.field2;
+ 	}
+
+ 	Test(String value) {
+ 		super(value);
+-		field = "constructor";
+-		field1 = field2;
++		this.field = "constructor";
++		this.field1 = this.field2;
+ 	}
+
+ 	Test() {
+ 		this("default");
+ 	}
+
+ 	void instanceMethod(String parameter) {
+-		field = "value";
+-		field1 = field2;
+-		helper();
++		this.field = "value";
++		this.field1 = this.field2;
++		this.helper();
+ 		staticField = "static context";
+ 		staticMethod();
+
+ 		String localVariable = parameter;
+ 		String result = parameter + localVariable;
+
+ 		this.alreadyPrefixed = "already has this";
+ 		this.alreadyPrefixedMethod();
+ 		super.toString();
+
+ 		Consumer<String> lambda = s -> {
+-			field = s;
+-			field1 = field2;
++			this.field = s;
++			this.field1 = this.field2;
+ 		};
+
+-		Runnable runnable = () -> field = "lambda";
++		Runnable runnable = () -> this.field = "lambda";
+ 	}
+
+ 	static void staticMethod() {
+ 		staticField = "static context";
+ 		staticHelper();
+ 	}
+
+ 	void helper() {}
+ 	void alreadyPrefixedMethod() {}
+ 	static void staticHelper() {}
+ }

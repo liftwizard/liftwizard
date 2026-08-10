@@ -1,0 +1,20 @@
+--- a/replacePatterns/02-before.java
++++ b/replacePatterns/02-after.java
+@@ -1,13 +1,17 @@
++import org.junit.jupiter.api.Test;
++
+ public class ChildTest extends ParentTest {
+ 	@Override
++	@Test
+ 	public void testOne() {
+ 	}
+
+ 	@Override
++	@Test
+ 	public void testTwo() {
+ 	}
+
+ 	@Override
+ 	public void helperMethod() {
+ 	}
+ }

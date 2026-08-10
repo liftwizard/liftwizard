@@ -1,0 +1,45 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,24 +1,26 @@
+-import org.junit.ClassRule;
+-import org.junit.Rule;
+-import io.dropwizard.testing.junit.DropwizardAppRule;
+-import io.dropwizard.testing.junit.DropwizardClientRule;
+-import io.dropwizard.testing.junit.ResourceTestRule;
++import io.dropwizard.testing.junit5.DropwizardClientExtension;
++import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
++import io.dropwizard.testing.junit5.ResourceExtension;
++import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.junit.jupiter.api.extension.RegisterExtension;
+
++@ExtendWith(DropwizardExtensionsSupport.class)
+ class MyTest {
+-	@ClassRule
+-	public static DropwizardAppRule<Object> APP_RULE =
+-			new DropwizardAppRule<>(Object.class, "config.yml");
++	@RegisterExtension
++	public static LiftwizardAppExtension<Object> APP_RULE =
++			new LiftwizardAppExtension<>(Object.class, "config.yml");
+
+-	@Rule
+-	public DropwizardAppRule<Object> instanceRule =
+-			new DropwizardAppRule<>(Object.class, "config.yml");
++	@RegisterExtension
++	public LiftwizardAppExtension<Object> instanceRule =
++			new LiftwizardAppExtension<>(Object.class, "config.yml");
+
+-	@ClassRule
+-	public static DropwizardClientRule CLIENT_RULE =
+-			new DropwizardClientRule(new Object());
++	@RegisterExtension
++	public static DropwizardClientExtension CLIENT_RULE =
++			new DropwizardClientExtension(new Object());
+
+-	@ClassRule
+-	public static ResourceTestRule RESOURCES = ResourceTestRule.builder()
++	@RegisterExtension
++	public static ResourceExtension RESOURCES = ResourceExtension.builder()
+ 			.addResource(new Object())
+ 			.build();
+ }

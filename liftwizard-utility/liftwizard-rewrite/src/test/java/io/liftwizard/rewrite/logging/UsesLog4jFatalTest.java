@@ -16,6 +16,8 @@
 
 package io.liftwizard.rewrite.logging;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
@@ -23,15 +25,17 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class UsesLog4jFatalTest implements RewriteTest {
+class UsesLog4jFatalTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UsesLog4jFatal())
-			.parser(JavaParser.fromJavaVersion().classpathFromResources(new InMemoryExecutionContext(), "reload4j"));
+			.parser(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
+			);
 	}
 
 	@DocumentExample
@@ -42,136 +46,12 @@ class UsesLog4jFatalTest implements RewriteTest {
 				// constant is marked in place; the Preconditions.or composition surfaces these across
 				// two cycles when both appear in one file.
 				(spec) -> spec.expectedCyclesThatMakeChanges(2),
-				java(
-					"""
-					import org.apache.log4j.Level;
-					import org.apache.log4j.Logger;
-
-					import java.util.Optional;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void fatalStringLiteral() {
-					        LOGGER.fatal("Simple message");
-					    }
-
-					    void fatalStringVariable(String message) {
-					        LOGGER.fatal(message);
-					    }
-
-					    void fatalObjectArgument(Object myObject) {
-					        LOGGER.fatal(myObject);
-					    }
-
-					    void fatalThrowableArgument(Exception exception) {
-					        LOGGER.fatal("Failure", exception);
-					    }
-
-					    void fatalMethodReference(Optional<Object> value) {
-					        value.ifPresent(LOGGER::fatal);
-					    }
-
-					    void bareLevelFatalConstant() {
-					        Level level = Level.FATAL;
-					    }
-
-					    void logAtFatalLevel() {
-					        LOGGER.log(Level.FATAL, "boom");
-					    }
-					}
-					""",
-					"""
-					/*~~>*/import org.apache.log4j.Level;
-					import org.apache.log4j.Logger;
-
-					import java.util.Optional;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void fatalStringLiteral() {
-					        LOGGER.fatal("Simple message");
-					    }
-
-					    void fatalStringVariable(String message) {
-					        LOGGER.fatal(message);
-					    }
-
-					    void fatalObjectArgument(Object myObject) {
-					        LOGGER.fatal(myObject);
-					    }
-
-					    void fatalThrowableArgument(Exception exception) {
-					        LOGGER.fatal("Failure", exception);
-					    }
-
-					    void fatalMethodReference(Optional<Object> value) {
-					        value.ifPresent(LOGGER::fatal);
-					    }
-
-					    void bareLevelFatalConstant() {
-					        Level level = /*~~>*/Level.FATAL;
-					    }
-
-					    void logAtFatalLevel() {
-					        LOGGER.log(/*~~>*/Level.FATAL, "boom");
-					    }
-					}
-					"""
-				)
+				this.javaFixture("replacePatterns/01")
 			);
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Level;
-					import org.apache.log4j.Logger;
-
-					import java.util.Optional;
-
-					class CustomLogger {
-					    void fatal(String message) {}
-					}
-
-					class CustomLevel {
-					    public static final String FATAL = "FATAL";
-					}
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-					    private final CustomLogger custom = new CustomLogger();
-
-					    void doesNotDetectOtherLevels(String message) {
-					        LOGGER.debug(message);
-					        LOGGER.info(message);
-					        LOGGER.warn(message);
-					        LOGGER.error(message);
-					    }
-
-					    void doesNotDetectOtherLevelConstants() {
-					        Level error = Level.ERROR;
-					        Level debug = Level.DEBUG;
-					        LOGGER.log(Level.ERROR, "oops");
-					    }
-
-					    void doesNotDetectOtherLevelMethodReference(Optional<Object> value) {
-					        value.ifPresent(LOGGER::error);
-					    }
-
-					    void doesNotDetectUnrelatedFatal(String message) {
-					        custom.fatal(message);
-					    }
-
-					    void doesNotDetectUnrelatedFatalConstant() {
-					        String fatal = CustomLevel.FATAL;
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

@@ -1,0 +1,44 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,27 +1,28 @@
+-import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
+-import org.eclipse.collections.api.set.sorted.MutableSortedSet;
+ import java.util.Comparator;
+ import java.util.List;
+
++import org.eclipse.collections.api.factory.SortedSets;
++import org.eclipse.collections.api.set.sorted.MutableSortedSet;
++
+ class Test<T extends Comparable<T>> {
+-	private final MutableSortedSet<String> fieldInterfaceEmpty = new TreeSortedSet<>();
+-	private final MutableSortedSet<String> fieldInterfaceComparator = new TreeSortedSet<>(Comparator.naturalOrder());
+-	private final MutableSortedSet<String> fieldInterfaceIterable = new TreeSortedSet<>(Comparator.naturalOrder(), fieldInterfaceEmpty);
++	private final MutableSortedSet<String> fieldInterfaceEmpty = SortedSets.mutable.empty();
++	private final MutableSortedSet<String> fieldInterfaceComparator = SortedSets.mutable.with(Comparator.naturalOrder());
++	private final MutableSortedSet<String> fieldInterfaceIterable = SortedSets.mutable.withAll(Comparator.naturalOrder(), fieldInterfaceEmpty);
+
+ 	void test() {
+-		MutableSortedSet<String> diamondSet = new TreeSortedSet<>();
+-		MutableSortedSet<String> explicitSimple = new TreeSortedSet<String>();
+-		MutableSortedSet<List<String>> explicitNested = new TreeSortedSet<List<String>>();
+-		MutableSortedSet<MutableSortedSet<T>> nestedTypeParam = new TreeSortedSet<MutableSortedSet<T>>();
+-		org.eclipse.collections.api.set.sorted.MutableSortedSet<String> fullyQualified = new org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet<>();
+-		MutableSortedSet<String> withComparator = new TreeSortedSet<>(Comparator.naturalOrder());
+-		MutableSortedSet<String> withComparatorAndIterable = new TreeSortedSet<>(Comparator.reverseOrder(), diamondSet);
++		MutableSortedSet<String> diamondSet = SortedSets.mutable.empty();
++		MutableSortedSet<String> explicitSimple = SortedSets.mutable.<String>empty();
++		MutableSortedSet<List<String>> explicitNested = SortedSets.mutable.<List<String>>empty();
++		MutableSortedSet<MutableSortedSet<T>> nestedTypeParam = SortedSets.mutable.<MutableSortedSet<T>>empty();
++		org.eclipse.collections.api.set.sorted.MutableSortedSet<String> fullyQualified = SortedSets.mutable.empty();
++		MutableSortedSet<String> withComparator = SortedSets.mutable.with(Comparator.naturalOrder());
++		MutableSortedSet<String> withComparatorAndIterable = SortedSets.mutable.withAll(Comparator.reverseOrder(), diamondSet);
+ 	}
+ }
+
+ class A<T extends Comparable<T>> {
+ 	@Override
+ 	public MutableSortedSet<T> newEmpty() {
+-		return new TreeSortedSet<>();
++		return SortedSets.mutable.empty();
+ 	}
+ }

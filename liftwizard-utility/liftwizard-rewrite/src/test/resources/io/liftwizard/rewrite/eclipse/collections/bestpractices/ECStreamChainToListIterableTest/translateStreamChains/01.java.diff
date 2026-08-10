@@ -1,0 +1,23 @@
+--- a/translateStreamChains/01-before.java
++++ b/translateStreamChains/01-after.java
+@@ -1,13 +1,13 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	void test(MutableList<String> list) {
+-		var result1 = list.stream().toList();
+-		var result2 = list.stream().skip(1).toArray();
+-		var result3 = list.stream().limit(2).toList();
+-		var result4 = list.stream().filter(each -> !each.isEmpty()).toList();
+-		var result5 = list.stream().map(String::trim).toList();
+-		var result6 = list.stream().distinct().toList();
+-		var result7 = list.stream().filter(each -> !each.isEmpty()).map(String::trim).toArray();
++		var result1 = list.toList();
++		var result2 = list.drop(1).toArray();
++		var result3 = list.take(2);
++		var result4 = list.select(each -> !each.isEmpty());
++		var result5 = list.collect(String::trim);
++		var result6 = list.distinct();
++		var result7 = list.select(each -> !each.isEmpty()).collect(String::trim).toArray();
+ 	}
+ }

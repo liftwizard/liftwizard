@@ -1,0 +1,39 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,30 +1,30 @@
+ import java.util.stream.Collectors;
+
+ import org.eclipse.collections.api.list.ImmutableList;
+ import org.eclipse.collections.api.list.MutableList;
+ import org.eclipse.collections.api.set.MutableSet;
+
+ class Test {
+ 	MutableList<String> stringList;
+ 	MutableList<Integer> intList;
+ 	ImmutableList<String> immutableList;
+ 	MutableSet<String> mutableSet;
+
+ 	// Basic joining with MutableList<String>
+-	String result1 = stringList.stream().collect(Collectors.joining(", "));
++	String result1 = stringList.makeString(", ");
+
+ 	// stream().map(Object::toString).collect(joining)
+-	String result2 = intList.stream().map(Object::toString).collect(Collectors.joining(", "));
++	String result2 = intList.makeString(", ");
+
+ 	// Empty delimiter
+-	String result3 = stringList.stream().collect(Collectors.joining(""));
++	String result3 = stringList.makeString("");
+
+ 	// ImmutableList
+-	String result4 = immutableList.stream().collect(Collectors.joining("-"));
++	String result4 = immutableList.makeString("-");
+
+ 	// MutableSet
+-	String result5 = mutableSet.stream().collect(Collectors.joining("|"));
++	String result5 = mutableSet.makeString("|");
+
+ 	// stream().map(String::toString).collect(joining)
+-	String result6 = stringList.stream().map(String::toString).collect(Collectors.joining(", "));
++	String result6 = stringList.makeString(", ");
+ }

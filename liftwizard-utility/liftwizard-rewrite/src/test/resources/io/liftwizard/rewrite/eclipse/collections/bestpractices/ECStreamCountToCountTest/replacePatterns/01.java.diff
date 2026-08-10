@@ -1,0 +1,44 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,35 +1,35 @@
+ import java.util.function.Predicate;
+
+ import org.eclipse.collections.api.list.ImmutableList;
+ import org.eclipse.collections.api.list.MutableList;
+ import org.eclipse.collections.api.set.MutableSet;
+
+ class Test {
+ 	long streamFilterCount(MutableList<String> list, Predicate<String> predicate) {
+-		return list.stream().filter(predicate).count();
++		return list.count(predicate);
+ 	}
+
+ 	long withLambdaPredicate(MutableList<String> list) {
+-		return list.stream().filter(s -> s.length() > 5).count();
++		return list.count(s -> s.length() > 5);
+ 	}
+
+ 	long withMethodReferencePredicate(MutableList<String> list) {
+-		return list.stream().filter(String::isEmpty).count();
++		return list.count(String::isEmpty);
+ 	}
+
+ 	long withImmutableList(ImmutableList<String> list, Predicate<String> predicate) {
+-		return list.stream().filter(predicate).count();
++		return list.count(predicate);
+ 	}
+
+ 	long withMutableSet(MutableSet<Integer> set, Predicate<Integer> predicate) {
+-		return set.stream().filter(predicate).count();
++		return set.count(predicate);
+ 	}
+
+ 	void inIfCondition(MutableList<String> list) {
+-		if (list.stream().filter(String::isEmpty).count() > 5) {
++		if (list.count(String::isEmpty) > 5) {
+ 			this.doWork();
+ 		}
+ 	}
+
+ 	void doWork() {}
+ }

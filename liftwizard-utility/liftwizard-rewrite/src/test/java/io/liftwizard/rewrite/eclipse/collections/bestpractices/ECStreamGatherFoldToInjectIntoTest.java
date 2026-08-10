@@ -16,14 +16,13 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import io.liftwizard.rewrite.eclipse.collections.AbstractEclipseCollectionsTest;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.TypeValidation;
-
-import static org.openrewrite.java.Assertions.java;
 
 /**
  * Tests for {@link ECStreamGatherFoldToInjectInto}.
@@ -64,6 +63,7 @@ class ECStreamGatherFoldToInjectIntoTest extends AbstractEclipseCollectionsTest 
 		spec.parser(
 			JavaParser.fromJavaVersion()
 				.classpath("eclipse-collections-api", "eclipse-collections")
+				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(GATHERER_STUB, GATHERERS_STUB)
 		);
 	}
@@ -71,132 +71,11 @@ class ECStreamGatherFoldToInjectIntoTest extends AbstractEclipseCollectionsTest 
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.stream.Gatherers;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    Integer foldWithOrElseThrow(MutableList<Integer> list) {
-					        return list.stream()
-					            .gather(Gatherers.fold(() -> 0, Integer::sum))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-
-					    Integer foldWithGet(MutableList<Integer> list) {
-					        return list.stream()
-					            .gather(Gatherers.fold(() -> 0, Integer::sum))
-					            .findFirst()
-					            .get();
-					    }
-
-					    Integer foldWithLambda(MutableList<Integer> list) {
-					        return list.stream()
-					            .gather(Gatherers.fold(() -> 0, (a, b) -> a + b))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-
-					    Integer foldWithImmutableList(ImmutableList<Integer> list) {
-					        return list.stream()
-					            .gather(Gatherers.fold(() -> 0, Integer::sum))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-
-					    String foldWithStringConcat(MutableList<String> list) {
-					        return list.stream()
-					            .gather(Gatherers.fold(() -> "", String::concat))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-
-					    Integer foldWithMutableSet(MutableSet<Integer> set) {
-					        return set.stream()
-					            .gather(Gatherers.fold(() -> 1, (a, b) -> a * b))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    Integer foldWithOrElseThrow(MutableList<Integer> list) {
-					        return list.injectInto(0, Integer::sum);
-					    }
-
-					    Integer foldWithGet(MutableList<Integer> list) {
-					        return list.injectInto(0, Integer::sum);
-					    }
-
-					    Integer foldWithLambda(MutableList<Integer> list) {
-					        return list.injectInto(0, (a, b) -> a + b);
-					    }
-
-					    Integer foldWithImmutableList(ImmutableList<Integer> list) {
-					        return list.injectInto(0, Integer::sum);
-					    }
-
-					    String foldWithStringConcat(MutableList<String> list) {
-					        return list.injectInto("", String::concat);
-					    }
-
-					    Integer foldWithMutableSet(MutableSet<Integer> set) {
-					        return set.injectInto(1, (a, b) -> a * b);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.ArrayList;
-					import java.util.function.Supplier;
-					import java.util.stream.Gatherers;
-					import java.util.stream.Stream;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    ArrayList<Integer> arrayList;
-					    MutableList<Integer> mutableList;
-					    Supplier<Integer> supplier = () -> 0;
-
-					    Integer nonEclipseCollectionsType() {
-					        return arrayList.stream()
-					            .gather(Gatherers.fold(() -> 0, Integer::sum))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-
-					    Stream<Integer> withoutFindFirst() {
-					        return mutableList.stream()
-					            .gather(Gatherers.fold(() -> 0, Integer::sum));
-					    }
-
-					    Integer nonSupplierLambda() {
-					        return mutableList.stream()
-					            .gather(Gatherers.fold(supplier, Integer::sum))
-					            .findFirst()
-					            .orElseThrow();
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

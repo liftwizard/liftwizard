@@ -16,6 +16,8 @@
 
 package io.liftwizard.rewrite.logging;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
@@ -23,121 +25,27 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class UsesLog4j1LogWithPriorityTest implements RewriteTest {
+class UsesLog4j1LogWithPriorityTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UsesLog4j1LogWithPriority())
-			.parser(JavaParser.fromJavaVersion().classpathFromResources(new InMemoryExecutionContext(), "reload4j"));
+			.parser(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
+			);
 	}
 
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Level;
-					import org.apache.log4j.Logger;
-					import org.apache.log4j.Priority;
-
-					import java.util.function.BiConsumer;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void staticStandardLevel() {
-					        LOGGER.log(Level.INFO, "hello");
-					    }
-
-					    void objectMessage(Object myObject) {
-					        LOGGER.log(Level.INFO, myObject);
-					    }
-
-					    void dynamicPriority(Priority priority, String message) {
-					        LOGGER.log(priority, message);
-					    }
-
-					    void withThrowable(Exception exception) {
-					        LOGGER.log(Level.ERROR, "boom", exception);
-					    }
-
-					    void methodReference() {
-					        BiConsumer<Priority, Object> ref = LOGGER::log;
-					    }
-					}
-					""",
-					"""
-					/*~~>*/import org.apache.log4j.Level;
-					import org.apache.log4j.Logger;
-					import org.apache.log4j.Priority;
-
-					import java.util.function.BiConsumer;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void staticStandardLevel() {
-					        LOGGER.log(Level.INFO, "hello");
-					    }
-
-					    void objectMessage(Object myObject) {
-					        LOGGER.log(Level.INFO, myObject);
-					    }
-
-					    void dynamicPriority(Priority priority, String message) {
-					        LOGGER.log(priority, message);
-					    }
-
-					    void withThrowable(Exception exception) {
-					        LOGGER.log(Level.ERROR, "boom", exception);
-					    }
-
-					    void methodReference() {
-					        BiConsumer<Priority, Object> ref = LOGGER::log;
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Level;
-					import org.apache.log4j.Logger;
-
-					class CustomLogger {
-					    void log(String message) {}
-					}
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-					    private final CustomLogger custom = new CustomLogger();
-
-					    void doesNotDetectLevelMethods(String message) {
-					        LOGGER.debug(message);
-					        LOGGER.info(message);
-					        LOGGER.warn(message);
-					        LOGGER.error(message);
-					    }
-
-					    void doesNotDetectBareLevelConstant() {
-					        Level level = Level.INFO;
-					    }
-
-					    void doesNotDetectUnrelatedLog(String message) {
-					        custom.log(message);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

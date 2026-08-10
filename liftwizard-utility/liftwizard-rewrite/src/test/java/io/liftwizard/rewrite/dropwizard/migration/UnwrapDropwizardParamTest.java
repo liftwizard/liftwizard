@@ -16,6 +16,8 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -23,16 +25,16 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class UnwrapDropwizardParamTest implements RewriteTest {
+class UnwrapDropwizardParamTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UnwrapDropwizardParam("io.dropwizard.jersey.params.BooleanParam", "java.lang.Boolean"))
 			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.dependsOn(
 						"""
 						package io.dropwizard.jersey.params;
 
@@ -53,70 +55,11 @@ class UnwrapDropwizardParamTest implements RewriteTest {
 	@Test
 	@DocumentExample
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.jersey.params.BooleanParam;
-
-					class Test {
-					    void parameterUsage(BooleanParam flag) {
-					        Boolean value = flag.get();
-					    }
-
-					    void localVariable() {
-					        BooleanParam param = new BooleanParam("true");
-					        boolean result = param.get();
-					    }
-
-					    Boolean returnValue(BooleanParam param) {
-					        return param.get();
-					    }
-
-					    void passToMethod(BooleanParam param) {
-					        String s = String.valueOf(param.get());
-					    }
-					}
-					""",
-					"""
-					class Test {
-					    void parameterUsage(Boolean flag) {
-					        Boolean value = flag;
-					    }
-
-					    void localVariable() {
-					        Boolean param = new Boolean("true");
-					        boolean result = param;
-					    }
-
-					    Boolean returnValue(Boolean param) {
-					        return param;
-					    }
-
-					    void passToMethod(Boolean param) {
-					        String s = String.valueOf(param);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					class Test {
-					    void alreadyUsingBoolean(Boolean flag) {
-					        boolean result = flag;
-					    }
-
-					    void primitiveBoolean(boolean flag) {
-					        boolean result = flag;
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

@@ -1,0 +1,34 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,21 +1,21 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	void test(MutableList<String> list) {
+-		boolean sizeEqualsZero = list.size() == 0;
+-		boolean sizeGreaterThanZero = list.size() > 0;
+-		boolean sizeNotEqualsZero = list.size() != 0;
+-		boolean sizeGreaterThanOrEqualOne = list.size() >= 1;
+-		boolean sizeLessThanOne = list.size() < 1;
+-		boolean sizeLessThanOrEqualZero = list.size() <= 0;
+-		boolean reversedOneGreaterThanSize = 1 > list.size();
+-		boolean reversedZeroGreaterThanOrEqualSize = 0 >= list.size();
+-		boolean reversedZeroEqualsSize = 0 == list.size();
++		boolean sizeEqualsZero = list.isEmpty();
++		boolean sizeGreaterThanZero = list.notEmpty();
++		boolean sizeNotEqualsZero = list.notEmpty();
++		boolean sizeGreaterThanOrEqualOne = list.notEmpty();
++		boolean sizeLessThanOne = list.isEmpty();
++		boolean sizeLessThanOrEqualZero = list.isEmpty();
++		boolean reversedOneGreaterThanSize = list.isEmpty();
++		boolean reversedZeroGreaterThanOrEqualSize = list.isEmpty();
++		boolean reversedZeroEqualsSize = list.isEmpty();
+
+-		if (list.size() == 0) {
++		if (list.isEmpty()) {
+ 			doWork();
+ 		}
+ 	}
+
+ 	void doWork() {}
+ }

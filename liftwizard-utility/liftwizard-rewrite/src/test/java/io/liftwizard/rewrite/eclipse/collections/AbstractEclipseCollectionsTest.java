@@ -16,43 +16,20 @@
 
 package io.liftwizard.rewrite.eclipse.collections;
 
-import org.eclipse.collections.api.factory.Lists;
-import org.eclipse.collections.api.factory.Sets;
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.openrewrite.java.JavaParser;
-import org.openrewrite.java.style.ImportLayoutStyle;
-import org.openrewrite.style.NamedStyles;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.Tree.randomId;
-
-public abstract class AbstractEclipseCollectionsTest implements RewriteTest {
-
-	protected static final NamedStyles NO_STAR_IMPORT_STYLE = new NamedStyles(
-		randomId(),
-		"no-star-imports",
-		"No star imports style",
-		"Prevents OpenRewrite from collapsing imports into star imports",
-		Sets.fixedSize.empty(),
-		Lists.fixedSize.with(
-			ImportLayoutStyle.builder()
-				.classCountToUseStarImport(9999)
-				.nameCountToUseStarImport(9999)
-				.importPackage("org.eclipse.collections.*")
-				.blankLine()
-				.importAllOthers()
-				.blankLine()
-				.importStaticAllOthers()
-				.build()
-		)
-	);
+public abstract class AbstractEclipseCollectionsTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec.parser(
 			JavaParser.fromJavaVersion()
 				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
-				.styles(Lists.fixedSize.with(NO_STAR_IMPORT_STYLE))
+				.styles(AbstractRewriteStyles.styles())
 		);
 	}
 }

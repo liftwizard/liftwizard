@@ -1,0 +1,32 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,20 +1,20 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	void test(MutableList<String> list) {
+-		boolean countEqualsZero = list.count(s -> s.length() > 5) == 0;
+-		boolean countGreaterThanZero = list.count(s -> s.length() > 5) > 0;
+-		boolean countNotEqualsZero = list.count(s -> s.length() > 5) != 0;
+-		boolean countLessThanOrEqualZero = list.count(s -> s.length() > 5) <= 0;
+-		boolean countGreaterThanOrEqualOne = list.count(s -> s.length() > 5) >= 1;
+-		boolean reversedZeroGreaterThanOrEqualCount = 0 >= list.count(s -> s.length() > 5);
+-		boolean reversedOneLessThanOrEqualCount = 1 <= list.count(s -> s.length() > 5);
+-		boolean reversedZeroLessThanCount = 0 < list.count(s -> s.length() > 5);
++		boolean countEqualsZero = list.noneSatisfy(s -> s.length() > 5);
++		boolean countGreaterThanZero = list.anySatisfy(s -> s.length() > 5);
++		boolean countNotEqualsZero = list.anySatisfy(s -> s.length() > 5);
++		boolean countLessThanOrEqualZero = list.noneSatisfy(s -> s.length() > 5);
++		boolean countGreaterThanOrEqualOne = list.anySatisfy(s -> s.length() > 5);
++		boolean reversedZeroGreaterThanOrEqualCount = list.noneSatisfy(s -> s.length() > 5);
++		boolean reversedOneLessThanOrEqualCount = list.anySatisfy(s -> s.length() > 5);
++		boolean reversedZeroLessThanCount = list.anySatisfy(s -> s.length() > 5);
+
+ 		boolean otherComparison = list.count(s -> s.length() > 5) >= 2;
+
+-		if (list.count(s -> s.length() > 5) == 0) {
++		if (list.noneSatisfy(s -> s.length() > 5)) {
+ 			// None satisfy
+ 		}
+ 	}
+ }

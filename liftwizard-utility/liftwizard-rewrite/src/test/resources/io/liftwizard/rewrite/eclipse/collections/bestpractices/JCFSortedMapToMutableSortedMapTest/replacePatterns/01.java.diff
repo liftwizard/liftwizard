@@ -1,0 +1,30 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,18 +1,18 @@
+ import java.util.List;
+-import java.util.SortedMap;
+ import org.eclipse.collections.api.factory.SortedMaps;
++import org.eclipse.collections.api.map.sorted.MutableSortedMap;
+ import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
+
+ class Test {
+-	private final SortedMap<String, Integer> fieldSortedMap = SortedMaps.mutable.empty();
++	private final MutableSortedMap<String, Integer> fieldSortedMap = SortedMaps.mutable.empty();
+
+ 	void test() {
+-		SortedMap<String, Integer> sortedMap = SortedMaps.mutable.empty();
+-		java.util.SortedMap<String, Integer> fullyQualified = SortedMaps.mutable.empty();
+-		SortedMap rawSortedMap = SortedMaps.mutable.empty();
+-		java.util.SortedMap rawSortedMapFullyQualified = SortedMaps.mutable.empty();
+-		SortedMap<String, List<Integer>> nestedGenerics = SortedMaps.mutable.empty();
+-		SortedMap<String, Integer> treeSortedMap = TreeSortedMap.newMap();
+-		SortedMap<String, Integer> map1 = SortedMaps.mutable.empty(), map2 = SortedMaps.mutable.with("a", 1);
++		MutableSortedMap<String, Integer> sortedMap = SortedMaps.mutable.empty();
++		MutableSortedMap<String, Integer> fullyQualified = SortedMaps.mutable.empty();
++		MutableSortedMap rawSortedMap = SortedMaps.mutable.empty();
++		MutableSortedMap rawSortedMapFullyQualified = SortedMaps.mutable.empty();
++		MutableSortedMap<String, List<Integer>> nestedGenerics = SortedMaps.mutable.empty();
++		MutableSortedMap<String, Integer> treeSortedMap = TreeSortedMap.newMap();
++		MutableSortedMap<String, Integer> map1 = SortedMaps.mutable.empty(), map2 = SortedMaps.mutable.with("a", 1);
+ 	}
+ }

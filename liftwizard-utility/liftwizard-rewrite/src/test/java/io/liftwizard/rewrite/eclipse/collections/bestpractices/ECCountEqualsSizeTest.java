@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECCountEqualsSizeTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,61 +32,11 @@ class ECCountEqualsSizeTest extends AbstractEclipseCollectionsTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        boolean allMatch = list.count(s -> s.length() > 5) == list.size();
-					        boolean reversedAllMatch = list.size() == list.count(s -> s.length() > 5);
-
-					        if (list.count(s -> s.length() > 5) == list.size()) {
-					            // All satisfy
-					        }
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list) {
-					        boolean allMatch = list.allSatisfy(s -> s.length() > 5);
-					        boolean reversedAllMatch = list.allSatisfy(s -> s.length() > 5);
-
-					        if (list.allSatisfy(s -> s.length() > 5)) {
-					            // All satisfy
-					        }
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    void test(MutableList<String> list, MutableList<String> otherList) {
-					        // Different collections - should not transform
-					        boolean differentLists = list.count(s -> s.length() > 5) == otherList.size();
-
-					        // Count used standalone - should not transform
-					        int countResult = list.count(s -> s.length() > 5);
-
-					        // Count compared to zero - different recipe handles this
-					        boolean countEqualsZero = list.count(s -> s.length() > 5) == 0;
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

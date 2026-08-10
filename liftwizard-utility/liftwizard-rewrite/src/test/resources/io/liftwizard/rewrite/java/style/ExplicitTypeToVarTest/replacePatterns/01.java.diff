@@ -1,0 +1,55 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,42 +1,42 @@
+ import java.util.ArrayList;
+ import java.util.HashMap;
+
+ class Test<E, K, V> {
+ 	void test() {
+ 		// Basic constructor
+-		StringBuilder sb = new StringBuilder();
++		var sb = new StringBuilder();
+
+ 		// Constructor with arguments
+-		StringBuilder sbWithArg = new StringBuilder("initial");
++		var sbWithArg = new StringBuilder("initial");
+
+ 		// Generics with concrete types
+-		ArrayList<String> list = new ArrayList<>();
++		var list = new ArrayList<String>();
+
+ 		// Nested generics with concrete types
+-		HashMap<String, ArrayList<Integer>> map = new HashMap<>();
++		var map = new HashMap<String, ArrayList<Integer>>();
+
+ 		// Type variable in generic
+-		ArrayList<E> typeVarList = new ArrayList<>();
++		var typeVarList = new ArrayList<E>();
+
+ 		// Multiple type variables
+-		HashMap<K, V> typeVarMap = new HashMap<>();
++		var typeVarMap = new HashMap<K, V>();
+
+ 		// Nested type variables
+-		HashMap<K, ArrayList<V>> nested = new HashMap<>();
++		var nested = new HashMap<K, ArrayList<V>>();
+
+ 		// In lambda
+ 		Runnable r = () -> {
+-			ArrayList<String> lambdaList = new ArrayList<>();
++			var lambdaList = new ArrayList<String>();
+ 		};
+ 	}
+
+ 	// Instance initializer
+ 	{
+-		StringBuilder initSb = new StringBuilder();
++		var initSb = new StringBuilder();
+ 	}
+
+ 	// Static initializer
+ 	static {
+-		StringBuilder staticSb = new StringBuilder();
++		var staticSb = new StringBuilder();
+ 	}
+ }

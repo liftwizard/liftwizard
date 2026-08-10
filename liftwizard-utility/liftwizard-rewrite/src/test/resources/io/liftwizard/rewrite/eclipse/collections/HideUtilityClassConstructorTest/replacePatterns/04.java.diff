@@ -1,0 +1,11 @@
+--- a/replacePatterns/04-before.java
++++ b/replacePatterns/04-after.java
+@@ -1,6 +1,7 @@
+ public class StaticFieldsOnly {
+-	public StaticFieldsOnly() {
++	private StaticFieldsOnly() {
++		throw new AssertionError("Suppress default constructor for noninstantiability");
+ 	}
+
+ 	public static int a;
+ }

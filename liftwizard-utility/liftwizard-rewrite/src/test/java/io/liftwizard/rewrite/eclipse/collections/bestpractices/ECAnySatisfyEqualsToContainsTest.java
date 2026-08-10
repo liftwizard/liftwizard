@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,92 +32,11 @@ class ECAnySatisfyEqualsToContainsTest extends AbstractEclipseCollectionsTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    private final String expected = "hello";
-
-					    void targetMethodReference(MutableList<String> list, String target) {
-					        boolean containsTarget = list.anySatisfy(target::equals);
-
-					        if (list.anySatisfy(target::equals)) {
-					            this.doWork();
-					        }
-					    }
-
-					    void fieldReference(MutableList<String> list) {
-					        boolean containsExpected = list.anySatisfy(this.expected::equals);
-					    }
-
-					    void integerType(MutableList<Integer> list, Integer target) {
-					        boolean containsTarget = list.anySatisfy(target::equals);
-					    }
-
-					    void stringLiteralMethodReference(MutableList<String> list) {
-					        assertFalse(list.anySatisfy("Monkey"::equals));
-					    }
-
-					    void doWork() {}
-
-					    void assertFalse(boolean value) {}
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    private final String expected = "hello";
-
-					    void targetMethodReference(MutableList<String> list, String target) {
-					        boolean containsTarget = list.contains(target);
-
-					        if (list.contains(target)) {
-					            this.doWork();
-					        }
-					    }
-
-					    void fieldReference(MutableList<String> list) {
-					        boolean containsExpected = list.contains(this.expected);
-					    }
-
-					    void integerType(MutableList<Integer> list, Integer target) {
-					        boolean containsTarget = list.contains(target);
-					    }
-
-					    void stringLiteralMethodReference(MutableList<String> list) {
-					        assertFalse(list.contains("Monkey"));
-					    }
-
-					    void doWork() {}
-
-					    void assertFalse(boolean value) {}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-
-					class Test {
-					    void test(MutableList<String> list, Predicate<String> predicate) {
-					        boolean anySatisfyPredicate = list.anySatisfy(predicate);
-					        boolean anySatisfyLambda = list.anySatisfy(s -> s.length() > 5);
-					        boolean directContains = list.contains("hello");
-
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }
