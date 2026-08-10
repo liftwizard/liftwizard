@@ -16,22 +16,24 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class Dropwizard3Jetty10LoginServiceTypesTest implements RewriteTest {
+class Dropwizard3Jetty10LoginServiceTypesTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10LoginServiceTypes")
 			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.dependsOn(
 						"""
 						package org.eclipse.jetty.security;
 
@@ -52,81 +54,11 @@ class Dropwizard3Jetty10LoginServiceTypesTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.jetty.security.AbstractLoginService;
-					import org.eclipse.jetty.security.AbstractLoginService.UserPrincipal;
-					import org.eclipse.jetty.security.AbstractLoginService.RolePrincipal;
-
-					class AdminLoginService extends AbstractLoginService {
-
-					    private final UserPrincipal adminPrincipal = new UserPrincipal("admin", "secret");
-
-					    String[] loadRoleInfo(UserPrincipal principal) {
-					        return new String[] { "admin" };
-					    }
-
-					    UserPrincipal loadUserInfo(String userName) {
-					        return this.adminPrincipal;
-					    }
-
-					    RolePrincipal makeRole(String name) {
-					        return new RolePrincipal(name);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.jetty.security.AbstractLoginService;
-					import org.eclipse.jetty.security.RolePrincipal;
-					import org.eclipse.jetty.security.UserPrincipal;
-
-					class AdminLoginService extends AbstractLoginService {
-
-					    private final UserPrincipal adminPrincipal = new UserPrincipal("admin", "secret");
-
-					    String[] loadRoleInfo(UserPrincipal principal) {
-					        return new String[] { "admin" };
-					    }
-
-					    UserPrincipal loadUserInfo(String userName) {
-					        return this.adminPrincipal;
-					    }
-
-					    RolePrincipal makeRole(String name) {
-					        return new RolePrincipal(name);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					class UnrelatedTypes {
-
-					    static class UserPrincipal {
-					        UserPrincipal(String name) {}
-					    }
-
-					    static class RolePrincipal {
-					        RolePrincipal(String name) {}
-					    }
-
-					    UserPrincipal getUser() {
-					        return new UserPrincipal("alice");
-					    }
-
-					    RolePrincipal getRole() {
-					        return new RolePrincipal("admin");
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

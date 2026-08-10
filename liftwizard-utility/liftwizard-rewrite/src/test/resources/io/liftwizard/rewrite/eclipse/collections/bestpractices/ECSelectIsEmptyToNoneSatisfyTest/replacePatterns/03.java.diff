@@ -1,0 +1,14 @@
+--- a/replacePatterns/03-before.java
++++ b/replacePatterns/03-after.java
+@@ -1,10 +1,10 @@
+ import org.eclipse.collections.api.block.predicate.Predicate;
+ import org.eclipse.collections.api.set.MutableSet;
+
+ class TestSet {
+ 	boolean test(
+ 			MutableSet<Integer> set,
+ 			Predicate<Integer> predicate) {
+-		return set.select(predicate).isEmpty();
++		return set.noneSatisfy(predicate);
+ 	}
+ }

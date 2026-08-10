@@ -1,0 +1,19 @@
+--- a/translateMatchTerminals/01-before.java
++++ b/translateMatchTerminals/01-after.java
+@@ -1,11 +1,11 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	void test(MutableList<String> list) {
+-		boolean result1 = list.stream().anyMatch(String::isEmpty);
+-		boolean result2 = list.stream().allMatch(each -> each.length() > 1);
+-		boolean result3 = list.stream().noneMatch(String::isBlank);
+-		boolean result4 = list.stream().filter(each -> !each.isEmpty()).anyMatch(each -> each.length() > 3);
+-		list.stream().forEach(System.out::println);
++		boolean result1 = list.anySatisfy(String::isEmpty);
++		boolean result2 = list.allSatisfy(each -> each.length() > 1);
++		boolean result3 = list.noneSatisfy(String::isBlank);
++		boolean result4 = list.select(each -> !each.isEmpty()).anySatisfy(each -> each.length() > 3);
++		list.forEach(System.out::println);
+ 	}
+ }

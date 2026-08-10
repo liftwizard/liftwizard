@@ -1,0 +1,19 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,11 +1,13 @@
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Set;
+
++import org.eclipse.collections.impl.utility.Iterate;
++
+ class Test {
+ 	void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
+-		String listFirst = list.iterator().next();
+-		Integer arrayListFirst = numbers.listIterator().next();
+-		Object setFirst = set.iterator().next();
++		String listFirst = Iterate.getFirst(list);
++		Integer arrayListFirst = Iterate.getFirst(numbers);
++		Object setFirst = Iterate.getFirst(set);
+ 	}
+ }

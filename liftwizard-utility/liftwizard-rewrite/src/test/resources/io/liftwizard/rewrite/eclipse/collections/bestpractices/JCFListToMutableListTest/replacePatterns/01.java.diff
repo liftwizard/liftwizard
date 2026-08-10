@@ -1,0 +1,51 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,36 +1,37 @@
+ import java.util.List;
+ import java.util.Map;
+ import org.eclipse.collections.api.factory.Lists;
++import org.eclipse.collections.api.list.MutableList;
+ import org.eclipse.collections.impl.list.mutable.FastList;
+
+ class Test {
+-	private final List<String> fieldList = Lists.mutable.empty();
++	private final MutableList<String> fieldList = Lists.mutable.empty();
+
+ 	void test() {
+-		List<String> simpleList = Lists.mutable.empty();
+-		java.util.List<String> fullyQualifiedList = Lists.mutable.empty();
+-		List rawList = Lists.mutable.empty();
+-		java.util.List fullyQualifiedRawList = Lists.mutable.empty();
+-		List<Map<String, Integer>> nestedGenericsList = Lists.mutable.empty();
+-		List<String> fastList = FastList.newList();
+-		List<String> list1 = Lists.mutable.empty(), list2 = Lists.mutable.with("a", "b");
+-		List<? extends Number> wildcardGenerics = Lists.mutable.empty();
++		MutableList<String> simpleList = Lists.mutable.empty();
++		MutableList<String> fullyQualifiedList = Lists.mutable.empty();
++		MutableList rawList = Lists.mutable.empty();
++		MutableList fullyQualifiedRawList = Lists.mutable.empty();
++		MutableList<Map<String, Integer>> nestedGenericsList = Lists.mutable.empty();
++		MutableList<String> fastList = FastList.newList();
++		MutableList<String> list1 = Lists.mutable.empty(), list2 = Lists.mutable.with("a", "b");
++		MutableList<? extends Number> wildcardGenerics = Lists.mutable.empty();
+ 	}
+
+ 	/**
+ 	 * Tests that {@link Map#size()} method works correctly.
+ 	 * Also tests {@link List#size()} method.
+ 	 */
+ 	void javaDocReference() {
+-		List<String> list = Lists.mutable.empty();
++		MutableList<String> list = Lists.mutable.empty();
+ 	}
+ }
+
+ class InstanceofExample {
+ 	void method() {
+ 		Object obj = Lists.mutable.empty();
+ 		if (obj instanceof List) {
+-			List<String> list = Lists.mutable.empty();
++			MutableList<String> list = Lists.mutable.empty();
+ 		}
+ 	}
+ }

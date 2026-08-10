@@ -1,0 +1,15 @@
+--- a/replacePatterns/07-before.java
++++ b/replacePatterns/07-after.java
+@@ -1,11 +1,11 @@
+ import java.util.List;
+ import java.util.Optional;
+
+ import org.eclipse.collections.api.block.predicate.Predicate;
+ import org.eclipse.collections.impl.utility.ListIterate;
+
+ class TestListIterate {
+ 	Optional<String> test(List<String> list, Predicate<String> predicate) {
+-		return ListIterate.select(list, predicate).getFirstOptional();
++		return ListIterate.detectOptional(list, predicate);
+ 	}
+ }

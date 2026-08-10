@@ -1,0 +1,30 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,20 +1,20 @@
+-import org.eclipse.collections.impl.test.Verify;
+-
+ import java.util.concurrent.Callable;
+
++import static org.assertj.core.api.Assertions.assertThatThrownBy;
++
+ class Test {
+ 	void test() {
+-		Verify.assertThrows(IllegalArgumentException.class, () -> {
++		assertThatThrownBy(() -> {
+ 			throw new IllegalArgumentException("error");
+-		});
++		}).isInstanceOf(IllegalArgumentException.class);
+
+-		Verify.assertThrows(NullPointerException.class, () -> {
++		assertThatThrownBy(() -> {
+ 			throw new NullPointerException();
+-		});
++		}).isInstanceOf(NullPointerException.class);
+
+ 		Callable<Object> failingCallable = () -> {
+ 			throw new RuntimeException("error");
+ 		};
+-		Verify.assertThrows(RuntimeException.class, failingCallable);
++		assertThatThrownBy(failingCallable::call).isInstanceOf(RuntimeException.class);
+ 	}
+ }

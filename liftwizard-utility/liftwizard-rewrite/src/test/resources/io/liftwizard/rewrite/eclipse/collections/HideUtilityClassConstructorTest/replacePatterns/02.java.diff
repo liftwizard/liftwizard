@@ -1,0 +1,12 @@
+--- a/replacePatterns/02-before.java
++++ b/replacePatterns/02-after.java
+@@ -1,7 +1,8 @@
+ public class PublicCtor {
+-	public PublicCtor() {
++	private PublicCtor() {
++		throw new AssertionError("Suppress default constructor for noninstantiability");
+ 	}
+
+ 	public static void utility() {
+ 	}
+ }

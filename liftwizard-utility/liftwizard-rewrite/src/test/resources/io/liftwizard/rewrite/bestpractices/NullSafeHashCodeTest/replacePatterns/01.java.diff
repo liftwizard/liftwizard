@@ -1,0 +1,20 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,10 +1,12 @@
++import java.util.Objects;
++
+ class Test {
+ 	int test(String str, Integer num) {
+-		int hash1 = str == null ? 0 : str.hashCode();
+-		int hash2 = num == null ? 0 : num.hashCode();
+-		int hash3 = str != null ? str.hashCode() : 0;
+-		int hash4 = num != null ? num.hashCode() : 0;
++		int hash1 = Objects.hashCode(str);
++		int hash2 = Objects.hashCode(num);
++		int hash3 = Objects.hashCode(str);
++		int hash4 = Objects.hashCode(num);
+
+-		return str == null ? 0 : str.hashCode();
++		return Objects.hashCode(str);
+ 	}
+ }

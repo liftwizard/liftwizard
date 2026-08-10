@@ -1,0 +1,25 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,19 +1,19 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	boolean testNegatedIsEmpty(MutableList<String> list) {
+-		return !list.isEmpty();
++		return list.notEmpty();
+ 	}
+
+ 	boolean testNegatedNotEmpty(MutableList<String> list) {
+-		return !list.notEmpty();
++		return list.isEmpty();
+ 	}
+
+ 	void testInIfStatement(MutableList<String> list) {
+-		if (!list.isEmpty()) {
++		if (list.notEmpty()) {
+ 			this.doWork();
+ 		}
+ 	}
+
+ 	void doWork() {}
+ }

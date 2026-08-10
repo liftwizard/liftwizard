@@ -1,0 +1,12 @@
+--- a/replacePatterns/03-before.java
++++ b/replacePatterns/03-after.java
+@@ -1,7 +1,8 @@
+ public class PackagePrivateCtor {
+-	PackagePrivateCtor() {
++	private PackagePrivateCtor() {
++		throw new AssertionError("Suppress default constructor for noninstantiability");
+ 	}
+
+ 	public static void utility() {
+ 	}
+ }

@@ -1,0 +1,11 @@
+--- a/replacePatterns/04-before.java
++++ b/replacePatterns/04-after.java
+@@ -1,7 +1,7 @@
+ import org.eclipse.collections.api.list.MutableList;
+
+ class TestLambda {
+ 	int test(MutableList<String> list) {
+-		return list.select(s -> s.length() > 5).size();
++		return list.count(s -> s.length() > 5);
+ 	}
+ }

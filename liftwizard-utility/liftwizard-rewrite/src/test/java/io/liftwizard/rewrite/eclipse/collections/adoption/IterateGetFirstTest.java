@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class IterateGetFirstTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,63 +32,11 @@ class IterateGetFirstTest extends AbstractEclipseCollectionsTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.ArrayList;
-					import java.util.List;
-					import java.util.Set;
-
-					class Test {
-					    void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
-					        String listFirst = list.iterator().next();
-					        Integer arrayListFirst = numbers.listIterator().next();
-					        Object setFirst = set.iterator().next();
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.impl.utility.Iterate;
-
-					import java.util.ArrayList;
-					import java.util.List;
-					import java.util.Set;
-
-					class Test {
-					    void testMultiplePatterns(List<String> list, ArrayList<Integer> numbers, Set<Object> set) {
-					        String listFirst = Iterate.getFirst(list);
-					        Integer arrayListFirst = Iterate.getFirst(numbers);
-					        Object setFirst = Iterate.getFirst(set);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Iterator;
-					import java.util.List;
-					import java.util.ListIterator;
-
-					class Test {
-					    void test(List<String> list) {
-					        Iterator<String> iter = list.iterator();
-					        String first = iter.next();
-
-					        ListIterator<String> listIter = list.listIterator();
-					        String second = listIter.next();
-
-					        iter.hasNext();
-					        listIter.hasPrevious();
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

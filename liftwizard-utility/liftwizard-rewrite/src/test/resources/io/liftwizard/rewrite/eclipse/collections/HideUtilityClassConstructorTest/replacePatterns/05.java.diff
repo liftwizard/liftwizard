@@ -1,0 +1,10 @@
+--- a/replacePatterns/05-before.java
++++ b/replacePatterns/05-after.java
+@@ -1,6 +1,7 @@
+ public class AlreadyPrivateNoAssertionError {
+ 	private AlreadyPrivateNoAssertionError() {
++		throw new AssertionError("Suppress default constructor for noninstantiability");
+ 	}
+
+ 	public static String foo() { return "foo"; }
+ }

@@ -1,0 +1,46 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,35 +1,35 @@
+ import java.util.List;
+ import java.util.Set;
+ import org.eclipse.collections.impl.utility.Iterate;
+
+ class Test {
+ 	boolean testIsEmpty(List<String> list) {
+-		return list == null || list.isEmpty();
++		return Iterate.isEmpty(list);
+ 	}
+
+ 	boolean testNotEmpty(Set<Integer> set) {
+-		return set != null && !set.isEmpty();
++		return Iterate.notEmpty(set);
+ 	}
+
+ 	boolean testNegatedIterateIsEmpty(List<String> list) {
+-		return !Iterate.isEmpty(list);
++		return Iterate.notEmpty(list);
+ 	}
+
+ 	boolean testNegatedIterateNotEmpty(List<String> list) {
+-		return !Iterate.notEmpty(list);
++		return Iterate.isEmpty(list);
+ 	}
+
+ 	void testMultiple(List<String> strings, Set<Object> objects) {
+-		if (strings == null || strings.isEmpty()) {
++		if (Iterate.isEmpty(strings)) {
+ 		}
+
+-		if (objects != null && !objects.isEmpty()) {
++		if (Iterate.notEmpty(objects)) {
+ 		}
+
+-		if (!Iterate.isEmpty(strings)) {
++		if (Iterate.notEmpty(strings)) {
+ 		}
+
+-		if (!Iterate.notEmpty(objects)) {
++		if (Iterate.isEmpty(objects)) {
+ 		}
+ 	}
+ }

@@ -1,0 +1,10 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,6 +1,5 @@
+-import io.dropwizard.util.Sets;
+ import java.util.Set;
+
+ class MyConfig {
+-	Set<String> allowed = Sets.of("a", "b", "c");
++	Set<String> allowed = Set.of("a", "b", "c");
+ }

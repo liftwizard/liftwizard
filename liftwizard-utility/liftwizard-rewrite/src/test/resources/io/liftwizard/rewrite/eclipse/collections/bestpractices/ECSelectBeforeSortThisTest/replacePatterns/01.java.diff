@@ -1,0 +1,35 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,26 +1,26 @@
+ import java.util.Comparator;
+
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	MutableList<String> sortThisSelect(MutableList<String> list) {
+-		return list.sortThis().select(s -> s.length() > 3);
++		return list.select(s -> s.length() > 3).sortThis();
+ 	}
+
+ 	MutableList<String> sortThisWithComparatorSelect(MutableList<String> list) {
+-		return list.sortThis(Comparator.comparing(String::length)).select(s -> s.length() > 3);
++		return list.select(s -> s.length() > 3).sortThis(Comparator.comparing(String::length));
+ 	}
+
+ 	MutableList<String> sortThisReject(MutableList<String> list) {
+-		return list.sortThis().reject(s -> s.isEmpty());
++		return list.reject(s -> s.isEmpty()).sortThis();
+ 	}
+
+ 	MutableList<String> sortThisWithComparatorReject(MutableList<String> list) {
+-		return list.sortThis(Comparator.reverseOrder()).reject(String::isEmpty);
++		return list.reject(String::isEmpty).sortThis(Comparator.reverseOrder());
+ 	}
+
+ 	void multiplePatterns(MutableList<String> list1, MutableList<Integer> list2) {
+-		MutableList<String> result1 = list1.sortThis().select(s -> s.length() > 3);
+-		MutableList<Integer> result2 = list2.sortThis(Comparator.naturalOrder()).reject(i -> i < 0);
++		MutableList<String> result1 = list1.select(s -> s.length() > 3).sortThis();
++		MutableList<Integer> result2 = list2.reject(i -> i < 0).sortThis(Comparator.naturalOrder());
+ 	}
+ }

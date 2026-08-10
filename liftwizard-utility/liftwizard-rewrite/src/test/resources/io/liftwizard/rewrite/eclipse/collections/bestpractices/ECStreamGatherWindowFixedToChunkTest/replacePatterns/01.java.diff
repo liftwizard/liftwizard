@@ -1,0 +1,44 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,37 +1,27 @@
+ import java.util.List;
+-import java.util.stream.Collectors;
+-import java.util.stream.Gatherers;
+
+ import org.eclipse.collections.api.list.ImmutableList;
+ import org.eclipse.collections.api.list.MutableList;
+ import org.eclipse.collections.api.set.MutableSet;
+
+ class Test {
+ 	MutableList<String> mutableList;
+ 	ImmutableList<String> immutableList;
+ 	MutableSet<Integer> mutableSet;
+
+ 	List<List<String>> windowFixedWithMutableList() {
+-		return mutableList.stream()
+-			.gather(Gatherers.windowFixed(3))
+-			.collect(Collectors.toList());
++		return mutableList.chunk(3);
+ 	}
+
+ 	List<List<String>> windowFixedWithImmutableList() {
+-		return immutableList.stream()
+-			.gather(Gatherers.windowFixed(5))
+-			.collect(Collectors.toList());
++		return immutableList.chunk(5);
+ 	}
+
+ 	List<List<Integer>> windowFixedWithMutableSet() {
+-		return mutableSet.stream()
+-			.gather(Gatherers.windowFixed(2))
+-			.collect(Collectors.toList());
++		return mutableSet.chunk(2);
+ 	}
+
+ 	List<List<String>> windowFixedWithVariableSize(int batchSize) {
+-		return mutableList.stream()
+-			.gather(Gatherers.windowFixed(batchSize))
+-			.collect(Collectors.toList());
++		return mutableList.chunk(batchSize);
+ 	}
+ }

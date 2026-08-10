@@ -1,0 +1,19 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,9 +1,16 @@
+ import ch.qos.logback.access.spi.IAccessEvent;
+
+ class FakeAccessEvent implements IAccessEvent {
+
+ 	@Override
+ 	public String getRequestURL() {
+ 		return "https://example.com";
+ 	}
++
++	@Override
++	public long getSequenceNumber() {
++		throw new UnsupportedOperationException(
++				this.getClass().getSimpleName() + ".getSequenceNumber() not implemented yet"
++		);
++	}
+ }

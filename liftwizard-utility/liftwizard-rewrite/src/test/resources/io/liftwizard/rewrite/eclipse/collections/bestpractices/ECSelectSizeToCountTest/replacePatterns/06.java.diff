@@ -1,0 +1,14 @@
+--- a/replacePatterns/06-before.java
++++ b/replacePatterns/06-after.java
+@@ -1,10 +1,10 @@
+ import java.util.List;
+
+ import org.eclipse.collections.api.block.predicate.Predicate;
+ import org.eclipse.collections.impl.utility.ListIterate;
+
+ class TestListIterate {
+ 	int test(List<String> list, Predicate<String> predicate) {
+-		return ListIterate.select(list, predicate).size();
++		return ListIterate.count(list, predicate);
+ 	}
+ }

@@ -1,0 +1,13 @@
+--- a/detectsObjectArgumentWhenLoggerInheritanceIsSevered/01-before.java
++++ b/detectsObjectArgumentWhenLoggerInheritanceIsSevered/01-after.java
+@@ -1,9 +1,9 @@
+ import org.apache.log4j.Logger;
+
+ class Test {
+ 	private static final Logger LOGGER = Logger.getLogger(Test.class);
+
+ 	void test(Object myObject) {
+-		LOGGER.info(myObject);
++		/*~~>*/LOGGER.info(myObject);
+ 	}
+ }

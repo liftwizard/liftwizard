@@ -1,0 +1,33 @@
+--- a/replacePatterns/01-before.java
++++ b/replacePatterns/01-after.java
+@@ -1,25 +1,25 @@
+ import org.eclipse.collections.api.RichIterable;
+ import org.eclipse.collections.api.list.MutableList;
+
+ class Test {
+ 	long withCast(MutableList<String> list) {
+-		return list.collectLong(s -> (long) s.length()).sum();
++		return list.sumOfLong(s -> (long) s.length());
+ 	}
+
+ 	long withLambda(MutableList<Long> list) {
+-		return list.collectLong(l -> l * 2).sum();
++		return list.sumOfLong(l -> l * 2);
+ 	}
+
+ 	long withRichIterable(RichIterable<Long> iterable) {
+-		return iterable.collectLong(l -> l * 2).sum();
++		return iterable.sumOfLong(l -> l * 2);
+ 	}
+
+ 	void inExpression(MutableList<Long> list) {
+-		long result = list.collectLong(l -> l).sum() + 10;
+-		if (list.collectLong(l -> l * 2).sum() > 100) {
++		long result = list.sumOfLong(l -> l) + 10;
++		if (list.sumOfLong(l -> l * 2) > 100) {
+ 			this.doWork();
+ 		}
+ 	}
+
+ 	void doWork() {}
+ }
