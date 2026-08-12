@@ -25,10 +25,16 @@ styleConfigs:
       tabSize: 4
       indentSize: 4
       continuationIndent: 8
+  # The groups mirror the order that spotless importOrder and the CustomImportOrder Checkstyle rule already enforce,
+  # so that an import a recipe adds lands where those two would have put it.
   - org.openrewrite.java.style.ImportLayoutStyle:
       classCountToUseStarImport: 9999
       nameCountToUseStarImport: 9999
       layout:
+        - "import java.*"
+        - "<blank line>"
+        - "import javax.*"
+        - "<blank line>"
         - "import all other imports"
         - "<blank line>"
         - "import static all other imports"
