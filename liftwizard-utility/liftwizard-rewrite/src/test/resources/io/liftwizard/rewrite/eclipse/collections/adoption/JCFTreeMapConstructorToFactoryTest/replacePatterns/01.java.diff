@@ -1,14 +1,13 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,23 +1,24 @@
+@@ -1,23 +1,23 @@
  import java.util.Comparator;
  import java.util.List;
  import java.util.Map;
  import java.util.SortedMap;
 -import java.util.TreeMap;
-
 +import org.eclipse.collections.api.factory.SortedMaps;
-+
+
  class Test {
 -	private final SortedMap<String, String> fieldInterfaceEmpty = new TreeMap<>();
 -	private final SortedMap<String, String> fieldInterfaceComparator = new TreeMap<>(Comparator.naturalOrder());

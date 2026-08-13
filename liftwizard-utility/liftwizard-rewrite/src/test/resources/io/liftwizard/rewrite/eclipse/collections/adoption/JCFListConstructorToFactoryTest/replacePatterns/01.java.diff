@@ -1,13 +1,12 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,24 +1,25 @@
+@@ -1,24 +1,24 @@
 -import java.util.ArrayList;
  import java.util.Arrays;
  import java.util.Collection;
  import java.util.List;
-
 +import org.eclipse.collections.api.factory.Lists;
-+
+
  class Test {
 -	private final List<String> fieldInterfaceEmpty = new ArrayList<>();
 -	private final List<Integer> fieldInterfaceCapacity = new ArrayList<>(10);

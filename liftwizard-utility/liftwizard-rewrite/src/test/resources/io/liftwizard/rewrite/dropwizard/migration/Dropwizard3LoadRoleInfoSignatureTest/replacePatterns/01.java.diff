@@ -1,8 +1,7 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,29 +1,32 @@
+@@ -1,29 +1,31 @@
 +import java.util.List;
-+
  import org.eclipse.jetty.security.AbstractLoginService;
 +import org.eclipse.jetty.security.RolePrincipal;
  import org.eclipse.jetty.security.UserPrincipal;

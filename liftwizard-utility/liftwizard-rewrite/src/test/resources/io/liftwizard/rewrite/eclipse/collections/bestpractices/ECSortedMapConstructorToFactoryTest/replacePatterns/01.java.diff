@@ -1,16 +1,15 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,32 +1,33 @@
+@@ -1,32 +1,32 @@
 -import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 -import org.eclipse.collections.api.map.sorted.MutableSortedMap;
  import java.util.Comparator;
  import java.util.List;
  import java.util.SortedMap;
  import java.util.TreeMap;
-
 +import org.eclipse.collections.api.factory.SortedMaps;
 +import org.eclipse.collections.api.map.sorted.MutableSortedMap;
-+
+
  class Test<T extends Comparable<T>> {
 -	private final MutableSortedMap<String, String> fieldInterfaceEmpty = new TreeSortedMap<>();
 -	private final MutableSortedMap<String, String> fieldInterfaceComparator = new TreeSortedMap<>(Comparator.naturalOrder());

@@ -1,14 +1,13 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,27 +1,28 @@
+@@ -1,27 +1,27 @@
 -import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
 -import org.eclipse.collections.api.set.sorted.MutableSortedSet;
  import java.util.Comparator;
  import java.util.List;
-
 +import org.eclipse.collections.api.factory.SortedSets;
 +import org.eclipse.collections.api.set.sorted.MutableSortedSet;
-+
+
  class Test<T extends Comparable<T>> {
 -	private final MutableSortedSet<String> fieldInterfaceEmpty = new TreeSortedSet<>();
 -	private final MutableSortedSet<String> fieldInterfaceComparator = new TreeSortedSet<>(Comparator.naturalOrder());

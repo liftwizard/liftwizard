@@ -1,19 +1,18 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,41 +1,46 @@
+@@ -1,41 +1,45 @@
 -import java.util.Collections;
  import java.util.List;
  import java.util.Map;
  import java.util.Set;
  import java.util.SortedMap;
  import java.util.SortedSet;
-
 +import org.eclipse.collections.api.factory.Lists;
 +import org.eclipse.collections.api.factory.Maps;
 +import org.eclipse.collections.api.factory.Sets;
 +import org.eclipse.collections.api.factory.SortedMaps;
 +import org.eclipse.collections.api.factory.SortedSets;
-+
+
  class Test {
 -	private final List<String> emptyListField = Collections.emptyList();
 -	private final Set<Integer> emptySetField = Collections.emptySet();

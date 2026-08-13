@@ -1,9 +1,8 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,37 +1,39 @@
+@@ -1,37 +1,38 @@
  import java.util.Collection;
  import java.util.List;
-+
 +import org.eclipse.collections.api.collection.MutableCollection;
  import org.eclipse.collections.api.factory.Lists;
  import org.eclipse.collections.api.factory.Sets;

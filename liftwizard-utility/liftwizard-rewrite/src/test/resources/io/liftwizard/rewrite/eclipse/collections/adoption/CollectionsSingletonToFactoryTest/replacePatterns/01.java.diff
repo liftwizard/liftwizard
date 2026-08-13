@@ -1,15 +1,14 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,22 +1,25 @@
+@@ -1,22 +1,24 @@
 -import java.util.Collections;
  import java.util.List;
  import java.util.Map;
  import java.util.Set;
-
 +import org.eclipse.collections.api.factory.Lists;
 +import org.eclipse.collections.api.factory.Maps;
 +import org.eclipse.collections.api.factory.Sets;
-+
+
  class Test {
 -	private final List<String> fieldSingletonList = Collections.singletonList("element");
 -	private final Set<String> fieldSingleton = Collections.singleton("element");

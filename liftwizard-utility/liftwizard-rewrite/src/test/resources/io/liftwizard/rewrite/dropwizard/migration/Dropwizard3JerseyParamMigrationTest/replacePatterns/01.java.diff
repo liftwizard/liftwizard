@@ -1,19 +1,18 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,29 +1,29 @@
+@@ -1,29 +1,28 @@
 -import io.dropwizard.jersey.params.InstantParam;
 -import io.dropwizard.jersey.params.LocalDateParam;
 -import io.dropwizard.jersey.params.DateTimeParam;
 -import io.dropwizard.jersey.params.BooleanParam;
 -import io.dropwizard.jersey.params.DurationParam;
 -import io.dropwizard.jersey.params.SizeParam;
-+import java.time.Duration;
-
 +import io.dropwizard.jersey.jsr310.InstantParam;
 +import io.dropwizard.jersey.jsr310.LocalDateParam;
 +import io.dropwizard.jersey.jsr310.ZonedDateTimeParam;
 +import io.dropwizard.util.DataSize;
-+
++import java.time.Duration;
+
  class Test {
  	void packageMoves(InstantParam instant, LocalDateParam date) {
  		Object a = instant.get();

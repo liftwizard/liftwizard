@@ -1,8 +1,8 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,84 +1,91 @@
+@@ -1,84 +1,90 @@
  import java.util.Map;
-
+-
 +import org.eclipse.collections.api.bag.MutableBag;
 +import org.eclipse.collections.api.list.MutableList;
 +import org.eclipse.collections.api.map.MutableMap;

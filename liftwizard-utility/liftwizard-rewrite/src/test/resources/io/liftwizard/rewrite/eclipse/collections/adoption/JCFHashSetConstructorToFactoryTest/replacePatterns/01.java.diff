@@ -1,14 +1,13 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,25 +1,26 @@
+@@ -1,25 +1,25 @@
  import java.util.Arrays;
  import java.util.Collection;
 -import java.util.HashSet;
  import java.util.List;
  import java.util.Set;
-
 +import org.eclipse.collections.api.factory.Sets;
-+
+
  class Test {
 -	private final Set<String> fieldInterfaceEmpty = new HashSet<>();
 -	private final Set<Integer> fieldInterfaceCapacity = new HashSet<>(10);

@@ -1,13 +1,12 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,30 +1,31 @@
+@@ -1,30 +1,30 @@
 -import org.eclipse.collections.api.map.MutableMap;
 -import org.eclipse.collections.impl.map.mutable.UnifiedMap;
  import java.util.List;
-
 +import org.eclipse.collections.api.factory.Maps;
 +import org.eclipse.collections.api.map.MutableMap;
-+
+
  class Test<T> {
 -	private final MutableMap<String, String> fieldInterfaceEmpty = new UnifiedMap<>();
 -	private final MutableMap<String, Integer> fieldInterfaceCapacity = new UnifiedMap<>(10);

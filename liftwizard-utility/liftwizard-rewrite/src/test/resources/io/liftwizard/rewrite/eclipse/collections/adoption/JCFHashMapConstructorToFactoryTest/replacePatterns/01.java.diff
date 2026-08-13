@@ -1,12 +1,11 @@
 --- a/replacePatterns/01-before.java
 +++ b/replacePatterns/01-after.java
-@@ -1,22 +1,23 @@
+@@ -1,22 +1,22 @@
 -import java.util.HashMap;
  import java.util.List;
  import java.util.Map;
-
 +import org.eclipse.collections.api.factory.Maps;
-+
+
  class Test {
 -	private final Map<String, String> fieldInterfaceEmpty = new HashMap<>();
 -	private final Map<String, Integer> fieldInterfaceCapacity = new HashMap<>(10);
