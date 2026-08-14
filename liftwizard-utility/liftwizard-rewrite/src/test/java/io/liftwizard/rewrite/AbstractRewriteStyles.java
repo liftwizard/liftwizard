@@ -46,9 +46,9 @@ public interface AbstractRewriteStyles {
 		if (result.isEmpty()) {
 			throw new AssertionError(
 				"Found no style named %s on the classpath. It is declared in %s.".formatted(
-						STYLE_NAME,
-						"liftwizard-rewrite/src/main/resources/META-INF/rewrite/styles.yml"
-					)
+					STYLE_NAME,
+					"liftwizard-rewrite/src/main/resources/META-INF/rewrite/styles.yml"
+				)
 			);
 		}
 
