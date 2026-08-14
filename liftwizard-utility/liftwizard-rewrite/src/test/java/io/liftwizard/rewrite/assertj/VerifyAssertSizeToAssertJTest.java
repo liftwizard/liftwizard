@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -32,6 +33,7 @@ class VerifyAssertSizeToAssertJTest implements RewriteTest {
 			.recipe(new VerifyAssertSizeToAssertJRecipes())
 			.parser(
 				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
 					.dependsOn(
 						"""
 						package org.eclipse.collections.impl.test;
@@ -39,12 +41,12 @@ class VerifyAssertSizeToAssertJTest implements RewriteTest {
 						import java.util.Map;
 
 						public final class Verify {
-						    public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
-						    public static void assertSize(int expectedSize, Iterable<?> iterable) {}
-						    public static void assertSize(String message, int expectedSize, Object[] array) {}
-						    public static void assertSize(int expectedSize, Object[] array) {}
-						    public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
-						    public static void assertSize(int expectedSize, Map<?, ?> map) {}
+							public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
+							public static void assertSize(int expectedSize, Iterable<?> iterable) {}
+							public static void assertSize(String message, int expectedSize, Object[] array) {}
+							public static void assertSize(int expectedSize, Object[] array) {}
+							public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
+							public static void assertSize(int expectedSize, Map<?, ?> map) {}
 						}
 						"""
 					)
@@ -67,54 +69,54 @@ class VerifyAssertSizeToAssertJTest implements RewriteTest {
 					import java.util.HashMap;
 
 					class Test {
-					    void test() {
-					        Integer[] numbers = new Integer[]{1, 2, 3, 4, 5};
-					        Verify.assertSize("numbers should have expected size", 5, numbers);
-					        Verify.assertSize(5, numbers);
+						void test() {
+							Integer[] numbers = new Integer[]{1, 2, 3, 4, 5};
+							Verify.assertSize("numbers should have expected size", 5, numbers);
+							Verify.assertSize(5, numbers);
 
-					        Object[] objects = new Object[10];
-					        Verify.assertSize("objects should have expected size", 10, objects);
-					        Verify.assertSize(10, objects);
+							Object[] objects = new Object[10];
+							Verify.assertSize("objects should have expected size", 10, objects);
+							Verify.assertSize(10, objects);
 
-					        Integer[] emptyArray = new Integer[0];
-					        Verify.assertSize("should be empty", 0, emptyArray);
-					        Verify.assertSize(0, emptyArray);
+							Integer[] emptyArray = new Integer[0];
+							Verify.assertSize("should be empty", 0, emptyArray);
+							Verify.assertSize(0, emptyArray);
 
-					        MutableList<Integer> mutableNumbers = Lists.mutable.with(1, 2, 3, 4, 5);
-					        Verify.assertSize("numbers should have expected size", 5, mutableNumbers);
-					        Verify.assertSize(5, mutableNumbers);
+							MutableList<Integer> mutableNumbers = Lists.mutable.with(1, 2, 3, 4, 5);
+							Verify.assertSize("numbers should have expected size", 5, mutableNumbers);
+							Verify.assertSize(5, mutableNumbers);
 
-					        MutableList<Integer> emptyList = Lists.mutable.with();
-					        Verify.assertSize("should be empty", 0, emptyList);
-					        Verify.assertSize(0, emptyList);
+							MutableList<Integer> emptyList = Lists.mutable.with();
+							Verify.assertSize("should be empty", 0, emptyList);
+							Verify.assertSize(0, emptyList);
 
-					        List<? extends Number> boundedWildcard = new ArrayList<Integer>();
-					        ((ArrayList<Integer>) boundedWildcard).add(1);
-					        ((ArrayList<Integer>) boundedWildcard).add(2);
-					        Verify.assertSize("bounded wildcard list should have size 2", 2, boundedWildcard);
-					        Verify.assertSize(2, boundedWildcard);
+							List<? extends Number> boundedWildcard = new ArrayList<Integer>();
+							((ArrayList<Integer>) boundedWildcard).add(1);
+							((ArrayList<Integer>) boundedWildcard).add(2);
+							Verify.assertSize("bounded wildcard list should have size 2", 2, boundedWildcard);
+							Verify.assertSize(2, boundedWildcard);
 
-					        List<? super Integer> lowerBoundedWildcard = new ArrayList<Number>();
-					        lowerBoundedWildcard.add(1);
-					        lowerBoundedWildcard.add(2);
-					        lowerBoundedWildcard.add(3);
-					        Verify.assertSize(3, lowerBoundedWildcard);
+							List<? super Integer> lowerBoundedWildcard = new ArrayList<Number>();
+							lowerBoundedWildcard.add(1);
+							lowerBoundedWildcard.add(2);
+							lowerBoundedWildcard.add(3);
+							Verify.assertSize(3, lowerBoundedWildcard);
 
-					        List rawType = new ArrayList();
-					        rawType.add("element");
-					        Verify.assertSize("raw type list should have size 1", 1, rawType);
-					        Verify.assertSize(1, rawType);
+							List rawType = new ArrayList();
+							rawType.add("element");
+							Verify.assertSize("raw type list should have size 1", 1, rawType);
+							Verify.assertSize(1, rawType);
 
-					        Map<String, Integer> map = new HashMap<>();
-					        map.put("a", 1);
-					        map.put("b", 2);
-					        Verify.assertSize("map should have size 2", 2, map);
-					        Verify.assertSize(2, map);
+							Map<String, Integer> map = new HashMap<>();
+							map.put("a", 1);
+							map.put("b", 2);
+							Verify.assertSize("map should have size 2", 2, map);
+							Verify.assertSize(2, map);
 
-					        Map<String, Integer> emptyMap = new HashMap<>();
-					        Verify.assertSize("map should be empty", 0, emptyMap);
-					        Verify.assertSize(0, emptyMap);
-					    }
+							Map<String, Integer> emptyMap = new HashMap<>();
+							Verify.assertSize("map should be empty", 0, emptyMap);
+							Verify.assertSize(0, emptyMap);
+						}
 					}
 					""",
 					"""
@@ -127,54 +129,54 @@ class VerifyAssertSizeToAssertJTest implements RewriteTest {
 					import java.util.HashMap;
 
 					class Test {
-					    void test() {
-					        Integer[] numbers = new Integer[]{1, 2, 3, 4, 5};
-					        Assertions.assertThat(numbers).as("numbers should have expected size").hasSize(5);
-					        Assertions.assertThat(numbers).hasSize(5);
+						void test() {
+							Integer[] numbers = new Integer[]{1, 2, 3, 4, 5};
+							Assertions.assertThat(numbers).as("numbers should have expected size").hasSize(5);
+							Assertions.assertThat(numbers).hasSize(5);
 
-					        Object[] objects = new Object[10];
-					        Assertions.assertThat(objects).as("objects should have expected size").hasSize(10);
-					        Assertions.assertThat(objects).hasSize(10);
+							Object[] objects = new Object[10];
+							Assertions.assertThat(objects).as("objects should have expected size").hasSize(10);
+							Assertions.assertThat(objects).hasSize(10);
 
-					        Integer[] emptyArray = new Integer[0];
-					        Assertions.assertThat(emptyArray).as("should be empty").hasSize(0);
-					        Assertions.assertThat(emptyArray).hasSize(0);
+							Integer[] emptyArray = new Integer[0];
+							Assertions.assertThat(emptyArray).as("should be empty").hasSize(0);
+							Assertions.assertThat(emptyArray).hasSize(0);
 
-					        MutableList<Integer> mutableNumbers = Lists.mutable.with(1, 2, 3, 4, 5);
-					        Assertions.assertThat(mutableNumbers).as("numbers should have expected size").hasSize(5);
-					        Assertions.assertThat(mutableNumbers).hasSize(5);
+							MutableList<Integer> mutableNumbers = Lists.mutable.with(1, 2, 3, 4, 5);
+							Assertions.assertThat(mutableNumbers).as("numbers should have expected size").hasSize(5);
+							Assertions.assertThat(mutableNumbers).hasSize(5);
 
-					        MutableList<Integer> emptyList = Lists.mutable.with();
-					        Assertions.assertThat(emptyList).as("should be empty").hasSize(0);
-					        Assertions.assertThat(emptyList).hasSize(0);
+							MutableList<Integer> emptyList = Lists.mutable.with();
+							Assertions.assertThat(emptyList).as("should be empty").hasSize(0);
+							Assertions.assertThat(emptyList).hasSize(0);
 
-					        List<? extends Number> boundedWildcard = new ArrayList<Integer>();
-					        ((ArrayList<Integer>) boundedWildcard).add(1);
-					        ((ArrayList<Integer>) boundedWildcard).add(2);
-					        Assertions.assertThat(boundedWildcard).as("bounded wildcard list should have size 2").hasSize(2);
-					        Assertions.assertThat(boundedWildcard).hasSize(2);
+							List<? extends Number> boundedWildcard = new ArrayList<Integer>();
+							((ArrayList<Integer>) boundedWildcard).add(1);
+							((ArrayList<Integer>) boundedWildcard).add(2);
+							Assertions.assertThat(boundedWildcard).as("bounded wildcard list should have size 2").hasSize(2);
+							Assertions.assertThat(boundedWildcard).hasSize(2);
 
-					        List<? super Integer> lowerBoundedWildcard = new ArrayList<Number>();
-					        lowerBoundedWildcard.add(1);
-					        lowerBoundedWildcard.add(2);
-					        lowerBoundedWildcard.add(3);
-					        Assertions.assertThat(lowerBoundedWildcard).hasSize(3);
+							List<? super Integer> lowerBoundedWildcard = new ArrayList<Number>();
+							lowerBoundedWildcard.add(1);
+							lowerBoundedWildcard.add(2);
+							lowerBoundedWildcard.add(3);
+							Assertions.assertThat(lowerBoundedWildcard).hasSize(3);
 
-					        List rawType = new ArrayList();
-					        rawType.add("element");
-					        Assertions.assertThat(rawType).as("raw type list should have size 1").hasSize(1);
-					        Assertions.assertThat(rawType).hasSize(1);
+							List rawType = new ArrayList();
+							rawType.add("element");
+							Assertions.assertThat(rawType).as("raw type list should have size 1").hasSize(1);
+							Assertions.assertThat(rawType).hasSize(1);
 
-					        Map<String, Integer> map = new HashMap<>();
-					        map.put("a", 1);
-					        map.put("b", 2);
-					        Assertions.assertThat(map).as("map should have size 2").hasSize(2);
-					        Assertions.assertThat(map).hasSize(2);
+							Map<String, Integer> map = new HashMap<>();
+							map.put("a", 1);
+							map.put("b", 2);
+							Assertions.assertThat(map).as("map should have size 2").hasSize(2);
+							Assertions.assertThat(map).hasSize(2);
 
-					        Map<String, Integer> emptyMap = new HashMap<>();
-					        Assertions.assertThat(emptyMap).as("map should be empty").hasSize(0);
-					        Assertions.assertThat(emptyMap).hasSize(0);
-					    }
+							Map<String, Integer> emptyMap = new HashMap<>();
+							Assertions.assertThat(emptyMap).as("map should be empty").hasSize(0);
+							Assertions.assertThat(emptyMap).hasSize(0);
+						}
 					}
 					"""
 				)

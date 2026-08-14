@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -31,7 +32,9 @@ class Dropwizard3PackageRenamesTest implements RewriteTest {
 		spec
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3PackageRenames")
 			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.dependsOn(
 						"""
 						package io.dropwizard;
 

@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import io.liftwizard.rewrite.dropwizard.UnwrapDropwizardParam;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -32,7 +33,9 @@ class UnwrapDropwizardParamTest implements RewriteTest {
 		spec
 			.recipe(new UnwrapDropwizardParam("io.dropwizard.jersey.params.BooleanParam", "java.lang.Boolean"))
 			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.dependsOn(
 						"""
 						package io.dropwizard.jersey.params;
 

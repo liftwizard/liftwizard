@@ -43,38 +43,38 @@ class ECGarbageFreeLambdasTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    MutableList<String> strings;
-					    MutableList<StringBuilder> builders;
-					    MutableList<Entry<String, Integer>> entries;
-					    RichIterable<String> richIterable;
-					    String prefix;
-					    String target;
-					    String suffix;
-					    String text;
-					    Integer value;
+						MutableList<String> strings;
+						MutableList<StringBuilder> builders;
+						MutableList<Entry<String, Integer>> entries;
+						RichIterable<String> richIterable;
+						String prefix;
+						String target;
+						String suffix;
+						String text;
+						Integer value;
 
-					    void all() {
-					        strings.select(s -> s.startsWith(prefix));
-					        strings.select(s -> s.equals(target));
-					        strings.select(s -> { return s.startsWith(prefix); });
-					        richIterable.select(s -> s.startsWith(prefix));
-					        strings.reject(s -> s.startsWith(prefix));
-					        strings.collect(s -> s.concat(suffix));
-					        strings.detect(s -> s.startsWith(prefix));
-					        strings.detectOptional(s -> s.startsWith(prefix));
-					        strings.detectIfNone(s -> s.startsWith(prefix), () -> "fallback");
-					        strings.anySatisfy(s -> s.startsWith(prefix));
-					        strings.allSatisfy(s -> s.startsWith(prefix));
-					        strings.noneSatisfy(s -> s.startsWith(prefix));
-					        strings.count(s -> s.startsWith(prefix));
-					        strings.partition(s -> s.startsWith(prefix));
-					        strings.countBy(s -> s.concat(suffix));
-					        builders.forEach(b -> b.append(text));
-					        strings.removeIf(s -> s.startsWith(prefix));
-					        entries.anySatisfy(e -> e.equals(value));
-					        entries.forEach(e -> e.setValue(value));
-					        entries.forEach((entry) -> entry.setValue(value));
-					    }
+						void all() {
+							strings.select(s -> s.startsWith(prefix));
+							strings.select(s -> s.equals(target));
+							strings.select(s -> { return s.startsWith(prefix); });
+							richIterable.select(s -> s.startsWith(prefix));
+							strings.reject(s -> s.startsWith(prefix));
+							strings.collect(s -> s.concat(suffix));
+							strings.detect(s -> s.startsWith(prefix));
+							strings.detectOptional(s -> s.startsWith(prefix));
+							strings.detectIfNone(s -> s.startsWith(prefix), () -> "fallback");
+							strings.anySatisfy(s -> s.startsWith(prefix));
+							strings.allSatisfy(s -> s.startsWith(prefix));
+							strings.noneSatisfy(s -> s.startsWith(prefix));
+							strings.count(s -> s.startsWith(prefix));
+							strings.partition(s -> s.startsWith(prefix));
+							strings.countBy(s -> s.concat(suffix));
+							builders.forEach(b -> b.append(text));
+							strings.removeIf(s -> s.startsWith(prefix));
+							entries.anySatisfy(e -> e.equals(value));
+							entries.forEach(e -> e.setValue(value));
+							entries.forEach((entry) -> entry.setValue(value));
+						}
 					}
 					""",
 					"""
@@ -84,38 +84,38 @@ class ECGarbageFreeLambdasTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    MutableList<String> strings;
-					    MutableList<StringBuilder> builders;
-					    MutableList<Entry<String, Integer>> entries;
-					    RichIterable<String> richIterable;
-					    String prefix;
-					    String target;
-					    String suffix;
-					    String text;
-					    Integer value;
+						MutableList<String> strings;
+						MutableList<StringBuilder> builders;
+						MutableList<Entry<String, Integer>> entries;
+						RichIterable<String> richIterable;
+						String prefix;
+						String target;
+						String suffix;
+						String text;
+						Integer value;
 
-					    void all() {
-					        strings.selectWith(String::startsWith, prefix);
-					        strings.selectWith(Object::equals, target);
-					        strings.selectWith(String::startsWith, prefix);
-					        richIterable.selectWith(String::startsWith, prefix);
-					        strings.rejectWith(String::startsWith, prefix);
-					        strings.collectWith(String::concat, suffix);
-					        strings.detectWith(String::startsWith, prefix);
-					        strings.detectWithOptional(String::startsWith, prefix);
-					        strings.detectWithIfNone(String::startsWith, prefix, () -> "fallback");
-					        strings.anySatisfyWith(String::startsWith, prefix);
-					        strings.allSatisfyWith(String::startsWith, prefix);
-					        strings.noneSatisfyWith(String::startsWith, prefix);
-					        strings.countWith(String::startsWith, prefix);
-					        strings.partitionWith(String::startsWith, prefix);
-					        strings.countByWith(String::concat, suffix);
-					        builders.forEachWith(StringBuilder::append, text);
-					        strings.removeIfWith(String::startsWith, prefix);
-					        entries.anySatisfyWith(Object::equals, value);
-					        entries.forEachWith(Entry::setValue, value);
-					        entries.forEachWith(Entry::setValue, value);
-					    }
+						void all() {
+							strings.selectWith(String::startsWith, prefix);
+							strings.selectWith(Object::equals, target);
+							strings.selectWith(String::startsWith, prefix);
+							richIterable.selectWith(String::startsWith, prefix);
+							strings.rejectWith(String::startsWith, prefix);
+							strings.collectWith(String::concat, suffix);
+							strings.detectWith(String::startsWith, prefix);
+							strings.detectWithOptional(String::startsWith, prefix);
+							strings.detectWithIfNone(String::startsWith, prefix, () -> "fallback");
+							strings.anySatisfyWith(String::startsWith, prefix);
+							strings.allSatisfyWith(String::startsWith, prefix);
+							strings.noneSatisfyWith(String::startsWith, prefix);
+							strings.countWith(String::startsWith, prefix);
+							strings.partitionWith(String::startsWith, prefix);
+							strings.countByWith(String::concat, suffix);
+							builders.forEachWith(StringBuilder::append, text);
+							strings.removeIfWith(String::startsWith, prefix);
+							entries.anySatisfyWith(Object::equals, value);
+							entries.forEachWith(Entry::setValue, value);
+							entries.forEachWith(Entry::setValue, value);
+						}
 					}
 					"""
 				)
@@ -132,26 +132,26 @@ class ECGarbageFreeLambdasTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    MutableList<String> strings;
-					    MutableList<StringBuilder> builders;
-					    Predicate<String> predicate;
-					    Function<String, String> fn;
-					    String prefix;
+						MutableList<String> strings;
+						MutableList<StringBuilder> builders;
+						Predicate<String> predicate;
+						Function<String, String> fn;
+						String prefix;
 
-					    void all() {
-					        strings.select(s -> s.startsWith(s));
-					        strings.select(s -> s.isEmpty());
-					        strings.select(s -> s.trim().startsWith(prefix));
-					        strings.select(String::isEmpty);
-					        strings.select(predicate);
-					        strings.select(s -> s.regionMatches(0, prefix, 0, 1));
-					        strings.collect(fn);
-					        strings.collect(String::trim);
-					        strings.detectIfNone(s -> s.startsWith(s), () -> "");
-					        strings.detectIfNone(String::isEmpty, () -> "");
-					        builders.forEach(b -> b.append(b.toString()));
-					        builders.forEach(StringBuilder::reverse);
-					    }
+						void all() {
+							strings.select(s -> s.startsWith(s));
+							strings.select(s -> s.isEmpty());
+							strings.select(s -> s.trim().startsWith(prefix));
+							strings.select(String::isEmpty);
+							strings.select(predicate);
+							strings.select(s -> s.regionMatches(0, prefix, 0, 1));
+							strings.collect(fn);
+							strings.collect(String::trim);
+							strings.detectIfNone(s -> s.startsWith(s), () -> "");
+							strings.detectIfNone(String::isEmpty, () -> "");
+							builders.forEach(b -> b.append(b.toString()));
+							builders.forEach(StringBuilder::reverse);
+						}
 					}
 					"""
 				)

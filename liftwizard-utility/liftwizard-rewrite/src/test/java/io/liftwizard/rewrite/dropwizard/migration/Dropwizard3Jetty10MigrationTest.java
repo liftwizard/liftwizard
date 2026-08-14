@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -31,7 +32,9 @@ class Dropwizard3Jetty10MigrationTest implements RewriteTest {
 		spec
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3Jetty10Migration")
 			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.dependsOn(
 						"""
 						package org.eclipse.jetty.util.component;
 

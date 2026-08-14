@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -32,6 +33,7 @@ class VerifyAssertEmptyToAssertJTest implements RewriteTest {
 			.recipe(new VerifyAssertEmptyToAssertJRecipes())
 			.parser(
 				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
 					.dependsOn(
 						"""
 						package org.eclipse.collections.impl.test;
@@ -39,10 +41,10 @@ class VerifyAssertEmptyToAssertJTest implements RewriteTest {
 						import java.util.Map;
 
 						public final class Verify {
-						    public static void assertEmpty(String message, Iterable<?> iterable) {}
-						    public static void assertEmpty(Iterable<?> iterable) {}
-						    public static void assertEmpty(String message, Map<?, ?> map) {}
-						    public static void assertEmpty(Map<?, ?> map) {}
+							public static void assertEmpty(String message, Iterable<?> iterable) {}
+							public static void assertEmpty(Iterable<?> iterable) {}
+							public static void assertEmpty(String message, Map<?, ?> map) {}
+							public static void assertEmpty(Map<?, ?> map) {}
 						}
 						"""
 					)
@@ -63,15 +65,15 @@ class VerifyAssertEmptyToAssertJTest implements RewriteTest {
 					import java.util.HashMap;
 
 					class Test {
-					    void test() {
-					        MutableList<String> list = Lists.mutable.empty();
-					        Verify.assertEmpty("list should be empty", list);
-					        Verify.assertEmpty(list);
+						void test() {
+							MutableList<String> list = Lists.mutable.empty();
+							Verify.assertEmpty("list should be empty", list);
+							Verify.assertEmpty(list);
 
-					        Map<String, Integer> map = new HashMap<>();
-					        Verify.assertEmpty("map should be empty", map);
-					        Verify.assertEmpty(map);
-					    }
+							Map<String, Integer> map = new HashMap<>();
+							Verify.assertEmpty("map should be empty", map);
+							Verify.assertEmpty(map);
+						}
 					}
 					""",
 					"""
@@ -82,15 +84,15 @@ class VerifyAssertEmptyToAssertJTest implements RewriteTest {
 					import java.util.HashMap;
 
 					class Test {
-					    void test() {
-					        MutableList<String> list = Lists.mutable.empty();
-					        Assertions.assertThat(list).as("list should be empty").isEmpty();
-					        Assertions.assertThat(list).isEmpty();
+						void test() {
+							MutableList<String> list = Lists.mutable.empty();
+							Assertions.assertThat(list).as("list should be empty").isEmpty();
+							Assertions.assertThat(list).isEmpty();
 
-					        Map<String, Integer> map = new HashMap<>();
-					        Assertions.assertThat(map).as("map should be empty").isEmpty();
-					        Assertions.assertThat(map).isEmpty();
-					    }
+							Map<String, Integer> map = new HashMap<>();
+							Assertions.assertThat(map).as("map should be empty").isEmpty();
+							Assertions.assertThat(map).isEmpty();
+						}
 					}
 					"""
 				)

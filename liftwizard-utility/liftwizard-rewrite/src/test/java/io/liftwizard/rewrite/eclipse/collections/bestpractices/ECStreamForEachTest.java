@@ -44,21 +44,21 @@ class ECStreamForEachTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.set.MutableSet;
 
 					class Test {
-					    void streamForEachWithForEach(MutableList<String> list) {
-					        list.stream().forEach(System.out::println);
-					    }
+						void streamForEachWithForEach(MutableList<String> list) {
+							list.stream().forEach(System.out::println);
+						}
 
-					    void streamForEachWithLambda(MutableList<String> list, List<String> target) {
-					        list.stream().forEach(s -> target.add(s));
-					    }
+						void streamForEachWithLambda(MutableList<String> list, List<String> target) {
+							list.stream().forEach(s -> target.add(s));
+						}
 
-					    void streamForEachWithImmutableList(ImmutableList<String> list) {
-					        list.stream().forEach(System.out::println);
-					    }
+						void streamForEachWithImmutableList(ImmutableList<String> list) {
+							list.stream().forEach(System.out::println);
+						}
 
-					    void streamForEachWithMutableSet(MutableSet<Integer> set, List<Integer> target) {
-					        set.stream().forEach(i -> target.add(i * 2));
-					    }
+						void streamForEachWithMutableSet(MutableSet<Integer> set, List<Integer> target) {
+							set.stream().forEach(i -> target.add(i * 2));
+						}
 					}
 					""",
 					"""
@@ -69,21 +69,21 @@ class ECStreamForEachTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.set.MutableSet;
 
 					class Test {
-					    void streamForEachWithForEach(MutableList<String> list) {
-					        list.forEach(System.out::println);
-					    }
+						void streamForEachWithForEach(MutableList<String> list) {
+							list.forEach(System.out::println);
+						}
 
-					    void streamForEachWithLambda(MutableList<String> list, List<String> target) {
-					        list.forEach(s -> target.add(s));
-					    }
+						void streamForEachWithLambda(MutableList<String> list, List<String> target) {
+							list.forEach(s -> target.add(s));
+						}
 
-					    void streamForEachWithImmutableList(ImmutableList<String> list) {
-					        list.forEach(System.out::println);
-					    }
+						void streamForEachWithImmutableList(ImmutableList<String> list) {
+							list.forEach(System.out::println);
+						}
 
-					    void streamForEachWithMutableSet(MutableSet<Integer> set, List<Integer> target) {
-					        set.forEach(i -> target.add(i * 2));
-					    }
+						void streamForEachWithMutableSet(MutableSet<Integer> set, List<Integer> target) {
+							set.forEach(i -> target.add(i * 2));
+						}
 					}
 					"""
 				)
@@ -100,15 +100,15 @@ class ECStreamForEachTest extends AbstractEclipseCollectionsTest {
 					import org.eclipse.collections.api.list.MutableList;
 
 					class Test {
-					    void withIntermediateOperations(MutableList<String> list) {
-					        list.stream()
-					            .filter(s -> s.length() > 5)
-					            .forEach(System.out::println);
-					    }
+						void withIntermediateOperations(MutableList<String> list) {
+							list.stream()
+								.filter(s -> s.length() > 5)
+								.forEach(System.out::println);
+						}
 
-					    Stream<String> onlyStream(MutableList<String> list) {
-					        return list.stream();
-					    }
+						Stream<String> onlyStream(MutableList<String> list) {
+							return list.stream();
+						}
 					}
 					"""
 				)

@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.junit;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -30,7 +31,7 @@ class AddTestAnnotationToOverrideMethodsTest implements RewriteTest {
 	public void defaults(final RecipeSpec spec) {
 		spec
 			.recipe(new AddTestAnnotationToOverrideMethods())
-			.parser(JavaParser.fromJavaVersion().classpath("junit-jupiter-api"));
+			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("junit-jupiter-api"));
 	}
 
 	@DocumentExample
@@ -42,52 +43,52 @@ class AddTestAnnotationToOverrideMethodsTest implements RewriteTest {
 					import org.junit.jupiter.api.Test;
 
 					public class ParentTest {
-					    @Test
-					    public void testOne() {
-					    }
+						@Test
+						public void testOne() {
+						}
 
-					    @Test
-					    public void testTwo() {
-					    }
+						@Test
+						public void testTwo() {
+						}
 
-					    public void helperMethod() {
-					    }
+						public void helperMethod() {
+						}
 					}
 					"""
 				),
 				java(
 					"""
 					public class ChildTest extends ParentTest {
-					    @Override
-					    public void testOne() {
-					    }
+						@Override
+						public void testOne() {
+						}
 
-					    @Override
-					    public void testTwo() {
-					    }
+						@Override
+						public void testTwo() {
+						}
 
-					    @Override
-					    public void helperMethod() {
-					    }
+						@Override
+						public void helperMethod() {
+						}
 					}
 					""",
 					"""
 					import org.junit.jupiter.api.Test;
 
 					public class ChildTest extends ParentTest {
-					    @Override
-					    @Test
-					    public void testOne() {
-					    }
+						@Override
+						@Test
+						public void testOne() {
+						}
 
-					    @Override
-					    @Test
-					    public void testTwo() {
-					    }
+						@Override
+						@Test
+						public void testTwo() {
+						}
 
-					    @Override
-					    public void helperMethod() {
-					    }
+						@Override
+						public void helperMethod() {
+						}
 					}
 					"""
 				)
@@ -103,16 +104,16 @@ class AddTestAnnotationToOverrideMethodsTest implements RewriteTest {
 					import org.junit.jupiter.api.Test;
 
 					public class ParentNegative {
-					    @Test
-					    public void testMethod() {
-					    }
+						@Test
+						public void testMethod() {
+						}
 
-					    public void helperMethod() {
-					    }
+						public void helperMethod() {
+						}
 
-					    @BeforeEach
-					    public void setUp() {
-					    }
+						@BeforeEach
+						public void setUp() {
+						}
 					}
 					"""
 				),
@@ -121,21 +122,21 @@ class AddTestAnnotationToOverrideMethodsTest implements RewriteTest {
 					import org.junit.jupiter.api.Test;
 
 					public class ChildNegative extends ParentNegative {
-					    @Test
-					    @Override
-					    public void testMethod() {
-					    }
+						@Test
+						@Override
+						public void testMethod() {
+						}
 
-					    @Override
-					    public void helperMethod() {
-					    }
+						@Override
+						public void helperMethod() {
+						}
 
-					    @Override
-					    public void setUp() {
-					    }
+						@Override
+						public void setUp() {
+						}
 
-					    public void localMethod() {
-					    }
+						public void localMethod() {
+						}
 					}
 					"""
 				)

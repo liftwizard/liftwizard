@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -32,6 +33,7 @@ class VerifyAssertCountToAssertJTest implements RewriteTest {
 			.recipe(new VerifyAssertCountToAssertJRecipe())
 			.parser(
 				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
 					.dependsOn(
 						"""
 						package org.eclipse.collections.impl.test;
@@ -39,7 +41,7 @@ class VerifyAssertCountToAssertJTest implements RewriteTest {
 						import org.eclipse.collections.api.block.predicate.Predicate;
 
 						public final class Verify {
-						    public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
+							public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
 						}
 						"""
 					)
@@ -58,13 +60,13 @@ class VerifyAssertCountToAssertJTest implements RewriteTest {
 					import org.eclipse.collections.impl.factory.Lists;
 
 					class Test {
-					    void test() {
-					        MutableList<Integer> numbers = Lists.mutable.with(1, 2, 3, 4, 5);
-					        Verify.assertCount(2, numbers, each -> each % 2 == 0);
+						void test() {
+							MutableList<Integer> numbers = Lists.mutable.with(1, 2, 3, 4, 5);
+							Verify.assertCount(2, numbers, each -> each % 2 == 0);
 
-					        MutableList<String> emptyList = Lists.mutable.empty();
-					        Verify.assertCount(0, emptyList, s -> s.length() > 0);
-					    }
+							MutableList<String> emptyList = Lists.mutable.empty();
+							Verify.assertCount(0, emptyList, s -> s.length() > 0);
+						}
 					}
 					""",
 					"""
@@ -73,13 +75,13 @@ class VerifyAssertCountToAssertJTest implements RewriteTest {
 					import org.eclipse.collections.impl.factory.Lists;
 
 					class Test {
-					    void test() {
-					        MutableList<Integer> numbers = Lists.mutable.with(1, 2, 3, 4, 5);
-					        Assertions.assertThat(numbers).filteredOn(each -> each % 2 == 0).hasSize(2);
+						void test() {
+							MutableList<Integer> numbers = Lists.mutable.with(1, 2, 3, 4, 5);
+							Assertions.assertThat(numbers).filteredOn(each -> each % 2 == 0).hasSize(2);
 
-					        MutableList<String> emptyList = Lists.mutable.empty();
-					        Assertions.assertThat(emptyList).filteredOn(s -> s.length() > 0).hasSize(0);
-					    }
+							MutableList<String> emptyList = Lists.mutable.empty();
+							Assertions.assertThat(emptyList).filteredOn(s -> s.length() > 0).hasSize(0);
+						}
 					}
 					"""
 				)
