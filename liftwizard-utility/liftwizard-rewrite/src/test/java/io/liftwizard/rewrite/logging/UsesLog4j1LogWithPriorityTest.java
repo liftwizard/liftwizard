@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.logging;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
@@ -31,7 +32,11 @@ class UsesLog4j1LogWithPriorityTest implements RewriteTest {
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new UsesLog4j1LogWithPriority())
-			.parser(JavaParser.fromJavaVersion().classpathFromResources(new InMemoryExecutionContext(), "reload4j"));
+			.parser(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.classpathFromResources(new InMemoryExecutionContext(), "reload4j")
+			);
 	}
 
 	@DocumentExample

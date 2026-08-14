@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -28,7 +29,9 @@ class AssertionsStaticImportTest implements RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new AssertionsStaticImport()).parser(JavaParser.fromJavaVersion().classpath("assertj-core"));
+		spec
+			.recipe(new AssertionsStaticImport())
+			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("assertj-core"));
 	}
 
 	@DocumentExample
@@ -44,31 +47,31 @@ class AssertionsStaticImportTest implements RewriteTest {
 					import java.util.HashMap;
 
 					class Test {
-					    void test() {
-					        List<String> list = new ArrayList<>();
-					        Assertions.assertThat(list).isEmpty();
-					        Assertions.assertThat(list).isNotEmpty();
-					        Assertions.assertThat(list).hasSize(0);
-					        Assertions.assertThat("text").isEqualTo("text");
-					        Assertions.assertThat(42).isGreaterThan(0);
-					        Assertions.assertThat(true).isTrue();
+						void test() {
+							List<String> list = new ArrayList<>();
+							Assertions.assertThat(list).isEmpty();
+							Assertions.assertThat(list).isNotEmpty();
+							Assertions.assertThat(list).hasSize(0);
+							Assertions.assertThat("text").isEqualTo("text");
+							Assertions.assertThat(42).isGreaterThan(0);
+							Assertions.assertThat(true).isTrue();
 
-					        Assertions.assertThatThrownBy(() -> {
-					            throw new IllegalArgumentException("error");
-					        }).isInstanceOf(IllegalArgumentException.class);
+							Assertions.assertThatThrownBy(() -> {
+								throw new IllegalArgumentException("error");
+							}).isInstanceOf(IllegalArgumentException.class);
 
-					        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-					            .isThrownBy(() -> {
-					                throw new IllegalArgumentException("error");
-					            });
+							Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+								.isThrownBy(() -> {
+									throw new IllegalArgumentException("error");
+								});
 
-					        Map<String, String> map = new HashMap<>();
-					        Assertions.assertThat(map).containsKey("key");
+							Map<String, String> map = new HashMap<>();
+							Assertions.assertThat(map).containsKey("key");
 
-					        Assertions.fail("Should not reach here");
+							Assertions.fail("Should not reach here");
 
-					        Assertions.useDefaultDateFormatsOnly();
-					    }
+							Assertions.useDefaultDateFormatsOnly();
+						}
 					}
 					""",
 					"""
@@ -77,34 +80,38 @@ class AssertionsStaticImportTest implements RewriteTest {
 					import java.util.Map;
 					import java.util.HashMap;
 
-					import static org.assertj.core.api.Assertions.*;
+					import static org.assertj.core.api.Assertions.assertThat;
+					import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+					import static org.assertj.core.api.Assertions.assertThatThrownBy;
+					import static org.assertj.core.api.Assertions.fail;
+					import static org.assertj.core.api.Assertions.useDefaultDateFormatsOnly;
 
 					class Test {
-					    void test() {
-					        List<String> list = new ArrayList<>();
-					        assertThat(list).isEmpty();
-					        assertThat(list).isNotEmpty();
-					        assertThat(list).hasSize(0);
-					        assertThat("text").isEqualTo("text");
-					        assertThat(42).isGreaterThan(0);
-					        assertThat(true).isTrue();
+						void test() {
+							List<String> list = new ArrayList<>();
+							assertThat(list).isEmpty();
+							assertThat(list).isNotEmpty();
+							assertThat(list).hasSize(0);
+							assertThat("text").isEqualTo("text");
+							assertThat(42).isGreaterThan(0);
+							assertThat(true).isTrue();
 
-					        assertThatThrownBy(() -> {
-					            throw new IllegalArgumentException("error");
-					        }).isInstanceOf(IllegalArgumentException.class);
+							assertThatThrownBy(() -> {
+								throw new IllegalArgumentException("error");
+							}).isInstanceOf(IllegalArgumentException.class);
 
-					        assertThatExceptionOfType(IllegalArgumentException.class)
-					            .isThrownBy(() -> {
-					                throw new IllegalArgumentException("error");
-					            });
+							assertThatExceptionOfType(IllegalArgumentException.class)
+								.isThrownBy(() -> {
+									throw new IllegalArgumentException("error");
+								});
 
-					        Map<String, String> map = new HashMap<>();
-					        assertThat(map).containsKey("key");
+							Map<String, String> map = new HashMap<>();
+							assertThat(map).containsKey("key");
 
-					        fail("Should not reach here");
+							fail("Should not reach here");
 
-					        useDefaultDateFormatsOnly();
-					    }
+							useDefaultDateFormatsOnly();
+						}
 					}
 					"""
 				)
@@ -122,10 +129,10 @@ class AssertionsStaticImportTest implements RewriteTest {
 					import static org.assertj.core.api.Assertions.assertThat;
 
 					class Test {
-					    void test() {
-					        List<String> list = new ArrayList<>();
-					        assertThat(list).isEmpty();
-					    }
+						void test() {
+							List<String> list = new ArrayList<>();
+							assertThat(list).isEmpty();
+						}
 					}
 					"""
 				)

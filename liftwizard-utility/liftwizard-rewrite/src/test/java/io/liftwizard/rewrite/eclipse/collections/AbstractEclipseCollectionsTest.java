@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.eclipse.collections;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.factory.Sets;
 import org.openrewrite.java.JavaParser;
@@ -51,6 +52,7 @@ public abstract class AbstractEclipseCollectionsTest implements RewriteTest {
 	public void defaults(RecipeSpec spec) {
 		spec.parser(
 			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
 				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
 				.styles(Lists.fixedSize.with(NO_STAR_IMPORT_STYLE))
 		);

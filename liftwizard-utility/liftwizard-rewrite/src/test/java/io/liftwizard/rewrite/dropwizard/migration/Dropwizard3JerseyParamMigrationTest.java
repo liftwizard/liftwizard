@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -31,68 +32,70 @@ class Dropwizard3JerseyParamMigrationTest implements RewriteTest {
 		spec
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.Dropwizard3JerseyParamMigration")
 			.parser(
-				JavaParser.fromJavaVersion().dependsOn(
+				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
+					.dependsOn(
 						"""
 						package io.dropwizard.jersey.params;
 
 						public class InstantParam {
-						    public java.time.Instant get() { return null; }
+							public java.time.Instant get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.params;
 
 						public class LocalDateParam {
-						    public java.time.LocalDate get() { return null; }
+							public java.time.LocalDate get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.params;
 
 						public class DateTimeParam {
-						    public Object get() { return null; }
+							public Object get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.params;
 
 						public class BooleanParam {
-						    public Boolean get() { return null; }
+							public Boolean get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.params;
 
 						public class DurationParam {
-						    public java.time.Duration get() { return null; }
+							public java.time.Duration get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.params;
 
 						public class SizeParam {
-						    public Object get() { return null; }
+							public Object get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.jsr310;
 
 						public class InstantParam {
-						    public java.time.Instant get() { return null; }
+							public java.time.Instant get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.jsr310;
 
 						public class LocalDateParam {
-						    public java.time.LocalDate get() { return null; }
+							public java.time.LocalDate get() { return null; }
 						}
 						""",
 						"""
 						package io.dropwizard.jersey.jsr310;
 
 						public class ZonedDateTimeParam {
-						    public java.time.ZonedDateTime get() { return null; }
+							public java.time.ZonedDateTime get() { return null; }
 						}
 						""",
 						"""
@@ -105,7 +108,7 @@ class Dropwizard3JerseyParamMigrationTest implements RewriteTest {
 						package io.dropwizard.jersey.params;
 
 						public class IntParam {
-						    public int get() { return 0; }
+							public int get() { return 0; }
 						}
 						"""
 					)
@@ -126,57 +129,57 @@ class Dropwizard3JerseyParamMigrationTest implements RewriteTest {
 					import io.dropwizard.jersey.params.SizeParam;
 
 					class Test {
-					    void packageMoves(InstantParam instant, LocalDateParam date) {
-					        Object a = instant.get();
-					        Object b = date.get();
-					    }
+						void packageMoves(InstantParam instant, LocalDateParam date) {
+							Object a = instant.get();
+							Object b = date.get();
+						}
 
-					    void dateTimeParamReplacement(DateTimeParam dateTime) {
-					        Object value = dateTime.get();
-					    }
+						void dateTimeParamReplacement(DateTimeParam dateTime) {
+							Object value = dateTime.get();
+						}
 
-					    void unwrapBooleanParam(BooleanParam flag) {
-					        Boolean value = flag.get();
-					    }
+						void unwrapBooleanParam(BooleanParam flag) {
+							Boolean value = flag.get();
+						}
 
-					    void unwrapDurationParam(DurationParam duration) {
-					        Object value = duration.get();
-					    }
+						void unwrapDurationParam(DurationParam duration) {
+							Object value = duration.get();
+						}
 
-					    void unwrapSizeParam(SizeParam size) {
-					        Object value = size.get();
-					    }
+						void unwrapSizeParam(SizeParam size) {
+							Object value = size.get();
+						}
 					}
 					""",
 					"""
+					import java.time.Duration;
+
 					import io.dropwizard.jersey.jsr310.InstantParam;
 					import io.dropwizard.jersey.jsr310.LocalDateParam;
 					import io.dropwizard.jersey.jsr310.ZonedDateTimeParam;
 					import io.dropwizard.util.DataSize;
 
-					import java.time.Duration;
-
 					class Test {
-					    void packageMoves(InstantParam instant, LocalDateParam date) {
-					        Object a = instant.get();
-					        Object b = date.get();
-					    }
+						void packageMoves(InstantParam instant, LocalDateParam date) {
+							Object a = instant.get();
+							Object b = date.get();
+						}
 
-					    void dateTimeParamReplacement(ZonedDateTimeParam dateTime) {
-					        Object value = dateTime.get();
-					    }
+						void dateTimeParamReplacement(ZonedDateTimeParam dateTime) {
+							Object value = dateTime.get();
+						}
 
-					    void unwrapBooleanParam(Boolean flag) {
-					        Boolean value = flag;
-					    }
+						void unwrapBooleanParam(Boolean flag) {
+							Boolean value = flag;
+						}
 
-					    void unwrapDurationParam(Duration duration) {
-					        Object value = duration;
-					    }
+						void unwrapDurationParam(Duration duration) {
+							Object value = duration;
+						}
 
-					    void unwrapSizeParam(DataSize size) {
-					        Object value = size;
-					    }
+						void unwrapSizeParam(DataSize size) {
+							Object value = size;
+						}
 					}
 					"""
 				)
@@ -191,14 +194,14 @@ class Dropwizard3JerseyParamMigrationTest implements RewriteTest {
 					import io.dropwizard.jersey.params.IntParam;
 
 					class Test {
-					    void intParamStaysInParams(IntParam intParam) {
-					        int value = intParam.get();
-					    }
+						void intParamStaysInParams(IntParam intParam) {
+							int value = intParam.get();
+						}
 
-					    void alreadyUsingRawTypes(Boolean flag, java.time.Duration duration) {
-					        boolean b = flag;
-					        long millis = duration.toMillis();
-					    }
+						void alreadyUsingRawTypes(Boolean flag, java.time.Duration duration) {
+							boolean b = flag;
+							long millis = duration.toMillis();
+						}
 					}
 					"""
 				)

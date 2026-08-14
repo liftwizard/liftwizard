@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.logging;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -30,7 +31,7 @@ class ParameterizedLoggingTest implements RewriteTest {
 	public void defaults(RecipeSpec spec) {
 		spec
 			.recipe(new ParameterizedLogging("org.slf4j.Logger info(..)", null))
-			.parser(JavaParser.fromJavaVersion().classpath("slf4j-api"));
+			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).classpath("slf4j-api"));
 	}
 
 	@DocumentExample

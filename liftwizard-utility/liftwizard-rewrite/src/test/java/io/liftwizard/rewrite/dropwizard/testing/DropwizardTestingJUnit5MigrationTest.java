@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.testing;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -32,71 +33,72 @@ class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
 			.recipeFromResources("io.liftwizard.rewrite.dropwizard.testing.DropwizardTestingJUnit5Migration")
 			.parser(
 				JavaParser.fromJavaVersion()
+					.styles(AbstractRewriteStyles.styles())
 					.dependsOn(
 						"""
 						package io.dropwizard.testing.junit;
 
 						public class DropwizardAppRule<C> {
-						    public DropwizardAppRule(Class<?> applicationClass, String configPath) {}
+							public DropwizardAppRule(Class<?> applicationClass, String configPath) {}
 						}
 						""",
 						"""
 						package io.dropwizard.testing.junit;
 
 						public class DropwizardClientRule {
-						    public DropwizardClientRule(Object... resources) {}
+							public DropwizardClientRule(Object... resources) {}
 						}
 						""",
 						"""
 						package io.dropwizard.testing.junit;
 
 						public class ResourceTestRule {
-						    public static Builder builder() {
-						        return new Builder();
-						    }
+							public static Builder builder() {
+								return new Builder();
+							}
 
-						    public static class Builder {
-						        public Builder addResource(Object resource) {
-						            return this;
-						        }
+							public static class Builder {
+								public Builder addResource(Object resource) {
+									return this;
+								}
 
-						        public ResourceTestRule build() {
-						            return new ResourceTestRule();
-						        }
-						    }
+								public ResourceTestRule build() {
+									return new ResourceTestRule();
+								}
+							}
 						}
 						""",
 						"""
 						package io.liftwizard.junit.extension.app;
 
 						public class LiftwizardAppExtension<C> {
-						    public LiftwizardAppExtension(Class<?> applicationClass, String configPath) {}
+							public LiftwizardAppExtension(Class<?> applicationClass, String configPath) {}
 						}
 						""",
 						"""
 						package io.dropwizard.testing.junit5;
 
 						public class DropwizardClientExtension {
-						    public DropwizardClientExtension(Object... resources) {}
+							public DropwizardClientExtension(Object... resources) {}
 						}
 						""",
 						"""
 						package io.dropwizard.testing.junit5;
 
 						public class ResourceExtension {
-						    public static Builder builder() {
-						        return new Builder();
-						    }
+							public static Builder builder() {
+								return new Builder();
+							}
 
-						    public static class Builder {
-						        public Builder addResource(Object resource) {
-						            return this;
-						        }
+							public static class Builder {
+								public Builder addResource(Object resource) {
+									return this;
+								}
 
-						        public ResourceExtension build() {
-						            return new ResourceExtension();
-						        }
-						    }
+								public ResourceExtension build() {
+									return new ResourceExtension();
+								}
+							}
 						}
 						""",
 						"""
@@ -143,22 +145,22 @@ class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
 					import io.dropwizard.testing.junit.ResourceTestRule;
 
 					class MyTest {
-					    @ClassRule
-					    public static DropwizardAppRule<Object> APP_RULE =
-					            new DropwizardAppRule<>(Object.class, "config.yml");
+						@ClassRule
+						public static DropwizardAppRule<Object> APP_RULE =
+								new DropwizardAppRule<>(Object.class, "config.yml");
 
-					    @Rule
-					    public DropwizardAppRule<Object> instanceRule =
-					            new DropwizardAppRule<>(Object.class, "config.yml");
+						@Rule
+						public DropwizardAppRule<Object> instanceRule =
+								new DropwizardAppRule<>(Object.class, "config.yml");
 
-					    @ClassRule
-					    public static DropwizardClientRule CLIENT_RULE =
-					            new DropwizardClientRule(new Object());
+						@ClassRule
+						public static DropwizardClientRule CLIENT_RULE =
+								new DropwizardClientRule(new Object());
 
-					    @ClassRule
-					    public static ResourceTestRule RESOURCES = ResourceTestRule.builder()
-					            .addResource(new Object())
-					            .build();
+						@ClassRule
+						public static ResourceTestRule RESOURCES = ResourceTestRule.builder()
+								.addResource(new Object())
+								.build();
 					}
 					""",
 					"""
@@ -171,22 +173,22 @@ class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
 
 					@ExtendWith(DropwizardExtensionsSupport.class)
 					class MyTest {
-					    @RegisterExtension
-					    public static LiftwizardAppExtension<Object> APP_RULE =
-					            new LiftwizardAppExtension<>(Object.class, "config.yml");
+						@RegisterExtension
+						public static LiftwizardAppExtension<Object> APP_RULE =
+								new LiftwizardAppExtension<>(Object.class, "config.yml");
 
-					    @RegisterExtension
-					    public LiftwizardAppExtension<Object> instanceRule =
-					            new LiftwizardAppExtension<>(Object.class, "config.yml");
+						@RegisterExtension
+						public LiftwizardAppExtension<Object> instanceRule =
+								new LiftwizardAppExtension<>(Object.class, "config.yml");
 
-					    @RegisterExtension
-					    public static DropwizardClientExtension CLIENT_RULE =
-					            new DropwizardClientExtension(new Object());
+						@RegisterExtension
+						public static DropwizardClientExtension CLIENT_RULE =
+								new DropwizardClientExtension(new Object());
 
-					    @RegisterExtension
-					    public static ResourceExtension RESOURCES = ResourceExtension.builder()
-					            .addResource(new Object())
-					            .build();
+						@RegisterExtension
+						public static ResourceExtension RESOURCES = ResourceExtension.builder()
+								.addResource(new Object())
+								.build();
 					}
 					"""
 				)
@@ -207,18 +209,18 @@ class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
 
 					@ExtendWith(DropwizardExtensionsSupport.class)
 					class MyTest {
-					    @RegisterExtension
-					    public static LiftwizardAppExtension<Object> APP_RULE =
-					            new LiftwizardAppExtension<>(Object.class, "config.yml");
+						@RegisterExtension
+						public static LiftwizardAppExtension<Object> APP_RULE =
+								new LiftwizardAppExtension<>(Object.class, "config.yml");
 
-					    @RegisterExtension
-					    public static DropwizardClientExtension CLIENT_RULE =
-					            new DropwizardClientExtension(new Object());
+						@RegisterExtension
+						public static DropwizardClientExtension CLIENT_RULE =
+								new DropwizardClientExtension(new Object());
 
-					    @RegisterExtension
-					    public static ResourceExtension RESOURCES = ResourceExtension.builder()
-					            .addResource(new Object())
-					            .build();
+						@RegisterExtension
+						public static ResourceExtension RESOURCES = ResourceExtension.builder()
+								.addResource(new Object())
+								.build();
 					}
 					"""
 				)

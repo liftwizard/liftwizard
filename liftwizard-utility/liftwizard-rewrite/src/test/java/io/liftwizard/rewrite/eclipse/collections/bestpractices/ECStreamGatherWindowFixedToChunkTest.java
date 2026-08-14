@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import io.liftwizard.rewrite.eclipse.collections.AbstractEclipseCollectionsTest;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -62,6 +63,7 @@ class ECStreamGatherWindowFixedToChunkTest extends AbstractEclipseCollectionsTes
 		spec.typeValidationOptions(TypeValidation.none());
 		spec.parser(
 			JavaParser.fromJavaVersion()
+				.styles(AbstractRewriteStyles.styles())
 				.classpath("eclipse-collections-api", "eclipse-collections")
 				.dependsOn(GATHERER_STUB, GATHERERS_STUB)
 		);

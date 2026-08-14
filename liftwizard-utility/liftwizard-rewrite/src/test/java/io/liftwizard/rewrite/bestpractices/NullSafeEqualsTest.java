@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.bestpractices;
 
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
@@ -28,7 +29,9 @@ class NullSafeEqualsTest implements RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new NullSafeEqualsRecipes()).parser(JavaParser.fromJavaVersion());
+		spec
+			.recipe(new NullSafeEqualsRecipes())
+			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()));
 	}
 
 	@DocumentExample
