@@ -560,6 +560,30 @@
                                     </config>
                                 </prettier>
                             </java>
+
+                            <!-- Fixture inputs are Java sources stored outside the directories covered by <java>. -->
+                            <!-- Expected outputs retain OpenRewrite's emitted style, and recipes may test import handling. -->
+                            <formats combine.children="append">
+                                <format>
+                                    <includes>
+                                        <include>**/src/test/resources/**/*-before.java</include>
+                                        <include>**/src/test/resources/**/*-unchanged.java</include>
+                                    </includes>
+
+                                    <prettier>
+                                        <devDependencies>
+                                            <prettier>3.8.1</prettier>
+                                            <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                        </devDependencies>
+                                        <configFile>.prettierrc.json5</configFile>
+                                        <config>
+                                            <parser>java</parser>
+                                            <plugins>prettier-java-next-line</plugins>
+                                            <braceStyle>next-line</braceStyle>
+                                        </config>
+                                    </prettier>
+                                </format>
+                            </formats>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -603,6 +627,30 @@
 
                                 <removeUnusedImports />
                             </java>
+
+                            <!-- Fixture inputs are Java sources stored outside the directories covered by <java>. -->
+                            <!-- Expected outputs retain OpenRewrite's emitted style, and recipes may test import handling. -->
+                            <formats combine.children="append">
+                                <format>
+                                    <includes>
+                                        <include>**/src/test/resources/**/*-before.java</include>
+                                        <include>**/src/test/resources/**/*-unchanged.java</include>
+                                    </includes>
+
+                                    <prettier>
+                                        <devDependencies>
+                                            <prettier>3.8.1</prettier>
+                                            <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                        </devDependencies>
+                                        <configFile>.prettierrc.json5</configFile>
+                                        <config>
+                                            <parser>java</parser>
+                                            <plugins>prettier-java-next-line</plugins>
+                                            <braceStyle>next-line</braceStyle>
+                                        </config>
+                                    </prettier>
+                                </format>
+                            </formats>
                         </configuration>
                     </plugin>
                 </plugins>
