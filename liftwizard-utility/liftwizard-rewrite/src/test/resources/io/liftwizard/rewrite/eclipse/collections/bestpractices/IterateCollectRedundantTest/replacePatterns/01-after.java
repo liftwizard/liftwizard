@@ -1,0 +1,19 @@
+import java.util.Collection;
+import org.eclipse.collections.api.block.function.Function;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.set.MutableSet;
+
+class Test
+{
+	void test(MutableList<String> list, MutableSet<Integer> set, Function<String, Integer> function)
+	{
+		var result1 = list.collect(String::length);
+		var result2 = list.collect(function);
+		var result3 = list.collect((s) -> s.toUpperCase());
+		var result4 = set.collect((i) -> i * 2);
+		Collection<Integer> result5 = list.collect(String::length);
+		Collection<Integer> result6 = list.collect(function);
+		Collection<String> result7 = list.collect((s) -> s.toUpperCase());
+		Collection<Integer> result8 = set.collect((i) -> i * 2);
+	}
+}

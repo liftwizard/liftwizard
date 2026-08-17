@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECStreamCollectSummarizingToCollectPrimitiveTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,85 +32,11 @@ class ECStreamCollectSummarizingToCollectPrimitiveTest extends AbstractEclipseCo
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.DoubleSummaryStatistics;
-					import java.util.IntSummaryStatistics;
-					import java.util.LongSummaryStatistics;
-					import java.util.stream.Collectors;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    MutableList<String> mutableList;
-					    ImmutableList<String> immutableList;
-					    MutableSet<String> set;
-
-					    void test() {
-					        DoubleSummaryStatistics result1 = mutableList.stream().collect(Collectors.summarizingDouble(String::length));
-					        DoubleSummaryStatistics result2 = mutableList.stream().collect(Collectors.summarizingDouble(s -> s.length() * 1.0));
-					        IntSummaryStatistics result3 = mutableList.stream().collect(Collectors.summarizingInt(String::length));
-					        LongSummaryStatistics result4 = mutableList.stream().collect(Collectors.summarizingLong(s -> (long) s.length()));
-					        DoubleSummaryStatistics result5 = immutableList.stream().collect(Collectors.summarizingDouble(String::length));
-					        IntSummaryStatistics result6 = set.stream().collect(Collectors.summarizingInt(String::length));
-					    }
-					}
-					""",
-					"""
-					import java.util.DoubleSummaryStatistics;
-					import java.util.IntSummaryStatistics;
-					import java.util.LongSummaryStatistics;
-					import java.util.stream.Collectors;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    MutableList<String> mutableList;
-					    ImmutableList<String> immutableList;
-					    MutableSet<String> set;
-
-					    void test() {
-					        DoubleSummaryStatistics result1 = mutableList.collectDouble(String::length).summaryStatistics();
-					        DoubleSummaryStatistics result2 = mutableList.collectDouble(s -> s.length() * 1.0).summaryStatistics();
-					        IntSummaryStatistics result3 = mutableList.collectInt(String::length).summaryStatistics();
-					        LongSummaryStatistics result4 = mutableList.collectLong(s -> (long) s.length()).summaryStatistics();
-					        DoubleSummaryStatistics result5 = immutableList.collectDouble(String::length).summaryStatistics();
-					        IntSummaryStatistics result6 = set.collectInt(String::length).summaryStatistics();
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.ArrayList;
-					import java.util.DoubleSummaryStatistics;
-					import java.util.List;
-					import java.util.stream.Collectors;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    ArrayList<String> arrayList = new ArrayList<>();
-					    MutableList<String> list;
-
-					    void test() {
-					        DoubleSummaryStatistics result1 = arrayList.stream().collect(Collectors.summarizingDouble(String::length));
-					        List<String> result2 = list.stream().collect(Collectors.toList());
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

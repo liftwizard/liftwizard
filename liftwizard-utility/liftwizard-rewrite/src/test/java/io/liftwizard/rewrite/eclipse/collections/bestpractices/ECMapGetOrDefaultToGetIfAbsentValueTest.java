@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECMapGetOrDefaultToGetIfAbsentValueTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,52 +32,11 @@ class ECMapGetOrDefaultToGetIfAbsentValueTest extends AbstractEclipseCollections
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.map.MutableMap;
-
-					class Test {
-					    void test(MutableMap<String, String> map, MutableMap<String, Integer> intMap, String key) {
-					        String result1 = map.getOrDefault("key", "default");
-					        String result2 = map.getOrDefault(key, "fallback");
-					        Integer result3 = intMap.getOrDefault("key", 0);
-					        String result4 = map.getOrDefault("key", "default");
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.map.MutableMap;
-
-					class Test {
-					    void test(MutableMap<String, String> map, MutableMap<String, Integer> intMap, String key) {
-					        String result1 = map.getIfAbsentValue("key", "default");
-					        String result2 = map.getIfAbsentValue(key, "fallback");
-					        Integer result3 = intMap.getIfAbsentValue("key", 0);
-					        String result4 = map.getIfAbsentValue("key", "default");
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					class Test {
-					    void test(Map<String, String> map, HashMap<String, String> hashMap) {
-					        String result1 = map.getOrDefault("key", "default");
-					        String result2 = hashMap.getOrDefault("key", "default");
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

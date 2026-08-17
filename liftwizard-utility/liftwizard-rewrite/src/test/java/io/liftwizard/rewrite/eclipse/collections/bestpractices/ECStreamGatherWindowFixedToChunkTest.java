@@ -24,8 +24,6 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.TypeValidation;
 
-import static org.openrewrite.java.Assertions.java;
-
 /**
  * Tests for {@link ECStreamGatherWindowFixedToChunk}.
  *
@@ -72,110 +70,11 @@ class ECStreamGatherWindowFixedToChunkTest extends AbstractEclipseCollectionsTes
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.List;
-					import java.util.stream.Collectors;
-					import java.util.stream.Gatherers;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    MutableList<String> mutableList;
-					    ImmutableList<String> immutableList;
-					    MutableSet<Integer> mutableSet;
-
-					    List<List<String>> windowFixedWithMutableList() {
-					        return mutableList.stream()
-					            .gather(Gatherers.windowFixed(3))
-					            .collect(Collectors.toList());
-					    }
-
-					    List<List<String>> windowFixedWithImmutableList() {
-					        return immutableList.stream()
-					            .gather(Gatherers.windowFixed(5))
-					            .collect(Collectors.toList());
-					    }
-
-					    List<List<Integer>> windowFixedWithMutableSet() {
-					        return mutableSet.stream()
-					            .gather(Gatherers.windowFixed(2))
-					            .collect(Collectors.toList());
-					    }
-
-					    List<List<String>> windowFixedWithVariableSize(int batchSize) {
-					        return mutableList.stream()
-					            .gather(Gatherers.windowFixed(batchSize))
-					            .collect(Collectors.toList());
-					    }
-					}
-					""",
-					"""
-					import java.util.List;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    MutableList<String> mutableList;
-					    ImmutableList<String> immutableList;
-					    MutableSet<Integer> mutableSet;
-
-					    List<List<String>> windowFixedWithMutableList() {
-					        return mutableList.chunk(3);
-					    }
-
-					    List<List<String>> windowFixedWithImmutableList() {
-					        return immutableList.chunk(5);
-					    }
-
-					    List<List<Integer>> windowFixedWithMutableSet() {
-					        return mutableSet.chunk(2);
-					    }
-
-					    List<List<String>> windowFixedWithVariableSize(int batchSize) {
-					        return mutableList.chunk(batchSize);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.ArrayList;
-					import java.util.List;
-					import java.util.stream.Collectors;
-					import java.util.stream.Gatherers;
-					import java.util.stream.Stream;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    ArrayList<String> arrayList;
-					    MutableList<String> mutableList;
-
-					    List<List<String>> nonEclipseCollectionsType() {
-					        return arrayList.stream()
-					            .gather(Gatherers.windowFixed(3))
-					            .collect(Collectors.toList());
-					    }
-
-					    Stream<List<String>> withoutCollect() {
-					        return mutableList.stream()
-					            .gather(Gatherers.windowFixed(3));
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

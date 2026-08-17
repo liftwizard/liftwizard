@@ -16,18 +16,21 @@
 
 package io.liftwizard.rewrite.eclipse.collections;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class HideUtilityClassConstructorTest implements RewriteTest {
+class HideUtilityClassConstructorTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
-		spec.recipe(new HideUtilityClassConstructor());
+		spec
+			.recipe(new HideUtilityClassConstructor())
+			.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()));
 	}
 
 	@DocumentExample
@@ -35,116 +38,15 @@ class HideUtilityClassConstructorTest implements RewriteTest {
 	void replacePatterns() {
 		rewriteRun(
 			//language=java
-			java(
-				"""
-				public class Math {
-				    public static final int TWO = 2;
-
-				    public static int addTwo(int a) {
-				        return a + TWO;
-				    }
-				}
-
-				""",
-				"""
-				public class Math {
-				    public static final int TWO = 2;
-
-				    public static int addTwo(int a) {
-				        return a + TWO;
-				    }
-
-				    private Math() {
-				        throw new AssertionError("Suppress default constructor for noninstantiability");
-				    }
-				}
-
-				"""
-			),
+			this.javaFixture("replacePatterns/01"),
 			//language=java
-			java(
-				"""
-				public class PublicCtor {
-				    public PublicCtor() {
-				    }
-
-				    public static void utility() {
-				    }
-				}
-				""",
-				"""
-				public class PublicCtor {
-				    private PublicCtor() {
-				        throw new AssertionError("Suppress default constructor for noninstantiability");
-				    }
-
-				    public static void utility() {
-				    }
-				}
-				"""
-			),
+			this.javaFixture("replacePatterns/02"),
 			//language=java
-			java(
-				"""
-				public class PackagePrivateCtor {
-				    PackagePrivateCtor() {
-				    }
-
-				    public static void utility() {
-				    }
-				}
-				""",
-				"""
-				public class PackagePrivateCtor {
-				    private PackagePrivateCtor() {
-				        throw new AssertionError("Suppress default constructor for noninstantiability");
-				    }
-
-				    public static void utility() {
-				    }
-				}
-				"""
-			),
+			this.javaFixture("replacePatterns/03"),
 			//language=java
-			java(
-				"""
-				public class StaticFieldsOnly {
-				    public StaticFieldsOnly() {
-				    }
-
-				    public static int a;
-				}
-				""",
-				"""
-				public class StaticFieldsOnly {
-				    private StaticFieldsOnly() {
-				        throw new AssertionError("Suppress default constructor for noninstantiability");
-				    }
-
-				    public static int a;
-				}
-				"""
-			),
+			this.javaFixture("replacePatterns/04"),
 			//language=java
-			java(
-				"""
-				public class AlreadyPrivateNoAssertionError {
-				    private AlreadyPrivateNoAssertionError() {
-				    }
-
-				    public static String foo() { return "foo"; }
-				}
-				""",
-				"""
-				public class AlreadyPrivateNoAssertionError {
-				    private AlreadyPrivateNoAssertionError() {
-				        throw new AssertionError("Suppress default constructor for noninstantiability");
-				    }
-
-				    public static String foo() { return "foo"; }
-				}
-				"""
-			)
+			this.javaFixture("replacePatterns/05")
 		);
 	}
 
@@ -152,112 +54,25 @@ class HideUtilityClassConstructorTest implements RewriteTest {
 	void doNotReplaceInvalidPatterns() {
 		rewriteRun(
 			//language=java
-			java(
-				"""
-				public class ProtectedCtor {
-				    protected ProtectedCtor() {
-				    }
-
-				    public static void utility() {
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
 			//language=java
-			java(
-				"""
-				public interface AnInterface {
-				    public static final String utility = "";
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02"),
 			//language=java
-			java(
-				"""
-				public abstract class AbstractClass {
-				    public AbstractClass() {
-				    }
-
-				    public static void someStatic() {
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/03"),
 			//language=java
-			java(
-				"""
-				package a;
-
-				public class HasMainMethod {
-				    public static void main(String[] args) {
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/04"),
 			//language=java
-			java(
-				"""
-				public class HasNonStaticMethods {
-				    public HasNonStaticMethods() {
-				    }
-
-				    public static void someStatic() {
-				    }
-
-				    public void notStatic() {
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/05"),
 			//language=java
-			java(
-				"""
-				public class TotallyEmpty {
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/06"),
 			//language=java
-			java(
-				"""
-				public class OnlyPublicConstructor {
-				    public OnlyPublicConstructor() {
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/07"),
 			//language=java
-			java(
-				"""
-				public interface ImplementedInterface {
-				    static void utility() {
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/08"),
 			//language=java
-			java(
-				"""
-				public class ImplementsInterface implements ImplementedInterface {
-				    public ImplementsInterface() {
-				    }
-
-				    public static void utility() {
-				        ImplementedInterface.utility();
-				    }
-				}
-				"""
-			),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/09"),
 			//language=java
-			java(
-				"""
-				public class AlreadyPrivateWithAssertionError {
-				    private AlreadyPrivateWithAssertionError() {
-				        throw new AssertionError("Suppress default constructor for noninstantiability");
-				    }
-				    public static String foo() { return "foo"; }
-				}
-				"""
-			)
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/10")
 		);
 	}
 }
