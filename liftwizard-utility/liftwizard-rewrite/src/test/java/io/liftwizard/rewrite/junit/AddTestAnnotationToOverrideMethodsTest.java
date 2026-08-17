@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.junit;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -23,9 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class AddTestAnnotationToOverrideMethodsTest implements RewriteTest {
+class AddTestAnnotationToOverrideMethodsTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(final RecipeSpec spec) {
@@ -37,109 +36,14 @@ class AddTestAnnotationToOverrideMethodsTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.junit.jupiter.api.Test;
-
-					public class ParentTest {
-						@Test
-						public void testOne() {
-						}
-
-						@Test
-						public void testTwo() {
-						}
-
-						public void helperMethod() {
-						}
-					}
-					"""
-				),
-				java(
-					"""
-					public class ChildTest extends ParentTest {
-						@Override
-						public void testOne() {
-						}
-
-						@Override
-						public void testTwo() {
-						}
-
-						@Override
-						public void helperMethod() {
-						}
-					}
-					""",
-					"""
-					import org.junit.jupiter.api.Test;
-
-					public class ChildTest extends ParentTest {
-						@Override
-						@Test
-						public void testOne() {
-						}
-
-						@Override
-						@Test
-						public void testTwo() {
-						}
-
-						@Override
-						public void helperMethod() {
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("replacePatterns/01"), this.javaFixture("replacePatterns/02"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(
-				java(
-					"""
-					import org.junit.jupiter.api.BeforeEach;
-					import org.junit.jupiter.api.Test;
-
-					public class ParentNegative {
-						@Test
-						public void testMethod() {
-						}
-
-						public void helperMethod() {
-						}
-
-						@BeforeEach
-						public void setUp() {
-						}
-					}
-					"""
-				),
-				java(
-					"""
-					import org.junit.jupiter.api.Test;
-
-					public class ChildNegative extends ParentNegative {
-						@Test
-						@Override
-						public void testMethod() {
-						}
-
-						@Override
-						public void helperMethod() {
-						}
-
-						@Override
-						public void setUp() {
-						}
-
-						public void localMethod() {
-						}
-					}
-					"""
-				)
-			);
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02")
+		);
 	}
 }
