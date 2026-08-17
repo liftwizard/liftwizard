@@ -66,11 +66,11 @@ class ECSortedSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest
 					}
 					""",
 					"""
-					import org.eclipse.collections.api.factory.SortedSets;
-					import org.eclipse.collections.api.set.sorted.MutableSortedSet;
-
 					import java.util.Comparator;
 					import java.util.List;
+
+					import org.eclipse.collections.api.factory.SortedSets;
+					import org.eclipse.collections.api.set.sorted.MutableSortedSet;
 
 					class Test<T extends Comparable<T>> {
 					    private final MutableSortedSet<String> fieldInterfaceEmpty = SortedSets.mutable.empty();

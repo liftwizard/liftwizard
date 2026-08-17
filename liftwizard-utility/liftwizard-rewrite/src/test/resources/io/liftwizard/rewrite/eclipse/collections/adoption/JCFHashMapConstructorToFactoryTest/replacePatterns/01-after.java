@@ -1,0 +1,25 @@
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.collections.api.factory.Maps;
+
+class Test
+{
+	private final Map<String, String> fieldInterfaceEmpty = Maps.mutable.empty();
+	private final Map<String, Integer> fieldInterfaceCapacity = Maps.mutable.withInitialCapacity(10);
+	private final Map<String, String> fieldInterfaceMap = Maps.mutable.withMap(this.fieldInterfaceEmpty);
+
+	void test(Map<String, String> inputMap)
+	{
+		Map<String, Integer> typeInference = Maps.mutable.empty();
+		Map<String, List<Integer>> nestedGenerics = Maps.mutable.empty();
+		Map<String, ? extends Number> wildcardGenerics = Maps.mutable.empty();
+		Map<String, Integer> explicitSimple = Maps.mutable.<String, Integer>empty();
+		Map<String, List<Integer>> explicitNested = Maps.mutable.<String, List<Integer>>empty();
+		java.util.Map<String, Integer> fullyQualified = Maps.mutable.empty();
+		Map<String, Integer> withCapacity20 = Maps.mutable.withInitialCapacity(20);
+		Map<String, Integer> explicit30 = Maps.mutable.<String, Integer>withInitialCapacity(30);
+		Map<String, String> interfaceFromMap = Maps.mutable.withMap(inputMap);
+		Map<String, String> fromMap = Maps.mutable.withMap(this.fieldInterfaceEmpty);
+	}
+}
