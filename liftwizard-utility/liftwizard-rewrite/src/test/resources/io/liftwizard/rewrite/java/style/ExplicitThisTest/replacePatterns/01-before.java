@@ -1,0 +1,92 @@
+import java.util.function.Consumer;
+
+class Parent
+{
+	private String parentField;
+
+	Parent(String value)
+	{
+		parentField = value;
+	}
+}
+
+class Test
+	extends Parent
+{
+	private String field;
+	private String field1;
+	private String field2;
+	private static String staticField;
+	private String alreadyPrefixed;
+
+	private String fieldInit1 = "initial";
+	private String fieldInit2 = field1;
+	private String fieldInit3 = field1 + field2;
+
+	private static String staticFieldInit = staticField;
+
+	static
+	{
+		staticField = "static initializer";
+		staticHelper();
+	}
+
+	{
+		field = "instance initializer";
+		field1 = field2;
+	}
+
+	Test(String value)
+	{
+		super(value);
+		field = "constructor";
+		field1 = field2;
+	}
+
+	Test()
+	{
+		this("default");
+	}
+
+	void instanceMethod(String parameter)
+	{
+		field = "value";
+		field1 = field2;
+		helper();
+		staticField = "static context";
+		staticMethod();
+
+		String localVariable = parameter;
+		String result = parameter + localVariable;
+
+		this.alreadyPrefixed = "already has this";
+		this.alreadyPrefixedMethod();
+		super.toString();
+
+		Consumer<String> lambda = (s) ->
+		{
+			field = s;
+			field1 = field2;
+		};
+
+		Runnable runnable = () -> field = "lambda";
+	}
+
+	static void staticMethod()
+	{
+		staticField = "static context";
+		staticHelper();
+	}
+
+	void helper()
+	{
+	}
+
+	void alreadyPrefixedMethod()
+	{
+	}
+
+	static void staticHelper()
+	{
+	}
+}

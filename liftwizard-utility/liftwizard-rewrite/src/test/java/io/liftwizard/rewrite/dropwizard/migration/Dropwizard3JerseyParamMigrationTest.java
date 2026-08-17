@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -23,9 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class Dropwizard3JerseyParamMigrationTest implements RewriteTest {
+class Dropwizard3JerseyParamMigrationTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -118,93 +117,11 @@ class Dropwizard3JerseyParamMigrationTest implements RewriteTest {
 	@Test
 	@DocumentExample
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.jersey.params.InstantParam;
-					import io.dropwizard.jersey.params.LocalDateParam;
-					import io.dropwizard.jersey.params.DateTimeParam;
-					import io.dropwizard.jersey.params.BooleanParam;
-					import io.dropwizard.jersey.params.DurationParam;
-					import io.dropwizard.jersey.params.SizeParam;
-
-					class Test {
-						void packageMoves(InstantParam instant, LocalDateParam date) {
-							Object a = instant.get();
-							Object b = date.get();
-						}
-
-						void dateTimeParamReplacement(DateTimeParam dateTime) {
-							Object value = dateTime.get();
-						}
-
-						void unwrapBooleanParam(BooleanParam flag) {
-							Boolean value = flag.get();
-						}
-
-						void unwrapDurationParam(DurationParam duration) {
-							Object value = duration.get();
-						}
-
-						void unwrapSizeParam(SizeParam size) {
-							Object value = size.get();
-						}
-					}
-					""",
-					"""
-					import java.time.Duration;
-
-					import io.dropwizard.jersey.jsr310.InstantParam;
-					import io.dropwizard.jersey.jsr310.LocalDateParam;
-					import io.dropwizard.jersey.jsr310.ZonedDateTimeParam;
-					import io.dropwizard.util.DataSize;
-
-					class Test {
-						void packageMoves(InstantParam instant, LocalDateParam date) {
-							Object a = instant.get();
-							Object b = date.get();
-						}
-
-						void dateTimeParamReplacement(ZonedDateTimeParam dateTime) {
-							Object value = dateTime.get();
-						}
-
-						void unwrapBooleanParam(Boolean flag) {
-							Boolean value = flag;
-						}
-
-						void unwrapDurationParam(Duration duration) {
-							Object value = duration;
-						}
-
-						void unwrapSizeParam(DataSize size) {
-							Object value = size;
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.jersey.params.IntParam;
-
-					class Test {
-						void intParamStaysInParams(IntParam intParam) {
-							int value = intParam.get();
-						}
-
-						void alreadyUsingRawTypes(Boolean flag, java.time.Duration duration) {
-							boolean b = flag;
-							long millis = duration.toMillis();
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

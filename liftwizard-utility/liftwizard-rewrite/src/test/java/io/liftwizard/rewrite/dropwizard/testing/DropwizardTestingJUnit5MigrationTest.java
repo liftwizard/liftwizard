@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.testing;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -23,9 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
+class DropwizardTestingJUnit5MigrationTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -135,95 +134,11 @@ class DropwizardTestingJUnit5MigrationTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.junit.ClassRule;
-					import org.junit.Rule;
-					import io.dropwizard.testing.junit.DropwizardAppRule;
-					import io.dropwizard.testing.junit.DropwizardClientRule;
-					import io.dropwizard.testing.junit.ResourceTestRule;
-
-					class MyTest {
-						@ClassRule
-						public static DropwizardAppRule<Object> APP_RULE =
-								new DropwizardAppRule<>(Object.class, "config.yml");
-
-						@Rule
-						public DropwizardAppRule<Object> instanceRule =
-								new DropwizardAppRule<>(Object.class, "config.yml");
-
-						@ClassRule
-						public static DropwizardClientRule CLIENT_RULE =
-								new DropwizardClientRule(new Object());
-
-						@ClassRule
-						public static ResourceTestRule RESOURCES = ResourceTestRule.builder()
-								.addResource(new Object())
-								.build();
-					}
-					""",
-					"""
-					import io.dropwizard.testing.junit5.DropwizardClientExtension;
-					import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
-					import io.dropwizard.testing.junit5.ResourceExtension;
-					import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
-					import org.junit.jupiter.api.extension.ExtendWith;
-					import org.junit.jupiter.api.extension.RegisterExtension;
-
-					@ExtendWith(DropwizardExtensionsSupport.class)
-					class MyTest {
-						@RegisterExtension
-						public static LiftwizardAppExtension<Object> APP_RULE =
-								new LiftwizardAppExtension<>(Object.class, "config.yml");
-
-						@RegisterExtension
-						public LiftwizardAppExtension<Object> instanceRule =
-								new LiftwizardAppExtension<>(Object.class, "config.yml");
-
-						@RegisterExtension
-						public static DropwizardClientExtension CLIENT_RULE =
-								new DropwizardClientExtension(new Object());
-
-						@RegisterExtension
-						public static ResourceExtension RESOURCES = ResourceExtension.builder()
-								.addResource(new Object())
-								.build();
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.testing.junit5.DropwizardClientExtension;
-					import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
-					import io.dropwizard.testing.junit5.ResourceExtension;
-					import io.liftwizard.junit.extension.app.LiftwizardAppExtension;
-					import org.junit.jupiter.api.extension.ExtendWith;
-					import org.junit.jupiter.api.extension.RegisterExtension;
-
-					@ExtendWith(DropwizardExtensionsSupport.class)
-					class MyTest {
-						@RegisterExtension
-						public static LiftwizardAppExtension<Object> APP_RULE =
-								new LiftwizardAppExtension<>(Object.class, "config.yml");
-
-						@RegisterExtension
-						public static DropwizardClientExtension CLIENT_RULE =
-								new DropwizardClientExtension(new Object());
-
-						@RegisterExtension
-						public static ResourceExtension RESOURCES = ResourceExtension.builder()
-								.addResource(new Object())
-								.build();
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }
