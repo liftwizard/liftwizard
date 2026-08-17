@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.assertj;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -24,9 +25,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-import static org.openrewrite.java.Assertions.java;
-
-class VerifyAssertThrowsToAssertJTest implements RewriteTest {
+class VerifyAssertThrowsToAssertJTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -55,77 +54,16 @@ class VerifyAssertThrowsToAssertJTest implements RewriteTest {
 	@Test
 	void replacePatterns() {
 		this.rewriteRun(
-				(spec) ->
-					spec.typeValidationOptions(
-						TypeValidation.builder().identifiers(false).methodInvocations(false).build()
-					),
-				java(
-					"""
-					import org.eclipse.collections.impl.test.Verify;
-
-					import java.util.concurrent.Callable;
-
-					class Test {
-						void test() {
-							Verify.assertThrows(IllegalArgumentException.class, () -> {
-								throw new IllegalArgumentException("error");
-							});
-
-							Verify.assertThrows(NullPointerException.class, () -> {
-								throw new NullPointerException();
-							});
-
-							Callable<Object> failingCallable = () -> {
-								throw new RuntimeException("error");
-							};
-							Verify.assertThrows(RuntimeException.class, failingCallable);
-						}
-					}
-					""",
-					"""
-					import java.util.concurrent.Callable;
-
-					import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-					class Test {
-						void test() {
-							assertThatThrownBy(() -> {
-								throw new IllegalArgumentException("error");
-							}).isInstanceOf(IllegalArgumentException.class);
-
-							assertThatThrownBy(() -> {
-								throw new NullPointerException();
-							}).isInstanceOf(NullPointerException.class);
-
-							Callable<Object> failingCallable = () -> {
-								throw new RuntimeException("error");
-							};
-							assertThatThrownBy(failingCallable::call).isInstanceOf(RuntimeException.class);
-						}
-					}
-					"""
-				)
-			);
+			(spec) ->
+				spec.typeValidationOptions(
+					TypeValidation.builder().identifiers(false).methodInvocations(false).build()
+				),
+			this.javaFixture("replacePatterns/01")
+		);
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.concurrent.Callable;
-
-					import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-					class Test {
-						void test() {
-							assertThatThrownBy(() -> {
-								throw new IllegalArgumentException("error");
-							}).isInstanceOf(IllegalArgumentException.class);
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

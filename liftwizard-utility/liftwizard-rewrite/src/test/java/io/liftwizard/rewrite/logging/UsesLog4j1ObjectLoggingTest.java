@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.logging;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -24,9 +25,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class UsesLog4j1ObjectLoggingTest implements RewriteTest {
+class UsesLog4j1ObjectLoggingTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -42,142 +41,12 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					import java.util.function.Consumer;
-
-					class MyEvent {
-					    String name;
-					}
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void detectsObjectArgument(Object myObject) {
-					        LOGGER.info(myObject);
-					    }
-
-					    void detectsCustomTypeArgument(MyEvent event) {
-					        LOGGER.info(event);
-					    }
-
-					    void detectsAcrossLogLevels(Object obj) {
-					        LOGGER.trace(obj);
-					        LOGGER.debug(obj);
-					        LOGGER.warn(obj);
-					        LOGGER.error(obj);
-					        LOGGER.fatal(obj);
-					    }
-
-					    void detectsObjectMethodReference() {
-					        take(LOGGER::trace);
-					        take(LOGGER::debug);
-					        take(LOGGER::info);
-					        take(LOGGER::warn);
-					        take(LOGGER::error);
-					        take(LOGGER::fatal);
-					    }
-
-					    void take(Consumer<MyEvent> sink) {
-					    }
-					}
-					""",
-					"""
-					import org.apache.log4j.Logger;
-
-					import java.util.function.Consumer;
-
-					class MyEvent {
-					    String name;
-					}
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void detectsObjectArgument(Object myObject) {
-					        /*~~>*/LOGGER.info(myObject);
-					    }
-
-					    void detectsCustomTypeArgument(MyEvent event) {
-					        /*~~>*/LOGGER.info(event);
-					    }
-
-					    void detectsAcrossLogLevels(Object obj) {
-					        /*~~>*/LOGGER.trace(obj);
-					        /*~~>*/LOGGER.debug(obj);
-					        /*~~>*/LOGGER.warn(obj);
-					        /*~~>*/LOGGER.error(obj);
-					        /*~~>*/LOGGER.fatal(obj);
-					    }
-
-					    void detectsObjectMethodReference() {
-					        take(/*~~>*/LOGGER::trace);
-					        take(/*~~>*/LOGGER::debug);
-					        take(/*~~>*/LOGGER::info);
-					        take(/*~~>*/LOGGER::warn);
-					        take(/*~~>*/LOGGER::error);
-					        take(/*~~>*/LOGGER::fatal);
-					    }
-
-					    void take(Consumer<MyEvent> sink) {
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					import java.util.function.Consumer;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void doesNotDetectStringLiteral() {
-					        LOGGER.info("Simple message");
-					    }
-
-					    void doesNotDetectStringVariable(String message) {
-					        LOGGER.info(message);
-					    }
-
-					    void doesNotDetectStringConcatenation(String name) {
-					        LOGGER.info("Hello " + name);
-					    }
-
-					    void doesNotDetectThrowables(Exception exception) {
-					        LOGGER.error(exception);
-					        LOGGER.error(exception.getClass().getName(), exception);
-					    }
-
-					    void doesNotDetectStringBuilder(StringBuilder builder) {
-					        LOGGER.info(builder);
-					    }
-
-					    void doesNotDetectStringMethodReference() {
-					        take(LOGGER::trace);
-					        take(LOGGER::debug);
-					        take(LOGGER::info);
-					        take(LOGGER::warn);
-					        take(LOGGER::error);
-					        take(LOGGER::fatal);
-					    }
-
-					    void take(Consumer<String> sink) {
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 
 	@Test
@@ -196,34 +65,11 @@ class UsesLog4j1ObjectLoggingTest implements RewriteTest {
 			""";
 
 		this.rewriteRun(
-				(spec) ->
-					spec.parser(
-						JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).dependsOn(severedLoggerStub)
-					),
-				java(
-					"""
-					import org.apache.log4j.Logger;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(Object myObject) {
-					        LOGGER.info(myObject);
-					    }
-					}
-					""",
-					"""
-					import org.apache.log4j.Logger;
-
-					class Test {
-					    private static final Logger LOGGER = Logger.getLogger(Test.class);
-
-					    void test(Object myObject) {
-					        /*~~>*/LOGGER.info(myObject);
-					    }
-					}
-					"""
-				)
-			);
+			(spec) ->
+				spec.parser(
+					JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles()).dependsOn(severedLoggerStub)
+				),
+			this.javaFixture("detectsObjectArgumentWhenLoggerInheritanceIsSevered/01")
+		);
 	}
 }
