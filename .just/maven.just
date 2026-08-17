@@ -12,6 +12,9 @@ default_spotless_profiles := env('MVN_SPOTLESS_PROFILES', "spotless-apply,spotle
 default_profiles := env('MVN_PROFILES', "--activate-profiles " + default_verify_profiles + "," + default_checkstyle_profiles + "," + default_spotless_profiles)
 
 # Run `mvn` with configurable target, profiles, and flags
+[arg("MVN", long="mvn", help="Maven binary to use")]
+[arg("TARGET", long="target", help="Maven target/phase to run")]
+[arg("PROFILES", long="profiles", help="Maven profile activation string")]
 mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags:
     #!/usr/bin/env bash
     set -uo pipefail
@@ -54,45 +57,62 @@ _clean-m2:
     just _run "git clean --quiet --force -dx release.properties **/pom.xml.releaseBackup"
 
 # `mvn verify` without tests
+[arg("MVN", long="mvn", help="Maven binary to use")]
 compile MVN=default_mvn: (mvn MVN "verify" "" skip_tests_flags)
 
 # `mvn verify` with tests
+[arg("MVN", long="mvn", help="Maven binary to use")]
 test MVN=default_mvn *FLAGS="": (mvn MVN "verify" "" (default_flags + " " + FLAGS))
 
 # `mvn verify` with tests and rerecord profile
+[arg("MVN", long="mvn", help="Maven binary to use")]
 test-rerecord MVN=default_mvn: (mvn MVN "verify" "--activate-profiles rerecord" default_flags)
 
 # `mvn install`
+[arg("MVN", long="mvn", help="Maven binary to use")]
 install MVN=default_mvn: (mvn MVN "install" "" skip_tests_flags)
 
 # `mvn` with enforcer plugin
+[arg("MVN", long="mvn", help="Maven binary to use")]
 enforcer MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-enforcer-plugin" skip_tests_flags)
 
 # `mvn` with dependency plugin
+[arg("MVN", long="mvn", help="Maven binary to use")]
 dependency MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-dependency-plugin" skip_tests_flags)
 
 # `mvn` with javadoc plugin
+[arg("MVN", long="mvn", help="Maven binary to use")]
 javadoc MVN=default_mvn: (mvn MVN "verify" "--activate-profiles maven-javadoc-plugin" skip_tests_flags)
 
 # `mvn` with jacoco plugin for code coverage
+[arg("MVN", long="mvn", help="Maven binary to use")]
 coverage MVN=default_mvn: (mvn MVN "verify" "--activate-profiles jacoco-maven-plugin" default_flags)
 
 # `mvn` with errorprone
+[arg("MVN", long="mvn", help="Maven binary to use")]
 errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags)
 
 # `mvn` with errorprone-strict
+[arg("MVN", long="mvn", help="Maven binary to use")]
 errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-strict" skip_tests_flags)
 
 # `mvn` with errorprone-patch to generate auto-fixes
+[arg("MVN", long="mvn", help="Maven binary to use")]
 errorprone-patch MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-patch" skip_tests_flags)
 
 # `mvn` with spotbugs
+[arg("MVN", long="mvn", help="Maven binary to use")]
 spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin" skip_tests_flags)
 
 # `mvn checkstyle:check` with the given profile
+[arg("PROFILE", long="profile", help="Checkstyle profile name")]
+[arg("FAIL_ON_VIOLATION", long="warn", value="false", help="Warn without failing")]
+[arg("MVN", long="mvn", help="Maven binary to use")]
 checkstyle-profile PROFILE FAIL_ON_VIOLATION="true" MVN="mvn": (mvn MVN "checkstyle:check" ("--activate-profiles " + PROFILE) (default_flags + " -Dcheckstyle.failOnViolation=" + FAIL_ON_VIOLATION))
 
 # Run checkstyle with all profiles
+[arg("FAIL_ON_VIOLATION", long="warn", value="false", help="Warn without failing")]
+[arg("MVN", long="mvn", help="Maven binary to use")]
 checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
     (checkstyle-profile "checkstyle-semantics" FAIL_ON_VIOLATION MVN) \
     (checkstyle-profile "checkstyle-formatting" FAIL_ON_VIOLATION MVN) \
@@ -100,21 +120,29 @@ checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
     (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
 
 # spotless
+[arg("NAME", long="name", help="Spotless formatter name")]
+[arg("MVN", long="mvn", help="Maven binary to use")]
 spotless NAME MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent' --activate-profiles spotless-apply,spotless-" + NAME) default_flags)
 
 # spotless-all
+[arg("MVN", long="mvn", help="Maven binary to use")]
 spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent' --activate-profiles " + default_spotless_profiles) default_flags)
 
 # `mvn` with reproducible build check
+[arg("MVN", long="mvn", help="Maven binary to use")]
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags)
 
 # `mvn` rewrite dry run
+[arg("MVN", long="mvn", help="Maven binary to use")]
 rewrite-dry-run MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun") rewrite_flags)
 
 # `mvn` rewrite run
+[arg("MVN", long="mvn", help="Maven binary to use")]
 rewrite-run MVN=default_mvn: clean (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" (rewrite_projects + " --activate-profiles rewrite-maven-plugin") rewrite_flags)
 
 # `mvn` with rewrite-maven-plugin for single recipe
+[arg("RECIPE", long="recipe", help="OpenRewrite recipe class name")]
+[arg("MVN", long="mvn", help="Maven binary to use")]
 rewrite RECIPE MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" ("--projects '" + rewrite_project_exclusions + ",!liftwizard-example' --activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) rewrite_flags)
 
 # display available updates (dependencies, plugins, properties)
@@ -134,6 +162,7 @@ rewrite RECIPE MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-pl
     just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} buildplan:list-phase"
 
 # `mvn wrapper:wrapper`
+[arg("VERSION", long="version", help="Version to use")]
 @wrapper VERSION:
     just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} wrapper:wrapper -Dmaven={{ANSI_YELLOW}}{{VERSION}}{{ANSI_DEFAULT}}"
 
@@ -193,4 +222,5 @@ release:
     just _run "gh run watch {{ANSI_YELLOW}}${run_id}{{ANSI_DEFAULT}}"
 
 # `mvn deploy`
+[arg("MVN", long="mvn", help="Maven binary to use")]
 deploy MVN="mvn": (mvn MVN "deploy" "--activate-profiles maven-central-deploy,deploy,maven-javadoc-plugin" "")
