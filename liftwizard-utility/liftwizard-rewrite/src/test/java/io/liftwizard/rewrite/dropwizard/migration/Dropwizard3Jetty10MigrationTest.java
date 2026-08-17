@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -23,9 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class Dropwizard3Jetty10MigrationTest implements RewriteTest {
+class Dropwizard3Jetty10MigrationTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -71,57 +70,11 @@ class Dropwizard3Jetty10MigrationTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.jetty.util.component.AbstractLifeCycle;
-					import org.eclipse.jetty.util.component.ContainerLifeCycle;
-					import org.eclipse.jetty.util.component.LifeCycle;
-
-					class MyComponent {
-					    void onAbstractLifeCycle(AbstractLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addLifeCycleListener(listener);
-					    }
-
-					    void onContainerLifeCycle(ContainerLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addLifeCycleListener(listener);
-					    }
-					}
-					""",
-					"""
-					import org.eclipse.jetty.util.component.AbstractLifeCycle;
-					import org.eclipse.jetty.util.component.ContainerLifeCycle;
-					import org.eclipse.jetty.util.component.LifeCycle;
-
-					class MyComponent {
-					    void onAbstractLifeCycle(AbstractLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addEventListener(listener);
-					    }
-
-					    void onContainerLifeCycle(ContainerLifeCycle lifecycle, LifeCycle.Listener listener) {
-					        lifecycle.addEventListener(listener);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.EventListener;
-					import org.eclipse.jetty.util.component.AbstractLifeCycle;
-
-					class MyComponent {
-					    void alreadyUsingAddEventListener(AbstractLifeCycle lifecycle, EventListener listener) {
-					        lifecycle.addEventListener(listener);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }
