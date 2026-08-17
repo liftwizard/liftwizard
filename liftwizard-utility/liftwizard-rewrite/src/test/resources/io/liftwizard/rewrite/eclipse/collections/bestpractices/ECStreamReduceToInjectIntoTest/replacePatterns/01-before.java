@@ -1,0 +1,44 @@
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.set.MutableSet;
+
+class Test
+{
+	Integer withMethodReference(MutableList<Integer> list)
+	{
+		return list.stream().reduce(0, Integer::sum);
+	}
+
+	Integer withLambda(MutableList<Integer> list)
+	{
+		return list.stream().reduce(0, (a, b) -> a + b);
+	}
+
+	Integer withImmutableList(ImmutableList<Integer> list)
+	{
+		return list.stream().reduce(0, Integer::sum);
+	}
+
+	Integer withMutableSet(MutableSet<Integer> set)
+	{
+		return set.stream().reduce(1, (a, b) -> a * b);
+	}
+
+	String withStringConcat(MutableList<String> list)
+	{
+		return list.stream().reduce("", String::concat);
+	}
+
+	void inIfCondition(MutableList<Integer> list)
+	{
+		Integer sum = list.stream().reduce(0, Integer::sum);
+		if (list.stream().reduce(0, Integer::sum) > 100)
+		{
+			this.doWork();
+		}
+	}
+
+	void doWork()
+	{
+	}
+}

@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECStreamFindFirstToDetectOptionalTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,116 +32,11 @@ class ECStreamFindFirstToDetectOptionalTest extends AbstractEclipseCollectionsTe
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Optional;
-					import java.util.function.Predicate;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    Optional<String> streamFilterFindFirst(MutableList<String> list, Predicate<String> predicate) {
-					        return list.stream().filter(predicate).findFirst();
-					    }
-
-					    Optional<String> withLambdaPredicate(MutableList<String> list) {
-					        return list.stream().filter(s -> s.length() > 5).findFirst();
-					    }
-
-					    Optional<String> withMethodReferencePredicate(MutableList<String> list) {
-					        return list.stream().filter(String::isEmpty).findFirst();
-					    }
-
-					    Optional<String> withImmutableList(ImmutableList<String> list, Predicate<String> predicate) {
-					        return list.stream().filter(predicate).findFirst();
-					    }
-
-					    Optional<Integer> withMutableSet(MutableSet<Integer> set, Predicate<Integer> predicate) {
-					        return set.stream().filter(predicate).findFirst();
-					    }
-
-					    void inIfPresent(MutableList<String> list) {
-					        list.stream().filter(String::isEmpty).findFirst().ifPresent(System.out::println);
-					    }
-
-					    String withOrElse(MutableList<String> list) {
-					        return list.stream().filter(s -> s.length() > 5).findFirst().orElse("default");
-					    }
-					}
-					""",
-					"""
-					import java.util.Optional;
-					import java.util.function.Predicate;
-
-					import org.eclipse.collections.api.list.ImmutableList;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.set.MutableSet;
-
-					class Test {
-					    Optional<String> streamFilterFindFirst(MutableList<String> list, Predicate<String> predicate) {
-					        return list.detectOptional(predicate);
-					    }
-
-					    Optional<String> withLambdaPredicate(MutableList<String> list) {
-					        return list.detectOptional(s -> s.length() > 5);
-					    }
-
-					    Optional<String> withMethodReferencePredicate(MutableList<String> list) {
-					        return list.detectOptional(String::isEmpty);
-					    }
-
-					    Optional<String> withImmutableList(ImmutableList<String> list, Predicate<String> predicate) {
-					        return list.detectOptional(predicate);
-					    }
-
-					    Optional<Integer> withMutableSet(MutableSet<Integer> set, Predicate<Integer> predicate) {
-					        return set.detectOptional(predicate);
-					    }
-
-					    void inIfPresent(MutableList<String> list) {
-					        list.detectOptional(String::isEmpty).ifPresent(System.out::println);
-					    }
-
-					    String withOrElse(MutableList<String> list) {
-					        return list.detectOptional(s -> s.length() > 5).orElse("default");
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Optional;
-					import java.util.stream.Stream;
-
-					import org.eclipse.collections.api.list.MutableList;
-
-					class Test {
-					    Optional<String> withMultipleIntermediateOperations(MutableList<String> list) {
-					        return list.stream()
-					            .filter(s -> s.length() > 3)
-					            .map(String::toUpperCase)
-					            .findFirst();
-					    }
-
-					    Stream<String> onlyStream(MutableList<String> list) {
-					        return list.stream();
-					    }
-
-					    Optional<String> onlyFindFirst(MutableList<String> list) {
-					        return list.stream().findFirst();
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

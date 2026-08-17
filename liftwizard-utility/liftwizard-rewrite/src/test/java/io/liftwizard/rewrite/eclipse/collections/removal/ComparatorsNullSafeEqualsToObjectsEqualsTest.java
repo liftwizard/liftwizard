@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ComparatorsNullSafeEqualsToObjectsEqualsTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,33 +32,6 @@ class ComparatorsNullSafeEqualsToObjectsEqualsTest extends AbstractEclipseCollec
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.impl.block.factory.Comparators;
-
-					class Test {
-					    void test() {
-					        String left = "foo";
-					        String right = "bar";
-					        boolean equal = Comparators.nullSafeEquals(left, right);
-					        boolean notEqual = !Comparators.nullSafeEquals(left, right);
-					    }
-					}
-					""",
-					"""
-					import java.util.Objects;
-
-					class Test {
-					    void test() {
-					        String left = "foo";
-					        String right = "bar";
-					        boolean equal = Objects.equals(left, right);
-					        boolean notEqual = !Objects.equals(left, right);
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 }

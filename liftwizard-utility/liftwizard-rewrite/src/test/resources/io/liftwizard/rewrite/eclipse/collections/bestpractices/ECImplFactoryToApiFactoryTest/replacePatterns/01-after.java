@@ -1,0 +1,33 @@
+import org.eclipse.collections.api.factory.Bags;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.api.factory.SortedBags;
+import org.eclipse.collections.api.factory.SortedMaps;
+import org.eclipse.collections.api.factory.SortedSets;
+import org.eclipse.collections.api.factory.Stacks;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.set.MutableSet;
+
+public class Example
+{
+	private MutableList<String> listField = Lists.mutable.empty();
+	private final MutableSet<String> setField;
+
+	public Example()
+	{
+		this.setField = Sets.mutable.empty();
+	}
+
+	void method()
+	{
+		var list = Lists.mutable.empty();
+		var set = Sets.mutable.empty();
+		var map = Maps.mutable.empty();
+		var bag = Bags.mutable.empty();
+		var stack = Stacks.mutable.empty();
+		var sortedSet = SortedSets.mutable.empty();
+		var sortedMap = SortedMaps.mutable.empty();
+		var sortedBag = SortedBags.mutable.empty();
+	}
+}
