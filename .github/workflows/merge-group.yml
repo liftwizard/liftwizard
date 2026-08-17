@@ -238,7 +238,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Produce Checkstyle XML: Semantics"
-        run: just checkstyle-profile checkstyle-semantics false
+        run: just checkstyle-profile --profile checkstyle-semantics --warn
 
       - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
         with:
@@ -275,7 +275,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Produce Checkstyle XML: Strict Semantics"
-        run: just checkstyle-profile checkstyle-semantics-strict false
+        run: just checkstyle-profile --profile checkstyle-semantics-strict --warn
 
       - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
         with:
@@ -312,7 +312,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Produce Checkstyle XML: Formatting"
-        run: just checkstyle-profile checkstyle-formatting false
+        run: just checkstyle-profile --profile checkstyle-formatting --warn
 
       - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
         with:
@@ -401,7 +401,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Spotless Check: Formats"
-        run: just spotless formats
+        run: just spotless --name formats
 
       - name: "Check for local modifications"
         run: just _check-local-modifications
@@ -433,7 +433,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Spotless Check: Java cleanthat"
-        run: just spotless java-cleanthat
+        run: just spotless --name java-cleanthat
 
       - name: "Check for local modifications"
         run: just _check-local-modifications
@@ -465,7 +465,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Spotless Check: Java"
-        run: just spotless java
+        run: just spotless --name java
 
       - name: "Check for local modifications"
         run: just _check-local-modifications
@@ -497,7 +497,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Spotless Check: Prettier Java (with sorted imports)"
-        run: just spotless prettier-java-sort-imports
+        run: just spotless --name prettier-java-sort-imports
 
       - name: "Check for local modifications"
         run: just _check-local-modifications
@@ -529,7 +529,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Spotless Check: Sql"
-        run: just spotless sql
+        run: just spotless --name sql
 
       - name: "Check for local modifications"
         run: just _check-local-modifications
@@ -561,7 +561,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Spotless Check: Pom"
-        run: just spotless pom
+        run: just spotless --name pom
 
       - name: "Check for local modifications"
         run: just _check-local-modifications
