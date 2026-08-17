@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-import static org.openrewrite.java.Assertions.java;
-
 class ECAllSatisfyPredicatesNotToNoneSatisfyTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -34,66 +32,11 @@ class ECAllSatisfyPredicatesNotToNoneSatisfyTest extends AbstractEclipseCollecti
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.block.factory.Predicates;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-
-					class Test {
-					    void test(MutableList<String> list, Predicate<String> predicate) {
-					        boolean allSatisfyPredicatesNot = list.allSatisfy(Predicates.not(predicate));
-					        boolean allSatisfyPredicatesNotLambda = list.allSatisfy(Predicates.not(s -> s.length() > 5));
-					        boolean allSatisfyPredicatesNotMethodRef = list.allSatisfy(Predicates.not(String::isEmpty));
-
-					        if (list.allSatisfy(Predicates.not(s -> s.isEmpty()))) {
-					            this.doWork();
-					        }
-					    }
-
-					    void doWork() {}
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-
-					class Test {
-					    void test(MutableList<String> list, Predicate<String> predicate) {
-					        boolean allSatisfyPredicatesNot = list.noneSatisfy(predicate);
-					        boolean allSatisfyPredicatesNotLambda = list.noneSatisfy(s -> s.length() > 5);
-					        boolean allSatisfyPredicatesNotMethodRef = list.noneSatisfy(String::isEmpty);
-
-					        if (list.noneSatisfy(s -> s.isEmpty())) {
-					            this.doWork();
-					        }
-					    }
-
-					    void doWork() {}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.block.factory.Predicates;
-					import org.eclipse.collections.api.block.predicate.Predicate;
-
-					class Test {
-					    void test(MutableList<String> list, Predicate<String> predicate) {
-					        boolean nonNegatedAllSatisfy = list.allSatisfy(predicate);
-					        boolean withOtherPredicateMethod = list.allSatisfy(Predicates.alwaysTrue());
-					    }
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }
