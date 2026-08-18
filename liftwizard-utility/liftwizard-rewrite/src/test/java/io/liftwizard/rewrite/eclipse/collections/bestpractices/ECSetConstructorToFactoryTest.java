@@ -87,12 +87,12 @@ class ECSetConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 					}
 					""",
 					"""
+					import java.util.List;
+
 					import org.eclipse.collections.api.factory.Sets;
 					import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
 					import org.eclipse.collections.api.set.MutableSet;
 					import org.eclipse.collections.impl.set.immutable.ImmutableSetFactoryImpl;
-
-					import java.util.List;
 
 					class Test<T> {
 					    // Field declarations - interface type with various constructors

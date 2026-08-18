@@ -22,9 +22,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-import static org.openrewrite.java.Assertions.java;
-
-class AssertJMigrationYamlTest implements RewriteTest {
+class AssertJMigrationYamlTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -68,292 +66,37 @@ class AssertJMigrationYamlTest implements RewriteTest {
 
 	@Test
 	void transformsVerifyAssertCount() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.impl.test.Verify;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					class Test {
-						void test() {
-							MutableList<Integer> numbers = Lists.mutable.with(1, 2, 3, 4, 5);
-							Verify.assertCount(2, numbers, each -> each % 2 == 0);
-
-							MutableList<String> emptyList = Lists.mutable.empty();
-							Verify.assertCount(0, emptyList, s -> s.length() > 0);
-						}
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					import static org.assertj.core.api.Assertions.assertThat;
-
-					class Test {
-						void test() {
-							MutableList<Integer> numbers = Lists.mutable.with(1, 2, 3, 4, 5);
-							assertThat(numbers).filteredOn(each -> each % 2 == 0).hasSize(2);
-
-							MutableList<String> emptyList = Lists.mutable.empty();
-							assertThat(emptyList).filteredOn(s -> s.length() > 0).hasSize(0);
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("transformsVerifyAssertCount/01"));
 	}
 
 	@Test
 	void transformsVerifyAssertEmpty() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					import org.eclipse.collections.impl.test.Verify;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.empty();
-							Verify.assertEmpty("list should be empty", list);
-							Verify.assertEmpty(list);
-
-							Map<String, Integer> map = new HashMap<>();
-							Verify.assertEmpty("map should be empty", map);
-							Verify.assertEmpty(map);
-						}
-					}
-					""",
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					import static org.assertj.core.api.Assertions.assertThat;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.empty();
-							assertThat(list).as("list should be empty").isEmpty();
-							assertThat(list).isEmpty();
-
-							Map<String, Integer> map = new HashMap<>();
-							assertThat(map).as("map should be empty").isEmpty();
-							assertThat(map).isEmpty();
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("transformsVerifyAssertEmpty/01"));
 	}
 
 	@Test
 	void transformsVerifyAssertNotEmpty() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					import org.eclipse.collections.impl.test.Verify;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.with("a", "b");
-							Verify.assertNotEmpty("list should not be empty", list);
-							Verify.assertNotEmpty(list);
-
-							Map<String, Integer> map = new HashMap<>();
-							map.put("key", 1);
-							Verify.assertNotEmpty("map should not be empty", map);
-							Verify.assertNotEmpty(map);
-						}
-					}
-					""",
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					import static org.assertj.core.api.Assertions.assertThat;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.with("a", "b");
-							assertThat(list).as("list should not be empty").isNotEmpty();
-							assertThat(list).isNotEmpty();
-
-							Map<String, Integer> map = new HashMap<>();
-							map.put("key", 1);
-							assertThat(map).as("map should not be empty").isNotEmpty();
-							assertThat(map).isNotEmpty();
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("transformsVerifyAssertNotEmpty/01"));
 	}
 
 	@Test
 	void transformsVerifyAssertSize() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					import org.eclipse.collections.impl.test.Verify;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.with("a", "b", "c");
-							Verify.assertSize("list should have size 3", 3, list);
-							Verify.assertSize(3, list);
-
-							String[] array = new String[]{"a", "b", "c"};
-							Verify.assertSize("array should have size 3", 3, array);
-							Verify.assertSize(3, array);
-
-							Map<String, Integer> map = new HashMap<>();
-							map.put("a", 1);
-							map.put("b", 2);
-							Verify.assertSize("map should have size 2", 2, map);
-							Verify.assertSize(2, map);
-						}
-					}
-					""",
-					"""
-					import java.util.HashMap;
-					import java.util.Map;
-
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					import static org.assertj.core.api.Assertions.assertThat;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.with("a", "b", "c");
-							assertThat(list).as("list should have size 3").hasSize(3);
-							assertThat(list).hasSize(3);
-
-							String[] array = new String[]{"a", "b", "c"};
-							assertThat(array).as("array should have size 3").hasSize(3);
-							assertThat(array).hasSize(3);
-
-							Map<String, Integer> map = new HashMap<>();
-							map.put("a", 1);
-							map.put("b", 2);
-							assertThat(map).as("map should have size 2").hasSize(2);
-							assertThat(map).hasSize(2);
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("transformsVerifyAssertSize/01"));
 	}
 
 	@Test
 	void transformsVerifyAssertThrows() {
 		this.rewriteRun(
-				(spec) ->
-					spec.typeValidationOptions(
-						TypeValidation.builder().identifiers(false).methodInvocations(false).build()
-					),
-				java(
-					"""
-					import org.eclipse.collections.impl.test.Verify;
-
-					import java.util.concurrent.Callable;
-
-					class Test {
-						void test() {
-							Verify.assertThrows(IllegalArgumentException.class, () -> {
-								throw new IllegalArgumentException("error");
-							});
-
-							Verify.assertThrows(NullPointerException.class, () -> {
-								throw new NullPointerException();
-							});
-
-							Callable<Object> failingCallable = () -> {
-								throw new RuntimeException("error");
-							};
-							Verify.assertThrows(RuntimeException.class, failingCallable);
-						}
-					}
-					""",
-					"""
-					import java.util.concurrent.Callable;
-
-					import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-					class Test {
-						void test() {
-							assertThatThrownBy(() -> {
-								throw new IllegalArgumentException("error");
-							}).isInstanceOf(IllegalArgumentException.class);
-
-							assertThatThrownBy(() -> {
-								throw new NullPointerException();
-							}).isInstanceOf(NullPointerException.class);
-
-							Callable<Object> failingCallable = () -> {
-								throw new RuntimeException("error");
-							};
-							assertThatThrownBy(failingCallable::call).isInstanceOf(RuntimeException.class);
-						}
-					}
-					"""
-				)
-			);
+			(spec) ->
+				spec.typeValidationOptions(
+					TypeValidation.builder().identifiers(false).methodInvocations(false).build()
+				),
+			this.javaFixture("transformsVerifyAssertThrows/01")
+		);
 	}
 
 	@Test
 	void appliesStaticImportOptimization() {
-		this.rewriteRun(
-				java(
-					"""
-					import org.eclipse.collections.impl.test.Verify;
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.with("a", "b", "c");
-							Verify.assertSize(3, list);
-							Verify.assertNotEmpty(list);
-						}
-					}
-					""",
-					"""
-					import org.eclipse.collections.api.list.MutableList;
-					import org.eclipse.collections.impl.factory.Lists;
-
-					import static org.assertj.core.api.Assertions.assertThat;
-
-					class Test {
-						void test() {
-							MutableList<String> list = Lists.mutable.with("a", "b", "c");
-							assertThat(list).hasSize(3);
-							assertThat(list).isNotEmpty();
-						}
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("appliesStaticImportOptimization/01"));
 	}
 }

@@ -69,10 +69,10 @@ class ECMapConstructorToFactoryTest extends AbstractEclipseCollectionsTest {
 					}
 					""",
 					"""
+					import java.util.List;
+
 					import org.eclipse.collections.api.factory.Maps;
 					import org.eclipse.collections.api.map.MutableMap;
-
-					import java.util.List;
 
 					class Test<T> {
 					    private final MutableMap<String, String> fieldInterfaceEmpty = Maps.mutable.empty();

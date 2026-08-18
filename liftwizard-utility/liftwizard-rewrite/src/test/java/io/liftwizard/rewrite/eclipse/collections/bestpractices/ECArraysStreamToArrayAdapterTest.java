@@ -93,12 +93,12 @@ class ECArraysStreamToArrayAdapterTest extends AbstractEclipseCollectionsTest {
 					}
 					""",
 					"""
-					import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
-
 					import java.util.Comparator;
 					import java.util.List;
 					import java.util.Optional;
 					import java.util.Set;
+
+					import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
 
 					class Test {
 					    void directTerminals(String[] values, String[] names) {

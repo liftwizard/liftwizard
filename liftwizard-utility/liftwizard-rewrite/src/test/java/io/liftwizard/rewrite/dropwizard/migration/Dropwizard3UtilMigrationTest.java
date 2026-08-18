@@ -16,6 +16,7 @@
 
 package io.liftwizard.rewrite.dropwizard.migration;
 
+import io.liftwizard.rewrite.AbstractRewriteFixtures;
 import io.liftwizard.rewrite.AbstractRewriteStyles;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -23,9 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.Assertions.java;
-
-class Dropwizard3UtilMigrationTest implements RewriteTest {
+class Dropwizard3UtilMigrationTest implements AbstractRewriteFixtures, RewriteTest {
 
 	@Override
 	public void defaults(RecipeSpec spec) {
@@ -54,39 +53,11 @@ class Dropwizard3UtilMigrationTest implements RewriteTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import io.dropwizard.util.Sets;
-					import java.util.Set;
-
-					class MyConfig {
-					    Set<String> allowed = Sets.of("a", "b", "c");
-					}
-					""",
-					"""
-					import java.util.Set;
-
-					class MyConfig {
-					    Set<String> allowed = Set.of("a", "b", "c");
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns() {
-		this.rewriteRun(
-				java(
-					"""
-					import java.util.Set;
-
-					class MyConfig {
-					    Set<String> allowed = Set.of("a", "b", "c");
-					}
-					"""
-				)
-			);
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }

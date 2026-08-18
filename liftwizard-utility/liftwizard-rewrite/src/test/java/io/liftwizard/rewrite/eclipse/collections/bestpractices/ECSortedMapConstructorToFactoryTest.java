@@ -71,13 +71,13 @@ class ECSortedMapConstructorToFactoryTest extends AbstractEclipseCollectionsTest
 					}
 					""",
 					"""
-					import org.eclipse.collections.api.factory.SortedMaps;
-					import org.eclipse.collections.api.map.sorted.MutableSortedMap;
-
 					import java.util.Comparator;
 					import java.util.List;
 					import java.util.SortedMap;
 					import java.util.TreeMap;
+
+					import org.eclipse.collections.api.factory.SortedMaps;
+					import org.eclipse.collections.api.map.sorted.MutableSortedMap;
 
 					class Test<T extends Comparable<T>> {
 					    private final MutableSortedMap<String, String> fieldInterfaceEmpty = SortedMaps.mutable.empty();
