@@ -18,6 +18,11 @@ package io.liftwizard.reladomo.json.test.extension;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -27,12 +32,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gs.fw.common.mithra.MithraDataObject;
+import com.gs.fw.common.mithra.attribute.TimestampAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JsonTestDataParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsonTestDataParser.class);
+	private static final Class<?>[] NO_PARAMS = {};
 
 	@Nonnull
 	private final String filename;
@@ -87,9 +94,47 @@ public class JsonTestDataParser {
 			String dataClassName = this.className + "Data";
 			Class<?> dataClass = Class.forName(dataClassName);
 			this.dataObjects = objectMapper.readerForListOf(dataClass).readValue(arrayNode);
-		} catch (ClassNotFoundException | IOException e) {
+			this.convertTimestampsFromUtc(arrayNode);
+		} catch (IOException | ReflectiveOperationException e) {
 			throw new RuntimeException("Error reading JSON file: " + this.filename, e);
 		}
+	}
+
+	private void convertTimestampsFromUtc(ArrayNode arrayNode)
+		throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		Class<?> finderClass = Class.forName(this.className + "Finder");
+		for (var rowIndex = 0; rowIndex < arrayNode.size(); rowIndex++) {
+			JsonNode row = arrayNode.get(rowIndex);
+			MithraDataObject dataObject = this.dataObjects.get(rowIndex);
+			var fieldNames = row.fieldNames();
+			while (fieldNames.hasNext()) {
+				String fieldName = fieldNames.next();
+				Method attributeMethod = finderClass.getMethod(fieldName, NO_PARAMS);
+				Object attribute = attributeMethod.invoke(null);
+				if (attribute instanceof TimestampAttribute timestampAttribute) {
+					Timestamp timestamp = timestampAttribute.valueOf(dataObject);
+					timestampAttribute.setTimestampValue(
+						dataObject,
+						convertTimestampFromUtc(timestampAttribute, timestamp)
+					);
+				}
+			}
+		}
+	}
+
+	private static Timestamp convertTimestampFromUtc(TimestampAttribute<?> timestampAttribute, Timestamp timestamp) {
+		if (timestamp == null) {
+			return null;
+		}
+		LocalDateTime utcDateTime = LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC);
+		if (
+			timestampAttribute.isAsOfAttributeTo()
+			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
+				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
+		) {
+			return timestampAttribute.getAsOfAttributeInfinity();
+		}
+		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
 	}
 
 	@Nonnull

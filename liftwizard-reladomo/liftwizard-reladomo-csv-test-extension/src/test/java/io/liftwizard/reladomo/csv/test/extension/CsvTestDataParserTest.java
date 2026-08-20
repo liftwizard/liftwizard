@@ -17,7 +17,7 @@
 package io.liftwizard.reladomo.csv.test.extension;
 
 import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.helloworld.core.PersonData;
@@ -103,14 +103,14 @@ class CsvTestDataParserTest {
 		expectedAlice.setId(1L);
 		expectedAlice.setFullName("Alice Smith");
 		expectedAlice.setJobTitle("Engineer");
-		expectedAlice.setSystemFrom(Timestamp.from(Instant.parse("2024-01-01T00:00:00.000Z")));
+		expectedAlice.setSystemFrom(Timestamp.valueOf(LocalDateTime.parse("2024-01-01T00:00:00.000")));
 		expectedAlice.setSystemTo(PersonFinder.systemTo().getAsOfAttributeInfinity());
 
 		var expectedBob = new PersonData();
 		expectedBob.setId(2L);
 		expectedBob.setFullName("Bob Jones");
 		expectedBob.setJobTitle("Manager");
-		expectedBob.setSystemFrom(Timestamp.from(Instant.parse("2024-01-15T00:00:00.000Z")));
+		expectedBob.setSystemFrom(Timestamp.valueOf(LocalDateTime.parse("2024-01-15T00:00:00.000")));
 		expectedBob.setSystemTo(PersonFinder.systemTo().getAsOfAttributeInfinity());
 
 		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");

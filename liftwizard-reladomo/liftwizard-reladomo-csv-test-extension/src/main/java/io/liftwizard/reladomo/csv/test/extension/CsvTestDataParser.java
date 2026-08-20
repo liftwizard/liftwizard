@@ -27,6 +27,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -196,8 +198,7 @@ public class CsvTestDataParser {
 		@Nonnull String value
 	) {
 		if (attribute instanceof TimestampAttribute timestampAttribute) {
-			Instant instant = Instant.parse(value);
-			Timestamp timestamp = Timestamp.from(instant);
+			Timestamp timestamp = parseTimestamp(timestampAttribute, value);
 			timestampAttribute.setTimestampValue(dataObject, timestamp);
 		} else if (attribute instanceof DateAttribute dateAttribute) {
 			LocalDate localDate = LocalDate.parse(value);
@@ -218,6 +219,20 @@ public class CsvTestDataParser {
 		} else {
 			throw new UnsupportedOperationException("Unsupported attribute type: " + attribute.getClass().getName());
 		}
+	}
+
+	static Timestamp parseTimestamp(TimestampAttribute<?> timestampAttribute, String value) {
+		Instant instant = Instant.parse(value);
+		Timestamp timestamp = Timestamp.from(instant);
+		LocalDateTime utcDateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+		if (
+			timestampAttribute.isAsOfAttributeTo()
+			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
+				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
+		) {
+			return timestampAttribute.getAsOfAttributeInfinity();
+		}
+		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
 	}
 
 	@Nonnull
