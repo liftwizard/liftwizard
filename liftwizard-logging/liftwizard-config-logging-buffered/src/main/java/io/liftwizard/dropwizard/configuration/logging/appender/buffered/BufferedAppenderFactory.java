@@ -33,6 +33,9 @@ import io.dropwizard.logging.layout.LayoutFactory;
 import io.liftwizard.logging.logback.appender.buffered.BufferedAppender;
 
 /**
+ * An {@link AppenderFactory} that builds a {@link BufferedAppender}, which holds log events in memory so that tests
+ * can assert on them.
+ *
  * @see <a href="https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappenderfactory">https://liftwizard.io/docs/logging/buffered-logging#buffered-logging-in-tests-bufferedappenderfactory</a>
  */
 @JsonTypeName("buffered")

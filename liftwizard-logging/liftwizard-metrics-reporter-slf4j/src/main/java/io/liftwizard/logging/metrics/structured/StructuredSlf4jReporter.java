@@ -43,6 +43,9 @@ import io.liftwizard.logging.metrics.structured.proxy.AbstractLoggerProxy;
 import org.slf4j.Marker;
 
 /**
+ * A {@link ScheduledReporter} that logs metrics to SLF4J as structured key-value pairs instead of a single
+ * preformatted message.
+ *
  * @see Slf4jReporter
  */
 public class StructuredSlf4jReporter extends ScheduledReporter {

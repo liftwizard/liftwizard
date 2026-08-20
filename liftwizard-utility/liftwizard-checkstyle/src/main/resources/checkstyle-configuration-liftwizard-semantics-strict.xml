@@ -148,10 +148,7 @@
             <property name="tags" value="noinspection" />
         </module>
         <module name="JavadocContentLocation" />
-        <module name="JavadocStyle">
-            <property name="scope" value="public" />
-            <property name="checkFirstSentence" value="false" />
-        </module>
+        <module name="SummaryJavadoc" />
         <module name="MissingJavadocPackage" />
         <module name="SingleLineJavadoc" />
         <!--endregion-->

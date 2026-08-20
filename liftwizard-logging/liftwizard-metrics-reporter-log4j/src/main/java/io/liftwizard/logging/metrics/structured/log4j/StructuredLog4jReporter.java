@@ -40,6 +40,9 @@ import com.codahale.metrics.Timer;
 import io.liftwizard.logging.metrics.structured.log4j.proxy.AbstractLoggerProxy;
 
 /**
+ * A {@link ScheduledReporter} that logs metrics to Log4j as structured key-value pairs instead of a single
+ * preformatted message.
+ *
  * @see com.codahale.metrics.Slf4jReporter
  */
 public class StructuredLog4jReporter extends ScheduledReporter {

@@ -27,7 +27,7 @@ import org.fusesource.jansi.AnsiType;
 import org.fusesource.jansi.io.AnsiOutputStream;
 
 /**
- * Based on the Jansi test <a href="https://github.com/fusesource/jansi/blob/master/src/test/java/org/fusesource/jansi/io/AnsiOutputStreamTest.java">AnsiOutputStreamTest</a>
+ * Based on the Jansi test <a href="https://github.com/fusesource/jansi/blob/master/src/test/java/org/fusesource/jansi/io/AnsiOutputStreamTest.java">AnsiOutputStreamTest</a>.
  */
 public final class AnsiColorStrip {
 

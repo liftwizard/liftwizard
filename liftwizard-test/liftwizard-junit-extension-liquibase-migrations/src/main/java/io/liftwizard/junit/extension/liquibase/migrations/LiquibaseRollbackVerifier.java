@@ -60,7 +60,9 @@ public final class LiquibaseRollbackVerifier {
 	}
 
 	/**
-	 * Verifies all changesets in the specified migrations file by:
+	 * Verifies all changesets in the specified migrations file.
+	 *
+	 * <p>Each changeset is verified by:
 	 * <ol>
 	 *   <li>Iterating through each changeset</li>
 	 *   <li>Applying the changeset</li>

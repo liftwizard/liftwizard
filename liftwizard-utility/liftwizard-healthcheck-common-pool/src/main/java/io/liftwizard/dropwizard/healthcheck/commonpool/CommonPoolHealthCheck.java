@@ -70,6 +70,8 @@ public class CommonPoolHealthCheck extends HealthCheck {
 	}
 
 	/**
+	 * Creates a health check that fails when a matching thread in the common pool is in an unhealthy state.
+	 *
 	 * @param threadNamePrefix      Threads with a name matching this prefix will be checked further. Default is {@code "ForkJoinPool.commonPool-worker-"}
 	 * @param threadStates          Unhealthy states. Default is {@code Set.of(State.RUNNABLE)}
 	 * @param alwaysAllowedPatterns Patterns that match traces that are allowed to put background tasks into the common pool. For example: com\.github\.benmane\.caffeine\.cache\..*
