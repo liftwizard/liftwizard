@@ -17,14 +17,16 @@
 package io.liftwizard.reladomo.json.test.extension;
 
 import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.helloworld.core.PersonData;
+import com.example.helloworld.core.PersonFinder;
 import com.gs.fw.common.mithra.MithraDataObject;
 import io.liftwizard.reladomo.test.extension.ExecuteSqlExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoPurgeAllExtension;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -89,25 +91,32 @@ class JsonTestDataParserTest {
 
 	@Test
 	void populatesDataObjectsWithCorrectValues() {
-		var expectedAlice = new PersonData();
-		expectedAlice.setId(1L);
-		expectedAlice.setFullName("Alice Smith");
-		expectedAlice.setJobTitle("Engineer");
-		expectedAlice.setSystemFrom(Timestamp.from(Instant.parse("2024-01-01T00:00:00.000Z")));
-		expectedAlice.setSystemTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
-
-		var expectedBob = new PersonData();
-		expectedBob.setId(2L);
-		expectedBob.setFullName("Bob Jones");
-		expectedBob.setJobTitle("Manager");
-		expectedBob.setSystemFrom(Timestamp.from(Instant.parse("2024-01-15T00:00:00.000Z")));
-		expectedBob.setSystemTo(Timestamp.from(Instant.parse("9999-12-01T23:59:00.000Z")));
-
 		var parser = new JsonTestDataParser("test-data/com.example.helloworld.core.Person.json");
 		List<MithraDataObject> dataObjects = parser.getDataObjects();
 
 		assertThat(dataObjects)
-			.usingRecursiveFieldByFieldElementComparator()
-			.containsExactly(expectedAlice, expectedBob);
+			.extracting(
+				(dataObject) -> ((PersonData) dataObject).getId(),
+				(dataObject) -> ((PersonData) dataObject).getFullName(),
+				(dataObject) -> ((PersonData) dataObject).getJobTitle(),
+				(dataObject) -> ((PersonData) dataObject).getSystemFrom(),
+				(dataObject) -> ((PersonData) dataObject).getSystemTo()
+			)
+			.containsExactly(
+				Tuple.tuple(
+					1L,
+					"Alice Smith",
+					"Engineer",
+					Timestamp.valueOf(LocalDateTime.parse("2024-01-01T00:00:00.000")),
+					PersonFinder.systemTo().getAsOfAttributeInfinity()
+				),
+				Tuple.tuple(
+					2L,
+					"Bob Jones",
+					"Manager",
+					Timestamp.valueOf(LocalDateTime.parse("2024-01-15T00:00:00.000")),
+					PersonFinder.systemTo().getAsOfAttributeInfinity()
+				)
+			);
 	}
 }

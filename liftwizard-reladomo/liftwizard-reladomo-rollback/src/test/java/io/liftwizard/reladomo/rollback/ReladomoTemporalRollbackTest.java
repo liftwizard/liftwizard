@@ -89,14 +89,15 @@ class ReladomoTemporalRollbackTest {
 		Person alice = PersonFinder.findOne(PersonFinder.id().eq(1L).and(PersonFinder.system().equalsEdgePoint()));
 		assertThat(alice).isNotNull();
 		assertThat(alice.getFullName()).isEqualTo("Alice");
-		assertThat(alice.getSystemTo().toInstant().atZone(ZoneOffset.UTC).getYear()).isEqualTo(9999);
+		assertThat(alice.getSystemFrom().toInstant()).isEqualTo(Instant.parse("2024-01-01T00:00:00Z"));
+		assertThat(alice.getSystemTo()).isEqualTo(PersonFinder.systemTo().getAsOfAttributeInfinity());
 
 		// Bob should now be active (system_to restored to infinity)
 		Person bob = PersonFinder.findOne(PersonFinder.id().eq(2L).and(PersonFinder.system().equalsEdgePoint()));
 		assertThat(bob).isNotNull();
 		assertThat(bob.getFullName()).isEqualTo("Bob");
 		// Bob's system_to should now be infinity (restored from 2024-06-15)
-		assertThat(bob.getSystemTo().toInstant().atZone(ZoneOffset.UTC).getYear()).isEqualTo(9999);
+		assertThat(bob.getSystemTo()).isEqualTo(PersonFinder.systemTo().getAsOfAttributeInfinity());
 
 		// Charlie should not exist (purged because created after rollback date)
 		Person charlie = PersonFinder.findOne(PersonFinder.id().eq(3L).and(PersonFinder.system().equalsEdgePoint()));
