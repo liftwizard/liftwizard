@@ -178,7 +178,7 @@ public class Builder {
 	}
 
 	/**
-	 * A function to convert the structured argument Map to another type, such as net.logstash.logback.marker.LogstashMarker or net.logstash.logback.argument.StructuredArgument
+	 * Sets a function to convert the structured argument Map to another type, such as net.logstash.logback.marker.LogstashMarker or net.logstash.logback.argument.StructuredArgument.
 	 *
 	 * @param newToStructuredObjectFunction A function such as {@code Markers::appendEntries} or {@code StructuredArguments::entries}
 	 * @return {@code this}

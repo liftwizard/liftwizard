@@ -33,6 +33,8 @@ import org.openrewrite.java.tree.Space;
 import org.openrewrite.marker.Markers;
 
 /**
+ * Adds an explicit {@code this.} prefix to field and method access.
+ *
  * @deprecated Use {@code org.openrewrite.staticanalysis.ExplicitThis} from rewrite-static-analysis instead.
  *     This recipe was contributed upstream (PR #791, merged 2026-03-21).
  */
