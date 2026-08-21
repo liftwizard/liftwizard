@@ -153,7 +153,7 @@ jobs:
 
       - name: Run Spotless Apply for POM
         run: |
-          just spotless pom
+          just spotless --name pom
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-pom"
@@ -241,7 +241,7 @@ jobs:
 
       - name: Run Spotless Apply for Formats
         run: |
-          just spotless formats
+          just spotless --name formats
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-formats"
@@ -292,7 +292,7 @@ jobs:
 
       - name: Run Spotless Apply for Java
         run: |
-          just spotless java
+          just spotless --name java
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-java"
@@ -343,7 +343,7 @@ jobs:
 
       - name: Run Spotless Apply for Prettier Java with Sorted Imports
         run: |
-          just spotless prettier-java-sort-imports
+          just spotless --name prettier-java-sort-imports
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-prettier-java-sort-imports"
@@ -394,7 +394,7 @@ jobs:
 
       - name: Run Spotless Apply for Java Cleanthat
         run: |
-          just spotless java-cleanthat
+          just spotless --name java-cleanthat
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-spotless-java-cleanthat"
