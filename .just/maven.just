@@ -11,8 +11,12 @@ default_checkstyle_profiles := env('MVN_CHECKSTYLE_PROFILES', "checkstyle-semant
 default_spotless_profiles := env('MVN_SPOTLESS_PROFILES', "spotless-apply,spotless-formats,spotless-java,spotless-prettier-java-sort-imports,spotless-java-cleanthat,spotless-sql,spotless-pom")
 default_profiles := env('MVN_PROFILES', "--activate-profiles " + default_verify_profiles + "," + default_checkstyle_profiles + "," + default_spotless_profiles)
 
+# Install the build plugins the reactor needs on its own plugin classpath
+@_install-build-plugins MVN=default_mvn:
+    just _run "{{ANSI_GRAY}}{{MVN}}{{ANSI_DEFAULT}} {{ANSI_GRAY}}{{skip_tests_flags}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-generator-plugins/liftwizard-generator-reladomo-code-plugin,liftwizard-utility/liftwizard-checkstyle,liftwizard-utility/liftwizard-rewrite --also-make"
+
 # Run `mvn` with configurable target, profiles, and flags
-mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags:
+mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags: (_install-build-plugins MVN)
     #!/usr/bin/env bash
     set -uo pipefail
 
@@ -25,8 +29,6 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     if [ "{{TARGET}}" = "{{default_target}}" ]; then TARGET_COLOR="{{ANSI_GRAY}}"; else TARGET_COLOR="{{ANSI_GREEN}}"; fi
     if [ "{{PROFILES}}" = "{{default_profiles}}" ]; then PROFILES_COLOR="{{ANSI_GRAY}}"; else PROFILES_COLOR="{{ANSI_BLUE}}"; fi
     if [ "{{FLAGS}}" = "{{default_flags}}" ]; then FLAGS_COLOR="{{ANSI_GRAY}}"; else FLAGS_COLOR="{{ANSI_MAGENTA}}"; fi
-
-    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-generator-plugins/liftwizard-generator-reladomo-code-plugin,liftwizard-utility/liftwizard-checkstyle,liftwizard-utility/liftwizard-rewrite --also-make"
 
     just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${TARGET_COLOR}{{TARGET}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} ${PROFILES_COLOR}{{PROFILES}}{{ANSI_DEFAULT}}"
 
