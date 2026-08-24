@@ -277,15 +277,6 @@
                             <configuration>
                                 <failOnDryRunResults>true</failOnDryRunResults>
                             </configuration>
-                            <executions>
-                                <execution>
-                                    <id>OpenRewrite dry run</id>
-                                    <goals>
-                                        <goal>dryRunNoFork</goal>
-                                    </goals>
-                                    <phase>verify</phase>
-                                </execution>
-                            </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
