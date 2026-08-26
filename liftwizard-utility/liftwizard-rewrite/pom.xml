@@ -227,6 +227,18 @@
 
         <dependency>
             <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-groovy</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.ben-manes.caffeine</groupId>
+                    <artifactId>caffeine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
             <artifactId>rewrite-test</artifactId>
             <scope>test</scope>
             <exclusions>

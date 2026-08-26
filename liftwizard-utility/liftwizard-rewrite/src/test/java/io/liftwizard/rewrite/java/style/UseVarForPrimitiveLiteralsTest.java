@@ -41,4 +41,9 @@ class UseVarForPrimitiveLiteralsTest implements AbstractRewriteFixtures, Rewrite
 	void doNotReplaceInvalidPatterns() {
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
+
+	@Test
+	void doNotReplaceGroovyDef() {
+		this.rewriteRun(this.groovyFixtureUnchanged("doNotReplaceGroovyDef/01"));
+	}
 }
