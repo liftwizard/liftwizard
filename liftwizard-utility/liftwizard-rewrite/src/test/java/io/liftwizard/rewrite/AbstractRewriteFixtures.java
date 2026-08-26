@@ -27,6 +27,7 @@ import java.util.Scanner;
 
 import org.openrewrite.test.SourceSpecs;
 
+import static org.openrewrite.groovy.Assertions.groovy;
 import static org.openrewrite.java.Assertions.java;
 
 /**
@@ -66,6 +67,11 @@ public interface AbstractRewriteFixtures {
 	/** A source file that a recipe must leave alone. */
 	default SourceSpecs javaFixtureUnchanged(String name) {
 		return java(this.fixture(name + "-unchanged.java"));
+	}
+
+	/** A Groovy source file that a recipe must leave alone. */
+	default SourceSpecs groovyFixtureUnchanged(String name) {
+		return groovy(this.fixture(name + "-unchanged.groovy"));
 	}
 
 	default String fixture(String name) {

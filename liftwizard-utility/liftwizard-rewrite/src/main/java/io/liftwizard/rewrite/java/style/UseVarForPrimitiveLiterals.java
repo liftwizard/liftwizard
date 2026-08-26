@@ -111,8 +111,17 @@ public class UseVarForPrimitiveLiterals extends Recipe {
 				return false;
 			}
 
-			if (typeTree instanceof Identifier varId && "var".equals(varId.getSimpleName())) {
-				return false;
+			if (typeTree instanceof Identifier typeId) {
+				// Groovy `def x = 1` parses to an empty type identifier plus a RedundantDef marker that prints the
+				// `def` keyword. There is no type to replace, so writing `var` into the type expression splices it
+				// onto the front of the variable name instead: `def varx = 1`.
+				if (typeId.getSimpleName().isEmpty()) {
+					return false;
+				}
+
+				if ("var".equals(typeId.getSimpleName())) {
+					return false;
+				}
 			}
 
 			if (this.isFieldDeclaration()) {
