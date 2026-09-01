@@ -145,6 +145,7 @@
                                 <activeStyles>
                                     <style>io.liftwizard.NoStarImports</style>
                                 </activeStyles>
+                                <checkstyleDetectionEnabled>false</checkstyleDetectionEnabled>
                             </configuration>
                             <dependencies>
                                 <dependency>
@@ -192,6 +193,7 @@
                                 <activeStyles>
                                     <style>io.liftwizard.NoStarImports</style>
                                 </activeStyles>
+                                <checkstyleDetectionEnabled>false</checkstyleDetectionEnabled>
                             </configuration>
                             <dependencies>
                                 <dependency>
@@ -249,6 +251,7 @@
                                 <activeStyles>
                                     <style>io.liftwizard.NoStarImports</style>
                                 </activeStyles>
+                                <checkstyleDetectionEnabled>false</checkstyleDetectionEnabled>
                             </configuration>
                             <dependencies>
                                 <dependency>
