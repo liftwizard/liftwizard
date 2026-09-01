@@ -18,6 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.adoption;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -103,8 +104,13 @@ public class CollectionsEmptyToFactory extends Recipe {
 				return mi;
 			}
 
+			Optional<String> factoryType = FactoryTypeResolver.resolve(this.getCursor(), factoryClass);
+			if (factoryType.isEmpty()) {
+				return mi;
+			}
+			String factoryImport = factoryType.get();
+
 			String typeParams = this.extractTypeParameters(mi);
-			String factoryImport = "org.eclipse.collections.api.factory." + factoryClass;
 			this.maybeRemoveImport("java.util.Collections");
 			this.maybeAddImport(factoryImport);
 

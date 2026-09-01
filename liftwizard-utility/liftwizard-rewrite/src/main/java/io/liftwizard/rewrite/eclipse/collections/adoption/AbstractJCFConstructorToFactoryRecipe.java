@@ -19,9 +19,11 @@ package io.liftwizard.rewrite.eclipse.collections.adoption;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.Cursor;
@@ -41,63 +43,7 @@ import org.openrewrite.java.tree.VariableDeclarator;
 
 public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 
-	private static final List<String> STUBS = List.of(
-		"""
-		package org.eclipse.collections.api.factory;
-		public final class Lists {
-		    public static final Mutable mutable = new Mutable();
-		    public static class Mutable {
-		        public <T> java.util.List<T> empty() { return null; }
-		        public <T> java.util.List<T> withInitialCapacity(int capacity) { return null; }
-		        public <T> java.util.List<T> withAll(Iterable<? extends T> iterable) { return null; }
-		    }
-		}
-		""",
-		"""
-		package org.eclipse.collections.api.factory;
-		public final class Maps {
-		    public static final Mutable mutable = new Mutable();
-		    public static class Mutable {
-		        public <K, V> java.util.Map<K, V> empty() { return null; }
-		        public <K, V> java.util.Map<K, V> withInitialCapacity(int capacity) { return null; }
-		        public <K, V> java.util.Map<K, V> withMap(java.util.Map<? extends K, ? extends V> map) { return null; }
-		    }
-		}
-		""",
-		"""
-		package org.eclipse.collections.api.factory;
-		public final class Sets {
-		    public static final Mutable mutable = new Mutable();
-		    public static class Mutable {
-		        public <T> java.util.Set<T> empty() { return null; }
-		        public <T> java.util.Set<T> withInitialCapacity(int capacity) { return null; }
-		        public <T> java.util.Set<T> withAll(Iterable<? extends T> iterable) { return null; }
-		    }
-		}
-		""",
-		"""
-		package org.eclipse.collections.api.factory;
-		public final class SortedMaps {
-		    public static final Mutable mutable = new Mutable();
-		    public static class Mutable {
-		        public <K, V> java.util.SortedMap<K, V> empty() { return null; }
-		        public <K, V> java.util.SortedMap<K, V> with(java.util.Comparator<? super K> comparator) { return null; }
-		        public <K, V> java.util.SortedMap<K, V> withSortedMap(java.util.Map<? extends K, ? extends V> map) { return null; }
-		    }
-		}
-		""",
-		"""
-		package org.eclipse.collections.api.factory;
-		public final class SortedSets {
-		    public static final Mutable mutable = new Mutable();
-		    public static class Mutable {
-		        public <T> java.util.SortedSet<T> empty() { return null; }
-		        public <T> java.util.SortedSet<T> with(java.util.Comparator<? super T> comparator) { return null; }
-		        public <T> java.util.SortedSet<T> withAll(Iterable<? extends T> iterable) { return null; }
-		    }
-		}
-		"""
-	);
+	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
 
 	private final String sourceTypeSimpleName;
 	private final String targetFactorySimpleName;
@@ -181,10 +127,16 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 				return nc;
 			}
 
+			Optional<String> factoryType = FactoryTypeResolver.resolve(this.getCursor(), this.targetFactorySimpleName);
+			if (factoryType.isEmpty()) {
+				return nc;
+			}
+			String factoryImport = factoryType.get();
+
 			String typeParams = this.extractTypeParameterString(nc);
 
 			this.maybeRemoveImport("java.util." + this.sourceTypeSimpleName);
-			this.maybeAddImport("org.eclipse.collections.api.factory." + this.targetFactorySimpleName);
+			this.maybeAddImport(factoryImport);
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
@@ -196,7 +148,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe extends Recipe {
 					isCollectionConstructor
 				);
 			JavaTemplate template = JavaTemplate.builder(templateSource)
-				.imports("org.eclipse.collections.api.factory." + this.targetFactorySimpleName)
+				.imports(factoryImport)
 				.contextSensitive()
 				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 				.build();

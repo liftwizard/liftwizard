@@ -24,7 +24,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
+import org.openrewrite.java.tree.J;
+import org.openrewrite.test.SourceSpec;
 import org.openrewrite.test.SourceSpecs;
 
 import static org.openrewrite.groovy.Assertions.groovy;
@@ -50,18 +53,24 @@ public interface AbstractRewriteFixtures {
 	 * {@code replacePatterns/01-after.java}.
 	 */
 	default SourceSpecs javaFixture(String name) {
+		return this.javaFixture(name, (spec) -> {});
+	}
+
+	/** Like {@link #javaFixture(String)}, with extra assertions such as {@link SourceSpec#afterRecipe} on the spec. */
+	default SourceSpecs javaFixture(String name, Consumer<SourceSpec<J.CompilationUnit>> customizer) {
 		String before = this.fixture(name + "-before.java");
 
 		if (this.isRerecordEnabled()) {
-			return java(before, before, (spec) ->
+			return java(before, before, (spec) -> {
 				spec.after((actual) -> {
 					this.rerecordFixture(name + "-after.java", actual);
 					return actual;
-				})
-			);
+				});
+				customizer.accept(spec);
+			});
 		}
 
-		return java(before, this.fixture(name + "-after.java"));
+		return java(before, this.fixture(name + "-after.java"), customizer);
 	}
 
 	/** A source file that a recipe must leave alone. */

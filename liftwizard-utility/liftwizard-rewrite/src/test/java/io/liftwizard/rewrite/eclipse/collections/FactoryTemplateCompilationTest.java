@@ -93,7 +93,16 @@ class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
 
 	@Test
 	void transformedFactoriesCompileAgainstLibrary() throws IOException {
-		this.assertCompiles(List.of(this.fixture("factories-before.java")));
+		this.assertFactoryRewriteCompiles("factories");
+	}
+
+	@Test
+	void transformedImplementationFactoriesCompileAgainstLibrary() throws IOException {
+		this.assertFactoryRewriteCompiles("implementation-factories");
+	}
+
+	private void assertFactoryRewriteCompiles(String name) throws IOException {
+		this.assertCompiles(List.of(this.fixture(name + "-before.java")));
 		this.rewriteRun(
 			(spec) ->
 				spec.recipes(
@@ -109,7 +118,7 @@ class FactoryTemplateCompilationTest extends AbstractEclipseCollectionsTest {
 					new ECSortedSetConstructorToFactory(),
 					new CollectionsEmptyToFactory()
 				),
-			java(this.fixture("factories-before.java"), this.fixture("factories-after.java"), (spec) ->
+			java(this.fixture(name + "-before.java"), this.fixture(name + "-after.java"), (spec) ->
 				spec.afterRecipe((cu) -> this.assertCompiles(List.of(cu.printAll())))
 			)
 		);
