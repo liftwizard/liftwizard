@@ -18,9 +18,15 @@ package io.liftwizard.rewrite.eclipse.collections;
 
 import java.util.List;
 
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+
 public final class EclipseCollectionsTemplateStubs {
 
-	private static final List<String> FACTORIES = List.of(
+	private static final String API_FACTORY_PACKAGE_DECLARATION = "package org.eclipse.collections.api.factory;";
+	private static final String IMPL_FACTORY_PACKAGE_DECLARATION = "package org.eclipse.collections.impl.factory;";
+
+	private static final ImmutableList<String> API_STUBS = Lists.immutable.with(
 		"""
 		package org.eclipse.collections.api.factory;
 
@@ -289,6 +295,12 @@ public final class EclipseCollectionsTemplateStubs {
 		"""
 	);
 
+	private static final ImmutableList<String> FACTORIES = API_STUBS.newWithAll(
+		API_STUBS.select((stub) -> stub.startsWith(API_FACTORY_PACKAGE_DECLARATION)).collect((stub) ->
+			stub.replace(API_FACTORY_PACKAGE_DECLARATION, IMPL_FACTORY_PACKAGE_DECLARATION)
+		)
+	);
+
 	private static final List<String> RICH_ITERABLE = List.of(
 		"""
 		package org.eclipse.collections.api.block.function;
@@ -405,7 +417,7 @@ public final class EclipseCollectionsTemplateStubs {
 	private EclipseCollectionsTemplateStubs() {}
 
 	public static List<String> factories() {
-		return FACTORIES;
+		return FACTORIES.castToList();
 	}
 
 	public static List<String> richIterable() {

@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class CollectionsEmptyToFactoryTest extends AbstractEclipseCollectionsTest {
 
 	@Override
@@ -32,6 +34,16 @@ class CollectionsEmptyToFactoryTest extends AbstractEclipseCollectionsTest {
 	@DocumentExample
 	@Test
 	void replacePatterns() {
-		this.rewriteRun(this.javaFixture("replacePatterns/01"));
+		this.rewriteRun(
+				this.javaFixture("replacePatterns/01"),
+				// Lists is already bound to org.eclipse.collections.impl.factory.Lists, so the recipe must reuse it
+				this.javaFixture("replacePatterns/02", (spec) ->
+					spec.afterRecipe((cu) ->
+						assertThat(collectTypesNamed(cu, "Lists"))
+							.isNotEmpty()
+							.containsOnly("org.eclipse.collections.impl.factory.Lists")
+					)
+				)
+			);
 	}
 }
