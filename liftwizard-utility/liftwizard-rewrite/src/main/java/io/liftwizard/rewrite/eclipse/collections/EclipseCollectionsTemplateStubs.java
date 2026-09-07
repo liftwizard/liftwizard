@@ -49,7 +49,7 @@ public final class EclipseCollectionsTemplateStubs {
 		    public static final Mutable mutable = new Mutable();
 
 		    public static final class FixedSize {
-		        public <T> org.eclipse.collections.api.list.MutableList<T> empty() {
+		        public <T> org.eclipse.collections.api.list.FixedSizeList<T> empty() {
 		            return null;
 		        }
 		    }
@@ -83,6 +83,12 @@ public final class EclipseCollectionsTemplateStubs {
 		}
 		""",
 		"""
+		package org.eclipse.collections.api.list;
+
+		public interface FixedSizeList<T> extends MutableList<T> {
+		}
+		""",
+		"""
 		package org.eclipse.collections.api.factory;
 
 		public final class Maps {
@@ -90,7 +96,7 @@ public final class EclipseCollectionsTemplateStubs {
 		    public static final Mutable mutable = new Mutable();
 
 		    public static final class FixedSize {
-		        public <K, V> org.eclipse.collections.api.map.MutableMap<K, V> empty() {
+		        public <K, V> org.eclipse.collections.api.map.FixedSizeMap<K, V> empty() {
 		            return null;
 		        }
 		    }
@@ -119,6 +125,12 @@ public final class EclipseCollectionsTemplateStubs {
 		}
 		""",
 		"""
+		package org.eclipse.collections.api.map;
+
+		public interface FixedSizeMap<K, V> extends MutableMap<K, V> {
+		}
+		""",
+		"""
 		package org.eclipse.collections.api.factory;
 
 		public final class Sets {
@@ -126,7 +138,7 @@ public final class EclipseCollectionsTemplateStubs {
 		    public static final Mutable mutable = new Mutable();
 
 		    public static final class FixedSize {
-		        public <T> org.eclipse.collections.api.set.MutableSet<T> empty() {
+		        public <T> org.eclipse.collections.api.set.FixedSizeSet<T> empty() {
 		            return null;
 		        }
 		    }
@@ -157,6 +169,12 @@ public final class EclipseCollectionsTemplateStubs {
 		package org.eclipse.collections.api.set;
 
 		public interface MutableSet<T> extends java.util.Set<T> {
+		}
+		""",
+		"""
+		package org.eclipse.collections.api.set;
+
+		public interface FixedSizeSet<T> extends MutableSet<T> {
 		}
 		""",
 		"""
@@ -200,19 +218,6 @@ public final class EclipseCollectionsTemplateStubs {
 
 		        public <K, V> org.eclipse.collections.api.map.sorted.MutableSortedMap<K, V> with(
 		            java.util.Comparator<? super K> comparator
-		        ) {
-		            return null;
-		        }
-
-		        public <K, V> org.eclipse.collections.api.map.sorted.MutableSortedMap<K, V> withAll(
-		            java.util.Comparator<? super K> comparator,
-		            java.lang.Iterable<?> iterable
-		        ) {
-		            return null;
-		        }
-
-		        public <K, V> org.eclipse.collections.api.map.sorted.MutableSortedMap<K, V> withInitialCapacity(
-		            int capacity
 		        ) {
 		            return null;
 		        }
@@ -271,10 +276,6 @@ public final class EclipseCollectionsTemplateStubs {
 		        public <T> org.eclipse.collections.api.set.sorted.MutableSortedSet<T> withAll(
 		            java.lang.Iterable<? extends T> iterable
 		        ) {
-		            return null;
-		        }
-
-		        public <T> org.eclipse.collections.api.set.sorted.MutableSortedSet<T> withInitialCapacity(int capacity) {
 		            return null;
 		        }
 		    }
