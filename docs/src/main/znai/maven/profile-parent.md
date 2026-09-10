@@ -138,13 +138,10 @@ See [pull-request.yml](https://github.com/motlin/liftwizard/blob/main/.github/wo
 | `spotless-java-cleanthat`             | Code Formatting       | Code cleanup and refactoring                 |
 | `spotless-java-sort-imports`          | Code Formatting       | Sort and organize Java imports               |
 | `spotless-java-unused-imports`        | Code Formatting       | Remove unused Java imports                   |
-| `spotless-json`                       | Code Formatting       | JSON/JSON5 formatting                        |
-| `spotless-markdown`                   | Code Formatting       | Markdown formatting                          |
 | `spotless-pom`                        | Code Formatting       | POM file formatting and sorting              |
 | `spotless-prettier-java`              | Code Formatting       | Prettier formatting for Java                 |
 | `spotless-prettier-java-sort-imports` | Code Formatting       | Prettier + import sorting                    |
 | `spotless-sql`                        | Code Formatting       | SQL formatting with Prettier                 |
-| `spotless-yaml`                       | Code Formatting       | YAML formatting                              |
 | **Code Refactoring**                  |                       |                                              |
 | `rewrite-maven-plugin`                | Code Refactoring      | Safe refactoring recipes                     |
 | `rewrite-maven-plugin-dryRun`         | Code Refactoring      | Verify refactors without applying            |
