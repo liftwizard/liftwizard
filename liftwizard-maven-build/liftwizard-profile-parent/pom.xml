@@ -359,8 +359,9 @@
                             <formats>
                                 <format>
                                     <toggleOffOn />
+                                    <!-- No defaultIncludes; ** would include target/ and .idea Velocity templates. -->
                                     <includes>
-                                        <include>**/*.java</include>
+                                        <include>src/**/*.java</include>
                                     </includes>
                                     <trimTrailingWhitespace />
                                     <endWithNewline />
@@ -687,13 +688,10 @@
                             <sql>
                                 <toggleOffOn />
 
+                                <!-- No defaultIncludes; ** would include target/. -->
                                 <includes>
-                                    <include>**/*.sql</include>
+                                    <include>src/**/*.sql</include>
                                 </includes>
-
-                                <excludes>
-                                    <exclude>**/target/**/*.sql</exclude>
-                                </excludes>
 
                                 <prettier>
                                     <devDependencies>
