@@ -1,9 +1,9 @@
 # set up `git-test`
 setup-git-test:
     # Combined
-    git test add --forget --test default                      'just clean _check-local-modifications mvn'
-    git test add --forget --test checkstyle                   'just clean _check-local-modifications checkstyle'
-    git test add --forget --test spotless-all                 'just clean _check-local-modifications spotless-all'
+    git test add --forget --test default      'just --global-justfile _check-local-modifications && (should-skip-commit || just precommit) && just --global-justfile _check-local-modifications'
+    git test add --forget --test no-tests     'MVN_FLAGS="--threads 2C -DskipTests" just clean _check-local-modifications mvn'
+    git test add --forget --test module-build 'if grep -q liftwizard-generator-rewrite liftwizard-generator-plugins/pom.xml 2>/dev/null; then mvn clean install -pl liftwizard-generator-plugins/liftwizard-generator-rewrite,liftwizard-generator-plugins/liftwizard-generator-rewrite-plugin,liftwizard-utility/liftwizard-rewrite -am; else mvn clean install -pl liftwizard-utility/liftwizard-rewrite -am; fi'
     # Individual
     # git test add --forget --test compile                      'just clean _check-local-modifications compile'
     # git test add --forget --test test                         'just clean _check-local-modifications test'
@@ -27,4 +27,4 @@ setup-git-test:
     # git test add --forget --test yaml                         'just clean _check-local-modifications spotless yaml'
     # git test add --forget --test sql                          'just clean _check-local-modifications spotless sql'
 
-git_tests := env('GIT_TESTS', "default,checkstyle,spotless-all")
+git_tests := env('GIT_TESTS', "default")
