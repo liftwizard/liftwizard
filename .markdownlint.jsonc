@@ -270,4 +270,11 @@
 
 	// MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md056.md
 	"MD056": true,
+
+	// MD060/table-column-style : Table column style : https://github.com/DavidAnson/markdownlint/blob/main/doc/md060.md
+	// Disabled: conflicts with oxfmt, which pads empty table cells as `|  |`
+	// (one space each side of empty content). No MD060 style accepts that —
+	// `compact` wants `| |` — so the rule fights the formatter on every run.
+	// oxfmt already enforces consistent table formatting, making MD060 redundant.
+	"MD060": false,
 }
