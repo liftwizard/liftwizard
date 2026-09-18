@@ -18,8 +18,8 @@
 type: specs.openrewrite.org/v1beta/style
 name: io.liftwizard.NoStarImports
 styleConfigs:
-  # Matches useTabs and tabWidth in .prettierrc.json5. Without this, OpenRewrite indents the lines it rewrites with
-  # spaces while the untouched lines keep their tabs.
+  # Matches liftwizard.prettier.useTabs and liftwizard.prettier.tabWidth in liftwizard-profile-parent. Without this,
+  # OpenRewrite indents the lines it rewrites with spaces while the untouched lines keep their tabs.
   - org.openrewrite.java.style.TabsAndIndentsStyle:
       useTabCharacter: true
       tabSize: 4
