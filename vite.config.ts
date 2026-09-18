@@ -12,8 +12,8 @@ export default {
 			{
 				files: [".yamllint.yaml", "**/*.yaml", "**/*.yml"],
 				options: {
-					tabWidth: 2,
 					useTabs: false,
+					tabWidth: 2,
 				},
 			},
 		],
