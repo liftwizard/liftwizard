@@ -22,7 +22,6 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.openrewrite.java.Assertions.java;
 
 class JCFHashSetConstructorToFactoryTest
 	extends AbstractEclipseCollectionsTest
@@ -57,16 +56,8 @@ class JCFHashSetConstructorToFactoryTest
 		this.rewriteRun(
 			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"),
 			// Sets is bound to an unrelated type, so there is no way to import the Eclipse Collections factory
-			java(
-				"""
-				package other;
-
-				public class Sets
-				{
-				}
-				"""
-			),
-			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02")
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/02"),
+			this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/03")
 		);
 	}
 }
