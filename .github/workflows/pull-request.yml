@@ -35,6 +35,9 @@ jobs:
 
       - uses: jdx/mise-action@f10502fc09dadecfefb962fff68ce77213930204 # v4.2.2
 
+      - name: Add SLF4J problem matcher
+        run: echo "::add-matcher::.github/slf4j.json"
+
       - run: just coverage
 
       - uses: madrapps/jacoco-report@e51ce1f46f7f8b5331593f935e59cbaf44b84920 # v1.8.0

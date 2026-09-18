@@ -11,7 +11,7 @@ default:
     @just --list --unsorted
 
 # Run build and auto-formatters
-precommit: mise mvn
+precommit: mise test-problem-matchers mvn
     @echo "Precommit checks completed"
 
 # `mise install`
@@ -21,6 +21,10 @@ mise:
 
 # clean (maven and git)
 @clean: _clean-git _clean-maven _clean-m2
+
+# `node --test` for GitHub problem matchers
+test-problem-matchers:
+    node --test .github/*.test.mjs
 
 markdownlint:
     markdownlint --config .markdownlint.jsonc  --fix .
