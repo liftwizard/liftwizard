@@ -1,0 +1,24 @@
+{
+	"problemMatcher": [
+		{
+			"owner": "slf4j-error",
+			"severity": "error",
+			"pattern": [
+				{
+					"regexp": "\\bSLF4J(?:\\([EWI]\\))?: ((?:Failed to load class \"org\\.slf4j\\.impl\\.Static\\w+Binder\"|No SLF4J providers were found|Class path contains multiple SLF4J (?:bindings|providers)|Class path contains SLF4J bindings targeting slf4j-api versions|The requested version \\S+ by your slf4j binding is not compatible|slf4j-api \\S+ \\(or later\\) is incompatible with this binding|Failed to instantiate |A (?:SLF4J )?service provider failed to instantiate|Detected both \\S+ AND ).*?)\\s*$",
+					"message": 1
+				}
+			]
+		},
+		{
+			"owner": "slf4j-warning",
+			"severity": "warning",
+			"pattern": [
+				{
+					"regexp": "\\bSLF4J(?:\\([EWI]\\))?: (Failed toString\\(\\) invocation on an object of type .*?)\\s*$",
+					"message": 1
+				}
+			]
+		}
+	]
+}
