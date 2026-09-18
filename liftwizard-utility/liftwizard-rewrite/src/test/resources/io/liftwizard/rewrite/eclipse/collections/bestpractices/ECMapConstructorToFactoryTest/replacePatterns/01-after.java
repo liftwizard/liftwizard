@@ -19,7 +19,7 @@ class Test<T>
 		MutableMap<String, List<Integer>> explicitNested = Maps.mutable.<String, List<Integer>>empty();
 		MutableMap<String, MutableMap<T, Integer>> nestedTypeParam = Maps.mutable.<String, MutableMap<T, Integer>>empty();
 		org.eclipse.collections.api.map.MutableMap<String, Integer> fullyQualified =
-				Maps.mutable.empty();
+			Maps.mutable.empty();
 		MutableMap<String, Integer> withCapacity = Maps.mutable.withInitialCapacity(16);
 		MutableMap<Integer, String> withCapacity32 = Maps.mutable.withInitialCapacity(32);
 		MutableMap<String, Integer> mapFromOther = Maps.mutable.withMap(diamondMap);

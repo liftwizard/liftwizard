@@ -22,7 +22,7 @@ class Test<T extends Comparable<T>>
 		MutableSortedMap<String, List<Integer>> explicitNested = SortedMaps.mutable.<String, List<Integer>>empty();
 		MutableSortedMap<String, MutableSortedMap<T, Integer>> nestedTypeParam = SortedMaps.mutable.<String, MutableSortedMap<T, Integer>>empty();
 		org.eclipse.collections.api.map.sorted.MutableSortedMap<String, Integer> fullyQualified =
-				SortedMaps.mutable.empty();
+			SortedMaps.mutable.empty();
 		MutableSortedMap<String, Integer> withComparator = SortedMaps.mutable.with(Comparator.naturalOrder());
 		MutableSortedMap<String, Integer> withSortedMap = SortedMaps.mutable.withSortedMap(localSortedMap);
 	}

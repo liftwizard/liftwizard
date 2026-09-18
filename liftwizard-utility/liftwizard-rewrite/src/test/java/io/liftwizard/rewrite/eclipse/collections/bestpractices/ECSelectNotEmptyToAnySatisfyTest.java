@@ -17,6 +17,7 @@
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import io.liftwizard.rewrite.eclipse.collections.AbstractEclipseCollectionsTest;
+import io.liftwizard.rewrite.java.style.PreserveMethodChainLineBreaks;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -28,7 +29,7 @@ class ECSelectNotEmptyToAnySatisfyTest
 	public void defaults(RecipeSpec spec)
 	{
 		super.defaults(spec);
-		spec.recipe(new ECSelectNotEmptyToAnySatisfyRecipes());
+		spec.recipes(new ECSelectNotEmptyToAnySatisfyRecipes(), new PreserveMethodChainLineBreaks());
 	}
 
 	@Test
@@ -45,7 +46,9 @@ class ECSelectNotEmptyToAnySatisfyTest
 			// Pattern 2: ArrayIterate.select().notEmpty() -> ArrayIterate.anySatisfy()
 			this.javaFixture("replacePatterns/04"),
 			// Pattern 2: ListIterate.select().notEmpty() -> ListIterate.anySatisfy()
-			this.javaFixture("replacePatterns/05")
+			this.javaFixture("replacePatterns/05"),
+			// Multi-line chain keeps the line break before the replaced call
+			this.javaFixture("replacePatterns/06")
 		);
 	}
 

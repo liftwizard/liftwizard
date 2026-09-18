@@ -630,6 +630,21 @@ Replace java.util.Map declarations with MutableMap when initialized with Eclipse
 - `Map<String, Integer> map = Maps.mutable.empty()` → `MutableMap<String, Integer> map = Maps.mutable.empty()`
 - `Map map = Maps.mutable.empty()` → `MutableMap map = Maps.mutable.empty()`
 
+### Formatting
+
+#### PreserveMethodChainLineBreaks
+
+Runs last in the best-practices composite. It restores the line break before a chained call when an earlier recipe replaced the tail of a multi-line method chain. Refaster templates cannot express whitespace, so without it
+
+```java
+boolean result = list
+	.asLazy()
+	.select(predicate)
+	.notEmpty();
+```
+
+becomes `.asLazy().anySatisfy(predicate)` on a single line instead of keeping `.anySatisfy(predicate)` on its own line.
+
 ## Adoption Recipes
 
 ### JCFListConstructorToFactory

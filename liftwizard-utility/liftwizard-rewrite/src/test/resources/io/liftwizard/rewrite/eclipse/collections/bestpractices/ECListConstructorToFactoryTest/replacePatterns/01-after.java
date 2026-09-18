@@ -32,7 +32,7 @@ class Test<T>
 
 		// Fully qualified types
 		org.eclipse.collections.api.list.MutableList<String> fullyQualified =
-				Lists.mutable.empty();
+			Lists.mutable.empty();
 
 		// Initial capacity constructor
 		MutableList<String> withCapacity = Lists.mutable.withInitialCapacity(16);

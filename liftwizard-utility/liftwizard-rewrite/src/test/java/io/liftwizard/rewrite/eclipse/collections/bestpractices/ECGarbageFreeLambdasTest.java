@@ -35,7 +35,7 @@ class ECGarbageFreeLambdasTest
 	@DocumentExample
 	void replacePatterns()
 	{
-		this.rewriteRun(this.javaFixture("replacePatterns/01"));
+		this.rewriteRun(this.javaFixture("replacePatterns/01"), this.javaFixture("replacePatterns/02"));
 	}
 
 	@Test

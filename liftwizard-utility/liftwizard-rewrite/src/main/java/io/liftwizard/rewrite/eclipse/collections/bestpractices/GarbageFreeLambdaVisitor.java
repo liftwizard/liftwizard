@@ -113,13 +113,29 @@ final class GarbageFreeLambdaVisitor
 			mi.getSelect(),
 			spaceBefore(result.capturedExpression())
 		);
-		replacement = result.withTypedMemberReferences(replacement);
-		if (mi.getMethodType() == null)
+		return rename(mi, result.withTypedMemberReferences(replacement), this.targetMethodName);
+	}
+
+	/**
+	 * Copies the name and arguments of {@code replacement} onto {@code original}, keeping the original select subtree
+	 * and its padding so a multi-line chain keeps its line breaks and indentation. {@link JavaTemplate} replaces the
+	 * whole invocation and reformats the select, which joins {@code .foo()\n.select(...)} onto one line.
+	 */
+	static J.MethodInvocation rename(
+		J.MethodInvocation original,
+		J.MethodInvocation replacement,
+		String targetMethodName
+	)
+	{
+		J.MethodInvocation renamed = original
+			.withName(original.getName().withSimpleName(targetMethodName))
+			.withArguments(replacement.getArguments());
+		if (original.getMethodType() == null)
 		{
-			return replacement;
+			return renamed.withMethodType(replacement.getMethodType());
 		}
-		JavaType.Method methodType = mi.getMethodType().withName(this.targetMethodName);
-		return replacement.withMethodType(methodType).withName(replacement.getName().withType(methodType));
+		JavaType.Method methodType = original.getMethodType().withName(targetMethodName);
+		return renamed.withMethodType(methodType).withName(renamed.getName().withType(methodType));
 	}
 
 	static Expression spaceBefore(Expression expression)

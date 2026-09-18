@@ -17,7 +17,7 @@ class Test<T extends Comparable<T>>
 		MutableSortedSet<List<String>> explicitNested = SortedSets.mutable.<List<String>>empty();
 		MutableSortedSet<MutableSortedSet<T>> nestedTypeParam = SortedSets.mutable.<MutableSortedSet<T>>empty();
 		org.eclipse.collections.api.set.sorted.MutableSortedSet<String> fullyQualified =
-				SortedSets.mutable.empty();
+			SortedSets.mutable.empty();
 		MutableSortedSet<String> withComparator = SortedSets.mutable.with(Comparator.naturalOrder());
 		MutableSortedSet<String> withComparatorAndIterable = SortedSets.mutable.withAll(Comparator.reverseOrder(), diamondSet);
 	}
