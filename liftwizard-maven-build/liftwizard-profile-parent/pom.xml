@@ -356,7 +356,7 @@
                         <artifactId>spotless-maven-plugin</artifactId>
                         <version>3.10.3</version>
                         <configuration>
-                            <formats>
+                            <formats combine.children="append">
                                 <format>
                                     <toggleOffOn />
                                     <!-- No defaultIncludes; ** would include target/ and .idea Velocity templates. -->
@@ -385,7 +385,7 @@
                         <artifactId>spotless-maven-plugin</artifactId>
                         <version>3.10.3</version>
                         <configuration>
-                            <formats>
+                            <formats combine.children="append">
                                 <format>
                                     <toggleOffOn />
                                     <includes>
