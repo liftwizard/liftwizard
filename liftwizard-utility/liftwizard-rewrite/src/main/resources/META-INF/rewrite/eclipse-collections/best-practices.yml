@@ -93,3 +93,5 @@ recipeList:
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.ECStreamChainToListIterable
   - io.liftwizard.rewrite.eclipse.collections.bestpractices.JCFSortedSetToMutableSortedSet
   - io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsDeclarationSiteTypeVariances
+  # Must stay last so it runs after the recipes whose dropped line breaks it restores.
+  - io.liftwizard.rewrite.java.style.PreserveMethodChainLineBreaks

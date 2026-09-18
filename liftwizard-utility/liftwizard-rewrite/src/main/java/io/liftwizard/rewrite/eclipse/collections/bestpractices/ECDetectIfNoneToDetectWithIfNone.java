@@ -31,7 +31,6 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
-import org.openrewrite.java.tree.JavaType;
 
 /**
  * Converts {@code richIterable.detectIfNone(x -> x.foo(captured), defaultFn)} to
@@ -134,13 +133,11 @@ public class ECDetectIfNoneToDetectWithIfNone
 				GarbageFreeLambdaVisitor.spaceBefore(result.capturedExpression()),
 				defaultFunction
 			);
-			replacement = result.withTypedMemberReferences(replacement);
-			if (mi.getMethodType() == null)
-			{
-				return replacement;
-			}
-			JavaType.Method methodType = mi.getMethodType().withName("detectWithIfNone");
-			return replacement.withMethodType(methodType).withName(replacement.getName().withType(methodType));
+			return GarbageFreeLambdaVisitor.rename(
+				mi,
+				result.withTypedMemberReferences(replacement),
+				"detectWithIfNone"
+			);
 		}
 	}
 }
