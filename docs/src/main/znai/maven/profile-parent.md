@@ -165,4 +165,32 @@ See [pull-request.yml](https://github.com/motlin/liftwizard/blob/main/.github/wo
 | `deploy`                              | Utility               | Deploy artifacts with sources                |
 | `spotless-preserve-cache`             | Utility               | Preserve Spotless cache during clean         |
 
+## Overriding Prettier settings
+
+The `spotless-prettier-java` and `spotless-prettier-java-sort-imports` profiles carry their Prettier configuration inline, driven by Maven properties. No `.prettierrc.json5` (or any other Prettier config file) is needed in the consuming repository, and one would have no effect because the inline settings take precedence.
+
+| Property                                           | Default  |
+| -------------------------------------------------- | -------- |
+| `liftwizard.prettier.version`                      | `3.8.1`  |
+| `liftwizard.prettier-java-next-line.version`       | `2.10.3` |
+| `liftwizard.prettier.printWidth`                   | `120`    |
+| `liftwizard.prettier.tabWidth`                     | `4`      |
+| `liftwizard.prettier.useTabs`                      | `true`   |
+| `liftwizard.prettier.semi`                         | `true`   |
+| `liftwizard.prettier.singleQuote`                  | `false`  |
+| `liftwizard.prettier.trailingComma`                | `all`    |
+| `liftwizard.prettier.bracketSpacing`               | `false`  |
+| `liftwizard.prettier.arrowParens`                  | `always` |
+| `liftwizard.prettier.experimentalOperatorPosition` | `start`  |
+
+To customize, override the properties in your POM:
+
+```xml
+<properties>
+    <liftwizard.prettier.printWidth>100</liftwizard.prettier.printWidth>
+    <liftwizard.prettier.useTabs>false</liftwizard.prettier.useTabs>
+    <liftwizard.prettier.tabWidth>4</liftwizard.prettier.tabWidth>
+</properties>
+```
+
 For detailed profile configurations, see [liftwizard-profile-parent/pom.xml](https://github.com/motlin/liftwizard/blob/main/liftwizard-maven-build/liftwizard-profile-parent/pom.xml) on GitHub.
