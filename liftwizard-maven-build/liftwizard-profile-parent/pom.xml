@@ -42,6 +42,21 @@
         <errorprone.flags.patch.addon />
         <errorprone.flags.untested.addon />
         <!--endregion Error Prone -->
+
+        <!--region Prettier: -Pspotless-prettier-java[-sort-imports] -->
+        <liftwizard.prettier.version>3.8.1</liftwizard.prettier.version>
+        <liftwizard.prettier-java-next-line.version>2.10.3</liftwizard.prettier-java-next-line.version>
+
+        <liftwizard.prettier.printWidth>120</liftwizard.prettier.printWidth>
+        <liftwizard.prettier.tabWidth>4</liftwizard.prettier.tabWidth>
+        <liftwizard.prettier.useTabs>true</liftwizard.prettier.useTabs>
+        <liftwizard.prettier.semi>true</liftwizard.prettier.semi>
+        <liftwizard.prettier.singleQuote>false</liftwizard.prettier.singleQuote>
+        <liftwizard.prettier.trailingComma>all</liftwizard.prettier.trailingComma>
+        <liftwizard.prettier.bracketSpacing>false</liftwizard.prettier.bracketSpacing>
+        <liftwizard.prettier.arrowParens>always</liftwizard.prettier.arrowParens>
+        <liftwizard.prettier.experimentalOperatorPosition>start</liftwizard.prettier.experimentalOperatorPosition>
+        <!--endregion Prettier -->
     </properties>
 
     <dependencyManagement>
@@ -483,14 +498,22 @@
 
                                 <prettier>
                                     <devDependencies>
-                                        <prettier>3.8.1</prettier>
-                                        <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                        <prettier>${liftwizard.prettier.version}</prettier>
+                                        <prettier-java-next-line>${liftwizard.prettier-java-next-line.version}</prettier-java-next-line>
                                     </devDependencies>
-                                    <configFile>.prettierrc.json5</configFile>
                                     <config>
                                         <parser>java</parser>
                                         <plugins>prettier-java-next-line</plugins>
                                         <braceStyle>next-line</braceStyle>
+                                        <printWidth>${liftwizard.prettier.printWidth}</printWidth>
+                                        <tabWidth>${liftwizard.prettier.tabWidth}</tabWidth>
+                                        <useTabs>${liftwizard.prettier.useTabs}</useTabs>
+                                        <semi>${liftwizard.prettier.semi}</semi>
+                                        <singleQuote>${liftwizard.prettier.singleQuote}</singleQuote>
+                                        <trailingComma>${liftwizard.prettier.trailingComma}</trailingComma>
+                                        <bracketSpacing>${liftwizard.prettier.bracketSpacing}</bracketSpacing>
+                                        <arrowParens>${liftwizard.prettier.arrowParens}</arrowParens>
+                                        <experimentalOperatorPosition>${liftwizard.prettier.experimentalOperatorPosition}</experimentalOperatorPosition>
                                     </config>
                                 </prettier>
                             </java>
@@ -506,14 +529,22 @@
 
                                     <prettier>
                                         <devDependencies>
-                                            <prettier>3.8.1</prettier>
-                                            <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                            <prettier>${liftwizard.prettier.version}</prettier>
+                                            <prettier-java-next-line>${liftwizard.prettier-java-next-line.version}</prettier-java-next-line>
                                         </devDependencies>
-                                        <configFile>.prettierrc.json5</configFile>
                                         <config>
                                             <parser>java</parser>
                                             <plugins>prettier-java-next-line</plugins>
                                             <braceStyle>next-line</braceStyle>
+                                            <printWidth>${liftwizard.prettier.printWidth}</printWidth>
+                                            <tabWidth>${liftwizard.prettier.tabWidth}</tabWidth>
+                                            <useTabs>${liftwizard.prettier.useTabs}</useTabs>
+                                            <semi>${liftwizard.prettier.semi}</semi>
+                                            <singleQuote>${liftwizard.prettier.singleQuote}</singleQuote>
+                                            <trailingComma>${liftwizard.prettier.trailingComma}</trailingComma>
+                                            <bracketSpacing>${liftwizard.prettier.bracketSpacing}</bracketSpacing>
+                                            <arrowParens>${liftwizard.prettier.arrowParens}</arrowParens>
+                                            <experimentalOperatorPosition>${liftwizard.prettier.experimentalOperatorPosition}</experimentalOperatorPosition>
                                         </config>
                                     </prettier>
                                 </format>
@@ -544,14 +575,22 @@
 
                                 <prettier>
                                     <devDependencies>
-                                        <prettier>3.8.1</prettier>
-                                        <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                        <prettier>${liftwizard.prettier.version}</prettier>
+                                        <prettier-java-next-line>${liftwizard.prettier-java-next-line.version}</prettier-java-next-line>
                                     </devDependencies>
-                                    <configFile>.prettierrc.json5</configFile>
                                     <config>
                                         <parser>java</parser>
                                         <plugins>prettier-java-next-line</plugins>
                                         <braceStyle>next-line</braceStyle>
+                                        <printWidth>${liftwizard.prettier.printWidth}</printWidth>
+                                        <tabWidth>${liftwizard.prettier.tabWidth}</tabWidth>
+                                        <useTabs>${liftwizard.prettier.useTabs}</useTabs>
+                                        <semi>${liftwizard.prettier.semi}</semi>
+                                        <singleQuote>${liftwizard.prettier.singleQuote}</singleQuote>
+                                        <trailingComma>${liftwizard.prettier.trailingComma}</trailingComma>
+                                        <bracketSpacing>${liftwizard.prettier.bracketSpacing}</bracketSpacing>
+                                        <arrowParens>${liftwizard.prettier.arrowParens}</arrowParens>
+                                        <experimentalOperatorPosition>${liftwizard.prettier.experimentalOperatorPosition}</experimentalOperatorPosition>
                                     </config>
                                 </prettier>
 
@@ -574,14 +613,22 @@
 
                                     <prettier>
                                         <devDependencies>
-                                            <prettier>3.8.1</prettier>
-                                            <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                            <prettier>${liftwizard.prettier.version}</prettier>
+                                            <prettier-java-next-line>${liftwizard.prettier-java-next-line.version}</prettier-java-next-line>
                                         </devDependencies>
-                                        <configFile>.prettierrc.json5</configFile>
                                         <config>
                                             <parser>java</parser>
                                             <plugins>prettier-java-next-line</plugins>
                                             <braceStyle>next-line</braceStyle>
+                                            <printWidth>${liftwizard.prettier.printWidth}</printWidth>
+                                            <tabWidth>${liftwizard.prettier.tabWidth}</tabWidth>
+                                            <useTabs>${liftwizard.prettier.useTabs}</useTabs>
+                                            <semi>${liftwizard.prettier.semi}</semi>
+                                            <singleQuote>${liftwizard.prettier.singleQuote}</singleQuote>
+                                            <trailingComma>${liftwizard.prettier.trailingComma}</trailingComma>
+                                            <bracketSpacing>${liftwizard.prettier.bracketSpacing}</bracketSpacing>
+                                            <arrowParens>${liftwizard.prettier.arrowParens}</arrowParens>
+                                            <experimentalOperatorPosition>${liftwizard.prettier.experimentalOperatorPosition}</experimentalOperatorPosition>
                                         </config>
                                     </prettier>
                                 </format>
