@@ -30,6 +30,8 @@ jobs:
           gpg-passphrase-env-var: MAVEN_GPG_PASSPHRASE
 
       - uses: jdx/mise-action@f10502fc09dadecfefb962fff68ce77213930204 # v4.2.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           cache: false
 
