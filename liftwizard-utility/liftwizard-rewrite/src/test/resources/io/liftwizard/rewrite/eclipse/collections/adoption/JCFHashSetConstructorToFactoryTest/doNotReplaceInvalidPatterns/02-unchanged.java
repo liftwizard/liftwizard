@@ -1,15 +1,5 @@
-package example;
+package other;
 
-import java.util.HashSet;
-import java.util.Set;
-import other.Sets;
-
-class UnrelatedSetsAlreadyImported
+public class Sets
 {
-	private final Sets sets = new Sets();
-
-	void test()
-	{
-		Set<String> visited = new HashSet<>();
-	}
 }
