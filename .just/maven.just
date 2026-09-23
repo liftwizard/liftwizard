@@ -1,6 +1,6 @@
-default_mvn      := env('MVN_BINARY',   "mvn")
-default_target   := env('MVN_TARGET',   "verify")
-default_flags    := env('MVN_FLAGS',    "--threads 2C")
+default_mvn := env('MVN_BINARY', "mvn")
+default_target := env('MVN_TARGET', "verify")
+default_flags := env('MVN_FLAGS', "--threads 2C")
 skip_tests_flags := default_flags + " -DskipTests"
 rewrite_flags := "--threads 2C -DskipTests"
 rewrite_project_exclusions := "!liftwizard-generator-plugins/liftwizard-generator-rewrite,!liftwizard-generator-plugins/liftwizard-generator-rewrite-plugin,!liftwizard-utility/liftwizard-rewrite"
@@ -23,7 +23,7 @@ _install-build-plugins MVN=default_mvn:
         exit 0
     fi
 
-    just _run "{{ANSI_GRAY}}{{MVN}}{{ANSI_DEFAULT}} {{ANSI_GRAY}}{{skip_tests_flags}}{{ANSI_DEFAULT}} {{ANSI_GREEN}}install{{ANSI_DEFAULT}} --projects liftwizard-generator-plugins/liftwizard-generator-reladomo-code-plugin,liftwizard-utility/liftwizard-checkstyle,liftwizard-utility/liftwizard-rewrite --also-make"
+    just _run "{{ ANSI_GRAY }}{{ MVN }}{{ ANSI_DEFAULT }} {{ ANSI_GRAY }}{{ skip_tests_flags }}{{ ANSI_DEFAULT }} {{ ANSI_GREEN }}install{{ ANSI_DEFAULT }} --projects liftwizard-generator-plugins/liftwizard-generator-reladomo-code-plugin,liftwizard-utility/liftwizard-checkstyle,liftwizard-utility/liftwizard-rewrite --also-make"
 
 # Run `mvn` with configurable target, profiles, and flags
 mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=default_flags: (_install-build-plugins MVN)
@@ -35,12 +35,12 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     fi
 
     # Set colors based on whether values match defaults
-    if [ "{{MVN}}" = "{{default_mvn}}" ]; then MVN_COLOR="{{ANSI_GRAY}}"; else MVN_COLOR="{{ANSI_MAGENTA}}"; fi
-    if [ "{{TARGET}}" = "{{default_target}}" ]; then TARGET_COLOR="{{ANSI_GRAY}}"; else TARGET_COLOR="{{ANSI_GREEN}}"; fi
-    if [ "{{PROFILES}}" = "{{default_profiles}}" ]; then PROFILES_COLOR="{{ANSI_GRAY}}"; else PROFILES_COLOR="{{ANSI_BLUE}}"; fi
-    if [ "{{FLAGS}}" = "{{default_flags}}" ]; then FLAGS_COLOR="{{ANSI_GRAY}}"; else FLAGS_COLOR="{{ANSI_MAGENTA}}"; fi
+    if [ "{{ MVN }}" = "{{ default_mvn }}" ]; then MVN_COLOR="{{ ANSI_GRAY }}"; else MVN_COLOR="{{ ANSI_MAGENTA }}"; fi
+    if [ "{{ TARGET }}" = "{{ default_target }}" ]; then TARGET_COLOR="{{ ANSI_GRAY }}"; else TARGET_COLOR="{{ ANSI_GREEN }}"; fi
+    if [ "{{ PROFILES }}" = "{{ default_profiles }}" ]; then PROFILES_COLOR="{{ ANSI_GRAY }}"; else PROFILES_COLOR="{{ ANSI_BLUE }}"; fi
+    if [ "{{ FLAGS }}" = "{{ default_flags }}" ]; then FLAGS_COLOR="{{ ANSI_GRAY }}"; else FLAGS_COLOR="{{ ANSI_MAGENTA }}"; fi
 
-    just _run "${MVN_COLOR}{{MVN}}{{ANSI_DEFAULT}} ${TARGET_COLOR}{{TARGET}}{{ANSI_DEFAULT}} ${FLAGS_COLOR}{{FLAGS}}{{ANSI_DEFAULT}} ${PROFILES_COLOR}{{PROFILES}}{{ANSI_DEFAULT}}"
+    just _run "${MVN_COLOR}{{ MVN }}{{ ANSI_DEFAULT }} ${TARGET_COLOR}{{ TARGET }}{{ ANSI_DEFAULT }} ${FLAGS_COLOR}{{ FLAGS }}{{ ANSI_DEFAULT }} ${PROFILES_COLOR}{{ PROFILES }}{{ ANSI_DEFAULT }}"
 
     EXIT_CODE=$?
     if [ $EXIT_CODE -eq 0 ]; then
@@ -51,14 +51,14 @@ mvn MVN=default_mvn TARGET=default_target PROFILES=default_profiles *FLAGS=defau
     COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
 
     MESSAGE="Failed in directory ${DIRECTORY} on commit: '${COMMIT_MESSAGE}' with exit code ${EXIT_CODE}"
-    {{echo_command}} "$MESSAGE"
+    {{ echo_command }} "$MESSAGE"
     exit $EXIT_CODE
 
 # clean ~/.m2 with `rm -rf ~/.m2/repository/...`
 _clean-m2:
     #!/usr/bin/env bash
     set -uo pipefail
-    just _run "rm -rf ~/.m2/repository/{{ANSI_YELLOW}}{{group_id_with_slashes}}{{ANSI_DEFAULT}}/**/*-SNAPSHOT"
+    just _run "rm -rf ~/.m2/repository/{{ ANSI_YELLOW }}{{ group_id_with_slashes }}{{ ANSI_DEFAULT }}/**/*-SNAPSHOT"
     exit 0
 
 # `mvn clean`
@@ -105,11 +105,7 @@ spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-
 checkstyle-profile PROFILE FAIL_ON_VIOLATION="true" MVN="mvn": (mvn MVN "checkstyle:check" ("--activate-profiles " + PROFILE) (default_flags + " -Dcheckstyle.failOnViolation=" + FAIL_ON_VIOLATION))
 
 # Run checkstyle with all profiles
-checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": \
-    (checkstyle-profile "checkstyle-semantics" FAIL_ON_VIOLATION MVN) \
-    (checkstyle-profile "checkstyle-formatting" FAIL_ON_VIOLATION MVN) \
-    (checkstyle-profile "checkstyle-semantics-strict" FAIL_ON_VIOLATION MVN) \
-    (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
+checkstyle FAIL_ON_VIOLATION="true" MVN="mvn": (checkstyle-profile "checkstyle-semantics" FAIL_ON_VIOLATION MVN) (checkstyle-profile "checkstyle-formatting" FAIL_ON_VIOLATION MVN) (checkstyle-profile "checkstyle-semantics-strict" FAIL_ON_VIOLATION MVN) (checkstyle-profile "checkstyle-formatting-strict" FAIL_ON_VIOLATION MVN)
 
 # spotless
 spotless NAME MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizard-maven-build/liftwizard-minimal-parent' --activate-profiles spotless-apply,spotless-" + NAME) default_flags)
@@ -131,23 +127,23 @@ rewrite RECIPE MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-pl
 
 # display available updates (dependencies, plugins, properties)
 @display-updates:
-    just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates"
+    just _run "mvn {{ ANSI_MAGENTA }}--threads 1{{ ANSI_DEFAULT }} versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates"
 
 # `mvn dependency:tree`
 @dependency-tree:
-    just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} dependency:tree"
+    just _run "mvn {{ ANSI_MAGENTA }}--threads 1{{ ANSI_DEFAULT }} dependency:tree"
 
 # `mvn buildplan-list`
 @buildplan-list:
-    just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} buildplan:list"
+    just _run "mvn {{ ANSI_MAGENTA }}--threads 1{{ ANSI_DEFAULT }} buildplan:list"
 
 # `mvn buildplan-list-phase`
 @buildplan-list-phase:
-    just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} buildplan:list-phase"
+    just _run "mvn {{ ANSI_MAGENTA }}--threads 1{{ ANSI_DEFAULT }} buildplan:list-phase"
 
 # `mvn wrapper:wrapper`
 @wrapper VERSION:
-    just _run "mvn {{ANSI_MAGENTA}}--threads 1{{ANSI_DEFAULT}} wrapper:wrapper -Dmaven={{ANSI_YELLOW}}{{VERSION}}{{ANSI_DEFAULT}}"
+    just _run "mvn {{ ANSI_MAGENTA }}--threads 1{{ ANSI_DEFAULT }} wrapper:wrapper -Dmaven={{ ANSI_YELLOW }}{{ VERSION }}{{ ANSI_DEFAULT }}"
 
 # Trigger GitHub Actions release workflow
 [group('release')]
@@ -155,7 +151,7 @@ release:
     #!/usr/bin/env bash
     set -Eeuo pipefail
 
-    just _run "git checkout {{ANSI_BRIGHT_RED}}{{ANSI_BOLD}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_NORMAL}}"
+    just _run "git checkout {{ ANSI_BRIGHT_RED }}{{ ANSI_BOLD }}{{ upstream_remote }}/{{ upstream_branch }}{{ ANSI_NORMAL }}"
 
     current_branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$current_branch" = "HEAD" ]; then
@@ -163,16 +159,16 @@ release:
     else
         current_ref="$current_branch"
     fi
-    if [ "$current_branch" != "{{upstream_branch}}" ]; then
-        echo "⚠️  Not on {{ANSI_YELLOW}}{{upstream_branch}}{{ANSI_DEFAULT}} branch (currently on {{ANSI_RED}}${current_ref}{{ANSI_DEFAULT}})"
+    if [ "$current_branch" != "{{ upstream_branch }}" ]; then
+        echo "⚠️  Not on {{ ANSI_YELLOW }}{{ upstream_branch }}{{ ANSI_DEFAULT }} branch (currently on {{ ANSI_RED }}${current_ref}{{ ANSI_DEFAULT }})"
         read -p "Continue anyway? [y/N] " -n 1 -r
         echo
         [[ $REPLY =~ ^[Yy]$ ]] || exit 1
     fi
     local_sha=$(git rev-parse HEAD)
-    remote_sha=$(git rev-parse {{upstream_remote}}/{{upstream_branch}})
+    remote_sha=$(git rev-parse {{ upstream_remote }}/{{ upstream_branch }})
     if [ "$local_sha" != "$remote_sha" ]; then
-        echo "⚠️  Local {{ANSI_YELLOW}}{{upstream_branch}}{{ANSI_DEFAULT}} is not up to date with {{ANSI_YELLOW}}{{upstream_remote}}/{{upstream_branch}}{{ANSI_DEFAULT}}"
+        echo "⚠️  Local {{ ANSI_YELLOW }}{{ upstream_branch }}{{ ANSI_DEFAULT }} is not up to date with {{ ANSI_YELLOW }}{{ upstream_remote }}/{{ upstream_branch }}{{ ANSI_DEFAULT }}"
         echo "   Local:  ${local_sha}"
         echo "   Remote: ${remote_sha}"
         read -p "Continue anyway? [y/N] " -n 1 -r
@@ -193,16 +189,16 @@ release:
         exit 1
     fi
 
-    echo "📦 Current version: {{ANSI_YELLOW}}${CURRENT_VERSION}{{ANSI_DEFAULT}}"
-    echo "🏷️  Release version: {{ANSI_GREEN}}${RELEASE_VERSION}{{ANSI_DEFAULT}}"
+    echo "📦 Current version: {{ ANSI_YELLOW }}${CURRENT_VERSION}{{ ANSI_DEFAULT }}"
+    echo "🏷️  Release version: {{ ANSI_GREEN }}${RELEASE_VERSION}{{ ANSI_DEFAULT }}"
 
-    read -p "Enter next version (default: {{ANSI_YELLOW}}$NEXT_VERSION{{ANSI_DEFAULT}}): " INPUT_VERSION
+    read -p "Enter next version (default: {{ ANSI_YELLOW }}$NEXT_VERSION{{ ANSI_DEFAULT }}): " INPUT_VERSION
     NEXT_VERSION=${INPUT_VERSION:-$NEXT_VERSION}
 
-    just _run "gh workflow run {{ANSI_YELLOW}}release.yml{{ANSI_DEFAULT}} --field next-version={{ANSI_YELLOW}}${NEXT_VERSION}{{ANSI_DEFAULT}}"
-    just _run "sleep {{ANSI_YELLOW}}2{{ANSI_DEFAULT}}"
+    just _run "gh workflow run {{ ANSI_YELLOW }}release.yml{{ ANSI_DEFAULT }} --field next-version={{ ANSI_YELLOW }}${NEXT_VERSION}{{ ANSI_DEFAULT }}"
+    just _run "sleep {{ ANSI_YELLOW }}2{{ ANSI_DEFAULT }}"
     run_id=$(gh run list --workflow=release.yml --limit 1 --json databaseId --jq '.[0].databaseId')
-    just _run "gh run watch {{ANSI_YELLOW}}${run_id}{{ANSI_DEFAULT}}"
+    just _run "gh run watch {{ ANSI_YELLOW }}${run_id}{{ ANSI_DEFAULT }}"
 
 # `mvn deploy`
 deploy MVN="mvn": (mvn MVN "deploy" "--activate-profiles maven-central-deploy,deploy,maven-javadoc-plugin" "")
