@@ -16,7 +16,7 @@ _check-local-modifications:
     git status --porcelain | grep -q '^??' && ERRORS+="- Untracked files exist\n"
 
     if [ -n "$ERRORS" ]; then
-        {{echo_command}} "Local modifications"
+        {{ echo_command }} "Local modifications"
         echo -e "$ERRORS"
         just _run "git status"
         exit 1
