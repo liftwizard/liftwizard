@@ -1,4 +1,5 @@
 .envrc
+/.llm/
 JUSTFILE_BRANCH
 
 # Project-specific
