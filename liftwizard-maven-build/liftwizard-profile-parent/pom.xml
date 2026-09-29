@@ -88,7 +88,7 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>3.10.2</version>
+                <version>3.10.3</version>
                 <configuration>
                     <upToDateChecking>
                         <enabled>true</enabled>
@@ -302,7 +302,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -330,7 +330,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -354,7 +354,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <formats>
                                 <format>
@@ -383,7 +383,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <formats>
                                 <format>
@@ -416,7 +416,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <java>
                                 <toggleOffOn>
@@ -447,7 +447,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <java>
                                 <toggleOffOn>
@@ -473,7 +473,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <java>
                                 <toggleOffOn>
@@ -534,7 +534,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <java>
                                 <toggleOffOn>
@@ -602,7 +602,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <java>
                                 <toggleOffOn>
@@ -633,7 +633,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <java>
                                 <toggleOffOn>
@@ -660,7 +660,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <antlr4>
                                 <toggleOffOn />
@@ -683,7 +683,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <sql>
                                 <toggleOffOn />
@@ -718,7 +718,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>3.10.2</version>
+                        <version>3.10.3</version>
                         <configuration>
                             <pom>
                                 <toggleOffOn />
