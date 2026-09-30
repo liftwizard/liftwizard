@@ -3,5 +3,6 @@
 // Docs: https://github.com/DavidAnson/markdownlint-cli2#configuration
 {
 	"globs": ["**/*.md"],
-	"ignores": ["**/target/**", "**/node_modules/**", ".llm/**", ".claude/**", "CLAUDE.local.md"],
+	"gitignore": true,
+	"ignores": ["**/node_modules/**", ".claude/**", "CLAUDE.local.md"],
 }
