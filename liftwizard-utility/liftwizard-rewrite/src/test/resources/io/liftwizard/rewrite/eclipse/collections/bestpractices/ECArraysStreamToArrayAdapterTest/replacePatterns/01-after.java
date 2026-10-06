@@ -12,10 +12,10 @@ class Test
 		var result1 = ArrayAdapter.adapt(values).toList();
 		List<String> result2 = ArrayAdapter.adapt(names).toList();
 		var result3 = ArrayAdapter.adapt(new String[]
-			{
-				"a",
-				"b",
-				"c",
+		{
+			"a",
+			"b",
+			"c",
 		}).toList();
 	}
 

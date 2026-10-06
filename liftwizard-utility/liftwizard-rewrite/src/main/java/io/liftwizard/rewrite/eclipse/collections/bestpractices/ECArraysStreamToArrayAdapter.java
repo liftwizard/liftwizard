@@ -143,11 +143,13 @@ public class ECArraysStreamToArrayAdapter
 		{
 			this.maybeRemoveImport("java.util.Arrays");
 			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
-			return ARRAY_ADAPTER_ADAPT.apply(
+			J.MethodInvocation adapted = ARRAY_ADAPTER_ADAPT.apply(
 				this.getCursor(),
 				root.getCoordinates().replace(),
 				root.getArguments().get(0)
 			);
+			// The template re-indents a multi-line argument such as an array initializer, leaving its braces misaligned
+			return adapted.getPadding().withArguments(root.getPadding().getArguments());
 		}
 	}
 }
