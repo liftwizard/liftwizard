@@ -1,7 +1,7 @@
 # set up `git-test`
 setup-git-test:
     # Combined
-    git test add --forget --test default      'just --global-justfile _check-local-modifications && (should-skip-commit || just precommit) && just --global-justfile _check-local-modifications'
+    git test add --forget --test default      'just --global-justfile _check-local-modifications && (should-skip-commit || just verify) && just --global-justfile _check-local-modifications'
     git test add --forget --test no-tests     'MVN_FLAGS="--threads 2C -DskipTests" just clean _check-local-modifications mvn'
     git test add --forget --test module-build 'if grep -q liftwizard-generator-rewrite liftwizard-generator-plugins/pom.xml 2>/dev/null; then mvn clean install -pl liftwizard-generator-plugins/liftwizard-generator-rewrite,liftwizard-generator-plugins/liftwizard-generator-rewrite-plugin,liftwizard-utility/liftwizard-rewrite -am; else mvn clean install -pl liftwizard-utility/liftwizard-rewrite -am; fi'
     # Individual
