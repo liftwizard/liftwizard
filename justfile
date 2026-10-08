@@ -11,8 +11,11 @@ default:
     @just --list --unsorted
 
 # Run build and auto-formatters
-precommit: mise test-problem-matchers mvn
-    @echo "Precommit checks completed"
+verify: mise test-problem-matchers mvn
+    @echo "Verify checks completed"
+
+# Deprecated alias for `verify`
+precommit: verify
 
 # `mise install`
 mise:
