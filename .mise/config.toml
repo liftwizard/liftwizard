@@ -5,9 +5,9 @@ maven = "3.9.16"
 mvnd = "1.0.6"
 node = "24.21.0"
 pre-commit = "4.6.2"
-"npm:markdownlint-cli2" = "0.23.2"
+"npm:markdownlint-cli2" = "0.23.3"
 "npm:strip-ansi-cli" = "4.0.0"
-"npm:vite-plus" = "0.3.1"
+"npm:vite-plus" = "0.3.3"
 
 [tool_alias]
 mvnd = "asdf:https://github.com/joschi/asdf-mvnd"
