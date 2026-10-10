@@ -158,8 +158,13 @@ echo ""
 check_security_setting() {
     local endpoint="$1"
     local description="$2"
+    local jq_filter="${3:-}"
     local current
-    current=$(gh api "repos/${REPO}/$endpoint" --silent && echo "true" || echo "false")
+    if [[ -n "$jq_filter" ]]; then
+        current=$(gh api "repos/${REPO}/$endpoint" --jq "$jq_filter" 2>/dev/null || echo "false")
+    else
+        current=$(gh api "repos/${REPO}/$endpoint" --silent && echo "true" || echo "false")
+    fi
 
     if [[ "$current" == "true" ]]; then
         return
@@ -171,8 +176,10 @@ check_security_setting() {
     fi
 }
 
+# vulnerability-alerts returns 204 when enabled and 404 when disabled;
+# automated-security-fixes always returns 200 with an "enabled" field.
 check_security_setting "vulnerability-alerts"      "vulnerability alerts"
-check_security_setting "automated-security-fixes"  "automated security fixes (Dependabot)"
+check_security_setting "automated-security-fixes"  "automated security fixes (Dependabot)" ".enabled"
 
 echo ""
 
