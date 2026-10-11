@@ -38,7 +38,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConnectionManagerFactoryTest
+final class ConnectionManagerFactoryTest
 {
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();

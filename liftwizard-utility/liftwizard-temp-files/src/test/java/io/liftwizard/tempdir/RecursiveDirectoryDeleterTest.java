@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class RecursiveDirectoryDeleterTest
+final class RecursiveDirectoryDeleterTest
 {
 	@TempDir
 	private Path testDir;

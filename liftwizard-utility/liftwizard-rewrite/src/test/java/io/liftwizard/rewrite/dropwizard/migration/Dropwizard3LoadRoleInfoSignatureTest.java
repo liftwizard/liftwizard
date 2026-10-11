@@ -25,7 +25,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-class Dropwizard3LoadRoleInfoSignatureTest
+final class Dropwizard3LoadRoleInfoSignatureTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

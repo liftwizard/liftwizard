@@ -21,7 +21,7 @@ import org.openrewrite.config.Environment;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CompositeRecipeGeneratorTest
+final class CompositeRecipeGeneratorTest
 {
 	@Test
 	void emptyExclusionsThrows()

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class ManagedTempDirectoryTest
+final class ManagedTempDirectoryTest
 {
 	@Test
 	void createTempDirectory_shouldCreateDirectoryThatExistsAndIsWritable()

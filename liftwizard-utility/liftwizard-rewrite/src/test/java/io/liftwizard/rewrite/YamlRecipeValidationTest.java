@@ -40,7 +40,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class YamlRecipeValidationTest
+final class YamlRecipeValidationTest
 {
 	@Test
 	void allYamlRecipeReferencesResolve()

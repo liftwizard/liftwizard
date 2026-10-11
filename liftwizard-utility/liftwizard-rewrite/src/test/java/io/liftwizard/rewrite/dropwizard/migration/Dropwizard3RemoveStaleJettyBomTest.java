@@ -23,7 +23,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3RemoveStaleJettyBomTest
+final class Dropwizard3RemoveStaleJettyBomTest
 	implements RewriteTest
 {
 	@Override

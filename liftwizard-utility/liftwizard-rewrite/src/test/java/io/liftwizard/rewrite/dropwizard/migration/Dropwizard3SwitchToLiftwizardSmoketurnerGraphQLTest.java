@@ -25,7 +25,7 @@ import org.openrewrite.test.TypeValidation;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3SwitchToLiftwizardSmoketurnerGraphQLTest
+final class Dropwizard3SwitchToLiftwizardSmoketurnerGraphQLTest
 	implements RewriteTest
 {
 	@Override

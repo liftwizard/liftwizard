@@ -34,7 +34,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class JsonTestDataParserTest
+final class JsonTestDataParserTest
 {
 	@RegisterExtension
 	@Order(1)

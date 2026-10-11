@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Unit tests for {@link PeopleResource}.
  */
-class PeopleResourceTest
+final class PeopleResourceTest
 {
 	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 

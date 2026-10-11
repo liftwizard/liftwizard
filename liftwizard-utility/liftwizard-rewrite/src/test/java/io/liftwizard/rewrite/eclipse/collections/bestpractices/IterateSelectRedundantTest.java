@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-class IterateSelectRedundantTest
+final class IterateSelectRedundantTest
 	extends AbstractEclipseCollectionsTest
 {
 	@Override

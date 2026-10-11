@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * <p>This test catches such version mismatches by using @ParameterizedTest with @MethodSource.
  */
-class JUnitVersionCompatibilityTest
+final class JUnitVersionCompatibilityTest
 {
 	private static Stream<Arguments> testDataProvider()
 	{

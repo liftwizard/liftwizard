@@ -31,7 +31,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CsvTestDataExtensionTest
+final class CsvTestDataExtensionTest
 {
 	@RegisterExtension
 	@Order(1)

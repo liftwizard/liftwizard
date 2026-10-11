@@ -23,7 +23,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class EnforceConsistentConstructorArgumentLineWrappingTest
+final class EnforceConsistentConstructorArgumentLineWrappingTest
 	implements RewriteTest
 {
 	@Override

@@ -24,7 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class DropwizardTestingJUnit5MigrationTest
+final class DropwizardTestingJUnit5MigrationTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

@@ -24,7 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3Jetty10LoginServiceTypesTest
+final class Dropwizard3Jetty10LoginServiceTypesTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

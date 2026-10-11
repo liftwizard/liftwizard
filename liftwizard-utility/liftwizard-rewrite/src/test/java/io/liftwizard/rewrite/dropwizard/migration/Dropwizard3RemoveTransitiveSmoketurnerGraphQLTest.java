@@ -25,7 +25,7 @@ import org.openrewrite.test.TypeValidation;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3RemoveTransitiveSmoketurnerGraphQLTest
+final class Dropwizard3RemoveTransitiveSmoketurnerGraphQLTest
 	implements RewriteTest
 {
 	@Override

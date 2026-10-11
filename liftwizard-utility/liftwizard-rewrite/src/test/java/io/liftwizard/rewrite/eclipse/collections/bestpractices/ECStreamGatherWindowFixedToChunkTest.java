@@ -31,7 +31,7 @@ import org.openrewrite.test.TypeValidation;
  * we provide stub classes for {@code Gatherer} and {@code Gatherers} and disable
  * type validation because {@code Stream.gather()} does not exist in the Java 17 JDK.
  */
-class ECStreamGatherWindowFixedToChunkTest
+final class ECStreamGatherWindowFixedToChunkTest
 	extends AbstractEclipseCollectionsTest
 {
 	// Stub for java.util.stream.Gatherer (Java 24+)

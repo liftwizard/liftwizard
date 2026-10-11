@@ -35,7 +35,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FirebaseAuthFilterFactoryTest
+final class FirebaseAuthFilterFactoryTest
 {
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();

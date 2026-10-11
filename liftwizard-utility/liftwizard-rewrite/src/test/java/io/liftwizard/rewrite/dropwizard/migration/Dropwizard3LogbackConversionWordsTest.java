@@ -23,7 +23,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.test.SourceSpecs.text;
 
-class Dropwizard3LogbackConversionWordsTest
+final class Dropwizard3LogbackConversionWordsTest
 	implements RewriteTest
 {
 	@Override

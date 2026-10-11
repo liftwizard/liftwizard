@@ -24,7 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class Dropwizard3IAccessEventGetSequenceNumberTest
+final class Dropwizard3IAccessEventGetSequenceNumberTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

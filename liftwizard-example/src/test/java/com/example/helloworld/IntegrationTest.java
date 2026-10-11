@@ -28,7 +28,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-class IntegrationTest
+final class IntegrationTest
 {
 	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 

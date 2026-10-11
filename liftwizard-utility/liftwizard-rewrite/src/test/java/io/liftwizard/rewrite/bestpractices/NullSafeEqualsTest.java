@@ -24,7 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class NullSafeEqualsTest
+final class NullSafeEqualsTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

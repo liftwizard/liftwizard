@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JsonPrettyPrinterTest
+final class JsonPrettyPrinterTest
 {
 	private final ObjectMapper mapper = JsonPrettyPrinterTest.getObjectMapper();
 

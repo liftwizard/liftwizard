@@ -22,7 +22,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.TypeValidation;
 
-class PreLambdaTypesToLambdasTest
+final class PreLambdaTypesToLambdasTest
 	extends AbstractEclipseCollectionsTest
 {
 	@Override

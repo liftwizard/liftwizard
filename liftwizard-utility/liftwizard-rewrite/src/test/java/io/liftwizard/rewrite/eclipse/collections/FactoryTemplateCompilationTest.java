@@ -47,7 +47,7 @@ import org.openrewrite.java.tree.Statement;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.java.Assertions.java;
 
-class FactoryTemplateCompilationTest
+final class FactoryTemplateCompilationTest
 	extends AbstractEclipseCollectionsTest
 {
 	@TempDir

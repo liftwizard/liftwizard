@@ -24,7 +24,7 @@ import org.openrewrite.test.RewriteTest;
 import static org.openrewrite.java.Assertions.javaVersion;
 
 @SuppressWarnings("deprecation")
-class ExplicitTypeToVarTest
+final class ExplicitTypeToVarTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

@@ -23,7 +23,7 @@ import org.openrewrite.test.RecipeSpec;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CollectionsEmptyToFactoryTest
+final class CollectionsEmptyToFactoryTest
 	extends AbstractEclipseCollectionsTest
 {
 	@Override

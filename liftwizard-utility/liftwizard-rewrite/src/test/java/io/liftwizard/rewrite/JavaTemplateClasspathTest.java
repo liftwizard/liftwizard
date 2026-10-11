@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JavaTemplateClasspathTest
+final class JavaTemplateClasspathTest
 {
 	@Test
 	void mainSourcesDoNotUseRuntimeClasspathForJavaTemplates()

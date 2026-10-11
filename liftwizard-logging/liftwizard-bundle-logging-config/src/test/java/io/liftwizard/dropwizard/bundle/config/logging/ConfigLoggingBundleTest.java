@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-class ConfigLoggingBundleTest
+final class ConfigLoggingBundleTest
 {
 	/**
 	 * The minimized-configuration log is a best-effort diagnostic. A failure while computing it (for example a Jackson

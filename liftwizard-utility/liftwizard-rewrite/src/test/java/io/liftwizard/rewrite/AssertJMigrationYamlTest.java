@@ -22,7 +22,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-class AssertJMigrationYamlTest
+final class AssertJMigrationYamlTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

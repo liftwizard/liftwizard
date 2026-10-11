@@ -23,7 +23,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.maven.Assertions.pomXml;
 
-class Dropwizard3ExcludeStaleJettyServletApiTest
+final class Dropwizard3ExcludeStaleJettyServletApiTest
 	implements RewriteTest
 {
 	@Override

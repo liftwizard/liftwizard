@@ -25,7 +25,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class UsesLog4jFatalTest
+final class UsesLog4jFatalTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

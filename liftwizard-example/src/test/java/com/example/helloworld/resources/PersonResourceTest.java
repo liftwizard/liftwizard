@@ -23,7 +23,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PersonResourceTest
+final class PersonResourceTest
 {
 	private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("test-example.json5");
 

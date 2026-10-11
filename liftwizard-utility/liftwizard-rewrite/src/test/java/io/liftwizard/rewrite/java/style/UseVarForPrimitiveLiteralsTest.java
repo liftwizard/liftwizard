@@ -24,7 +24,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.javaVersion;
 
-class UseVarForPrimitiveLiteralsTest
+final class UseVarForPrimitiveLiteralsTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

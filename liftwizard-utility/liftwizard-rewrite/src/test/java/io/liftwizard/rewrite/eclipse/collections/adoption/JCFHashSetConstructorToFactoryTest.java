@@ -23,7 +23,7 @@ import org.openrewrite.test.RecipeSpec;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JCFHashSetConstructorToFactoryTest
+final class JCFHashSetConstructorToFactoryTest
 	extends AbstractEclipseCollectionsTest
 {
 	@Override

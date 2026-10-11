@@ -24,7 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class ECImplFactoryToApiFactoryTest
+final class ECImplFactoryToApiFactoryTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

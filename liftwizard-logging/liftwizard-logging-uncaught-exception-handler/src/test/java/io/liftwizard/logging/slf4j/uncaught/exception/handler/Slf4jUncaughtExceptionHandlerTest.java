@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Slf4jUncaughtExceptionHandlerTest
+final class Slf4jUncaughtExceptionHandlerTest
 {
 	private PrintStream originalStderr;
 	private ByteArrayOutputStream stderrCapture;

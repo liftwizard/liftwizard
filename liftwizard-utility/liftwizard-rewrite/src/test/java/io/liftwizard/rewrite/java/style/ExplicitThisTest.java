@@ -25,7 +25,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 @SuppressWarnings("deprecation")
-class ExplicitThisTest
+final class ExplicitThisTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

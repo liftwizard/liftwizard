@@ -33,7 +33,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-class ExecutorServiceFactoryTest
+final class ExecutorServiceFactoryTest
 {
 	@RegisterExtension
 	private final LogMarkerTestExtension logMarkerTestExtension = new LogMarkerTestExtension();

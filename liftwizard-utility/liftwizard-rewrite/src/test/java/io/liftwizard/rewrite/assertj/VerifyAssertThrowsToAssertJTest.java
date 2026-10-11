@@ -25,7 +25,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
-class VerifyAssertThrowsToAssertJTest
+final class VerifyAssertThrowsToAssertJTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

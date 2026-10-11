@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LogMarkerTestExtension.class)
-class ManagedFileSystemTest
+final class ManagedFileSystemTest
 {
 	@Test
 	void smokeTest()

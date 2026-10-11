@@ -24,7 +24,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class IfElseToTernaryTest
+final class IfElseToTernaryTest
 	implements AbstractRewriteFixtures, RewriteTest
 {
 	@Override

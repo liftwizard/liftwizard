@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 
-class IterateEmptyTest
+final class IterateEmptyTest
 	extends AbstractEclipseCollectionsTest
 {
 	@Override
