@@ -484,7 +484,7 @@
                                 <prettier>
                                     <devDependencies>
                                         <prettier>3.8.1</prettier>
-                                        <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                        <prettier-java-next-line>2.10.4</prettier-java-next-line>
                                     </devDependencies>
                                     <configFile>.prettierrc.json5</configFile>
                                     <config>
@@ -507,7 +507,7 @@
                                     <prettier>
                                         <devDependencies>
                                             <prettier>3.8.1</prettier>
-                                            <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                            <prettier-java-next-line>2.10.4</prettier-java-next-line>
                                         </devDependencies>
                                         <configFile>.prettierrc.json5</configFile>
                                         <config>
@@ -545,7 +545,7 @@
                                 <prettier>
                                     <devDependencies>
                                         <prettier>3.8.1</prettier>
-                                        <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                        <prettier-java-next-line>2.10.4</prettier-java-next-line>
                                     </devDependencies>
                                     <configFile>.prettierrc.json5</configFile>
                                     <config>
@@ -575,7 +575,7 @@
                                     <prettier>
                                         <devDependencies>
                                             <prettier>3.8.1</prettier>
-                                            <prettier-java-next-line>2.10.3</prettier-java-next-line>
+                                            <prettier-java-next-line>2.10.4</prettier-java-next-line>
                                         </devDependencies>
                                         <configFile>.prettierrc.json5</configFile>
                                         <config>
