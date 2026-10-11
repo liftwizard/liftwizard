@@ -86,35 +86,6 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  maven-errorprone:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
-
-      - uses: jdx/mise-action@7a4e45a543138629540c9a1616d08632b893e492 # v5.0.1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Add Error Prone problem matcher
-        run: echo "::add-matcher::.github/errorprone.json"
-
-      - run: just errorprone
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-errorprone-strict:
     runs-on: ubuntu-latest
     steps:
@@ -656,7 +627,6 @@ jobs:
         maven-test,
         maven-spotbugs,
         maven-errorprone-strict,
-        maven-errorprone,
         maven-enforcer,
         maven-dependency,
         maven-javadoc,
