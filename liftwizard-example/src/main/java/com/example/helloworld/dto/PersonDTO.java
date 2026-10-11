@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class PersonDTO
+public final class PersonDTO
 {
 	private Long id;
 	private String fullName;
@@ -150,7 +150,6 @@ public class PersonDTO
 		result = 31 * result + Objects.hashCode(this.jobTitle);
 		result = 31 * result + Objects.hashCode(this.system);
 		result = 31 * result + Objects.hashCode(this.systemFrom);
-		result = 31 * result + Objects.hashCode(this.systemTo);
-		return result;
+		return 31 * result + Objects.hashCode(this.systemTo);
 	}
 }
