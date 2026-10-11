@@ -91,8 +91,7 @@ public final class ManagedFileSystem
 		String pathWithinJar = schemeSpecificPart.substring(separatorIndex + 1);
 		URI jarUri = URI.create("jar:" + jarPath);
 		FileSystem fileSystem = getOrCreate(jarUri);
-		Path result = fileSystem.getPath(pathWithinJar);
-		return result;
+		return fileSystem.getPath(pathWithinJar);
 	}
 
 	private static FileSystem getOrCreate(URI uri)

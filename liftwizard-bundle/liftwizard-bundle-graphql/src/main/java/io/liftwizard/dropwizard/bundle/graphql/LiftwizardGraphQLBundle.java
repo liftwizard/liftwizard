@@ -159,8 +159,7 @@ public class LiftwizardGraphQLBundle<
 		var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
 		var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
 
-		List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
-		return instrumentations;
+		return List.of(metricsInstrumentation, loggingInstrumentation);
 	}
 
 	@Nonnull

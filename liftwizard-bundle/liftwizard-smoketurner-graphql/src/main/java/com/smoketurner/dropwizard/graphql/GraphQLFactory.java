@@ -195,8 +195,7 @@ public class GraphQLFactory
 		}
 
 		final var generator = new SchemaGenerator();
-		final GraphQLSchema schema = generator.makeExecutableSchema(registry, this.runtimeWiring);
-		return schema;
+		return generator.makeExecutableSchema(registry, this.runtimeWiring);
 	}
 
 	private static BufferedReader getResourceAsReader(final String name)

@@ -168,8 +168,7 @@ public class JsonMatchRule
 		try
 		{
 			JsonNode jsonNode = this.objectMapper.readTree(string);
-			String prettyPrintedString = this.objectMapper.writeValueAsString(jsonNode);
-			return prettyPrintedString;
+			return this.objectMapper.writeValueAsString(jsonNode);
 		}
 		catch (JsonProcessingException e)
 		{

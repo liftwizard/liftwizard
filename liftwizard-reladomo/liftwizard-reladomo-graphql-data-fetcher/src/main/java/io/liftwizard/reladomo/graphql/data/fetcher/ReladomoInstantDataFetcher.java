@@ -60,7 +60,6 @@ public class ReladomoInstantDataFetcher<Input>
 			LocalDateTime localDateTime = result.toLocalDateTime();
 			return localDateTime.toInstant(ZoneOffset.UTC);
 		}
-		Instant instant = result.toInstant();
-		return instant;
+		return result.toInstant();
 	}
 }
