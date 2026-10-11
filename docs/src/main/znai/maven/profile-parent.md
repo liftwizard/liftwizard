@@ -21,7 +21,7 @@
 mvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-prettier-java-sort-imports
 
 # Run static analysis
-mvn verify --activate-profiles errorprone-strict
+mvn verify --activate-profiles errorprone,errorprone-strict
 ```
 
 **Step 3:** Add GitHub Actions workflows to run these profiles in CI. Here are two patterns used in production.
@@ -48,7 +48,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - uses: jdx/mise-action@v2
-            - run: mvn verify --activate-profiles errorprone-strict -DskipTests
+            - run: mvn verify --activate-profiles errorprone,errorprone-strict -DskipTests
 
     checkstyle-semantics:
         runs-on: ubuntu-latest
