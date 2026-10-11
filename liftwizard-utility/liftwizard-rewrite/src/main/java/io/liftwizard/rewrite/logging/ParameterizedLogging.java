@@ -19,6 +19,7 @@ package io.liftwizard.rewrite.logging;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
@@ -83,6 +84,7 @@ public final class ParameterizedLogging
 		);
 	}
 
+	@CanIgnoreReturnValue
 	private static MessageAndArguments concatenationToLiteral(Expression message, MessageAndArguments result)
 	{
 		if (!(message instanceof J.Binary))

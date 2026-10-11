@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
@@ -33,24 +34,28 @@ public class ReladomoTestRuleBuilder
 	private Optional<ReladomoPurgeAllTestRule> purgeAllTestRule = Optional.empty();
 	private ReladomoLoadDataTestRule loadDataTestRule = new ReladomoLoadDataTestRule();
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath)
 	{
 		this.initializeTestRule = Optional.of(new ReladomoInitializeTestRule(runtimeConfigurationPath));
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setTestDataFileNames(@Nonnull String... testDataFileNames)
 	{
 		this.loadDataTestRule = new ReladomoLoadDataTestRule(testDataFileNames);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setTestDataFileNames(@Nonnull ImmutableList<String> testDataFileNames)
 	{
 		this.loadDataTestRule = new ReladomoLoadDataTestRule(testDataFileNames);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder enableDropCreateTables()
 	{
 		if (this.executeSqlTestRule.isEmpty())
@@ -60,12 +65,14 @@ public class ReladomoTestRuleBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder disableDropCreateTables()
 	{
 		this.executeSqlTestRule = Optional.empty();
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setDdlLocationPattern(@Nonnull String ddlLocationPattern)
 	{
 		if (this.executeSqlTestRule.isEmpty())
@@ -76,6 +83,7 @@ public class ReladomoTestRuleBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setIdxLocationPattern(@Nonnull String idxLocationPattern)
 	{
 		if (this.executeSqlTestRule.isEmpty())
@@ -86,6 +94,7 @@ public class ReladomoTestRuleBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setFkLocationPattern(@Nonnull String fkLocationPattern)
 	{
 		if (this.executeSqlTestRule.isEmpty())
@@ -96,6 +105,7 @@ public class ReladomoTestRuleBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
 	{
 		if (this.executeSqlTestRule.isEmpty())
@@ -106,12 +116,14 @@ public class ReladomoTestRuleBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder withPurgeAllTestRule()
 	{
 		this.purgeAllTestRule = Optional.of(new ReladomoPurgeAllTestRule());
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoTestRuleBuilder withoutPurgeAllTestRule()
 	{
 		this.purgeAllTestRule = Optional.empty();

@@ -18,6 +18,7 @@ package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
 import java.util.List;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.java.AddImport;
@@ -259,6 +260,7 @@ final class GarbageFreeLambdaVisitor
 			this.paramName = paramName;
 		}
 
+		@CanIgnoreReturnValue
 		@Override
 		public J.Identifier visitIdentifier(J.Identifier identifier, Object ignored)
 		{

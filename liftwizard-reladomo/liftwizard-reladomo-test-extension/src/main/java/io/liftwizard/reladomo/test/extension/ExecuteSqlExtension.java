@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import io.liftwizard.reladomo.ddl.executor.DatabaseDdlExecutor;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -48,24 +49,28 @@ public class ExecuteSqlExtension
 	private Supplier<? extends Connection> connectionSupplier = () ->
 		H2InMemoryConnectionManager.getInstance().getConnection();
 
+	@CanIgnoreReturnValue
 	public ExecuteSqlExtension setDdlLocationPattern(@Nonnull String ddlLocationPattern)
 	{
 		this.ddlLocationPattern = Objects.requireNonNull(ddlLocationPattern);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ExecuteSqlExtension setIdxLocationPattern(@Nonnull String idxLocationPattern)
 	{
 		this.idxLocationPattern = Objects.requireNonNull(idxLocationPattern);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ExecuteSqlExtension setFkLocationPattern(@Nonnull String fkLocationPattern)
 	{
 		this.fkLocationPattern = Objects.requireNonNull(fkLocationPattern);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ExecuteSqlExtension setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
 	{
 		this.connectionSupplier = Objects.requireNonNull(connectionSupplier);

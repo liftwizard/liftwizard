@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -62,24 +63,28 @@ public class ReladomoExtensionBuilder
 		}
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setRuntimeConfigurationPath(@Nonnull String runtimeConfigurationPath)
 	{
 		this.initializeExtension = Optional.of(new ReladomoInitializeExtension(runtimeConfigurationPath));
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setTestDataFileNames(@Nonnull String... testDataFileNames)
 	{
 		this.loadDataExtension = new ReladomoLoadDataExtension(testDataFileNames);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setTestDataFileNames(@Nonnull ImmutableList<String> testDataFileNames)
 	{
 		this.loadDataExtension = new ReladomoLoadDataExtension(testDataFileNames);
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder enableDropCreateTables()
 	{
 		if (this.executeSqlExtension.isEmpty())
@@ -89,12 +94,14 @@ public class ReladomoExtensionBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder disableDropCreateTables()
 	{
 		this.executeSqlExtension = Optional.empty();
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setDdlLocationPattern(@Nonnull String ddlLocationPattern)
 	{
 		if (this.executeSqlExtension.isEmpty())
@@ -105,6 +112,7 @@ public class ReladomoExtensionBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setIdxLocationPattern(@Nonnull String idxLocationPattern)
 	{
 		if (this.executeSqlExtension.isEmpty())
@@ -115,6 +123,7 @@ public class ReladomoExtensionBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setFkLocationPattern(@Nonnull String fkLocationPattern)
 	{
 		if (this.executeSqlExtension.isEmpty())
@@ -125,6 +134,7 @@ public class ReladomoExtensionBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder setConnectionSupplier(@Nonnull Supplier<? extends Connection> connectionSupplier)
 	{
 		if (this.executeSqlExtension.isEmpty())
@@ -135,12 +145,14 @@ public class ReladomoExtensionBuilder
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder withPurgeAllExtension()
 	{
 		this.purgeAllExtension = Optional.of(new ReladomoPurgeAllExtension());
 		return this;
 	}
 
+	@CanIgnoreReturnValue
 	public ReladomoExtensionBuilder withoutPurgeAllExtension()
 	{
 		this.purgeAllExtension = Optional.empty();

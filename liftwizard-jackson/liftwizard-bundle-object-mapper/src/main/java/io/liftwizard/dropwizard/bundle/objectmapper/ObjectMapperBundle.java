@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auto.service.AutoService;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
@@ -73,6 +74,7 @@ public class ObjectMapperBundle
 		return this.configureObjectMapper(new ObjectMapperFactory(), Jackson.newObjectMapper());
 	}
 
+	@CanIgnoreReturnValue
 	public ObjectMapper configureObjectMapper(ObjectMapperFactory objectMapperFactory, ObjectMapper objectMapper)
 	{
 		if (!objectMapperFactory.isEnabled())

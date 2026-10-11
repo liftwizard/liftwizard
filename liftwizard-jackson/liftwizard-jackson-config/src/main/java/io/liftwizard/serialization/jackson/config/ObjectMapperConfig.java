@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
@@ -79,6 +80,7 @@ public final class ObjectMapperConfig
 		return configure(objectMapper, prettyPrint, failOnUnknownProperties, serializationInclusion, Nulls.AS_EMPTY);
 	}
 
+	@CanIgnoreReturnValue
 	public static ObjectMapper configure(
 		@Nonnull ObjectMapper objectMapper,
 		boolean prettyPrint,

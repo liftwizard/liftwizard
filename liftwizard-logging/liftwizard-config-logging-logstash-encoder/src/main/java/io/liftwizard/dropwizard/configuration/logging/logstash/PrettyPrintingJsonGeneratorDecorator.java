@@ -19,12 +19,14 @@ package io.liftwizard.dropwizard.configuration.logging.logstash;
 import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.liftwizard.serialization.jackson.pretty.JsonLinesPrettyPrinter;
 import net.logstash.logback.decorate.JsonGeneratorDecorator;
 
 public class PrettyPrintingJsonGeneratorDecorator
 	implements JsonGeneratorDecorator
 {
+	@CanIgnoreReturnValue
 	@Override
 	public JsonGenerator decorate(@Nonnull JsonGenerator generator)
 	{

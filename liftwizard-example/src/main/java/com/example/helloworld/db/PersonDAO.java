@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.example.helloworld.core.Person;
 import com.example.helloworld.core.PersonFinder;
 import com.example.helloworld.core.PersonList;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 
 public class PersonDAO
@@ -14,6 +15,7 @@ public class PersonDAO
 		return Optional.ofNullable(PersonFinder.findOne(PersonFinder.id().eq(id)));
 	}
 
+	@CanIgnoreReturnValue
 	public Person create(Person person)
 	{
 		MithraManagerProvider.getMithraManager().executeTransactionalCommand((tx) ->

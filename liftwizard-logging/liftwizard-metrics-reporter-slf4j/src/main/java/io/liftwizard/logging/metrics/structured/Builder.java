@@ -26,6 +26,7 @@ import java.util.function.Function;
 import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.liftwizard.logging.metrics.structured.proxy.AbstractLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.DebugLoggerProxy;
 import io.liftwizard.logging.metrics.structured.proxy.ErrorLoggerProxy;
@@ -71,6 +72,7 @@ public class Builder
 	 * @param newShutdownExecutorOnStop if true, then executor will be stopped in same time with this reporter
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder shutdownExecutorOnStop(boolean newShutdownExecutorOnStop)
 	{
 		this.shutdownExecutorOnStop = newShutdownExecutorOnStop;
@@ -85,6 +87,7 @@ public class Builder
 	 * @param newExecutor the executor to use while scheduling reporting of metrics.
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder scheduleOn(ScheduledExecutorService newExecutor)
 	{
 		this.executor = newExecutor;
@@ -97,6 +100,7 @@ public class Builder
 	 * @param newLogger an SLF4J {@link Logger}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder outputTo(Logger newLogger)
 	{
 		this.logger = newLogger;
@@ -109,6 +113,7 @@ public class Builder
 	 * @param newMarker an SLF4J {@link Marker}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder markWith(Marker newMarker)
 	{
 		this.marker = newMarker;
@@ -121,6 +126,7 @@ public class Builder
 	 * @param newPrefix the prefix for all metric names
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder prefixedWith(String newPrefix)
 	{
 		this.prefix = newPrefix;
@@ -133,6 +139,7 @@ public class Builder
 	 * @param newRateUnit a unit of time
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder convertRatesTo(TimeUnit newRateUnit)
 	{
 		this.rateUnit = newRateUnit;
@@ -145,6 +152,7 @@ public class Builder
 	 * @param newDurationUnit a unit of time
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder convertDurationsTo(TimeUnit newDurationUnit)
 	{
 		this.durationUnit = newDurationUnit;
@@ -157,6 +165,7 @@ public class Builder
 	 * @param newFilter a {@link MetricFilter}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder filter(MetricFilter newFilter)
 	{
 		this.filter = newFilter;
@@ -169,6 +178,7 @@ public class Builder
 	 * @param newLoggingLevel a {@link LoggingLevel}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder withLoggingLevel(LoggingLevel newLoggingLevel)
 	{
 		this.loggingLevel = newLoggingLevel;
@@ -182,6 +192,7 @@ public class Builder
 	 * @param newDisabledMetricAttributes a set of {@link MetricAttribute}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder disabledMetricAttributes(Set<MetricAttribute> newDisabledMetricAttributes)
 	{
 		this.disabledMetricAttributes = Sets.mutable.withAll(newDisabledMetricAttributes);
@@ -194,6 +205,7 @@ public class Builder
 	 * @param newToStructuredObjectFunction A function such as {@code Markers::appendEntries} or {@code StructuredArguments::entries}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder mapToStructuredObjectFunction(Function<Map<String, Object>, ?> newToStructuredObjectFunction)
 	{
 		this.mapToStructuredObjectFunction = newToStructuredObjectFunction;
@@ -206,6 +218,7 @@ public class Builder
 	 * @param newMessage A String such as {@code "metrics"} or {@code "metrics: {}"}
 	 * @return {@code this}
 	 */
+	@CanIgnoreReturnValue
 	public Builder message(String newMessage)
 	{
 		this.message = newMessage;

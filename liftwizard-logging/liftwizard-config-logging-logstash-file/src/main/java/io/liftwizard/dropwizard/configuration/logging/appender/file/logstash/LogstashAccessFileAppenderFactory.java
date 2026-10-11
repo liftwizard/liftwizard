@@ -42,6 +42,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.dropwizard.logging.AbstractAppenderFactory;
 import io.dropwizard.logging.AppenderFactory;
 import io.dropwizard.logging.async.AsyncAppenderFactory;
@@ -257,6 +258,7 @@ public class LogstashAccessFileAppenderFactory
 			: this.dateAndSizeSpecifiedPolicy(appender, context);
 	}
 
+	@CanIgnoreReturnValue
 	private RollingFileAppender<IAccessEvent> configurePolicyWithDefaults(
 		RollingFileAppender<IAccessEvent> appender,
 		Context context
@@ -307,6 +309,7 @@ public class LogstashAccessFileAppenderFactory
 		return rollingPolicy;
 	}
 
+	@CanIgnoreReturnValue
 	private RollingFileAppender<IAccessEvent> dateAndSizeSpecifiedPolicy(
 		RollingFileAppender<IAccessEvent> appender,
 		Context context

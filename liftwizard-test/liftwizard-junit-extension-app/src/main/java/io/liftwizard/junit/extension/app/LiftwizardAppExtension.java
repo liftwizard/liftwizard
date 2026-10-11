@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.ws.rs.client.Client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.cli.Command;
@@ -181,6 +182,7 @@ public class LiftwizardAppExtension<C extends Configuration>
 		this(new DropwizardTestSupport<>(applicationClass, configuration, commandInstantiator));
 	}
 
+	@CanIgnoreReturnValue
 	public LiftwizardAppExtension<C> manage(Managed managed)
 	{
 		return this.addListener(
@@ -195,6 +197,7 @@ public class LiftwizardAppExtension<C extends Configuration>
 		);
 	}
 
+	@CanIgnoreReturnValue
 	public LiftwizardAppExtension<C> addListener(AbstractServiceListener<C> listener)
 	{
 		this.testSupport.addListener(

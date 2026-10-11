@@ -21,6 +21,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import net.logstash.logback.decorate.JsonFactoryDecorator;
 
@@ -36,6 +37,7 @@ public class ObjectMapperConfigJsonFactoryDecorator
 		this.serializationInclusion = Objects.requireNonNull(serializationInclusion);
 	}
 
+	@CanIgnoreReturnValue
 	@Override
 	public JsonFactory decorate(JsonFactory factory)
 	{
