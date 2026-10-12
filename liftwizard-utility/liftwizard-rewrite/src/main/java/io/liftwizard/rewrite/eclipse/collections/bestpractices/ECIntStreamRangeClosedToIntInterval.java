@@ -128,7 +128,7 @@ public class ECIntStreamRangeClosedToIntInterval
 			return intIntervalFromTo.apply(
 				this.getCursor(),
 				mi.getCoordinates().replace(),
-				mi.getArguments().get(0),
+				mi.getArguments().getFirst(),
 				mi.getArguments().get(1)
 			);
 		}

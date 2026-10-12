@@ -122,7 +122,7 @@ public class IfElseToTernary
 				{
 					return null;
 				}
-				return statements.get(0);
+				return statements.getFirst();
 			}
 			return statement;
 		}

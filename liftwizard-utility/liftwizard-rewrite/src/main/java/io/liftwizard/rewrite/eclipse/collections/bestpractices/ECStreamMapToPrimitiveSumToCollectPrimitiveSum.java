@@ -159,7 +159,7 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum
 
 			// Build: collection.collectDouble(fn).sum()
 
-			Expression mapperFunction = mapToPrimitiveArgs.get(0);
+			Expression mapperFunction = mapToPrimitiveArgs.getFirst();
 
 			// Reuse the mapToDouble() method type (1 arg) for the collectDouble(fn) call
 			JavaType.Method mapToPrimitiveMethodType = mapToPrimitiveCall.getMethodType();

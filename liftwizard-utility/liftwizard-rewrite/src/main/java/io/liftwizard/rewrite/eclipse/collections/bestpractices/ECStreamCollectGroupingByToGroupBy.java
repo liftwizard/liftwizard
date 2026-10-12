@@ -113,7 +113,7 @@ public class ECStreamCollectGroupingByToGroupBy
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;
@@ -168,7 +168,7 @@ public class ECStreamCollectGroupingByToGroupBy
 				List<Expression> args = collectorCall.getArguments();
 				if (args.size() == 1)
 				{
-					return args.get(0);
+					return args.getFirst();
 				}
 				return null;
 			}
@@ -194,7 +194,7 @@ public class ECStreamCollectGroupingByToGroupBy
 					return null;
 				}
 
-				return args.get(0);
+				return args.getFirst();
 			}
 
 			return null;

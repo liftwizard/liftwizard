@@ -117,7 +117,7 @@ public class ECStreamReduceToInjectInto
 				return methodInvocation;
 			}
 
-			Expression identity = arguments.get(0);
+			Expression identity = arguments.getFirst();
 			Expression accumulator = arguments.get(1);
 
 			J.Identifier newMethodName = methodInvocation.getName().withSimpleName("injectInto");

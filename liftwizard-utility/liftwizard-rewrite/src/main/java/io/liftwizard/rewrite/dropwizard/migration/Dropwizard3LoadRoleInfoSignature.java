@@ -91,7 +91,7 @@ public class Dropwizard3LoadRoleInfoSignature
 		{
 			return false;
 		}
-		J firstParam = method.getParameters().get(0);
+		J firstParam = method.getParameters().getFirst();
 		if (!(firstParam instanceof J.VariableDeclarations vd))
 		{
 			return false;

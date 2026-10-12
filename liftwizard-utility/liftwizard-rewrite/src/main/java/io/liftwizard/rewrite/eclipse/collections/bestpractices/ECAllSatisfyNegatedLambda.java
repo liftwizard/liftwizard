@@ -92,7 +92,7 @@ public class ECAllSatisfyNegatedLambda
 				return methodInvocation;
 			}
 
-			Expression argument = methodInvocation.getArguments().get(0);
+			Expression argument = methodInvocation.getArguments().getFirst();
 			if (!(argument instanceof J.Lambda lambda))
 			{
 				return methodInvocation;

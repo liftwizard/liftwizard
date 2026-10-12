@@ -117,7 +117,7 @@ public class ECStreamFlatMapCollectToFlatCollect
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;
@@ -170,7 +170,7 @@ public class ECStreamFlatMapCollectToFlatCollect
 				return methodInvocation;
 			}
 
-			Expression flatMapArg = flatMapArguments.get(0);
+			Expression flatMapArg = flatMapArguments.getFirst();
 			Expression transformedArg = this.stripStreamFromLambda(flatMapArg);
 			if (transformedArg == null)
 			{
@@ -232,7 +232,7 @@ public class ECStreamFlatMapCollectToFlatCollect
 				{
 					return null;
 				}
-				if (!(bodyMethodInvocation.getArguments().get(0) instanceof J.Empty))
+				if (!(bodyMethodInvocation.getArguments().getFirst() instanceof J.Empty))
 				{
 					return null;
 				}

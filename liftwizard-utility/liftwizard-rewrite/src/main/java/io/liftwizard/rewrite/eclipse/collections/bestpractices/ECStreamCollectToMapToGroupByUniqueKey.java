@@ -107,7 +107,7 @@ public class ECStreamCollectToMapToGroupByUniqueKey
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;
@@ -157,7 +157,7 @@ public class ECStreamCollectToMapToGroupByUniqueKey
 				return methodInvocation;
 			}
 
-			Expression keyFn = toMapArguments.get(0);
+			Expression keyFn = toMapArguments.getFirst();
 
 			J.Identifier groupByUniqueKeyMethodName = streamCall.getName().withSimpleName("groupByUniqueKey");
 

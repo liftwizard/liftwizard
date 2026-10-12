@@ -49,7 +49,7 @@ final class ECStreamSupport
 		{
 			return false;
 		}
-		return method.getArguments().get(0) instanceof J.Empty;
+		return method.getArguments().getFirst() instanceof J.Empty;
 	}
 
 	static boolean isEclipseCollectionsType(Expression expression)
