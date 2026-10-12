@@ -86,7 +86,7 @@ public class ReladomoLoadDataExtension
 			return this.testDataFileNames;
 		}
 
-		ReladomoTestFile reladomoTestFileAnnotation = element.get().getAnnotation(ReladomoTestFile.class);
+		ReladomoTestFile reladomoTestFileAnnotation = element.orElseThrow().getAnnotation(ReladomoTestFile.class);
 		if (reladomoTestFileAnnotation == null)
 		{
 			return this.testDataFileNames;

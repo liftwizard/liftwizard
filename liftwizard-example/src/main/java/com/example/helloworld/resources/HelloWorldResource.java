@@ -60,7 +60,7 @@ public class HelloWorldResource
 	{
 		if (dateTimeParam.isPresent())
 		{
-			DateTimeParam actualDateTimeParam = dateTimeParam.get();
+			DateTimeParam actualDateTimeParam = dateTimeParam.orElseThrow();
 			LOGGER.info("Received a date: {}", actualDateTimeParam);
 			return actualDateTimeParam.get().toString();
 		}

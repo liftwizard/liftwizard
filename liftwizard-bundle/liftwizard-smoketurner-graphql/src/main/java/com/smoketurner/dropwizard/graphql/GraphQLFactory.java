@@ -178,7 +178,7 @@ public class GraphQLFactory
 	{
 		if (this.graphQLSchema.isPresent())
 		{
-			return this.graphQLSchema.get();
+			return this.graphQLSchema.orElseThrow();
 		}
 
 		final var parser = new SchemaParser();

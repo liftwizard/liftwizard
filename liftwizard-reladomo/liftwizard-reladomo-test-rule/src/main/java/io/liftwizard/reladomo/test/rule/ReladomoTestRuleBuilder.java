@@ -72,7 +72,7 @@ public class ReladomoTestRuleBuilder
 		{
 			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
 		}
-		this.executeSqlTestRule.get().setDdlLocationPattern(ddlLocationPattern);
+		this.executeSqlTestRule.orElseThrow().setDdlLocationPattern(ddlLocationPattern);
 		return this;
 	}
 
@@ -82,7 +82,7 @@ public class ReladomoTestRuleBuilder
 		{
 			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
 		}
-		this.executeSqlTestRule.get().setIdxLocationPattern(idxLocationPattern);
+		this.executeSqlTestRule.orElseThrow().setIdxLocationPattern(idxLocationPattern);
 		return this;
 	}
 
@@ -92,7 +92,7 @@ public class ReladomoTestRuleBuilder
 		{
 			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
 		}
-		this.executeSqlTestRule.get().setFkLocationPattern(fkLocationPattern);
+		this.executeSqlTestRule.orElseThrow().setFkLocationPattern(fkLocationPattern);
 		return this;
 	}
 
@@ -102,7 +102,7 @@ public class ReladomoTestRuleBuilder
 		{
 			this.executeSqlTestRule = Optional.of(new ExecuteSqlTestRule());
 		}
-		this.executeSqlTestRule.get().setConnectionSupplier(connectionSupplier);
+		this.executeSqlTestRule.orElseThrow().setConnectionSupplier(connectionSupplier);
 		return this;
 	}
 
