@@ -110,7 +110,7 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;
@@ -169,7 +169,7 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag
 				return false;
 			}
 
-			Expression classifyingFunction = args.get(0);
+			Expression classifyingFunction = args.getFirst();
 			if (!(classifyingFunction instanceof J.MethodInvocation identityCall))
 			{
 				return false;

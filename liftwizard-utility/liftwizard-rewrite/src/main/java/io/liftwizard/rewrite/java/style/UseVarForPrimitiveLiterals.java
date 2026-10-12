@@ -100,7 +100,7 @@ public class UseVarForPrimitiveLiterals
 				return false;
 			}
 
-			NamedVariable variable = variables.get(0);
+			NamedVariable variable = variables.getFirst();
 
 			Expression initializer = variable.getInitializer();
 			if (initializer == null)
@@ -176,7 +176,7 @@ public class UseVarForPrimitiveLiterals
 
 		private VariableDeclarations transformToVar(VariableDeclarations vd)
 		{
-			NamedVariable variable = vd.getVariables().get(0);
+			NamedVariable variable = vd.getVariables().getFirst();
 			Literal literal = (Literal) variable.getInitializer();
 
 			Space prefix = vd.getTypeExpression() == null ? Space.EMPTY : vd.getTypeExpression().getPrefix();

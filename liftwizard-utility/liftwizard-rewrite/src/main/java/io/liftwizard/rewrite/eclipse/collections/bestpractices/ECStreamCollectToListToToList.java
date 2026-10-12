@@ -96,7 +96,7 @@ public class ECStreamCollectToListToToList
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;

@@ -301,11 +301,11 @@ abstract class AbstractECStreamChainVisitor
 		return switch (link.getSimpleName())
 		{
 			// Eclipse Collections drop(int)/take(int) cannot accept Stream.skip(long)'s long arguments
-			case "skip", "limit" -> arguments.size() == 1 && isIntTyped(arguments.get(0));
+			case "skip", "limit" -> arguments.size() == 1 && isIntTyped(arguments.getFirst());
 			// Lambdas and method references compile against either functional interface family, but a
 			// variable of a java.util.function type would not
 			case "filter", "map", "anyMatch", "allMatch", "noneMatch", "forEach" -> arguments.size() == 1
-				&& (arguments.get(0) instanceof J.Lambda || arguments.get(0) instanceof J.MemberReference);
+				&& (arguments.getFirst() instanceof J.Lambda || arguments.getFirst() instanceof J.MemberReference);
 			case "sorted" -> arguments.size() <= 1;
 			case "findFirst", "distinct", "toList", "toArray", "iterator" -> arguments.isEmpty();
 			default -> false;
@@ -332,7 +332,7 @@ abstract class AbstractECStreamChainVisitor
 		}
 
 		List<Expression> arguments = realArguments(link);
-		if (arguments.size() != 1 || !(arguments.get(0) instanceof J.MethodInvocation collectorCall))
+		if (arguments.size() != 1 || !(arguments.getFirst() instanceof J.MethodInvocation collectorCall))
 		{
 			return null;
 		}
@@ -422,7 +422,7 @@ abstract class AbstractECStreamChainVisitor
 	protected static List<Expression> realArguments(J.MethodInvocation invocation)
 	{
 		List<Expression> arguments = invocation.getArguments();
-		if (arguments.size() == 1 && arguments.get(0) instanceof J.Empty)
+		if (arguments.size() == 1 && arguments.getFirst() instanceof J.Empty)
 		{
 			return List.of();
 		}

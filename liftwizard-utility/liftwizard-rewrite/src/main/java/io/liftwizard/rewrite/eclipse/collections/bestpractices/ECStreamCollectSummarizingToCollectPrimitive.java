@@ -117,7 +117,7 @@ public class ECStreamCollectSummarizingToCollectPrimitive
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation summarizingCall))
 			{
 				return methodInvocation;
@@ -169,7 +169,7 @@ public class ECStreamCollectSummarizingToCollectPrimitive
 			JavaType.Method summaryStatsMethodType =
 				streamMethodType != null ? streamMethodType.withName("summaryStatistics") : null;
 
-			Expression mapperFunction = summarizingArgs.get(0);
+			Expression mapperFunction = summarizingArgs.getFirst();
 
 			// Inner call: collection.collectDouble(fn)
 			J.Identifier collectPrimitiveMethodName = streamCall

@@ -130,7 +130,7 @@ public class ECStreamCountToCount
 				return methodInvocation;
 			}
 
-			Expression predicate = filterArguments.get(0);
+			Expression predicate = filterArguments.getFirst();
 
 			J.Identifier countMethodName = methodInvocation.getName().withSimpleName("count");
 

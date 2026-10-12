@@ -102,7 +102,7 @@ public class ECStreamCollectPartitioningByToPartition
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;
@@ -141,7 +141,7 @@ public class ECStreamCollectPartitioningByToPartition
 				return methodInvocation;
 			}
 
-			Expression predicate = partitioningByArgs.get(0);
+			Expression predicate = partitioningByArgs.getFirst();
 			J.Identifier partitionMethodName = streamCall.getName().withSimpleName("partition");
 
 			return streamCall
