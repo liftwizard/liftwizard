@@ -23,6 +23,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * Tests that JUnit components have compatible versions.
@@ -37,7 +38,7 @@ final class JUnitVersionCompatibilityTest
 {
 	private static Stream<Arguments> testDataProvider()
 	{
-		return Stream.of(Arguments.of("first", 1), Arguments.of("second", 2), Arguments.of("third", 3));
+		return Stream.of(arguments("first", 1), arguments("second", 2), arguments("third", 3));
 	}
 
 	@ParameterizedTest
