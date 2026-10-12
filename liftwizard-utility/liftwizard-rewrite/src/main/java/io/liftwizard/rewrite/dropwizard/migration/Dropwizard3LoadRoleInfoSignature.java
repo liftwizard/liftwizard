@@ -165,7 +165,7 @@ public class Dropwizard3LoadRoleInfoSignature
 			{
 				return processed;
 			}
-			return this.rewriteAsListOfRolePrincipal(processed, newArray, ctx);
+			return this.rewriteAsListOfRolePrincipal(processed, newArray);
 		}
 
 		private boolean isInsideLoadRoleInfoOverride()
@@ -177,7 +177,7 @@ public class Dropwizard3LoadRoleInfoSignature
 			return parentValue instanceof J.MethodDeclaration enclosing && isLoadRoleInfoOverride(enclosing);
 		}
 
-		private J.Return rewriteAsListOfRolePrincipal(J.Return retn, J.NewArray newArray, ExecutionContext ctx)
+		private J.Return rewriteAsListOfRolePrincipal(J.Return retn, J.NewArray newArray)
 		{
 			List<Expression> elements = newArray.getInitializer() == null ? List.of() : newArray.getInitializer();
 

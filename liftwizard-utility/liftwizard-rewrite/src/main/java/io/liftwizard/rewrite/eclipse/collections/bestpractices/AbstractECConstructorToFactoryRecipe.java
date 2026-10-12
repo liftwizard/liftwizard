@@ -175,7 +175,7 @@ public abstract class AbstractECConstructorToFactoryRecipe
 				return nc;
 			}
 
-			if (this.isVariableTypeConcreteClass(nc))
+			if (this.isVariableTypeConcreteClass())
 			{
 				return nc;
 			}
@@ -357,10 +357,10 @@ public abstract class AbstractECConstructorToFactoryRecipe
 				return "";
 			}
 
-			return this.inferTypeParametersFromContext(nc);
+			return this.inferTypeParametersFromContext();
 		}
 
-		private String inferTypeParametersFromContext(J.NewClass nc)
+		private String inferTypeParametersFromContext()
 		{
 			Cursor cursor = this.getCursor();
 			while (cursor != null)
@@ -459,7 +459,7 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			return typeStr;
 		}
 
-		private boolean isVariableTypeConcreteClass(J.NewClass newClass)
+		private boolean isVariableTypeConcreteClass()
 		{
 			String implementationClass = MessageFormat.format(
 				"org.eclipse.collections.impl.{0}.mutable.{1}",
