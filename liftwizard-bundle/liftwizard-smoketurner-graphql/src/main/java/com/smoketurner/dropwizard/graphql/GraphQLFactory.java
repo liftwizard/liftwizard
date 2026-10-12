@@ -85,7 +85,7 @@ public class GraphQLFactory
 	@JsonProperty
 	public void setSchemaFiles(List<String> files)
 	{
-		this.schemaFiles = Optional.ofNullable(files).orElseGet(ArrayList::new);
+		this.schemaFiles = Objects.requireNonNullElseGet(files, ArrayList::new);
 	}
 
 	@JsonProperty
@@ -170,7 +170,7 @@ public class GraphQLFactory
 	@JsonIgnore
 	public void setInstrumentations(@Nullable List<Instrumentation> instrumentations)
 	{
-		this.instrumentations = Optional.ofNullable(instrumentations).orElseGet(ArrayList::new);
+		this.instrumentations = Objects.requireNonNullElseGet(instrumentations, ArrayList::new);
 	}
 
 	public GraphQLSchema build()
