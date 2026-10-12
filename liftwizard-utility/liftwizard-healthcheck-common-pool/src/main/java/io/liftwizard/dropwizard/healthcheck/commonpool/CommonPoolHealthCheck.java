@@ -20,13 +20,13 @@ import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
@@ -115,10 +115,10 @@ public class CommonPoolHealthCheck
 	protected Result check()
 	{
 		ThreadInfo[] threadInfos = this.threads.getThreadInfo(this.threads.getAllThreadIds(), MAX_STACK_TRACE_DEPTH);
-		List<ThreadInfo> badThreadInfos = Stream.of(threadInfos)
-			.filter((threadInfo) -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
-			.filter((threadInfo) -> this.threadStates.contains(threadInfo.getThreadState()))
-			.filter(
+		List<ThreadInfo> badThreadInfos = ArrayAdapter.adapt(threadInfos)
+			.select((threadInfo) -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
+			.select((threadInfo) -> this.threadStates.contains(threadInfo.getThreadState()))
+			.select(
 				(threadInfo) ->
 					this.bannedPatterns.isEmpty()
 					|| this.bannedPatterns.anySatisfy((bannedPattern) ->
@@ -128,15 +128,14 @@ public class CommonPoolHealthCheck
 						)
 					)
 			)
-			.filter((threadInfo) ->
+			.select((threadInfo) ->
 				this.alwaysAllowedPatterns.noneSatisfy((alwaysAllowedPattern) ->
 					ArrayAdapter.adapt(threadInfo.getStackTrace()).anySatisfyWith(
 						this::traceMatchesPattern,
 						alwaysAllowedPattern
 					)
 				)
-			)
-			.toList();
+			);
 
 		if (badThreadInfos.isEmpty())
 		{
@@ -180,7 +179,7 @@ public class CommonPoolHealthCheck
 	@Nonnull
 	private String getStackTraceString(StackTraceElement[] stackTrace)
 	{
-		return Stream.of(stackTrace)
+		return Arrays.stream(stackTrace)
 			.map(StackTraceElement::toString)
 			.collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));
 	}
