@@ -31,7 +31,7 @@ public class User
 
 	public int getId()
 	{
-		return (int) (ThreadLocalRandom.current().nextDouble() * 100.0);
+		return (int) ThreadLocalRandom.current().nextDouble(100.0);
 	}
 
 	public Set<String> getRoles()
