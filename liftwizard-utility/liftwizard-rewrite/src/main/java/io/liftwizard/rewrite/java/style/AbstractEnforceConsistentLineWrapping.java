@@ -143,7 +143,7 @@ public abstract class AbstractEnforceConsistentLineWrapping
 		}
 
 		// First element must have a newline prefix
-		if (!containsNewline(elements.get(0).getElement().getPrefix()))
+		if (!containsNewline(elements.getFirst().getElement().getPrefix()))
 		{
 			return false;
 		}
@@ -173,7 +173,7 @@ public abstract class AbstractEnforceConsistentLineWrapping
 		}
 
 		// All groups must have the same size >= 2
-		int firstGroupSize = groupSizes.get(0);
+		int firstGroupSize = groupSizes.getFirst();
 		if (firstGroupSize < 2)
 		{
 			return false;

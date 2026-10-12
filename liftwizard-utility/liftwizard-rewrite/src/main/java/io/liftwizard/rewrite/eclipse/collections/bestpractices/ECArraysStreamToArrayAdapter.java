@@ -130,7 +130,7 @@ public class ECArraysStreamToArrayAdapter
 			}
 
 			// Only match Object[] arrays, not primitive arrays (int[], long[], double[])
-			JavaType argType = root.getArguments().get(0).getType();
+			JavaType argType = root.getArguments().getFirst().getType();
 			if (argType instanceof JavaType.Array arrayType && arrayType.getElemType() instanceof JavaType.Primitive)
 			{
 				return false;
@@ -146,7 +146,7 @@ public class ECArraysStreamToArrayAdapter
 			J.MethodInvocation adapted = ARRAY_ADAPTER_ADAPT.apply(
 				this.getCursor(),
 				root.getCoordinates().replace(),
-				root.getArguments().get(0)
+				root.getArguments().getFirst()
 			);
 			// The template re-indents a multi-line argument such as an array initializer, leaving its braces misaligned
 			return adapted.getPadding().withArguments(root.getPadding().getArguments());

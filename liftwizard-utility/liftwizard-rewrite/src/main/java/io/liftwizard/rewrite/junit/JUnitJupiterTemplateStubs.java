@@ -53,7 +53,7 @@ public final class JUnitJupiterTemplateStubs
 
 	public static String testStub()
 	{
-		return STUBS.get(0);
+		return STUBS.getFirst();
 	}
 
 	public static String extendWithStub()

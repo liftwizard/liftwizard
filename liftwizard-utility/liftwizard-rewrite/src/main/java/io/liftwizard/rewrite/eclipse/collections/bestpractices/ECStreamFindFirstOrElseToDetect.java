@@ -99,7 +99,7 @@ public class ECStreamFindFirstOrElseToDetect
 				return methodInvocation;
 			}
 
-			Expression defaultValue = orElseArguments.get(0);
+			Expression defaultValue = orElseArguments.getFirst();
 			if (!(defaultValue instanceof J.Literal literal) || literal.getValue() != null)
 			{
 				return methodInvocation;
@@ -155,7 +155,7 @@ public class ECStreamFindFirstOrElseToDetect
 				return methodInvocation;
 			}
 
-			Expression predicate = filterArguments.get(0);
+			Expression predicate = filterArguments.getFirst();
 
 			J.Identifier newMethodName = methodInvocation.getName().withSimpleName("detect");
 

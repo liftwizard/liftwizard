@@ -80,7 +80,7 @@ final class GarbageFreeLambdaVisitor
 			return mi;
 		}
 
-		Result result = detect(mi.getArguments().get(0));
+		Result result = detect(mi.getArguments().getFirst());
 		if (result == null)
 		{
 			return mi;
@@ -156,7 +156,7 @@ final class GarbageFreeLambdaVisitor
 			return null;
 		}
 
-		J firstParameter = lambda.getParameters().getParameters().get(0);
+		J firstParameter = lambda.getParameters().getParameters().getFirst();
 		if (!(firstParameter instanceof J.VariableDeclarations varDecls))
 		{
 			return null;
@@ -165,7 +165,7 @@ final class GarbageFreeLambdaVisitor
 		{
 			return null;
 		}
-		J.VariableDeclarations.NamedVariable namedVariable = varDecls.getVariables().get(0);
+		J.VariableDeclarations.NamedVariable namedVariable = varDecls.getVariables().getFirst();
 		JavaType paramType = namedVariable.getType();
 		if (paramType == null)
 		{
@@ -179,7 +179,7 @@ final class GarbageFreeLambdaVisitor
 			{
 				return null;
 			}
-			Statement onlyStatement = block.getStatements().get(0);
+			Statement onlyStatement = block.getStatements().getFirst();
 			if (!(onlyStatement instanceof J.Return returnStatement))
 			{
 				return null;
@@ -212,7 +212,7 @@ final class GarbageFreeLambdaVisitor
 		{
 			return null;
 		}
-		Expression capturedExpression = innerCall.getArguments().get(0);
+		Expression capturedExpression = innerCall.getArguments().getFirst();
 		if (capturedExpression instanceof J.Empty)
 		{
 			return null;

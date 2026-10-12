@@ -98,7 +98,7 @@ public class ECDetectIfNoneToDetectWithIfNone
 				return mi;
 			}
 
-			GarbageFreeLambdaVisitor.Result result = GarbageFreeLambdaVisitor.detect(mi.getArguments().get(0));
+			GarbageFreeLambdaVisitor.Result result = GarbageFreeLambdaVisitor.detect(mi.getArguments().getFirst());
 			if (result == null)
 			{
 				return mi;

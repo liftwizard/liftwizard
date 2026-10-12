@@ -141,7 +141,7 @@ public class ECStreamGatherFoldToInjectInto
 				return methodInvocation;
 			}
 
-			Expression gathererArg = gatherArguments.get(0);
+			Expression gathererArg = gatherArguments.getFirst();
 			if (!(gathererArg instanceof J.MethodInvocation foldCall))
 			{
 				return methodInvocation;
@@ -163,7 +163,7 @@ public class ECStreamGatherFoldToInjectInto
 				return methodInvocation;
 			}
 
-			Expression supplierArg = foldArguments.get(0);
+			Expression supplierArg = foldArguments.getFirst();
 
 			// Extract the body of the supplier lambda: () -> value
 			Expression initialValueRaw = this.extractSupplierLambdaBody(supplierArg);
@@ -217,7 +217,7 @@ public class ECStreamGatherFoldToInjectInto
 			{
 				return true;
 			}
-			return method.getArguments().size() == 1 && method.getArguments().get(0) instanceof J.Empty;
+			return method.getArguments().size() == 1 && method.getArguments().getFirst() instanceof J.Empty;
 		}
 
 		private Expression extractSupplierLambdaBody(Expression expression)
@@ -229,7 +229,7 @@ public class ECStreamGatherFoldToInjectInto
 			// Must be a zero-argument lambda: () -> value
 			if (!lambda.getParameters().getParameters().isEmpty())
 			{
-				J firstParam = lambda.getParameters().getParameters().get(0);
+				J firstParam = lambda.getParameters().getParameters().getFirst();
 				if (!(firstParam instanceof J.Empty))
 				{
 					return null;

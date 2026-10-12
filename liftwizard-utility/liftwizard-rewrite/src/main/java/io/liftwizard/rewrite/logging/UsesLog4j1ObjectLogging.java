@@ -133,13 +133,13 @@ public final class UsesLog4j1ObjectLogging
 			{
 				return null;
 			}
-			if (m.getArguments().isEmpty() || m.getArguments().get(0) instanceof J.Empty)
+			if (m.getArguments().isEmpty() || m.getArguments().getFirst() instanceof J.Empty)
 			{
 				return null;
 			}
 			if (matchesAny(LEVEL_MATCHERS, m))
 			{
-				return m.getArguments().get(0);
+				return m.getArguments().getFirst();
 			}
 			return null;
 		}
@@ -162,7 +162,7 @@ public final class UsesLog4j1ObjectLogging
 				&& functionalInterface.getTypeParameters().size() == 1
 			)
 			{
-				return functionalInterface.getTypeParameters().get(0);
+				return functionalInterface.getTypeParameters().getFirst();
 			}
 			return null;
 		}

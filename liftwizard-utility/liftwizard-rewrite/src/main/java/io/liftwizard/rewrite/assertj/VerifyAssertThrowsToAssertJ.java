@@ -83,7 +83,7 @@ public class VerifyAssertThrowsToAssertJ
 			this.maybeRemoveImport("org.eclipse.collections.impl.test.Verify");
 			this.maybeAddImport("org.assertj.core.api.Assertions", "assertThatThrownBy", false);
 
-			Expression exceptionClass = methodInvocation.getArguments().get(0);
+			Expression exceptionClass = methodInvocation.getArguments().getFirst();
 			return template.apply(
 				this.getCursor(),
 				methodInvocation.getCoordinates().replace(),

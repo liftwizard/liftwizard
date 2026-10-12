@@ -121,7 +121,7 @@ public class IterateToArrayIterate
 					return mi;
 				}
 
-				Expression firstArgument = mi.getArguments().get(0);
+				Expression firstArgument = mi.getArguments().getFirst();
 				if (!(firstArgument instanceof J.MethodInvocation arraysAsListCall))
 				{
 					return mi;
@@ -137,7 +137,7 @@ public class IterateToArrayIterate
 					return mi;
 				}
 
-				final Expression arrayArgument = arraysAsListCall.getArguments().get(0);
+				final Expression arrayArgument = arraysAsListCall.getArguments().getFirst();
 				this.maybeRemoveImport("org.eclipse.collections.impl.utility.Iterate");
 				this.maybeRemoveImport("java.util.Arrays");
 				this.maybeAddImport("org.eclipse.collections.impl.utility.ArrayIterate");

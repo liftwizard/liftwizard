@@ -135,7 +135,7 @@ public class ECStreamMatchToSatisfy
 				return methodInvocation;
 			}
 
-			Expression predicate = arguments.get(0);
+			Expression predicate = arguments.getFirst();
 
 			J.Identifier newMethodName = methodInvocation.getName().withSimpleName(satisfyMethod);
 

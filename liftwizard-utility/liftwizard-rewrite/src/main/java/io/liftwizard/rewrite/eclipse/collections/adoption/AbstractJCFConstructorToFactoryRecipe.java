@@ -110,20 +110,20 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			List<Expression> arguments = nc.getArguments();
 
 			boolean isEmptyConstructor =
-				arguments.isEmpty() || (arguments.size() == 1 && arguments.get(0) instanceof J.Empty);
+				arguments.isEmpty() || (arguments.size() == 1 && arguments.getFirst() instanceof J.Empty);
 			boolean isInitialCapacityConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& isNumericType(arguments.get(0).getType());
+				&& !(arguments.getFirst() instanceof J.Empty)
+				&& isNumericType(arguments.getFirst().getType());
 			boolean isComparatorConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& isComparatorType(arguments.get(0).getType());
+				&& !(arguments.getFirst() instanceof J.Empty)
+				&& isComparatorType(arguments.getFirst().getType());
 			boolean isCollectionConstructor =
 				arguments.size() == 1
-				&& !(arguments.get(0) instanceof J.Empty)
-				&& !isNumericType(arguments.get(0).getType())
-				&& !isComparatorType(arguments.get(0).getType());
+				&& !(arguments.getFirst() instanceof J.Empty)
+				&& !isNumericType(arguments.getFirst().getType())
+				&& !isComparatorType(arguments.getFirst().getType());
 
 			if (
 				!isEmptyConstructor
@@ -170,7 +170,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			J replacement;
 			if (isInitialCapacityConstructor || isComparatorConstructor || isCollectionConstructor)
 			{
-				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.get(0));
+				replacement = template.apply(this.getCursor(), nc.getCoordinates().replace(), arguments.getFirst());
 			}
 			else
 			{

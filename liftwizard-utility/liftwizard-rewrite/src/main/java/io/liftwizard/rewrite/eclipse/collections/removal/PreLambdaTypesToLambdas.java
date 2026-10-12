@@ -285,7 +285,7 @@ public class PreLambdaTypesToLambdas
 				{
 					return nc;
 				}
-				Expression arg = nc.getArguments().get(0);
+				Expression arg = nc.getArguments().getFirst();
 				if (sub.needsContextChecks() && !passesContextChecks(arg, sub))
 				{
 					return nc;
@@ -310,7 +310,7 @@ public class PreLambdaTypesToLambdas
 				{
 					continue;
 				}
-				Expression arg = invocation.getArguments().get(0);
+				Expression arg = invocation.getArguments().getFirst();
 				if (!passesContextChecks(arg, sub))
 				{
 					return invocation;

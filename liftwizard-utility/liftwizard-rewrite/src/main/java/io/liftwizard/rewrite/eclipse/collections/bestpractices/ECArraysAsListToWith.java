@@ -163,7 +163,7 @@ public class ECArraysAsListToWith
 				{
 					return mi;
 				}
-				comparatorArg = mi.getArguments().get(0);
+				comparatorArg = mi.getArguments().getFirst();
 				argument = mi.getArguments().get(1);
 			}
 			else
@@ -172,7 +172,7 @@ public class ECArraysAsListToWith
 				{
 					return mi;
 				}
-				argument = mi.getArguments().get(0);
+				argument = mi.getArguments().getFirst();
 			}
 
 			if (!(argument instanceof J.MethodInvocation arraysAsListCall))

@@ -128,7 +128,7 @@ public class ECStreamMinMaxToMinMax
 				return methodInvocation;
 			}
 
-			Expression comparator = arguments.get(0);
+			Expression comparator = arguments.getFirst();
 
 			J.Identifier newMethodName = methodInvocation.getName().withSimpleName(optionalMethod);
 
