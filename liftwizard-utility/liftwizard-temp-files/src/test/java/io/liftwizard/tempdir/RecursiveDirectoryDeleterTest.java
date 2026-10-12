@@ -107,6 +107,6 @@ class RecursiveDirectoryDeleterTest
 		readOnlyFile.toFile().setWritable(true);
 
 		assertThat(result).isFalse();
-		assertThat(Files.exists(readOnlyFile)).isTrue();
+		assertThat(readOnlyFile).exists();
 	}
 }
