@@ -41,6 +41,20 @@
         <errorprone.flags.strict.addon />
         <errorprone.flags.patch.addon />
         <errorprone.flags.untested.addon />
+        <!-- Refaster NamePattern excludes rules we disagree with: -->
+        <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
+        <!-- StringRules$StringsIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
+        <!-- Immutable*Rules$* rewrite JDK collection factories to Guava immutable collections. -->
+        <!-- StringRules$Formatted and JUnitRules$ArgumentsEnumeration are style rewrites we do not want. -->
+        <errorprone.xplugin>-Xplugin:ErrorProne \
+            -XepExcludedPaths:.*/generated-(test-)?sources/.* \
+            -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty)(?!Immutable[A-Za-z]*Rules\$)(?!StringRules\$Formatted$)(?!JUnitRules\$ArgumentsEnumeration$).* \
+            ${errorprone.flags.suppressed} \
+            ${errorprone.flags.strict.addon} \
+            ${errorprone.flags.patch.addon} \
+            ${errorprone.flags.untested.addon}</errorprone.xplugin>
+        <errorprone.version>2.50.0</errorprone.version>
+        <error-prone-support.version>0.30.0</error-prone-support.version>
         <!--endregion Error Prone -->
     </properties>
 
@@ -746,6 +760,8 @@
         <!--endregion Phase 1: validate-->
 
         <!--region Phase 7: compile-->
+        <!-- Runs Error Prone inside the Maven JVM instead of forking javac per module, which avoids a cold JVM and Refaster rule loading for every compilation. -->
+        <!-- The Maven JVM must export and open the jdk.compiler internals that Error Prone uses; see the .mvn/jvm.config in the liftwizard repository. -->
         <profile>
             <id>errorprone</id>
             <build>
@@ -755,49 +771,28 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>3.16.0</version>
                         <configuration>
-                            <fork>true</fork>
+                            <fork>false</fork>
                             <compilerArgs combine.children="append">
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
-                                <!-- Refaster NamePattern excludes rules we disagree with: -->
-                                <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
-                                <!-- StringRules$StringsIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
-                                <!-- Immutable*Rules$* rewrite JDK collection factories to Guava immutable collections. -->
-                                <!-- StringRules$Formatted and JUnitRules$ArgumentsEnumeration are style rewrites we do not want. -->
-                                <arg>-Xplugin:ErrorProne \
-                                    -XepExcludedPaths:.*/generated-(test-)?sources/.* \
-                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty)(?!Immutable[A-Za-z]*Rules\$)(?!StringRules\$Formatted$)(?!JUnitRules\$ArgumentsEnumeration$).* \
-                                    ${errorprone.flags.suppressed} \
-                                    ${errorprone.flags.strict.addon} \
-                                    ${errorprone.flags.patch.addon} \
-                                    ${errorprone.flags.untested.addon}</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
-                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
-                                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
-                                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+                                <arg>${errorprone.xplugin}</arg>
                             </compilerArgs>
                             <annotationProcessorPaths combine.children="append">
                                 <path>
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
-                                    <version>2.50.0</version>
+                                    <version>${errorprone.version}</version>
                                 </path>
                                 <path>
                                     <groupId>tech.picnic.error-prone-support</groupId>
                                     <artifactId>error-prone-contrib</artifactId>
-                                    <version>0.30.0</version>
+                                    <version>${error-prone-support.version}</version>
                                 </path>
                                 <path>
                                     <groupId>tech.picnic.error-prone-support</groupId>
                                     <artifactId>refaster-runner</artifactId>
-                                    <version>0.30.0</version>
+                                    <version>${error-prone-support.version}</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
