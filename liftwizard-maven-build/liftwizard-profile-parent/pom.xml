@@ -762,10 +762,10 @@
                                 <arg>--should-stop=ifError=FLOW</arg>
                                 <!-- Refaster NamePattern excludes rules we disagree with: -->
                                 <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
-                                <!-- StringRules$StringIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
+                                <!-- StringRules$StringsIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
                                 <arg>-Xplugin:ErrorProne \
                                     -XepExcludedPaths:.*/generated-sources/.* \
-                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringIsNullOrEmpty).* \
+                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty).* \
                                     ${errorprone.flags.suppressed} \
                                     ${errorprone.flags.strict.addon} \
                                     ${errorprone.flags.patch.addon} \
