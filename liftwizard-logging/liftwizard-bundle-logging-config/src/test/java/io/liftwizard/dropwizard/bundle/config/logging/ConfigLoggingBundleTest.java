@@ -129,8 +129,8 @@ class ConfigLoggingBundleTest
 		);
 
 		assertThat(fallback).isPresent();
-		assertThat(fallback.get().path("server").has("maxThreads")).isTrue();
-		assertThat(fallback.get().path("server").has("requestLog")).isFalse();
+		assertThat(fallback.orElseThrow().path("server").has("maxThreads")).isTrue();
+		assertThat(fallback.orElseThrow().path("server").has("requestLog")).isFalse();
 	}
 
 	/**

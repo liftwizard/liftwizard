@@ -96,7 +96,7 @@ public class ConfigLoggingBundle
 			{
 				LOGGER.info(
 					"Dropwizard configuration (minimized):\n{}",
-					objectMapper.writeValueAsString(minimized.get())
+					objectMapper.writeValueAsString(minimized.orElseThrow())
 				);
 			}
 		}
@@ -119,7 +119,7 @@ public class ConfigLoggingBundle
 				{
 					LOGGER.info(
 						"Dropwizard configuration (minimized, ignoring the request log factory):\n{}",
-						objectMapper.writeValueAsString(minimized.get())
+						objectMapper.writeValueAsString(minimized.orElseThrow())
 					);
 				}
 			}
@@ -178,7 +178,7 @@ public class ConfigLoggingBundle
 		{
 			return Optional.empty();
 		}
-		Object defaultConfiguration = maybeDefaultConfiguration.get();
+		Object defaultConfiguration = maybeDefaultConfiguration.orElseThrow();
 
 		ObjectNode configurationJsonNode = minimizationMapper.valueToTree(configuration);
 		ObjectNode defaultConfigurationJsonNode = minimizationMapper.valueToTree(defaultConfiguration);
