@@ -24,6 +24,8 @@ mvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-pre
 mvn verify --activate-profiles errorprone,errorprone-strict
 ```
 
+The `errorprone` profile forks a new javac process for every module. On large builds, use `errorprone-in-process` in its place to run Error Prone inside the Maven JVM. It needs the `jdk.compiler` exports and opens from Liftwizard's [.mvn/jvm.config](https://github.com/motlin/liftwizard/blob/main/.mvn/jvm.config) in your project's `.mvn/jvm.config`. The `errorprone-strict`, `errorprone-patch`, and `errorprone-untested` profiles combine with either one.
+
 **Step 3:** Add GitHub Actions workflows to run these profiles in CI. Here are two patterns used in production.
 
 ### Pattern 1: Required Checks (merge-group)
@@ -155,6 +157,7 @@ See [pull-request.yml](https://github.com/motlin/liftwizard/blob/main/.github/wo
 | `checkstyle-semantics`                | Static Analysis       | Semantic code style checks                   |
 | `checkstyle-semantics-strict`         | Static Analysis       | Strict semantic checks                       |
 | `errorprone`                          | Static Analysis       | Basic error-prone checks                     |
+| `errorprone-in-process`               | Static Analysis       | Error-prone checks without forking javac     |
 | `errorprone-patch`                    | Static Analysis       | Generate patches for error-prone fixes       |
 | `errorprone-strict`                   | Static Analysis       | Strict error-prone checks                    |
 | `spotbugs-maven-plugin`               | Static Analysis       | FindBugs successor for bug detection         |
