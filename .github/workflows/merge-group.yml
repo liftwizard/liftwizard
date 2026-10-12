@@ -15,6 +15,29 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      maven: ${{ steps.filter.outputs.maven }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      # Maven jobs skip when every changed file is markdown or Znai documentation source.
+      - name: Detect changes that affect the Maven build
+        id: filter
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
+        run: |
+          if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep --quiet --invert-match --extended-regexp '(\.md$|^docs/src/)'; then
+            echo "maven=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "maven=false" >> "$GITHUB_OUTPUT"
+          fi
+
   pre-commit:
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +53,8 @@ jobs:
       - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
 
   maven-test:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -61,6 +86,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-spotbugs:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -87,6 +114,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-errorprone-strict:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -116,6 +145,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-enforcer:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -143,6 +174,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-dependency:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -170,6 +203,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-javadoc:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -197,6 +232,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   checkstyle-semantics:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     name: checkstyle xml (semantics)
     runs-on: ubuntu-latest
     permissions:
@@ -234,6 +271,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   checkstyle-semantics-strict:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     name: checkstyle xml (semantics strict)
     runs-on: ubuntu-latest
     permissions:
@@ -271,6 +310,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   checkstyle-formatting:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     name: checkstyle xml (formatting)
     runs-on: ubuntu-latest
     permissions:
@@ -308,6 +349,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   maven-rewrite:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -337,6 +380,8 @@ jobs:
 
   # Check for reproducible builds with artifact:check-buildplan
   maven-reproducible:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -364,6 +409,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -493,6 +540,7 @@ jobs:
     if: ${{ !cancelled() }}
     needs:
       [
+        changes,
         pre-commit,
         maven-test,
         maven-spotbugs,
@@ -516,3 +564,4 @@ jobs:
       - uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # release/v1
         with:
           jobs: ${{ toJSON(needs) }}
+          allowed-skips: maven-test, maven-spotbugs, maven-errorprone-strict, maven-enforcer, maven-dependency, maven-javadoc, checkstyle-semantics, checkstyle-semantics-strict, checkstyle-formatting, maven-rewrite, maven-reproducible, spotless
