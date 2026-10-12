@@ -32,7 +32,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilderSpec;
 import graphql.execution.AsyncExecutionStrategy;
@@ -203,7 +202,7 @@ public class GraphQLFactory
 	{
 		LOGGER.info("Loading GraphQL schema file: {}", name);
 
-		final ClassLoader loader = MoreObjects.firstNonNull(
+		final ClassLoader loader = Objects.requireNonNullElse(
 			Thread.currentThread().getContextClassLoader(),
 			GraphQLFactory.class.getClassLoader()
 		);
