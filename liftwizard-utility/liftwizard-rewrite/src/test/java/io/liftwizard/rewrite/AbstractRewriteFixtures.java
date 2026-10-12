@@ -122,7 +122,7 @@ public interface AbstractRewriteFixtures
 	private Path fixturePath(String name)
 	{
 		Path result = Path.of("src", "test", "resources").toAbsolutePath();
-		for (String packagePart : this.getClass().getPackageName().split("\\."))
+		for (String packagePart : this.getClass().getPackageName().split("\\.", -1))
 		{
 			result = result.resolve(packagePart);
 		}
