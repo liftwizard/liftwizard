@@ -27,7 +27,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.throwable;
 
 class IntegrationTest
 {
@@ -114,7 +113,7 @@ class IntegrationTest
 				.queryParam("date", "abc")
 				.request()
 				.get(String.class)
-		).asInstanceOf(throwable(BadRequestException.class));
+		).isInstanceOf(BadRequestException.class);
 	}
 
 	@Test
