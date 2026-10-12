@@ -90,7 +90,7 @@ final class YamlRecipeValidationTest
 				ymlFiles = paths
 					.filter(Files::isRegularFile)
 					.filter((path) -> path.getFileName().toString().endsWith(".yml"))
-					.collect(Collectors.toList());
+					.toList();
 			}
 
 			for (Path ymlFile : ymlFiles)
