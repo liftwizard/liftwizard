@@ -100,7 +100,7 @@ public class ExplicitTypeToVar
 				return false;
 			}
 
-			NamedVariable variable = variables.get(0);
+			NamedVariable variable = variables.getFirst();
 
 			// Must have an initializer
 			Expression initializer = variable.getInitializer();
@@ -190,7 +190,7 @@ public class ExplicitTypeToVar
 
 		private VariableDeclarations transformToVar(VariableDeclarations vd)
 		{
-			NamedVariable variable = vd.getVariables().get(0);
+			NamedVariable variable = vd.getVariables().getFirst();
 			var initializer = (NewClass) variable.getInitializer();
 
 			Space prefix = vd.getTypeExpression() == null ? Space.EMPTY : vd.getTypeExpression().getPrefix();

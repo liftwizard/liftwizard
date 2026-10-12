@@ -99,7 +99,7 @@ public class ECStreamGatherWindowFixedToChunk
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation collectorCall))
 			{
 				return methodInvocation;
@@ -128,7 +128,7 @@ public class ECStreamGatherWindowFixedToChunk
 				return methodInvocation;
 			}
 
-			Expression gathererArg = gatherArguments.get(0);
+			Expression gathererArg = gatherArguments.getFirst();
 			if (!(gathererArg instanceof J.MethodInvocation windowFixedCall))
 			{
 				return methodInvocation;
@@ -174,7 +174,7 @@ public class ECStreamGatherWindowFixedToChunk
 			}
 
 			// Transform: collection.chunk(n)
-			Expression sizeArg = windowFixedArguments.get(0);
+			Expression sizeArg = windowFixedArguments.getFirst();
 			// Use streamCall as the base to preserve the dot formatting between
 			// the collection expression and the method name
 			J.Identifier chunkMethodName = streamCall.getName().withSimpleName("chunk");

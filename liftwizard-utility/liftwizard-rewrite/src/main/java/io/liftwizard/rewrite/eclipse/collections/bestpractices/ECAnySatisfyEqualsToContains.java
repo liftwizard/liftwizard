@@ -75,7 +75,7 @@ public class ECAnySatisfyEqualsToContains
 			}
 
 			List<Expression> args = mi.getArguments();
-			if (args.size() != 1 || !(args.get(0) instanceof J.MemberReference memberRef))
+			if (args.size() != 1 || !(args.getFirst() instanceof J.MemberReference memberRef))
 			{
 				return mi;
 			}

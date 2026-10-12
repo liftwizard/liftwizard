@@ -102,7 +102,7 @@ public class ECStreamJoiningToMakeString
 				return methodInvocation;
 			}
 
-			Expression collectorArg = collectArguments.get(0);
+			Expression collectorArg = collectArguments.getFirst();
 			if (!(collectorArg instanceof J.MethodInvocation joiningCall))
 			{
 				return methodInvocation;
@@ -123,7 +123,7 @@ public class ECStreamJoiningToMakeString
 			if (collectSelect instanceof J.MethodInvocation mapCall && MAP_MATCHER.matches(mapCall))
 			{
 				List<Expression> mapArgs = mapCall.getArguments();
-				if (mapArgs.size() == 1 && this.isToStringMapper(mapArgs.get(0)))
+				if (mapArgs.size() == 1 && this.isToStringMapper(mapArgs.getFirst()))
 				{
 					streamOrMapSelect = mapCall.getSelect();
 				}
@@ -182,7 +182,7 @@ public class ECStreamJoiningToMakeString
 					return (
 						("toString".equals(lambdaBody.getSimpleName()) && lambdaBody.getArguments().isEmpty())
 						|| (lambdaBody.getArguments().size() == 1
-							&& lambdaBody.getArguments().get(0) instanceof J.Empty)
+							&& lambdaBody.getArguments().getFirst() instanceof J.Empty)
 					);
 				}
 			}

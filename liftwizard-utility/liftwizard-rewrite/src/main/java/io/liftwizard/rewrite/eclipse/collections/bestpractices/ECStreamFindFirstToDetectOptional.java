@@ -129,7 +129,7 @@ public class ECStreamFindFirstToDetectOptional
 				return methodInvocation;
 			}
 
-			Expression predicate = filterArguments.get(0);
+			Expression predicate = filterArguments.getFirst();
 
 			J.Identifier newMethodName = methodInvocation.getName().withSimpleName("detectOptional");
 

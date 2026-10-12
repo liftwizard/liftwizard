@@ -180,12 +180,14 @@ public final class ParameterizedLogging
 		public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
 		{
 			J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
-			if (!this.matcher.matches(m) || m.getArguments().isEmpty() || m.getArguments().get(0) instanceof J.Empty)
+			if (
+				!this.matcher.matches(m) || m.getArguments().isEmpty() || m.getArguments().getFirst() instanceof J.Empty
+			)
 			{
 				return m;
 			}
 
-			int logMsgIndex = isMarker(m.getArguments().get(0)) ? 1 : 0;
+			int logMsgIndex = isMarker(m.getArguments().getFirst()) ? 1 : 0;
 
 			// Only process if we have at most 2 arguments after accounting for marker
 			if (m.getArguments().size() - logMsgIndex > 2)
