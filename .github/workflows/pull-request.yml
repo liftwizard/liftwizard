@@ -14,7 +14,32 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      maven: ${{ steps.filter.outputs.maven }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      # Maven jobs skip when every changed file is markdown or Znai documentation source.
+      - name: Detect changes that affect the Maven build
+        id: filter
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
+        run: |
+          if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep --quiet --invert-match --extended-regexp '(\.md$|^docs/src/)'; then
+            echo "maven=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "maven=false" >> "$GITHUB_OUTPUT"
+          fi
+
   maven-coverage:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -77,6 +102,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   maven-rewrite-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -130,6 +157,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-pom-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -183,6 +212,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-formats-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -236,6 +267,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-java-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -289,6 +322,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-prettier-java-sort-imports-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -342,6 +377,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   spotless-java-cleanthat-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -395,6 +432,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   errorprone-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -453,6 +492,8 @@ jobs:
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   liftwizard-file-match-rerecord-fix:
+    needs: changes
+    if: needs.changes.outputs.maven == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
