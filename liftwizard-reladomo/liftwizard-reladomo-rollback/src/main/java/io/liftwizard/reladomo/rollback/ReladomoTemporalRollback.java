@@ -181,8 +181,7 @@ public class ReladomoTemporalRollback
 		String systemFromColumn = systemAttribute.getFromAttribute().getColumnName();
 		String systemToColumn = systemAttribute.getToAttribute().getColumnName();
 
-		String sql = String.format(
-			"UPDATE %s SET %s = ? WHERE %s <= ? AND %s > ? AND %s < ?",
+		String sql = "UPDATE %s SET %s = ? WHERE %s <= ? AND %s > ? AND %s < ?".formatted(
 			tableName,
 			systemToColumn,
 			systemFromColumn,

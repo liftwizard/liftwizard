@@ -2,8 +2,6 @@ package com.example.helloworld.core;
 
 import java.util.Optional;
 
-import static java.lang.String.format;
-
 public class Template
 {
 	private final String content;
@@ -17,6 +15,6 @@ public class Template
 
 	public String render(Optional<String> name)
 	{
-		return format(this.content, name.orElse(this.defaultName));
+		return this.content.formatted(name.orElse(this.defaultName));
 	}
 }

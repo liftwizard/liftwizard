@@ -209,7 +209,7 @@ public class GraphQLFactory
 
 		final InputStream in = loader.getResourceAsStream(name);
 
-		Objects.requireNonNull(in, () -> String.format("resource not found: %s", name));
+		Objects.requireNonNull(in, () -> "resource not found: %s".formatted(name));
 
 		return new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 	}
