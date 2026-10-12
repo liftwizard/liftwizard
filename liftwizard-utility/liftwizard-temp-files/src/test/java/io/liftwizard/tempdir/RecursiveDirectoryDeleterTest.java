@@ -51,7 +51,7 @@ final class RecursiveDirectoryDeleterTest
 	{
 		RecursiveDirectoryDeleter.deleteRecursively(this.testDir);
 
-		assertThat(Files.exists(this.testDir)).isFalse();
+		assertThat(this.testDir).doesNotExist();
 	}
 
 	@Test
@@ -59,7 +59,7 @@ final class RecursiveDirectoryDeleterTest
 		throws IOException
 	{
 		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
-		assertThat(Files.exists(nonExistentDir)).isFalse();
+		assertThat(nonExistentDir).doesNotExist();
 
 		RecursiveDirectoryDeleter.deleteRecursively(nonExistentDir);
 	}
@@ -70,14 +70,14 @@ final class RecursiveDirectoryDeleterTest
 		boolean result = RecursiveDirectoryDeleter.tryDeleteRecursively(this.testDir);
 
 		assertThat(result).isTrue();
-		assertThat(Files.exists(this.testDir)).isFalse();
+		assertThat(this.testDir).doesNotExist();
 	}
 
 	@Test
 	void tryDeleteRecursively_shouldReturnTrueForNonExistentDirectory()
 	{
 		Path nonExistentDir = Path.of(this.testDir.toString(), "non-existent-" + System.currentTimeMillis());
-		assertThat(Files.exists(nonExistentDir)).isFalse();
+		assertThat(nonExistentDir).doesNotExist();
 
 		boolean result = RecursiveDirectoryDeleter.tryDeleteRecursively(nonExistentDir);
 
