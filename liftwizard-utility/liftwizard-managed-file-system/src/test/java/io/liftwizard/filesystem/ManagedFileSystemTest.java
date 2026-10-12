@@ -24,7 +24,7 @@ import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(LogMarkerTestExtension.class)
 final class ManagedFileSystemTest
@@ -34,12 +34,12 @@ final class ManagedFileSystemTest
 		throws URISyntaxException
 	{
 		Path path1 = ManagedFileSystem.get(new URI("file:///"));
-		assertTrue(path1.isAbsolute());
-		assertTrue(path1.toFile().exists());
+		assertThat(path1).isAbsolute();
+		assertThat(path1.toFile()).exists();
 
 		String tmpdir = System.getProperty("java.io.tmpdir");
 		Path path2 = ManagedFileSystem.get(new URI("file://" + tmpdir));
-		assertTrue(path2.isAbsolute());
-		assertTrue(path2.toFile().exists());
+		assertThat(path2).isAbsolute();
+		assertThat(path2.toFile()).exists();
 	}
 }
