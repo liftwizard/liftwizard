@@ -83,6 +83,8 @@ public class NullSafeEquals
 			return right == left || (left != null && left.equals(right));
 		}
 
+		// Parentheses would change the matched expression shape, so keep the pattern as written.
+		@SuppressWarnings("OperatorPrecedence")
 		@BeforeTemplate
 		boolean pattern6(T left, T right)
 		{
