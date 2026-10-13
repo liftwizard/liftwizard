@@ -22,7 +22,6 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -115,7 +114,7 @@ public class CommonPoolHealthCheck
 	protected Result check()
 	{
 		ThreadInfo[] threadInfos = this.threads.getThreadInfo(this.threads.getAllThreadIds(), MAX_STACK_TRACE_DEPTH);
-		List<ThreadInfo> badThreadInfos = ArrayAdapter.adapt(threadInfos)
+		MutableList<ThreadInfo> badThreadInfos = ArrayAdapter.adapt(threadInfos)
 			.select((threadInfo) -> threadInfo.getThreadName().startsWith(this.threadNamePrefix))
 			.select((threadInfo) -> this.threadStates.contains(threadInfo.getThreadState()))
 			.select(
