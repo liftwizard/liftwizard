@@ -114,7 +114,7 @@ errorprone-patch MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --acti
 
 # `mvn` with spotbugs
 [arg("MVN", long="mvn", help="Maven binary to use")]
-spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin" skip_tests_flags)
+spotbugs MVN=default_mvn: (mvn MVN "verify" "--activate-profiles spotbugs-maven-plugin -Dspotbugs.fork=false" skip_tests_flags)
 
 # `mvn checkstyle:check` with the given profile
 [arg("MVN", long="mvn", help="Maven binary to use")]
