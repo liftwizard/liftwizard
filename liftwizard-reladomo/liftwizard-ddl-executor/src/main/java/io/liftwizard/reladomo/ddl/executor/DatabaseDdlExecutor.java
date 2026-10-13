@@ -57,12 +57,11 @@ public final class DatabaseDdlExecutor
 		String fkLocationPattern
 	)
 	{
-		MutableSet<URL> urls =
-			Sets.mutable
-				// Maven's classpath, including maven itself, appears here
-				.withAll(ClasspathHelper.forJavaClassPath())
-				// The "usual" classpath appears here
-				.withAll(ClasspathHelper.forClassLoader());
+		MutableSet<URL> urls = Sets.mutable
+			// Maven's classpath, including maven itself, appears here
+			.withAll(ClasspathHelper.forJavaClassPath())
+			// The "usual" classpath appears here
+			.withAll(ClasspathHelper.forClassLoader());
 		FilterBuilder filterBuilder = new FilterBuilder()
 			.include(ddlLocationPattern)
 			.include(idxLocationPattern)

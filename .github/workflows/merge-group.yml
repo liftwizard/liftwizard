@@ -488,38 +488,6 @@ jobs:
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  spotless-prettier-java-sort-imports:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          key: maven-spotless-prettier-java-sort-imports-${{ hashFiles('**/pom.xml') }}
-          path: ~/.m2/repository
-          restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
-
-      - uses: jdx/mise-action@7a4e45a543138629540c9a1616d08632b893e492 # v5.0.1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: "Spotless Check: Prettier Java (with sorted imports)"
-        run: just spotless --name prettier-java-sort-imports
-
-      - name: "Check for local modifications"
-        run: just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   spotless-sql:
     runs-on: ubuntu-latest
     steps:
@@ -667,7 +635,6 @@ jobs:
         maven-reproducible,
         spotless-formats,
         spotless-java,
-        spotless-prettier-java-sort-imports,
         spotless-java-cleanthat,
         spotless-sql,
         spotless-pom,

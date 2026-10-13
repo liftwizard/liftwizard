@@ -37,7 +37,17 @@
 	// Options: "start" | "end"
 	experimentalOperatorPosition: "start",
 
+	// prettier-java-next-line: Import groups in Spotless's importOrder format
+	importOrder: "java,javax,,#java|#javax,#",
+
 	overrides: [
+		{
+			// OpenRewrite fixture inputs keep the plugin's default import order, so recipes can test import handling
+			files: ["**/src/test/resources/**/*.java"],
+			options: {
+				importOrder: "",
+			},
+		},
 		{
 			files: [".yamllint.yaml", "**/*.yaml", "**/*.yml"],
 			options: {
