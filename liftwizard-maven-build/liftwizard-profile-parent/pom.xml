@@ -33,7 +33,7 @@
     <properties>
         <spotless.check.skip>true</spotless.check.skip>
 
-        <!--region Error Prone: -Perrorprone[-strict|-patch|-untested] -->
+        <!--region Error Prone: -Perrorprone[-strict|-patch|-untested|-junit-to-assertj] -->
         <!-- EqualsGetClass:OFF due to https://github.com/google/error-prone/issues/1144 -->
         <errorprone.flags.suppressed>-Xep:CanIgnoreReturnValueSuggester:OFF -Xep:NullableOnContainingClass:OFF -Xep:OperatorPrecedence:OFF -Xep:EqualsGetClass:OFF -Xep:UnusedVariable:WARN -Xep:Slf4jLoggerDeclaration:OFF -Xep:UnnecessaryParentheses:OFF -Xep:LexicographicalAnnotationListing:OFF -Xep:StaticImport:OFF -Xep:DirectReturn:OFF -Xep:JUnitClassModifiers:OFF -Xep:StringSplitter:OFF -Xep:CollectorMutability:OFF</errorprone.flags.suppressed>
         <errorprone.flags.promoted>-Xep:NullableOnContainingClass:ERROR -Xep:UnusedVariable:ERROR -Xep:BadImport:ERROR -Xep:DefaultCharset:ERROR -Xep:IdentityConversion:ERROR -Xep:InvalidInlineTag:ERROR -Xep:JavaDurationGetSecondsToToSeconds:ERROR -Xep:MissingOverride:ERROR -Xep:ObjectToString:ERROR -Xep:RedundantStringConversion:ERROR -Xep:StringCaseLocaleUsage:ERROR -Xep:UnnecessaryLambda:ERROR -Xep:ClassCastLambdaUsage:ERROR -Xep:IsInstanceLambdaUsage:ERROR -Xep:EagerStringFormatting:ERROR -Xep:FormatStringConcatenation:ERROR -Xep:NestedOptionals:ERROR -Xep:OptionalOrElseGet:ERROR -Xep:PrimitiveComparison:ERROR -Xep:RedundantStringEscape:ERROR -Xep:StringJoining:ERROR -Xep:EmptyMethod:ERROR -Xep:Slf4jLogStatement:ERROR -Xep:JUnitMethodDeclaration:ERROR -Xep:MockitoMockClassReference:ERROR -Xep:MockitoStubbing:ERROR -Xep:UnusedNestedClass:ERROR -Xep:UnicodeEscape:ERROR -Xep:UnusedMethod:ERROR -Xep:UnnecessaryStringBuilder:ERROR</errorprone.flags.promoted>
@@ -41,6 +41,8 @@
         <errorprone.flags.strict.addon />
         <errorprone.flags.patch.addon />
         <errorprone.flags.untested.addon />
+        <!-- JUnitToAssertJRules$* rewrite JUnit assertions to AssertJ; -Perrorprone-junit-to-assertj opts in. -->
+        <errorprone.refaster.junit-to-assertj>(?!JUnitToAssertJRules\$)</errorprone.refaster.junit-to-assertj>
         <!-- Refaster NamePattern excludes rules we disagree with: -->
         <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
         <!-- StringRules$StringsIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
@@ -48,7 +50,7 @@
         <!-- StringRules$Formatted and JUnitRules$ArgumentsEnumeration are style rewrites we do not want. -->
         <errorprone.xplugin>-Xplugin:ErrorProne \
             -XepExcludedPaths:.*/generated-sources/.* \
-            -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty)(?!Immutable[A-Za-z]*Rules\$)(?!StringRules\$Formatted$)(?!JUnitRules\$ArgumentsEnumeration$).* \
+            -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty)(?!Immutable[A-Za-z]*Rules\$)(?!StringRules\$Formatted$)(?!JUnitRules\$ArgumentsEnumeration$)${errorprone.refaster.junit-to-assertj}.* \
             ${errorprone.flags.suppressed} \
             ${errorprone.flags.strict.addon} \
             ${errorprone.flags.patch.addon} \
@@ -875,6 +877,14 @@
             </properties>
         </profile>
         <!-- /profile:errorprone-untested -->
+
+        <profile>
+            <id>errorprone-junit-to-assertj</id>
+            <properties>
+                <errorprone.refaster.junit-to-assertj />
+            </properties>
+        </profile>
+        <!-- /profile:errorprone-junit-to-assertj -->
         <!--endregion Phase 7: compile-->
 
         <!--region Phase 15: test-->

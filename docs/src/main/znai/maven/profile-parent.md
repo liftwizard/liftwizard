@@ -24,7 +24,9 @@ mvn spotless:apply --activate-profiles spotless-apply,spotless-java,spotless-pre
 mvn verify --activate-profiles errorprone,errorprone-strict
 ```
 
-The `errorprone` profile forks a new javac process for every module. On large builds, use `errorprone-in-process` in its place to run Error Prone inside the Maven JVM. It needs the `jdk.compiler` exports and opens from Liftwizard's [.mvn/jvm.config](https://github.com/motlin/liftwizard/blob/main/.mvn/jvm.config) in your project's `.mvn/jvm.config`. The `errorprone-strict`, `errorprone-patch`, and `errorprone-untested` profiles combine with either one.
+The `errorprone` profile forks a new javac process for every module. On large builds, use `errorprone-in-process` in its place to run Error Prone inside the Maven JVM. It needs the `jdk.compiler` exports and opens from Liftwizard's [.mvn/jvm.config](https://github.com/motlin/liftwizard/blob/main/.mvn/jvm.config) in your project's `.mvn/jvm.config`. The `errorprone-strict`, `errorprone-patch`, `errorprone-untested`, and `errorprone-junit-to-assertj` profiles combine with either one.
+
+Refaster skips the `JUnitToAssertJRules` rules by default because they convert JUnit assertions to AssertJ. Add `errorprone-junit-to-assertj` to opt in, for example `--activate-profiles errorprone-in-process,errorprone-patch,errorprone-junit-to-assertj`.
 
 **Step 3:** Add GitHub Actions workflows to run these profiles in CI. Here are two patterns used in production.
 
