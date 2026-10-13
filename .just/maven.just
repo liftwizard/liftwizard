@@ -110,7 +110,7 @@ errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorp
 
 # `mvn` with errorprone-patch to generate auto-fixes
 [arg("MVN", long="mvn", help="Maven binary to use")]
-errorprone-patch MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --activate-profiles errorprone-in-process,errorprone-patch") skip_tests_flags)
+errorprone-patch MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --activate-profiles errorprone-in-process,errorprone-patch,errorprone-junit-to-assertj") skip_tests_flags)
 
 # `mvn` with spotbugs
 [arg("MVN", long="mvn", help="Maven binary to use")]
