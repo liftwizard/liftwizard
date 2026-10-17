@@ -22,12 +22,17 @@ import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.MutableList;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
+import org.openrewrite.Tree;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JRightPadded;
 import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.Space;
 import org.openrewrite.java.tree.TypeUtils;
+import org.openrewrite.marker.Markers;
 
 /**
  * Shared engine for translating whole {@code java.util.stream.Stream} call chains to Eclipse
@@ -42,7 +47,8 @@ import org.openrewrite.java.tree.TypeUtils;
  * unchanged) and the chain must end in a terminal whose result type is compatible in both worlds
  * ({@code toList()}, {@code collect(Collectors.toList())}, {@code toArray()}, {@code iterator()},
  * {@code forEach}, {@code anyMatch} → {@code anySatisfy}, {@code allMatch} →
- * {@code allSatisfy}, {@code noneMatch} → {@code noneSatisfy}).
+ * {@code allSatisfy}, {@code noneMatch} → {@code noneSatisfy}, {@code collect(Collectors.joining(...))}
+ * → {@code makeString(...)}).
  *
  * <p>Guards shared by all chain sources:
  * <ul>
@@ -52,6 +58,8 @@ import org.openrewrite.java.tree.TypeUtils;
  * <li>{@code skip}/{@code limit} arguments must be {@code int}; {@code Stream.skip(long)} has no
  * {@code drop(long)} equivalent.</li>
  * <li>Collector terminals must be known {@code Collectors} factory calls.</li>
+ * <li>{@code Collectors.joining} arguments that are not {@code String}-typed are wrapped in
+ * {@code toString()}, because {@code makeString} only accepts {@code String}.</li>
  * <li>{@code count()} only translates to {@code size()} in literal comparisons where the
  * {@code long} to {@code int} return-type difference cannot change assignment or inference.</li>
  * <li>Stream-typed usages (assignment, argument, return) and other untranslatable links leave the
@@ -76,6 +84,8 @@ abstract class AbstractECStreamChainVisitor
 	private static final MethodMatcher TO_UNMODIFIABLE_SET_MATCHER = new MethodMatcher(
 		"java.util.stream.Collectors toUnmodifiableSet()"
 	);
+
+	private static final MethodMatcher JOINING_MATCHER = new MethodMatcher("java.util.stream.Collectors joining(..)");
 
 	/**
 	 * Whether this invocation is the source of a translatable chain, e.g. {@code Arrays.stream(array)}
@@ -158,16 +168,27 @@ abstract class AbstractECStreamChainVisitor
 
 		if (isCollectorTerminal)
 		{
+			List<Expression> ecArguments = "makeString".equals(ecName) ? makeStringArguments(mi) : List.of();
 			if (mi.getMethodType() != null)
 			{
 				JavaType.Method methodType = mi
 					.getMethodType()
 					.withName(ecName)
 					.withParameterNames(List.of())
-					.withParameterTypes(List.of());
+					.withParameterTypes(
+						ecArguments
+							.stream()
+							.map((each) -> (JavaType) JavaType.Primitive.String)
+							.toList()
+					);
 				mi = mi.withName(mi.getName().withType(methodType)).withMethodType(methodType);
 			}
-			mi = mi.withArguments(List.of());
+			mi = mi.withArguments(ecArguments);
+			if ("makeString".equals(ecName) && isToStringMapper(method.getSelect()))
+			{
+				// makeString already calls String.valueOf on each element, so a map(Object::toString) step is redundant
+				mi = mi.withSelect(((J.MethodInvocation) mi.getSelect()).getSelect());
+			}
 		}
 
 		if ("findFirst".equals(streamName))
@@ -353,7 +374,118 @@ abstract class AbstractECStreamChainVisitor
 		{
 			return "toImmutableSet";
 		}
+		if (JOINING_MATCHER.matches(collectorCall) && isTranslatableJoining(collectorCall))
+		{
+			return "makeString";
+		}
 		return null;
+	}
+
+	private static boolean isTranslatableJoining(J.MethodInvocation joiningCall)
+	{
+		List<Expression> arguments = realArguments(joiningCall);
+		return (
+			(arguments.size() <= 1 || arguments.size() == 3)
+			&& arguments
+				.stream()
+				.allMatch(
+					(argument) ->
+						TypeUtils.isString(argument.getType())
+						|| TypeUtils.isAssignableTo("java.lang.CharSequence", argument.getType())
+				)
+		);
+	}
+
+	/**
+	 * {@code joining()} → {@code makeString("")}, because {@code makeString()} defaults to a {@code ", "} separator;
+	 * {@code joining(delimiter)} → {@code makeString(delimiter)}; and {@code joining(delimiter, prefix, suffix)} →
+	 * {@code makeString(prefix, delimiter, suffix)}. Other {@code CharSequence} arguments become
+	 * {@code argument.toString()}, matching {@code joining}, whose {@code StringJoiner} calls {@code toString()} on each
+	 * argument up front.
+	 */
+	private static List<Expression> makeStringArguments(J.MethodInvocation collectInvocation)
+	{
+		J.MethodInvocation joiningCall = (J.MethodInvocation) realArguments(collectInvocation).get(0);
+		List<Expression> arguments = realArguments(joiningCall);
+		if (arguments.isEmpty())
+		{
+			return List.of(
+				new J.Literal(Tree.randomId(), Space.EMPTY, Markers.EMPTY, "", "\"\"", null, JavaType.Primitive.String)
+			);
+		}
+		if (arguments.size() == 1)
+		{
+			return List.of(asStringArgument(arguments.get(0)));
+		}
+		Expression delimiter = arguments.get(0);
+		Expression prefix = arguments.get(1);
+		return List.of(
+			asStringArgument(prefix.withPrefix(delimiter.getPrefix())),
+			asStringArgument(delimiter.withPrefix(prefix.getPrefix())),
+			asStringArgument(arguments.get(2))
+		);
+	}
+
+	private static Expression asStringArgument(Expression argument)
+	{
+		if (TypeUtils.isString(argument.getType()))
+		{
+			return argument;
+		}
+		JavaType.Method toStringType = findToString(TypeUtils.asFullyQualified(argument.getType()));
+		return new J.MethodInvocation(
+			Tree.randomId(),
+			argument.getPrefix(),
+			Markers.EMPTY,
+			JRightPadded.build(argument.withPrefix(Space.EMPTY)),
+			null,
+			new J.Identifier(Tree.randomId(), Space.EMPTY, Markers.EMPTY, List.of(), "toString", toStringType, null),
+			JContainer.build(List.of(JRightPadded.build(new J.Empty(Tree.randomId(), Space.EMPTY, Markers.EMPTY)))),
+			toStringType
+		);
+	}
+
+	private static JavaType.Method findToString(JavaType.FullyQualified type)
+	{
+		if (type == null)
+		{
+			return null;
+		}
+		for (JavaType.Method method : type.getMethods())
+		{
+			if ("toString".equals(method.getName()) && method.getParameterTypes().isEmpty())
+			{
+				return method;
+			}
+		}
+		return findToString(type.getSupertype());
+	}
+
+	private static boolean isToStringMapper(Expression expression)
+	{
+		if (!(expression instanceof J.MethodInvocation mapCall) || !"map".equals(mapCall.getSimpleName()))
+		{
+			return false;
+		}
+		List<Expression> arguments = realArguments(mapCall);
+		if (arguments.size() != 1)
+		{
+			return false;
+		}
+		if (arguments.get(0) instanceof J.MemberReference memberReference)
+		{
+			return "toString".equals(memberReference.getReference().getSimpleName());
+		}
+		return (
+			arguments.get(0) instanceof J.Lambda lambda
+			&& lambda.getParameters().getParameters().size() == 1
+			&& lambda.getParameters().getParameters().get(0) instanceof J.VariableDeclarations parameter
+			&& lambda.getBody() instanceof J.MethodInvocation body
+			&& "toString".equals(body.getSimpleName())
+			&& realArguments(body).isEmpty()
+			&& body.getSelect() instanceof J.Identifier receiver
+			&& receiver.getSimpleName().equals(parameter.getVariables().get(0).getSimpleName())
+		);
 	}
 
 	private static boolean isSafeCountContext(Cursor cursor)

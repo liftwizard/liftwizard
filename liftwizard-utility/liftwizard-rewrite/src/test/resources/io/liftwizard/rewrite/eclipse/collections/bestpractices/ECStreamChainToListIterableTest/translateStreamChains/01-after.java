@@ -16,4 +16,9 @@ class Test
 			.collect(String::trim)
 			.toArray();
 	}
+
+	String joining(MutableList<String> list)
+	{
+		return list.makeString(", ");
+	}
 }
