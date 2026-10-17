@@ -75,4 +75,45 @@ class Test
 		Arrays.stream(values).forEach((each) -> each.trim());
 		Arrays.stream(values).forEach(System.out::println);
 	}
+
+	String noArguments(String[] values)
+	{
+		return Arrays.stream(values).collect(Collectors.joining());
+	}
+
+	String delimiter(String[] values)
+	{
+		return Arrays.stream(values)
+			.filter((each) -> !each.isEmpty())
+			.collect(Collectors.joining(", "));
+	}
+
+	String delimiterPrefixSuffix(StackTraceElement[] stackTrace)
+	{
+		return Arrays.stream(stackTrace)
+			.map(StackTraceElement::toString)
+			.collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));
+	}
+
+	String lambdaToString(Object[] values)
+	{
+		return Arrays.stream(values)
+			.map((each) -> each.toString())
+			.collect(Collectors.joining(", ", "[", "]"));
+	}
+
+	String otherMapper(String[] values)
+	{
+		return Arrays.stream(values).map(String::trim).collect(Collectors.joining(", "));
+	}
+
+	String charSequenceDelimiter(String[] values, StringBuilder delimiter)
+	{
+		return Arrays.stream(values).collect(Collectors.joining(delimiter));
+	}
+
+	String charSequencePrefix(String[] values, StringBuilder prefix)
+	{
+		return Arrays.stream(values).collect(Collectors.joining(", ", prefix, "]"));
+	}
 }

@@ -74,4 +74,43 @@ class Test
 		ArrayAdapter.adapt(values).forEach((each) -> each.trim());
 		ArrayAdapter.adapt(values).forEach(System.out::println);
 	}
+
+	String noArguments(String[] values)
+	{
+		return ArrayAdapter.adapt(values).makeString("");
+	}
+
+	String delimiter(String[] values)
+	{
+		return ArrayAdapter.adapt(values)
+			.select((each) -> !each.isEmpty())
+			.makeString(", ");
+	}
+
+	String delimiterPrefixSuffix(StackTraceElement[] stackTrace)
+	{
+		return ArrayAdapter.adapt(stackTrace)
+			.makeString("", "\n\t at ", System.lineSeparator());
+	}
+
+	String lambdaToString(Object[] values)
+	{
+		return ArrayAdapter.adapt(values)
+			.makeString("[", ", ", "]");
+	}
+
+	String otherMapper(String[] values)
+	{
+		return ArrayAdapter.adapt(values).collect(String::trim).makeString(", ");
+	}
+
+	String charSequenceDelimiter(String[] values, StringBuilder delimiter)
+	{
+		return ArrayAdapter.adapt(values).makeString(delimiter.toString());
+	}
+
+	String charSequencePrefix(String[] values, StringBuilder prefix)
+	{
+		return ArrayAdapter.adapt(values).makeString(prefix.toString(), ", ", "]");
+	}
 }

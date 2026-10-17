@@ -1,3 +1,4 @@
+import java.util.stream.Collectors;
 import org.eclipse.collections.api.list.MutableList;
 
 class Test
@@ -18,5 +19,10 @@ class Test
 			.filter((each) -> !each.isEmpty())
 			.map(String::trim)
 			.toArray();
+	}
+
+	String joining(MutableList<String> list)
+	{
+		return list.stream().collect(Collectors.joining(", "));
 	}
 }
