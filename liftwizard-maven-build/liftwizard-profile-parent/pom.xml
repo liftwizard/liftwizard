@@ -33,14 +33,30 @@
     <properties>
         <spotless.check.skip>true</spotless.check.skip>
 
-        <!--region Error Prone: -Perrorprone[-strict|-patch|-untested] -->
+        <!--region Error Prone: -Perrorprone[-strict|-patch|-untested|-junit-to-assertj] -->
         <!-- EqualsGetClass:OFF due to https://github.com/google/error-prone/issues/1144 -->
-        <errorprone.flags.suppressed>-Xep:CanIgnoreReturnValueSuggester:OFF -Xep:NullableOnContainingClass:OFF -Xep:OperatorPrecedence:OFF -Xep:EqualsGetClass:OFF -Xep:UnusedVariable:WARN -Xep:Slf4jLoggerDeclaration:OFF -Xep:UnnecessaryParentheses:OFF -Xep:LexicographicalAnnotationListing:OFF -Xep:StaticImport:OFF</errorprone.flags.suppressed>
-        <errorprone.flags.promoted>-Xep:CanIgnoreReturnValueSuggester:ERROR -Xep:NullableOnContainingClass:ERROR -Xep:OperatorPrecedence:ERROR -Xep:EqualsGetClass:ERROR -Xep:UnusedVariable:ERROR -Xep:BadImport:ERROR -Xep:DefaultCharset:ERROR -Xep:DirectReturn:ERROR -Xep:IdentityConversion:ERROR -Xep:InvalidInlineTag:ERROR -Xep:JavaDurationGetSecondsToToSeconds:ERROR -Xep:MissingOverride:ERROR -Xep:ObjectToString:ERROR -Xep:RedundantStringConversion:ERROR -Xep:StringCaseLocaleUsage:ERROR -Xep:StringSplitter:ERROR -Xep:UnnecessaryLambda:ERROR -Xep:ClassCastLambdaUsage:ERROR -Xep:IsInstanceLambdaUsage:ERROR -Xep:EagerStringFormatting:ERROR -Xep:FormatStringConcatenation:ERROR -Xep:NestedOptionals:ERROR -Xep:OptionalOrElseGet:ERROR -Xep:PrimitiveComparison:ERROR -Xep:RedundantStringEscape:ERROR -Xep:StringJoining:ERROR -Xep:EmptyMethod:ERROR -Xep:Slf4jLogStatement:ERROR -Xep:JUnitClassModifiers:ERROR -Xep:JUnitMethodDeclaration:ERROR -Xep:MockitoMockClassReference:ERROR -Xep:MockitoStubbing:ERROR -Xep:UnusedNestedClass:ERROR -Xep:UnicodeEscape:ERROR -Xep:UnusedMethod:ERROR -Xep:UnnecessaryStringBuilder:ERROR -Xep:CollectorMutability:ERROR</errorprone.flags.promoted>
+        <errorprone.flags.suppressed>-Xep:CanIgnoreReturnValueSuggester:OFF -Xep:NullableOnContainingClass:OFF -Xep:OperatorPrecedence:OFF -Xep:EqualsGetClass:OFF -Xep:UnusedVariable:WARN -Xep:Slf4jLoggerDeclaration:OFF -Xep:UnnecessaryParentheses:OFF -Xep:LexicographicalAnnotationListing:OFF -Xep:StaticImport:OFF -Xep:DirectReturn:OFF -Xep:JUnitClassModifiers:OFF -Xep:StringSplitter:OFF -Xep:CollectorMutability:OFF</errorprone.flags.suppressed>
+        <errorprone.flags.promoted>-Xep:NullableOnContainingClass:ERROR -Xep:UnusedVariable:ERROR -Xep:BadImport:ERROR -Xep:DefaultCharset:ERROR -Xep:IdentityConversion:ERROR -Xep:InvalidInlineTag:ERROR -Xep:JavaDurationGetSecondsToToSeconds:ERROR -Xep:MissingOverride:ERROR -Xep:ObjectToString:ERROR -Xep:RedundantStringConversion:ERROR -Xep:StringCaseLocaleUsage:ERROR -Xep:UnnecessaryLambda:ERROR -Xep:ClassCastLambdaUsage:ERROR -Xep:IsInstanceLambdaUsage:ERROR -Xep:EagerStringFormatting:ERROR -Xep:FormatStringConcatenation:ERROR -Xep:NestedOptionals:ERROR -Xep:OptionalOrElseGet:ERROR -Xep:PrimitiveComparison:ERROR -Xep:RedundantStringEscape:ERROR -Xep:StringJoining:ERROR -Xep:EmptyMethod:ERROR -Xep:Slf4jLogStatement:ERROR -Xep:JUnitMethodDeclaration:ERROR -Xep:MockitoMockClassReference:ERROR -Xep:MockitoStubbing:ERROR -Xep:UnusedNestedClass:ERROR -Xep:UnicodeEscape:ERROR -Xep:UnusedMethod:ERROR -Xep:UnnecessaryStringBuilder:ERROR</errorprone.flags.promoted>
         <errorprone.flags.untested>-Xep:AssertJNullnessAssertion:ERROR -Xep:AssertJOptionalAssertion:ERROR -Xep:ConstantNaming:ERROR -Xep:ExplicitArgumentEnumeration:ERROR -Xep:ExplicitEnumOrdering:ERROR -Xep:JUnitNullaryParameterizedTestDeclaration:ERROR -Xep:JUnitValueSource:ERROR -Xep:LexicographicalAnnotationAttributeListing:ERROR -Xep:NonStaticImport:ERROR -Xep:TimeZoneUsage:ERROR -Xep:ImmutablesSortedSetComparator:ERROR -Xep:CanonicalAnnotationSyntax:ERROR -Xep:CanonicalClassNameUsage:ERROR -Xep:AmbiguousJsonCreator:ERROR -Xep:MongoDBTextFilterUsage:ERROR -Xep:RequestParamType:ERROR</errorprone.flags.untested>
         <errorprone.flags.strict.addon />
         <errorprone.flags.patch.addon />
         <errorprone.flags.untested.addon />
+        <!-- JUnitToAssertJRules$* rewrite JUnit assertions to AssertJ; -Perrorprone-junit-to-assertj opts in. -->
+        <errorprone.refaster.junit-to-assertj>(?!JUnitToAssertJRules\$)</errorprone.refaster.junit-to-assertj>
+        <!-- Refaster NamePattern excludes rules we disagree with: -->
+        <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
+        <!-- StringRules$StringsIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
+        <!-- Immutable*Rules$* rewrite JDK collection factories to Guava immutable collections. -->
+        <!-- StringRules$Formatted and JUnitRules$ArgumentsEnumeration are style rewrites we do not want. -->
+        <errorprone.xplugin>-Xplugin:ErrorProne \
+            -XepExcludedPaths:.*/generated-sources/.* \
+            -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty)(?!Immutable[A-Za-z]*Rules\$)(?!StringRules\$Formatted$)(?!JUnitRules\$ArgumentsEnumeration$)${errorprone.refaster.junit-to-assertj}.* \
+            ${errorprone.flags.suppressed} \
+            ${errorprone.flags.strict.addon} \
+            ${errorprone.flags.patch.addon} \
+            ${errorprone.flags.untested.addon}</errorprone.xplugin>
+        <errorprone.version>2.50.0</errorprone.version>
+        <error-prone-support.version>0.30.0</error-prone-support.version>
         <!--endregion Error Prone -->
     </properties>
 
@@ -760,16 +776,7 @@
                                 <arg>-XDcompilePolicy=simple</arg>
                                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                                 <arg>--should-stop=ifError=FLOW</arg>
-                                <!-- Refaster NamePattern excludes rules we disagree with: -->
-                                <!-- PreconditionsRules$* rewrites to Guava Preconditions. -->
-                                <!-- StringRules$StringIsNullOrEmpty rewrites to Guava Strings.isNullOrEmpty(). -->
-                                <arg>-Xplugin:ErrorProne \
-                                    -XepExcludedPaths:.*/generated-sources/.* \
-                                    -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringIsNullOrEmpty).* \
-                                    ${errorprone.flags.suppressed} \
-                                    ${errorprone.flags.strict.addon} \
-                                    ${errorprone.flags.patch.addon} \
-                                    ${errorprone.flags.untested.addon}</arg>
+                                <arg>${errorprone.xplugin}</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
@@ -785,17 +792,17 @@
                                 <path>
                                     <groupId>com.google.errorprone</groupId>
                                     <artifactId>error_prone_core</artifactId>
-                                    <version>2.50.0</version>
+                                    <version>${errorprone.version}</version>
                                 </path>
                                 <path>
                                     <groupId>tech.picnic.error-prone-support</groupId>
                                     <artifactId>error-prone-contrib</artifactId>
-                                    <version>0.30.0</version>
+                                    <version>${error-prone-support.version}</version>
                                 </path>
                                 <path>
                                     <groupId>tech.picnic.error-prone-support</groupId>
                                     <artifactId>refaster-runner</artifactId>
-                                    <version>0.30.0</version>
+                                    <version>${error-prone-support.version}</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
@@ -804,6 +811,48 @@
             </build>
         </profile>
         <!-- /profile:errorprone -->
+
+        <!-- Runs Error Prone inside the Maven JVM instead of forking javac per module, which avoids a cold JVM and Refaster rule loading for every compilation. -->
+        <!-- The Maven JVM must export and open the jdk.compiler internals that Error Prone uses; see the .mvn/jvm.config in the liftwizard repository. -->
+        <profile>
+            <id>errorprone-in-process</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.16.0</version>
+                        <configuration>
+                            <fork>false</fork>
+                            <compilerArgs combine.children="append">
+                                <arg>-XDcompilePolicy=simple</arg>
+                                <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
+                                <arg>--should-stop=ifError=FLOW</arg>
+                                <arg>${errorprone.xplugin}</arg>
+                            </compilerArgs>
+                            <annotationProcessorPaths combine.children="append">
+                                <path>
+                                    <groupId>com.google.errorprone</groupId>
+                                    <artifactId>error_prone_core</artifactId>
+                                    <version>${errorprone.version}</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>error-prone-contrib</artifactId>
+                                    <version>${error-prone-support.version}</version>
+                                </path>
+                                <path>
+                                    <groupId>tech.picnic.error-prone-support</groupId>
+                                    <artifactId>refaster-runner</artifactId>
+                                    <version>${error-prone-support.version}</version>
+                                </path>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- /profile:errorprone-in-process -->
 
         <profile>
             <id>errorprone-strict</id>
@@ -816,7 +865,7 @@
         <profile>
             <id>errorprone-patch</id>
             <properties>
-                <errorprone.flags.patch.addon>-XepPatchChecks:Refaster,DirectReturn,IdentityConversion -XepPatchLocation:IN_PLACE</errorprone.flags.patch.addon>
+                <errorprone.flags.patch.addon>-XepPatchChecks:Refaster,IdentityConversion -XepPatchLocation:IN_PLACE</errorprone.flags.patch.addon>
             </properties>
         </profile>
         <!-- /profile:errorprone-patch -->
@@ -828,6 +877,14 @@
             </properties>
         </profile>
         <!-- /profile:errorprone-untested -->
+
+        <profile>
+            <id>errorprone-junit-to-assertj</id>
+            <properties>
+                <errorprone.refaster.junit-to-assertj />
+            </properties>
+        </profile>
+        <!-- /profile:errorprone-junit-to-assertj -->
         <!--endregion Phase 7: compile-->
 
         <!--region Phase 15: test-->
