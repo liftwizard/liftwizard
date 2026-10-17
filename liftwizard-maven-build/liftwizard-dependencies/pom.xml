@@ -50,7 +50,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-bom</artifactId>
-                <version>2.1.12</version>
+                <version>5.0.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -58,7 +58,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-dependencies</artifactId>
-                <version>2.1.12</version>
+                <version>5.0.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -431,7 +431,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-core</artifactId>
-                <version>2.1.12</version>
+                <version>5.0.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -447,7 +447,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-jersey</artifactId>
-                <version>2.1.12</version>
+                <version>5.0.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -463,7 +463,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-testing</artifactId>
-                <version>2.1.12</version>
+                <version>5.0.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
@@ -491,7 +491,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-auth</artifactId>
-                <version>2.1.12</version>
+                <version>5.0.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.module</groupId>
