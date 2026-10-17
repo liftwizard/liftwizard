@@ -102,15 +102,15 @@ coverage MVN=default_mvn: (mvn MVN "verify" "--activate-profiles jacoco-maven-pl
 
 # `mvn` with errorprone
 [arg("MVN", long="mvn", help="Maven binary to use")]
-errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone" skip_tests_flags)
+errorprone MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-in-process" skip_tests_flags)
 
 # `mvn` with errorprone-strict
 [arg("MVN", long="mvn", help="Maven binary to use")]
-errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-strict" skip_tests_flags)
+errorprone-strict MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-in-process,errorprone-strict" skip_tests_flags)
 
 # `mvn` with errorprone-patch to generate auto-fixes
 [arg("MVN", long="mvn", help="Maven binary to use")]
-errorprone-patch MVN=default_mvn: (mvn MVN "verify" "--activate-profiles errorprone-patch" skip_tests_flags)
+errorprone-patch MVN=default_mvn: (mvn MVN "verify" (rewrite_projects + " --activate-profiles errorprone-in-process,errorprone-patch,errorprone-junit-to-assertj") skip_tests_flags)
 
 # `mvn` with spotbugs
 [arg("MVN", long="mvn", help="Maven binary to use")]
