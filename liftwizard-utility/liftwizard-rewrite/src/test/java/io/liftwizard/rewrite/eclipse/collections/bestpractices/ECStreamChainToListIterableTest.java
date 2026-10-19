@@ -33,38 +33,14 @@ class ECStreamChainToListIterableTest
 
 	@DocumentExample
 	@Test
-	void translateStreamChains()
+	void replacePatterns()
 	{
-		this.rewriteRun(this.javaFixture("translateStreamChains/01"));
+		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
 
 	@Test
-	void translateMatchTerminals()
+	void doNotReplaceInvalidPatterns()
 	{
-		this.rewriteRun(this.javaFixture("translateMatchTerminals/01"));
-	}
-
-	@Test
-	void translateCollectorTerminals()
-	{
-		this.rewriteRun(this.javaFixture("translateCollectorTerminals/01"));
-	}
-
-	@Test
-	void translateSortedCountAndFindFirstTerminals()
-	{
-		this.rewriteRun(this.javaFixture("translateSortedCountAndFindFirstTerminals/01"));
-	}
-
-	@Test
-	void doNotReplaceUntranslatableReceivers()
-	{
-		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceUntranslatableReceivers/01"));
-	}
-
-	@Test
-	void doNotReplaceUntranslatableChains()
-	{
-		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceUntranslatableChains/01"));
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
 	}
 }
