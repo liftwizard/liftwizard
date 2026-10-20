@@ -16,15 +16,24 @@
 
 package io.liftwizard.reladomo.json.test.extension;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 import com.example.helloworld.core.Person;
 import com.example.helloworld.core.PersonFinder;
 import com.gs.fw.common.mithra.MithraList;
+import io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager;
 import io.liftwizard.reladomo.test.extension.ExecuteSqlExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoPurgeAllExtension;
 import org.assertj.core.groups.Tuple;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -33,6 +42,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JsonTestDataExtensionTest
 {
+	private static final LocalDateTime INFINITY_UTC_WALL_CLOCK = LocalDateTime.of(9999, 12, 1, 23, 59, 0);
+
 	@RegisterExtension
 	@Order(1)
 	final ExecuteSqlExtension executeSqlExtension = new ExecuteSqlExtension();
@@ -97,5 +108,30 @@ class JsonTestDataExtensionTest
 				(person) -> person.getSystemTo().toInstant()
 			)
 			.containsExactly(2L, "Bob Jones", "Manager", bobSystemFrom, infinityInstant);
+	}
+
+	@Test
+	void storesInfinityAsUtcWallClock()
+		throws SQLException
+	{
+		assertThat(selectSystemTo()).containsExactly(INFINITY_UTC_WALL_CLOCK, INFINITY_UTC_WALL_CLOCK);
+	}
+
+	private static ImmutableList<LocalDateTime> selectSystemTo()
+		throws SQLException
+	{
+		try (
+			Connection connection = H2InMemoryConnectionManager.getInstance().getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT system_to FROM PERSON ORDER BY id")
+		)
+		{
+			MutableList<LocalDateTime> result = Lists.mutable.empty();
+			while (resultSet.next())
+			{
+				result.add(resultSet.getObject(1, LocalDateTime.class));
+			}
+			return result.toImmutable();
+		}
 	}
 }

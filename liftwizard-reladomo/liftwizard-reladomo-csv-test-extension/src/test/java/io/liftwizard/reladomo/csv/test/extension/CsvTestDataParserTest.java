@@ -110,14 +110,14 @@ class CsvTestDataParserTest
 		expectedAlice.setFullName("Alice Smith");
 		expectedAlice.setJobTitle("Engineer");
 		expectedAlice.setSystemFrom(Timestamp.valueOf(LocalDateTime.parse("2024-01-01T00:00:00.000")));
-		expectedAlice.setSystemTo(PersonFinder.systemTo().getAsOfAttributeInfinity());
+		expectedAlice.setSystemTo(Timestamp.valueOf(LocalDateTime.parse("9999-12-01T23:59:00.000")));
 
 		var expectedBob = new PersonData();
 		expectedBob.setId(2L);
 		expectedBob.setFullName("Bob Jones");
 		expectedBob.setJobTitle("Manager");
 		expectedBob.setSystemFrom(Timestamp.valueOf(LocalDateTime.parse("2024-01-15T00:00:00.000")));
-		expectedBob.setSystemTo(PersonFinder.systemTo().getAsOfAttributeInfinity());
+		expectedBob.setSystemTo(Timestamp.valueOf(LocalDateTime.parse("9999-12-01T23:59:00.000")));
 
 		var parser = new CsvTestDataParser("test-data/com.example.helloworld.core.Person.csv");
 		List<MithraDataObject> dataObjects = parser.getDataObjects();

@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.helloworld.core.PersonData;
-import com.example.helloworld.core.PersonFinder;
 import com.gs.fw.common.mithra.MithraDataObject;
 import io.liftwizard.reladomo.test.extension.ExecuteSqlExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
@@ -114,14 +113,14 @@ class JsonTestDataParserTest
 					"Alice Smith",
 					"Engineer",
 					Timestamp.valueOf(LocalDateTime.parse("2024-01-01T00:00:00.000")),
-					PersonFinder.systemTo().getAsOfAttributeInfinity()
+					Timestamp.valueOf(LocalDateTime.parse("9999-12-01T23:59:00.000"))
 				),
 				Tuple.tuple(
 					2L,
 					"Bob Jones",
 					"Manager",
 					Timestamp.valueOf(LocalDateTime.parse("2024-01-15T00:00:00.000")),
-					PersonFinder.systemTo().getAsOfAttributeInfinity()
+					Timestamp.valueOf(LocalDateTime.parse("9999-12-01T23:59:00.000"))
 				)
 			);
 	}

@@ -11,9 +11,9 @@
     <AsOfAttribute
             name="system"
             toIsInclusive="false"
-            infinityDate="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+            infinityDate="[io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp.getDefaultInfinity()]"
             infinityIsNull="false"
-            defaultIfNotSpecified="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+            defaultIfNotSpecified="[io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp.getDefaultInfinity()]"
             futureExpiringRowsExist="true"
             isProcessingDate="true"
             timezoneConversion="convert-to-utc"

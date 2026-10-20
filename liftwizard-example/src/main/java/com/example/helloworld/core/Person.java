@@ -2,7 +2,7 @@ package com.example.helloworld.core;
 
 import java.sql.Timestamp;
 
-import com.gs.fw.common.mithra.util.DefaultInfinityTimestamp;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp;
 
 public class Person
 	extends PersonAbstract
@@ -16,7 +16,7 @@ public class Person
 
 	public Person()
 	{
-		this(DefaultInfinityTimestamp.getDefaultInfinity());
+		this(UtcInfinityTimestamp.getDefaultInfinity());
 	}
 
 	public Person(String fullName, String jobTitle)

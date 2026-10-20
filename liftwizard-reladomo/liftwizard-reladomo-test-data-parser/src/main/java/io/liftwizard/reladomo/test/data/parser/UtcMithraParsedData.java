@@ -35,8 +35,13 @@ import com.gs.fw.common.mithra.util.fileparser.MithraParsedData;
  *
  * <p>The standard {@code MithraParsedData} parses timestamps using the JVM's default timezone.
  * This class overrides {@link #parseData(StreamTokenizer, int, Object)} to parse timestamp
- * values in UTC. Reladomo as-of infinity values are the exception because they are
- * JVM-local wall-clock sentinels.</p>
+ * values in UTC.</p>
+ *
+ * <p>Test data is inserted without time zone conversion, which writes each timestamp's
+ * JVM-local wall clock. As-of infinity values are therefore replaced with a timestamp whose
+ * JVM-local wall clock is the infinity's UTC wall clock, so the database stores the same
+ * literal (for example {@code 9999-12-01 23:59:00}) that SQL migrations and Reladomo writes
+ * use, regardless of the JVM default time zone.</p>
  *
  * @see MithraParsedData
  */
@@ -125,8 +130,13 @@ public class UtcMithraParsedData
 				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
 		)
 		{
-			return timestampAttribute.getAsOfAttributeInfinity();
+			return toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity());
 		}
 		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
+	}
+
+	private static Timestamp toUtcWallClock(Timestamp timestamp)
+	{
+		return Timestamp.valueOf(LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC));
 	}
 }
