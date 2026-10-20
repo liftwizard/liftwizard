@@ -19,6 +19,7 @@ package io.liftwizard.reladomo.test.extension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
@@ -26,6 +27,7 @@ import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.mithraruntime.MithraRuntimeType;
 import com.gs.fw.common.mithra.util.MithraConfigurationManager;
+import com.gs.fw.common.mithra.util.MithraTimestamp;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -50,6 +52,8 @@ public class ReladomoInitializeExtension
 				.getResourceAsStream(this.runtimeConfigurationPath);
 		)
 		{
+			// Like ReladomoBundle, so that Reladomo binds as-of infinity as its UTC wall clock regardless of the JVM time zone.
+			MithraTimestamp.zSetDefaultTimezone(TimeZone.getTimeZone("UTC"));
 			MithraConfigurationManager mithraConfigurationManager =
 				MithraManagerProvider.getMithraManager().getConfigManager();
 			MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
