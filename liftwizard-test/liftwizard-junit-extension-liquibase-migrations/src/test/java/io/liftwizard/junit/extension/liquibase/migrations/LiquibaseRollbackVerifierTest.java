@@ -20,8 +20,8 @@ import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(LogMarkerTestExtension.class)
 class LiquibaseRollbackVerifierTest
@@ -29,12 +29,16 @@ class LiquibaseRollbackVerifierTest
 	@Test
 	void verifyAllChangesets()
 	{
-		assertDoesNotThrow(() -> LiquibaseRollbackVerifier.verifyAllChangesets("test-migrations.xml"));
+		assertThatCode(() ->
+			LiquibaseRollbackVerifier.verifyAllChangesets("test-migrations.xml")
+		).doesNotThrowAnyException();
 	}
 
 	@Test
 	void verifyAllChangesets_nullMigrationsFile()
 	{
-		assertThrows(NullPointerException.class, () -> LiquibaseRollbackVerifier.verifyAllChangesets(null));
+		assertThatThrownBy(() -> LiquibaseRollbackVerifier.verifyAllChangesets(null)).isInstanceOf(
+			NullPointerException.class
+		);
 	}
 }
