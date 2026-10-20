@@ -31,7 +31,21 @@
         <module>liftwizard-checkstyle</module>
         <module>liftwizard-healthcheck-common-pool</module>
         <module>liftwizard-managed-file-system</module>
-        <module>liftwizard-rewrite</module>
         <module>liftwizard-temp-files</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <!--rewrite-maven-plugin depends on liftwizard-rewrite, which inherits that plugin's profile, so Maven 3.10 rejects the reactor as cyclic unless the module is left out.-->
+            <id>liftwizard-rewrite-module</id>
+            <activation>
+                <property>
+                    <name>!skipLiftwizardRewriteModule</name>
+                </property>
+            </activation>
+            <modules>
+                <module>liftwizard-rewrite</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
