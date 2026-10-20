@@ -18,8 +18,8 @@ package io.liftwizard.dropwizard.bundle.reladomo;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -30,12 +30,13 @@ import com.google.auto.service.AutoService;
 import com.gs.fw.common.mithra.MithraBusinessException;
 import com.gs.fw.common.mithra.MithraManager;
 import com.gs.fw.common.mithra.MithraManagerProvider;
-import com.gs.fw.common.mithra.util.DefaultInfinityTimestamp;
+import com.gs.fw.common.mithra.util.MithraTimestamp;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactory;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class ReladomoBundle
 
 		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-		ReladomoBundle.assertTimezoneUTC();
+		ReladomoBundle.setReladomoDefaultTimeZoneToUtc();
 
 		ReladomoFactory reladomoFactory = reladomoFactoryProvider.getReladomoFactory();
 
@@ -93,28 +94,43 @@ public class ReladomoBundle
 		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
-	private static void assertTimezoneUTC()
+	/**
+	 * Sets Reladomo's default time zone to UTC, without changing the JVM default time zone.
+	 *
+	 * <p>Reladomo binds as-of infinity using its default time zone, which is the JVM default time zone unless changed.
+	 * With {@link UtcInfinityTimestamp} in a JVM whose default time zone is not UTC, as-of infinity would be written and
+	 * queried as the JVM-local wall clock, like {@code 9999-12-01 18:59:00} in America/New_York, and would not match
+	 * rows written by SQL as {@code 9999-12-01 23:59:00}.</p>
+	 *
+	 * <p>Reladomo also reads timestamp attributes without {@code timezoneConversion="convert-to-utc"} using its default
+	 * time zone, but writes them using the JVM default time zone. In a JVM whose default time zone is not UTC, those
+	 * attributes no longer round-trip, so this logs which rules the model must follow.</p>
+	 */
+	private static void setReladomoDefaultTimeZoneToUtc()
 	{
+		MithraTimestamp.zSetDefaultTimezone(TimeZone.getTimeZone("UTC"));
+
 		TimeZone defaultTimeZone = TimeZone.getDefault();
-		if (!defaultTimeZone.equals(TimeZone.getTimeZone("UTC")))
+		if (!"UTC".equals(defaultTimeZone.getID()))
 		{
-			LOGGER.warn("Expected default TimeZone to be UTC, but was: {}.", defaultTimeZone);
+			LOGGER.info(
+				"Set Reladomo's default time zone to UTC. The JVM default time zone is {}, which works when every timestamp attribute uses timezoneConversion=\"convert-to-utc\" and every as-of attribute uses UtcInfinityTimestamp. Other timestamp attributes shift by the JVM's UTC offset when written and read back, and as-of attributes using DefaultInfinityTimestamp do not match infinity rows.",
+				defaultTimeZone.getID()
+			);
 		}
 
-		long expectedInfinityMilli = LocalDateTime.of(9999, 12, 1, 23, 59, 0).toInstant(ZoneOffset.UTC).toEpochMilli();
-		long actualInfinityMilli = DefaultInfinityTimestamp.getDefaultInfinity().getTime();
-
-		if (actualInfinityMilli != expectedInfinityMilli)
+		Instant expectedInfinity = UtcInfinityTimestamp.getDefaultInfinityInstant();
+		Timestamp boundInfinity = MithraTimestamp.zConvertTimeForWritingWithUtcCalendar(
+			UtcInfinityTimestamp.getDefaultInfinity(),
+			MithraTimestamp.DefaultTimeZone
+		);
+		if (!boundInfinity.toInstant().equals(expectedInfinity))
 		{
-			long difference = actualInfinityMilli - expectedInfinityMilli;
-			long offset = difference / (1000 * 60 * 60);
-
-			LOGGER.warn(
-				"Expected default Infinity to be {}, but was: {}. Offset: {} hours.",
-				expectedInfinityMilli,
-				actualInfinityMilli,
-				offset
+			String message = "Expected Reladomo to bind infinity as %s but was %s.".formatted(
+				expectedInfinity,
+				boundInfinity.toInstant()
 			);
+			throw new IllegalStateException(message);
 		}
 	}
 
