@@ -33,5 +33,63 @@
             <artifactId>reladomo</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <!-- Reladomo's handling of as-of infinity depends on the JVM default time zone. -->
+                    <!-- Run the tests again in UTC and in a time zone that is not UTC, regardless of the machine's time zone. -->
+                    <execution>
+                        <id>test-utc</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <argLine>-XX:-OmitStackTraceInFastThrow @{argLine} -Duser.timezone=UTC</argLine>
+                            <reportsDirectory>${project.build.directory}/surefire-reports-utc</reportsDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-america-new-york</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <argLine>-XX:-OmitStackTraceInFastThrow @{argLine} -Duser.timezone=America/New_York</argLine>
+                            <reportsDirectory>${project.build.directory}/surefire-reports-america-new-york</reportsDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

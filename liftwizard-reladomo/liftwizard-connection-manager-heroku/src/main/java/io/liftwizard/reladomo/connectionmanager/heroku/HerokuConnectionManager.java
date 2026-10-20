@@ -25,7 +25,7 @@ import com.gs.fw.common.mithra.bulkloader.BulkLoader;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.connectionmanager.XAConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
-import com.gs.fw.common.mithra.databasetype.PostgresDatabaseType;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityPostgresDatabaseType;
 
 public final class HerokuConnectionManager
 	implements SourcelessConnectionManager
@@ -84,7 +84,7 @@ public final class HerokuConnectionManager
 	@Override
 	public DatabaseType getDatabaseType()
 	{
-		return PostgresDatabaseType.getInstance();
+		return UtcInfinityPostgresDatabaseType.getInstance();
 	}
 
 	@Override

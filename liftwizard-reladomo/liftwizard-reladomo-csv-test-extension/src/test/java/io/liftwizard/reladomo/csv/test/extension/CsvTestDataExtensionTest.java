@@ -117,6 +117,14 @@ class CsvTestDataExtensionTest
 		assertThat(selectSystemTo()).containsExactly(INFINITY_UTC_WALL_CLOCK, INFINITY_UTC_WALL_CLOCK);
 	}
 
+	@Test
+	void infinityQueryFindsLoadedRows()
+	{
+		MithraList<Person> allPersons = PersonFinder.findManyBypassCache(PersonFinder.all());
+
+		assertThat(allPersons).extracting(Person::getId).containsExactlyInAnyOrder(1L, 2L);
+	}
+
 	private static ImmutableList<LocalDateTime> selectSystemTo()
 		throws SQLException
 	{
