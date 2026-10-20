@@ -35,7 +35,7 @@ jobs:
         run: mvn install --projects liftwizard-utility/liftwizard-rewrite -DskipTests -Dspotless.skip -Dspotbugs.skip -Djacoco.skip -Dcheckstyle.skip -Denforcer.skip
 
       - name: Run OpenRewrite one-off recipes
-        run: mvn rewrite:run -Prewrite-maven-plugin-one-off
+        run: mvn rewrite:run -Prewrite-maven-plugin-one-off -DskipLiftwizardRewriteModule
 
       - name: Check for changes
         id: check_changes
