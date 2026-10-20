@@ -150,9 +150,19 @@ public class JsonTestDataParser
 				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
 		)
 		{
-			return timestampAttribute.getAsOfAttributeInfinity();
+			return toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity());
 		}
 		return timestampAttribute.requiresConversionFromUtc() ? Timestamp.valueOf(utcDateTime) : timestamp;
+	}
+
+	/**
+	 * Test data is inserted without time zone conversion, which writes the JVM-local wall clock.
+	 * Returns a timestamp whose JVM-local wall clock is the given timestamp's UTC wall clock, so
+	 * as-of infinity is stored as the same literal that SQL migrations and Reladomo writes use.
+	 */
+	private static Timestamp toUtcWallClock(Timestamp timestamp)
+	{
+		return Timestamp.valueOf(LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC));
 	}
 
 	@Nonnull
