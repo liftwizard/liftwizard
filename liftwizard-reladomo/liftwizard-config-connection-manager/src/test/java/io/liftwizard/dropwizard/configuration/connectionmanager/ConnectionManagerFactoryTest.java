@@ -23,7 +23,6 @@ import javax.validation.Validator;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
-import com.gs.fw.common.mithra.databasetype.GenericDatabaseType;
 import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -32,6 +31,7 @@ import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityGenericDatabaseType;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -72,7 +72,9 @@ class ConnectionManagerFactoryTest
 		assertThat(sourcelessConnectionManager.getDatabaseTimeZone()).isEqualTo(
 			TimeZone.getTimeZone("America/New_York")
 		);
-		assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(GenericDatabaseType.getInstance());
+		assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(
+			UtcInfinityGenericDatabaseType.getInstance()
+		);
 	}
 
 	private static ObjectMapper newObjectMapper()

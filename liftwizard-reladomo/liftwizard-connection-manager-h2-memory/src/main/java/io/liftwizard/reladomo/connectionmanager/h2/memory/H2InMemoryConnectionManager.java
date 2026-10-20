@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import com.gs.fw.common.mithra.bulkloader.BulkLoader;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
-import com.gs.fw.common.mithra.databasetype.H2DatabaseType;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityH2DatabaseType;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
@@ -99,7 +99,7 @@ public final class H2InMemoryConnectionManager
 	@Override
 	public DatabaseType getDatabaseType()
 	{
-		return H2DatabaseType.getInstance();
+		return UtcInfinityH2DatabaseType.getInstance();
 	}
 
 	@Override
