@@ -20,12 +20,10 @@ import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -178,8 +176,6 @@ public class CommonPoolHealthCheck
 	@Nonnull
 	private String getStackTraceString(StackTraceElement[] stackTrace)
 	{
-		return Arrays.stream(stackTrace)
-			.map(StackTraceElement::toString)
-			.collect(Collectors.joining("\n\t at ", "", System.lineSeparator()));
+		return ArrayAdapter.adapt(stackTrace).makeString("", "\n\t at ", System.lineSeparator());
 	}
 }
