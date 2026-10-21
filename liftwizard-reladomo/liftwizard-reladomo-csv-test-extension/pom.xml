@@ -108,15 +108,11 @@
                 <version>3.6.0</version>
                 <executions>
                     <!-- Reladomo's handling of as-of infinity depends on the JVM default time zone. -->
-                    <!-- Run the tests again in UTC and in a time zone that is not UTC, regardless of the machine's time zone. -->
+                    <!-- Run the tests in UTC and again in a time zone that is not UTC, regardless of the machine's time zone. -->
                     <execution>
-                        <id>test-utc</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
+                        <id>default-test</id>
                         <configuration>
                             <argLine>-XX:-OmitStackTraceInFastThrow @{argLine} -Duser.timezone=UTC</argLine>
-                            <reportsDirectory>${project.build.directory}/surefire-reports-utc</reportsDirectory>
                         </configuration>
                     </execution>
                     <execution>
