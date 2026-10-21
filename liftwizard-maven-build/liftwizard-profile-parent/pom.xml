@@ -766,7 +766,7 @@
                                 <!-- Immutable*Rules$* rewrite JDK collection factories to Guava immutable collections. -->
                                 <!-- StringRules$Formatted and JUnitRules$ArgumentsEnumeration are style rewrites we do not want. -->
                                 <arg>-Xplugin:ErrorProne \
-                                    -XepExcludedPaths:.*/generated-sources/.* \
+                                    -XepExcludedPaths:.*/generated-(test-)?sources/.* \
                                     -XepOpt:Refaster:NamePattern=^(?!PreconditionsRules\$)(?!StringRules\$StringsIsNullOrEmpty)(?!Immutable[A-Za-z]*Rules\$)(?!StringRules\$Formatted$)(?!JUnitRules\$ArgumentsEnumeration$).* \
                                     ${errorprone.flags.suppressed} \
                                     ${errorprone.flags.strict.addon} \
