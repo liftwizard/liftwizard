@@ -28,6 +28,7 @@ import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.mithraruntime.MithraRuntimeType;
 import com.gs.fw.common.mithra.util.MithraConfigurationManager;
 import com.gs.fw.common.mithra.util.MithraTimestamp;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityModelValidator;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -59,6 +60,7 @@ public class ReladomoInitializeExtension
 			MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
 			mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
 			mithraConfigurationManager.fullyInitialize();
+			UtcInfinityModelValidator.validateRuntimeConfigurationIfNotUtc();
 		}
 		catch (MithraBusinessException | IOException e)
 		{

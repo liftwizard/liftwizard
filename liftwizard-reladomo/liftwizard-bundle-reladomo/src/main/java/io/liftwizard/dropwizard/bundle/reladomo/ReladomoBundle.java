@@ -36,6 +36,7 @@ import io.dropwizard.util.Duration;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactory;
 import io.liftwizard.dropwizard.configuration.reladomo.ReladomoFactoryProvider;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityModelValidator;
 import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +89,7 @@ public class ReladomoBundle
 			this.registerRetrieveCountMetrics(environment.metrics());
 		}
 		MithraManagerProvider.getMithraManager().fullyInitialize();
+		UtcInfinityModelValidator.validateRuntimeConfigurationIfNotUtc();
 
 		environment.lifecycle().manage(new ManagedReladomoCleanup());
 
@@ -104,20 +106,12 @@ public class ReladomoBundle
 	 *
 	 * <p>Reladomo also reads timestamp attributes without {@code timezoneConversion="convert-to-utc"} using its default
 	 * time zone, but writes them using the JVM default time zone. In a JVM whose default time zone is not UTC, those
-	 * attributes no longer round-trip, so this logs which rules the model must follow.</p>
+	 * attributes no longer round-trip, so {@link UtcInfinityModelValidator} rejects them once the runtime configuration
+	 * is loaded.</p>
 	 */
 	private static void setReladomoDefaultTimeZoneToUtc()
 	{
 		MithraTimestamp.zSetDefaultTimezone(TimeZone.getTimeZone("UTC"));
-
-		TimeZone defaultTimeZone = TimeZone.getDefault();
-		if (!"UTC".equals(defaultTimeZone.getID()))
-		{
-			LOGGER.info(
-				"Set Reladomo's default time zone to UTC. The JVM default time zone is {}, which works when every timestamp attribute uses timezoneConversion=\"convert-to-utc\" and every as-of attribute uses UtcInfinityTimestamp. Other timestamp attributes shift by the JVM's UTC offset when written and read back, and as-of attributes using DefaultInfinityTimestamp do not match infinity rows.",
-				defaultTimeZone.getID()
-			);
-		}
 
 		Instant expectedInfinity = UtcInfinityTimestamp.getDefaultInfinityInstant();
 		Timestamp boundInfinity = MithraTimestamp.zConvertTimeForWritingWithUtcCalendar(
