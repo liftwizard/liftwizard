@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.liftwizard.reladomo.utc.infinity.timestamp;
 
 import java.lang.reflect.Proxy;
