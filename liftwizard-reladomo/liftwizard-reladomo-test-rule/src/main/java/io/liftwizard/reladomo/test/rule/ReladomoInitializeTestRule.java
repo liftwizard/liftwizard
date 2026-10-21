@@ -28,6 +28,7 @@ import com.gs.fw.common.mithra.MithraManagerProvider;
 import com.gs.fw.common.mithra.mithraruntime.MithraRuntimeType;
 import com.gs.fw.common.mithra.util.MithraConfigurationManager;
 import com.gs.fw.common.mithra.util.MithraTimestamp;
+import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityModelValidator;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -77,6 +78,7 @@ public class ReladomoInitializeTestRule
 				MithraRuntimeType mithraRuntimeType = mithraConfigurationManager.parseConfiguration(inputStream);
 				mithraConfigurationManager.initializeRuntime(mithraRuntimeType);
 				mithraConfigurationManager.fullyInitialize();
+				UtcInfinityModelValidator.validateRuntimeConfigurationIfNotUtc();
 			}
 			catch (MithraBusinessException e)
 			{
