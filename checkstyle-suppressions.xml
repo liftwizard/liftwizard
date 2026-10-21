@@ -34,7 +34,7 @@
     -->
     <suppress files="Bundle.java$" checks="AbstractClassName" />
 
-    <suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*" />
+    <suppress files="[\\/]generated-(test-)?sources[\\/]" checks="[a-zA-Z0-9]*" />
 
     <!-- Forked from Dropwizard so suppress all violations -->
     <suppress files="[\\/]LiftwizardExceptionMapperBinder.java" checks="[a-zA-Z0-9]*" />
