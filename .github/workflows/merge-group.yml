@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.x"
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
@@ -45,7 +45,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -76,7 +76,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -102,7 +102,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -131,7 +131,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -158,7 +158,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -185,7 +185,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -218,7 +218,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -255,7 +255,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -292,7 +292,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -324,7 +324,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -352,7 +352,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -381,7 +381,7 @@ jobs:
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
-      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
