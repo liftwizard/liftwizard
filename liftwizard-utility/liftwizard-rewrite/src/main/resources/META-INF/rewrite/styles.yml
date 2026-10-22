@@ -38,6 +38,10 @@ styleConfigs:
         - "import all other imports"
         - "<blank line>"
         - "import static all other imports"
+  # Matches option="text" on the EmptyBlock Checkstyle rule. Without this, EmptyBlock deletes blocks that hold only a
+  # comment, such as a TODO explaining why a branch is intentionally empty.
+  - org.openrewrite.java.style.EmptyBlockStyle:
+      blockPolicy: TEXT
   - org.openrewrite.java.style.SpacesStyle:
       other:
         beforeComma: false
