@@ -1,0 +1,56 @@
+name: OpenRewrite recipes
+description: Configure Code Genome credentials for Maven and install the source-available OpenRewrite recipe modules into ~/.m2, building them from their release tags when they are not cached. Run it after Java, Maven, Python, and mise are set up.
+
+inputs:
+  codegenome-username:
+    description: Code Genome Project username
+    required: true
+  codegenome-token:
+    description: Code Genome Project token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # Recipe releases newer than the last ones on Maven Central are only published to the Code Genome Project. The server goes into its own global settings file so that it merges with whatever another step writes to ~/.m2/settings.xml. Maven reads MAVEN_ARGS and the credentials from the environment of later steps.
+    - name: Configure Code Genome credentials
+      shell: bash
+      env:
+        CODEGENOME_USERNAME: ${{ inputs.codegenome-username }}
+        CODEGENOME_TOKEN: ${{ inputs.codegenome-token }}
+      run: |
+        settings="$RUNNER_TEMP/codegenome-settings.xml"
+        cat > "$settings" <<'EOF'
+        <settings>
+          <servers>
+            <server>
+              <id>codegenome</id>
+              <username>${env.CODEGENOME_USERNAME}</username>
+              <password>${env.CODEGENOME_TOKEN}</password>
+            </server>
+          </servers>
+        </settings>
+        EOF
+        {
+          echo "CODEGENOME_USERNAME=$CODEGENOME_USERNAME"
+          echo "CODEGENOME_TOKEN=$CODEGENOME_TOKEN"
+          echo "MAVEN_ARGS=${MAVEN_ARGS:+$MAVEN_ARGS }--global-settings $settings"
+        } >> "$GITHUB_ENV"
+
+    # The key covers the resolved modules and versions, so bumping a version in a POM rebuilds the cache. It also covers this action's files, which hashFiles cannot read when another repository uses the action.
+    - name: Compute recipe cache key
+      id: key
+      shell: bash
+      run: |
+        hash=$({ "$GITHUB_ACTION_PATH/build-openrewrite-recipes.sh" --list; cat "$GITHUB_ACTION_PATH"/*; } | sha256sum | cut -c1-16)
+        echo "key=openrewrite-recipes-$hash" >> "$GITHUB_OUTPUT"
+
+    # Building the recipes takes about 10 minutes, so they get their own cache. The warm-up job on main saves it where every branch can restore it.
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        key: ${{ steps.key.outputs.key }}
+        path: ~/.m2/repository/org/openrewrite/recipe
+
+    - name: Build source-available OpenRewrite recipes
+      shell: bash
+      run: "$GITHUB_ACTION_PATH/build-openrewrite-recipes.sh"

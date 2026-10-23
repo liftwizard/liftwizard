@@ -102,6 +102,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
