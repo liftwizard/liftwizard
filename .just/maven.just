@@ -140,18 +140,22 @@ spotless-all MVN=default_mvn: (mvn MVN "spotless:apply" ("--projects '!liftwizar
 [arg("MVN", long="mvn", help="Maven binary to use")]
 reproducible MVN=default_mvn: (mvn MVN "verify artifact:check-buildplan" "" skip_tests_flags)
 
+# Build the source-available OpenRewrite recipe modules into ~/.m2
+build-openrewrite-recipes:
+    .github/actions/openrewrite-recipes/build-openrewrite-recipes.sh
+
 # `mvn` rewrite dry run
 [arg("MVN", long="mvn", help="Maven binary to use")]
-rewrite-dry-run MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:dryRun" (rewrite_projects + " --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun") rewrite_flags)
+rewrite-dry-run MVN=default_mvn: build-openrewrite-recipes (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:dryRun" (rewrite_projects + " --activate-profiles rewrite-maven-plugin,rewrite-maven-plugin-dryRun") rewrite_flags)
 
 # `mvn` rewrite run
 [arg("MVN", long="mvn", help="Maven binary to use")]
-rewrite-run MVN=default_mvn: clean (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" (rewrite_projects + " --activate-profiles rewrite-maven-plugin") rewrite_flags)
+rewrite-run MVN=default_mvn: clean build-openrewrite-recipes (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" (rewrite_projects + " --activate-profiles rewrite-maven-plugin") rewrite_flags)
 
 # `mvn` with rewrite-maven-plugin for single recipe
 [arg("MVN", long="mvn", help="Maven binary to use")]
 [arg("RECIPE", long="recipe", help="OpenRewrite recipe class name")]
-rewrite RECIPE MVN=default_mvn: (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" ("--projects '" + rewrite_project_exclusions + ",!liftwizard-example' --activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) rewrite_flags)
+rewrite RECIPE MVN=default_mvn: build-openrewrite-recipes (mvn MVN "org.openrewrite.maven:rewrite-maven-plugin:run" ("--projects '" + rewrite_project_exclusions + ",!liftwizard-example' --activate-profiles rewrite-maven-plugin -Drewrite.activeRecipes=" + RECIPE) rewrite_flags)
 
 # display available updates (dependencies, plugins, properties)
 @display-updates:

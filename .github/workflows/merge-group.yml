@@ -328,6 +328,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+
       - name: Run rewrite-maven-plugin (dry run)
         run: just rewrite-dry-run
 
