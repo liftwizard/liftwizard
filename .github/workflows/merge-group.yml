@@ -440,7 +440,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: reviewdog/action-markdownlint@b85a623ec721cb42896c485633f527cbd2d58063 # v0.31.5
+      - uses: reviewdog/action-markdownlint@59696bf7ca9d7428b5cd84a97d0798b5375cb74d # v0.31.6
         with:
           reporter: github-pr-check
           fail_on_error: true
