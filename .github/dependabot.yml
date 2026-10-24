@@ -1,7 +1,16 @@
 version: 2
+registries:
+  # OpenRewrite releases newer than the last ones on Maven Central are only published to the Code Genome Project.
+  codegenome:
+    type: maven-repository
+    url: https://artifacts.codegenomeproject.org/maven
+    username: ${{ secrets.CODEGENOME_USERNAME }}
+    password: ${{ secrets.CODEGENOME_TOKEN }}
 updates:
   - package-ecosystem: "maven"
     directory: "/"
+    registries:
+      - codegenome
     schedule:
       interval: "daily"
       time: "07:00"
