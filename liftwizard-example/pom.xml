@@ -581,7 +581,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.1</version>
                 <executions>
                     <!-- Run the Reladomo time zone tests again in a JVM whose default time zone is not UTC. -->
                     <!-- Reladomo's handling of as-of infinity depends on the JVM default time zone. -->
