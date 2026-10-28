@@ -44,8 +44,6 @@ import org.openrewrite.java.tree.VariableDeclarator;
 public abstract class AbstractJCFConstructorToFactoryRecipe
 	extends Recipe
 {
-	private static final List<String> STUBS = EclipseCollectionsTemplateStubs.factories();
-
 	private final String sourceTypeSimpleName;
 	private final String targetFactorySimpleName;
 
@@ -164,7 +162,13 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
+				.javaParser(
+					JavaParser.fromJavaVersion().dependsOn(
+						EclipseCollectionsTemplateStubs.factoriesExcludingTypesDeclaredIn(
+							this.getCursor().firstEnclosingOrThrow(J.CompilationUnit.class)
+						)
+					)
+				)
 				.build();
 
 			J replacement;
