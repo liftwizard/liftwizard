@@ -29,6 +29,7 @@ import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.MethodMatcher;
+import org.openrewrite.java.search.HasTypeOnClasspathSourceSet;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.J;
 
@@ -99,7 +100,13 @@ public class ECIntStreamRangeClosedToIntInterval
 	@Override
 	public TreeVisitor<?, ExecutionContext> getVisitor()
 	{
-		return Preconditions.check(new UsesMethod<>(RANGE_CLOSED_MATCHER), new IntStreamRangeClosedVisitor());
+		return Preconditions.check(
+			Preconditions.and(
+				new UsesMethod<>(RANGE_CLOSED_MATCHER),
+				new HasTypeOnClasspathSourceSet<>(INT_INTERVAL_TYPE)
+			),
+			new IntStreamRangeClosedVisitor()
+		);
 	}
 
 	private static final class IntStreamRangeClosedVisitor

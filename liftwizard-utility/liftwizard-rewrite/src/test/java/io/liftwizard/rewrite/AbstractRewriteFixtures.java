@@ -88,6 +88,15 @@ public interface AbstractRewriteFixtures
 		return java(this.fixture(name + "-unchanged.java"));
 	}
 
+	/**
+	 * The before fixture of a {@link #javaFixture(String)} pair, as a source file that a recipe must leave alone under a
+	 * different configuration, such as markers on the spec.
+	 */
+	default SourceSpecs javaFixtureBeforeUnchanged(String name, Consumer<SourceSpec<J.CompilationUnit>> customizer)
+	{
+		return java(this.fixture(name + "-before.java"), customizer);
+	}
+
 	/** A Groovy source file that a recipe must leave alone. */
 	default SourceSpecs groovyFixtureUnchanged(String name)
 	{
