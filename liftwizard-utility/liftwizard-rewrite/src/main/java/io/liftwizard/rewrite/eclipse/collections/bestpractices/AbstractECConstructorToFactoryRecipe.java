@@ -209,7 +209,14 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryClass)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
+				.javaParser(
+					JavaParser.fromJavaVersion().dependsOn(
+						EclipseCollectionsTemplateStubs.excludingTypesDeclaredIn(
+							STUBS,
+							this.getCursor().firstEnclosingOrThrow(J.CompilationUnit.class)
+						)
+					)
+				)
 				.build();
 
 			J replacement;

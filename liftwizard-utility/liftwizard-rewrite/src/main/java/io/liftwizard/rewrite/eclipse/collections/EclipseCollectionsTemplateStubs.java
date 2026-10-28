@@ -437,17 +437,19 @@ public final class EclipseCollectionsTemplateStubs
 	}
 
 	/**
-	 * Returns the factory stubs minus any stub declaring a type that the compilation unit also declares. A
-	 * context-sensitive template compiles the compilation unit's own classes next to the stubs, so a stub such as
+	 * Returns the stubs minus any stub declaring a type that the compilation unit also declares. A context-sensitive
+	 * template compiles the compilation unit's own classes next to the stubs, so a stub such as
 	 * {@code org.eclipse.collections.impl.factory.Sets} would collide with the real {@code Sets.java} being rewritten.
 	 */
-	public static String[] factoriesExcludingTypesDeclaredIn(J.CompilationUnit compilationUnit)
+	public static String[] excludingTypesDeclaredIn(List<String> stubs, J.CompilationUnit compilationUnit)
 	{
 		ImmutableSet<String> declaredTypes = ListAdapter.adapt(compilationUnit.getClasses())
 			.collectIf((classDeclaration) -> classDeclaration.getType() != null, J.ClassDeclaration::getType)
 			.collect(JavaType.FullyQualified::getFullyQualifiedName, Sets.mutable.empty())
 			.toImmutable();
-		return FACTORIES.reject((stub) -> declaredTypes.contains(getFullyQualifiedName(stub))).toArray(new String[0]);
+		return ListAdapter.adapt(stubs)
+			.reject((stub) -> declaredTypes.contains(getFullyQualifiedName(stub)))
+			.toArray(new String[0]);
 	}
 
 	private static String getFullyQualifiedName(String stub)
