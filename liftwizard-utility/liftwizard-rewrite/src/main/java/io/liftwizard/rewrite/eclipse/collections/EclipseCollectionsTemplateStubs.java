@@ -17,14 +17,27 @@
 package io.liftwizard.rewrite.eclipse.collections;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.set.ImmutableSet;
+import org.eclipse.collections.impl.list.mutable.ListAdapter;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JavaType;
 
 public final class EclipseCollectionsTemplateStubs
 {
 	private static final String API_FACTORY_PACKAGE_DECLARATION = "package org.eclipse.collections.api.factory;";
 	private static final String IMPL_FACTORY_PACKAGE_DECLARATION = "package org.eclipse.collections.impl.factory;";
+
+	private static final Pattern PACKAGE_PATTERN = Pattern.compile("^package ([\\w.]+);", Pattern.MULTILINE);
+	private static final Pattern TYPE_PATTERN = Pattern.compile(
+		"^public (?:final )?(?:class|interface) (\\w+)",
+		Pattern.MULTILINE
+	);
 
 	private static final ImmutableList<String> API_STUBS = Lists.immutable.with(
 		"""
@@ -421,6 +434,31 @@ public final class EclipseCollectionsTemplateStubs
 	public static List<String> factories()
 	{
 		return FACTORIES.castToList();
+	}
+
+	/**
+	 * Returns the factory stubs minus any stub declaring a type that the compilation unit also declares. A
+	 * context-sensitive template compiles the compilation unit's own classes next to the stubs, so a stub such as
+	 * {@code org.eclipse.collections.impl.factory.Sets} would collide with the real {@code Sets.java} being rewritten.
+	 */
+	public static String[] factoriesExcludingTypesDeclaredIn(J.CompilationUnit compilationUnit)
+	{
+		ImmutableSet<String> declaredTypes = ListAdapter.adapt(compilationUnit.getClasses())
+			.collectIf((classDeclaration) -> classDeclaration.getType() != null, J.ClassDeclaration::getType)
+			.collect(JavaType.FullyQualified::getFullyQualifiedName, Sets.mutable.empty())
+			.toImmutable();
+		return FACTORIES.reject((stub) -> declaredTypes.contains(getFullyQualifiedName(stub))).toArray(new String[0]);
+	}
+
+	private static String getFullyQualifiedName(String stub)
+	{
+		Matcher packageMatcher = PACKAGE_PATTERN.matcher(stub);
+		Matcher typeMatcher = TYPE_PATTERN.matcher(stub);
+		if (!packageMatcher.find() || !typeMatcher.find())
+		{
+			throw new IllegalStateException("Cannot find the declared type in stub:\n" + stub);
+		}
+		return packageMatcher.group(1) + "." + typeMatcher.group(1);
 	}
 
 	public static List<String> richIterable()
