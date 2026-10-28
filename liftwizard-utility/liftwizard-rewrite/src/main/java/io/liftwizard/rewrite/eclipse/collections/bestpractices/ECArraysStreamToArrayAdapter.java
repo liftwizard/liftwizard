@@ -28,6 +28,7 @@ import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.MethodMatcher;
+import org.openrewrite.java.search.HasTypeOnClasspathSourceSet;
 import org.openrewrite.java.search.UsesMethod;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
@@ -61,6 +62,7 @@ public class ECArraysStreamToArrayAdapter
 	extends Recipe
 {
 	private static final MethodMatcher ARRAYS_STREAM_MATCHER = new MethodMatcher("java.util.Arrays stream(..)");
+	private static final String ARRAY_ADAPTER_TYPE = "org.eclipse.collections.impl.list.fixed.ArrayAdapter";
 
 	private static final List<String> STUBS = List.of(
 		"""
@@ -104,14 +106,20 @@ public class ECArraysStreamToArrayAdapter
 	@Override
 	public TreeVisitor<?, ExecutionContext> getVisitor()
 	{
-		return Preconditions.check(new UsesMethod<>(ARRAYS_STREAM_MATCHER), new ECArraysStreamToArrayAdapterVisitor());
+		return Preconditions.check(
+			Preconditions.and(
+				new UsesMethod<>(ARRAYS_STREAM_MATCHER),
+				new HasTypeOnClasspathSourceSet<>(ARRAY_ADAPTER_TYPE)
+			),
+			new ECArraysStreamToArrayAdapterVisitor()
+		);
 	}
 
 	private static final class ECArraysStreamToArrayAdapterVisitor
 		extends AbstractECStreamChainVisitor
 	{
 		private static final JavaTemplate ARRAY_ADAPTER_ADAPT = JavaTemplate.builder("ArrayAdapter.adapt(#{any()})")
-			.imports("org.eclipse.collections.impl.list.fixed.ArrayAdapter")
+			.imports(ARRAY_ADAPTER_TYPE)
 			.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
 			.build();
 
@@ -142,7 +150,7 @@ public class ECArraysStreamToArrayAdapter
 		protected J.MethodInvocation visitTranslatableRoot(J.MethodInvocation root)
 		{
 			this.maybeRemoveImport("java.util.Arrays");
-			this.maybeAddImport("org.eclipse.collections.impl.list.fixed.ArrayAdapter");
+			this.maybeAddImport(ARRAY_ADAPTER_TYPE);
 			J.MethodInvocation adapted = ARRAY_ADAPTER_ADAPT.apply(
 				this.getCursor(),
 				root.getCoordinates().replace(),

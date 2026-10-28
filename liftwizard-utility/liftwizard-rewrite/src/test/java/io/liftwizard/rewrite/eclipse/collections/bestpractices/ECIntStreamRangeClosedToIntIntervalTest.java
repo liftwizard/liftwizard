@@ -16,9 +16,14 @@
 
 package io.liftwizard.rewrite.eclipse.collections.bestpractices;
 
+import java.util.List;
+
+import io.liftwizard.rewrite.AbstractRewriteStyles;
 import io.liftwizard.rewrite.eclipse.collections.AbstractEclipseCollectionsTest;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.java.JavaParser;
+import org.openrewrite.java.marker.JavaSourceSet;
 import org.openrewrite.test.RecipeSpec;
 
 class ECIntStreamRangeClosedToIntIntervalTest
@@ -35,12 +40,32 @@ class ECIntStreamRangeClosedToIntIntervalTest
 	@Test
 	void replacePatterns()
 	{
-		this.rewriteRun(this.javaFixture("replacePatterns/01"));
+		this.rewriteRun(
+			this.javaFixture("replacePatterns/01", (spec) ->
+				spec.markers(
+					JavaSourceSet.build(
+						"main",
+						JavaParser.dependenciesFromClasspath("eclipse-collections-api", "eclipse-collections")
+					)
+				)
+			)
+		);
 	}
 
 	@Test
 	void doNotReplaceInvalidPatterns()
 	{
 		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
+	}
+
+	@Test
+	void doNotReplaceWithoutEclipseCollectionsOnClasspath()
+	{
+		this.rewriteRun(
+			(spec) -> spec.parser(JavaParser.fromJavaVersion().styles(AbstractRewriteStyles.styles())),
+			this.javaFixtureBeforeUnchanged("replacePatterns/01", (spec) ->
+				spec.markers(JavaSourceSet.build("main", List.of()))
+			)
+		);
 	}
 }
