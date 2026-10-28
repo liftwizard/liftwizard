@@ -17,10 +17,12 @@
 package io.liftwizard.rewrite.bestpractices;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
+import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.search.SemanticallyEqual;
@@ -89,6 +91,14 @@ public class IfElseToTernary
 				return super.visitIf(iff, ctx);
 			}
 
+			if (
+				containsFunctionalExpression(slot.thenExpression())
+				|| containsFunctionalExpression(slot.elseExpression())
+			)
+			{
+				return super.visitIf(iff, ctx);
+			}
+
 			Expression condition = iff.getIfCondition().getTree();
 			String templateCode = slot.needsParentheses()
 				? "(#{any()} ? #{any()} : #{any()})"
@@ -111,6 +121,28 @@ public class IfElseToTernary
 			}
 
 			return this.autoFormat(result, ctx);
+		}
+
+		private static boolean containsFunctionalExpression(Expression expression)
+		{
+			var found = new AtomicBoolean();
+			new JavaIsoVisitor<AtomicBoolean>()
+			{
+				@Override
+				public J.Lambda visitLambda(J.Lambda lambda, AtomicBoolean result)
+				{
+					result.set(true);
+					return lambda;
+				}
+
+				@Override
+				public J.MemberReference visitMemberReference(J.MemberReference memberReference, AtomicBoolean result)
+				{
+					result.set(true);
+					return memberReference;
+				}
+			}.visit(expression, found);
+			return found.get();
 		}
 
 		private static Statement unwrapSingleStatement(Statement statement)

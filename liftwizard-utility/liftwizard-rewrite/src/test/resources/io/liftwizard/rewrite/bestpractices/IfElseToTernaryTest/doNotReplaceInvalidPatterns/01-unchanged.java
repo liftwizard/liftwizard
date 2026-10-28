@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 class Test
 {
@@ -104,5 +105,59 @@ class Test
 		{
 			result = value;
 		}
+	}
+
+	void assignLambda(boolean flag)
+	{
+		Runnable runnable;
+		if (flag)
+		{
+			runnable = () -> this.first();
+		}
+		else
+		{
+			runnable = () -> this.second();
+		}
+		runnable.run();
+	}
+
+	void lambdaArgument(Optional<String> optional, boolean flag)
+	{
+		if (flag)
+		{
+			optional.ifPresent((value) -> this.consume(value));
+		}
+		else
+		{
+			optional.ifPresent((value) -> this.consumeOther(value));
+		}
+	}
+
+	void memberReferenceArgument(Optional<String> optional, boolean flag)
+	{
+		if (flag)
+		{
+			optional.ifPresent(this::consume);
+		}
+		else
+		{
+			optional.ifPresent(this::consumeOther);
+		}
+	}
+
+	void first()
+	{
+	}
+
+	void second()
+	{
+	}
+
+	void consume(String value)
+	{
+	}
+
+	void consumeOther(String value)
+	{
 	}
 }
