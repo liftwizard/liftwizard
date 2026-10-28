@@ -164,7 +164,8 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 				.contextSensitive()
 				.javaParser(
 					JavaParser.fromJavaVersion().dependsOn(
-						EclipseCollectionsTemplateStubs.factoriesExcludingTypesDeclaredIn(
+						EclipseCollectionsTemplateStubs.excludingTypesDeclaredIn(
+							EclipseCollectionsTemplateStubs.factories(),
 							this.getCursor().firstEnclosingOrThrow(J.CompilationUnit.class)
 						)
 					)

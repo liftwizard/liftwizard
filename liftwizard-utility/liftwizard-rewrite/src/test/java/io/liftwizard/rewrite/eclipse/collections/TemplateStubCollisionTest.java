@@ -16,7 +16,10 @@
 
 package io.liftwizard.rewrite.eclipse.collections;
 
+import io.liftwizard.rewrite.eclipse.collections.adoption.CollectionsEmptyToFactory;
 import io.liftwizard.rewrite.eclipse.collections.adoption.JCFTreeSetConstructorToFactory;
+import io.liftwizard.rewrite.eclipse.collections.bestpractices.ECArraysAsListToWith;
+import io.liftwizard.rewrite.eclipse.collections.bestpractices.ECListConstructorToFactory;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.test.RecipeSpec;
 
@@ -27,7 +30,12 @@ class TemplateStubCollisionTest
 	public void defaults(RecipeSpec spec)
 	{
 		super.defaults(spec);
-		spec.recipes(new JCFTreeSetConstructorToFactory());
+		spec.recipes(
+			new JCFTreeSetConstructorToFactory(),
+			new CollectionsEmptyToFactory(),
+			new ECArraysAsListToWith(),
+			new ECListConstructorToFactory()
+		);
 	}
 
 	@Test

@@ -212,7 +212,14 @@ public class ECArraysAsListToWith
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.contextSensitive()
-				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))
+				.javaParser(
+					JavaParser.fromJavaVersion().dependsOn(
+						EclipseCollectionsTemplateStubs.excludingTypesDeclaredIn(
+							STUBS,
+							this.getCursor().firstEnclosingOrThrow(J.CompilationUnit.class)
+						)
+					)
+				)
 				.build();
 
 			Object[] templateArguments;
