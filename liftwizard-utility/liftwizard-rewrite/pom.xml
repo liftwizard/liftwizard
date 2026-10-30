@@ -46,7 +46,7 @@
             <dependency>
                 <groupId>org.openrewrite</groupId>
                 <artifactId>rewrite-bom</artifactId>
-                <version>8.90.4</version>
+                <version>8.94.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -163,7 +163,7 @@
         <dependency>
             <groupId>org.openrewrite</groupId>
             <artifactId>rewrite-templating</artifactId>
-            <version>1.44.0</version>
+            <version>1.47.0</version>
         </dependency>
 
         <dependency>
@@ -298,7 +298,7 @@
                         <path>
                             <groupId>org.openrewrite</groupId>
                             <artifactId>rewrite-templating</artifactId>
-                            <version>1.44.0</version>
+                            <version>1.47.0</version>
                         </path>
                         <path>
                             <groupId>jakarta.annotation</groupId>
@@ -443,7 +443,7 @@
                     <dependency>
                         <groupId>org.openrewrite</groupId>
                         <artifactId>rewrite-java-17</artifactId>
-                        <version>8.90.4</version>
+                        <version>8.94.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -496,7 +496,7 @@
                     <dependency>
                         <groupId>org.openrewrite</groupId>
                         <artifactId>rewrite-maven</artifactId>
-                        <version>8.90.4</version>
+                        <version>8.94.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.openrewrite.recipe</groupId>
