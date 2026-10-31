@@ -246,7 +246,7 @@
             <plugin>
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
-                <version>6.50.0</version>
+                <version>6.51.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.openrewrite.recipe</groupId>
