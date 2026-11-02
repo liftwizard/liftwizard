@@ -54,6 +54,10 @@ if [[ "${1:-}" == "--list" ]]; then
     exit 0
 fi
 
+if [[ ${#RECIPES[@]} -eq 0 ]]; then
+    exit 0
+fi
+
 # Some recipe modules build with a Java 25 toolchain. Installing it with mise does not change any mise configuration.
 TOOLCHAIN_JDK=temurin-25.0.4+101.0.LTS
 mise install --quiet "java@$TOOLCHAIN_JDK"
