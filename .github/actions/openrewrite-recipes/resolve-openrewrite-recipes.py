@@ -1,6 +1,6 @@
 """Print the OpenRewrite recipe modules that have to be built from source, one artifactId:version per line, dependencies first.
 
-The starting point is every org.openrewrite.recipe dependency of rewrite-maven-plugin in the effective POMs given as arguments. From there it follows the dependencies in each module's official POM on the Code Genome Project. A module has to be built when Code Genome refuses its jar, which it does for every module under the Moderne Source Available License.
+The starting point is every org.openrewrite.recipe dependency of rewrite-maven-plugin in the effective POMs given as arguments. From there it follows the dependencies in each module's official POM on the Code Genome Project. A module has to be built when its jar is missing from Maven Central and Code Genome refuses it, which Code Genome does for every module under the Moderne Source Available License, even for versions that are also on Maven Central.
 
 Credentials come from the CODEGENOME_USERNAME and CODEGENOME_TOKEN environment variables.
 """
@@ -10,6 +10,7 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ElementTree
 
+CENTRAL_URL = "https://repo.maven.apache.org/maven2/org/openrewrite/recipe"
 CODEGENOME_URL = "https://artifacts.codegenomeproject.org/maven/org/openrewrite/recipe"
 NAMESPACE = {"m": "http://maven.apache.org/POM/4.0.0"}
 
@@ -18,6 +19,13 @@ def curl(*arguments):
     # The credentials go through stdin so that they never appear in the process list. curl does not send them on to the storage host that Code Genome redirects to.
     config = 'user = "{}:{}"\n'.format(os.environ["CODEGENOME_USERNAME"], os.environ["CODEGENOME_TOKEN"])
     return subprocess.run(["curl", "--silent", "--show-error", "--config", "-", *arguments], input=config, capture_output=True, text=True, check=True).stdout
+
+
+def on_central(artifact_id, version):
+    status = subprocess.run(["curl", "--silent", "--show-error", "--head", "--output", "/dev/null", "--write-out", "%{http_code}", f"{CENTRAL_URL}/{artifact_id}/{version}/{artifact_id}-{version}.jar"], capture_output=True, text=True, check=True).stdout
+    if status not in ("200", "404"):
+        sys.exit(f"Unexpected HTTP {status} from Maven Central for {artifact_id}:{version}")
+    return status == "200"
 
 
 def recipe_dependencies(element):
@@ -47,7 +55,7 @@ def main():
         pom = ElementTree.fromstring(curl("--fail", "--location", f"{base}.pom"))
         for dependency in recipe_dependencies(pom):
             visit(dependency)
-        if curl("--output", "/dev/null", "--write-out", "%{http_code}", f"{base}.jar") == "403":
+        if not on_central(artifact_id, version) and curl("--output", "/dev/null", "--write-out", "%{http_code}", f"{base}.jar") == "403":
             ordered.append(module)
 
     for module in sorted({recipe for effective_pom in sys.argv[1:] for recipe in plugin_recipes(effective_pom)}):
