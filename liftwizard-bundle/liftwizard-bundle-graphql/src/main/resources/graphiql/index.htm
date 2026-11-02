@@ -9,14 +9,16 @@
 <html>
 	<head>
 		<style>
-			body {
+			body
+			{
 				height: 100%;
 				margin: 0;
 				width: 100%;
 				overflow: hidden;
 			}
 
-			#graphiql {
+			#graphiql
+			{
 				height: 100vh;
 			}
 		</style>
@@ -44,27 +46,37 @@
 		<script src="https://unpkg.com/graphiql/graphiql.min.js" type="application/javascript"></script>
 		<script src="/renderExample.js" type="application/javascript"></script>
 		<script>
-			function graphQLFetcher(graphQLParams) {
-				return fetch("https://swapi-graphql.netlify.com/.netlify/functions/index", {
-					method: "post",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
+			function graphQLFetcher(graphQLParams)
+			{
+				return fetch(
+					"https://swapi-graphql.netlify.com/.netlify/functions/index",
+					{
+						method: "post",
+						headers:
+						{
+							Accept: "application/json",
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(graphQLParams),
+						credentials: "omit",
 					},
-					body: JSON.stringify(graphQLParams),
-					credentials: "omit",
-				}).then(function (response) {
-					return response.json().catch(function () {
+				).then(function (response)
+				{
+					return response.json().catch(function ()
+					{
 						return response.text();
 					});
 				});
 			}
 
 			ReactDOM.render(
-				React.createElement(GraphiQL, {
-					fetcher: graphQLFetcher,
-					defaultVariableEditorOpen: true,
-				}),
+				React.createElement(
+					GraphiQL,
+					{
+						fetcher: graphQLFetcher,
+						defaultVariableEditorOpen: true,
+					},
+				),
 				document.getElementById("graphiql"),
 			);
 		</script>

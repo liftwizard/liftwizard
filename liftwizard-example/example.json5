@@ -2,34 +2,41 @@
 	template: "Hello, %s!",
 	// the key needs to match the configuration key of the renderer (ViewRenderer::getConfigurationKey)
 	defaultName: "${DW_DEFAULT_NAME:-Stranger}",
-	viewRendererConfiguration: {
-		freemarker: {
+	viewRendererConfiguration:
+	{
+		freemarker:
+		{
 			strict_syntax: "yes",
 			whitespace_stripping: "yes",
 		},
 	},
-	configLogging: {
+	configLogging:
+	{
 		enabled: true,
 	},
-	objectMapper: {
+	objectMapper:
+	{
 		enabled: true,
 		prettyPrint: true,
 		failOnUnknownProperties: true,
 		serializationInclusion: "NON_ABSENT",
 		defaultNullSetterInfo: "AS_EMPTY",
 	},
-	jerseyHttpLogging: {
+	jerseyHttpLogging:
+	{
 		enabled: true,
 		includedRequestHeaders: ["Host", "User-Agent", "Content-Type"],
 		includedResponseHeaders: ["Host", "User-Agent", "Content-Type"],
 		maxEntitySize: "8 kilobytes",
 	},
-	h2: {
+	h2:
+	{
 		enabled: true,
 		webPort: 8075,
 		tcpPort: 9075,
 	},
-	reladomo: {
+	reladomo:
+	{
 		transactionTimeout: "5 minutes",
 		runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
 	},
@@ -76,7 +83,8 @@
 			timeZone: "UTC",
 		},
 	],
-	server: {
+	server:
+	{
 		detailedJsonProcessingExceptionMapper: true,
 		applicationConnectors: [
 			{
@@ -92,13 +100,16 @@
 		],
 		rootPath: "/api/",
 	},
-	logging: {
+	logging:
+	{
 		level: "DEBUG",
-		loggers: {
+		loggers:
+		{
 			// Sets the level for 'com.example.app' to DEBUG.
 			"com.example.app": "DEBUG",
 			// Redirects SQL logs to a separate file
-			"org.hibernate.SQL": {
+			"org.hibernate.SQL":
+			{
 				level: "DEBUG",
 			},
 			"klass.model.meta.domain": "INFO",
@@ -127,7 +138,8 @@
 				currentLogFilename: "./logs/logstash.jsonl",
 				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
 				includeCallerData: true,
-				encoder: {
+				encoder:
+				{
 					includeContext: true,
 					includeMdc: true,
 					includeStructuredArguments: true,
@@ -138,7 +150,8 @@
 			},
 		],
 	},
-	liquibase: {
+	liquibase:
+	{
 		enabled: true,
 		dataSourceMigrations: [
 			{

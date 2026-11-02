@@ -6,35 +6,42 @@
 	// The systemTo is null, or infinity, indicating this data is current.
 	systemTo: null,
 	// The version object is covered in the section on Versioning.
-	version: {
+	version:
+	{
 		number: 1,
 		systemFrom: "2001-01-03T23:59:59Z",
 		systemTo: null,
 		// The createdOn, createdBy, and lastUpdatedBy properties are covered in the section on Auditing.
 		createdOn: "2001-01-03T23:59:59Z",
-		createdBy: {
+		createdBy:
+		{
 			userId: "User ID",
 		},
-		lastUpdatedBy: {
+		lastUpdatedBy:
+		{
 			userId: "User ID",
 		},
 	},
 	title: "Blueprint title",
-	voteSummary: {
+	voteSummary:
+	{
 		numberOfUpvotes: 0,
 		systemFrom: "2001-01-03T23:59:59Z",
 		systemTo: null,
 	},
-	blueprintString: {
+	blueprintString:
+	{
 		// The request only included blueprintString.sha, a foreign key. The response includes the whole object.
 		sha: "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
 		// We created the blueprint data at time 2: 2001-01-02.
 		createdOn: "2001-01-02T23:59:59Z",
-		createdBy: {
+		createdBy:
+		{
 			userId: "User ID",
 		},
 	},
-	imgurImage: {
+	imgurImage:
+	{
 		// The request only included the imgurImage.id, a foreign key. The response includes the whole object.
 		imgurId: "Imgur ID 1",
 		imgurType: "image/png",
@@ -50,7 +57,8 @@
 			// The BlueprintTag mapping was created along with the blueprint post at time 3: 2001-01-03.
 			systemFrom: "2001-01-03T23:59:59Z",
 			systemTo: null,
-			tag: {
+			tag:
+			{
 				// The request only included tag.category and tag.name, the composite foreign key. The response includes the whole object.
 				category: "belt",
 				name: "balancer",

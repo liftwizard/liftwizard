@@ -4,12 +4,19 @@ import {test} from "node:test";
 
 const config = JSON.parse(readFileSync(new URL("./slf4j.json", import.meta.url), "utf8"));
 
-function findMatch(line) {
-	for (const matcher of config.problemMatcher) {
+function findMatch(line)
+{
+	for (const matcher of config.problemMatcher)
+	{
 		const [pattern] = matcher.pattern;
 		const match = new RegExp(pattern.regexp).exec(line);
-		if (match) {
-			return {owner: matcher.owner, severity: matcher.severity, message: match[pattern.message]};
+		if (match)
+		{
+			return {
+				owner: matcher.owner,
+				severity: matcher.severity,
+				message: match[pattern.message],
+			};
 		}
 	}
 	return undefined;
@@ -63,24 +70,30 @@ const ignoredLines = [
 	"[INFO] Building Liftwizard JUnit Rule: Log SLF4J Markers 2.1.50-SNAPSHOT [79/169]",
 ];
 
-for (const line of errorLines) {
-	test(`error: ${line}`, () => {
+for (const line of errorLines)
+{
+	test(`error: ${line}`, () =>
+	{
 		const match = findMatch(line);
 		assert.equal(match?.severity, "error");
 		assert.equal(match.message, line.replace(/^SLF4J(\([EWI]\))?: /, "").trim());
 	});
 }
 
-for (const line of warningLines) {
-	test(`warning: ${line}`, () => {
+for (const line of warningLines)
+{
+	test(`warning: ${line}`, () =>
+	{
 		const match = findMatch(line);
 		assert.equal(match?.severity, "warning");
 		assert.equal(match.message, line.replace(/^SLF4J(\([EWI]\))?: /, "").trim());
 	});
 }
 
-for (const line of ignoredLines) {
-	test(`ignored: ${line}`, () => {
+for (const line of ignoredLines)
+{
+	test(`ignored: ${line}`, () =>
+	{
 		assert.equal(findMatch(line), undefined);
 	});
 }

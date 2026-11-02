@@ -1,7 +1,8 @@
 {
 	"title": "Liftwizard",
 	"type": "Guide",
-	"viewOn": {
+	"viewOn":
+	{
 		"link": "https://github.com/liftwizard/liftwizard/blob/main/docs/src/main/znai",
 		"title": "View On GitHub"
 	}

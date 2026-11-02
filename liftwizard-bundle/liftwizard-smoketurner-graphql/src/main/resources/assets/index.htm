@@ -16,31 +16,36 @@
 	<body>
 		<div id="root">
 			<style>
-				body {
+				body
+				{
 					background-color: rgb(23, 42, 58);
 					font-family:
 						Open Sans,
 						sans-serif;
 					height: 90vh;
 				}
-				#root {
+				#root
+				{
 					height: 100%;
 					width: 100%;
 					display: flex;
 					align-items: center;
 					justify-content: center;
 				}
-				.loading {
+				.loading
+				{
 					font-size: 32px;
 					font-weight: 200;
 					color: rgba(255, 255, 255, 0.6);
 					margin-left: 20px;
 				}
-				img {
+				img
+				{
 					width: 78px;
 					height: 78px;
 				}
-				.title {
+				.title
+				{
 					font-weight: 400;
 				}
 			</style>
@@ -51,10 +56,14 @@
 			</div>
 		</div>
 		<script>
-			window.addEventListener("load", function (event) {
-				GraphQLPlayground.init(document.getElementById("root"), {
-					endpoint: "/graphql",
-				});
+			window.addEventListener("load", function (event)
+			{
+				GraphQLPlayground.init(
+					document.getElementById("root"),
+					{
+						endpoint: "/graphql",
+					},
+				);
 			});
 		</script>
 	</body>
