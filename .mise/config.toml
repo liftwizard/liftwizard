@@ -1,6 +1,5 @@
 [settings]
-# Skip releases younger than 24 hours when mise chooses a version (`mise upgrade`, `latest`, ranges),
-# enforcing .claude/includes/sync-version-policy.md. An exact version pinned here still installs.
+# Skip releases younger than 24 hours when mise chooses a version (`mise upgrade`, `latest`, ranges), enforcing the 24-hour version policy. An exact version pinned here still installs.
 minimum_release_age = "1d"
 
 [tools]
