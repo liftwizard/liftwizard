@@ -28,9 +28,11 @@ repos:
         files: '(?i)(^|/)\.?justfile$|\.just$'
         types: [file]
       - id: oxfmt
-        name: vp fmt
-        entry: vp fmt --no-error-on-unmatched-pattern
+        name: oxfmt-next-line
+        entry: oxfmt-next-line --no-error-on-unmatched-pattern
         language: system
+        # Show "Finished in Xms on N files" so every run proves formatting happened.
+        verbose: true
       - id: prettier-java
         name: prettier-java-next-line
         # Prettier resolves plugins from the working directory, so load the mise-installed plugin by path.

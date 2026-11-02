@@ -441,7 +441,7 @@ jobs:
         run: |
           just test
 
-          vp fmt
+          oxfmt-next-line
 
           if [[ -n $(git status --porcelain) ]]; then
             FIX_BRANCH="fix-${{ github.event.pull_request.number }}-liftwizard-file-match-rerecord"
