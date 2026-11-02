@@ -118,7 +118,8 @@ Let's add the logstash-file appender to the list of configured appenders.
 ```json5
 {
 	// ...
-	logging: {
+	logging:
+	{
 		level: "DEBUG",
 		appenders: [
 			{
@@ -132,7 +133,8 @@ Let's add the logstash-file appender to the list of configured appenders.
 				currentLogFilename: "./logs/logstash.jsonl",
 				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
 				includeCallerData: true,
-				encoder: {
+				encoder:
+				{
 					includeContext: true,
 					includeMdc: true,
 					includeStructuredArguments: true,

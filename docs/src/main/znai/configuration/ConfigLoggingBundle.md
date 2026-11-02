@@ -15,11 +15,13 @@ INFO  12:53:29 [main]  {liftwizard.priority=-8, liftwizard.bundle=ConfigLoggingB
 {
 	template: "Hello, %s!",
 	defaultName: "Stranger",
-	configLogging: {
+	configLogging:
+	{
 		enabled: true,
 	},
 	// ...
-	metrics: {
+	metrics:
+	{
 		frequency: "1 minute",
 		reporters: [],
 	},

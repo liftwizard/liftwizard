@@ -2,32 +2,39 @@
 	"key": "6ed1f638-a63c-3a54-af67-ba494f27bff2",
 	"systemFrom": "2001-01-03T23:59:59Z",
 	"systemTo": "2001-01-04T23:59:59Z",
-	"version": {
+	"version":
+	{
 		"number": 1,
 		"systemFrom": "2001-01-03T23:59:59Z",
 		"systemTo": "2001-01-04T23:59:59Z",
 		"createdOn": "2001-01-03T23:59:59Z",
-		"createdBy": {
+		"createdBy":
+		{
 			"userId": "User ID"
 		},
-		"lastUpdatedBy": {
+		"lastUpdatedBy":
+		{
 			"userId": "User ID"
 		}
 	},
 	"title": "Blueprint title",
-	"voteSummary": {
+	"voteSummary":
+	{
 		"numberOfUpvotes": 0,
 		"systemFrom": "2001-01-03T23:59:59Z",
 		"systemTo": null
 	},
-	"blueprintString": {
+	"blueprintString":
+	{
 		"sha": "cc341849b4086ce7b1893b366b0dc8e99ce4e595",
 		"createdOn": "2001-01-02T23:59:59Z",
-		"createdBy": {
+		"createdBy":
+		{
 			"userId": "User ID"
 		}
 	},
-	"imgurImage": {
+	"imgurImage":
+	{
 		"imgurId": "Imgur ID 1",
 		"imgurType": "image/png",
 		"height": 300,
@@ -42,7 +49,8 @@
 			"tagName": "balancer",
 			"systemFrom": "2001-01-03T23:59:59Z",
 			"systemTo": null,
-			"tag": {
+			"tag":
+			{
 				"category": "belt",
 				"name": "balancer",
 				"ordinal": 1,

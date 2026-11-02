@@ -1,7 +1,9 @@
 ```json
 {
-	"server": {
-		"requestLog": {
+	"server":
+	{
+		"requestLog":
+		{
 			"appenders": [
 				{
 					"type": "console",

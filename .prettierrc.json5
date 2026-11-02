@@ -44,13 +44,15 @@
 		{
 			// OpenRewrite fixture inputs keep the plugin's default import order, so recipes can test import handling
 			files: ["**/src/test/resources/**/*.java"],
-			options: {
+			options:
+			{
 				importOrder: "",
 			},
 		},
 		{
 			files: [".yamllint.yaml", "**/*.yaml", "**/*.yml"],
-			options: {
+			options:
+			{
 				tabWidth: 2,
 				useTabs: false,
 			},

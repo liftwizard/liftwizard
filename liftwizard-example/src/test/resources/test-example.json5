@@ -1,14 +1,17 @@
 {
 	template: "Hello, %s!",
 	defaultName: "Stranger",
-	clock: {
+	clock:
+	{
 		type: "incrementing",
 	},
-	uuid: {
+	uuid:
+	{
 		type: "seed",
 		seed: "example seed",
 	},
-	server: {
+	server:
+	{
 		detailedJsonProcessingExceptionMapper: true,
 		applicationConnectors: [
 			{
@@ -23,7 +26,8 @@
 			},
 		],
 	},
-	logging: {
+	logging:
+	{
 		level: "INFO",
 		appenders: [
 			{
@@ -45,7 +49,8 @@
 				currentLogFilename: "./logs/logstash.jsonl",
 				archivedLogFilenamePattern: "./logs/logstash-%d.jsonl",
 				includeCallerData: true,
-				encoder: {
+				encoder:
+				{
 					includeContext: true,
 					includeMdc: true,
 					includeStructuredArguments: true,
@@ -56,10 +61,12 @@
 			},
 		],
 	},
-	configLogging: {
+	configLogging:
+	{
 		enabled: true,
 	},
-	h2: {
+	h2:
+	{
 		enabled: true,
 		webPort: 8082,
 		tcpPort: 9092,
@@ -103,10 +110,12 @@
 			schemaName: "liftwizard-app-h2",
 		},
 	],
-	reladomo: {
+	reladomo:
+	{
 		runtimeConfigurationPaths: ["reladomo-runtime-configuration/ReladomoRuntimeConfiguration.xml"],
 	},
-	liquibase: {
+	liquibase:
+	{
 		enabled: true,
 		dataSourceMigrations: [
 			{

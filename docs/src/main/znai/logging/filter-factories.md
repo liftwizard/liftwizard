@@ -12,7 +12,8 @@ To use it, add a dependency on `liftwizard-config-logging-filter-requesturl`. Th
 
 ```json
 {
-	"requestLog": {
+	"requestLog":
+	{
 		"appenders": [
 			{
 				"type": "console",
@@ -44,7 +45,8 @@ To use it, add a dependency on `liftwizard-config-logging-filter-janino`. Then a
 
 ```json5
 {
-	logging: {
+	logging:
+	{
 		level: "DEBUG",
 		appenders: [
 			{

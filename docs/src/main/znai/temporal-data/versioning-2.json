@@ -1,28 +1,34 @@
 {
-	"version": {
+	"version":
+	{
 		"number": 2
 	},
-	"blueprintString": {
+	"blueprintString":
+	{
 		"sha": "b11911083a0cf471a5156108389f9899675ccb0c"
 	},
-	"imgurImage": {
+	"imgurImage":
+	{
 		"imgurId": "2nd Imgur ID"
 	},
 	"tags": [
 		{
-			"tag": {
+			"tag":
+			{
 				"category": "moderation",
 				"name": "scheduled for deletion"
 			}
 		},
 		{
-			"tag": {
+			"tag":
+			{
 				"category": "belt",
 				"name": "balancer"
 			}
 		},
 		{
-			"tag": {
+			"tag":
+			{
 				"category": "belt",
 				"name": "prioritizer"
 			}
