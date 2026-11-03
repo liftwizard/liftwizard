@@ -39,6 +39,7 @@ public class BodyCaptureResponseWrapper
 	private final int maxCapture;
 	private final byte[] captureBuffer;
 	private int capturedBytes;
+	private long totalBytes;
 	private ServletOutputStream wrappedStream;
 	private PrintWriter wrappedWriter;
 
@@ -73,14 +74,24 @@ public class BodyCaptureResponseWrapper
 		return this.wrappedWriter;
 	}
 
-	@Override
-	public void flushBuffer()
-		throws IOException
+	/**
+	 * Flushes the {@link PrintWriter} returned by {@link #getWriter()}, if any. The writer encodes
+	 * characters into a private buffer that the container never sees, so output written without an
+	 * explicit flush would otherwise never reach the client or the capture buffer.
+	 */
+	public void flushWriter()
 	{
 		if (this.wrappedWriter != null)
 		{
 			this.wrappedWriter.flush();
 		}
+	}
+
+	@Override
+	public void flushBuffer()
+		throws IOException
+	{
+		this.flushWriter();
 		if (this.wrappedStream != null)
 		{
 			this.wrappedStream.flush();
@@ -102,11 +113,12 @@ public class BodyCaptureResponseWrapper
 
 	public boolean isTruncated()
 	{
-		return this.capturedBytes >= this.maxCapture;
+		return this.totalBytes > this.maxCapture;
 	}
 
 	private void capture(byte[] data, int offset, int length)
 	{
+		this.totalBytes += length;
 		int remaining = this.maxCapture - this.capturedBytes;
 		if (remaining <= 0)
 		{
@@ -119,6 +131,7 @@ public class BodyCaptureResponseWrapper
 
 	private void capture(int b)
 	{
+		this.totalBytes++;
 		if (this.capturedBytes < this.maxCapture)
 		{
 			this.captureBuffer[this.capturedBytes] = (byte) b;
