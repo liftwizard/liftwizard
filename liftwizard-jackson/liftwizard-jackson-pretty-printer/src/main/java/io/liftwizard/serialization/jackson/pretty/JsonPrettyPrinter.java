@@ -25,10 +25,22 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.Separators;
 
+/**
+ * Tab-indented pretty printer that matches oxfmt with {@code "braceStyle": "next-line"}.
+ *
+ * <p>A non-empty object that is a field value starts on the next line, at the key's indentation. Empty objects, arrays, objects inside arrays, and the root object keep their opening bracket on the same line.
+ *
+ * <p>Jackson writes the field/value separator before it knows the value's type, so this printer needs {@link JsonPrettyPrinterGenerator} to announce objects. Install {@link JsonPrettyPrinterSerializerProvider} on the {@code ObjectMapper} to get it. Without it, every field value stays on the key's line.
+ */
 public class JsonPrettyPrinter
 	extends DefaultPrettyPrinter
 {
 	private static final DefaultIndenter TAB_INDENTER = new DefaultIndenter("\t", DefaultIndenter.SYS_LF);
+
+	// Set by JsonPrettyPrinterGenerator just before the generator asks for the separator
+	private boolean nextValueIsObject;
+	// The separator was written without its trailing space, and the '{' is deferred until we know whether the object is empty
+	private boolean objectOpenPending;
 
 	public JsonPrettyPrinter()
 	{
@@ -43,20 +55,66 @@ public class JsonPrettyPrinter
 	@Override
 	public DefaultPrettyPrinter createInstance()
 	{
-		return this;
+		return new JsonPrettyPrinter();
+	}
+
+	void beforeStartObject()
+	{
+		this.nextValueIsObject = true;
 	}
 
 	@Override
 	public void writeObjectFieldValueSeparator(@Nonnull JsonGenerator jsonGenerator)
 		throws IOException
 	{
-		jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator() + " ");
+		jsonGenerator.writeRaw(this._separators.getObjectFieldValueSeparator());
+		if (this.nextValueIsObject)
+		{
+			this.objectOpenPending = true;
+		}
+		else
+		{
+			jsonGenerator.writeRaw(' ');
+		}
+	}
+
+	@Override
+	public void writeStartObject(@Nonnull JsonGenerator jsonGenerator)
+		throws IOException
+	{
+		this.nextValueIsObject = false;
+		if (this.objectOpenPending)
+		{
+			this._nesting++;
+		}
+		else
+		{
+			super.writeStartObject(jsonGenerator);
+		}
+	}
+
+	@Override
+	public void beforeObjectEntries(@Nonnull JsonGenerator jsonGenerator)
+		throws IOException
+	{
+		if (this.objectOpenPending)
+		{
+			this.objectOpenPending = false;
+			this._objectIndenter.writeIndentation(jsonGenerator, this._nesting - 1);
+			jsonGenerator.writeRaw('{');
+		}
+		super.beforeObjectEntries(jsonGenerator);
 	}
 
 	@Override
 	public void writeEndObject(@Nonnull JsonGenerator jsonGenerator, int nrOfEntries)
 		throws IOException
 	{
+		if (this.objectOpenPending)
+		{
+			this.objectOpenPending = false;
+			jsonGenerator.writeRaw(" {");
+		}
 		super.writeEndObject(jsonGenerator, nrOfEntries);
 		if (this._nesting == 0)
 		{
