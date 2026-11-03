@@ -30,6 +30,12 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-connection-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-reladomo-utc-infinity-timestamp</artifactId>
             <version>${project.version}</version>
         </dependency>

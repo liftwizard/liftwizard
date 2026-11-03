@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 
 class ReladomoTemporalRollbackTest
@@ -175,6 +176,45 @@ class ReladomoTemporalRollbackTest
 		Person currentBob = PersonFinder.findOne(PersonFinder.id().eq(2L));
 		assertThat(currentBob).isNotNull();
 		assertThat(currentBob.getFullName()).isEqualTo("Bob");
+	}
+
+	@Test
+	@ReladomoTestFile("test-data/rollback-test-data.txt")
+	void rollbackIsUndoneWhenOuterTransactionRollsBack()
+	{
+		assertThatThrownBy(() ->
+			MithraManagerProvider.getMithraManager().executeTransactionalCommand((tx) ->
+			{
+				new ReladomoTemporalRollback(ROLLBACK_DATE).rollbackAllTables();
+				// A query flushes the buffered rollback writes to the database before the outer transaction ends.
+				PersonFinder.findMany(PersonFinder.system().equalsEdgePoint()).forceResolve();
+				throw new IllegalStateException("Roll back the outer transaction");
+			})
+		)
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("Roll back the outer transaction");
+
+		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
+
+		MithraList<Person> allPersonsAfter = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
+		allPersonsAfter.setOrderBy(PersonFinder.id().ascendingOrderBy());
+		assertThat(allPersonsAfter)
+			.extracting(Person::getId, Person::getFullName, Person::getSystemFrom, Person::getSystemTo)
+			.containsExactly(
+				tuple(
+					1L,
+					"Alice",
+					timestamp("2024-01-01T00:00:00Z"),
+					PersonFinder.systemTo().getAsOfAttributeInfinity()
+				),
+				tuple(2L, "Bob", timestamp("2024-01-01T00:00:00Z"), timestamp("2024-06-15T12:00:00Z")),
+				tuple(
+					3L,
+					"Charlie",
+					timestamp("2024-07-01T00:00:00Z"),
+					PersonFinder.systemTo().getAsOfAttributeInfinity()
+				)
+			);
 	}
 
 	private static Timestamp timestamp(String instant)

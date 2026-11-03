@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import com.gs.fw.common.mithra.bulkloader.BulkLoader;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
+import io.liftwizard.reladomo.connectionmanager.TransactionalConnectionSource;
 import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityH2DatabaseType;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
@@ -36,7 +37,10 @@ public final class H2InMemoryConnectionManager
 
 	private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("UTC");
 	private static final String SCHEMA_NAME = "liftwizard-app-h2";
-	private static final DataSource DATA_SOURCE = H2InMemoryConnectionManager.createDataSource();
+	private static final TransactionalConnectionSource CONNECTION_SOURCE = new TransactionalConnectionSource(
+		H2InMemoryConnectionManager.createDataSource(),
+		UtcInfinityH2DatabaseType.getInstance()
+	);
 
 	private H2InMemoryConnectionManager()
 	{
@@ -48,7 +52,7 @@ public final class H2InMemoryConnectionManager
 	{
 		var poolProperties = new PoolProperties();
 		poolProperties.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
-		poolProperties.setUrl("jdbc:p6spy:h2:mem:;NON_KEYWORDS=USER");
+		poolProperties.setUrl("jdbc:p6spy:h2:mem:" + SCHEMA_NAME + ";DB_CLOSE_DELAY=-1;NON_KEYWORDS=USER");
 		poolProperties.setUsername("sa");
 		poolProperties.setPassword("");
 		poolProperties.setInitialSize(1);
@@ -88,7 +92,7 @@ public final class H2InMemoryConnectionManager
 	{
 		try
 		{
-			return DATA_SOURCE.getConnection();
+			return CONNECTION_SOURCE.getConnection();
 		}
 		catch (SQLException e)
 		{
