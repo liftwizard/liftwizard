@@ -51,8 +51,7 @@ class InstrumentedDataFetcherTest
 		assertThat(result).isCompletedWithValue("value");
 		Map<String, Long> timerCounts = new TreeMap<>();
 		metricRegistry.getTimers().forEach((name, timer) -> timerCounts.put(name, timer.getCount()));
-		assertThat(timerCounts).isEqualTo(
-			Map.of(
+		assertThat(timerCounts).containsExactlyInAnyOrderEntriesOf(Map.of(
 				"asyncFetcher.sync",
 				1L,
 				"asyncFetcher.async",
@@ -65,8 +64,7 @@ class InstrumentedDataFetcherTest
 				1L,
 				"liftwizard.graphql.path.items.async",
 				1L
-			)
-		);
+			));
 	}
 
 	private static final class AsyncDataFetcher
