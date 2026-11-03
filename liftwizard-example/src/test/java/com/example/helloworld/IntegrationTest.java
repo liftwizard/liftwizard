@@ -59,7 +59,20 @@ class IntegrationTest
 	private final LogMarkerTestExtension logMarkerExtension = new LogMarkerTestExtension();
 
 	@Test
-	void helloWorld()
+	void helloWorldDatesPeopleAndLogFile()
+		throws Exception
+	{
+		this.helloWorld();
+		this.validDateParameter();
+		this.invalidDateParameter();
+		this.noDateParameter();
+		this.postNewPerson();
+		this.renderingPersonFreemarker();
+		this.renderingPersonMustache();
+		this.logFileWritten();
+	}
+
+	private void helloWorld()
 		throws Exception
 	{
 		Response response = this.dropwizardAppExtension
@@ -91,8 +104,7 @@ class IntegrationTest
 		assertThat(response.getStatusInfo().toEnum()).as(entityAsString).isEqualTo(status);
 	}
 
-	@Test
-	void validDateParameter()
+	private void validDateParameter()
 	{
 		String date = this.dropwizardAppExtension
 			.client()
@@ -103,8 +115,7 @@ class IntegrationTest
 		assertThat(date).isEqualTo("2022-01-20T00:00:00.000Z");
 	}
 
-	@Test
-	void invalidDateParameter()
+	private void invalidDateParameter()
 	{
 		assertThatThrownBy(() ->
 			this.dropwizardAppExtension
@@ -116,8 +127,7 @@ class IntegrationTest
 		).isInstanceOf(BadRequestException.class);
 	}
 
-	@Test
-	void noDateParameter()
+	private void noDateParameter()
 	{
 		String date = this.dropwizardAppExtension
 			.client()
@@ -127,8 +137,7 @@ class IntegrationTest
 		assertThat(date).isEmpty();
 	}
 
-	@Test
-	void postPerson()
+	private void postNewPerson()
 	{
 		var person = new PersonDTO("Dr. IntegrationTest", "Chief Wizard");
 		PersonDTO newPerson = this.postPerson(person);
@@ -137,15 +146,13 @@ class IntegrationTest
 		assertThat(newPerson.getJobTitle()).isEqualTo(person.getJobTitle());
 	}
 
-	@Test
-	void renderingPersonFreemarker()
+	private void renderingPersonFreemarker()
 		throws Exception
 	{
 		this.testRenderingPerson("view_freemarker");
 	}
 
-	@Test
-	void renderingPersonMustache()
+	private void renderingPersonMustache()
 		throws Exception
 	{
 		this.testRenderingPerson("view_mustache");
@@ -174,8 +181,7 @@ class IntegrationTest
 			.readEntity(PersonDTO.class);
 	}
 
-	@Test
-	void logFileWritten()
+	private void logFileWritten()
 		throws IOException
 	{
 		// The log file is using a size and time based policy, which used to silently

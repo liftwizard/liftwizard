@@ -59,7 +59,14 @@ class PersonResourceTest
 
 	@Test
 	@ReladomoTestFile("test-data/person.txt")
-	void getPersonSuccess()
+	void getPersonSuccessThenNotFound()
+		throws JSONException
+	{
+		this.getPersonSuccess();
+		this.getPersonNotFound();
+	}
+
+	private void getPersonSuccess()
 		throws JSONException
 	{
 		Response response = this.getPersonResponse(1);
@@ -79,9 +86,7 @@ class PersonResourceTest
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}
 
-	@Test
-	@ReladomoTestFile("test-data/person.txt")
-	void getPersonNotFound()
+	private void getPersonNotFound()
 		throws JSONException
 	{
 		Response response = this.getPersonResponse(2);
