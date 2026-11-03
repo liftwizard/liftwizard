@@ -17,7 +17,11 @@
 package io.liftwizard.dropwizard.configuration.executor;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.configuration.ConfigurationException;
 import io.dropwizard.configuration.ConfigurationValidationException;
@@ -25,6 +29,7 @@ import io.dropwizard.configuration.JsonConfigurationFactory;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
+import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import io.liftwizard.serialization.jackson.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
@@ -96,6 +101,50 @@ class ExecutorServiceFactoryTest
 		{
 			String message = e.getMessage();
 			assertThat(message).contains("maxThreads < minThreads");
+		}
+	}
+
+	@Test
+	void poolGrowsToMaxThreads()
+		throws Exception
+	{
+		ExecutorServiceFactory executorServiceFactory = new ExecutorServiceFactory();
+		executorServiceFactory.setNameFormat("grow-test-%d");
+		executorServiceFactory.setMinThreads(0);
+		executorServiceFactory.setMaxThreads(4);
+
+		MetricRegistry metricRegistry = new MetricRegistry();
+		ExecutorService executorService = executorServiceFactory.build(
+			new LifecycleEnvironment(metricRegistry),
+			metricRegistry
+		);
+		try
+		{
+			CountDownLatch allRunning = new CountDownLatch(4);
+			CountDownLatch release = new CountDownLatch(1);
+			for (int i = 0; i < 4; i++)
+			{
+				executorService.execute(() ->
+				{
+					allRunning.countDown();
+					try
+					{
+						release.await();
+					}
+					catch (InterruptedException e)
+					{
+						Thread.currentThread().interrupt();
+					}
+				});
+			}
+
+			boolean allTasksRanConcurrently = allRunning.await(5, TimeUnit.SECONDS);
+			release.countDown();
+			assertThat(allTasksRanConcurrently).isTrue();
+		}
+		finally
+		{
+			executorService.shutdownNow();
 		}
 	}
 
