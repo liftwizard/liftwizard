@@ -41,8 +41,8 @@ class FirebaseOAuthAuthenticatorTest
 	@Test
 	void invalidTokenIsNotLogged()
 	{
-		Logger logger = (Logger) LoggerFactory.getLogger(FirebaseOAuthAuthenticator.class);
-		ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+		var logger = (Logger) LoggerFactory.getLogger(FirebaseOAuthAuthenticatorTest.class);
+		var listAppender = new ListAppender<ILoggingEvent>();
 		listAppender.setContext(logger.getLoggerContext());
 		listAppender.start();
 		logger.addAppender(listAppender);
