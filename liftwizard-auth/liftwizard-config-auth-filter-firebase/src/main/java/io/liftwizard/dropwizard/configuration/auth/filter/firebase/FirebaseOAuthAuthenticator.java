@@ -64,7 +64,7 @@ public class FirebaseOAuthAuthenticator
 			{
 				throw new RuntimeException(e);
 			}
-			LOGGER.warn(credentials, e.getMessage());
+			LOGGER.warn("Firebase ID token verification failed: {}", e.getMessage());
 			return Optional.empty();
 		}
 	}
