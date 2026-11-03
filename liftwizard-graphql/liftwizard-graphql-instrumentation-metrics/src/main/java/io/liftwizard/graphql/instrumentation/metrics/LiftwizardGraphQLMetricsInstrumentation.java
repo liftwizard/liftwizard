@@ -16,7 +16,6 @@
 
 package io.liftwizard.graphql.instrumentation.metrics;
 
-import java.time.Clock;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +45,6 @@ public class LiftwizardGraphQLMetricsInstrumentation
 	extends SimpleInstrumentation
 {
 	private final MetricRegistry metricRegistry;
-	private final Clock clock;
 
 	private final Timer allFieldsSyncTimer;
 	private final Timer allFieldsAsyncTimer;
@@ -58,10 +56,9 @@ public class LiftwizardGraphQLMetricsInstrumentation
 	private final Timer validationTimer;
 	private final Meter validationExceptionsMeter;
 
-	public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry, Clock clock)
+	public LiftwizardGraphQLMetricsInstrumentation(MetricRegistry metricRegistry)
 	{
 		this.metricRegistry = Objects.requireNonNull(metricRegistry);
-		this.clock = Objects.requireNonNull(clock);
 
 		this.allFieldsSyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "sync"));
 		this.allFieldsAsyncTimer = metricRegistry.timer(MetricRegistry.name("liftwizard", "graphql", "field", "async"));
@@ -138,6 +135,6 @@ public class LiftwizardGraphQLMetricsInstrumentation
 		String typeName = GraphQLInstrumentationUtils.getTypeName(type);
 		String path = GraphQLInstrumentationUtils.getPathWithoutIndex(parameters.getExecutionStepInfo());
 
-		return new InstrumentedDataFetcher<>(this.metricRegistry, this.clock, dataFetcher, fieldName, typeName, path);
+		return new InstrumentedDataFetcher<>(this.metricRegistry, dataFetcher, fieldName, typeName, path);
 	}
 }

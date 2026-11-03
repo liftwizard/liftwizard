@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.bundle.graphql;
 
-import java.time.Clock;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -39,8 +38,6 @@ import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
-import io.liftwizard.dropwizard.configuration.clock.ClockFactoryProvider;
 import io.liftwizard.dropwizard.configuration.graphql.GraphQLFactoryProvider;
 import io.liftwizard.graphql.instrumentation.logging.LiftwizardGraphQLLoggingInstrumentation;
 import io.liftwizard.graphql.instrumentation.metrics.LiftwizardGraphQLMetricsInstrumentation;
@@ -48,8 +45,6 @@ import io.liftwizard.graphql.scalar.temporal.GraphQLLocalDateScalar;
 import io.liftwizard.graphql.scalar.temporal.GraphQLTemporalScalar;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.slf4j.MDC.MDCCloseable;
 
@@ -66,8 +61,6 @@ public class LiftwizardGraphQLBundle<
 >
 	extends GraphQLBundle<T>
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);
-
 	@Nonnull
 	private final ImmutableList<Consumer<RuntimeWiring.Builder>> runtimeWiringBuilders;
 
@@ -131,7 +124,7 @@ public class LiftwizardGraphQLBundle<
 		// methods being called so the schema is connected properly.
 		GraphQLFactory factory = configuration.getGraphQLFactory();
 
-		List<Instrumentation> instrumentations = this.getInstrumentations(configuration);
+		List<Instrumentation> instrumentations = this.getInstrumentations();
 		factory.setInstrumentations(instrumentations);
 
 		RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
@@ -152,31 +145,12 @@ public class LiftwizardGraphQLBundle<
 	}
 
 	@Nonnull
-	private List<Instrumentation> getInstrumentations(T configuration)
+	private List<Instrumentation> getInstrumentations()
 	{
-		Clock clock = this.getClock(configuration);
-
-		var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
+		var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry);
 		var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
 
 		List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
 		return instrumentations;
-	}
-
-	@Nonnull
-	private Clock getClock(T configuration)
-	{
-		if (!(configuration instanceof ClockFactoryProvider clockFactoryProvider))
-		{
-			LOGGER.warn(
-				"Configuration {} does not implement {}. Using system clock.",
-				configuration.getClass().getSimpleName(),
-				ClockFactoryProvider.class.getSimpleName()
-			);
-			return Clock.systemUTC();
-		}
-
-		ClockFactory clockFactory = clockFactoryProvider.getClockFactory();
-		return clockFactory.createClock();
 	}
 }

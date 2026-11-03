@@ -18,9 +18,6 @@ package io.liftwizard.graphql.instrumentation.metrics;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.time.Clock;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.codahale.metrics.Clock;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -46,9 +44,6 @@ public class InstrumentedDataFetcher<T>
 {
 	@Nonnull
 	private final MetricRegistry metricRegistry;
-
-	@Nonnull
-	private final Clock clock;
 
 	@Nonnull
 	private final DataFetcher<T> dataFetcher;
@@ -100,7 +95,6 @@ public class InstrumentedDataFetcher<T>
 
 	public InstrumentedDataFetcher(
 		@Nonnull MetricRegistry metricRegistry,
-		@Nonnull Clock clock,
 		@Nonnull DataFetcher<T> dataFetcher,
 		@Nonnull String fieldName,
 		@Nonnull String typeName,
@@ -108,7 +102,6 @@ public class InstrumentedDataFetcher<T>
 	)
 	{
 		this.metricRegistry = Objects.requireNonNull(metricRegistry);
-		this.clock = Objects.requireNonNull(clock);
 		this.dataFetcher = Objects.requireNonNull(dataFetcher);
 		this.typeName = Objects.requireNonNull(typeName);
 		this.fieldName = Objects.requireNonNull(fieldName);
@@ -307,7 +300,7 @@ public class InstrumentedDataFetcher<T>
 	public T get(DataFetchingEnvironment environment)
 		throws Exception
 	{
-		Instant startTime = Instant.now();
+		long startTick = Clock.defaultClock().getTick();
 		Optional<Context> fetcherSyncClock = this.timerFetcherSync.map(Timer::time);
 		Optional<Context> fieldSyncClock = this.timerFieldSync.map(Timer::time);
 		Optional<Context> pathSyncClock = this.timerPathSync.map(Timer::time);
@@ -326,11 +319,10 @@ public class InstrumentedDataFetcher<T>
 
 					if (this.timedAnnotation != null)
 					{
-						Instant stopTime = this.clock.instant();
-						Duration duration = Duration.between(startTime, stopTime);
-						timerFetcherAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);
-						timerFieldAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);
-						timerPathAsync.orElseThrow().update(duration.toNanos(), TimeUnit.NANOSECONDS);
+						long durationNanos = Clock.defaultClock().getTick() - startTick;
+						timerFetcherAsync.orElseThrow().update(durationNanos, TimeUnit.NANOSECONDS);
+						timerFieldAsync.orElseThrow().update(durationNanos, TimeUnit.NANOSECONDS);
+						timerPathAsync.orElseThrow().update(durationNanos, TimeUnit.NANOSECONDS);
 					}
 
 					if (throwable != null)

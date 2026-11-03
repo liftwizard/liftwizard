@@ -5,9 +5,7 @@ To turn it on, either run the entire [`LiftwizardGraphQLBundle`](graphql/bundle.
 ```java
 GraphQLFactory factory = ...;
 
-Clock clock = Clock.systemUTC();
-
-var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry, clock);
+var metricsInstrumentation = new LiftwizardGraphQLMetricsInstrumentation(this.metricRegistry);
 var loggingInstrumentation = new LiftwizardGraphQLLoggingInstrumentation();
 
 List<Instrumentation> instrumentations = List.of(metricsInstrumentation, loggingInstrumentation);
