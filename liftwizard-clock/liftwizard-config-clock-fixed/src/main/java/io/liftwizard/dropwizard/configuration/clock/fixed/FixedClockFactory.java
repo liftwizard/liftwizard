@@ -17,10 +17,9 @@
 package io.liftwizard.dropwizard.configuration.clock.fixed;
 
 import java.time.Clock;
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -77,16 +76,19 @@ public class FixedClockFactory
 	@JsonIgnore
 	public boolean isValidTimezone()
 	{
-		TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-		if (zoneInfo != null)
+		if (this.timeZoneName == null)
 		{
 			return true;
 		}
 
-		String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-			this.timeZoneName,
-			Arrays.toString(TimeZone.getAvailableIDs())
-		);
-		throw new IllegalStateException(message);
+		try
+		{
+			ZoneId.of(this.timeZoneName);
+			return true;
+		}
+		catch (DateTimeException e)
+		{
+			return false;
+		}
 	}
 }

@@ -20,6 +20,8 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Validator;
 
@@ -72,6 +74,20 @@ class FixedClockFactoryTest
 		Instant actualInstant = clock.instant();
 		Instant expectedInstant = Instant.parse("2000-12-31T23:59:59Z");
 		assertThat(actualInstant).isEqualTo(expectedInstant);
+	}
+
+	@Test
+	void invalidTimeZoneFailsValidation()
+	{
+		var fixedClockFactory = new FixedClockFactory();
+		fixedClockFactory.setTimeZoneName("America/NewYork");
+
+		Set<String> violations = this.validator
+			.validate(fixedClockFactory)
+			.stream()
+			.map((violation) -> violation.getPropertyPath() + " " + violation.getMessage())
+			.collect(Collectors.toSet());
+		assertThat(violations).hasSameElementsAs(Set.of("validTimezone Invalid timeZoneName"));
 	}
 
 	private static ObjectMapper newObjectMapper()
