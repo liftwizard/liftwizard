@@ -17,7 +17,6 @@
 package io.liftwizard.servlet.logging.filter;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
@@ -70,14 +69,10 @@ public final class ServerLoggingResponseFilter
 
 		if (entityType instanceof Class<?> aClass)
 		{
-			return Optional.of(aClass.getCanonicalName());
+			String canonicalName = aClass.getCanonicalName();
+			return Optional.of(canonicalName == null ? aClass.getName() : canonicalName);
 		}
 
-		if (entityType instanceof ParameterizedType parameterizedType)
-		{
-			return Optional.ofNullable(parameterizedType.getTypeName());
-		}
-
-		throw new AssertionError(entityType.getTypeName());
+		return Optional.of(entityType.getTypeName());
 	}
 }
