@@ -1,0 +1,17 @@
+{
+	"errors": [
+		{
+			"message": "Validation error (WrongType@[itemByFinder]) : argument 'operation.name.subString' with value 'ObjectValue{objectFields=[ObjectField{name='name', value=ObjectValue{objectFields=[ObjectField{name='subString', value=ObjectValue{objectFields=[ObjectField{name='end', value=IntValue{value=3}}, ObjectField{name='eq', value=StringValue{value='bc'}}]}}]}}]}' is missing required fields '[start]'",
+			"locations": [
+				{
+					"line": 2,
+					"column": 15
+				}
+			],
+			"extensions":
+			{
+				"classification": "ValidationError"
+			}
+		}
+	]
+}

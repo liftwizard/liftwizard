@@ -1,0 +1,38 @@
+{
+	subStringEq: itemByFinder(operation: {name: {subString: {start: 1, end: 3, eq: "bc"}}})
+	{
+		id
+		name
+	}
+	subStringThenLower: itemByFinder(operation: {name: {subString: {start: 1, end: 3, lower: {eq: "bc"}}}})
+	{
+		id
+		name
+	}
+	lowerThenSubString: itemByFinder(operation: {name: {lower: {subString: {start: 0, end: 3, eq: "abc"}}}})
+	{
+		id
+		name
+	}
+	subStringThenLowerThenSubString: itemByFinder(
+		operation: {name: {subString: {start: 0, end: 4, lower: {subString: {start: 1, end: 3, eq: "bc"}}}}}
+	)
+	{
+		id
+		name
+	}
+	subStringWithOperatorsInside: itemByFinder(
+		operation: {name: {subString: {start: 1, end: 3, lower: {eq: "bc"}, startsWith: "b"}}}
+	)
+	{
+		id
+		name
+	}
+	subStringAndSiblingOperator: itemByFinder(
+		operation: {name: {subString: {start: 1, end: 3, eq: "bc"}, startsWith: "x"}}
+	)
+	{
+		id
+		name
+	}
+}

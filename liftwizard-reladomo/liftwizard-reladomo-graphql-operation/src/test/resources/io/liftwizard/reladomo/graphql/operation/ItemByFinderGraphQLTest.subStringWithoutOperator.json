@@ -1,0 +1,19 @@
+{
+	"errors": [
+		{
+			"message": "Exception while fetching data (/itemByFinder) : subString requires at least one operator besides start and end",
+			"locations": [
+				{
+					"line": 2,
+					"column": 2
+				}
+			],
+			"path": ["itemByFinder"],
+			"extensions":
+			{
+				"classification": "DataFetchingException"
+			}
+		}
+	],
+	"data": null
+}

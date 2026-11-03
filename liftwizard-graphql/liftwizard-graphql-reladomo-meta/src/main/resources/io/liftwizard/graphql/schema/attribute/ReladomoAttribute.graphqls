@@ -30,8 +30,39 @@ input _StringAttribute {
     wildCardNotEquals: String
 
     lower: _StringAttribute
-    # Parameters not allowed in input types
-    # subString(start: Int, end: Int): StringAttribute
+    subString: _SubStringAttribute
+}
+
+input _SubStringAttribute {
+    start: Int!
+    end: Int!
+
+    eq: String
+    notEq: String
+    in: [String]
+    notIn: [String]
+
+    greaterThan: String
+    greaterThanEquals: String
+    lessThan: String
+    lessThanEquals: String
+
+    startsWith: String
+    notStartsWith: String
+    endsWith: String
+    notEndsWith: String
+    contains: String
+    notContains: String
+    toLowerCase: _StringAttribute
+
+    wildCardEq: String
+    wildCardEquals: String
+    wildCardIn: [String]
+    wildCardNotEq: String
+    wildCardNotEquals: String
+
+    lower: _StringAttribute
+    subString: _SubStringAttribute
 }
 
 input _BooleanAttribute {

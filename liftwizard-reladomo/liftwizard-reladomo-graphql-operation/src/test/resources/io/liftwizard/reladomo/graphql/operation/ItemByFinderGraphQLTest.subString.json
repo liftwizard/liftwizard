@@ -1,0 +1,69 @@
+{
+	"data":
+	{
+		"subStringEq": [
+			{
+				"id": 1,
+				"name": "Abcdef"
+			},
+			{
+				"id": 2,
+				"name": "xbcz"
+			}
+		],
+		"subStringThenLower": [
+			{
+				"id": 1,
+				"name": "Abcdef"
+			},
+			{
+				"id": 2,
+				"name": "xbcz"
+			},
+			{
+				"id": 4,
+				"name": "ABCD"
+			}
+		],
+		"lowerThenSubString": [
+			{
+				"id": 1,
+				"name": "Abcdef"
+			},
+			{
+				"id": 4,
+				"name": "ABCD"
+			}
+		],
+		"subStringThenLowerThenSubString": [
+			{
+				"id": 1,
+				"name": "Abcdef"
+			},
+			{
+				"id": 2,
+				"name": "xbcz"
+			},
+			{
+				"id": 4,
+				"name": "ABCD"
+			}
+		],
+		"subStringWithOperatorsInside": [
+			{
+				"id": 1,
+				"name": "Abcdef"
+			},
+			{
+				"id": 2,
+				"name": "xbcz"
+			}
+		],
+		"subStringAndSiblingOperator": [
+			{
+				"id": 2,
+				"name": "xbcz"
+			}
+		]
+	}
+}

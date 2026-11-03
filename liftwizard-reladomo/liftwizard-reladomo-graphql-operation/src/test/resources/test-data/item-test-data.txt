@@ -1,0 +1,6 @@
+class io.liftwizard.reladomo.graphql.operation.model.Item
+id, name
+1 , "Abcdef"
+2 , "xbcz"
+3 , "Other"
+4 , "ABCD"

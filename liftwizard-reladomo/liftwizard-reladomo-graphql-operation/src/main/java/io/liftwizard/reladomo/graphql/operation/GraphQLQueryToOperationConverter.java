@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.attribute.Attribute;
@@ -286,17 +287,39 @@ public class GraphQLQueryToOperationConverter
 			case "wildCardEq", "wildCardEquals" -> attribute.wildCardEq((String) operationParameter);
 			case "wildCardIn" -> attribute.wildCardIn(new LinkedHashSet<>((Collection<String>) operationParameter));
 			case "wildCardNotEq", "wildCardNotEquals" -> attribute.wildCardNotEq((String) operationParameter);
-			case "subString" -> this.convertStringAttribute(
-				finderInstance,
-				attribute.substring(0, 0),
-				(Map<String, ?>) operationParameter
-			);
+			case "subString" -> this.convertSubString(finderInstance, attribute, (Map<String, ?>) operationParameter);
 			default ->
 			{
 				var message = "Unknown operation on StringAttribute: " + operationName;
 				throw new LiftwizardGraphQLContextException(message, this.getContext());
 			}
 		};
+	}
+
+	private Operation convertSubString(
+		RelatedFinder<?> finderInstance,
+		StringAttribute<?> attribute,
+		Map<String, ?> subStringParameter
+	)
+	{
+		Object start = subStringParameter.get("start");
+		Object end = subStringParameter.get("end");
+		if (!(start instanceof Integer startIndex) || !(end instanceof Integer endIndex))
+		{
+			var message = "subString requires start and end but found " + subStringParameter.keySet();
+			throw new LiftwizardGraphQLContextException(message, this.getContext());
+		}
+		Map<String, ?> operators = subStringParameter
+			.entrySet()
+			.stream()
+			.filter((entry) -> !"start".equals(entry.getKey()) && !"end".equals(entry.getKey()))
+			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		if (operators.isEmpty())
+		{
+			var message = "subString requires at least one operator besides start and end";
+			throw new LiftwizardGraphQLContextException(message, this.getContext());
+		}
+		return this.convertStringAttribute(finderInstance, attribute.substring(startIndex, endIndex), operators);
 	}
 
 	private Operation convertBooleanAttribute(

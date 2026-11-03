@@ -1,0 +1,7 @@
+{
+	itemByFinder(operation: {name: {subString: {end: 3, eq: "bc"}}})
+	{
+		id
+		name
+	}
+}
