@@ -24,8 +24,10 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.auto.service.AutoService;
 import io.dropwizard.db.ManagedDataSource;
+import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Environment;
 import io.liftwizard.dropwizard.bundle.prioritized.PrioritizedBundle;
 import io.liftwizard.dropwizard.configuration.datasource.NamedDataSourceProvider;
@@ -33,6 +35,7 @@ import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseDataS
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactory;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactoryProvider;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import liquibase.Liquibase;
 import liquibase.Scope;
 import liquibase.Scope.Attr;
 import liquibase.database.Database;
@@ -87,17 +90,34 @@ public class LiftwizardLiquibaseMigrationBundle
 
 		LOGGER.info("Running {}.", this.getClass().getSimpleName());
 
-		Scope.child(Attr.ui, new LoggerUIService(), () ->
-			this.runWithLogger(environment, liquibaseMigrationFactory, dataSourceProvider)
+		this.runMigrations(
+			liquibaseMigrationFactory,
+			dataSourceProvider,
+			environment.metrics(),
+			environment.lifecycle()
 		);
 
 		LOGGER.info("Completing {}.", this.getClass().getSimpleName());
 	}
 
+	void runMigrations(
+		@Nonnull LiquibaseMigrationFactory liquibaseMigrationFactory,
+		@Nonnull NamedDataSourceProvider dataSourceProvider,
+		@Nonnull MetricRegistry metricRegistry,
+		@Nonnull LifecycleEnvironment lifecycle
+	)
+		throws Exception
+	{
+		Scope.child(Attr.ui, new LoggerUIService(), () ->
+			this.runWithLogger(liquibaseMigrationFactory, dataSourceProvider, metricRegistry, lifecycle)
+		);
+	}
+
 	private void runWithLogger(
-		@Nonnull Environment environment,
 		LiquibaseMigrationFactory liquibaseMigrationFactory,
-		NamedDataSourceProvider dataSourceProvider
+		NamedDataSourceProvider dataSourceProvider,
+		MetricRegistry metricRegistry,
+		LifecycleEnvironment lifecycle
 	)
 	{
 		boolean dryRun = liquibaseMigrationFactory.isDryRun();
@@ -110,7 +130,7 @@ public class LiftwizardLiquibaseMigrationBundle
 			String dataSourceName = factory.getDataSourceName();
 			ManagedDataSource dataSource = dataSourceProvider
 				.getNamedDataSourcesFactory()
-				.getDataSourceByName(dataSourceName, environment.metrics(), environment.lifecycle());
+				.getDataSourceByName(dataSourceName, metricRegistry, lifecycle);
 			String catalogName = factory.getCatalogName();
 			String schemaName = factory.getSchemaName();
 			String migrationFile = factory.getMigrationFileName();
@@ -119,7 +139,7 @@ public class LiftwizardLiquibaseMigrationBundle
 			String context = String.join(",", contexts);
 
 			try (
-				CloseableLiquibase liquibase = this.openLiquibase(
+				Liquibase liquibase = this.openLiquibase(
 					dataSource,
 					catalogName,
 					schemaName,
@@ -145,10 +165,23 @@ public class LiftwizardLiquibaseMigrationBundle
 			{
 				throw new RuntimeException(e);
 			}
+
+			if (dropEntireSchemaOnStartupAndShutdown && !dryRun)
+			{
+				lifecycle.manage(
+					new LiquibaseDropAllManaged(
+						dataSource,
+						catalogName,
+						schemaName,
+						migrationFile,
+						migrationFileLocation
+					)
+				);
+			}
 		}
 	}
 
-	private CloseableLiquibase openLiquibase(
+	private Liquibase openLiquibase(
 		ManagedDataSource dataSource,
 		String catalogName,
 		String schemaName,
@@ -159,7 +192,7 @@ public class LiftwizardLiquibaseMigrationBundle
 	{
 		Database database = this.createDatabase(dataSource, catalogName, schemaName);
 		ResourceAccessor resourceAccessor = getResourceAccessor(migrationFileLocation);
-		return new CloseableLiquibase(migrationsFile, resourceAccessor, database, dataSource);
+		return new Liquibase(migrationsFile, resourceAccessor, database);
 	}
 
 	@Nonnull

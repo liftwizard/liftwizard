@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.Managed;
 import io.liftwizard.dropwizard.configuration.liquibase.migration.MigrationFileLocation;
+import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
@@ -71,7 +72,7 @@ public class LiquibaseDropAllManaged
 	@Override
 	public void stop()
 	{
-		try (CloseableLiquibase liquibase = this.openLiquibase())
+		try (Liquibase liquibase = this.openLiquibase())
 		{
 			liquibase.dropAll();
 		}
@@ -81,12 +82,12 @@ public class LiquibaseDropAllManaged
 		}
 	}
 
-	private CloseableLiquibase openLiquibase()
+	private Liquibase openLiquibase()
 		throws SQLException, LiquibaseException
 	{
 		Database database = this.createDatabase();
 		ResourceAccessor resourceAccessor = this.getResourceAccessor();
-		return new CloseableLiquibase(this.migrationFile, resourceAccessor, database, this.dataSource);
+		return new Liquibase(this.migrationFile, resourceAccessor, database);
 	}
 
 	private Database createDatabase()
