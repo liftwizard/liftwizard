@@ -16,11 +16,17 @@
 
 package io.dropwizard.bundles.redirect;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class HttpsRedirect
 	implements Redirect
 {
+	private static final Pattern IPV4_LITERAL = Pattern.compile("\\d{1,3}(\\.\\d{1,3}){3}");
+
 	private final boolean allowPrivateIps;
 
 	public HttpsRedirect()
@@ -55,28 +61,40 @@ public class HttpsRedirect
 		return this.getRedirectUrl(request, "https");
 	}
 
+	/**
+	 * Returns true for loopback addresses and the RFC 1918 ranges 10/8, 172.16/12 and 192.168/16.
+	 * Jetty reports IPv6 remote addresses in brackets, like {@code [0:0:0:0:0:0:0:1]}.
+	 */
 	private boolean isPrivateIp(String remoteAddr)
 	{
-		return (
-			remoteAddr.startsWith("10.")
-			|| remoteAddr.startsWith("192.168.")
-			|| remoteAddr.startsWith("127.")
-			|| remoteAddr.equals("0:0:0:0:0:0:0:1")
-		);
+		String address =
+			remoteAddr.startsWith("[") && remoteAddr.endsWith("]")
+				? remoteAddr.substring(1, remoteAddr.length() - 1)
+				: remoteAddr;
+
+		// Only parse IP literals, so InetAddress never falls back to a DNS lookup.
+		if (!address.contains(":") && !IPV4_LITERAL.matcher(address).matches())
+		{
+			return false;
+		}
+
+		try
+		{
+			InetAddress inetAddress = InetAddress.getByName(address);
+			return inetAddress.isLoopbackAddress() || inetAddress.isSiteLocalAddress();
+		}
+		catch (UnknownHostException e)
+		{
+			return false;
+		}
 	}
 
 	private String getRedirectUrl(HttpServletRequest request, String scheme)
 	{
 		var url = new StringBuilder(scheme);
 		url.append("://");
+		// Drop the port: the request arrived on a plaintext port, so speaking TLS to it would fail.
 		url.append(request.getServerName());
-
-		int port = request.getServerPort();
-		if (port != 80 && port != 443)
-		{
-			url.append(':').append(port);
-		}
-
 		url.append(request.getRequestURI());
 
 		String queryString = request.getQueryString();
