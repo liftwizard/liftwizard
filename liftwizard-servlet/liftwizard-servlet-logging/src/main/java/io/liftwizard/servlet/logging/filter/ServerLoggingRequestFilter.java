@@ -18,7 +18,6 @@ package io.liftwizard.servlet.logging.filter;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -138,11 +137,6 @@ public final class ServerLoggingRequestFilter
 		String pathTemplate = this.getPathTemplate(requestContext);
 		http.getPath().setBaseUriPath(baseUriPath);
 		http.getPath().setTemplate(pathTemplate);
-		URI absolutePath = uriInfo.getAbsolutePath();
-		if (!Objects.equals(http.getPath().getAbsolute(), absolutePath.toString()))
-		{
-			throw new AssertionError();
-		}
 	}
 
 	@Nullable
