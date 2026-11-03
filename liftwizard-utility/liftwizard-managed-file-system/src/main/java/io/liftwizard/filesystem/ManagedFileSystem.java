@@ -85,11 +85,13 @@ public final class ManagedFileSystem
 
 	private static Path getJar(URI uri)
 	{
-		String schemeSpecificPart = uri.getSchemeSpecificPart();
-		int separatorIndex = schemeSpecificPart.indexOf("!/");
-		String jarPath = schemeSpecificPart.substring(0, separatorIndex);
-		String pathWithinJar = schemeSpecificPart.substring(separatorIndex + 1);
-		URI jarUri = URI.create("jar:" + jarPath);
+		String rawSchemeSpecificPart = uri.getRawSchemeSpecificPart();
+		int separatorIndex = rawSchemeSpecificPart.indexOf("!/");
+		String rawJarPath =
+			separatorIndex == -1 ? rawSchemeSpecificPart : rawSchemeSpecificPart.substring(0, separatorIndex);
+		String pathWithinJar =
+			separatorIndex == -1 ? "/" : URI.create(rawSchemeSpecificPart.substring(separatorIndex + 1)).getPath();
+		URI jarUri = URI.create("jar:" + rawJarPath);
 		FileSystem fileSystem = getOrCreate(jarUri);
 		Path result = fileSystem.getPath(pathWithinJar);
 		return result;

@@ -16,13 +16,20 @@
 
 package io.liftwizard.filesystem;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,5 +48,48 @@ class ManagedFileSystemTest
 		Path path2 = ManagedFileSystem.get(new URI("file://" + tmpdir));
 		assertThat(path2).isAbsolute();
 		assertThat(path2.toFile()).exists();
+	}
+
+	@Test
+	void jarWithSpaceInPath(@TempDir Path tempDir)
+		throws IOException
+	{
+		Path jarFile = createJar(tempDir.resolve("John Doe").resolve("definitions.jar"));
+		URI uri = URI.create("jar:" + jarFile.toUri() + "!/defs");
+		assertThat(uri.toString()).contains("John%20Doe");
+
+		Path path = ManagedFileSystem.get(uri);
+		assertThat(path).hasToString("/defs");
+		assertThat(Files.readString(path.resolve("example.txt"))).isEqualTo("example contents");
+	}
+
+	@Test
+	void jarWithoutSeparator(@TempDir Path tempDir)
+		throws IOException
+	{
+		Path jarFile = createJar(tempDir.resolve("no separator").resolve("definitions.jar"));
+		URI uri = URI.create("jar:" + jarFile.toUri());
+
+		Path path = ManagedFileSystem.get(uri);
+		assertThat(path).hasToString("/");
+		assertThat(Files.readString(path.resolve("defs/example.txt"))).isEqualTo("example contents");
+	}
+
+	private static Path createJar(Path jarFile)
+		throws IOException
+	{
+		Files.createDirectories(jarFile.getParent());
+		try (
+			OutputStream outputStream = Files.newOutputStream(jarFile);
+			var zipOutputStream = new ZipOutputStream(outputStream)
+		)
+		{
+			zipOutputStream.putNextEntry(new ZipEntry("defs/"));
+			zipOutputStream.closeEntry();
+			zipOutputStream.putNextEntry(new ZipEntry("defs/example.txt"));
+			zipOutputStream.write("example contents".getBytes(StandardCharsets.UTF_8));
+			zipOutputStream.closeEntry();
+		}
+		return jarFile;
 	}
 }
