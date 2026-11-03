@@ -53,7 +53,7 @@ class StructuredSlf4jReporterTest
 			reporter.report();
 
 			assertThat(listAppender.list).hasSize(1);
-			ILoggingEvent event = listAppender.list.get(0);
+			ILoggingEvent event = listAppender.list.getFirst();
 			assertThat(event.getMarker()).isNull();
 			assertThat(event.getMessage()).isEqualTo("metrics");
 			assertThat(event.getArgumentArray()).containsExactly(expectedArgument);
