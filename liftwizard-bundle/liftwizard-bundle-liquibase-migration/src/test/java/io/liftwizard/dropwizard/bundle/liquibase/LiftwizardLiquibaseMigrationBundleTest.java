@@ -74,7 +74,7 @@ class LiftwizardLiquibaseMigrationBundleTest
 
 		List<Managed> managedObjects = this.getManagedObjects();
 		assertThat(managedObjects).hasSize(2);
-		assertThat(managedObjects.get(0)).isSameAs(this.dataSource);
+		assertThat(managedObjects.getFirst()).isSameAs(this.dataSource);
 		assertThat(managedObjects.get(1)).isInstanceOf(LiquibaseDropAllManaged.class);
 
 		// Dropwizard stops managed objects in reverse registration order.
