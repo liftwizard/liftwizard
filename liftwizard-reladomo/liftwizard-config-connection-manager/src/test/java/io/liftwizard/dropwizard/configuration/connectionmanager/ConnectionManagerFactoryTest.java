@@ -16,7 +16,9 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import javax.validation.Validator;
 
@@ -75,6 +77,23 @@ class ConnectionManagerFactoryTest
 		assertThat(sourcelessConnectionManager.getDatabaseType()).isEqualTo(
 			UtcInfinityGenericDatabaseType.getInstance()
 		);
+	}
+
+	@Test
+	void invalidTimeZoneFailsValidation()
+	{
+		var connectionManagerFactory = new ConnectionManagerFactory();
+		connectionManagerFactory.setConnectionManagerName("connectionManagerName");
+		connectionManagerFactory.setDataSourceName("dataSourceName");
+		connectionManagerFactory.setSchemaName("schemaName");
+		connectionManagerFactory.setTimeZoneName("America/NewYork");
+
+		Set<String> violations = this.validator
+			.validate(connectionManagerFactory)
+			.stream()
+			.map((violation) -> violation.getPropertyPath() + " " + violation.getMessage())
+			.collect(Collectors.toSet());
+		assertThat(violations).hasSameElementsAs(Set.of("validTimezone Invalid timeZoneName"));
 	}
 
 	private static ObjectMapper newObjectMapper()

@@ -16,7 +16,8 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.util.Arrays;
+import java.time.DateTimeException;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -45,7 +46,7 @@ public class ConnectionManagerFactory
 		Objects.requireNonNull(dataSource);
 
 		DatabaseType reladomoDatabaseType = this.databaseType.getDatabaseType();
-		TimeZone timeZone = TimeZone.getTimeZone(this.timeZoneName);
+		TimeZone timeZone = TimeZone.getTimeZone(ZoneId.of(this.timeZoneName));
 		return new LiftwizardConnectionManager(
 			this.connectionManagerName,
 			this.dataSourceName,
@@ -120,15 +121,19 @@ public class ConnectionManagerFactory
 	@JsonIgnore
 	public boolean isValidTimezone()
 	{
-		TimeZone zoneInfo = TimeZone.getTimeZone(this.timeZoneName);
-		if (zoneInfo == null)
+		if (this.timeZoneName == null)
 		{
-			String message = "Got timeZoneName '%s' but expected one of: %s".formatted(
-				this.timeZoneName,
-				Arrays.toString(TimeZone.getAvailableIDs())
-			);
-			throw new IllegalStateException(message);
+			return true;
 		}
-		return true;
+
+		try
+		{
+			ZoneId.of(this.timeZoneName);
+			return true;
+		}
+		catch (DateTimeException e)
+		{
+			return false;
+		}
 	}
 }
