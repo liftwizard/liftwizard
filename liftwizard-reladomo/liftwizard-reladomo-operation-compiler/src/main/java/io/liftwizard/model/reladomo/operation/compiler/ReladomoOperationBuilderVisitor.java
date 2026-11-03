@@ -185,7 +185,7 @@ public class ReladomoOperationBuilderVisitor<T>
 			return null;
 		}
 
-		String notExistsOperationText = ctx.notExistsOperation.getText();
+		String notExistsOperationText = this.getContextString(ctx.notExistsOperation);
 		var compiler = new ReladomoOperationCompiler();
 		return compiler.compile(relatedFinder, notExistsOperationText);
 	}
