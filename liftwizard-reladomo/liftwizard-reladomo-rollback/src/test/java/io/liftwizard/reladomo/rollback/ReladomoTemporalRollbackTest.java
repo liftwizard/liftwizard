@@ -16,6 +16,7 @@
 
 package io.liftwizard.reladomo.rollback;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -30,17 +31,15 @@ import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoLoadDataExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoPurgeAllExtension;
 import io.liftwizard.reladomo.test.extension.ReladomoTestFile;
-import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 class ReladomoTemporalRollbackTest
 {
-	private static final Instant INFINITY = UtcInfinityTimestamp.getDefaultInfinityInstant();
-
 	private static final Instant ROLLBACK_DATE = LocalDateTime.of(2024, 6, 1, 0, 0, 0).toInstant(ZoneOffset.UTC);
 
 	@RegisterExtension
@@ -74,7 +73,7 @@ class ReladomoTemporalRollbackTest
 		assertThat(allPersonsBefore).hasSize(3);
 
 		// Perform rollback to June 1, 2024
-		var rollback = new ReladomoTemporalRollback(ROLLBACK_DATE, INFINITY);
+		var rollback = new ReladomoTemporalRollback(ROLLBACK_DATE);
 		rollback.rollbackAllTables();
 
 		// Clear cache to ensure we read from database
@@ -115,12 +114,71 @@ class ReladomoTemporalRollbackTest
 		MithraList<Person> allPersonsBefore = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
 		int countBefore = allPersonsBefore.size();
 
-		var rollback = new ReladomoTemporalRollback(futureDate, INFINITY);
+		var rollback = new ReladomoTemporalRollback(futureDate);
 		rollback.rollbackAllTables();
 
 		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
 
 		MithraList<Person> allPersonsAfter = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
 		assertThat(allPersonsAfter).hasSize(countBefore);
+	}
+
+	@Test
+	@ReladomoTestFile("test-data/rollback-superseded-with-successor-test-data.txt")
+	void rollbackRestoresSupersededVersionAfterPurgingItsSuccessor()
+	{
+		new ReladomoTemporalRollback(ROLLBACK_DATE).rollbackAllTables();
+
+		MithraManagerProvider.getMithraManager().clearAllQueryCaches();
+
+		MithraList<Person> allPersonsAfter = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
+		allPersonsAfter.setOrderBy(
+			PersonFinder.id().ascendingOrderBy().and(PersonFinder.systemFrom().ascendingOrderBy())
+		);
+		assertThat(allPersonsAfter)
+			.extracting(Person::getId, Person::getJobTitle, Person::getSystemFrom, Person::getSystemTo)
+			.containsExactly(
+				tuple(
+					1L,
+					"Engineer",
+					timestamp("2024-01-01T00:00:00Z"),
+					PersonFinder.systemTo().getAsOfAttributeInfinity()
+				),
+				tuple(2L, "Engineer", timestamp("2023-01-01T00:00:00Z"), timestamp("2024-01-01T00:00:00Z")),
+				tuple(
+					2L,
+					"Manager",
+					timestamp("2024-01-01T00:00:00Z"),
+					PersonFinder.systemTo().getAsOfAttributeInfinity()
+				)
+			);
+	}
+
+	@Test
+	@ReladomoTestFile("test-data/rollback-test-data.txt")
+	void rollbackUpdatesCachedObjects()
+	{
+		Person bobBefore = PersonFinder.findOne(PersonFinder.id().eq(2L).and(PersonFinder.system().equalsEdgePoint()));
+		assertThat(bobBefore.getSystemTo()).isEqualTo(timestamp("2024-06-15T12:00:00Z"));
+
+		new ReladomoTemporalRollback(ROLLBACK_DATE).rollbackAllTables();
+
+		MithraList<Person> allPersonsAfter = PersonFinder.findMany(PersonFinder.system().equalsEdgePoint());
+		allPersonsAfter.setOrderBy(PersonFinder.id().ascendingOrderBy());
+		assertThat(allPersonsAfter)
+			.extracting(Person::getId, Person::getSystemFrom, Person::getSystemTo)
+			.containsExactly(
+				tuple(1L, timestamp("2024-01-01T00:00:00Z"), PersonFinder.systemTo().getAsOfAttributeInfinity()),
+				tuple(2L, timestamp("2024-01-01T00:00:00Z"), PersonFinder.systemTo().getAsOfAttributeInfinity())
+			);
+
+		Person currentBob = PersonFinder.findOne(PersonFinder.id().eq(2L));
+		assertThat(currentBob).isNotNull();
+		assertThat(currentBob.getFullName()).isEqualTo("Bob");
+	}
+
+	private static Timestamp timestamp(String instant)
+	{
+		return Timestamp.from(Instant.parse(instant));
 	}
 }
