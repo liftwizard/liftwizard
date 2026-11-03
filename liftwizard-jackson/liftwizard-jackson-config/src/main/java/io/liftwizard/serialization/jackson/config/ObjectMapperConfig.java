@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
 import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinter;
+import io.liftwizard.serialization.jackson.pretty.JsonPrettyPrinterSerializerProvider;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
@@ -90,6 +91,7 @@ public final class ObjectMapperConfig
 		if (prettyPrint)
 		{
 			objectMapper.setDefaultPrettyPrinter(DEFAULT_PRETTY_PRINTER);
+			objectMapper.setSerializerProvider(new JsonPrettyPrinterSerializerProvider());
 			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		}
 

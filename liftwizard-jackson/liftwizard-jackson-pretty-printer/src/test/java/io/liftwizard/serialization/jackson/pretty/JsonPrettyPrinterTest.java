@@ -22,8 +22,10 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,7 @@ class JsonPrettyPrinterTest
 
 		var objectMapper = new ObjectMapper();
 		objectMapper.setDefaultPrettyPrinter(jsonPrettyPrinter);
+		objectMapper.setSerializerProvider(new JsonPrettyPrinterSerializerProvider());
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		return objectMapper;
 	}
@@ -91,5 +94,275 @@ class JsonPrettyPrinterTest
 		String actualJson = this.mapper.writeValueAsString(emptyMap);
 		var expectedJson = "{}\n";
 		assertThat(actualJson).isEqualTo(expectedJson);
+	}
+
+	@Test
+	void nonEmptyObjectFieldValueOnNextLine()
+		throws JsonProcessingException
+	{
+		// language=JSON
+		var compactJson = """
+		{"a": {}, "b": {"c": 1, "g": {"h": [1]}}, "d": [{"e": {}}, []], "f": []}
+		""";
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"a": {},
+				"b":
+				{
+					"c": 1,
+					"g":
+					{
+						"h": [
+							1
+						]
+					}
+				},
+				"d": [
+					{
+						"e": {}
+					},
+					[]
+				],
+				"f": []
+			}
+			""";
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void nestedObjectsInArraysInObjects()
+		throws JsonProcessingException
+	{
+		// language=JSON
+		var compactJson = """
+		{"a": [{"b": {"c": [{"d": {"e": true}}]}}]}
+		""";
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"a": [
+					{
+						"b":
+						{
+							"c": [
+								{
+									"d":
+									{
+										"e": true
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+			""";
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void emptyObjectAsFieldValue()
+		throws JsonProcessingException
+	{
+		// language=JSON
+		var compactJson = """
+		{"a": {}, "b": {"c": {}}}
+		""";
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"a": {},
+				"b":
+				{
+					"c": {}
+				}
+			}
+			""";
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void emptyObjectInArray()
+		throws JsonProcessingException
+	{
+		// language=JSON
+		var compactJson = """
+		[{}, {"a": {}}]
+		""";
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			[
+				{},
+				{
+					"a": {}
+				}
+			]
+			""";
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void rootArray()
+		throws JsonProcessingException
+	{
+		// language=JSON
+		var compactJson = """
+		[{"a": {"b": null}}, 1, "x", []]
+		""";
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			[
+				{
+					"a":
+					{
+						"b": null
+					}
+				},
+				1,
+				"x",
+				[]
+			]
+			""";
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void stringValueContainingObjectSeparator()
+		throws JsonProcessingException
+	{
+		// language=JSON
+		var compactJson = """
+		{"\\": {": "\\": {", "b": {"c": "\\": {"}}
+		""";
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"\\": {": "\\": {",
+				"b":
+				{
+					"c": "\\": {"
+				}
+			}
+			""";
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void pojosUseNextLineObjects()
+		throws JsonProcessingException
+	{
+		Map<String, Object> map = new LinkedHashMap<>();
+		map.put("pet", new Pet(new Dog("Rex", new Owner("Ann"))));
+		map.put("empty", Map.of());
+		map.put("list", List.of(new Owner("Bob")));
+
+		String actualJson = this.mapper.writeValueAsString(map);
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"pet":
+				{
+					"animal":
+					{
+						"@type": "Dog",
+						"name": "Rex",
+						"owner":
+						{
+							"name": "Ann"
+						}
+					}
+				},
+				"empty": {},
+				"list": [
+					{
+						"name": "Bob"
+					}
+				]
+			}
+			""";
+
+		assertThat(actualJson).isEqualTo(expectedJson);
+	}
+
+	@Test
+	void writerWithDefaultPrettyPrinter()
+		throws JsonProcessingException
+	{
+		var objectMapper = new ObjectMapper();
+		objectMapper.setDefaultPrettyPrinter(new JsonPrettyPrinter());
+		objectMapper.setSerializerProvider(new JsonPrettyPrinterSerializerProvider());
+
+		JsonNode jsonNode = objectMapper.readTree("{\"a\":{\"b\":1}}");
+		String actualJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"a":
+				{
+					"b": 1
+				}
+			}
+			""";
+
+		assertThat(actualJson).isEqualTo(expectedJson);
+	}
+
+	@Test
+	void createInstanceReturnsFreshPrinter()
+	{
+		var jsonPrettyPrinter = new JsonPrettyPrinter();
+		assertThat(jsonPrettyPrinter.createInstance())
+			.isInstanceOf(JsonPrettyPrinter.class)
+			.isNotSameAs(jsonPrettyPrinter)
+			.isNotSameAs(jsonPrettyPrinter.createInstance());
+	}
+
+	private void assertPrettyPrints(String compactJson, String expectedJson)
+		throws JsonProcessingException
+	{
+		JsonNode jsonNode = this.mapper.readTree(compactJson);
+		String actualJson = this.mapper.writeValueAsString(jsonNode);
+		assertThat(actualJson).isEqualTo(expectedJson);
+	}
+
+	private record Pet(Animal animal)
+	{
+	}
+
+	@JsonTypeInfo(use = JsonTypeInfo.Id.SIMPLE_NAME)
+	private interface Animal
+	{
+	}
+
+	private record Dog(String name, Owner owner)
+		implements Animal
+	{
+	}
+
+	private record Owner(String name)
+	{
 	}
 }
