@@ -17,7 +17,6 @@
 package io.liftwizard.graphql.instrumentation.metrics;
 
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
 import com.codahale.metrics.MetricRegistry;
@@ -25,6 +24,7 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.Timed;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import org.eclipse.collections.api.factory.SortedMaps;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,8 +35,8 @@ class InstrumentedDataFetcherTest
 	void asyncCompletionRecordsAsyncTimers()
 		throws Exception
 	{
-		MetricRegistry metricRegistry = new MetricRegistry();
-		AsyncDataFetcher asyncDataFetcher = new AsyncDataFetcher();
+		var metricRegistry = new MetricRegistry();
+		var asyncDataFetcher = new AsyncDataFetcher();
 		var instrumentedDataFetcher = new InstrumentedDataFetcher<>(
 			metricRegistry,
 			asyncDataFetcher,
@@ -49,7 +49,7 @@ class InstrumentedDataFetcherTest
 		asyncDataFetcher.future.complete("value");
 
 		assertThat(result).isCompletedWithValue("value");
-		Map<String, Long> timerCounts = new TreeMap<>();
+		Map<String, Long> timerCounts = SortedMaps.mutable.empty();
 		metricRegistry.getTimers().forEach((name, timer) -> timerCounts.put(name, timer.getCount()));
 		assertThat(timerCounts).isEqualTo(
 			Map.of(
