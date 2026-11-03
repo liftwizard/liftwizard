@@ -83,7 +83,7 @@ public class StructuredSlf4jReporter
 			disabledMetricAttributes
 		);
 		this.loggerProxy = Objects.requireNonNull(loggerProxy);
-		this.marker = Objects.requireNonNull(marker);
+		this.marker = marker;
 		this.prefix = Objects.requireNonNull(prefix);
 		this.mapToStructuredObjectFunction = Objects.requireNonNull(mapToStructuredObjectFunction);
 		this.message = Objects.requireNonNull(message);
