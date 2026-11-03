@@ -49,8 +49,8 @@ import org.slf4j.LoggerFactory;
  * </ol>
  *
  * <p>All writes go through Reladomo inside one transaction, so they are buffered until commit and keep the cache
- * consistent. Atomicity at the database level still depends on the connection manager taking part in the
- * Reladomo transaction.
+ * consistent. Atomicity at the database level depends on the connection manager taking part in the Reladomo
+ * transaction, as Liftwizard's connection managers do through {@code TransactionalConnectionSource}.
  *
  * @see <a href="https://github.com/goldmansachs/reladomo/issues/261">Reladomo Issue #261</a>
  */

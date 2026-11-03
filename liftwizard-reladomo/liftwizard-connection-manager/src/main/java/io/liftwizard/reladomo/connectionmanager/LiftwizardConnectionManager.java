@@ -32,7 +32,7 @@ public class LiftwizardConnectionManager
 {
 	private final String connectionManagerName;
 	private final String dataSourceName;
-	private final DataSource dataSource;
+	private final TransactionalConnectionSource connectionSource;
 	private final DatabaseType databaseType;
 	private final TimeZone databaseTimeZone;
 	private final String schemaName;
@@ -48,8 +48,8 @@ public class LiftwizardConnectionManager
 	{
 		this.connectionManagerName = Objects.requireNonNull(connectionManagerName);
 		this.dataSourceName = Objects.requireNonNull(dataSourceName);
-		this.dataSource = Objects.requireNonNull(dataSource);
 		this.databaseType = Objects.requireNonNull(databaseType);
+		this.connectionSource = new TransactionalConnectionSource(dataSource, databaseType);
 		this.databaseTimeZone = Objects.requireNonNull(databaseTimeZone);
 		this.schemaName = Objects.requireNonNull(schemaName);
 	}
@@ -75,7 +75,7 @@ public class LiftwizardConnectionManager
 	{
 		try
 		{
-			return this.dataSource.getConnection();
+			return this.connectionSource.getConnection();
 		}
 		catch (SQLException e)
 		{
