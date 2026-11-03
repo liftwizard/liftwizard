@@ -16,28 +16,21 @@
 
 package io.liftwizard.reladomo.rollback;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TimeZone;
 
+import com.gs.fw.common.mithra.MithraDatedTransactionalObject;
 import com.gs.fw.common.mithra.MithraList;
 import com.gs.fw.common.mithra.MithraManagerProvider;
-import com.gs.fw.common.mithra.MithraObjectPortal;
 import com.gs.fw.common.mithra.attribute.AsOfAttribute;
 import com.gs.fw.common.mithra.attribute.TimestampAttribute;
-import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
-import com.gs.fw.common.mithra.databasetype.DatabaseType;
 import com.gs.fw.common.mithra.finder.Operation;
 import com.gs.fw.common.mithra.finder.RelatedFinder;
 import com.gs.fw.common.mithra.util.MithraRuntimeCacheController;
 import com.gs.fw.finder.TemporalTransactionalDomainList;
 import com.gs.reladomo.metadata.ReladomoClassMetaData;
-import io.liftwizard.reladomo.utc.infinity.timestamp.UtcInfinityTimestamp;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ListIterable;
 import org.eclipse.collections.impl.list.fixed.ArrayAdapter;
@@ -51,8 +44,13 @@ import org.slf4j.LoggerFactory;
  * <p>For each temporal table, this performs two operations:
  * <ol>
  *   <li>Purge all rows where system_from &gt; targetDate</li>
- *   <li>Restore versions that were superseded after the rollback point</li>
+ *   <li>Restore versions that were superseded after the rollback point, meaning rows where
+ *   system_from &lt;= targetDate AND targetDate &lt; system_to &lt; infinity, by setting system_to = infinity</li>
  * </ol>
+ *
+ * <p>All writes go through Reladomo inside one transaction, so they are buffered until commit and keep the cache
+ * consistent. Atomicity at the database level still depends on the connection manager taking part in the
+ * Reladomo transaction.
  *
  * @see <a href="https://github.com/goldmansachs/reladomo/issues/261">Reladomo Issue #261</a>
  */
@@ -62,18 +60,11 @@ public class ReladomoTemporalRollback
 
 	private final Instant targetDate;
 	private final Timestamp targetTimestamp;
-	private final Timestamp infinityTimestamp;
 
 	public ReladomoTemporalRollback(Instant targetDate)
 	{
-		this(targetDate, UtcInfinityTimestamp.getDefaultInfinityInstant());
-	}
-
-	public ReladomoTemporalRollback(Instant targetDate, Instant infinityDate)
-	{
 		this.targetDate = Objects.requireNonNull(targetDate);
 		this.targetTimestamp = Timestamp.from(targetDate);
-		this.infinityTimestamp = Timestamp.from(Objects.requireNonNull(infinityDate));
 	}
 
 	public void rollbackAllTables()
@@ -111,8 +102,7 @@ public class ReladomoTemporalRollback
 		}
 
 		RelatedFinder<?> finder = metaData.getFinderInstance();
-		MithraObjectPortal portal = finder.getMithraObjectPortal();
-		String tableName = portal.getDatabaseObject().getDefaultTableName();
+		String tableName = finder.getMithraObjectPortal().getDatabaseObject().getDefaultTableName();
 		AsOfAttribute systemColumn = maybeSystemAttribute.orElseThrow(() ->
 			new IllegalStateException("No system temporal attribute found")
 		);
@@ -124,100 +114,62 @@ public class ReladomoTemporalRollback
 			systemColumn.getToAttribute().getColumnName()
 		);
 
-		this.purgeFutureVersions(metaData, finder, systemColumn, tableName);
-		this.restoreSupersededVersions(portal, tableName, systemColumn);
-	}
-
-	/**
-	 * Purges all rows where system_from &gt; targetDate.
-	 */
-	private void purgeFutureVersions(
-		ReladomoClassMetaData metaData,
-		RelatedFinder<?> finder,
-		AsOfAttribute systemAttribute,
-		String tableName
-	)
-	{
-		TimestampAttribute systemFromAttribute = systemAttribute.getFromAttribute();
-
-		ListIterable<AsOfAttribute> asOfAttributes =
-			metaData.getAsOfAttributes() == null
-				? Lists.immutable.empty()
-				: ArrayAdapter.adapt(metaData.getAsOfAttributes());
-
-		Operation edgePointOperation = asOfAttributes
+		TimestampAttribute systemFromAttribute = systemColumn.getFromAttribute();
+		TimestampAttribute systemToAttribute = systemColumn.getToAttribute();
+		Timestamp infinity = systemColumn.getInfinityDate();
+		Operation edgePointOperation = ArrayAdapter.adapt(asOfAttributes)
 			.collect(AsOfAttribute::equalsEdgePoint)
 			.reduce(Operation::and)
-			.orElseGet(finder::all);
+			.orElseThrow();
 
-		Operation futureVersionsOperation = edgePointOperation.and(
-			systemFromAttribute.greaterThan(this.targetTimestamp)
+		// Run both queries before any write. A query flushes buffered writes for its portal, so querying between
+		// writes would push them to the database before the transaction commits.
+		MithraList<?> futureVersions = finder.findMany(
+			edgePointOperation.and(systemFromAttribute.greaterThan(this.targetTimestamp))
 		);
+		MithraList<?> supersededVersions = finder.findMany(
+			edgePointOperation
+				.and(systemFromAttribute.lessThanEquals(this.targetTimestamp))
+				.and(systemToAttribute.greaterThan(this.targetTimestamp))
+				.and(systemToAttribute.lessThan(infinity))
+		);
+		int futureVersionCount = futureVersions.size();
+		supersededVersions.forceResolve();
 
-		MithraList<?> futureVersions = finder.findMany(futureVersionsOperation);
-		int count = futureVersions.size();
+		purgeAll(futureVersions);
+		LOGGER.info("Purged {} future versions from {}", futureVersionCount, tableName);
 
-		if (count == 0)
+		// Restore superseded versions by replacing each with a copy whose system_to is infinity. Going through
+		// Reladomo keeps the restore in the transaction, uses Reladomo's timestamp conversion, and updates the cache.
+		ListIterable<MithraDatedTransactionalObject> restoredVersions = Lists.mutable
+			.withAll(supersededVersions)
+			.collect(MithraDatedTransactionalObject.class::cast)
+			.collect((supersededVersion) ->
+			{
+				MithraDatedTransactionalObject restoredVersion = supersededVersion.getNonPersistentCopy();
+				systemToAttribute.setValue(restoredVersion, infinity);
+				return restoredVersion;
+			});
+
+		purgeAll(supersededVersions);
+		restoredVersions.forEach(MithraDatedTransactionalObject::insertForRecovery);
+		LOGGER.info("Restored {} superseded versions in {}", restoredVersions.size(), tableName);
+	}
+
+	private static void purgeAll(MithraList<?> versions)
+	{
+		if (versions.isEmpty())
 		{
-			LOGGER.info("No future versions to purge from {}", tableName);
 			return;
 		}
 
-		if (!(futureVersions instanceof TemporalTransactionalDomainList<?> temporalList))
+		if (!(versions instanceof TemporalTransactionalDomainList<?> temporalList))
 		{
-			throw new IllegalStateException("Cannot purge future versions - invalid list type");
+			throw new IllegalStateException(
+				"Cannot purge versions - invalid list type: " + versions.getClass().getName()
+			);
 		}
 
 		temporalList.purgeAll();
-		LOGGER.info("Purged {} future versions from {}", count, tableName);
-	}
-
-	/**
-	 * Restores superseded versions by setting system_to = infinity for rows
-	 * where system_from &lt;= targetDate AND system_to &gt; targetDate AND system_to &lt; infinity.
-	 */
-	private void restoreSupersededVersions(MithraObjectPortal portal, String tableName, AsOfAttribute systemAttribute)
-	{
-		String systemFromColumn = systemAttribute.getFromAttribute().getColumnName();
-		String systemToColumn = systemAttribute.getToAttribute().getColumnName();
-
-		String sql = String.format(
-			"UPDATE %s SET %s = ? WHERE %s <= ? AND %s > ? AND %s < ?",
-			tableName,
-			systemToColumn,
-			systemFromColumn,
-			systemToColumn,
-			systemToColumn
-		);
-
-		var connectionManager = (SourcelessConnectionManager) portal.getDatabaseObject().getConnectionManager();
-		DatabaseType databaseType = connectionManager.getDatabaseType();
-		TimeZone timeZone = connectionManager.getDatabaseTimeZone();
-
-		try (
-			Connection connection = connectionManager.getConnection();
-			PreparedStatement statement = connection.prepareStatement(sql)
-		)
-		{
-			databaseType.setTimestamp(statement, 1, this.infinityTimestamp, false, timeZone);
-			databaseType.setTimestamp(statement, 2, this.targetTimestamp, false, timeZone);
-			databaseType.setTimestamp(statement, 3, this.targetTimestamp, false, timeZone);
-			databaseType.setTimestamp(statement, 4, this.infinityTimestamp, false, timeZone);
-
-			int updatedRows = statement.executeUpdate();
-
-			if (updatedRows > 0)
-			{
-				LOGGER.info("Restored {} superseded versions in {}", updatedRows, tableName);
-			}
-			else
-			{
-				LOGGER.info("No superseded versions to restore in {}", tableName);
-			}
-		}
-		catch (SQLException e)
-		{
-			throw new RuntimeException("Failed to execute SQL: " + sql, e);
-		}
 	}
 }
