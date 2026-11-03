@@ -18,6 +18,8 @@ package io.liftwizard.servlet.logging.typesafe;
 
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructuredArgumentsPath
@@ -45,13 +47,13 @@ public class StructuredArgumentsPath
 		return this.full;
 	}
 
-	public void setTemplate(String template)
+	public void setTemplate(@Nullable String template)
 	{
 		if (this.template != null)
 		{
 			throw new IllegalStateException(this.template);
 		}
-		this.template = Objects.requireNonNull(template);
+		this.template = template;
 	}
 
 	@JsonProperty
