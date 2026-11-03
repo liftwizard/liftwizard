@@ -71,11 +71,14 @@ public class ExecutorServiceFactory
 	@JsonIgnore
 	public ExecutorService build(LifecycleEnvironment environment, MetricRegistry metricRegistry)
 	{
+		// ThreadPoolExecutor only grows past its core size when the work queue rejects a task, and the default
+		// queue is unbounded, so a core size below maxThreads would never be exceeded. Size the core at maxThreads
+		// and let idle core threads time out when the pool is meant to shrink below maxThreads.
 		ExecutorService executorService = environment
 			.executorService(this.nameFormat)
-			.minThreads(this.minThreads)
+			.minThreads(this.maxThreads)
 			.maxThreads(this.maxThreads)
-			.allowCoreThreadTimeOut(this.allowCoreThreadTimeOut)
+			.allowCoreThreadTimeOut(this.allowCoreThreadTimeOut || this.minThreads < this.maxThreads)
 			.keepAliveTime(this.keepAliveTime)
 			.shutdownTime(this.shutdownTime)
 			.build();
