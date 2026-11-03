@@ -108,21 +108,21 @@ class ExecutorServiceFactoryTest
 	void poolGrowsToMaxThreads()
 		throws Exception
 	{
-		ExecutorServiceFactory executorServiceFactory = new ExecutorServiceFactory();
+		var executorServiceFactory = new ExecutorServiceFactory();
 		executorServiceFactory.setNameFormat("grow-test-%d");
 		executorServiceFactory.setMinThreads(0);
 		executorServiceFactory.setMaxThreads(4);
 
-		MetricRegistry metricRegistry = new MetricRegistry();
+		var metricRegistry = new MetricRegistry();
 		ExecutorService executorService = executorServiceFactory.build(
 			new LifecycleEnvironment(metricRegistry),
 			metricRegistry
 		);
 		try
 		{
-			CountDownLatch allRunning = new CountDownLatch(4);
-			CountDownLatch release = new CountDownLatch(1);
-			for (int i = 0; i < 4; i++)
+			var allRunning = new CountDownLatch(4);
+			var release = new CountDownLatch(1);
+			for (var i = 0; i < 4; i++)
 			{
 				executorService.execute(() ->
 				{
