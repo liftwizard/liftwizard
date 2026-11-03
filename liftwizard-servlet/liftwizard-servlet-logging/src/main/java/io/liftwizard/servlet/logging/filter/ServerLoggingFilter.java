@@ -109,6 +109,7 @@ public class ServerLoggingFilter
 		try
 		{
 			chain.doFilter(requestWrapper, responseWrapper);
+			responseWrapper.flushWriter();
 		}
 		finally
 		{
