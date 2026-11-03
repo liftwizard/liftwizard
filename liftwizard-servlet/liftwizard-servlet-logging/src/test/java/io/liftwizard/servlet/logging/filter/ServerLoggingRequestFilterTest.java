@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,11 +65,49 @@ class ServerLoggingRequestFilterTest
 		assertThat(path.getTemplate()).isEqualTo("/api/{name}");
 	}
 
+	@Test
+	void noMatchedTemplatesLeavesTemplateNull()
+		throws Exception
+	{
+		var servletRequestUrl = "http://localhost/api/unmatched";
+		URI jerseyRequestUri = URI.create("http://localhost/api/unmatched");
+
+		StructuredArgumentsPath path = filterPath(servletRequestUrl, jerseyRequestUri);
+
+		assertThat(path.getAbsolute()).isEqualTo(servletRequestUrl);
+		assertThat(path.getTemplate()).isNull();
+	}
+
 	private static StructuredArgumentsPath filterPath(
 		String servletRequestUrl,
 		URI jerseyRequestUri,
 		String resourceTemplate,
 		String methodTemplate
+	)
+		throws Exception
+	{
+		return filterPath(servletRequestUrl, jerseyRequestUri, (routingContext) ->
+		{
+			Matcher matcher = Pattern.compile("(.*)").matcher(jerseyRequestUri.getRawPath());
+			assertThat(matcher.matches()).isTrue();
+			routingContext.pushMatchResult(matcher);
+			routingContext.pushMatchResult(matcher);
+			routingContext.pushTemplates(new UriTemplate(resourceTemplate), new UriTemplate(methodTemplate));
+		});
+	}
+
+	private static StructuredArgumentsPath filterPath(String servletRequestUrl, URI jerseyRequestUri)
+		throws Exception
+	{
+		return filterPath(servletRequestUrl, jerseyRequestUri, (routingContext) ->
+		{
+		});
+	}
+
+	private static StructuredArgumentsPath filterPath(
+		String servletRequestUrl,
+		URI jerseyRequestUri,
+		Consumer<UriRoutingContext> routingContextSetup
 	)
 		throws Exception
 	{
@@ -94,12 +133,7 @@ class ServerLoggingRequestFilterTest
 			null
 		);
 		requestContext.setProperty("structuredArguments", structuredArguments);
-		var routingContext = (UriRoutingContext) requestContext.getUriInfo();
-		Matcher matcher = Pattern.compile("(.*)").matcher(jerseyRequestUri.getRawPath());
-		assertThat(matcher.matches()).isTrue();
-		routingContext.pushMatchResult(matcher);
-		routingContext.pushMatchResult(matcher);
-		routingContext.pushTemplates(new UriTemplate(resourceTemplate), new UriTemplate(methodTemplate));
+		routingContextSetup.accept((UriRoutingContext) requestContext.getUriInfo());
 
 		var resourceInfo = (ResourceInfo) Proxy.newProxyInstance(
 			ServerLoggingRequestFilterTest.class.getClassLoader(),
