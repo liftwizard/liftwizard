@@ -214,7 +214,7 @@ public final class TransactionalConnectionSource
 
 		private boolean rollbackConnections()
 		{
-			boolean success = true;
+			var success = true;
 			for (TransactionConnection connection : Lists.mutable
 				.withAll(this.availableConnections)
 				.withAll(this.connectionsInUse))
