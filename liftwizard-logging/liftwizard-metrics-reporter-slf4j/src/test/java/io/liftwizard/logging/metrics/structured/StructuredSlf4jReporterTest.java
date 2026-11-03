@@ -33,14 +33,14 @@ class StructuredSlf4jReporterTest
 	@Test
 	void reportsWithoutMarkerWhenNoMarkerIsConfigured()
 	{
-		LoggerContext loggerContext = new LoggerContext();
+		var loggerContext = new LoggerContext();
 		Logger logger = loggerContext.getLogger("metrics");
-		ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+		var listAppender = new ListAppender<ILoggingEvent>();
 		listAppender.setContext(loggerContext);
 		listAppender.start();
 		logger.addAppender(listAppender);
 
-		MetricRegistry registry = new MetricRegistry();
+		var registry = new MetricRegistry();
 		registry.counter("requests").inc(3);
 
 		Map<String, Object> expectedArgument = new LinkedHashMap<>();
@@ -53,7 +53,7 @@ class StructuredSlf4jReporterTest
 			reporter.report();
 
 			assertThat(listAppender.list).hasSize(1);
-			ILoggingEvent event = listAppender.list.get(0);
+			ILoggingEvent event = listAppender.list.getFirst();
 			assertThat(event.getMarker()).isNull();
 			assertThat(event.getMessage()).isEqualTo("metrics");
 			assertThat(event.getArgumentArray()).containsExactly(expectedArgument);
