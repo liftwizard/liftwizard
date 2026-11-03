@@ -1,5 +1,7 @@
 -- Reladomo quotes "name" as a reserved word, so the column must be created quoted and lower case.
 CREATE TABLE ITEM (
     id BIGINT NOT NULL PRIMARY KEY,
-    "name" VARCHAR(256)
+    "name" VARCHAR(256),
+    created_on DATE,
+    updated_at TIMESTAMP
 );

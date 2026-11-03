@@ -20,9 +20,11 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
@@ -582,8 +584,12 @@ public class GraphQLQueryToOperationConverter
 			case "notEq" -> operationParameter == null
 				? attribute.isNotNull()
 				: attribute.notEq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-			case "in" -> attribute.in(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
-			case "notIn" -> attribute.notIn(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
+			case "in" -> attribute.in(
+				GraphQLQueryToOperationConverter.getDates((Collection<String>) operationParameter)
+			);
+			case "notIn" -> attribute.notIn(
+				GraphQLQueryToOperationConverter.getDates((Collection<String>) operationParameter)
+			);
 			case "greaterThan" -> attribute.greaterThan(
 				GraphQLQueryToOperationConverter.getDate((String) operationParameter)
 			);
@@ -648,8 +654,12 @@ public class GraphQLQueryToOperationConverter
 			case "notEq" -> operationParameter == null
 				? attribute.isNotNull()
 				: attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-			case "in" -> attribute.in(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
-			case "notIn" -> attribute.notIn(new LinkedHashSet<>((Collection<? extends Timestamp>) operationParameter));
+			case "in" -> attribute.in(
+				GraphQLQueryToOperationConverter.getTimestamps((Collection<String>) operationParameter)
+			);
+			case "notIn" -> attribute.notIn(
+				GraphQLQueryToOperationConverter.getTimestamps((Collection<String>) operationParameter)
+			);
 			case "greaterThan" -> attribute.greaterThan(
 				GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter)
 			);
@@ -752,6 +762,26 @@ public class GraphQLQueryToOperationConverter
 	private ImmutableList<String> getContext()
 	{
 		return this.context.toList().toReversed().toImmutable();
+	}
+
+	private static Set<Date> getDates(Collection<String> operationParameter)
+	{
+		Set<Date> result = new LinkedHashSet<>();
+		for (String each : operationParameter)
+		{
+			result.add(GraphQLQueryToOperationConverter.getDate(each));
+		}
+		return result;
+	}
+
+	private static Set<Timestamp> getTimestamps(Collection<String> operationParameter)
+	{
+		Set<Timestamp> result = new LinkedHashSet<>();
+		for (String each : operationParameter)
+		{
+			result.add(GraphQLQueryToOperationConverter.getTimestamp(each));
+		}
+		return result;
 	}
 
 	private static Timestamp getDate(String operationParameter)

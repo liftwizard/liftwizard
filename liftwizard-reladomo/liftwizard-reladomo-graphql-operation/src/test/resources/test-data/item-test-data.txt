@@ -1,6 +1,6 @@
 class io.liftwizard.reladomo.graphql.operation.model.Item
-id, name
-1 , "Abcdef"
-2 , "xbcz"
-3 , "Other"
-4 , "ABCD"
+id, name    , createdOn   , updatedAt
+1 , "Abcdef", "2024-01-01", "2024-01-01 10:00:00.000"
+2 , "xbcz"  , "2024-02-15", "2024-02-15 12:30:00.000"
+3 , "Other" , "2024-03-31", "2024-03-31 23:59:59.000"
+4 , "ABCD"  , "2024-12-25", "2024-12-25 08:00:00.000"

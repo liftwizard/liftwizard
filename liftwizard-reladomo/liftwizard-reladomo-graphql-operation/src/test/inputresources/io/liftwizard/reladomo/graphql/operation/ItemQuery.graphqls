@@ -5,11 +5,15 @@ input _ItemFinder {
     OR:  [_ItemFinder!]
     id: _LongAttribute
     name: _StringAttribute
+    createdOn: _DateAttribute
+    updatedAt: _TimestampAttribute
 }
 
 type Item {
     id: Long!
     name: String
+    createdOn: LocalDate
+    updatedAt: Instant
 }
 
 type Query {

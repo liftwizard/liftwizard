@@ -27,5 +27,7 @@
 
     <Attribute name="id" javaType="long" columnName="id" primaryKey="true" />
     <Attribute name="name" javaType="String" columnName="name" maxLength="256" nullable="true" />
+    <Attribute name="createdOn" javaType="Date" columnName="created_on" nullable="true" />
+    <Attribute name="updatedAt" javaType="Timestamp" columnName="updated_at" nullable="true" timezoneConversion="convert-to-utc" />
 
 </MithraObject>
