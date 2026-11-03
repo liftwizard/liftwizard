@@ -16,6 +16,8 @@
 
 package io.liftwizard.reladomo.graphql.operation;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,6 +33,7 @@ import graphql.schema.idl.TypeDefinitionRegistry;
 import io.liftwizard.graphql.scalar.ScalarRuntimeWiringBuilder;
 import io.liftwizard.junit.extension.match.FileSlurper;
 import io.liftwizard.junit.extension.match.json.JsonMatchExtension;
+import io.liftwizard.reladomo.graphql.operation.model.Item;
 import io.liftwizard.reladomo.graphql.operation.model.ItemFinder;
 import io.liftwizard.reladomo.graphql.operation.model.ItemList;
 import io.liftwizard.reladomo.test.extension.ExecuteSqlExtension;
@@ -91,6 +94,18 @@ class ItemByFinderGraphQLTest
 		this.assertQueryResult(testInfo);
 	}
 
+	@Test
+	void temporalInAndNotIn(TestInfo testInfo)
+	{
+		this.assertQueryResult(testInfo);
+	}
+
+	@Test
+	void dateInWithInvalidDate(TestInfo testInfo)
+	{
+		this.assertQueryResult(testInfo);
+	}
+
 	private void assertQueryResult(TestInfo testInfo)
 	{
 		String testName = testInfo.getTestMethod().orElseThrow().getName();
@@ -119,6 +134,10 @@ class ItemByFinderGraphQLTest
 		runtimeWiringBuilder.type("Query", (builder) ->
 			builder.dataFetcher("itemByFinder", (environment) -> findItems(environment.getArgument("operation")))
 		);
+		// Reladomo returns java.util.Date for Date attributes, which the LocalDate scalar cannot serialize. Klass converts it before serialization (ReladomoTreeGraphqlConverter), so this does the same.
+		runtimeWiringBuilder.type("Item", (builder) ->
+			builder.dataFetcher("createdOn", (environment) -> toLocalDate(environment.<Item>getSource().getCreatedOn()))
+		);
 
 		return new SchemaGenerator().makeExecutableSchema(registry, runtimeWiringBuilder.build());
 	}
@@ -132,6 +151,11 @@ class ItemByFinderGraphQLTest
 		ItemList items = ItemFinder.findMany(operation);
 		items.setOrderBy(ItemFinder.id().ascendingOrderBy());
 		return items;
+	}
+
+	private static LocalDate toLocalDate(Date date)
+	{
+		return date == null ? null : new java.sql.Date(date.getTime()).toLocalDate();
 	}
 
 	private static String toJson(Map<String, Object> specification)

@@ -1,0 +1,19 @@
+{
+	"errors": [
+		{
+			"message": "Exception while fetching data (/itemByFinder) : Text '2024-13-45' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13",
+			"locations": [
+				{
+					"line": 2,
+					"column": 2
+				}
+			],
+			"path": ["itemByFinder"],
+			"extensions":
+			{
+				"classification": "DataFetchingException"
+			}
+		}
+	],
+	"data": null
+}

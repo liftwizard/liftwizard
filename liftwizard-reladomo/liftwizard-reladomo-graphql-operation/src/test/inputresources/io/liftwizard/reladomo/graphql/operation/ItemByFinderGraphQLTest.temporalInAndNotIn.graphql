@@ -1,0 +1,30 @@
+{
+	dateIn: itemByFinder(operation: {createdOn: {in: ["2024-01-01", "2024-03-31"]}})
+	{
+		id
+		name
+		createdOn
+		updatedAt
+	}
+	dateNotIn: itemByFinder(operation: {createdOn: {notIn: ["2024-01-01", "2024-03-31"]}})
+	{
+		id
+		name
+		createdOn
+		updatedAt
+	}
+	timestampIn: itemByFinder(operation: {updatedAt: {in: ["2024-02-15T12:30:00Z", "2024-12-25T08:00:00Z"]}})
+	{
+		id
+		name
+		createdOn
+		updatedAt
+	}
+	timestampNotIn: itemByFinder(operation: {updatedAt: {notIn: ["2024-02-15T12:30:00Z"]}})
+	{
+		id
+		name
+		createdOn
+		updatedAt
+	}
+}

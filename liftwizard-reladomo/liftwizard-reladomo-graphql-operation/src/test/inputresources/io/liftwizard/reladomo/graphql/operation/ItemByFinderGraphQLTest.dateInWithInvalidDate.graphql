@@ -1,0 +1,9 @@
+{
+	itemByFinder(operation: {createdOn: {in: ["2024-13-45"]}})
+	{
+		id
+		name
+		createdOn
+		updatedAt
+	}
+}

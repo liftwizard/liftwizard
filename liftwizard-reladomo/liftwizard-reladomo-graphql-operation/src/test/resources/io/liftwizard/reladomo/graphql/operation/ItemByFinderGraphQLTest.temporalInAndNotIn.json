@@ -1,0 +1,67 @@
+{
+	"data":
+	{
+		"dateIn": [
+			{
+				"id": 1,
+				"name": "Abcdef",
+				"createdOn": "2024-01-01",
+				"updatedAt": "2024-01-01T10:00:00Z"
+			},
+			{
+				"id": 3,
+				"name": "Other",
+				"createdOn": "2024-03-31",
+				"updatedAt": "2024-03-31T23:59:59Z"
+			}
+		],
+		"dateNotIn": [
+			{
+				"id": 2,
+				"name": "xbcz",
+				"createdOn": "2024-02-15",
+				"updatedAt": "2024-02-15T12:30:00Z"
+			},
+			{
+				"id": 4,
+				"name": "ABCD",
+				"createdOn": "2024-12-25",
+				"updatedAt": "2024-12-25T08:00:00Z"
+			}
+		],
+		"timestampIn": [
+			{
+				"id": 2,
+				"name": "xbcz",
+				"createdOn": "2024-02-15",
+				"updatedAt": "2024-02-15T12:30:00Z"
+			},
+			{
+				"id": 4,
+				"name": "ABCD",
+				"createdOn": "2024-12-25",
+				"updatedAt": "2024-12-25T08:00:00Z"
+			}
+		],
+		"timestampNotIn": [
+			{
+				"id": 1,
+				"name": "Abcdef",
+				"createdOn": "2024-01-01",
+				"updatedAt": "2024-01-01T10:00:00Z"
+			},
+			{
+				"id": 3,
+				"name": "Other",
+				"createdOn": "2024-03-31",
+				"updatedAt": "2024-03-31T23:59:59Z"
+			},
+			{
+				"id": 4,
+				"name": "ABCD",
+				"createdOn": "2024-12-25",
+				"updatedAt": "2024-12-25T08:00:00Z"
+			}
+		]
+	}
+}
