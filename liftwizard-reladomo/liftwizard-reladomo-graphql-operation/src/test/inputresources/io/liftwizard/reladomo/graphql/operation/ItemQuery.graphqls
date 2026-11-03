@@ -1,0 +1,17 @@
+# Hand-written stand-in for the finder, type, and query schema that Klass generates.
+
+input _ItemFinder {
+    AND: [_ItemFinder!]
+    OR:  [_ItemFinder!]
+    id: _LongAttribute
+    name: _StringAttribute
+}
+
+type Item {
+    id: Long!
+    name: String
+}
+
+type Query {
+    itemByFinder(operation: _ItemFinder!): [Item!]!
+}
