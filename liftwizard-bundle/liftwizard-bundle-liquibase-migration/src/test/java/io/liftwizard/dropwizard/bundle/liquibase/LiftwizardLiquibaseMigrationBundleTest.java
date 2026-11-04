@@ -37,6 +37,7 @@ import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseDataS
 import io.liftwizard.dropwizard.configuration.liquibase.migration.LiquibaseMigrationFactory;
 import io.liftwizard.dropwizard.db.NamedDataSourceFactory;
 import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
@@ -129,7 +130,7 @@ class LiftwizardLiquibaseMigrationBundleTest
 
 	private List<Managed> getManagedObjects()
 	{
-		List<Managed> result = Lists.mutable.empty();
+		MutableList<Managed> result = Lists.mutable.empty();
 		for (Object managedObject : this.lifecycle.getManagedObjects())
 		{
 			if (managedObject instanceof JettyManaged jettyManaged)
