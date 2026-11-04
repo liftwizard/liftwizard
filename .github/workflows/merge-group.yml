@@ -49,6 +49,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - run: just test-problem-matchers
 
       - name: Add SLF4J problem matcher
@@ -80,6 +86,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - run: just spotbugs
 
       # Remove any jars we may have created before actions/cache caches .m2
@@ -105,6 +117,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: Add Error Prone problem matcher
         run: echo "::add-matcher::.github/errorprone.json"
@@ -135,6 +153,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Run maven-enforcer-plugin
         run: just enforcer
 
@@ -162,6 +186,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Run maven-dependency-plugin
         run: just dependency
 
@@ -188,6 +218,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: Run maven-javadoc-plugin
         run: just javadoc
@@ -221,6 +257,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: "Produce Checkstyle XML: Semantics"
         run: just checkstyle-profile --profile checkstyle-semantics --warn
@@ -259,6 +301,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: "Produce Checkstyle XML: Strict Semantics"
         run: just checkstyle-profile --profile checkstyle-semantics-strict --warn
 
@@ -295,6 +343,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: "Produce Checkstyle XML: Formatting"
         run: just checkstyle-profile --profile checkstyle-formatting --warn
@@ -361,6 +415,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Run artifact:check-buildplan
         run: just reproducible
 
@@ -389,6 +449,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: "Spotless Check: Formats"
         if: ${{ !cancelled() }}
