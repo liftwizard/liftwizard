@@ -307,7 +307,7 @@ public class InstrumentedDataFetcher<T>
 	public T get(DataFetchingEnvironment environment)
 		throws Exception
 	{
-		Instant startTime = Instant.now();
+		Instant startTime = this.clock.instant();
 		Optional<Context> fetcherSyncClock = this.timerFetcherSync.map(Timer::time);
 		Optional<Context> fieldSyncClock = this.timerFieldSync.map(Timer::time);
 		Optional<Context> pathSyncClock = this.timerPathSync.map(Timer::time);
