@@ -17,6 +17,26 @@ class Test
 		// short - looks like int literal
 		short s = 42;
 
+		// char literal widened to a numeric type - var would make it a char
+		int charToInt = 'a';
+		long charToLong = 'a';
+		double charToDouble = 'a';
+
+		// hex, octal, and binary int literals - an F or D suffix changes their value or does not compile
+		double hexToDouble = 0x10;
+		float hexToFloat = 0x10;
+		double octalToDouble = 010;
+		double binaryToDouble = 0b10;
+
+		// long and float literals widened to a floating-point type - var would keep the narrower type
+		float longToFloat = 1L;
+		double longToDouble = 10L;
+		double floatToDouble = 1.5f;
+
+		// literal assigned to a supertype or boxed type - var would narrow it to the literal's type
+		Object objectFromString = "hello";
+		Integer boxed = 42;
+
 		// Already using var
 		var existing = 42;
 

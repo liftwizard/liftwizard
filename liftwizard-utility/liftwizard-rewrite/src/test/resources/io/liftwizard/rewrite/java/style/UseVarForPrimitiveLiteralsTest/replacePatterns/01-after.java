@@ -26,6 +26,16 @@ class Test
 		// double literal without suffix or decimal - needs D added
 		var d3 = 42D;
 
+		// hex and octal int literals widen to long with an L suffix
+		var l3 = 0x10L;
+		var l4 = 010L;
+
+		// decimal int literal widens to float with an F suffix
+		var f3 = 42F;
+
+		// double literal in exponent form already has type double
+		var d4 = 1e3;
+
 		// boolean literals
 		var b1 = true;
 		var b2 = false;
