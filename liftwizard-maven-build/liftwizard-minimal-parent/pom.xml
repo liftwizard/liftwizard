@@ -66,15 +66,6 @@
 
     <properties>
 
-        <!-- https://maven.apache.org/plugins/maven-resources-plugin/examples/encoding.html#specifying-a-character-encoding-scheme -->
-        <!-- Configure a sourceEncoding for maven-resources-plugin -->
-        <!-- Avoids errors of the form:  [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent! -->
-        <!-- Unnecessary starting with maven 4 -->
-        <!--region sourceEncoding-->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!--endregion sourceEncoding-->
-
         <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html#how-do-i-configure-my-maven-build -->
         <!-- Enable Reproducible Builds mode for plugins -->
         <!--region outputTimestamp-->
