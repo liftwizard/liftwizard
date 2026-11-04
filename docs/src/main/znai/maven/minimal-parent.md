@@ -16,19 +16,6 @@ Inherit from `liftwizard-minimal-parent` in your project's pom.xml:
 
 The following sections describe the best practices that are enforced by `liftwizard-minimal-parent`. You will not need to configure these in your project's pom.xml if you inherit from `liftwizard-minimal-parent`.
 
-# Resource encodings
-
-If you encounter a warning like: `[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!` this is because the project does not [specify a character encoding scheme](https://maven.apache.org/plugins/maven-resources-plugin/examples/encoding.html#specifying-a-character-encoding-scheme) to configure `maven-resources-plugin`.
-
-`liftwizard-minimal-parent` specifies the character encoding scheme in the `properties` section of the pom.xml.
-
-:include-file: liftwizard-minimal-parent/pom.xml {
-title: "liftwizard-minimal-parent/pom.xml",
-surroundedBy: ["region sourceEncoding"]
-}
-
-This will become unnecessary starting with maven 4.x.
-
 # Reproducible builds
 
 > [Reproducible builds](https://reproducible-builds.org/) are a set of software development practices that create an independently-verifiable path from source to binary code. A build is **reproducible** if given the same source code, build environment and build instructions, any party can recreate **bit-by-bit** identical copies of all specified artifacts.
