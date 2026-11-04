@@ -86,7 +86,11 @@ class IncrementingClockFactoryTest
 			.stream()
 			.map((violation) -> violation.getPropertyPath() + " " + violation.getMessage())
 			.collect(Collectors.toSet());
-		assertThat(violations).hasSameElementsAs(Set.of("validTimezone Invalid timeZoneName"));
+		assertThat(violations).hasSameElementsAs(
+			Set.of(
+				"timeZoneName 'America/NewYork' is not a time zone ID. Did you mean: America/New_York? See java.time.ZoneId.getAvailableZoneIds() for all IDs."
+			)
+		);
 	}
 
 	private static ObjectMapper newObjectMapper()

@@ -17,7 +17,6 @@
 package io.liftwizard.dropwizard.configuration.clock.incrementing;
 
 import java.time.Clock;
-import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -27,14 +26,13 @@ import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.auto.service.AutoService;
 import io.dropwizard.validation.MinDuration;
-import io.dropwizard.validation.ValidationMethod;
 import io.liftwizard.clock.incrementing.IncrementingClock;
 import io.liftwizard.dropwizard.configuration.clock.ClockFactory;
+import io.liftwizard.dropwizard.configuration.validation.ZoneIdName;
 
 @JsonTypeName("incrementing")
 @AutoService(ClockFactory.class)
@@ -81,6 +79,7 @@ public class IncrementingClockFactory
 		this.instant = instant;
 	}
 
+	@ZoneIdName
 	@JsonProperty("timeZone")
 	public String getTimeZoneName()
 	{
@@ -103,25 +102,5 @@ public class IncrementingClockFactory
 	public void setIncrementAmount(io.dropwizard.util.Duration incrementAmount)
 	{
 		this.incrementAmount = incrementAmount;
-	}
-
-	@ValidationMethod(message = "Invalid timeZoneName")
-	@JsonIgnore
-	public boolean isValidTimezone()
-	{
-		if (this.timeZoneName == null)
-		{
-			return true;
-		}
-
-		try
-		{
-			ZoneId.of(this.timeZoneName);
-			return true;
-		}
-		catch (DateTimeException e)
-		{
-			return false;
-		}
 	}
 }

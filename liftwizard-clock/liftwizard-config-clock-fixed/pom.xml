@@ -35,13 +35,14 @@
         </dependency>
 
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-jackson</artifactId>
+            <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-config-validation</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-validation</artifactId>
+            <artifactId>dropwizard-jackson</artifactId>
         </dependency>
 
         <dependency>

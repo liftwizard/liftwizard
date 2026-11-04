@@ -16,7 +16,6 @@
 
 package io.liftwizard.dropwizard.configuration.connectionmanager;
 
-import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -26,11 +25,10 @@ import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gs.fw.common.mithra.connectionmanager.SourcelessConnectionManager;
 import com.gs.fw.common.mithra.databasetype.DatabaseType;
-import io.dropwizard.validation.ValidationMethod;
+import io.liftwizard.dropwizard.configuration.validation.ZoneIdName;
 import io.liftwizard.reladomo.connectionmanager.LiftwizardConnectionManager;
 
 public class ConnectionManagerFactory
@@ -93,6 +91,7 @@ public class ConnectionManagerFactory
 		this.databaseType = databaseType;
 	}
 
+	@ZoneIdName
 	@JsonProperty("timeZone")
 	public String getTimeZoneName()
 	{
@@ -115,25 +114,5 @@ public class ConnectionManagerFactory
 	public void setSchemaName(String schemaName)
 	{
 		this.schemaName = schemaName;
-	}
-
-	@ValidationMethod(message = "Invalid timeZoneName")
-	@JsonIgnore
-	public boolean isValidTimezone()
-	{
-		if (this.timeZoneName == null)
-		{
-			return true;
-		}
-
-		try
-		{
-			ZoneId.of(this.timeZoneName);
-			return true;
-		}
-		catch (DateTimeException e)
-		{
-			return false;
-		}
 	}
 }
