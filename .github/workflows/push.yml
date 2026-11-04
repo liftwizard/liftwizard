@@ -36,6 +36,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Add SLF4J problem matcher
         run: echo "::add-matcher::.github/slf4j.json"
 

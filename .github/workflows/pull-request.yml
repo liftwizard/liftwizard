@@ -37,6 +37,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Add SLF4J problem matcher
         run: echo "::add-matcher::.github/slf4j.json"
 
@@ -160,6 +166,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
@@ -212,6 +224,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: Configure Git
         run: |
@@ -266,6 +284,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
@@ -319,6 +343,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
@@ -371,6 +401,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: Configure Git
         run: |
@@ -429,6 +465,12 @@ jobs:
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
 
       - name: Configure Git
         run: |

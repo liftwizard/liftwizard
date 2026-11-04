@@ -101,6 +101,14 @@
 
     </dependencies>
 
+    <!-- OpenRewrite releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. -->
+    <repositories>
+        <repository>
+            <id>codegenome</id>
+            <url>https://artifacts.codegenomeproject.org/maven</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>

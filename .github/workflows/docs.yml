@@ -31,6 +31,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: ./.github/actions/openrewrite-recipes
+        with:
+          codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
+          codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+          build-recipes: false
+
       - name: Set up grahpviz
         run: sudo apt-get install graphviz
 

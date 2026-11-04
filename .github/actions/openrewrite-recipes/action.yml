@@ -8,6 +8,10 @@ inputs:
   codegenome-token:
     description: Code Genome Project token
     required: true
+  build-recipes:
+    description: Whether to install the source-available recipe modules. Pass false when the job only needs the credentials to resolve OpenRewrite artifacts.
+    required: false
+    default: "true"
 
 runs:
   using: composite
@@ -39,6 +43,7 @@ runs:
 
     # The key covers the resolved modules and versions, so bumping a version in a POM rebuilds the cache. It also covers this action's files, which hashFiles cannot read when another repository uses the action.
     - name: Compute recipe cache key
+      if: inputs.build-recipes == 'true'
       id: key
       shell: bash
       run: |
@@ -47,10 +52,12 @@ runs:
 
     # Building the recipes takes about 10 minutes, so they get their own cache. The warm-up job on main saves it where every branch can restore it.
     - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      if: inputs.build-recipes == 'true'
       with:
         key: ${{ steps.key.outputs.key }}
         path: ~/.m2/repository/org/openrewrite/recipe
 
     - name: Build source-available OpenRewrite recipes
+      if: inputs.build-recipes == 'true'
       shell: bash
       run: "$GITHUB_ACTION_PATH/build-openrewrite-recipes.sh"
