@@ -142,6 +142,10 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
+                    <groupId>org.safere</groupId>
+                    <artifactId>safere</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>io.github.eisop</groupId>
                     <artifactId>dataflow-errorprone</artifactId>
                 </exclusion>
