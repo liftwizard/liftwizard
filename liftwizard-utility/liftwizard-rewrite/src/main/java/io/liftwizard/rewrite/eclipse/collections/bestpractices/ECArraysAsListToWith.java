@@ -185,11 +185,12 @@ public class ECArraysAsListToWith
 				return mi;
 			}
 
-			List<Expression> varargsElements = arraysAsListCall.getArguments();
-
 			String factoryImport = "org.eclipse.collections.api.factory." + factoryClass;
 			this.maybeRemoveImport("java.util.Arrays");
+			this.maybeRemoveImport(mi.getMethodType().getDeclaringType().getFullyQualifiedName());
 			this.maybeAddImport(factoryImport);
+
+			List<Expression> varargsElements = arraysAsListCall.getArguments();
 
 			String templateSource;
 			if (hasComparator)

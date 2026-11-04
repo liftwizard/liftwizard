@@ -175,12 +175,14 @@ public class ECStreamMapCollectToCollect
 					.withName(mapCall.getName().withSimpleName("collect"));
 
 				J.Identifier toSetMethodName = streamCall.getName().withSimpleName("toSet");
+				this.maybeRemoveImport("java.util.stream.Collectors");
 				return streamCall
 					.withSelect(collectCall.withPrefix(collectSelect.getPrefix()))
 					.withName(toSetMethodName)
 					.withPrefix(methodInvocation.getPrefix());
 			}
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(collectMethodName)

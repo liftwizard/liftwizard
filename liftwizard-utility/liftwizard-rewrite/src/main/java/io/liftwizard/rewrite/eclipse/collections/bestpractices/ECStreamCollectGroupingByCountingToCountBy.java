@@ -139,6 +139,7 @@ public class ECStreamCollectGroupingByCountingToCountBy
 
 			J.Identifier countByMethodName = streamCall.getName().withSimpleName("countBy");
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(countByMethodName)

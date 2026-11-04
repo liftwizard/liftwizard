@@ -147,6 +147,8 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag
 
 			// streamCall already has empty arguments from stream(), so we just
 			// change the name and select, keeping the no-arg arguments list.
+			this.maybeRemoveImport("java.util.function.Function");
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(toBagMethodName)

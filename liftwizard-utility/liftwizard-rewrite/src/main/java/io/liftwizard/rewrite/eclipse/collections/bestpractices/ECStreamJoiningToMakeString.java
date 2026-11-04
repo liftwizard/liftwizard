@@ -162,6 +162,7 @@ public class ECStreamJoiningToMakeString
 
 			List<Expression> joiningArgs = joiningCall.getArguments();
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(newMethodName)

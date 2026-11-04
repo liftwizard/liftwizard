@@ -23,6 +23,7 @@ import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
+import org.openrewrite.Tree;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaParser;
@@ -30,9 +31,13 @@ import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.search.UsesType;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JRightPadded;
 import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.Space;
 import org.openrewrite.java.tree.TypeTree;
 import org.openrewrite.java.tree.TypeUtils;
+import org.openrewrite.marker.Markers;
 
 public class Dropwizard3LoadRoleInfoSignature
 	extends Recipe
@@ -148,8 +153,43 @@ public class Dropwizard3LoadRoleInfoSignature
 			{
 				return md;
 			}
-			TypeTree newReturnType = TypeTree.build("List<RolePrincipal>").withPrefix(existingReturnType.getPrefix());
-			return md.withReturnTypeExpression(newReturnType);
+			return md.withReturnTypeExpression(listOfRolePrincipal(existingReturnType.getPrefix()));
+		}
+
+		/**
+		 * Builds {@code List<RolePrincipal>} as the parser does: a {@link J.ParameterizedType}, not an identifier
+		 * whose name happens to contain angle brackets.
+		 */
+		private static J.ParameterizedType listOfRolePrincipal(Space prefix)
+		{
+			JavaType.FullyQualified listType = JavaType.ShallowClass.build(LIST);
+			JavaType.FullyQualified rolePrincipalType = JavaType.ShallowClass.build(ROLE_PRINCIPAL);
+			J.Identifier listIdentifier = new J.Identifier(
+				Tree.randomId(),
+				Space.EMPTY,
+				Markers.EMPTY,
+				List.of(),
+				"List",
+				listType,
+				null
+			);
+			J.Identifier rolePrincipalIdentifier = new J.Identifier(
+				Tree.randomId(),
+				Space.EMPTY,
+				Markers.EMPTY,
+				List.of(),
+				"RolePrincipal",
+				rolePrincipalType,
+				null
+			);
+			return new J.ParameterizedType(
+				Tree.randomId(),
+				prefix,
+				Markers.EMPTY,
+				listIdentifier,
+				JContainer.build(List.of(JRightPadded.<Expression>build(rolePrincipalIdentifier))),
+				new JavaType.Parameterized(null, listType, List.of(rolePrincipalType))
+			);
 		}
 
 		@Override

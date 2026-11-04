@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
+import io.liftwizard.rewrite.eclipse.collections.TemplateTypeImports;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.Cursor;
@@ -145,11 +146,16 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			}
 			String factoryImport = factoryType.get();
 
-			String typeParams = this.extractTypeParameterString(nc);
+			Set<String> typeParameterImports = this.extractTypeParameterImports(nc);
 
 			this.maybeRemoveImport("java.util." + this.sourceTypeSimpleName);
 			this.maybeAddImport(factoryImport);
+			for (String typeParameterImport : typeParameterImports)
+			{
+				this.maybeAddImport(typeParameterImport);
+			}
 
+			String typeParams = this.extractTypeParameterString(nc);
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
 			String templateSource =
@@ -161,6 +167,7 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 				);
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
+				.imports(typeParameterImports.toArray(String[]::new))
 				.contextSensitive()
 				.javaParser(
 					JavaParser.fromJavaVersion().dependsOn(
@@ -270,6 +277,28 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			}
 
 			return typeParameters.stream().map(Expression::toString).collect(Collectors.joining(", "));
+		}
+
+		private Set<String> extractTypeParameterImports(J.NewClass nc)
+		{
+			if (!(nc.getClazz() instanceof J.ParameterizedType parameterizedType))
+			{
+				return Set.of();
+			}
+
+			List<Expression> typeParameters = parameterizedType.getTypeParameters();
+			if (Iterate.isEmpty(typeParameters))
+			{
+				return Set.of();
+			}
+
+			return TemplateTypeImports.of(
+				typeParameters
+					.stream()
+					.filter((tp) -> !(tp instanceof J.Empty))
+					.map(Expression::getType)
+					.toList()
+			);
 		}
 
 		private boolean isVariableTypeConcreteClass()

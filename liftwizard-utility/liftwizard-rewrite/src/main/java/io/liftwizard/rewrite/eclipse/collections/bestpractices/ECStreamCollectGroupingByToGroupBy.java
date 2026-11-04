@@ -149,6 +149,7 @@ public class ECStreamCollectGroupingByToGroupBy
 
 			J.Identifier groupByMethodName = streamCall.getName().withSimpleName("groupBy");
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(groupByMethodName)

@@ -209,16 +209,21 @@ public class UseVarForPrimitiveLiterals
 				return literal;
 			}
 
+			if (!(literal.getValue() instanceof Number number))
+			{
+				return literal;
+			}
+
 			JavaType type = vd.getType();
 
 			if (type == Primitive.Long && !valueSource.endsWith("l") && !valueSource.endsWith("L"))
 			{
-				return literal.withValueSource(valueSource + "L");
+				return withSuffix(literal, valueSource + "L", number.longValue(), Primitive.Long);
 			}
 
 			if (type == Primitive.Float && !valueSource.endsWith("f") && !valueSource.endsWith("F"))
 			{
-				return literal.withValueSource(valueSource + "F");
+				return withSuffix(literal, valueSource + "F", number.floatValue(), Primitive.Float);
 			}
 
 			if (
@@ -228,10 +233,18 @@ public class UseVarForPrimitiveLiterals
 				&& !valueSource.contains(".")
 			)
 			{
-				return literal.withValueSource(valueSource + "D");
+				return withSuffix(literal, valueSource + "D", number.doubleValue(), Primitive.Double);
 			}
 
 			return literal;
+		}
+
+		/**
+		 * A suffixed literal holds the value and type the parser gives it: {@code 42L} is the long 42, not the int 42.
+		 */
+		private static Literal withSuffix(Literal literal, String valueSource, Object value, Primitive type)
+		{
+			return literal.withValueSource(valueSource).withValue(value).withType(type);
 		}
 	}
 }

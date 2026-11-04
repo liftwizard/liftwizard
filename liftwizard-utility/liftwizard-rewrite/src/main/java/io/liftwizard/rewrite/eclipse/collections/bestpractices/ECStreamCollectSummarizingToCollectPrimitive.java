@@ -189,6 +189,7 @@ public class ECStreamCollectSummarizingToCollectPrimitive
 				.withSimpleName("summaryStatistics")
 				.withType(summaryStatsMethodType);
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectPrimitiveCall)
 				.withName(summaryStatsMethodName)

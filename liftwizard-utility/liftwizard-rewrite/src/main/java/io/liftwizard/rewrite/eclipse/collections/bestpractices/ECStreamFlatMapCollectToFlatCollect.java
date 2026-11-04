@@ -189,12 +189,14 @@ public class ECStreamFlatMapCollectToFlatCollect
 					.withArguments(newArguments);
 
 				J.Identifier toSetMethodName = streamCall.getName().withSimpleName("toSet");
+				this.maybeRemoveImport("java.util.stream.Collectors");
 				return streamCall
 					.withSelect(flatCollectCall.withPrefix(collectSelect.getPrefix()))
 					.withName(toSetMethodName)
 					.withPrefix(methodInvocation.getPrefix());
 			}
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(flatCollectMethodName)
