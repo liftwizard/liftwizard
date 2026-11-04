@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.liftwizard.rewrite.eclipse.collections.EclipseCollectionsTemplateStubs;
+import io.liftwizard.rewrite.eclipse.collections.TemplateTypeImports;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.openrewrite.Cursor;
@@ -192,8 +193,14 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			String factoryPackage = "org.eclipse.collections.api.factory" + prefixedFactoryPackageSuffix;
 			String factoryClass = factoryPackage + "." + this.factoryClassName;
 
+			Set<String> typeParameterImports = this.extractTypeParameterImports(nc);
+
 			this.maybeRemoveImport(implementationClass);
 			this.maybeAddImport(factoryClass);
+			for (String typeParameterImport : typeParameterImports)
+			{
+				this.maybeAddImport(typeParameterImport);
+			}
 
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.factoryClassName + "." + this.factoryMethod + "." + typeParamsTemplate;
@@ -208,6 +215,7 @@ public abstract class AbstractECConstructorToFactoryRecipe
 
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryClass)
+				.imports(typeParameterImports.toArray(String[]::new))
 				.contextSensitive()
 				.javaParser(
 					JavaParser.fromJavaVersion().dependsOn(
@@ -364,10 +372,35 @@ public abstract class AbstractECConstructorToFactoryRecipe
 				return "";
 			}
 
-			return this.inferTypeParametersFromContext();
+			return this.buildTypeParameterString(this.inferTypeParametersFromContext());
 		}
 
-		private String inferTypeParametersFromContext()
+		private Set<String> extractTypeParameterImports(J.NewClass nc)
+		{
+			if (
+				nc.getClazz() instanceof J.ParameterizedType paramType
+				&& Iterate.notEmpty(paramType.getTypeParameters())
+			)
+			{
+				return TemplateTypeImports.of(
+					paramType
+						.getTypeParameters()
+						.stream()
+						.filter((tp) -> !(tp instanceof J.Empty))
+						.map(Expression::getType)
+						.toList()
+				);
+			}
+
+			if (nc.getType() instanceof JavaType.Parameterized)
+			{
+				return Set.of();
+			}
+
+			return TemplateTypeImports.of(this.inferTypeParametersFromContext());
+		}
+
+		private List<JavaType> inferTypeParametersFromContext()
 		{
 			Cursor cursor = this.getCursor();
 			while (cursor != null)
@@ -381,10 +414,10 @@ public abstract class AbstractECConstructorToFactoryRecipe
 					{
 						if (!paramType.getTypeParameters().isEmpty())
 						{
-							return this.buildTypeParameterString(paramType.getTypeParameters());
+							return paramType.getTypeParameters();
 						}
 					}
-					return "";
+					return List.of();
 				}
 
 				if (value instanceof J.MethodDeclaration method)
@@ -396,10 +429,10 @@ public abstract class AbstractECConstructorToFactoryRecipe
 						{
 							if (!paramType.getTypeParameters().isEmpty())
 							{
-								return this.buildTypeParameterString(paramType.getTypeParameters());
+								return paramType.getTypeParameters();
 							}
 						}
-						return "";
+						return List.of();
 					}
 				}
 
@@ -412,17 +445,17 @@ public abstract class AbstractECConstructorToFactoryRecipe
 						{
 							if (!paramType.getTypeParameters().isEmpty())
 							{
-								return this.buildTypeParameterString(paramType.getTypeParameters());
+								return paramType.getTypeParameters();
 							}
 						}
-						return "";
+						return List.of();
 					}
 				}
 
 				cursor = cursor.getParent();
 			}
 
-			return "";
+			return List.of();
 		}
 
 		private String buildTypeParameterString(List<JavaType> typeParameters)

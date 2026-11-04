@@ -161,6 +161,8 @@ public class ECStreamCollectToMapToGroupByUniqueKey
 
 			J.Identifier groupByUniqueKeyMethodName = streamCall.getName().withSimpleName("groupByUniqueKey");
 
+			this.maybeRemoveImport("java.util.function.Function");
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(groupByUniqueKeyMethodName)

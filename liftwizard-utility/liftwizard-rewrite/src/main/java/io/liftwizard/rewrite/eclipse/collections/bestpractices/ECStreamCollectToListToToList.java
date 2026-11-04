@@ -131,6 +131,7 @@ public class ECStreamCollectToListToToList
 
 			J.Identifier toListMethodName = streamCall.getName().withSimpleName("toList");
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(toListMethodName)

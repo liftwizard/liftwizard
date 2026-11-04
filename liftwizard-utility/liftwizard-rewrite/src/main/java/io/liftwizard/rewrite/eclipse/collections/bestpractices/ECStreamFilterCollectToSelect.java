@@ -175,12 +175,14 @@ public class ECStreamFilterCollectToSelect
 					.withName(filterCall.getName().withSimpleName("select"));
 
 				J.Identifier toSetMethodName = streamCall.getName().withSimpleName("toSet");
+				this.maybeRemoveImport("java.util.stream.Collectors");
 				return streamCall
 					.withSelect(selectCall.withPrefix(collectSelect.getPrefix()))
 					.withName(toSetMethodName)
 					.withPrefix(methodInvocation.getPrefix());
 			}
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(selectMethodName)

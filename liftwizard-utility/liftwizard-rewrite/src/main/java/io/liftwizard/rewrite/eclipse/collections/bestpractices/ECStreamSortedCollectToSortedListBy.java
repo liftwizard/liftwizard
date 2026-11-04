@@ -174,6 +174,8 @@ public class ECStreamSortedCollectToSortedListBy
 			Expression function = comparingArgs.getFirst();
 			J.Identifier toSortedListByName = methodInvocation.getName().withSimpleName("toSortedListBy");
 
+			this.maybeRemoveImport("java.util.Comparator");
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(toSortedListByName)

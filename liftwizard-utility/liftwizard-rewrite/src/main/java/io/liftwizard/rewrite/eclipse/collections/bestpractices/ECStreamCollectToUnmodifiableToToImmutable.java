@@ -150,6 +150,7 @@ public class ECStreamCollectToUnmodifiableToToImmutable
 
 			J.Identifier toImmutableMethodName = streamCall.getName().withSimpleName(targetMethodName);
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(toImmutableMethodName)

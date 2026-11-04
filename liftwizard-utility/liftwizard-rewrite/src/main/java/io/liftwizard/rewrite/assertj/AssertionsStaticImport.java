@@ -72,12 +72,8 @@ public class AssertionsStaticImport
 				return methodInvocation;
 			}
 
-			if (!(methodInvocation.getSelect() instanceof J.Identifier identifier))
-			{
-				return methodInvocation;
-			}
-
-			if (!"Assertions".equals(identifier.getSimpleName()))
+			// A call without a select is already statically imported.
+			if (methodInvocation.getSelect() == null)
 			{
 				return methodInvocation;
 			}

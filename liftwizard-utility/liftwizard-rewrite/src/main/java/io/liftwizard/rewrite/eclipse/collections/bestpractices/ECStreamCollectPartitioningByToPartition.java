@@ -144,6 +144,7 @@ public class ECStreamCollectPartitioningByToPartition
 			Expression predicate = partitioningByArgs.getFirst();
 			J.Identifier partitionMethodName = streamCall.getName().withSimpleName("partition");
 
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return streamCall
 				.withSelect(collectionExpr.withPrefix(collectSelect.getPrefix()))
 				.withName(partitionMethodName)

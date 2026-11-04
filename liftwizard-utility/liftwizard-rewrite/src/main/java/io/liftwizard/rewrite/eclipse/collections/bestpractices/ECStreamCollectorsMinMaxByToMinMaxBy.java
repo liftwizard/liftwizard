@@ -186,6 +186,8 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy
 			Expression function = comparingArgs.getFirst();
 			J.Identifier newMethodName = methodInvocation.getName().withSimpleName(targetMethodName);
 
+			this.maybeRemoveImport("java.util.Comparator");
+			this.maybeRemoveImport("java.util.stream.Collectors");
 			return methodInvocation
 				.withSelect(collectionExpr.withPrefix(orElseSelect.getPrefix()))
 				.withName(newMethodName)
