@@ -26,6 +26,16 @@ class Test
 		// double literal without suffix or decimal - needs D added
 		double d3 = 42;
 
+		// hex and octal int literals widen to long with an L suffix
+		long l3 = 0x10;
+		long l4 = 010;
+
+		// decimal int literal widens to float with an F suffix
+		float f3 = 42;
+
+		// double literal in exponent form already has type double
+		double d4 = 1e3;
+
 		// boolean literals
 		boolean b1 = true;
 		boolean b2 = false;

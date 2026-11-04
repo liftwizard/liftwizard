@@ -17,8 +17,10 @@
 package io.liftwizard.rewrite.java.style;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.collections.api.factory.Lists;
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.Cursor;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Preconditions;
@@ -37,6 +39,7 @@ import org.openrewrite.java.tree.J.VariableDeclarations.NamedVariable;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.JavaType.Primitive;
 import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.TypeUtils;
 import org.openrewrite.marker.Markers;
 
 /**
@@ -79,6 +82,8 @@ public class UseVarForPrimitiveLiterals
 	private static final class UseVarForPrimitiveLiteralsVisitor
 		extends JavaIsoVisitor<ExecutionContext>
 	{
+		private static final Pattern DECIMAL_INT_LITERAL = Pattern.compile("0|[1-9][0-9_]*");
+
 		@Override
 		public VariableDeclarations visitVariableDeclarations(VariableDeclarations vd, ExecutionContext ctx)
 		{
@@ -89,7 +94,14 @@ public class UseVarForPrimitiveLiterals
 				return result;
 			}
 
-			return this.transformToVar(result);
+			Literal literal = (Literal) result.getVariables().getFirst().getInitializer();
+			Literal varLiteral = literalForVar(result.getType(), literal);
+			if (varLiteral == null)
+			{
+				return result;
+			}
+
+			return this.transformToVar(result, varLiteral);
 		}
 
 		private boolean isApplicable(VariableDeclarations vd)
@@ -174,10 +186,9 @@ public class UseVarForPrimitiveLiterals
 			);
 		}
 
-		private VariableDeclarations transformToVar(VariableDeclarations vd)
+		private VariableDeclarations transformToVar(VariableDeclarations vd, Literal varLiteral)
 		{
 			NamedVariable variable = vd.getVariables().getFirst();
-			Literal literal = (Literal) variable.getInitializer();
 
 			Space prefix = vd.getTypeExpression() == null ? Space.EMPTY : vd.getTypeExpression().getPrefix();
 
@@ -191,52 +202,63 @@ public class UseVarForPrimitiveLiterals
 				null
 			);
 
-			Literal expandedLiteral = this.maybeAddTypeSuffix(vd, literal);
-			if (expandedLiteral != literal)
+			if (varLiteral != variable.getInitializer())
 			{
-				NamedVariable newVariable = variable.withInitializer(expandedLiteral);
+				NamedVariable newVariable = variable.withInitializer(varLiteral);
 				return vd.withTypeExpression(varIdentifier).withVariables(Lists.fixedSize.of(newVariable));
 			}
 
 			return vd.withTypeExpression(varIdentifier);
 		}
 
-		private Literal maybeAddTypeSuffix(VariableDeclarations vd, Literal literal)
+		/**
+		 * Returns the literal to keep after replacing the declared type with {@code var}, or {@code null} when {@code var}
+		 * would give the variable a different type. That is the case for a literal of another kind, like a {@code char} or
+		 * {@code long} widened to {@code double}, or a {@code String} assigned to {@code Object}. An {@code int} literal
+		 * widens with a suffix, but only a decimal one can take {@code F} or {@code D}: {@code 0x10D} is the int 269, and
+		 * {@code 010D} is the double 10.0, not 8.0.
+		 */
+		@Nullable
+		private static Literal literalForVar(@Nullable JavaType declaredType, Literal literal)
 		{
+			JavaType literalType = literal.getType();
+			if (!(declaredType instanceof Primitive))
+			{
+				return literalType == Primitive.String && TypeUtils.isString(declaredType) ? literal : null;
+			}
+
+			if (literalType == declaredType)
+			{
+				return literal;
+			}
+
 			String valueSource = literal.getValueSource();
-			if (valueSource == null)
+			if (literalType != Primitive.Int || valueSource == null || !(literal.getValue() instanceof Number number))
 			{
-				return literal;
+				return null;
 			}
 
-			if (!(literal.getValue() instanceof Number number))
-			{
-				return literal;
-			}
-
-			JavaType type = vd.getType();
-
-			if (type == Primitive.Long && !valueSource.endsWith("l") && !valueSource.endsWith("L"))
+			if (declaredType == Primitive.Long)
 			{
 				return withSuffix(literal, valueSource + "L", number.longValue(), Primitive.Long);
 			}
 
-			if (type == Primitive.Float && !valueSource.endsWith("f") && !valueSource.endsWith("F"))
+			if (!DECIMAL_INT_LITERAL.matcher(valueSource).matches())
+			{
+				return null;
+			}
+
+			if (declaredType == Primitive.Float)
 			{
 				return withSuffix(literal, valueSource + "F", number.floatValue(), Primitive.Float);
 			}
 
-			if (
-				type == Primitive.Double
-				&& !valueSource.endsWith("d")
-				&& !valueSource.endsWith("D")
-				&& !valueSource.contains(".")
-			)
+			if (declaredType == Primitive.Double)
 			{
 				return withSuffix(literal, valueSource + "D", number.doubleValue(), Primitive.Double);
 			}
 
-			return literal;
+			return null;
 		}
 
 		/**
