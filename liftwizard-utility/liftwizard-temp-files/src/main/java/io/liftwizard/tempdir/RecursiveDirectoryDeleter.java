@@ -47,7 +47,9 @@ public final class RecursiveDirectoryDeleter
 		}
 
 		LOGGER.debug("Deleting directory recursively: {}", directory);
-		Files.walkFileTree(directory, new DeleteAllFilesVisitor());
+		var visitor = new DeleteAllFilesVisitor();
+		Files.walkFileTree(directory, visitor);
+		visitor.throwIfAnyFailed();
 	}
 
 	public static boolean tryDeleteRecursively(@Nonnull Path directory)

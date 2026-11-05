@@ -55,10 +55,10 @@ public final class ManagedTempDirectory
 		this.path = Objects.requireNonNull(path, "path cannot be null");
 	}
 
-	private static void shutdownCleanup()
+	static void shutdownCleanup()
 	{
 		LOGGER.debug("Running shutdown hook to clean up {} temporary directories", SHUTDOWN_REGISTRY.size());
-		SHUTDOWN_REGISTRY.forEach(ManagedTempDirectory::close);
+		SHUTDOWN_REGISTRY.forEach(ManagedTempDirectory::tryClose);
 	}
 
 	public static Path createTempDirectory(@Nonnull String prefix)
@@ -111,32 +111,45 @@ public final class ManagedTempDirectory
 	}
 
 	@Override
-	public void close()
+	public synchronized void close()
 	{
-		if (this.closed.compareAndSet(false, true))
+		if (this.closed.get())
 		{
-			LOGGER.debug("Closing managed temporary directory: {}", this.path);
-			SHUTDOWN_REGISTRY.remove(this);
-			try
-			{
-				RecursiveDirectoryDeleter.deleteRecursively(this.path);
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException("Failed to delete temporary directory: " + this.path, e);
-			}
+			return;
 		}
+
+		LOGGER.debug("Closing managed temporary directory: {}", this.path);
+		try
+		{
+			RecursiveDirectoryDeleter.deleteRecursively(this.path);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Failed to delete temporary directory: " + this.path, e);
+		}
+		this.markClosed();
 	}
 
-	public boolean tryClose()
+	public synchronized boolean tryClose()
 	{
-		if (this.closed.compareAndSet(false, true))
+		if (this.closed.get())
 		{
-			LOGGER.debug("Attempting to close managed temporary directory: {}", this.path);
-			SHUTDOWN_REGISTRY.remove(this);
-			return RecursiveDirectoryDeleter.tryDeleteRecursively(this.path);
+			return true;
 		}
-		return true;
+
+		LOGGER.debug("Attempting to close managed temporary directory: {}", this.path);
+		boolean deleted = RecursiveDirectoryDeleter.tryDeleteRecursively(this.path);
+		if (deleted)
+		{
+			this.markClosed();
+		}
+		return deleted;
+	}
+
+	private void markClosed()
+	{
+		this.closed.set(true);
+		SHUTDOWN_REGISTRY.remove(this);
 	}
 
 	@Override

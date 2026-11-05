@@ -18,14 +18,20 @@ package io.liftwizard.tempdir;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtendWith(LogMarkerTestExtension.class)
 class ManagedTempDirectoryTest
@@ -96,5 +102,76 @@ class ManagedTempDirectoryTest
 
 		assertThat(result).isTrue();
 		assertThat(managedDir.getPath()).doesNotExist();
+	}
+
+	@Test
+	void tryClose_shouldRetryAfterFailedDeletion()
+		throws IOException
+	{
+		ManagedTempDirectory managedDir = ManagedTempDirectory.create("try-close-retry-test");
+		lockSubdirectory(managedDir.getPath());
+
+		assertThat(managedDir.tryClose()).isFalse();
+		assertThat(managedDir.tryClose()).isFalse();
+		assertThat(managedDir.getPath()).exists();
+
+		unlock(managedDir.getPath());
+
+		assertThat(managedDir.tryClose()).isTrue();
+		assertThat(managedDir.getPath()).doesNotExist();
+	}
+
+	@Test
+	void close_shouldRetryAfterFailedDeletion()
+		throws IOException
+	{
+		ManagedTempDirectory managedDir = ManagedTempDirectory.create("close-retry-test");
+		lockSubdirectory(managedDir.getPath());
+
+		assertThatThrownBy(managedDir::close)
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Failed to delete temporary directory: " + managedDir.getPath());
+		assertThat(managedDir.getPath()).exists();
+
+		unlock(managedDir.getPath());
+
+		managedDir.close();
+		assertThat(managedDir.getPath()).doesNotExist();
+	}
+
+	@Test
+	void shutdownCleanup_shouldContinuePastFailedDeletions()
+		throws IOException
+	{
+		ManagedTempDirectory lockedManagedDir = ManagedTempDirectory.create("shutdown-locked-test");
+		lockSubdirectory(lockedManagedDir.getPath());
+		ImmutableList<ManagedTempDirectory> managedDirs = Lists.immutable
+			.with("a", "b", "c", "d", "e", "f", "g", "h")
+			.collect((suffix) -> ManagedTempDirectory.create("shutdown-test-" + suffix));
+
+		ManagedTempDirectory.shutdownCleanup();
+
+		assertThat(managedDirs.collect(ManagedTempDirectory::getPath)).allSatisfy((path) ->
+			assertThat(path).doesNotExist()
+		);
+		assertThat(lockedManagedDir.getPath()).exists();
+
+		unlock(lockedManagedDir.getPath());
+		lockedManagedDir.close();
+	}
+
+	private static void lockSubdirectory(Path parent)
+		throws IOException
+	{
+		assumeTrue(FileSystems.getDefault().supportedFileAttributeViews().contains("posix"));
+		Path lockedDir = Files.createDirectory(parent.resolve("locked"));
+		Files.writeString(lockedDir.resolve("locked-file.txt"), "locked content");
+		Files.setPosixFilePermissions(lockedDir, PosixFilePermissions.fromString("r-x------"));
+	}
+
+	private static void unlock(Path parent)
+		throws IOException
+	{
+		Files.setPosixFilePermissions(parent.resolve("locked"), PosixFilePermissions.fromString("rwx------"));
 	}
 }
