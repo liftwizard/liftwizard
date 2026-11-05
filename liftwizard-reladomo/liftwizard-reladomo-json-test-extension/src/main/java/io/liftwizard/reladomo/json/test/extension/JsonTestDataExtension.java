@@ -85,9 +85,9 @@ public class JsonTestDataExtension
 		if (!MithraManagerProvider.getMithraManager().getConfigManager().isClassConfigured(className))
 		{
 			throw new RuntimeException(
-				"Class "
-					+ className
-					+ " is not configured. Did you remember to initialize Reladomo with a runtime configuration?"
+				"Class " +
+					className +
+					" is not configured. Did you remember to initialize Reladomo with a runtime configuration?"
 			);
 		}
 

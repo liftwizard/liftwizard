@@ -71,9 +71,9 @@ public class MDCDataFetcher<T>
 	private String getDataFetcherName()
 	{
 		DataFetcher<T> wrappedDataFetcher =
-			this.dataFetcher instanceof LiftwizardAsyncDataFetcher
-				? ((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher()
-				: this.dataFetcher;
+			this.dataFetcher instanceof LiftwizardAsyncDataFetcher ?
+				((LiftwizardAsyncDataFetcher<T>) this.dataFetcher).getWrappedDataFetcher() :
+				this.dataFetcher;
 		String dataFetcherName = wrappedDataFetcher.getClass().getCanonicalName();
 		return dataFetcherName;
 	}

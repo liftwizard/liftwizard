@@ -83,12 +83,12 @@ public class ECStreamFlatMapCollectToFlatCollect
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().flatMap(fn).collect(Collectors.toList())` to `collection.flatCollect(fn)` "
-			+ "and `collection.stream().flatMap(fn).collect(Collectors.toSet())` to `collection.flatCollect(fn).toSet()`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the flatCollect method directly on RichIterable. "
-			+ "The lambda body must end with a .stream() call, which is stripped since "
-			+ "flatCollect expects an Iterable rather than a Stream."
+			"Transforms `collection.stream().flatMap(fn).collect(Collectors.toList())` to `collection.flatCollect(fn)` " +
+			"and `collection.stream().flatMap(fn).collect(Collectors.toSet())` to `collection.flatCollect(fn).toSet()`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the flatCollect method directly on RichIterable. " +
+			"The lambda body must end with a .stream() call, which is stripped since " +
+			"flatCollect expects an Iterable rather than a Stream."
 		);
 	}
 

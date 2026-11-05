@@ -48,8 +48,8 @@ public final class IgnoredPropertyNamesAnnotationIntrospector
 	public JsonIgnoreProperties.Value findPropertyIgnoralByName(MapperConfig<?> config, Annotated annotated)
 	{
 		if (
-			annotated instanceof AnnotatedClass annotatedClass
-			&& this.declaringType.isAssignableFrom(annotatedClass.getRawType())
+			annotated instanceof AnnotatedClass annotatedClass &&
+			this.declaringType.isAssignableFrom(annotatedClass.getRawType())
 		)
 		{
 			return this.ignoredProperties;

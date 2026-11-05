@@ -56,8 +56,8 @@ public class ReladomoExistsOperatorVisitor
 	@Override
 	public Operation visitOperatorNotExists(OperatorNotExistsContext ctx)
 	{
-		return this.notExistsOperation == null
-			? this.navigation.notExists()
-			: this.navigation.notExists(this.notExistsOperation);
+		return this.notExistsOperation == null ?
+			this.navigation.notExists() :
+			this.navigation.notExists(this.notExistsOperation);
 	}
 }

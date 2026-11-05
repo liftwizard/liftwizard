@@ -83,8 +83,8 @@ public class ServerLoggingFilter
 		throws IOException, ServletException
 	{
 		if (
-			!(request instanceof HttpServletRequest httpServletRequest)
-			|| !(response instanceof HttpServletResponse httpServletResponse)
+			!(request instanceof HttpServletRequest httpServletRequest) ||
+			!(response instanceof HttpServletResponse httpServletResponse)
 		)
 		{
 			chain.doFilter(request, response);
@@ -190,9 +190,9 @@ public class ServerLoggingFilter
 	)
 	{
 		if (
-			!this.loggingConfig.isLogRequestBodies()
-			|| requestWrapper == null
-			|| requestWrapper.getContentLengthLong() <= 0
+			!this.loggingConfig.isLogRequestBodies() ||
+			requestWrapper == null ||
+			requestWrapper.getContentLengthLong() <= 0
 		)
 		{
 			return;

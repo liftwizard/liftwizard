@@ -63,9 +63,9 @@ public class ExplicitTypeToVar
 	public String getDescription()
 	{
 		return (
-			"Replace explicit type declarations with `var` when the variable is initialized with a "
-			+ "constructor call of exactly the same type. Does not transform when declared type "
-			+ "differs from constructor type (e.g., interface vs implementation)."
+			"Replace explicit type declarations with `var` when the variable is initialized with a " +
+			"constructor call of exactly the same type. Does not transform when declared type " +
+			"differs from constructor type (e.g., interface vs implementation)."
 		);
 	}
 
@@ -153,8 +153,8 @@ public class ExplicitTypeToVar
 			}
 			Cursor grandparent = parent.getParentTreeCursor();
 			return (
-				parent.getValue() instanceof J.Block
-				&& (grandparent.getValue() instanceof J.ClassDeclaration || grandparent.getValue() instanceof NewClass)
+				parent.getValue() instanceof J.Block &&
+				(grandparent.getValue() instanceof J.ClassDeclaration || grandparent.getValue() instanceof NewClass)
 			);
 		}
 

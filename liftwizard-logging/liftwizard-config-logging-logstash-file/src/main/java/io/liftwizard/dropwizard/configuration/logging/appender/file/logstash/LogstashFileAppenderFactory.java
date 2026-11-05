@@ -256,9 +256,9 @@ public class LogstashFileAppenderFactory
 		var appender = new RollingFileAppender<ILoggingEvent>();
 		this.configureAppender(appender, context);
 
-		return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d")
-			? this.configurePolicyWithDefaults(appender, context)
-			: this.dateAndSizeSpecifiedPolicy(appender, context);
+		return this.maxFileSize == null || Objects.requireNonNull(this.archivedLogFilenamePattern).contains("%d") ?
+			this.configurePolicyWithDefaults(appender, context) :
+			this.dateAndSizeSpecifiedPolicy(appender, context);
 	}
 
 	private RollingFileAppender<ILoggingEvent> configurePolicyWithDefaults(
@@ -267,9 +267,9 @@ public class LogstashFileAppenderFactory
 	)
 	{
 		TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy =
-			this.maxFileSize == null
-				? this.getTimeBasedRollingPolicy(appender, context)
-				: this.getSizeAndTimeBasedRollingPolicy();
+			this.maxFileSize == null ?
+				this.getTimeBasedRollingPolicy(appender, context) :
+				this.getSizeAndTimeBasedRollingPolicy();
 
 		rollingPolicy.setContext(context);
 		rollingPolicy.setFileNamePattern(this.archivedLogFilenamePattern);

@@ -25,8 +25,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
 	name = "`stream().anyMatch(value::equals)` to `contains(value)`",
-	description = "Transforms `iterable.stream().anyMatch(value::equals)` to `iterable.contains(value)`. "
-		+ "The contains() method is simpler and more readable, and avoids the unnecessary stream intermediary."
+	description = "Transforms `iterable.stream().anyMatch(value::equals)` to `iterable.contains(value)`. " +
+		"The contains() method is simpler and more readable, and avoids the unnecessary stream intermediary."
 )
 public class ECStreamAnyMatchToContains
 {

@@ -60,16 +60,16 @@ import org.openrewrite.java.template.RecipeDescriptor;
  */
 @RecipeDescriptor(
 	name = "`select(pred).getFirstOptional()` to `detectOptional(pred)`",
-	description = "Transforms `collection.select(pred).getFirstOptional()` to `collection.detectOptional(pred)` "
-		+ "and `collection.select(pred).getFirst()` to `collection.detect(pred)`. "
-		+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
+	description = "Transforms `collection.select(pred).getFirstOptional()` to `collection.detectOptional(pred)` " +
+		"and `collection.select(pred).getFirst()` to `collection.detect(pred)`. " +
+		"Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
 )
 public class ECSelectFirstToDetect
 {
 	@RecipeDescriptor(
 		name = "`select(pred).getFirstOptional()` to `detectOptional(pred)`",
-		description = "Transforms `collection.select(pred).getFirstOptional()` to `collection.detectOptional(pred)`. "
-			+ "Only applies to OrderedIterable types (lists, sorted sets)."
+		description = "Transforms `collection.select(pred).getFirstOptional()` to `collection.detectOptional(pred)`. " +
+			"Only applies to OrderedIterable types (lists, sorted sets)."
 	)
 	public static final class SelectGetFirstOptionalToDetectOptional<T>
 	{

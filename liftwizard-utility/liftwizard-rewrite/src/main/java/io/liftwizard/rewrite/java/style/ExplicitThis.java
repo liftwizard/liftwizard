@@ -187,10 +187,10 @@ public class ExplicitThis
 
 			Method methodType = m.getMethodType();
 			if (
-				m.getSelect() != null
-				|| methodType == null
+				m.getSelect() != null ||
+				methodType == null ||
 				// Check if method is static using flag bits (0x0008 is the static flag)
-				|| (methodType.getFlagsBitMap() & 0x0008L) != 0
+				(methodType.getFlagsBitMap() & 0x0008L) != 0
 			)
 			{
 				return m;

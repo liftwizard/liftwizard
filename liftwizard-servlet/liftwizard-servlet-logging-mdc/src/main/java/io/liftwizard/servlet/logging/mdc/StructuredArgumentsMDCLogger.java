@@ -90,12 +90,12 @@ public class StructuredArgumentsMDCLogger
 			return;
 		}
 
-		String keyString = stack.isEmpty()
-			? key
-			: stack
-					.toList()
-					.toReversed()
-					.makeString("", ".", "." + key);
+		String keyString = stack.isEmpty() ?
+			key :
+			stack
+				.toList()
+				.toReversed()
+				.makeString("", ".", "." + key);
 
 		if (value.isArray())
 		{

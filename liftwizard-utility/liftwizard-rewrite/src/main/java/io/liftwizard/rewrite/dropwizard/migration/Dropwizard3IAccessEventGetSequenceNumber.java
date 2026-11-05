@@ -49,11 +49,11 @@ public class Dropwizard3IAccessEventGetSequenceNumber
 	public String getDescription()
 	{
 		return (
-			"Logback 1.5.x added `long getSequenceNumber()` to `ch.qos.logback.access.spi.IAccessEvent`. "
-			+ "Classes implementing IAccessEvent without overriding it will fail to compile. "
-			+ "This recipe inserts an UnsupportedOperationException stub for any concrete IAccessEvent "
-			+ "implementation that is missing the method, matching the convention used by stub/fake "
-			+ "test implementations."
+			"Logback 1.5.x added `long getSequenceNumber()` to `ch.qos.logback.access.spi.IAccessEvent`. " +
+			"Classes implementing IAccessEvent without overriding it will fail to compile. " +
+			"This recipe inserts an UnsupportedOperationException stub for any concrete IAccessEvent " +
+			"implementation that is missing the method, matching the convention used by stub/fake " +
+			"test implementations."
 		);
 	}
 

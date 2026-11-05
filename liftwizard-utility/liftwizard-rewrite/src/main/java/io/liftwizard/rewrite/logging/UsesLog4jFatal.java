@@ -67,11 +67,11 @@ public final class UsesLog4jFatal
 	public String getDescription()
 	{
 		return (
-			"Finds Log4j 1.x logging that uses the `fatal` level, including `fatal(..)` method "
-			+ "invocations (e.g., `LOGGER.fatal(message)`), `fatal` method references "
-			+ "(e.g., `LOGGER::fatal`), and the `Level.FATAL`/`Priority.FATAL` constant "
-			+ "(e.g., `LOGGER.log(Level.FATAL, message)`). SLF4J has no `fatal` level, so these "
-			+ "cannot be migrated automatically without losing the FATAL severity."
+			"Finds Log4j 1.x logging that uses the `fatal` level, including `fatal(..)` method " +
+			"invocations (e.g., `LOGGER.fatal(message)`), `fatal` method references " +
+			"(e.g., `LOGGER::fatal`), and the `Level.FATAL`/`Priority.FATAL` constant " +
+			"(e.g., `LOGGER.log(Level.FATAL, message)`). SLF4J has no `fatal` level, so these " +
+			"cannot be migrated automatically without losing the FATAL severity."
 		);
 	}
 

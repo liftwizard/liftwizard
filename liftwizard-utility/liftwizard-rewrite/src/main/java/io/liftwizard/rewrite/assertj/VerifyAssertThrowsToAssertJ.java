@@ -72,9 +72,9 @@ public class VerifyAssertThrowsToAssertJ
 
 			Expression callable = methodInvocation.getArguments().get(1);
 
-			String templateSourceCode = this.isLambdaOrMethodReference(callable)
-				? "assertThatThrownBy(#{any()}).isInstanceOf(#{any(java.lang.Class)})"
-				: "assertThatThrownBy(#{any(java.util.concurrent.Callable)}::call).isInstanceOf(#{any(java.lang.Class)})";
+			String templateSourceCode = this.isLambdaOrMethodReference(callable) ?
+				"assertThatThrownBy(#{any()}).isInstanceOf(#{any(java.lang.Class)})" :
+				"assertThatThrownBy(#{any(java.util.concurrent.Callable)}::call).isInstanceOf(#{any(java.lang.Class)})";
 			JavaTemplate template = JavaTemplate.builder(templateSourceCode)
 				.staticImports("org.assertj.core.api.Assertions.assertThatThrownBy")
 				.javaParser(JavaParser.fromJavaVersion().dependsOn(STUBS.toArray(String[]::new)))

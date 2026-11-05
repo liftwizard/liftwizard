@@ -64,9 +64,9 @@ public class ECMapGetOrDefaultToGetIfAbsentValue
 	public String getDescription()
 	{
 		return (
-			"Transforms `map.getOrDefault(key, value)` to `map.getIfAbsentValue(key, value)` "
-			+ "for Eclipse Collections map types. This replaces the JDK Map method with the "
-			+ "idiomatic Eclipse Collections equivalent on MapIterable."
+			"Transforms `map.getOrDefault(key, value)` to `map.getIfAbsentValue(key, value)` " +
+			"for Eclipse Collections map types. This replaces the JDK Map method with the " +
+			"idiomatic Eclipse Collections equivalent on MapIterable."
 		);
 	}
 

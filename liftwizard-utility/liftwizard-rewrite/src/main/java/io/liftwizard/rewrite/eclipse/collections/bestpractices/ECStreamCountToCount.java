@@ -67,8 +67,8 @@ public class ECStreamCountToCount
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().filter(pred).count()` to `collection.count(pred)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has the count method directly."
+			"Transforms `collection.stream().filter(pred).count()` to `collection.count(pred)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has the count method directly."
 		);
 	}
 

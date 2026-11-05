@@ -87,14 +87,14 @@ final class GarbageFreeLambdaVisitor
 
 		String selectPlaceholder = "#{any(org.eclipse.collections.api.RichIterable<" + result.typeFqn() + ">)}";
 		String templateSource =
-			selectPlaceholder
-			+ "."
-			+ this.targetMethodName
-			+ "("
-			+ result.simpleName()
-			+ "::"
-			+ result.methodName()
-			+ ", #{any()})";
+			selectPlaceholder +
+			"." +
+			this.targetMethodName +
+			"(" +
+			result.simpleName() +
+			"::" +
+			result.methodName() +
+			", #{any()})";
 
 		JavaTemplate template = JavaTemplate.builder(templateSource)
 			.imports(result.typeFqn())

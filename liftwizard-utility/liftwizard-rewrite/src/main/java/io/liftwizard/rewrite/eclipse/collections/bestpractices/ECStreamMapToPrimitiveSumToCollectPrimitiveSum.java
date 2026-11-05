@@ -83,11 +83,11 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().mapToDouble(fn).sum()` "
-			+ "to `collection.collectDouble(fn).sum()`. "
-			+ "Also handles mapToInt and mapToLong variants. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the collectDouble/collectInt/collectLong methods directly on RichIterable."
+			"Transforms `collection.stream().mapToDouble(fn).sum()` " +
+			"to `collection.collectDouble(fn).sum()`. " +
+			"Also handles mapToInt and mapToLong variants. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the collectDouble/collectInt/collectLong methods directly on RichIterable."
 		);
 	}
 
@@ -185,9 +185,9 @@ public class ECStreamMapToPrimitiveSumToCollectPrimitiveSum
 		private boolean isPrimitiveSumMethod(J.MethodInvocation method)
 		{
 			return (
-				DOUBLE_STREAM_SUM_MATCHER.matches(method)
-				|| INT_STREAM_SUM_MATCHER.matches(method)
-				|| LONG_STREAM_SUM_MATCHER.matches(method)
+				DOUBLE_STREAM_SUM_MATCHER.matches(method) ||
+				INT_STREAM_SUM_MATCHER.matches(method) ||
+				LONG_STREAM_SUM_MATCHER.matches(method)
 			);
 		}
 
