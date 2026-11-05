@@ -65,10 +65,10 @@ public class ECStreamGatherWindowFixedToChunk
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().gather(Gatherers.windowFixed(n)).collect(Collectors.toList())` "
-			+ "to `collection.chunk(n)`. This eliminates the unnecessary Stream intermediary since "
-			+ "Eclipse Collections has the chunk method directly on RichIterable. "
-			+ "Targets Java 24+ code using the Gatherers API (JEP 485)."
+			"Transforms `collection.stream().gather(Gatherers.windowFixed(n)).collect(Collectors.toList())` " +
+			"to `collection.chunk(n)`. This eliminates the unnecessary Stream intermediary since " +
+			"Eclipse Collections has the chunk method directly on RichIterable. " +
+			"Targets Java 24+ code using the Gatherers API (JEP 485)."
 		);
 	}
 

@@ -145,9 +145,9 @@ public class JsonTestDataParser
 		}
 		LocalDateTime utcDateTime = LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC);
 		if (
-			timestampAttribute.isAsOfAttributeTo()
-			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
-				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
+			timestampAttribute.isAsOfAttributeTo() &&
+			(timestamp.equals(timestampAttribute.getAsOfAttributeInfinity()) ||
+				utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
 		)
 		{
 			return toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity());

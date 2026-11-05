@@ -70,10 +70,10 @@ public class ECStreamSortedCollectToSortedListBy
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList())` "
-			+ "to `collection.toSortedListBy(fn)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the toSortedListBy method directly on RichIterable."
+			"Transforms `collection.stream().sorted(Comparator.comparing(fn)).collect(Collectors.toList())` " +
+			"to `collection.toSortedListBy(fn)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the toSortedListBy method directly on RichIterable."
 		);
 	}
 

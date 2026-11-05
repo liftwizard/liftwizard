@@ -50,9 +50,9 @@ public class EnforceConsistentMethodParameterLineWrapping
 	public String getDescription()
 	{
 		return (
-			"When a method declaration has multiple parameters and any parameter is line-wrapped, "
-			+ "enforce that all parameters use line wrapping for consistency. "
-			+ "Valid fixed-multiple groupings like key-value pairs are left unchanged."
+			"When a method declaration has multiple parameters and any parameter is line-wrapped, " +
+			"enforce that all parameters use line wrapping for consistency. " +
+			"Valid fixed-multiple groupings like key-value pairs are left unchanged."
 		);
 	}
 

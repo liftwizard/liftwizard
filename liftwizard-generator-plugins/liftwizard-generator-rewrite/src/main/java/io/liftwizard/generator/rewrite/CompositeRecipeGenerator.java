@@ -53,11 +53,11 @@ public class CompositeRecipeGenerator
 		if (spec.getExclusions().isEmpty())
 		{
 			throw new IllegalArgumentException(
-				"FilteredRecipeSpec '"
-					+ spec.getGeneratedRecipeName()
-					+ "' has no exclusions; a filtered recipe must exclude at least one recipe. Reference the base recipe '"
-					+ spec.getBaseRecipeName()
-					+ "' directly instead."
+				"FilteredRecipeSpec '" +
+					spec.getGeneratedRecipeName() +
+					"' has no exclusions; a filtered recipe must exclude at least one recipe. Reference the base recipe '" +
+					spec.getBaseRecipeName() +
+					"' directly instead."
 			);
 		}
 
@@ -188,9 +188,9 @@ public class CompositeRecipeGenerator
 		if (entry instanceof ExcludedRecipe excluded)
 		{
 			String comment =
-				excluded.reason() != null && !excluded.reason().isBlank()
-					? this.indent + "# " + excluded.reason() + "\n"
-					: "";
+				excluded.reason() != null && !excluded.reason().isBlank() ?
+					this.indent + "# " + excluded.reason() + "\n" :
+					"";
 			return comment + this.indent + "# - " + excluded.recipeName() + "\n";
 		}
 		else if (entry instanceof String name)
@@ -207,11 +207,11 @@ public class CompositeRecipeGenerator
 	private String renderMapEntry(ParameterizedEntry parameterized)
 	{
 		return (
-			this.indent
-			+ "- "
-			+ parameterized.name()
-			+ ":\n"
-			+ parameterized
+			this.indent +
+			"- " +
+			parameterized.name() +
+			":\n" +
+			parameterized
 				.options()
 				.entrySet()
 				.stream()

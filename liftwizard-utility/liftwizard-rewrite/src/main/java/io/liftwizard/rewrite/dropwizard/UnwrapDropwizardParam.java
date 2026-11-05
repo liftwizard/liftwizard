@@ -72,8 +72,8 @@ public class UnwrapDropwizardParam
 	public String getDescription()
 	{
 		return MessageFormat.format(
-			"Replaces `{0}` with `{1}` and removes `.get()` calls, "
-				+ "since the Dropwizard *Param wrapper is no longer needed.",
+			"Replaces `{0}` with `{1}` and removes `.get()` calls, " +
+				"since the Dropwizard *Param wrapper is no longer needed.",
 			this.oldParamType,
 			this.newType
 		);

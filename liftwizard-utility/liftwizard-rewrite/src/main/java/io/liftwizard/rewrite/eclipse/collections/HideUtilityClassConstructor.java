@@ -66,9 +66,9 @@ public class HideUtilityClassConstructor
 	public String getDescription()
 	{
 		return (
-			"Ensures utility classes (classes containing only static methods or fields in their API) "
-			+ "do not have a public constructor. Adds a private constructor that throws AssertionError "
-			+ "to enforce noninstantiability."
+			"Ensures utility classes (classes containing only static methods or fields in their API) " +
+			"do not have a public constructor. Adds a private constructor that throws AssertionError " +
+			"to enforce noninstantiability."
 		);
 	}
 
@@ -119,9 +119,9 @@ public class HideUtilityClassConstructor
 		{
 			J.ClassDeclaration c = super.visitClassDeclaration(classDecl, ctx);
 			if (
-				!EXCLUDE_CLASS_TYPES.contains(c.getKind())
-				&& !c.hasModifier(J.Modifier.Type.Abstract)
-				&& utilityClassMatcher.isRefactorableUtilityClass(getCursor())
+				!EXCLUDE_CLASS_TYPES.contains(c.getKind()) &&
+				!c.hasModifier(J.Modifier.Type.Abstract) &&
+				utilityClassMatcher.isRefactorableUtilityClass(getCursor())
 			)
 			{
 				c = (J.ClassDeclaration) new AddPrivateConstructorVisitor().visit(
@@ -154,14 +154,14 @@ public class HideUtilityClassConstructor
 			public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx)
 			{
 				if (
-					utilityClassMatcher.hasImplicitDefaultConstructor(classDecl)
-					&& J.ClassDeclaration.Kind.Type.Enum != classDecl.getKind()
+					utilityClassMatcher.hasImplicitDefaultConstructor(classDecl) &&
+					J.ClassDeclaration.Kind.Type.Enum != classDecl.getKind()
 				)
 				{
 					return JavaTemplate.builder(
-						"private #{}() {\n"
-							+ "    throw new AssertionError(\"Suppress default constructor for noninstantiability\");\n"
-							+ "}"
+						"private #{}() {\n" +
+							"    throw new AssertionError(\"Suppress default constructor for noninstantiability\");\n" +
+							"}"
 					)
 						.contextSensitive()
 						.build()
@@ -199,11 +199,11 @@ public class HideUtilityClassConstructor
 			{
 				J.MethodDeclaration md = super.visitMethodDeclaration(method, ctx);
 				if (
-					md.getMethodType() == null
-					|| !md.isConstructor()
-					|| md.hasModifier(J.Modifier.Type.Private)
-					|| md.hasModifier(J.Modifier.Type.Protected)
-					|| md.getMethodType().getDeclaringType().getKind() == JavaType.Class.Kind.Enum
+					md.getMethodType() == null ||
+					!md.isConstructor() ||
+					md.hasModifier(J.Modifier.Type.Private) ||
+					md.hasModifier(J.Modifier.Type.Protected) ||
+					md.getMethodType().getDeclaringType().getKind() == JavaType.Class.Kind.Enum
 				)
 				{
 					return md;
@@ -314,12 +314,12 @@ public class HideUtilityClassConstructor
 					if (statement instanceof J.MethodDeclaration md)
 					{
 						if (
-							!md.isConstructor()
-							&& md.hasModifier(J.Modifier.Type.Public)
-							&& md.hasModifier(J.Modifier.Type.Static)
-							&& md.getReturnTypeExpression() != null
-							&& JavaType.Primitive.Void == md.getReturnTypeExpression().getType()
-							&& new MethodMatcher(c.getType().getFullyQualifiedName() + " main(String[])").matches(md, c)
+							!md.isConstructor() &&
+							md.hasModifier(J.Modifier.Type.Public) &&
+							md.hasModifier(J.Modifier.Type.Static) &&
+							md.getReturnTypeExpression() != null &&
+							JavaType.Primitive.Void == md.getReturnTypeExpression().getType() &&
+							new MethodMatcher(c.getType().getFullyQualifiedName() + " main(String[])").matches(md, c)
 						)
 						{
 							return true;

@@ -65,8 +65,8 @@ public class LoopbackServerCommand<C extends Configuration>
 	private static void bindToLoopback(ConnectorFactory connectorFactory)
 	{
 		if (
-			connectorFactory instanceof HttpConnectorFactory httpConnectorFactory
-			&& httpConnectorFactory.getBindHost() == null
+			connectorFactory instanceof HttpConnectorFactory httpConnectorFactory &&
+			httpConnectorFactory.getBindHost() == null
 		)
 		{
 			httpConnectorFactory.setBindHost("127.0.0.1");

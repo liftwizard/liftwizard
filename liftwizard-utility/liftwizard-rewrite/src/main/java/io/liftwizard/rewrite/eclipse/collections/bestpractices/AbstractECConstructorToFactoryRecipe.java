@@ -148,29 +148,29 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			boolean isEmptyConstructor =
 				arguments.isEmpty() || (arguments.size() == 1 && arguments.getFirst() instanceof J.Empty);
 			boolean isInitialCapacityConstructor =
-				arguments.size() == 1
-				&& !(arguments.getFirst() instanceof J.Empty)
-				&& isNumericType(arguments.getFirst().getType());
+				arguments.size() == 1 &&
+				!(arguments.getFirst() instanceof J.Empty) &&
+				isNumericType(arguments.getFirst().getType());
 			boolean isComparatorConstructor =
-				arguments.size() == 1
-				&& !(arguments.getFirst() instanceof J.Empty)
-				&& isComparatorType(arguments.getFirst().getType());
+				arguments.size() == 1 &&
+				!(arguments.getFirst() instanceof J.Empty) &&
+				isComparatorType(arguments.getFirst().getType());
 			boolean isComparatorWithIterableConstructor =
-				arguments.size() == 2
-				&& isComparatorType(arguments.getFirst().getType())
-				&& isIterableType(arguments.get(1).getType());
+				arguments.size() == 2 &&
+				isComparatorType(arguments.getFirst().getType()) &&
+				isIterableType(arguments.get(1).getType());
 			boolean isCollectionConstructor =
-				arguments.size() == 1
-				&& !(arguments.getFirst() instanceof J.Empty)
-				&& !isNumericType(arguments.getFirst().getType())
-				&& !isComparatorType(arguments.getFirst().getType());
+				arguments.size() == 1 &&
+				!(arguments.getFirst() instanceof J.Empty) &&
+				!isNumericType(arguments.getFirst().getType()) &&
+				!isComparatorType(arguments.getFirst().getType());
 
 			if (
-				!isEmptyConstructor
-				&& !isInitialCapacityConstructor
-				&& !isComparatorConstructor
-				&& !isComparatorWithIterableConstructor
-				&& !isCollectionConstructor
+				!isEmptyConstructor &&
+				!isInitialCapacityConstructor &&
+				!isComparatorConstructor &&
+				!isComparatorWithIterableConstructor &&
+				!isCollectionConstructor
 			)
 			{
 				return nc;
@@ -187,9 +187,9 @@ public abstract class AbstractECConstructorToFactoryRecipe
 				return nc;
 			}
 
-			String prefixedFactoryPackageSuffix = this.factoryPackageSuffix.isEmpty()
-				? ""
-				: "." + this.factoryPackageSuffix;
+			String prefixedFactoryPackageSuffix = this.factoryPackageSuffix.isEmpty() ?
+				"" :
+				"." + this.factoryPackageSuffix;
 			String factoryPackage = "org.eclipse.collections.api.factory" + prefixedFactoryPackageSuffix;
 			String factoryClass = factoryPackage + "." + this.factoryClassName;
 
@@ -205,8 +205,8 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.factoryClassName + "." + this.factoryMethod + "." + typeParamsTemplate;
 			String templateSource =
-				prefix
-				+ this.getTemplateSource(
+				prefix +
+				this.getTemplateSource(
 					isInitialCapacityConstructor,
 					isComparatorConstructor,
 					isComparatorWithIterableConstructor,
@@ -296,9 +296,9 @@ public abstract class AbstractECConstructorToFactoryRecipe
 
 		private String getParamType()
 		{
-			return this.factoryClassName.equals("SortedMaps") || this.factoryClassName.contains("Map")
-				? "java.util.Map"
-				: "java.lang.Iterable";
+			return this.factoryClassName.equals("SortedMaps") || this.factoryClassName.contains("Map") ?
+				"java.util.Map" :
+				"java.lang.Iterable";
 		}
 
 		private static boolean isNumericType(JavaType type)
@@ -333,11 +333,11 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			}
 			String typeName = fqType.getFullyQualifiedName();
 			return (
-				"java.lang.Iterable".equals(typeName)
-				|| "java.util.Collection".equals(typeName)
-				|| "java.util.List".equals(typeName)
-				|| "java.util.Set".equals(typeName)
-				|| typeName.startsWith("org.eclipse.collections.")
+				"java.lang.Iterable".equals(typeName) ||
+				"java.util.Collection".equals(typeName) ||
+				"java.util.List".equals(typeName) ||
+				"java.util.Set".equals(typeName) ||
+				typeName.startsWith("org.eclipse.collections.")
 			);
 		}
 
@@ -378,8 +378,8 @@ public abstract class AbstractECConstructorToFactoryRecipe
 		private Set<String> extractTypeParameterImports(J.NewClass nc)
 		{
 			if (
-				nc.getClazz() instanceof J.ParameterizedType paramType
-				&& Iterate.notEmpty(paramType.getTypeParameters())
+				nc.getClazz() instanceof J.ParameterizedType paramType &&
+				Iterate.notEmpty(paramType.getTypeParameters())
 			)
 			{
 				return TemplateTypeImports.of(
@@ -510,8 +510,8 @@ public abstract class AbstractECConstructorToFactoryRecipe
 			if (this.getCursor().getParentTreeCursor().getValue() instanceof J.VariableDeclarations.NamedVariable)
 			{
 				if (
-					this.getCursor().getParentTreeCursor().getParentTreeCursor().getValue()
-						instanceof J.VariableDeclarations variableDecls
+					this.getCursor().getParentTreeCursor().getParentTreeCursor().getValue() instanceof
+						J.VariableDeclarations variableDecls
 				)
 				{
 					JavaType.FullyQualified variableType = TypeUtils.asFullyQualified(variableDecls.getType());

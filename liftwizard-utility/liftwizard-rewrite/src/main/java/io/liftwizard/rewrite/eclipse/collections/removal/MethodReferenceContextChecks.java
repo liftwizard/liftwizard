@@ -332,8 +332,8 @@ final class MethodReferenceContextChecks
 		{
 			Object parent = parentCursor.getValue();
 			if (
-				parent instanceof J.VariableDeclarations.NamedVariable namedVariable
-				&& namedVariable.getInitializer() == value
+				parent instanceof J.VariableDeclarations.NamedVariable namedVariable &&
+				namedVariable.getInitializer() == value
 			)
 			{
 				return namedVariable.getType();
@@ -355,9 +355,9 @@ final class MethodReferenceContextChecks
 				return parameterTypeAt(call.getMethodType(), call.getArguments(), value);
 			}
 			if (
-				parent instanceof J.NewClass newClass
-				&& newClass.getArguments() != null
-				&& newClass.getArguments().contains(value)
+				parent instanceof J.NewClass newClass &&
+				newClass.getArguments() != null &&
+				newClass.getArguments().contains(value)
 			)
 			{
 				return parameterTypeAt(newClass.getConstructorType(), newClass.getArguments(), value);

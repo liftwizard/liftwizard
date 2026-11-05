@@ -69,11 +69,11 @@ public class ECStreamChainToListIterable
 	public String getDescription()
 	{
 		return (
-			"Transforms `stream()` chains on Eclipse Collections lists to direct Eclipse Collections call chains, "
-			+ "renaming intermediate operations to their Eclipse Collections equivalents "
-			+ "(`skip` to `drop`, `limit` to `take`, `filter` to `select`, `map` to `collect`, "
-			+ "`anyMatch` to `anySatisfy`, ...). This eliminates the unnecessary Stream intermediary "
-			+ "since Eclipse Collections has these methods directly."
+			"Transforms `stream()` chains on Eclipse Collections lists to direct Eclipse Collections call chains, " +
+			"renaming intermediate operations to their Eclipse Collections equivalents " +
+			"(`skip` to `drop`, `limit` to `take`, `filter` to `select`, `map` to `collect`, " +
+			"`anyMatch` to `anySatisfy`, ...). This eliminates the unnecessary Stream intermediary " +
+			"since Eclipse Collections has these methods directly."
 		);
 	}
 
@@ -109,8 +109,8 @@ public class ECStreamChainToListIterable
 		{
 			Expression receiver = root.getSelect();
 			return (
-				receiver != null
-				&& TypeUtils.isAssignableTo("org.eclipse.collections.api.list.ListIterable", receiver.getType())
+				receiver != null &&
+				TypeUtils.isAssignableTo("org.eclipse.collections.api.list.ListIterable", receiver.getType())
 			);
 		}
 

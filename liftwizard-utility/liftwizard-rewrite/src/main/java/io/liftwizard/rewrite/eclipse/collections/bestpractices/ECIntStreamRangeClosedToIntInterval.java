@@ -79,9 +79,9 @@ public class ECIntStreamRangeClosedToIntInterval
 	public String getDescription()
 	{
 		return (
-			"Transforms `IntStream.rangeClosed(from, to)` to `IntInterval.fromTo(from, to)`. "
-			+ "Eclipse Collections' `IntInterval` is a memory-efficient, first-class collection "
-			+ "that supports `select`, `collect`, `sum`, and other operations without boxing."
+			"Transforms `IntStream.rangeClosed(from, to)` to `IntInterval.fromTo(from, to)`. " +
+			"Eclipse Collections' `IntInterval` is a memory-efficient, first-class collection " +
+			"that supports `select`, `collect`, `sum`, and other operations without boxing."
 		);
 	}
 

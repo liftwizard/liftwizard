@@ -348,9 +348,9 @@ public class GraphQLQueryToOperationConverter
 		return switch (operationName)
 		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Boolean) operationParameter);
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq((Boolean) operationParameter);
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq((Boolean) operationParameter);
 			case "in" -> attribute.in(BooleanSets.immutable.withAll((Iterable<Boolean>) operationParameter));
 			case "notIn" -> attribute.notIn(BooleanSets.immutable.withAll((Iterable<Boolean>) operationParameter));
 			default ->
@@ -385,9 +385,9 @@ public class GraphQLQueryToOperationConverter
 		return switch (operationName)
 		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Integer) operationParameter);
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq((Integer) operationParameter);
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq((Integer) operationParameter);
 			case "in" -> attribute.in(IntSets.immutable.withAll((Iterable<Integer>) operationParameter));
 			case "notIn" -> attribute.notIn(IntSets.immutable.withAll((Iterable<Integer>) operationParameter));
 			case "greaterThan" -> attribute.greaterThan((Integer) operationParameter);
@@ -431,9 +431,9 @@ public class GraphQLQueryToOperationConverter
 		return switch (operationName)
 		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Long) operationParameter);
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq((Long) operationParameter);
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq((Long) operationParameter);
 			case "in" -> attribute.in(LongSets.immutable.withAll((Iterable<Long>) operationParameter));
 			case "notIn" -> attribute.notIn(LongSets.immutable.withAll((Iterable<Long>) operationParameter));
 			case "greaterThan" -> attribute.greaterThan((Long) operationParameter);
@@ -477,9 +477,9 @@ public class GraphQLQueryToOperationConverter
 		return switch (operationName)
 		{
 			case "eq" -> operationParameter == null ? attribute.isNull() : attribute.eq((Double) operationParameter);
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq((Double) operationParameter);
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq((Double) operationParameter);
 			case "in" -> attribute.in(DoubleSets.immutable.withAll((Iterable<Double>) operationParameter));
 			case "notIn" -> attribute.notIn(DoubleSets.immutable.withAll((Iterable<Double>) operationParameter));
 			case "greaterThan" -> attribute.greaterThan((Double) operationParameter);
@@ -522,12 +522,12 @@ public class GraphQLQueryToOperationConverter
 	{
 		return switch (operationName)
 		{
-			case "eq" -> operationParameter == null
-				? attribute.isNull()
-				: attribute.eq(((Double) operationParameter).floatValue());
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq(((Double) operationParameter).floatValue());
+			case "eq" -> operationParameter == null ?
+				attribute.isNull() :
+				attribute.eq(((Double) operationParameter).floatValue());
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq(((Double) operationParameter).floatValue());
 			case "in" -> attribute.in(
 				FloatSets.immutable.withAll(
 					Iterate.collectFloat((Iterable<Double>) operationParameter, Double::floatValue)
@@ -578,12 +578,12 @@ public class GraphQLQueryToOperationConverter
 	{
 		return switch (operationName)
 		{
-			case "eq" -> operationParameter == null
-				? attribute.isNull()
-				: attribute.eq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+			case "eq" -> operationParameter == null ?
+				attribute.isNull() :
+				attribute.eq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
 			case "in" -> attribute.in(
 				GraphQLQueryToOperationConverter.getDates((Collection<String>) operationParameter)
 			);
@@ -648,12 +648,12 @@ public class GraphQLQueryToOperationConverter
 	{
 		return switch (operationName)
 		{
-			case "eq" -> operationParameter == null
-				? attribute.isNull()
-				: attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
-			case "notEq" -> operationParameter == null
-				? attribute.isNotNull()
-				: attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+			case "eq" -> operationParameter == null ?
+				attribute.isNull() :
+				attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+			case "notEq" -> operationParameter == null ?
+				attribute.isNotNull() :
+				attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
 			case "in" -> attribute.in(
 				GraphQLQueryToOperationConverter.getTimestamps((Collection<String>) operationParameter)
 			);

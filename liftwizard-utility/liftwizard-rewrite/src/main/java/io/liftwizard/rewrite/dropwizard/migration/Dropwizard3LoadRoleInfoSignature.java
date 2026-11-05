@@ -72,11 +72,11 @@ public class Dropwizard3LoadRoleInfoSignature
 	public String getDescription()
 	{
 		return (
-			"In Jetty 10, AbstractLoginService.loadRoleInfo's return type changed from "
-			+ "String[] to List<RolePrincipal>. This recipe rewrites overrides accordingly: "
-			+ "the method's return type is updated, returns of `new String[] { \"x\", ... }` "
-			+ "become `List.of(new RolePrincipal(\"x\"), ...)`, and returns of `new String[0]` "
-			+ "become `List.of()`."
+			"In Jetty 10, AbstractLoginService.loadRoleInfo's return type changed from " +
+			"String[] to List<RolePrincipal>. This recipe rewrites overrides accordingly: " +
+			"the method's return type is updated, returns of `new String[] { \"x\", ... }` " +
+			"become `List.of(new RolePrincipal(\"x\"), ...)`, and returns of `new String[0]` " +
+			"become `List.of()`."
 		);
 	}
 

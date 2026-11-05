@@ -50,9 +50,9 @@ public class EnforceConsistentAnnotationArgumentLineWrapping
 	public String getDescription()
 	{
 		return (
-			"When an annotation has multiple arguments and any argument is line-wrapped, "
-			+ "enforce that all arguments use line wrapping for consistency. "
-			+ "Valid fixed-multiple groupings like key-value pairs are left unchanged."
+			"When an annotation has multiple arguments and any argument is line-wrapped, " +
+			"enforce that all arguments use line wrapping for consistency. " +
+			"Valid fixed-multiple groupings like key-value pairs are left unchanged."
 		);
 	}
 

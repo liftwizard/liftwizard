@@ -81,10 +81,10 @@ public class ECStreamFilterCollectToSelect
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().filter(pred).collect(Collectors.toList())` to `collection.select(pred)` "
-			+ "and `collection.stream().filter(pred).collect(Collectors.toSet())` to `collection.select(pred).toSet()`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the select method directly on RichIterable."
+			"Transforms `collection.stream().filter(pred).collect(Collectors.toList())` to `collection.select(pred)` " +
+			"and `collection.stream().filter(pred).collect(Collectors.toSet())` to `collection.select(pred).toSet()`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the select method directly on RichIterable."
 		);
 	}
 

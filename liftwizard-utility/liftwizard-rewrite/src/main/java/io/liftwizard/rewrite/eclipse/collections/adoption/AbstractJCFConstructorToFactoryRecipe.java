@@ -111,24 +111,24 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			boolean isEmptyConstructor =
 				arguments.isEmpty() || (arguments.size() == 1 && arguments.getFirst() instanceof J.Empty);
 			boolean isInitialCapacityConstructor =
-				arguments.size() == 1
-				&& !(arguments.getFirst() instanceof J.Empty)
-				&& isNumericType(arguments.getFirst().getType());
+				arguments.size() == 1 &&
+				!(arguments.getFirst() instanceof J.Empty) &&
+				isNumericType(arguments.getFirst().getType());
 			boolean isComparatorConstructor =
-				arguments.size() == 1
-				&& !(arguments.getFirst() instanceof J.Empty)
-				&& isComparatorType(arguments.getFirst().getType());
+				arguments.size() == 1 &&
+				!(arguments.getFirst() instanceof J.Empty) &&
+				isComparatorType(arguments.getFirst().getType());
 			boolean isCollectionConstructor =
-				arguments.size() == 1
-				&& !(arguments.getFirst() instanceof J.Empty)
-				&& !isNumericType(arguments.getFirst().getType())
-				&& !isComparatorType(arguments.getFirst().getType());
+				arguments.size() == 1 &&
+				!(arguments.getFirst() instanceof J.Empty) &&
+				!isNumericType(arguments.getFirst().getType()) &&
+				!isComparatorType(arguments.getFirst().getType());
 
 			if (
-				!isEmptyConstructor
-				&& !isInitialCapacityConstructor
-				&& !isComparatorConstructor
-				&& !isCollectionConstructor
+				!isEmptyConstructor &&
+				!isInitialCapacityConstructor &&
+				!isComparatorConstructor &&
+				!isCollectionConstructor
 			)
 			{
 				return nc;
@@ -159,12 +159,8 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 			String typeParamsTemplate = typeParams.isEmpty() ? "" : "<" + typeParams + ">";
 			String prefix = this.targetFactorySimpleName + ".mutable." + typeParamsTemplate;
 			String templateSource =
-				prefix
-				+ this.getTemplateSource(
-					isInitialCapacityConstructor,
-					isComparatorConstructor,
-					isCollectionConstructor
-				);
+				prefix +
+				this.getTemplateSource(isInitialCapacityConstructor, isComparatorConstructor, isCollectionConstructor);
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(factoryImport)
 				.imports(typeParameterImports.toArray(String[]::new))
@@ -233,9 +229,9 @@ public abstract class AbstractJCFConstructorToFactoryRecipe
 
 		private String getParamType()
 		{
-			return this.sourceTypeSimpleName.equals("TreeMap") || this.sourceTypeSimpleName.contains("Map")
-				? "java.util.Map"
-				: "java.lang.Iterable";
+			return this.sourceTypeSimpleName.equals("TreeMap") || this.sourceTypeSimpleName.contains("Map") ?
+				"java.util.Map" :
+				"java.lang.Iterable";
 		}
 
 		private static boolean isNumericType(JavaType type)

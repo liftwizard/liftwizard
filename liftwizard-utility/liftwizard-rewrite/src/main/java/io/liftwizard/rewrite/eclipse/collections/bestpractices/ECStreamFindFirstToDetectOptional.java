@@ -62,9 +62,9 @@ public class ECStreamFindFirstToDetectOptional
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().filter(pred).findFirst()` to `collection.detectOptional(pred)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the detectOptional method directly on RichIterable."
+			"Transforms `collection.stream().filter(pred).findFirst()` to `collection.detectOptional(pred)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the detectOptional method directly on RichIterable."
 		);
 	}
 
