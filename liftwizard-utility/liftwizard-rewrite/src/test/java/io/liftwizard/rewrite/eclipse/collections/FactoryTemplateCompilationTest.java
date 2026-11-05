@@ -86,13 +86,13 @@ class FactoryTemplateCompilationTest
 						}
 					}
 					sources.add(
-						"abstract class FactoryContract"
-							+ sources.size()
-							+ " implements "
-							+ contract
-							+ " {\n"
-							+ body
-							+ "}\n"
+						"abstract class FactoryContract" +
+							sources.size() +
+							" implements " +
+							contract +
+							" {\n" +
+							body +
+							"}\n"
 					);
 				}
 			}

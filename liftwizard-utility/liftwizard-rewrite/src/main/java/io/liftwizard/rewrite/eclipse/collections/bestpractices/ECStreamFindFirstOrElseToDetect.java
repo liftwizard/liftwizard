@@ -68,9 +68,9 @@ public class ECStreamFindFirstOrElseToDetect
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().filter(pred).findFirst().orElse(null)` to `collection.detect(pred)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the detect method directly on RichIterable."
+			"Transforms `collection.stream().filter(pred).findFirst().orElse(null)` to `collection.detect(pred)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the detect method directly on RichIterable."
 		);
 	}
 

@@ -71,10 +71,10 @@ public class ECStreamGatherFoldToInjectInto
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().gather(Gatherers.fold(() -> init, folder)).findFirst().orElseThrow()` "
-			+ "to `collection.injectInto(init, folder)`. This eliminates the unnecessary Stream intermediary since "
-			+ "Eclipse Collections has the injectInto method directly on RichIterable. "
-			+ "Targets Java 24+ code using the Gatherers API (JEP 485)."
+			"Transforms `collection.stream().gather(Gatherers.fold(() -> init, folder)).findFirst().orElseThrow()` " +
+			"to `collection.injectInto(init, folder)`. This eliminates the unnecessary Stream intermediary since " +
+			"Eclipse Collections has the injectInto method directly on RichIterable. " +
+			"Targets Java 24+ code using the Gatherers API (JEP 485)."
 		);
 	}
 
@@ -94,8 +94,8 @@ public class ECStreamGatherFoldToInjectInto
 
 			// Match: .orElseThrow() or .get() — the unwrap at the end of the chain
 			if (
-				!"orElseThrow".equals(methodInvocation.getSimpleName())
-				&& !"get".equals(methodInvocation.getSimpleName())
+				!"orElseThrow".equals(methodInvocation.getSimpleName()) &&
+				!"get".equals(methodInvocation.getSimpleName())
 			)
 			{
 				return methodInvocation;

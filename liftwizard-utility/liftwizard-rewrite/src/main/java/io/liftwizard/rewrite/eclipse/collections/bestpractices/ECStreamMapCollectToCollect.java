@@ -81,10 +81,10 @@ public class ECStreamMapCollectToCollect
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().map(fn).collect(Collectors.toList())` to `collection.collect(fn)` "
-			+ "and `collection.stream().map(fn).collect(Collectors.toSet())` to `collection.collect(fn).toSet()`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the collect method directly on RichIterable."
+			"Transforms `collection.stream().map(fn).collect(Collectors.toList())` to `collection.collect(fn)` " +
+			"and `collection.stream().map(fn).collect(Collectors.toSet())` to `collection.collect(fn).toSet()`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the collect method directly on RichIterable."
 		);
 	}
 

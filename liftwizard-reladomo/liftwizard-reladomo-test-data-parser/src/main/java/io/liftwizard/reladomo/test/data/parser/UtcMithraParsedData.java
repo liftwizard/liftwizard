@@ -92,14 +92,14 @@ public class UtcMithraParsedData
 			{
 				var ch = (char) st.ttype;
 				throw new ParseException(
-					"unexpected character "
-						+ ch
-						+ " or type "
-						+ st.ttype
-						+ " on line "
-						+ st.lineno()
-						+ " attribute count "
-						+ attributeNumber,
+					"unexpected character " +
+						ch +
+						" or type " +
+						st.ttype +
+						" on line " +
+						st.lineno() +
+						" attribute count " +
+						attributeNumber,
 					st.lineno()
 				);
 			}
@@ -125,9 +125,9 @@ public class UtcMithraParsedData
 		var timestamp = new Timestamp(this.utcDateFormat.parse(value).getTime());
 		LocalDateTime utcDateTime = LocalDateTime.ofInstant(timestamp.toInstant(), ZoneOffset.UTC);
 		if (
-			timestampAttribute.isAsOfAttributeTo()
-			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
-				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
+			timestampAttribute.isAsOfAttributeTo() &&
+			(timestamp.equals(timestampAttribute.getAsOfAttributeInfinity()) ||
+				utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
 		)
 		{
 			return toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity());

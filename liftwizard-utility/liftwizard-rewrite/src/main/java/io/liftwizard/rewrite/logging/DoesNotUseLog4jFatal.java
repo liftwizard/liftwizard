@@ -41,9 +41,9 @@ public final class DoesNotUseLog4jFatal
 	public String getDescription()
 	{
 		return (
-			"Precondition that matches source files which do not use the Log4j 1.x `fatal` level "
-			+ "(e.g., `LOGGER.fatal(message)`). Files that use fatal logging are excluded, preventing "
-			+ "migration recipes from downgrading FATAL to ERROR, which has no equivalent in SLF4J."
+			"Precondition that matches source files which do not use the Log4j 1.x `fatal` level " +
+			"(e.g., `LOGGER.fatal(message)`). Files that use fatal logging are excluded, preventing " +
+			"migration recipes from downgrading FATAL to ERROR, which has no equivalent in SLF4J."
 		);
 	}
 

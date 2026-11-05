@@ -74,11 +74,11 @@ public class ECStreamCollectGroupingByIdentityCountingToToBag
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))` "
-			+ "to `collection.toBag()`. "
-			+ "When the classifying function is Function.identity(), countBy is equivalent to toBag(). "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the toBag method directly on RichIterable, returning a Bag."
+			"Transforms `collection.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))` " +
+			"to `collection.toBag()`. " +
+			"When the classifying function is Function.identity(), countBy is equivalent to toBag(). " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the toBag method directly on RichIterable, returning a Bag."
 		);
 	}
 

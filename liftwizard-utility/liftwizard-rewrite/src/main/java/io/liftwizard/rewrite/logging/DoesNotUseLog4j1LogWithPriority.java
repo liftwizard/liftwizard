@@ -43,10 +43,10 @@ public final class DoesNotUseLog4j1LogWithPriority
 	public String getDescription()
 	{
 		return (
-			"Precondition that matches source files which do not call the Log4j 1.x generic "
-			+ "`log(Priority, ..)` method. Files that use it (e.g., `LOGGER.log(Level.INFO, message)`) "
-			+ "are excluded, because SLF4J has no generic `log(level, ..)` method and migrating them "
-			+ "would produce uncompilable code."
+			"Precondition that matches source files which do not call the Log4j 1.x generic " +
+			"`log(Priority, ..)` method. Files that use it (e.g., `LOGGER.log(Level.INFO, message)`) " +
+			"are excluded, because SLF4J has no generic `log(level, ..)` method and migrating them " +
+			"would produce uncompilable code."
 		);
 	}
 

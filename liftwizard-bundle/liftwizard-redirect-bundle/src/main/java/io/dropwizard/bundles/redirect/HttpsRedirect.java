@@ -68,9 +68,9 @@ public class HttpsRedirect
 	private boolean isPrivateIp(String remoteAddr)
 	{
 		String address =
-			remoteAddr.startsWith("[") && remoteAddr.endsWith("]")
-				? remoteAddr.substring(1, remoteAddr.length() - 1)
-				: remoteAddr;
+			remoteAddr.startsWith("[") && remoteAddr.endsWith("]") ?
+				remoteAddr.substring(1, remoteAddr.length() - 1) :
+				remoteAddr;
 
 		// Only parse IP literals, so InetAddress never falls back to a DNS lookup.
 		if (!address.contains(":") && !IPV4_LITERAL.matcher(address).matches())
