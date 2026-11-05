@@ -35,17 +35,17 @@ class Dropwizard3UtilMigrationTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package io.dropwizard.util;
+						package io.dropwizard.util;
 
-					import java.util.Collections;
+						import java.util.Collections;
 
-					public final class Sets {
-					    @SafeVarargs
-					    public static <T> java.util.Set<T> of(T... elements) {
-					        return Collections.emptySet();
-					    }
-					}
-					"""
+						public final class Sets {
+						    @SafeVarargs
+						    public static <T> java.util.Set<T> of(T... elements) {
+						        return Collections.emptySet();
+						    }
+						}
+						"""
 				)
 		);
 	}

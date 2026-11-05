@@ -35,97 +35,97 @@ class DropwizardTestingJUnit5MigrationTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package io.dropwizard.testing.junit;
+						package io.dropwizard.testing.junit;
 
-					public class DropwizardAppRule<C> {
-						public DropwizardAppRule(Class<?> applicationClass, String configPath) {}
-					}
-					""",
-					"""
-					package io.dropwizard.testing.junit;
-
-					public class DropwizardClientRule {
-						public DropwizardClientRule(Object... resources) {}
-					}
-					""",
-					"""
-					package io.dropwizard.testing.junit;
-
-					public class ResourceTestRule {
-						public static Builder builder() {
-							return new Builder();
+						public class DropwizardAppRule<C> {
+							public DropwizardAppRule(Class<?> applicationClass, String configPath) {}
 						}
+						""",
+					"""
+						package io.dropwizard.testing.junit;
 
-						public static class Builder {
-							public Builder addResource(Object resource) {
-								return this;
+						public class DropwizardClientRule {
+							public DropwizardClientRule(Object... resources) {}
+						}
+						""",
+					"""
+						package io.dropwizard.testing.junit;
+
+						public class ResourceTestRule {
+							public static Builder builder() {
+								return new Builder();
 							}
 
-							public ResourceTestRule build() {
-								return new ResourceTestRule();
+							public static class Builder {
+								public Builder addResource(Object resource) {
+									return this;
+								}
+
+								public ResourceTestRule build() {
+									return new ResourceTestRule();
+								}
 							}
 						}
-					}
-					""",
+						""",
 					"""
-					package io.liftwizard.junit.extension.app;
+						package io.liftwizard.junit.extension.app;
 
-					public class LiftwizardAppExtension<C> {
-						public LiftwizardAppExtension(Class<?> applicationClass, String configPath) {}
-					}
-					""",
-					"""
-					package io.dropwizard.testing.junit5;
-
-					public class DropwizardClientExtension {
-						public DropwizardClientExtension(Object... resources) {}
-					}
-					""",
-					"""
-					package io.dropwizard.testing.junit5;
-
-					public class ResourceExtension {
-						public static Builder builder() {
-							return new Builder();
+						public class LiftwizardAppExtension<C> {
+							public LiftwizardAppExtension(Class<?> applicationClass, String configPath) {}
 						}
+						""",
+					"""
+						package io.dropwizard.testing.junit5;
 
-						public static class Builder {
-							public Builder addResource(Object resource) {
-								return this;
+						public class DropwizardClientExtension {
+							public DropwizardClientExtension(Object... resources) {}
+						}
+						""",
+					"""
+						package io.dropwizard.testing.junit5;
+
+						public class ResourceExtension {
+							public static Builder builder() {
+								return new Builder();
 							}
 
-							public ResourceExtension build() {
-								return new ResourceExtension();
+							public static class Builder {
+								public Builder addResource(Object resource) {
+									return this;
+								}
+
+								public ResourceExtension build() {
+									return new ResourceExtension();
+								}
 							}
 						}
-					}
-					""",
+						""",
 					"""
-					package io.dropwizard.testing.junit5;
+						package io.dropwizard.testing.junit5;
 
-					public class DropwizardExtensionsSupport {
-					}
-					""",
+						public class DropwizardExtensionsSupport {
+						}
+						""",
 					"""
-					package org.junit;
+						package org.junit;
 
-					import java.lang.annotation.*;
+						import java.lang.annotation.*;
 
-					@Retention(RetentionPolicy.RUNTIME)
-					@Target({ElementType.FIELD})
-					public @interface ClassRule {
-					}
-					""",
+						@Retention(RetentionPolicy.RUNTIME)
+						@Target({ElementType.FIELD})
+						public @interface ClassRule {
+						}
+						""",
 					"""
-					package org.junit;
+						package org.junit;
 
-					import java.lang.annotation.*;
+						import java.lang.annotation.*;
 
-					@Retention(RetentionPolicy.RUNTIME)
-					@Target({ElementType.FIELD})
-					public @interface Rule {
-					}
-					"""
+						@Retention(RetentionPolicy.RUNTIME)
+						@Target({ElementType.FIELD})
+						public @interface Rule {
+						}
+						"""
 				)
 				.classpath("junit-jupiter-api")
 		);

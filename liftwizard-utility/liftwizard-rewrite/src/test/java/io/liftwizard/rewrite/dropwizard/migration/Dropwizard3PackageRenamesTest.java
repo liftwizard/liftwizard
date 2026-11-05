@@ -35,108 +35,108 @@ class Dropwizard3PackageRenamesTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package io.dropwizard;
+						package io.dropwizard;
 
-					public class Application<T> {
-					    public void run(String... args) {}
-					}
-					""",
+						public class Application<T> {
+						    public void run(String... args) {}
+						}
+						""",
 					"""
-					package io.dropwizard;
+						package io.dropwizard;
 
-					public interface Bundle {
-					}
-					""",
+						public interface Bundle {
+						}
+						""",
 					"""
-					package io.dropwizard;
+						package io.dropwizard;
 
-					public class Configuration {
-					}
-					""",
+						public class Configuration {
+						}
+						""",
 					"""
-					package io.dropwizard;
+						package io.dropwizard;
 
-					public interface ConfiguredBundle<T> {
-					    void initialize(Object bootstrap);
-					    void run(T configuration, Object environment);
-					}
-					""",
+						public interface ConfiguredBundle<T> {
+						    void initialize(Object bootstrap);
+						    void run(T configuration, Object environment);
+						}
+						""",
 					"""
-					package io.dropwizard.server;
+						package io.dropwizard.server;
 
-					public interface ServerFactory {
-					}
-					""",
+						public interface ServerFactory {
+						}
+						""",
 					"""
-					package io.dropwizard.setup;
+						package io.dropwizard.setup;
 
-					public class Bootstrap<T> {
-					    public void addBundle(Object bundle) {}
-					}
-					""",
+						public class Bootstrap<T> {
+						    public void addBundle(Object bundle) {}
+						}
+						""",
 					"""
-					package io.dropwizard.setup;
+						package io.dropwizard.setup;
 
-					public class Environment {
-					    public String getName() { return null; }
-					}
-					""",
+						public class Environment {
+						    public String getName() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.cli;
+						package io.dropwizard.cli;
 
-					public abstract class Command {
-					    public abstract void run(Object environment, Object namespace);
-					}
-					""",
+						public abstract class Command {
+						    public abstract void run(Object environment, Object namespace);
+						}
+						""",
 					"""
-					package io.dropwizard.cli;
+						package io.dropwizard.cli;
 
-					public abstract class ConfiguredCommand<T> extends Command {
-					}
-					""",
+						public abstract class ConfiguredCommand<T> extends Command {
+						}
+						""",
 					"""
-					package io.dropwizard.logging;
+						package io.dropwizard.logging;
 
-					public abstract class AbstractAppenderFactory<E> {
-					}
-					""",
+						public abstract class AbstractAppenderFactory<E> {
+						}
+						""",
 					"""
-					package io.dropwizard.logging.filter;
+						package io.dropwizard.logging.filter;
 
-					public interface FilterFactory<E> {
-					}
-					""",
+						public interface FilterFactory<E> {
+						}
+						""",
 					"""
-					package io.dropwizard.logging.layout;
+						package io.dropwizard.logging.layout;
 
-					public interface LayoutFactory<E> {
-					}
-					""",
+						public interface LayoutFactory<E> {
+						}
+						""",
 					"""
-					package io.dropwizard.metrics;
+						package io.dropwizard.metrics;
 
-					public interface ReporterFactory {
-					}
-					""",
+						public interface ReporterFactory {
+						}
+						""",
 					"""
-					package io.dropwizard.views;
+						package io.dropwizard.views;
 
-					public abstract class View {
-					    protected View(String templateName) {}
-					}
-					""",
+						public abstract class View {
+						    protected View(String templateName) {}
+						}
+						""",
 					"""
-					package io.dropwizard.auth;
+						package io.dropwizard.auth;
 
-					public class AuthFilter {
-					}
-					""",
+						public class AuthFilter {
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.setup;
+						package io.dropwizard.jersey.setup;
 
-					public class JerseyEnvironment {
-					}
-					"""
+						public class JerseyEnvironment {
+						}
+						"""
 				)
 		);
 	}

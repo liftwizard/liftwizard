@@ -25,10 +25,7 @@ import com.gs.fw.common.mithra.finder.DeepRelationshipAttribute;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoRelationshipDataFetcher<
-	Input,
-	T
->
+public class ReladomoRelationshipDataFetcher<Input, T>
 	implements DataFetcher<T>
 {
 	private final DeepRelationshipAttribute<Input, T> relationshipAttribute;

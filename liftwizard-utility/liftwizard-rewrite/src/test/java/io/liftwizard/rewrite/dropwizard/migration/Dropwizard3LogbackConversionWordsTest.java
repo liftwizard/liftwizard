@@ -39,97 +39,97 @@ class Dropwizard3LogbackConversionWordsTest
 		this.rewriteRun(
 			text(
 				"""
-				<?xml version="1.0" encoding="UTF-8"?>
+					<?xml version="1.0" encoding="UTF-8"?>
 
-				<configuration>
-				    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%rootException</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Short" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%rEx</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Extended" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%xException</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="XThrow" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%xThrowable</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="XShort" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%xEx</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Full" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%exception</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Throw" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%throwable</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Ex" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%ex</pattern>
-				        </encoder>
-				    </appender>
-				</configuration>
-				""",
+					<configuration>
+					    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%rootException</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Short" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%rEx</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Extended" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%xException</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="XThrow" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%xThrowable</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="XShort" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%xEx</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Full" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%exception</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Throw" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%throwable</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Ex" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%ex</pattern>
+					        </encoder>
+					    </appender>
+					</configuration>
+					""",
 				"""
-				<?xml version="1.0" encoding="UTF-8"?>
+					<?xml version="1.0" encoding="UTF-8"?>
 
-				<configuration>
-				    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwRootException</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Short" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwREx</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Extended" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwXException</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="XThrow" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwXThrowable</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="XShort" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwXEx</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Full" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwException</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Throw" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwThrowable</pattern>
-				        </encoder>
-				    </appender>
-				    <appender name="Ex" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwEx</pattern>
-				        </encoder>
-				    </appender>
-				</configuration>
-				""",
+					<configuration>
+					    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwRootException</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Short" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwREx</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Extended" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwXException</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="XThrow" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwXThrowable</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="XShort" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwXEx</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Full" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwException</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Throw" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwThrowable</pattern>
+					        </encoder>
+					    </appender>
+					    <appender name="Ex" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwEx</pattern>
+					        </encoder>
+					    </appender>
+					</configuration>
+					""",
 				(spec) -> spec.path("logback-test.xml")
 			)
 		);
@@ -141,16 +141,16 @@ class Dropwizard3LogbackConversionWordsTest
 		this.rewriteRun(
 			text(
 				"""
-				<?xml version="1.0" encoding="UTF-8"?>
+					<?xml version="1.0" encoding="UTF-8"?>
 
-				<configuration>
-				    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-				        <encoder>
-				            <pattern>%message%n%dwRootException</pattern>
-				        </encoder>
-				    </appender>
-				</configuration>
-				""",
+					<configuration>
+					    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+					        <encoder>
+					            <pattern>%message%n%dwRootException</pattern>
+					        </encoder>
+					    </appender>
+					</configuration>
+					""",
 				(spec) -> spec.path("logback-test.xml")
 			)
 		);

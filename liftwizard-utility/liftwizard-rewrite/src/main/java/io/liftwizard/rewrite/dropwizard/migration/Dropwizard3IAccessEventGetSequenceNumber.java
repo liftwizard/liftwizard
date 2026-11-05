@@ -32,12 +32,12 @@ public class Dropwizard3IAccessEventGetSequenceNumber
 {
 	private static final String I_ACCESS_EVENT = "ch.qos.logback.access.spi.IAccessEvent";
 	private static final String I_ACCESS_EVENT_STUB = """
-	package ch.qos.logback.access.spi;
+		package ch.qos.logback.access.spi;
 
-	public interface IAccessEvent {
-	    long getSequenceNumber();
-	}
-	""";
+		public interface IAccessEvent {
+		    long getSequenceNumber();
+		}
+		""";
 
 	@Override
 	public String getDisplayName()
@@ -86,13 +86,13 @@ public class Dropwizard3IAccessEventGetSequenceNumber
 
 			return JavaTemplate.builder(
 				"""
-				@Override
-				public long getSequenceNumber() {
-				    throw new UnsupportedOperationException(
-				        this.getClass().getSimpleName() + ".getSequenceNumber() not implemented yet"
-				    );
-				}
-				"""
+					@Override
+					public long getSequenceNumber() {
+					    throw new UnsupportedOperationException(
+					        this.getClass().getSimpleName() + ".getSequenceNumber() not implemented yet"
+					    );
+					}
+					"""
 			)
 				.javaParser(JavaParser.fromJavaVersion().dependsOn(I_ACCESS_EVENT_STUB))
 				.build()

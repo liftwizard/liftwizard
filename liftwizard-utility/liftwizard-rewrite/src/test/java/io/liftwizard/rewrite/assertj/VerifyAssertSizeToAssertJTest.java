@@ -35,19 +35,19 @@ class VerifyAssertSizeToAssertJTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.collections.impl.test;
+						package org.eclipse.collections.impl.test;
 
-					import java.util.Map;
+						import java.util.Map;
 
-					public final class Verify {
-						public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
-						public static void assertSize(int expectedSize, Iterable<?> iterable) {}
-						public static void assertSize(String message, int expectedSize, Object[] array) {}
-						public static void assertSize(int expectedSize, Object[] array) {}
-						public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
-						public static void assertSize(int expectedSize, Map<?, ?> map) {}
-					}
-					"""
+						public final class Verify {
+							public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
+							public static void assertSize(int expectedSize, Iterable<?> iterable) {}
+							public static void assertSize(String message, int expectedSize, Object[] array) {}
+							public static void assertSize(int expectedSize, Object[] array) {}
+							public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
+							public static void assertSize(int expectedSize, Map<?, ?> map) {}
+						}
+						"""
 				)
 				.classpath("eclipse-collections-api", "eclipse-collections")
 		);

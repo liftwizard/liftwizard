@@ -44,11 +44,11 @@ public class DropwizardRuleAnnotations
 		JUnitJupiterTemplateStubs.extendWithStub(),
 		JUnitJupiterTemplateStubs.registerExtensionStub(),
 		"""
-		package io.dropwizard.testing.junit5;
+			package io.dropwizard.testing.junit5;
 
-		public class DropwizardExtensionsSupport {
-		}
-		"""
+			public class DropwizardExtensionsSupport {
+			}
+			"""
 	);
 
 	@Option(

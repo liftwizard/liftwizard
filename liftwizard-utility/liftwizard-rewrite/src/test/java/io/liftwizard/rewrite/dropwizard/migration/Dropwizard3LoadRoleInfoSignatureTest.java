@@ -38,28 +38,28 @@ class Dropwizard3LoadRoleInfoSignatureTest
 					.styles(AbstractRewriteStyles.styles())
 					.dependsOn(
 						"""
-						package org.eclipse.jetty.security;
+							package org.eclipse.jetty.security;
 
-						public abstract class AbstractLoginService {
-							protected abstract String[] loadRoleInfo(UserPrincipal principal);
-							protected abstract UserPrincipal loadUserInfo(String userName);
-						}
-						""",
+							public abstract class AbstractLoginService {
+								protected abstract String[] loadRoleInfo(UserPrincipal principal);
+								protected abstract UserPrincipal loadUserInfo(String userName);
+							}
+							""",
 						"""
-						package org.eclipse.jetty.security;
+							package org.eclipse.jetty.security;
 
-						public class UserPrincipal {
-							public UserPrincipal(String name, Object credential) {}
-							public String getName() { return null; }
-						}
-						""",
+							public class UserPrincipal {
+								public UserPrincipal(String name, Object credential) {}
+								public String getName() { return null; }
+							}
+							""",
 						"""
-						package org.eclipse.jetty.security;
+							package org.eclipse.jetty.security;
 
-						public class RolePrincipal {
-							public RolePrincipal(String name) {}
-						}
-						"""
+							public class RolePrincipal {
+								public RolePrincipal(String name) {}
+							}
+							"""
 					)
 			);
 	}

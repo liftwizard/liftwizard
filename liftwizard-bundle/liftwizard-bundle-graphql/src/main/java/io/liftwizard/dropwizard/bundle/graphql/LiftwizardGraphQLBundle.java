@@ -61,9 +61,7 @@ import org.slf4j.MDC.MDCCloseable;
  *
  * @see <a href="https://liftwizard.io/docs/graphql/bundle#liftwizardgraphqlbundle">https://liftwizard.io/docs/graphql/bundle#liftwizardgraphqlbundle</a>
  */
-public class LiftwizardGraphQLBundle<
-	T extends Configuration & GraphQLFactoryProvider
->
+public class LiftwizardGraphQLBundle<T extends Configuration & GraphQLFactoryProvider>
 	extends GraphQLBundle<T>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiftwizardGraphQLBundle.class);

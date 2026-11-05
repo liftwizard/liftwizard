@@ -102,8 +102,8 @@ class JsonPrettyPrinterTest
 	{
 		// language=JSON
 		var compactJson = """
-		{"a": {}, "b": {"c": 1, "g": {"h": [1]}}, "d": [{"e": {}}, []], "f": []}
-		""";
+			{"a": {}, "b": {"c": 1, "g": {"h": [1]}}, "d": [{"e": {}}, []], "f": []}
+			""";
 
 		// language=JSON
 		// prettier-ignore
@@ -139,8 +139,8 @@ class JsonPrettyPrinterTest
 	{
 		// language=JSON
 		var compactJson = """
-		{"a": [{"b": {"c": [{"d": {"e": true}}]}}]}
-		""";
+			{"a": [{"b": {"c": [{"d": {"e": true}}]}}]}
+			""";
 
 		// language=JSON
 		// prettier-ignore
@@ -173,8 +173,8 @@ class JsonPrettyPrinterTest
 	{
 		// language=JSON
 		var compactJson = """
-		{"a": {}, "b": {"c": {}}}
-		""";
+			{"a": {}, "b": {"c": {}}}
+			""";
 
 		// language=JSON
 		// prettier-ignore
@@ -197,8 +197,8 @@ class JsonPrettyPrinterTest
 	{
 		// language=JSON
 		var compactJson = """
-		[{}, {"a": {}}]
-		""";
+			[{}, {"a": {}}]
+			""";
 
 		// language=JSON
 		// prettier-ignore
@@ -220,8 +220,8 @@ class JsonPrettyPrinterTest
 	{
 		// language=JSON
 		var compactJson = """
-		[{"a": {"b": null}}, 1, "x", []]
-		""";
+			[{"a": {"b": null}}, 1, "x", []]
+			""";
 
 		// language=JSON
 		// prettier-ignore
@@ -248,8 +248,8 @@ class JsonPrettyPrinterTest
 	{
 		// language=JSON
 		var compactJson = """
-		{"\\": {": "\\": {", "b": {"c": "\\": {"}}
-		""";
+			{"\\": {": "\\": {", "b": {"c": "\\": {"}}
+			""";
 
 		// language=JSON
 		// prettier-ignore

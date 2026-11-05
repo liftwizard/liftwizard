@@ -35,81 +35,81 @@ class Dropwizard3JerseyParamMigrationTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class InstantParam {
-						public java.time.Instant get() { return null; }
-					}
-					""",
+						public class InstantParam {
+							public java.time.Instant get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class LocalDateParam {
-						public java.time.LocalDate get() { return null; }
-					}
-					""",
+						public class LocalDateParam {
+							public java.time.LocalDate get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class DateTimeParam {
-						public Object get() { return null; }
-					}
-					""",
+						public class DateTimeParam {
+							public Object get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class BooleanParam {
-						public Boolean get() { return null; }
-					}
-					""",
+						public class BooleanParam {
+							public Boolean get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class DurationParam {
-						public java.time.Duration get() { return null; }
-					}
-					""",
+						public class DurationParam {
+							public java.time.Duration get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class SizeParam {
-						public Object get() { return null; }
-					}
-					""",
+						public class SizeParam {
+							public Object get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.jsr310;
+						package io.dropwizard.jersey.jsr310;
 
-					public class InstantParam {
-						public java.time.Instant get() { return null; }
-					}
-					""",
+						public class InstantParam {
+							public java.time.Instant get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.jsr310;
+						package io.dropwizard.jersey.jsr310;
 
-					public class LocalDateParam {
-						public java.time.LocalDate get() { return null; }
-					}
-					""",
+						public class LocalDateParam {
+							public java.time.LocalDate get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.jsr310;
+						package io.dropwizard.jersey.jsr310;
 
-					public class ZonedDateTimeParam {
-						public java.time.ZonedDateTime get() { return null; }
-					}
-					""",
+						public class ZonedDateTimeParam {
+							public java.time.ZonedDateTime get() { return null; }
+						}
+						""",
 					"""
-					package io.dropwizard.util;
+						package io.dropwizard.util;
 
-					public class DataSize {
-					}
-					""",
+						public class DataSize {
+						}
+						""",
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class IntParam {
-						public int get() { return 0; }
-					}
-					"""
+						public class IntParam {
+							public int get() { return 0; }
+						}
+						"""
 				)
 		);
 	}

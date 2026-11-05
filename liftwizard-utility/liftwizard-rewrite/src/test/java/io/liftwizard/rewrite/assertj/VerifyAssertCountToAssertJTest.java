@@ -35,14 +35,14 @@ class VerifyAssertCountToAssertJTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.collections.impl.test;
+						package org.eclipse.collections.impl.test;
 
-					import org.eclipse.collections.api.block.predicate.Predicate;
+						import org.eclipse.collections.api.block.predicate.Predicate;
 
-					public final class Verify {
-						public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
-					}
-					"""
+						public final class Verify {
+							public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
+						}
+						"""
 				)
 				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
 		);

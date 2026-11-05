@@ -36,18 +36,18 @@ class UnwrapDropwizardParamTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package io.dropwizard.jersey.params;
+						package io.dropwizard.jersey.params;
 
-					public class BooleanParam {
-					    private final Boolean value;
-					    public BooleanParam(String input) {
-					        this.value = Boolean.valueOf(input);
-					    }
-					    public Boolean get() {
-					        return this.value;
-					    }
-					}
-					"""
+						public class BooleanParam {
+						    private final Boolean value;
+						    public BooleanParam(String input) {
+						        this.value = Boolean.valueOf(input);
+						    }
+						    public Boolean get() {
+						        return this.value;
+						    }
+						}
+						"""
 				)
 		);
 	}

@@ -25,10 +25,7 @@ import com.gs.fw.common.mithra.attribute.Attribute;
 import graphql.TrivialDataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-public class ReladomoAttributeDataFetcher<
-	Input,
-	T
->
+public class ReladomoAttributeDataFetcher<Input, T>
 	implements TrivialDataFetcher<T>
 {
 	private final Attribute<Input, T> attribute;

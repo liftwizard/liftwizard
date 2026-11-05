@@ -71,7 +71,6 @@ class PeopleResourceTest
 	{
 		Client client = this.dropwizardAppExtension.client();
 
-
 		{
 			Response response = client
 				.target("http://localhost:{port}/people/")
@@ -85,16 +84,15 @@ class PeopleResourceTest
 			// <editor-fold desc="Expected JSON">
 			// language=JSON
 			var expected = """
-			{
-				"id": 1,
-				"fullName": "Full Name",
-				"jobTitle": "Job Title"
-			}
-			""";
+				{
+					"id": 1,
+					"fullName": "Full Name",
+					"jobTitle": "Job Title"
+				}
+				""";
 			// </editor-fold>
 			JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 		}
-
 
 		{
 			Response response = client
@@ -109,14 +107,14 @@ class PeopleResourceTest
 			// <editor-fold desc="Expected JSON">
 			// language=JSON
 			var expected = """
-			[
-				{
-					"id": 1,
-					"fullName": "Full Name",
-					"jobTitle": "Job Title"
-				}
-			]
-			""";
+				[
+					{
+						"id": 1,
+						"fullName": "Full Name",
+						"jobTitle": "Job Title"
+					}
+				]
+				""";
 			// </editor-fold>
 			JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 		}
