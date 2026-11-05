@@ -207,8 +207,8 @@ public class ReladomoAttributeVisitor
 	public Attribute visitSimpleAttribute(SimpleAttributeContext ctx)
 	{
 		if (
-			ctx.className() != null
-			&& !Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
+			ctx.className() != null &&
+			!Objects.equals(ctx.className().getText(), this.getExpectedClassName(this.finder))
 		)
 		{
 			String error = "Expected 'this' or <%s> but found: <%s> in %s".formatted(

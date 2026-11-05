@@ -70,10 +70,10 @@ public class ECStreamJoiningToMakeString
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.joining(delimiter))` to `collection.makeString(delimiter)`. "
-			+ "Also handles `collection.stream().map(Object::toString).collect(Collectors.joining(delimiter))`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the makeString method directly on RichIterable."
+			"Transforms `collection.stream().collect(Collectors.joining(delimiter))` to `collection.makeString(delimiter)`. " +
+			"Also handles `collection.stream().map(Object::toString).collect(Collectors.joining(delimiter))`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the makeString method directly on RichIterable."
 		);
 	}
 
@@ -181,9 +181,9 @@ public class ECStreamJoiningToMakeString
 				if (lambda.getBody() instanceof J.MethodInvocation lambdaBody)
 				{
 					return (
-						("toString".equals(lambdaBody.getSimpleName()) && lambdaBody.getArguments().isEmpty())
-						|| (lambdaBody.getArguments().size() == 1
-							&& lambdaBody.getArguments().getFirst() instanceof J.Empty)
+						("toString".equals(lambdaBody.getSimpleName()) && lambdaBody.getArguments().isEmpty()) ||
+						(lambdaBody.getArguments().size() == 1 &&
+							lambdaBody.getArguments().getFirst() instanceof J.Empty)
 					);
 				}
 			}

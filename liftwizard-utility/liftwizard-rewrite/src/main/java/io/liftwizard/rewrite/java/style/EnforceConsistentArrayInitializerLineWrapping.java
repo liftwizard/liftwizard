@@ -51,9 +51,9 @@ public class EnforceConsistentArrayInitializerLineWrapping
 	public String getDescription()
 	{
 		return (
-			"When an array initializer has multiple elements and any element is line-wrapped, "
-			+ "enforce that all elements use line wrapping for consistency. "
-			+ "Valid fixed-multiple groupings like key-value pairs are left unchanged."
+			"When an array initializer has multiple elements and any element is line-wrapped, " +
+			"enforce that all elements use line wrapping for consistency. " +
+			"Valid fixed-multiple groupings like key-value pairs are left unchanged."
 		);
 	}
 

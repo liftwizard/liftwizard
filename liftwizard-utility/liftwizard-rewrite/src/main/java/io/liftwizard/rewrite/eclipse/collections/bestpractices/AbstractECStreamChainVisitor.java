@@ -148,9 +148,9 @@ abstract class AbstractECStreamChainVisitor
 
 		String streamName = method.getSimpleName();
 		String ecName =
-			intermediateTranslation(streamName) != null
-				? intermediateTranslation(streamName)
-				: terminalTranslation(method);
+			intermediateTranslation(streamName) != null ?
+				intermediateTranslation(streamName) :
+				terminalTranslation(method);
 		boolean isCollectorTerminal = "collect".equals(streamName) && terminalTranslation(method) != null;
 		if (isCollectorTerminal)
 		{
@@ -325,8 +325,8 @@ abstract class AbstractECStreamChainVisitor
 			case "skip", "limit" -> arguments.size() == 1 && isIntTyped(arguments.getFirst());
 			// Lambdas and method references compile against either functional interface family, but a
 			// variable of a java.util.function type would not
-			case "filter", "map", "anyMatch", "allMatch", "noneMatch", "forEach" -> arguments.size() == 1
-				&& (arguments.getFirst() instanceof J.Lambda || arguments.getFirst() instanceof J.MemberReference);
+			case "filter", "map", "anyMatch", "allMatch", "noneMatch", "forEach" -> arguments.size() == 1 &&
+				(arguments.getFirst() instanceof J.Lambda || arguments.getFirst() instanceof J.MemberReference);
 			case "sorted" -> arguments.size() <= 1;
 			case "findFirst", "distinct", "toList", "toArray", "iterator" -> arguments.isEmpty();
 			default -> false;
@@ -385,13 +385,13 @@ abstract class AbstractECStreamChainVisitor
 	{
 		List<Expression> arguments = realArguments(joiningCall);
 		return (
-			(arguments.size() <= 1 || arguments.size() == 3)
-			&& arguments
+			(arguments.size() <= 1 || arguments.size() == 3) &&
+			arguments
 				.stream()
 				.allMatch(
 					(argument) ->
-						TypeUtils.isString(argument.getType())
-						|| TypeUtils.isAssignableTo("java.lang.CharSequence", argument.getType())
+						TypeUtils.isString(argument.getType()) ||
+						TypeUtils.isAssignableTo("java.lang.CharSequence", argument.getType())
 				)
 		);
 	}
@@ -477,14 +477,14 @@ abstract class AbstractECStreamChainVisitor
 			return "toString".equals(memberReference.getReference().getSimpleName());
 		}
 		return (
-			arguments.get(0) instanceof J.Lambda lambda
-			&& lambda.getParameters().getParameters().size() == 1
-			&& lambda.getParameters().getParameters().get(0) instanceof J.VariableDeclarations parameter
-			&& lambda.getBody() instanceof J.MethodInvocation body
-			&& "toString".equals(body.getSimpleName())
-			&& realArguments(body).isEmpty()
-			&& body.getSelect() instanceof J.Identifier receiver
-			&& receiver.getSimpleName().equals(parameter.getVariables().get(0).getSimpleName())
+			arguments.get(0) instanceof J.Lambda lambda &&
+			lambda.getParameters().getParameters().size() == 1 &&
+			lambda.getParameters().getParameters().get(0) instanceof J.VariableDeclarations parameter &&
+			lambda.getBody() instanceof J.MethodInvocation body &&
+			"toString".equals(body.getSimpleName()) &&
+			realArguments(body).isEmpty() &&
+			body.getSelect() instanceof J.Identifier receiver &&
+			receiver.getSimpleName().equals(parameter.getVariables().get(0).getSimpleName())
 		);
 	}
 
@@ -528,8 +528,8 @@ abstract class AbstractECStreamChainVisitor
 	private static boolean isFilterCall(Expression expression)
 	{
 		return (
-			expression instanceof J.MethodInvocation methodInvocation
-			&& "filter".equals(methodInvocation.getSimpleName())
+			expression instanceof J.MethodInvocation methodInvocation &&
+			"filter".equals(methodInvocation.getSimpleName())
 		);
 	}
 

@@ -58,9 +58,9 @@ public class ECImplFactoryToApiFactory
 	public String getDescription()
 	{
 		return (
-			"Replace org.eclipse.collections.impl.factory.* factory field access "
-			+ "with api.factory equivalents. Does not transform static utility methods like "
-			+ "Sets.union(), Lists.adapt(), etc."
+			"Replace org.eclipse.collections.impl.factory.* factory field access " +
+			"with api.factory equivalents. Does not transform static utility methods like " +
+			"Sets.union(), Lists.adapt(), etc."
 		);
 	}
 
@@ -79,8 +79,8 @@ public class ECImplFactoryToApiFactory
 			public J.FieldAccess visitFieldAccess(J.FieldAccess fieldAccess, ExecutionContext ctx)
 			{
 				if (
-					!FACTORY_FIELDS.contains(fieldAccess.getSimpleName())
-					&& fieldAccess.getTarget() instanceof J.Identifier id
+					!FACTORY_FIELDS.contains(fieldAccess.getSimpleName()) &&
+					fieldAccess.getTarget() instanceof J.Identifier id
 				)
 				{
 					addIfImplFactory(id, acc);

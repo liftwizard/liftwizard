@@ -133,9 +133,9 @@ public class InstrumentedDataFetcher<T>
 
 	private DataFetcher<?> getAnnotatedDataFetcher()
 	{
-		return this.dataFetcher instanceof LiftwizardAsyncDataFetcher asyncDataFetcher
-			? asyncDataFetcher.getWrappedDataFetcher()
-			: this.dataFetcher;
+		return this.dataFetcher instanceof LiftwizardAsyncDataFetcher asyncDataFetcher ?
+			asyncDataFetcher.getWrappedDataFetcher() :
+			this.dataFetcher;
 	}
 
 	@Nullable

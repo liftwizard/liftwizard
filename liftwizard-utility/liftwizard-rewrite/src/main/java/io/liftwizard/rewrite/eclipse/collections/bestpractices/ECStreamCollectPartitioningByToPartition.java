@@ -66,11 +66,11 @@ public class ECStreamCollectPartitioningByToPartition
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.partitioningBy(pred))` "
-			+ "to `collection.partition(pred)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the partition method directly on RichIterable, returning a PartitionIterable "
-			+ "with getSelected() and getRejected()."
+			"Transforms `collection.stream().collect(Collectors.partitioningBy(pred))` " +
+			"to `collection.partition(pred)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the partition method directly on RichIterable, returning a PartitionIterable " +
+			"with getSelected() and getRejected()."
 		);
 	}
 

@@ -43,11 +43,11 @@ public class IfElseToTernary
 	public String getDescription()
 	{
 		return (
-			"Replaces an `if`/`else` statement whose two branches are identical except for a single expression "
-			+ "with one statement that uses a ternary (conditional) expression for the differing part. "
-			+ "Handles a differing method argument, a differing method receiver, and a differing assignment value. "
-			+ "Assumes the condition, the method receiver, and the surrounding arguments are free of side effects, "
-			+ "since the transformation can change their evaluation order."
+			"Replaces an `if`/`else` statement whose two branches are identical except for a single expression " +
+			"with one statement that uses a ternary (conditional) expression for the differing part. " +
+			"Handles a differing method argument, a differing method receiver, and a differing assignment value. " +
+			"Assumes the condition, the method receiver, and the surrounding arguments are free of side effects, " +
+			"since the transformation can change their evaluation order."
 		);
 	}
 
@@ -92,17 +92,17 @@ public class IfElseToTernary
 			}
 
 			if (
-				containsFunctionalExpression(slot.thenExpression())
-				|| containsFunctionalExpression(slot.elseExpression())
+				containsFunctionalExpression(slot.thenExpression()) ||
+				containsFunctionalExpression(slot.elseExpression())
 			)
 			{
 				return super.visitIf(iff, ctx);
 			}
 
 			Expression condition = iff.getIfCondition().getTree();
-			String templateCode = slot.needsParentheses()
-				? "(#{any()} ? #{any()} : #{any()})"
-				: "#{any()} ? #{any()} : #{any()}";
+			String templateCode = slot.needsParentheses() ?
+				"(#{any()} ? #{any()} : #{any()})" :
+				"#{any()} ? #{any()} : #{any()}";
 			JavaTemplate template = JavaTemplate.builder(templateCode).build();
 
 			var transformed = (Statement) new TernaryInsertionVisitor(slot, condition, template).visit(
@@ -162,15 +162,15 @@ public class IfElseToTernary
 		private static TernarySlot findSingleDifference(Statement thenStatement, Statement elseStatement)
 		{
 			if (
-				thenStatement instanceof J.MethodInvocation thenInvocation
-				&& elseStatement instanceof J.MethodInvocation elseInvocation
+				thenStatement instanceof J.MethodInvocation thenInvocation &&
+				elseStatement instanceof J.MethodInvocation elseInvocation
 			)
 			{
 				return findMethodInvocationDifference(thenInvocation, elseInvocation);
 			}
 			if (
-				thenStatement instanceof J.Assignment thenAssignment
-				&& elseStatement instanceof J.Assignment elseAssignment
+				thenStatement instanceof J.Assignment thenAssignment &&
+				elseStatement instanceof J.Assignment elseAssignment
 			)
 			{
 				return findAssignmentDifference(thenAssignment, elseAssignment);
@@ -223,8 +223,8 @@ public class IfElseToTernary
 					return null;
 				}
 				if (
-					thenSelect instanceof J.MethodInvocation thenSelectInvocation
-					&& elseSelect instanceof J.MethodInvocation elseSelectInvocation
+					thenSelect instanceof J.MethodInvocation thenSelectInvocation &&
+					elseSelect instanceof J.MethodInvocation elseSelectInvocation
 				)
 				{
 					TernarySlot deeper = findMethodInvocationDifference(thenSelectInvocation, elseSelectInvocation);
@@ -239,8 +239,8 @@ public class IfElseToTernary
 			Expression thenArgument = thenArguments.get(differingArgumentIndex);
 			Expression elseArgument = elseArguments.get(differingArgumentIndex);
 			if (
-				thenArgument instanceof J.MethodInvocation thenArgumentInvocation
-				&& elseArgument instanceof J.MethodInvocation elseArgumentInvocation
+				thenArgument instanceof J.MethodInvocation thenArgumentInvocation &&
+				elseArgument instanceof J.MethodInvocation elseArgumentInvocation
 			)
 			{
 				TernarySlot deeper = findMethodInvocationDifference(thenArgumentInvocation, elseArgumentInvocation);

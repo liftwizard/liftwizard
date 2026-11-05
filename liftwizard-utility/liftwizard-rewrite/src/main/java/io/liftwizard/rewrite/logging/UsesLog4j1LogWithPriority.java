@@ -53,10 +53,10 @@ public final class UsesLog4j1LogWithPriority
 	public String getDescription()
 	{
 		return (
-			"Finds Log4j 1.x calls to the generic `log(Priority, ..)` method "
-			+ "(e.g., `LOGGER.log(Level.INFO, message)` or `LOGGER::log`). SLF4J has no generic "
-			+ "`log(level, ..)` method, so these cannot be migrated automatically and the upstream "
-			+ "migration leaves them as uncompilable calls on an `org.slf4j.Logger`."
+			"Finds Log4j 1.x calls to the generic `log(Priority, ..)` method " +
+			"(e.g., `LOGGER.log(Level.INFO, message)` or `LOGGER::log`). SLF4J has no generic " +
+			"`log(level, ..)` method, so these cannot be migrated automatically and the upstream " +
+			"migration leaves them as uncompilable calls on an `org.slf4j.Logger`."
 		);
 	}
 

@@ -63,8 +63,8 @@ public class ECAllSatisfyNegatedLambda
 	public String getDescription()
 	{
 		return (
-			"Transforms `iterable.allSatisfy(x -> !pred(x))` to `iterable.noneSatisfy(x -> pred(x))` "
-			+ "for Eclipse Collections types, eliminating the double negation pattern."
+			"Transforms `iterable.allSatisfy(x -> !pred(x))` to `iterable.noneSatisfy(x -> pred(x))` " +
+			"for Eclipse Collections types, eliminating the double negation pattern."
 		);
 	}
 

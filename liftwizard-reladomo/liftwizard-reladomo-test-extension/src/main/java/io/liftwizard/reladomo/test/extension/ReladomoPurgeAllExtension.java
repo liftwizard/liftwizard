@@ -62,9 +62,9 @@ public class ReladomoPurgeAllExtension
 		ReladomoClassMetaData metaData = mithraRuntimeCacheController.getMetaData();
 		RelatedFinder finderInstance = metaData.getFinderInstance();
 		ListIterable<AsOfAttribute> asOfAttributes =
-			metaData.getAsOfAttributes() == null
-				? Lists.immutable.empty()
-				: ArrayAdapter.adapt(metaData.getAsOfAttributes());
+			metaData.getAsOfAttributes() == null ?
+				Lists.immutable.empty() :
+				ArrayAdapter.adapt(metaData.getAsOfAttributes());
 		Operation operation = asOfAttributes
 			.collect(AsOfAttribute::equalsEdgePoint)
 			.reduce(Operation::and)

@@ -120,9 +120,9 @@ public final class TransactionalConnectionSource
 		private Connection getConnection()
 			throws SQLException
 		{
-			TransactionConnection connection = this.availableConnections.isEmpty()
-				? this.borrowConnection()
-				: this.availableConnections.removeLast();
+			TransactionConnection connection = this.availableConnections.isEmpty() ?
+				this.borrowConnection() :
+				this.availableConnections.removeLast();
 			this.connectionsInUse.add(connection);
 			return connection;
 		}
@@ -170,10 +170,10 @@ public final class TransactionalConnectionSource
 			if (this.connectionsInUse.notEmpty())
 			{
 				throw new XAException(
-					"Detected "
-						+ this.connectionsInUse.size()
-						+ " open jdbc connections. "
-						+ "Close all connections borrowed from the connection manager before the transaction ends."
+					"Detected " +
+						this.connectionsInUse.size() +
+						" open jdbc connections. " +
+						"Close all connections borrowed from the connection manager before the transaction ends."
 				);
 			}
 			try

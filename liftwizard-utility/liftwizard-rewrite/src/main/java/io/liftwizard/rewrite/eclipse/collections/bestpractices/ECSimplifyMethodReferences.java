@@ -82,9 +82,9 @@ public class ECSimplifyMethodReferences
 	public String getDescription()
 	{
 		return (
-			"Simplifies `predicate::accept` to `predicate`, `function::valueOf` to `function`, "
-			+ "and similar patterns where a functional interface variable is unnecessarily "
-			+ "dereferenced with its single abstract method."
+			"Simplifies `predicate::accept` to `predicate`, `function::valueOf` to `function`, " +
+			"and similar patterns where a functional interface variable is unnecessarily " +
+			"dereferenced with its single abstract method."
 		);
 	}
 
@@ -138,12 +138,12 @@ public class ECSimplifyMethodReferences
 		private boolean isRedundantMethodReference(JavaType type, String methodName)
 		{
 			return (
-				this.isTypeCompatibleWithMethods(type, EC_PREDICATE, PREDICATE_METHODS, methodName)
-				|| this.isTypeCompatibleWithMethods(type, JDK_PREDICATE, PREDICATE_METHODS, methodName)
-				|| this.isTypeCompatibleWithMethods(type, EC_FUNCTION, FUNCTION_METHODS, methodName)
-				|| this.isTypeCompatibleWithMethods(type, JDK_FUNCTION, FUNCTION_METHODS, methodName)
-				|| this.isTypeCompatibleWithMethods(type, EC_PROCEDURE, PROCEDURE_METHODS, methodName)
-				|| this.isTypeCompatibleWithMethods(type, JDK_CONSUMER, PROCEDURE_METHODS, methodName)
+				this.isTypeCompatibleWithMethods(type, EC_PREDICATE, PREDICATE_METHODS, methodName) ||
+				this.isTypeCompatibleWithMethods(type, JDK_PREDICATE, PREDICATE_METHODS, methodName) ||
+				this.isTypeCompatibleWithMethods(type, EC_FUNCTION, FUNCTION_METHODS, methodName) ||
+				this.isTypeCompatibleWithMethods(type, JDK_FUNCTION, FUNCTION_METHODS, methodName) ||
+				this.isTypeCompatibleWithMethods(type, EC_PROCEDURE, PROCEDURE_METHODS, methodName) ||
+				this.isTypeCompatibleWithMethods(type, JDK_CONSUMER, PROCEDURE_METHODS, methodName)
 			);
 		}
 

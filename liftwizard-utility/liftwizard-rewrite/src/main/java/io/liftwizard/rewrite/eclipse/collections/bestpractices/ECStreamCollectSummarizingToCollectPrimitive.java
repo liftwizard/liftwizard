@@ -81,11 +81,11 @@ public class ECStreamCollectSummarizingToCollectPrimitive
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.summarizingDouble(fn))` "
-			+ "to `collection.collectDouble(fn).summaryStatistics()`. "
-			+ "Also handles summarizingInt and summarizingLong variants. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the collectDouble/collectInt/collectLong methods directly on RichIterable."
+			"Transforms `collection.stream().collect(Collectors.summarizingDouble(fn))` " +
+			"to `collection.collectDouble(fn).summaryStatistics()`. " +
+			"Also handles summarizingInt and summarizingLong variants. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the collectDouble/collectInt/collectLong methods directly on RichIterable."
 		);
 	}
 

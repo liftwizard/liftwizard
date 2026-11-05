@@ -74,9 +74,9 @@ public class ECStreamMatchToSatisfy
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().anyMatch(pred)` to `collection.anySatisfy(pred)`, "
-			+ "`stream().allMatch(pred)` to `allSatisfy(pred)`, and `stream().noneMatch(pred)` to `noneSatisfy(pred)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has these methods directly."
+			"Transforms `collection.stream().anyMatch(pred)` to `collection.anySatisfy(pred)`, " +
+			"`stream().allMatch(pred)` to `allSatisfy(pred)`, and `stream().noneMatch(pred)` to `noneSatisfy(pred)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has these methods directly."
 		);
 	}
 

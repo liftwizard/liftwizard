@@ -99,11 +99,11 @@ class UtcInfinityDatabaseTypeTest
 			.toMap(
 				(pair) -> pair.getOne().getClass().getSimpleName(),
 				(pair) ->
-					bindWallClock(pair.getOne(), NON_INFINITY, MithraTimestamp.UtcTimeZone)
-					+ " "
-					+ bindWallClock(pair.getOne(), NON_INFINITY, newYork)
-					+ " "
-					+ bindWallClock(pair.getOne(), NON_INFINITY, jvmDefault)
+					bindWallClock(pair.getOne(), NON_INFINITY, MithraTimestamp.UtcTimeZone) +
+					" " +
+					bindWallClock(pair.getOne(), NON_INFINITY, newYork) +
+					" " +
+					bindWallClock(pair.getOne(), NON_INFINITY, jvmDefault)
 			)
 			.toImmutable();
 
@@ -111,11 +111,11 @@ class UtcInfinityDatabaseTypeTest
 			.toMap(
 				(pair) -> pair.getOne().getClass().getSimpleName(),
 				(pair) ->
-					bindWallClock(pair.getTwo(), NON_INFINITY, MithraTimestamp.UtcTimeZone)
-					+ " "
-					+ bindWallClock(pair.getTwo(), NON_INFINITY, newYork)
-					+ " "
-					+ bindWallClock(pair.getTwo(), NON_INFINITY, jvmDefault)
+					bindWallClock(pair.getTwo(), NON_INFINITY, MithraTimestamp.UtcTimeZone) +
+					" " +
+					bindWallClock(pair.getTwo(), NON_INFINITY, newYork) +
+					" " +
+					bindWallClock(pair.getTwo(), NON_INFINITY, jvmDefault)
 			)
 			.toImmutable();
 
