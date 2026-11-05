@@ -18,8 +18,10 @@ package io.liftwizard.tempdir;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 
 import io.liftwizard.junit.extension.log.marker.LogMarkerTestExtension;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +30,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtendWith(LogMarkerTestExtension.class)
 class RecursiveDirectoryDeleterTest
@@ -108,5 +112,30 @@ class RecursiveDirectoryDeleterTest
 
 		assertThat(result).isFalse();
 		assertThat(readOnlyFile).exists();
+	}
+
+	@Test
+	void deleteRecursively_shouldDeleteEverythingDeletableBeforeThrowing()
+		throws IOException
+	{
+		assumeTrue(FileSystems.getDefault().supportedFileAttributeViews().contains("posix"));
+		Path lockedDir = Files.createDirectory(this.testDir.resolve("locked"));
+		Path lockedFile = Files.writeString(lockedDir.resolve("locked-file.txt"), "locked content");
+		Files.setPosixFilePermissions(lockedDir, PosixFilePermissions.fromString("r-x------"));
+
+		try
+		{
+			assertThatThrownBy(() -> RecursiveDirectoryDeleter.deleteRecursively(this.testDir)).isInstanceOf(
+				IOException.class
+			);
+
+			assertThat(this.testDir.resolve("nested")).doesNotExist();
+			assertThat(this.testDir.resolve("root-file.txt")).doesNotExist();
+			assertThat(lockedFile).exists();
+		}
+		finally
+		{
+			Files.setPosixFilePermissions(lockedDir, PosixFilePermissions.fromString("rwx------"));
+		}
 	}
 }

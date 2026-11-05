@@ -33,33 +33,67 @@ final class DeleteAllFilesVisitor
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteAllFilesVisitor.class);
 
+	private IOException firstFailure;
+
 	@Override
 	public FileVisitResult visitFile(@Nonnull Path path, @Nonnull BasicFileAttributes attributes)
-		throws IOException
 	{
-		Files.delete(path);
+		this.tryDelete(path);
 		return FileVisitResult.CONTINUE;
 	}
 
 	@Override
 	public FileVisitResult visitFileFailed(@Nonnull Path path, @Nonnull IOException exception)
-		throws IOException
 	{
 		LOGGER.warn("Failed to visit path {}: {}", path, exception.getMessage());
-		throw exception;
+		this.recordFailure(exception);
+		return FileVisitResult.CONTINUE;
 	}
 
 	@Override
 	public FileVisitResult postVisitDirectory(@Nonnull Path path, IOException exception)
-		throws IOException
 	{
 		if (exception != null)
 		{
 			LOGGER.warn("Error occurred while traversing directory {}: {}", path, exception.getMessage());
-			throw exception;
+			this.recordFailure(exception);
 		}
 
-		Files.delete(path);
+		this.tryDelete(path);
 		return FileVisitResult.CONTINUE;
+	}
+
+	void throwIfAnyFailed()
+		throws IOException
+	{
+		if (this.firstFailure != null)
+		{
+			throw this.firstFailure;
+		}
+	}
+
+	private void tryDelete(Path path)
+	{
+		try
+		{
+			Files.delete(path);
+		}
+		catch (IOException e)
+		{
+			LOGGER.warn("Failed to delete path {}: {}", path, e.getMessage());
+			this.recordFailure(e);
+		}
+	}
+
+	private void recordFailure(IOException exception)
+	{
+		if (this.firstFailure == null)
+		{
+			this.firstFailure = exception;
+		}
+		else
+		{
+			this.firstFailure.addSuppressed(exception);
+		}
 	}
 }
