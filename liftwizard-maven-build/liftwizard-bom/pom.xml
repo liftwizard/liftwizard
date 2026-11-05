@@ -857,6 +857,12 @@
                 <artifactId>liftwizard-rewrite</artifactId>
                 <version>2.1.53-SNAPSHOT</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-temp-files</artifactId>
+                <version>2.1.53-SNAPSHOT</version>
+            </dependency>
             <!--endregion liftwizard-utility-->
 
             <!--region liftwizard-uuid-->
