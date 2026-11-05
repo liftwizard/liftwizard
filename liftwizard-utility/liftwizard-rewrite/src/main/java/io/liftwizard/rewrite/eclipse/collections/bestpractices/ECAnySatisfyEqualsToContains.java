@@ -50,8 +50,8 @@ public class ECAnySatisfyEqualsToContains
 	public String getDescription()
 	{
 		return (
-			"Converts `iterable.anySatisfy(value::equals)` to `iterable.contains(value)` for Eclipse Collections types. "
-			+ "The contains() method is simpler and more readable, and may be faster for indexed collections."
+			"Converts `iterable.anySatisfy(value::equals)` to `iterable.contains(value)` for Eclipse Collections types. " +
+			"The contains() method is simpler and more readable, and may be faster for indexed collections."
 		);
 	}
 

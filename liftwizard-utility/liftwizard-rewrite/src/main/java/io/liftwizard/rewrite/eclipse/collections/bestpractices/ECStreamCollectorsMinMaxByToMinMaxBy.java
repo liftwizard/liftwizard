@@ -79,10 +79,10 @@ public class ECStreamCollectorsMinMaxByToMinMaxBy
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.minBy(Comparator.comparing(fn))).orElse(null)` "
-			+ "to `collection.minBy(fn)` and similarly for maxBy. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "minBy/maxBy methods directly on RichIterable."
+			"Transforms `collection.stream().collect(Collectors.minBy(Comparator.comparing(fn))).orElse(null)` " +
+			"to `collection.minBy(fn)` and similarly for maxBy. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"minBy/maxBy methods directly on RichIterable."
 		);
 	}
 

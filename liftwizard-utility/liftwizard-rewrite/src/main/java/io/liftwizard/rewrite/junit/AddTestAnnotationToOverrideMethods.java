@@ -43,10 +43,10 @@ public class AddTestAnnotationToOverrideMethods
 	public String getDescription()
 	{
 		return (
-			"Add `@Test` annotation to `@Override` methods in test classes when the "
-			+ "overridden parent method has `@Test`. This prevents test methods from "
-			+ "being silently skipped when a subclass overrides a parent test method "
-			+ "without carrying the `@Test` annotation forward."
+			"Add `@Test` annotation to `@Override` methods in test classes when the " +
+			"overridden parent method has `@Test`. This prevents test methods from " +
+			"being silently skipped when a subclass overrides a parent test method " +
+			"without carrying the `@Test` annotation forward."
 		);
 	}
 

@@ -26,9 +26,9 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
 	name = "`sortThis().select(pred)` -> `select(pred).sortThis()`",
-	description = "Transforms `list.sortThis().select(pred)` to `list.select(pred).sortThis()` for Eclipse Collections MutableList types. "
-		+ "This optimization filters before sorting, reducing the number of elements that need to be sorted. "
-		+ "Note: This is only safe when the select predicate does not depend on sorted order."
+	description = "Transforms `list.sortThis().select(pred)` to `list.select(pred).sortThis()` for Eclipse Collections MutableList types. " +
+		"This optimization filters before sorting, reducing the number of elements that need to be sorted. " +
+		"Note: This is only safe when the select predicate does not depend on sorted order."
 )
 public class ECSelectBeforeSortThis
 {

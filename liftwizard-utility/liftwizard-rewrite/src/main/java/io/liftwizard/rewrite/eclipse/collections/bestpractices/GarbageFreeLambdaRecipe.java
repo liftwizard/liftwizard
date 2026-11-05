@@ -71,9 +71,9 @@ public class GarbageFreeLambdaRecipe
 	public String getDescription()
 	{
 		return (
-			"Rewrites a single-arg Eclipse Collections call like `richIterable.select(x -> x.foo(captured))` "
-			+ "to its non-capturing `*With` form `richIterable.selectWith(Type::foo, captured)`. "
-			+ "The captured value must not reference the lambda parameter."
+			"Rewrites a single-arg Eclipse Collections call like `richIterable.select(x -> x.foo(captured))` " +
+			"to its non-capturing `*With` form `richIterable.selectWith(Type::foo, captured)`. " +
+			"The captured value must not reference the lambda parameter."
 		);
 	}
 

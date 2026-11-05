@@ -50,9 +50,9 @@ public class EnforceConsistentConstructorArgumentLineWrapping
 	public String getDescription()
 	{
 		return (
-			"When a constructor call has multiple arguments and any argument is line-wrapped, "
-			+ "enforce that all arguments use line wrapping for consistency. "
-			+ "Valid fixed-multiple groupings like key-value pairs are left unchanged."
+			"When a constructor call has multiple arguments and any argument is line-wrapped, " +
+			"enforce that all arguments use line wrapping for consistency. " +
+			"Valid fixed-multiple groupings like key-value pairs are left unchanged."
 		);
 	}
 

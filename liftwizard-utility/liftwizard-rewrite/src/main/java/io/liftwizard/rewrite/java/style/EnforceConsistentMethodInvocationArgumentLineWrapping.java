@@ -50,9 +50,9 @@ public class EnforceConsistentMethodInvocationArgumentLineWrapping
 	public String getDescription()
 	{
 		return (
-			"When a method call has multiple arguments and any argument is line-wrapped, "
-			+ "enforce that all arguments use line wrapping for consistency. "
-			+ "Valid fixed-multiple groupings like key-value pairs are left unchanged."
+			"When a method call has multiple arguments and any argument is line-wrapped, " +
+			"enforce that all arguments use line wrapping for consistency. " +
+			"Valid fixed-multiple groupings like key-value pairs are left unchanged."
 		);
 	}
 

@@ -24,16 +24,16 @@ import org.openrewrite.java.template.RecipeDescriptor;
 
 @RecipeDescriptor(
 	name = "`count(predicate) == size()` to `allSatisfy(predicate)`",
-	description = "Converts count() == size() comparisons to allSatisfy() for Eclipse Collections types. "
-		+ "The allSatisfy() method is more readable and can short-circuit on the first non-matching element, "
-		+ "while count() == size() must scan the entire collection."
+	description = "Converts count() == size() comparisons to allSatisfy() for Eclipse Collections types. " +
+		"The allSatisfy() method is more readable and can short-circuit on the first non-matching element, " +
+		"while count() == size() must scan the entire collection."
 )
 public class ECCountEqualsSize
 {
 	@RecipeDescriptor(
 		name = "`count(predicate) == size()` to `allSatisfy(predicate)`",
-		description = "Converts `iterable.count(predicate) == iterable.size()` and "
-			+ "`iterable.size() == iterable.count(predicate)` to `iterable.allSatisfy(predicate)`."
+		description = "Converts `iterable.count(predicate) == iterable.size()` and " +
+			"`iterable.size() == iterable.count(predicate)` to `iterable.allSatisfy(predicate)`."
 	)
 	public static final class CountEqualsSizeToAllSatisfy<T>
 	{

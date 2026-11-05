@@ -41,9 +41,9 @@ public final class DoesNotUseLog4j1ObjectLogging
 	public String getDescription()
 	{
 		return (
-			"Precondition that matches source files which do not pass non-String Objects to "
-			+ "Log4j 1.x logging methods. Files that use object logging (e.g., `LOGGER.info(myObject)`) "
-			+ "are excluded, preventing migration recipes from destroying structured logging."
+			"Precondition that matches source files which do not pass non-String Objects to " +
+			"Log4j 1.x logging methods. Files that use object logging (e.g., `LOGGER.info(myObject)`) " +
+			"are excluded, preventing migration recipes from destroying structured logging."
 		);
 	}
 

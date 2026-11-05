@@ -49,12 +49,12 @@ public class ECArraysAsListToWith
 	public String getDescription()
 	{
 		return (
-			"Replace `FastList.newList(Arrays.asList())`, `UnifiedSet.newSet(Arrays.asList())`, "
-			+ "`HashBag.newBag(Arrays.asList())`, `TreeSortedSet.newSet(Arrays.asList())`, and "
-			+ "`TreeBag.newBag(Arrays.asList())` with Eclipse Collections factory methods using varargs. "
-			+ "This recipe properly handles varargs of any arity. "
-			+ "Note: This could be refactored to use Refaster once OpenRewrite issue #4397 is resolved, "
-			+ "which will add support for the @Repeated annotation for varargs matching."
+			"Replace `FastList.newList(Arrays.asList())`, `UnifiedSet.newSet(Arrays.asList())`, " +
+			"`HashBag.newBag(Arrays.asList())`, `TreeSortedSet.newSet(Arrays.asList())`, and " +
+			"`TreeBag.newBag(Arrays.asList())` with Eclipse Collections factory methods using varargs. " +
+			"This recipe properly handles varargs of any arity. " +
+			"Note: This could be refactored to use Refaster once OpenRewrite issue #4397 is resolved, " +
+			"which will add support for the @Repeated annotation for varargs matching."
 		);
 	}
 
@@ -197,12 +197,12 @@ public class ECArraysAsListToWith
 			{
 				String varargsPlaceholder = this.buildVarargsPlaceholder(varargsElements);
 				templateSource =
-					factoryClass
-					+ "."
-					+ factoryMethod
-					+ ".with(#{any(java.util.Comparator)}"
-					+ (varargsPlaceholder.isEmpty() ? "" : ", " + varargsPlaceholder)
-					+ ")";
+					factoryClass +
+					"." +
+					factoryMethod +
+					".with(#{any(java.util.Comparator)}" +
+					(varargsPlaceholder.isEmpty() ? "" : ", " + varargsPlaceholder) +
+					")";
 			}
 			else
 			{

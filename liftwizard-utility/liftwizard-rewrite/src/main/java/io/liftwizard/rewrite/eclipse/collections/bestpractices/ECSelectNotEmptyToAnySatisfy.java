@@ -53,8 +53,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
  */
 @RecipeDescriptor(
 	name = "`select(pred).notEmpty()` to `anySatisfy(pred)`",
-	description = "Transforms `collection.select(pred).notEmpty()` to `collection.anySatisfy(pred)`. "
-		+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
+	description = "Transforms `collection.select(pred).notEmpty()` to `collection.anySatisfy(pred)`. " +
+		"Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
 )
 public class ECSelectNotEmptyToAnySatisfy
 {

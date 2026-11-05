@@ -70,10 +70,10 @@ public class ECStreamMinMaxToMinMax
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().min(comparator)` to `collection.minOptional(comparator)` and "
-			+ "`collection.stream().max(comparator)` to `collection.maxOptional(comparator)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "minOptional/maxOptional methods directly on RichIterable."
+			"Transforms `collection.stream().min(comparator)` to `collection.minOptional(comparator)` and " +
+			"`collection.stream().max(comparator)` to `collection.maxOptional(comparator)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"minOptional/maxOptional methods directly on RichIterable."
 		);
 	}
 

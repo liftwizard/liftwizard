@@ -84,13 +84,13 @@ public final class UsesLog4j1ObjectLogging
 	public String getDescription()
 	{
 		return (
-			"Finds Log4j 1.x logging where the message argument is not a CharSequence. "
-			+ "These pass an Object directly (e.g., `LOGGER.info(myObject)` "
-			+ "or `collection.forEach(LOGGER::info)`) "
-			+ "which allows appenders to inspect the object's type for structured logging. "
-			+ "CharSequence message arguments (e.g., String, StringBuilder) and Throwable "
-			+ "message arguments (e.g., `LOGGER.error(exception)`) are excluded "
-			+ "because they migrate safely to SLF4J."
+			"Finds Log4j 1.x logging where the message argument is not a CharSequence. " +
+			"These pass an Object directly (e.g., `LOGGER.info(myObject)` " +
+			"or `collection.forEach(LOGGER::info)`) " +
+			"which allows appenders to inspect the object's type for structured logging. " +
+			"CharSequence message arguments (e.g., String, StringBuilder) and Throwable " +
+			"message arguments (e.g., `LOGGER.error(exception)`) are excluded " +
+			"because they migrate safely to SLF4J."
 		);
 	}
 
@@ -158,8 +158,8 @@ public final class UsesLog4j1ObjectLogging
 		private static @Nullable JavaType consumedMessageType(J.MemberReference mr)
 		{
 			if (
-				mr.getType() instanceof JavaType.Parameterized functionalInterface
-				&& functionalInterface.getTypeParameters().size() == 1
+				mr.getType() instanceof JavaType.Parameterized functionalInterface &&
+				functionalInterface.getTypeParameters().size() == 1
 			)
 			{
 				return functionalInterface.getTypeParameters().getFirst();

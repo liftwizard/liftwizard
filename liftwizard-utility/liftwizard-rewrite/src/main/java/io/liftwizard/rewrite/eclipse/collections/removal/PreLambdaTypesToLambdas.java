@@ -146,12 +146,12 @@ public class PreLambdaTypesToLambdas
 	public String getDescription()
 	{
 		return (
-			"Replace Eclipse Collections' pre-lambda utility classes and constants with equivalent Java lambdas"
-			+ " and method references (e.g. `AddFunction.INTEGER` → `Integer::sum`,"
-			+ " `new CollectionAddProcedure<>(coll)` → `coll::add`, `MultiplyFunction.INTEGER` → `(a, b) -> a * b`)."
-			+ " Method-reference substitutions are skipped when the use-site target type is the concrete"
-			+ " implementing class or `java.lang.Object`, when the receiver is a `null` literal, or when the"
-			+ " substituted method reference would create an ambiguous overload at the call site."
+			"Replace Eclipse Collections' pre-lambda utility classes and constants with equivalent Java lambdas" +
+			" and method references (e.g. `AddFunction.INTEGER` → `Integer::sum`," +
+			" `new CollectionAddProcedure<>(coll)` → `coll::add`, `MultiplyFunction.INTEGER` → `(a, b) -> a * b`)." +
+			" Method-reference substitutions are skipped when the use-site target type is the concrete" +
+			" implementing class or `java.lang.Object`, when the receiver is a `null` literal, or when the" +
+			" substituted method reference would create an ambiguous overload at the call site."
 		);
 	}
 

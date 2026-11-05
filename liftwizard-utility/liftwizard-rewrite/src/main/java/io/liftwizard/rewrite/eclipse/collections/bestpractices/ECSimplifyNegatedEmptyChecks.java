@@ -45,10 +45,10 @@ public class ECSimplifyNegatedEmptyChecks
 	public String getDescription()
 	{
 		return (
-			"Simplifies negated empty checks: `!iterable.isEmpty()` to `iterable.notEmpty()` "
-			+ "and `!iterable.notEmpty()` to `iterable.isEmpty()` for Eclipse Collections types. "
-			+ "Prevents transformations inside isEmpty() or notEmpty() method implementations "
-			+ "to avoid infinite recursion."
+			"Simplifies negated empty checks: `!iterable.isEmpty()` to `iterable.notEmpty()` " +
+			"and `!iterable.notEmpty()` to `iterable.isEmpty()` for Eclipse Collections types. " +
+			"Prevents transformations inside isEmpty() or notEmpty() method implementations " +
+			"to avoid infinite recursion."
 		);
 	}
 
@@ -100,8 +100,8 @@ public class ECSimplifyNegatedEmptyChecks
 			}
 
 			if (
-				methodInv.getSelect() == null
-				|| !TypeUtils.isAssignableTo(RICH_ITERABLE, methodInv.getSelect().getType())
+				methodInv.getSelect() == null ||
+				!TypeUtils.isAssignableTo(RICH_ITERABLE, methodInv.getSelect().getType())
 			)
 			{
 				return result;

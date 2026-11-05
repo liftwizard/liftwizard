@@ -74,8 +74,8 @@ public class DropwizardRuleAnnotations
 	public String getDescription()
 	{
 		return (
-			"Replace JUnit 4 `@ClassRule`/`@Rule` annotations with JUnit 5 `@RegisterExtension` "
-			+ "and add `@ExtendWith(DropwizardExtensionsSupport.class)` to the test class."
+			"Replace JUnit 4 `@ClassRule`/`@Rule` annotations with JUnit 5 `@RegisterExtension` " +
+			"and add `@ExtendWith(DropwizardExtensionsSupport.class)` to the test class."
 		);
 	}
 

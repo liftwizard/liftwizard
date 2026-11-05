@@ -53,8 +53,8 @@ import org.openrewrite.java.template.RecipeDescriptor;
  */
 @RecipeDescriptor(
 	name = "`select(pred).size()` to `count(pred)`",
-	description = "Transforms `collection.select(pred).size()` to `collection.count(pred)`. "
-		+ "Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
+	description = "Transforms `collection.select(pred).size()` to `collection.count(pred)`. " +
+		"Also handles static utility methods like ArrayIterate.select() and ListIterate.select()."
 )
 public class ECSelectSizeToCount
 {

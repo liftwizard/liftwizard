@@ -80,11 +80,11 @@ public class ECStreamCollectGroupingByToGroupBy
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.groupingBy(fn))` and "
-			+ "`collection.stream().collect(Collectors.groupingBy(fn, Collectors.toSet()))` "
-			+ "to `collection.groupBy(fn)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the groupBy method directly on RichIterable, returning a Multimap."
+			"Transforms `collection.stream().collect(Collectors.groupingBy(fn))` and " +
+			"`collection.stream().collect(Collectors.groupingBy(fn, Collectors.toSet()))` " +
+			"to `collection.groupBy(fn)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the groupBy method directly on RichIterable, returning a Multimap."
 		);
 	}
 
