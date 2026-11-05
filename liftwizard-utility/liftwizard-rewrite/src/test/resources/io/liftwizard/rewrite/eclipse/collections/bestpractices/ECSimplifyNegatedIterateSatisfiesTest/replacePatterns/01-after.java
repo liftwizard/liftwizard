@@ -28,16 +28,16 @@ class Test
 		}
 
 		if (
-			Iterate.anySatisfy(list, predicate1)
-			|| Iterate.noneSatisfy(list, predicate2)
+			Iterate.anySatisfy(list, predicate1) ||
+				Iterate.noneSatisfy(list, predicate2)
 		)
 		{
 			// Either condition met
 		}
 
 		if (
-			Iterate.anySatisfy(list, predicate1)
-			&& Iterate.noneSatisfy(list, predicate2)
+			Iterate.anySatisfy(list, predicate1) &&
+				Iterate.noneSatisfy(list, predicate2)
 		)
 		{
 			// Double negation in conditions

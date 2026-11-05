@@ -48,8 +48,8 @@ class Test
 		List<String> result2 = list.toSortedList(Comparator.naturalOrder());
 		boolean result3 = list.size() > 2;
 		boolean result4 =
-			2
-			< list
+			2 <
+			list
 				.select((each) -> !each.isEmpty())
 				.size();
 		Optional<String> result5 = list.detectOptional(String::isEmpty);

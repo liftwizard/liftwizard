@@ -35,8 +35,8 @@ class Test
 		List<String> result2 = ArrayAdapter.adapt(values).toSortedList(Comparator.naturalOrder());
 		boolean result3 = ArrayAdapter.adapt(values).size() > 2;
 		boolean result4 =
-			2
-			< ArrayAdapter.adapt(values)
+			2 <
+			ArrayAdapter.adapt(values)
 				.select((each) -> !each.isEmpty())
 				.size();
 		Optional<String> result5 = ArrayAdapter.adapt(values).detectOptional(String::isEmpty);
