@@ -47,20 +47,20 @@ public class Dropwizard3LoadRoleInfoSignature
 	private static final String LIST = "java.util.List";
 	private static final String ABSTRACT_LOGIN_SERVICE = "org.eclipse.jetty.security.AbstractLoginService";
 	private static final String JETTY_SECURITY_STUB = """
-	package org.eclipse.jetty.security;
+		package org.eclipse.jetty.security;
 
-	public class UserPrincipal {
-	    public UserPrincipal(String name, Object credential) {}
-	    public String getName() { return null; }
-	}
-	""";
+		public class UserPrincipal {
+		    public UserPrincipal(String name, Object credential) {}
+		    public String getName() { return null; }
+		}
+		""";
 	private static final String ROLE_PRINCIPAL_STUB = """
-	package org.eclipse.jetty.security;
+		package org.eclipse.jetty.security;
 
-	public class RolePrincipal {
-	    public RolePrincipal(String name) {}
-	}
-	""";
+		public class RolePrincipal {
+		    public RolePrincipal(String name) {}
+		}
+		""";
 
 	@Override
 	public String getDisplayName()

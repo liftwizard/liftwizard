@@ -35,17 +35,17 @@ class VerifyAssertEmptyToAssertJTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.collections.impl.test;
+						package org.eclipse.collections.impl.test;
 
-					import java.util.Map;
+						import java.util.Map;
 
-					public final class Verify {
-						public static void assertEmpty(String message, Iterable<?> iterable) {}
-						public static void assertEmpty(Iterable<?> iterable) {}
-						public static void assertEmpty(String message, Map<?, ?> map) {}
-						public static void assertEmpty(Map<?, ?> map) {}
-					}
-					"""
+						public final class Verify {
+							public static void assertEmpty(String message, Iterable<?> iterable) {}
+							public static void assertEmpty(Iterable<?> iterable) {}
+							public static void assertEmpty(String message, Map<?, ?> map) {}
+							public static void assertEmpty(Map<?, ?> map) {}
+						}
+						"""
 				)
 				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
 		);

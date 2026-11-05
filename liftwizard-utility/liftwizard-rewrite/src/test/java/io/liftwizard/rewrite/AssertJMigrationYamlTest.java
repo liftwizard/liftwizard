@@ -33,32 +33,32 @@ class AssertJMigrationYamlTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.collections.impl.test;
+						package org.eclipse.collections.impl.test;
 
-					import java.util.Map;
-					import java.util.concurrent.Callable;
-					import org.eclipse.collections.api.block.predicate.Predicate;
+						import java.util.Map;
+						import java.util.concurrent.Callable;
+						import org.eclipse.collections.api.block.predicate.Predicate;
 
-					public final class Verify {
-						public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
-						public static void assertEmpty(String message, Iterable<?> iterable) {}
-						public static void assertEmpty(Iterable<?> iterable) {}
-						public static void assertEmpty(String message, Map<?, ?> map) {}
-						public static void assertEmpty(Map<?, ?> map) {}
-						public static void assertNotEmpty(String message, Iterable<?> iterable) {}
-						public static void assertNotEmpty(Iterable<?> iterable) {}
-						public static void assertNotEmpty(String message, Map<?, ?> map) {}
-						public static void assertNotEmpty(Map<?, ?> map) {}
-						public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
-						public static void assertSize(int expectedSize, Iterable<?> iterable) {}
-						public static void assertSize(String message, int expectedSize, Object[] array) {}
-						public static void assertSize(int expectedSize, Object[] array) {}
-						public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
-						public static void assertSize(int expectedSize, Map<?, ?> map) {}
-						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
-						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
-					}
-					"""
+						public final class Verify {
+							public static <T> void assertCount(int expectedCount, Iterable<T> iterable, Predicate<? super T> predicate) {}
+							public static void assertEmpty(String message, Iterable<?> iterable) {}
+							public static void assertEmpty(Iterable<?> iterable) {}
+							public static void assertEmpty(String message, Map<?, ?> map) {}
+							public static void assertEmpty(Map<?, ?> map) {}
+							public static void assertNotEmpty(String message, Iterable<?> iterable) {}
+							public static void assertNotEmpty(Iterable<?> iterable) {}
+							public static void assertNotEmpty(String message, Map<?, ?> map) {}
+							public static void assertNotEmpty(Map<?, ?> map) {}
+							public static void assertSize(String message, int expectedSize, Iterable<?> iterable) {}
+							public static void assertSize(int expectedSize, Iterable<?> iterable) {}
+							public static void assertSize(String message, int expectedSize, Object[] array) {}
+							public static void assertSize(int expectedSize, Object[] array) {}
+							public static void assertSize(String mapName, int expectedSize, Map<?, ?> map) {}
+							public static void assertSize(int expectedSize, Map<?, ?> map) {}
+							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
+							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
+						}
+						"""
 				)
 				.classpath("eclipse-collections-api", "eclipse-collections", "assertj-core")
 		);

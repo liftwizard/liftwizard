@@ -89,11 +89,11 @@ class IntegrationTest
 		String jsonResponse = response.readEntity(String.class);
 		// language=JSON
 		var expected = """
-		{
-			"id": 1,
-			"content": "Hello, Dr. IntegrationTest!"
-		}
-		""";
+			{
+				"id": 1,
+				"content": "Hello, Dr. IntegrationTest!"
+			}
+			""";
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}
 

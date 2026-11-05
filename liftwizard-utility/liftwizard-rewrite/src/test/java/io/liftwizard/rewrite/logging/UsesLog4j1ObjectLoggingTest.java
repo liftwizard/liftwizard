@@ -55,17 +55,17 @@ class UsesLog4j1ObjectLoggingTest
 	void detectsObjectArgumentWhenLoggerInheritanceIsSevered()
 	{
 		String severedLoggerStub = """
-		package org.apache.log4j;
-		public class Logger {
-		    public static Logger getLogger(Class clazz) { return null; }
-		    public void trace(Object message) {}
-		    public void debug(Object message) {}
-		    public void info(Object message) {}
-		    public void warn(Object message) {}
-		    public void error(Object message) {}
-		    public void fatal(Object message) {}
-		}
-		""";
+			package org.apache.log4j;
+			public class Logger {
+			    public static Logger getLogger(Class clazz) { return null; }
+			    public void trace(Object message) {}
+			    public void debug(Object message) {}
+			    public void info(Object message) {}
+			    public void warn(Object message) {}
+			    public void error(Object message) {}
+			    public void fatal(Object message) {}
+			}
+			""";
 
 		this.rewriteRun(
 			(spec) ->

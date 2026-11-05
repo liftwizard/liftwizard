@@ -36,15 +36,15 @@ class VerifyAssertThrowsToAssertJTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.collections.impl.test;
+						package org.eclipse.collections.impl.test;
 
-					import java.util.concurrent.Callable;
+						import java.util.concurrent.Callable;
 
-					public final class Verify {
-						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
-						public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
-					}
-					"""
+						public final class Verify {
+							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Runnable code) {}
+							public static void assertThrows(Class<? extends Throwable> expectedExceptionClass, Callable<?> code) {}
+						}
+						"""
 				)
 				.classpath("assertj-core")
 		);

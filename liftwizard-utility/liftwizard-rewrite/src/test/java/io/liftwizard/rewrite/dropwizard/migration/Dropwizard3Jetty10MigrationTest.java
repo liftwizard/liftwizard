@@ -35,34 +35,34 @@ class Dropwizard3Jetty10MigrationTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.jetty.util.component;
+						package org.eclipse.jetty.util.component;
 
-					import java.util.EventListener;
+						import java.util.EventListener;
 
-					public abstract class AbstractLifeCycle implements LifeCycle {
-					    public void addLifeCycleListener(LifeCycle.Listener listener) {}
-					    public void addEventListener(EventListener listener) {}
-					}
-					""",
+						public abstract class AbstractLifeCycle implements LifeCycle {
+						    public void addLifeCycleListener(LifeCycle.Listener listener) {}
+						    public void addEventListener(EventListener listener) {}
+						}
+						""",
 					"""
-					package org.eclipse.jetty.util.component;
+						package org.eclipse.jetty.util.component;
 
-					import java.util.EventListener;
+						import java.util.EventListener;
 
-					public interface LifeCycle {
-					    void addLifeCycleListener(Listener listener);
-					    void addEventListener(EventListener listener);
+						public interface LifeCycle {
+						    void addLifeCycleListener(Listener listener);
+						    void addEventListener(EventListener listener);
 
-					    interface Listener extends EventListener {
-					    }
-					}
-					""",
+						    interface Listener extends EventListener {
+						    }
+						}
+						""",
 					"""
-					package org.eclipse.jetty.util.component;
+						package org.eclipse.jetty.util.component;
 
-					public class ContainerLifeCycle extends AbstractLifeCycle {
-					}
-					"""
+						public class ContainerLifeCycle extends AbstractLifeCycle {
+						}
+						"""
 				)
 		);
 	}

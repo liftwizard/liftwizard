@@ -133,10 +133,7 @@ public class ConfigLoggingBundle
 		}
 	}
 
-	static Optional<ObjectNode> minimizeConfiguration(
-		@Nonnull Object configuration,
-		@Nonnull ObjectMapper objectMapper
-	)
+	static Optional<ObjectNode> minimizeConfiguration(@Nonnull Object configuration, @Nonnull ObjectMapper objectMapper)
 	{
 		ObjectMapper minimizationMapper = objectMapper.copy();
 		minimizationMapper.setMixInResolver(new JsonIncludeNonDefaultMixInResolver());

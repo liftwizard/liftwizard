@@ -35,18 +35,18 @@ class Dropwizard3Jetty10LoginServiceTypesTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package org.eclipse.jetty.security;
+						package org.eclipse.jetty.security;
 
-					public abstract class AbstractLoginService {
-					    public static class UserPrincipal {
-					        public UserPrincipal(String name, Object credential) {}
-					        public String getName() { return null; }
-					    }
-					    public static class RolePrincipal {
-					        public RolePrincipal(String name) {}
-					    }
-					}
-					"""
+						public abstract class AbstractLoginService {
+						    public static class UserPrincipal {
+						        public UserPrincipal(String name, Object credential) {}
+						        public String getName() { return null; }
+						    }
+						    public static class RolePrincipal {
+						        public RolePrincipal(String name) {}
+						    }
+						}
+						"""
 				)
 		);
 	}

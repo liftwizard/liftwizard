@@ -36,25 +36,25 @@ class ECStreamGatherFoldToInjectIntoTest
 {
 	// Stub for java.util.stream.Gatherer (Java 24+)
 	private static final String GATHERER_STUB = """
-	package java.util.stream;
+		package java.util.stream;
 
-	public interface Gatherer<T, A, R> {
-	}
-	""";
+		public interface Gatherer<T, A, R> {
+		}
+		""";
 
 	// Stub for java.util.stream.Gatherers (Java 24+)
 	private static final String GATHERERS_STUB = """
-	package java.util.stream;
+		package java.util.stream;
 
-	import java.util.function.BiFunction;
-	import java.util.function.Supplier;
+		import java.util.function.BiFunction;
+		import java.util.function.Supplier;
 
-	public class Gatherers {
-	    public static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder) {
-	        return null;
-	    }
-	}
-	""";
+		public class Gatherers {
+		    public static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder) {
+		        return null;
+		    }
+		}
+		""";
 
 	@Override
 	public void defaults(RecipeSpec spec)

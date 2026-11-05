@@ -98,9 +98,7 @@ public class LiftwizardGraphQLMetricsInstrumentation
 
 	@Override
 	@Nonnull
-	public InstrumentationContext<List<ValidationError>> beginValidation(
-		InstrumentationValidationParameters parameters
-	)
+	public InstrumentationContext<List<ValidationError>> beginValidation(InstrumentationValidationParameters parameters)
 	{
 		return new GlobalInstrumentationContext<>(this.validationTimer, this.validationExceptionsMeter);
 	}

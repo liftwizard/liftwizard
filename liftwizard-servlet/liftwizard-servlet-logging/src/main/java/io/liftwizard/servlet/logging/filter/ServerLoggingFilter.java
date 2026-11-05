@@ -61,11 +61,7 @@ public class ServerLoggingFilter
 	private final Consumer<StructuredArguments> structuredLogger;
 	private final Clock clock;
 
-	public ServerLoggingFilter(
-		LoggingConfig loggingConfig,
-		Consumer<StructuredArguments> structuredLogger,
-		Clock clock
-	)
+	public ServerLoggingFilter(LoggingConfig loggingConfig, Consumer<StructuredArguments> structuredLogger, Clock clock)
 	{
 		this.loggingConfig = Objects.requireNonNull(loggingConfig);
 		this.structuredLogger = Objects.requireNonNull(structuredLogger);

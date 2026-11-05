@@ -35,13 +35,13 @@ class Dropwizard3IAccessEventGetSequenceNumberTest
 				.styles(AbstractRewriteStyles.styles())
 				.dependsOn(
 					"""
-					package ch.qos.logback.access.spi;
+						package ch.qos.logback.access.spi;
 
-					public interface IAccessEvent {
-						String getRequestURL();
-						long getSequenceNumber();
-					}
-					"""
+						public interface IAccessEvent {
+							String getRequestURL();
+							long getSequenceNumber();
+						}
+						"""
 				)
 		);
 	}

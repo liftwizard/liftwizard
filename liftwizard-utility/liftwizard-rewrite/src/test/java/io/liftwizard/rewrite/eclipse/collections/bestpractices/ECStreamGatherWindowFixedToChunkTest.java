@@ -36,24 +36,24 @@ class ECStreamGatherWindowFixedToChunkTest
 {
 	// Stub for java.util.stream.Gatherer (Java 24+)
 	private static final String GATHERER_STUB = """
-	package java.util.stream;
+		package java.util.stream;
 
-	public interface Gatherer<T, A, R> {
-	}
-	""";
+		public interface Gatherer<T, A, R> {
+		}
+		""";
 
 	// Stub for java.util.stream.Gatherers (Java 24+)
 	private static final String GATHERERS_STUB = """
-	package java.util.stream;
+		package java.util.stream;
 
-	import java.util.List;
+		import java.util.List;
 
-	public class Gatherers {
-	    public static <T> Gatherer<T, ?, List<T>> windowFixed(int windowSize) {
-	        return null;
-	    }
-	}
-	""";
+		public class Gatherers {
+		    public static <T> Gatherer<T, ?, List<T>> windowFixed(int windowSize) {
+		        return null;
+		    }
+		}
+		""";
 
 	@Override
 	public void defaults(RecipeSpec spec)

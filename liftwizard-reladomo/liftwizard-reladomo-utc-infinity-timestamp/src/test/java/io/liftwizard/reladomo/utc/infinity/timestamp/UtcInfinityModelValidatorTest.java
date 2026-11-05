@@ -42,16 +42,16 @@ class UtcInfinityModelValidatorTest
 	void reportsEveryViolation()
 	{
 		String expectedMessage = """
-		The JVM default time zone is %s, not UTC. Every Reladomo timestamp attribute must use \
-		timezoneConversion="convert-to-utc" and every as-of attribute must use UtcInfinityTimestamp:
-		    io.liftwizard.reladomo.utc.infinity.timestamp.model.LocalTimestampObject.createdOn: \
-		timezoneConversion is not "convert-to-utc".
-		    io.liftwizard.reladomo.utc.infinity.timestamp.model.NewYorkInfinityObject.system: \
-		infinityDate is 9999-12-02T04:59:00Z, not UtcInfinityTimestamp's 9999-12-01T23:59:00Z.
-		    io.liftwizard.reladomo.utc.infinity.timestamp.model.LocalAsOfObject.systemFrom: \
-		timezoneConversion is not "convert-to-utc".
-		    io.liftwizard.reladomo.utc.infinity.timestamp.model.LocalAsOfObject.systemTo: \
-		timezoneConversion is not "convert-to-utc".""".formatted(TimeZone.getDefault().getID());
+			The JVM default time zone is %s, not UTC. Every Reladomo timestamp attribute must use \
+			timezoneConversion="convert-to-utc" and every as-of attribute must use UtcInfinityTimestamp:
+			    io.liftwizard.reladomo.utc.infinity.timestamp.model.LocalTimestampObject.createdOn: \
+			timezoneConversion is not "convert-to-utc".
+			    io.liftwizard.reladomo.utc.infinity.timestamp.model.NewYorkInfinityObject.system: \
+			infinityDate is 9999-12-02T04:59:00Z, not UtcInfinityTimestamp's 9999-12-01T23:59:00Z.
+			    io.liftwizard.reladomo.utc.infinity.timestamp.model.LocalAsOfObject.systemFrom: \
+			timezoneConversion is not "convert-to-utc".
+			    io.liftwizard.reladomo.utc.infinity.timestamp.model.LocalAsOfObject.systemTo: \
+			timezoneConversion is not "convert-to-utc".""".formatted(TimeZone.getDefault().getID());
 
 		assertThatThrownBy(() ->
 			UtcInfinityModelValidator.validate(

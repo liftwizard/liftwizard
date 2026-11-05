@@ -60,13 +60,13 @@ public class ECIntStreamRangeClosedToIntInterval
 	private static final String INT_INTERVAL_FROM_TO = "IntInterval.fromTo(#{any(int)}, #{any(int)})";
 	private static final List<String> STUBS = List.of(
 		"""
-		package org.eclipse.collections.impl.list.primitive;
-		public final class IntInterval {
-		    public static IntInterval fromTo(int from, int to) { return null; }
-		    public void forEach(java.util.function.IntConsumer procedure) {}
-		    public long sum() { return 0L; }
-		}
-		"""
+			package org.eclipse.collections.impl.list.primitive;
+			public final class IntInterval {
+			    public static IntInterval fromTo(int from, int to) { return null; }
+			    public void forEach(java.util.function.IntConsumer procedure) {}
+			    public long sum() { return 0L; }
+			}
+			"""
 	);
 
 	@Override

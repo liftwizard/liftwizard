@@ -66,11 +66,11 @@ public class ECArraysStreamToArrayAdapter
 
 	private static final List<String> STUBS = List.of(
 		"""
-		package org.eclipse.collections.impl.list.fixed;
-		public final class ArrayAdapter<T> {
-		    public static <T> ArrayAdapter<T> adapt(T[] array) { return null; }
-		}
-		"""
+			package org.eclipse.collections.impl.list.fixed;
+			public final class ArrayAdapter<T> {
+			    public static <T> ArrayAdapter<T> adapt(T[] array) { return null; }
+			}
+			"""
 	);
 
 	@Override

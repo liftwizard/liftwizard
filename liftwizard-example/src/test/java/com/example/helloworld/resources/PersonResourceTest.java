@@ -76,12 +76,12 @@ class PersonResourceTest
 		// <editor-fold desc="Expected JSON">
 		// language=JSON
 		var expected = """
-		{
-			"id": 1,
-			"fullName": "Full Name",
-			"jobTitle": "Job Title"
-		}
-		""";
+			{
+				"id": 1,
+				"fullName": "Full Name",
+				"jobTitle": "Job Title"
+			}
+			""";
 		// </editor-fold>
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}
@@ -96,11 +96,11 @@ class PersonResourceTest
 		// <editor-fold desc="Expected JSON">
 		// language=JSON
 		var expected = """
-		{
-			"code": 404,
-			"message": "No such user."
-		}
-		""";
+			{
+				"code": 404,
+				"message": "No such user."
+			}
+			""";
 		// </editor-fold>
 		JSONAssert.assertEquals(jsonResponse, expected, jsonResponse, JSONCompareMode.STRICT);
 	}

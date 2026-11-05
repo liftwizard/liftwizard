@@ -75,9 +75,9 @@ public final class UtcInfinityModelValidator
 		if (violations.notEmpty())
 		{
 			String message = """
-			The JVM default time zone is %s, not UTC. Every Reladomo timestamp attribute must use \
-			timezoneConversion="convert-to-utc" and every as-of attribute must use UtcInfinityTimestamp:
-			    %s""".formatted(TimeZone.getDefault().getID(), String.join("\n    ", violations));
+				The JVM default time zone is %s, not UTC. Every Reladomo timestamp attribute must use \
+				timezoneConversion="convert-to-utc" and every as-of attribute must use UtcInfinityTimestamp:
+				    %s""".formatted(TimeZone.getDefault().getID(), String.join("\n    ", violations));
 			throw new IllegalStateException(message);
 		}
 	}
