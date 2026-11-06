@@ -267,7 +267,7 @@ jobs:
       - name: "Produce Checkstyle XML: Semantics"
         run: just checkstyle-profile --profile checkstyle-semantics --warn
 
-      - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
+      - uses: motlin/checkstyle-results@798069acf0651db9ba688e64a057ddef66717b31 # v1.3.0
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
@@ -310,7 +310,7 @@ jobs:
       - name: "Produce Checkstyle XML: Strict Semantics"
         run: just checkstyle-profile --profile checkstyle-semantics-strict --warn
 
-      - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
+      - uses: motlin/checkstyle-results@798069acf0651db9ba688e64a057ddef66717b31 # v1.3.0
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
@@ -353,7 +353,7 @@ jobs:
       - name: "Produce Checkstyle XML: Formatting"
         run: just checkstyle-profile --profile checkstyle-formatting --warn
 
-      - uses: motlin/checkstyle-results@c92e0239f18f0f28d862f227df2dd3bc0a768f9e # v1.2.0
+      - uses: motlin/checkstyle-results@798069acf0651db9ba688e64a057ddef66717b31 # v1.3.0
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
