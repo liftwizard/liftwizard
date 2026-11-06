@@ -19,6 +19,8 @@ package io.liftwizard.reladomo.graphql.operation;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,6 +85,28 @@ class GraphQLQueryToOperationConverterTemporalInTest
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.updatedAt().notIn(Set.of(TIMESTAMP_1, TIMESTAMP_2)))
+		);
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	@Test
+	void dateInKeepsNullValues()
+	{
+		Operation actual = convert("createdOn", "in", Arrays.asList("2024-01-01", null));
+
+		Operation expected = ItemFinder.all().and(
+			ItemFinder.all().and(ItemFinder.createdOn().in(new LinkedHashSet<>(Arrays.asList(DATE_1, null))))
+		);
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	@Test
+	void timestampInKeepsNullValues()
+	{
+		Operation actual = convert("updatedAt", "in", Arrays.asList("2024-01-01T12:00:00Z", null));
+
+		Operation expected = ItemFinder.all().and(
+			ItemFinder.all().and(ItemFinder.updatedAt().in(new LinkedHashSet<>(Arrays.asList(TIMESTAMP_1, null))))
 		);
 		assertThat(actual).isEqualTo(expected);
 	}
