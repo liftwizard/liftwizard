@@ -769,7 +769,8 @@ public class GraphQLQueryToOperationConverter
 		Set<Date> result = new LinkedHashSet<>();
 		for (String each : operationParameter)
 		{
-			result.add(GraphQLQueryToOperationConverter.getDate(each));
+			// Keep null elements, as the other attribute types do
+			result.add(each == null ? null : GraphQLQueryToOperationConverter.getDate(each));
 		}
 		return result;
 	}
@@ -779,7 +780,7 @@ public class GraphQLQueryToOperationConverter
 		Set<Timestamp> result = new LinkedHashSet<>();
 		for (String each : operationParameter)
 		{
-			result.add(GraphQLQueryToOperationConverter.getTimestamp(each));
+			result.add(each == null ? null : GraphQLQueryToOperationConverter.getTimestamp(each));
 		}
 		return result;
 	}
