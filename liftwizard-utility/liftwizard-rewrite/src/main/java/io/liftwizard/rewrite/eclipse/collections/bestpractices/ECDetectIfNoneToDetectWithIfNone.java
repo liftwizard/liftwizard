@@ -62,9 +62,9 @@ public class ECDetectIfNoneToDetectWithIfNone
 	public String getDescription()
 	{
 		return (
-			"Converts `richIterable.detectIfNone(x -> x.foo(captured), defaultFn)` to "
-			+ "`richIterable.detectWithIfNone(Type::foo, captured, defaultFn)` for Eclipse Collections types. "
-			+ "The captured value must not reference the lambda parameter."
+			"Converts `richIterable.detectIfNone(x -> x.foo(captured), defaultFn)` to " +
+			"`richIterable.detectWithIfNone(Type::foo, captured, defaultFn)` for Eclipse Collections types. " +
+			"The captured value must not reference the lambda parameter."
 		);
 	}
 
@@ -108,12 +108,12 @@ public class ECDetectIfNoneToDetectWithIfNone
 
 			String selectPlaceholder = "#{any(org.eclipse.collections.api.RichIterable<" + result.typeFqn() + ">)}";
 			String templateSource =
-				selectPlaceholder
-				+ ".detectWithIfNone("
-				+ result.simpleName()
-				+ "::"
-				+ result.methodName()
-				+ ", #{any()}, #{any()})";
+				selectPlaceholder +
+				".detectWithIfNone(" +
+				result.simpleName() +
+				"::" +
+				result.methodName() +
+				", #{any()}, #{any()})";
 
 			JavaTemplate template = JavaTemplate.builder(templateSource)
 				.imports(result.typeFqn())

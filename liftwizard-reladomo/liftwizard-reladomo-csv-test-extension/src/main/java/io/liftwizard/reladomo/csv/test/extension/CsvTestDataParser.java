@@ -191,9 +191,9 @@ public class CsvTestDataParser
 	{
 		if (attribute instanceof TimestampAttribute timestampAttribute)
 		{
-			Timestamp timestamp = timestampAttribute.isAsOfAttributeTo()
-				? toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity())
-				: null;
+			Timestamp timestamp = timestampAttribute.isAsOfAttributeTo() ?
+				toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity()) :
+				null;
 			timestampAttribute.setTimestampValue(dataObject, timestamp);
 		}
 		else if (attribute instanceof DateAttribute dateAttribute)
@@ -283,9 +283,9 @@ public class CsvTestDataParser
 		Timestamp timestamp = Timestamp.from(instant);
 		LocalDateTime utcDateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
 		if (
-			timestampAttribute.isAsOfAttributeTo()
-			&& (timestamp.equals(timestampAttribute.getAsOfAttributeInfinity())
-				|| utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
+			timestampAttribute.isAsOfAttributeTo() &&
+			(timestamp.equals(timestampAttribute.getAsOfAttributeInfinity()) ||
+				utcDateTime.equals(timestampAttribute.getAsOfAttributeInfinity().toLocalDateTime()))
 		)
 		{
 			return toUtcWallClock(timestampAttribute.getAsOfAttributeInfinity());

@@ -67,10 +67,10 @@ public final class ParameterizedLogging
 	public String getDescription()
 	{
 		return (
-			"Transform logging statements using concatenation for messages and variables into a parameterized format. "
-			+ "For example, `logger.info(\"hi \" + userName)` becomes `logger.info(\"hi {}\", userName)`. "
-			+ "Unlike the upstream recipe, this version does not transform simple object arguments like "
-			+ "`LOGGER.info(myObject)` to `LOGGER.info(\"{}\", myObject)`."
+			"Transform logging statements using concatenation for messages and variables into a parameterized format. " +
+			"For example, `logger.info(\"hi \" + userName)` becomes `logger.info(\"hi {}\", userName)`. " +
+			"Unlike the upstream recipe, this version does not transform simple object arguments like " +
+			"`LOGGER.info(myObject)` to `LOGGER.info(\"{}\", myObject)`."
 		);
 	}
 
@@ -93,8 +93,8 @@ public final class ParameterizedLogging
 
 		var concat = (J.Binary) message;
 		if (
-			concat.getLeft() instanceof J.Binary
-			&& ((J.Binary) concat.getLeft()).getOperator() == J.Binary.Type.Addition
+			concat.getLeft() instanceof J.Binary &&
+			((J.Binary) concat.getLeft()).getOperator() == J.Binary.Type.Addition
 		)
 		{
 			concatenationToLiteral(concat.getLeft(), result);
@@ -112,8 +112,8 @@ public final class ParameterizedLogging
 		}
 
 		if (
-			concat.getRight() instanceof J.Binary
-			&& ((J.Binary) concat.getRight()).getOperator() == J.Binary.Type.Addition
+			concat.getRight() instanceof J.Binary &&
+			((J.Binary) concat.getRight()).getOperator() == J.Binary.Type.Addition
 		)
 		{
 			concatenationToLiteral(concat.getRight(), result);
@@ -216,8 +216,8 @@ public final class ParameterizedLogging
 						concatenationArgs.addAll(literalAndArgs.arguments);
 					}
 					else if (
-						index == m.getArguments().size() - 1
-						&& TypeUtils.isAssignableTo("java.lang.Throwable", arg.getType())
+						index == m.getArguments().size() - 1 &&
+						TypeUtils.isAssignableTo("java.lang.Throwable", arg.getType())
 					)
 					{
 						possibleThrowable = arg;
@@ -296,8 +296,8 @@ public final class ParameterizedLogging
 
 			// Avoid changing reference if the templating didn't actually change the contents
 			if (
-				m != method
-				&& m
+				m != method &&
+				m
 					.print(this.getCursor().getParentTreeCursor())
 					.equals(method.print(this.getCursor().getParentTreeCursor()))
 			)
@@ -311,10 +311,10 @@ public final class ParameterizedLogging
 		{
 			JavaType expressionType = expression.getType();
 			return (
-				TypeUtils.isAssignableTo("org.slf4j.Marker", expressionType)
-				|| TypeUtils.isAssignableTo("org.apache.logging.log4j.Marker", expressionType)
-				|| TypeUtils.isAssignableTo("java.lang.System.Logger.Level", expressionType)
-				|| TypeUtils.isAssignableTo("java.util.logging.Level", expressionType)
+				TypeUtils.isAssignableTo("org.slf4j.Marker", expressionType) ||
+				TypeUtils.isAssignableTo("org.apache.logging.log4j.Marker", expressionType) ||
+				TypeUtils.isAssignableTo("java.lang.System.Logger.Level", expressionType) ||
+				TypeUtils.isAssignableTo("java.util.logging.Level", expressionType)
 			);
 		}
 	}

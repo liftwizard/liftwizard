@@ -83,11 +83,11 @@ public class ECArraysStreamToArrayAdapter
 	public String getDescription()
 	{
 		return (
-			"Transforms `Arrays.stream(array)` chains to `ArrayAdapter.adapt(array)` chains, "
-			+ "renaming intermediate operations to their Eclipse Collections equivalents "
-			+ "(`skip` to `drop`, `limit` to `take`, `filter` to `select`, `map` to `collect`, "
-			+ "`anyMatch` to `anySatisfy`, ...). Eclipse Collections' `ArrayAdapter` wraps an array "
-			+ "as a `RichIterable` without copying the array."
+			"Transforms `Arrays.stream(array)` chains to `ArrayAdapter.adapt(array)` chains, " +
+			"renaming intermediate operations to their Eclipse Collections equivalents " +
+			"(`skip` to `drop`, `limit` to `take`, `filter` to `select`, `map` to `collect`, " +
+			"`anyMatch` to `anySatisfy`, ...). Eclipse Collections' `ArrayAdapter` wraps an array " +
+			"as a `RichIterable` without copying the array."
 		);
 	}
 

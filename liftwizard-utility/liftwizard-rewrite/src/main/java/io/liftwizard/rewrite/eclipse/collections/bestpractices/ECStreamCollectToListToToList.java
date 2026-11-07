@@ -65,9 +65,9 @@ public class ECStreamCollectToListToToList
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.toList())` to `collection.toList()`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the toList method directly on RichIterable."
+			"Transforms `collection.stream().collect(Collectors.toList())` to `collection.toList()`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the toList method directly on RichIterable."
 		);
 	}
 

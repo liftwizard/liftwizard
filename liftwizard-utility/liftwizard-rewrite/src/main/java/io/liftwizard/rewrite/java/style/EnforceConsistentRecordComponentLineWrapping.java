@@ -50,9 +50,9 @@ public class EnforceConsistentRecordComponentLineWrapping
 	public String getDescription()
 	{
 		return (
-			"When a record declaration has multiple components and any component is line-wrapped, "
-			+ "enforce that all components use line wrapping for consistency. "
-			+ "Valid fixed-multiple groupings like key-value pairs are left unchanged."
+			"When a record declaration has multiple components and any component is line-wrapped, " +
+			"enforce that all components use line wrapping for consistency. " +
+			"Valid fixed-multiple groupings like key-value pairs are left unchanged."
 		);
 	}
 

@@ -61,9 +61,9 @@ public class ECStreamReduceToInjectInto
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().reduce(identity, accumulator)` to `collection.injectInto(identity, function)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the injectInto method directly on RichIterable. The injectInto method is Eclipse Collections' native fold operation."
+			"Transforms `collection.stream().reduce(identity, accumulator)` to `collection.injectInto(identity, function)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the injectInto method directly on RichIterable. The injectInto method is Eclipse Collections' native fold operation."
 		);
 	}
 

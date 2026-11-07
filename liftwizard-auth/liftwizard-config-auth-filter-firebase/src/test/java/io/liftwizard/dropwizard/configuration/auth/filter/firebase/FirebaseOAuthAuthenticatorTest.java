@@ -65,8 +65,8 @@ class FirebaseOAuthAuthenticatorTest
 				.map((event) -> event.getLevel() + " " + event.getFormattedMessage())
 				.toList();
 			assertThat(messages).containsExactly(
-				Level.WARN
-					+ " Firebase ID token verification failed: Failed to parse Firebase ID token. Make sure you passed a string that represents a complete and valid JWT. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
+				Level.WARN +
+					" Firebase ID token verification failed: Failed to parse Firebase ID token. Make sure you passed a string that represents a complete and valid JWT. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
 			);
 		}
 		finally

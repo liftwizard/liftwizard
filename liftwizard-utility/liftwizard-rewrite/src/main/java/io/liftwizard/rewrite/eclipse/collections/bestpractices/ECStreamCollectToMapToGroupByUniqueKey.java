@@ -72,10 +72,10 @@ public class ECStreamCollectToMapToGroupByUniqueKey
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.toMap(keyFn, Function.identity()))` "
-			+ "to `collection.groupByUniqueKey(keyFn)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the groupByUniqueKey method directly on RichIterable, returning a MutableMap."
+			"Transforms `collection.stream().collect(Collectors.toMap(keyFn, Function.identity()))` " +
+			"to `collection.groupByUniqueKey(keyFn)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the groupByUniqueKey method directly on RichIterable, returning a MutableMap."
 		);
 	}
 

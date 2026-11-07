@@ -66,10 +66,10 @@ public class UseVarForPrimitiveLiterals
 	public String getDescription()
 	{
 		return (
-			"Replace explicit type declarations with `var` when the variable is initialized with a "
-			+ "literal value (primitive or String). Does not transform method return values, "
-			+ "constructor calls, or other non-literal initializers. Skips `byte` and `short` "
-			+ "because their literals are indistinguishable from `int` literals."
+			"Replace explicit type declarations with `var` when the variable is initialized with a " +
+			"literal value (primitive or String). Does not transform method return values, " +
+			"constructor calls, or other non-literal initializers. Skips `byte` and `short` " +
+			"because their literals are indistinguishable from `int` literals."
 		);
 	}
 
@@ -181,8 +181,8 @@ public class UseVarForPrimitiveLiterals
 			}
 			Cursor grandparent = parent.getParentTreeCursor();
 			return (
-				parent.getValue() instanceof J.Block
-				&& (grandparent.getValue() instanceof J.ClassDeclaration || grandparent.getValue() instanceof NewClass)
+				parent.getValue() instanceof J.Block &&
+				(grandparent.getValue() instanceof J.ClassDeclaration || grandparent.getValue() instanceof NewClass)
 			);
 		}
 

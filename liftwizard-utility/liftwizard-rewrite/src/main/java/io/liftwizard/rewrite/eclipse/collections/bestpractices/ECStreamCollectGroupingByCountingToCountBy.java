@@ -68,10 +68,10 @@ public class ECStreamCollectGroupingByCountingToCountBy
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.groupingBy(fn, Collectors.counting()))` "
-			+ "to `collection.countBy(fn)`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the countBy method directly on RichIterable, returning a Bag."
+			"Transforms `collection.stream().collect(Collectors.groupingBy(fn, Collectors.counting()))` " +
+			"to `collection.countBy(fn)`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the countBy method directly on RichIterable, returning a Bag."
 		);
 	}
 

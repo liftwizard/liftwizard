@@ -78,9 +78,9 @@ public class ECSimplifyNegatedSelectReject
 	public String getDescription()
 	{
 		return (
-			"Transforms `iterable.select(x -> !pred(x))` to `iterable.reject(x -> pred(x))` "
-			+ "and `iterable.reject(x -> !pred(x))` to `iterable.select(x -> pred(x))` "
-			+ "for Eclipse Collections types. Also handles `!=` comparisons by flipping to `==`."
+			"Transforms `iterable.select(x -> !pred(x))` to `iterable.reject(x -> pred(x))` " +
+			"and `iterable.reject(x -> !pred(x))` to `iterable.select(x -> pred(x))` " +
+			"for Eclipse Collections types. Also handles `!=` comparisons by flipping to `==`."
 		);
 	}
 

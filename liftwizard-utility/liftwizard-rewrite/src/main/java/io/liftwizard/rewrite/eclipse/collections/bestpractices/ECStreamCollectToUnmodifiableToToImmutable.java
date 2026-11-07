@@ -74,10 +74,10 @@ public class ECStreamCollectToUnmodifiableToToImmutable
 	public String getDescription()
 	{
 		return (
-			"Transforms `collection.stream().collect(Collectors.toUnmodifiableList())` to `collection.toImmutableList()` "
-			+ "and `collection.stream().collect(Collectors.toUnmodifiableSet())` to `collection.toImmutableSet()`. "
-			+ "This eliminates the unnecessary Stream intermediary since Eclipse Collections has "
-			+ "the toImmutableList and toImmutableSet methods directly on RichIterable."
+			"Transforms `collection.stream().collect(Collectors.toUnmodifiableList())` to `collection.toImmutableList()` " +
+			"and `collection.stream().collect(Collectors.toUnmodifiableSet())` to `collection.toImmutableSet()`. " +
+			"This eliminates the unnecessary Stream intermediary since Eclipse Collections has " +
+			"the toImmutableList and toImmutableSet methods directly on RichIterable."
 		);
 	}
 

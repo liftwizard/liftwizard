@@ -63,8 +63,8 @@ public class PreserveMethodChainLineBreaks
 	public String getDescription()
 	{
 		return (
-			"Restores the line break before a chained method call when an earlier recipe in the same run replaced the "
-			+ "tail of a multi-line method chain and joined the call onto the previous line."
+			"Restores the line break before a chained method call when an earlier recipe in the same run replaced the " +
+			"tail of a multi-line method chain and joined the call onto the previous line."
 		);
 	}
 

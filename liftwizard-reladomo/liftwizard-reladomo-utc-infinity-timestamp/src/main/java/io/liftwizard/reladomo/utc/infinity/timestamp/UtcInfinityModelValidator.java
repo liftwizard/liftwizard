@@ -90,8 +90,8 @@ public final class UtcInfinityModelValidator
 		for (Attribute<?, ?> attribute : finder.getPersistentAttributes())
 		{
 			if (
-				attribute instanceof TimestampAttribute<?> timestampAttribute
-				&& !timestampAttribute.requiresConversionFromUtc()
+				attribute instanceof TimestampAttribute<?> timestampAttribute &&
+				!timestampAttribute.requiresConversionFromUtc()
 			)
 			{
 				violations.add(className + "." + attribute.getAttributeName() + ": " + CONVERT_TO_UTC_REASON);
