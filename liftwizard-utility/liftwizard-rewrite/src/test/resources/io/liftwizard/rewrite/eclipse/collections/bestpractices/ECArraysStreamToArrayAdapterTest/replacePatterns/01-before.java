@@ -35,8 +35,8 @@ class Test
 		List<String> result2 = Arrays.stream(values).sorted(Comparator.naturalOrder()).toList();
 		boolean result3 = Arrays.stream(values).count() > 2;
 		boolean result4 =
-			2
-			< Arrays.stream(values)
+			2 <
+			Arrays.stream(values)
 				.filter((each) -> !each.isEmpty())
 				.count();
 		Optional<String> result5 = Arrays.stream(values).filter(String::isEmpty).findFirst();

@@ -54,8 +54,8 @@ class Test
 		List<String> result2 = list.stream().sorted(Comparator.naturalOrder()).toList();
 		boolean result3 = list.stream().count() > 2;
 		boolean result4 =
-			2
-			< list
+			2 <
+			list
 				.stream()
 				.filter((each) -> !each.isEmpty())
 				.count();
