@@ -40,99 +40,99 @@ class EnforceConsistentMethodInvocationArgumentLineWrappingTest
 			java(
 				"""
 					class Test {
-					    void method(String a, String b, String c) {}
-					    String methodReturning(String a, String b) { return a; }
-					    void method2(String a, String b) {}
-					    void method5(String a, String b, String c, String d, String e) {}
-					    void method6(String a, String b, String c, String d, String e, String f) {}
-					    void method7(String a, String b, String c, String d, String e, String f, String g) {}
-					    void method10(String a, String b, String c, String d, String e, String f, String g, String h, String i, String j) {}
+						void method(String a, String b, String c) {}
+						String methodReturning(String a, String b) { return a; }
+						void method2(String a, String b) {}
+						void method5(String a, String b, String c, String d, String e) {}
+						void method6(String a, String b, String c, String d, String e, String f) {}
+						void method7(String a, String b, String c, String d, String e, String f, String g) {}
+						void method10(String a, String b, String c, String d, String e, String f, String g, String h, String i, String j) {}
 
-					    void test() {
-					        method("first",
-					                "second",
-					                "third");
-					        method2("first",
-					                "second");
-					        method(
-					                "first", "second", "third");
-					        methodReturning("first",
-					                "second").toString();
-					        method6("a", "b",
-					                "c", "d",
-					                "e", "f");
-					        method5(
-					                "a", "b",
-					                "c", "d",
-					                "e");
-					        method7(
-					                "a", "b",
-					                "c", "d",
-					                "e", "f", "g");
-					        method10(
-					                "a", "b", "c",
-					                "d", "e", "f",
-					                "g", "h", "i", "j");
-					    }
+						void test() {
+							method("first",
+									"second",
+									"third");
+							method2("first",
+									"second");
+							method(
+									"first", "second", "third");
+							methodReturning("first",
+									"second").toString();
+							method6("a", "b",
+									"c", "d",
+									"e", "f");
+							method5(
+									"a", "b",
+									"c", "d",
+									"e");
+							method7(
+									"a", "b",
+									"c", "d",
+									"e", "f", "g");
+							method10(
+									"a", "b", "c",
+									"d", "e", "f",
+									"g", "h", "i", "j");
+						}
 					}""",
 				"""
 					class Test {
-					    void method(String a, String b, String c) {}
-					    String methodReturning(String a, String b) { return a; }
-					    void method2(String a, String b) {}
-					    void method5(String a, String b, String c, String d, String e) {}
-					    void method6(String a, String b, String c, String d, String e, String f) {}
-					    void method7(String a, String b, String c, String d, String e, String f, String g) {}
-					    void method10(String a, String b, String c, String d, String e, String f, String g, String h, String i, String j) {}
+						void method(String a, String b, String c) {}
+						String methodReturning(String a, String b) { return a; }
+						void method2(String a, String b) {}
+						void method5(String a, String b, String c, String d, String e) {}
+						void method6(String a, String b, String c, String d, String e, String f) {}
+						void method7(String a, String b, String c, String d, String e, String f, String g) {}
+						void method10(String a, String b, String c, String d, String e, String f, String g, String h, String i, String j) {}
 
-					    void test() {
-					        method(
-					                "first",
-					                "second",
-					                "third");
-					        method2(
-					                "first",
-					                "second");
-					        method(
-					                "first",
-					                "second",
-					                "third");
-					        methodReturning(
-					                "first",
-					                "second").toString();
-					        method6(
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e",
-					                "f");
-					        method5(
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e");
-					        method7(
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e",
-					                "f",
-					                "g");
-					        method10(
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e",
-					                "f",
-					                "g",
-					                "h",
-					                "i",
-					                "j");
-					    }
+						void test() {
+							method(
+									"first",
+									"second",
+									"third");
+							method2(
+									"first",
+									"second");
+							method(
+									"first",
+									"second",
+									"third");
+							methodReturning(
+									"first",
+									"second").toString();
+							method6(
+									"a",
+									"b",
+									"c",
+									"d",
+									"e",
+									"f");
+							method5(
+									"a",
+									"b",
+									"c",
+									"d",
+									"e");
+							method7(
+									"a",
+									"b",
+									"c",
+									"d",
+									"e",
+									"f",
+									"g");
+							method10(
+									"a",
+									"b",
+									"c",
+									"d",
+									"e",
+									"f",
+									"g",
+									"h",
+									"i",
+									"j");
+						}
 					}"""
 			)
 		);
@@ -145,40 +145,40 @@ class EnforceConsistentMethodInvocationArgumentLineWrappingTest
 			java(
 				"""
 					class Test {
-					    void method(String a, String b, String c) {}
-					    void method1(String a) {}
-					    void method4(String a, String b, String c, String d) {}
-					    void method6(String a, String b, String c, String d, String e, String f) {}
-					    void method8(String a, String b, String c, String d, String e, String f, String g, String h) {}
-					    void method9(String a, String b, String c, String d, String e, String f, String g, String h, String i) {}
+						void method(String a, String b, String c) {}
+						void method1(String a) {}
+						void method4(String a, String b, String c, String d) {}
+						void method6(String a, String b, String c, String d, String e, String f) {}
+						void method8(String a, String b, String c, String d, String e, String f, String g, String h) {}
+						void method9(String a, String b, String c, String d, String e, String f, String g, String h, String i) {}
 
-					    void test() {
-					        method("first", "second", "third");
-					        method(
-					                "first",
-					                "second",
-					                "third");
-					        method1("first");
-					        method1(
-					                "first");
-					        method6(
-					                "a", "b",
-					                "c", "d",
-					                "e", "f");
-					        method6(
-					                "a", "b", "c",
-					                "d", "e", "f");
-					        method4(
-					                "a", "b",
-					                "c", "d");
-					        method9(
-					                "a", "b", "c",
-					                "d", "e", "f",
-					                "g", "h", "i");
-					        method8(
-					                "a", "b", "c", "d",
-					                "e", "f", "g", "h");
-					    }
+						void test() {
+							method("first", "second", "third");
+							method(
+									"first",
+									"second",
+									"third");
+							method1("first");
+							method1(
+									"first");
+							method6(
+									"a", "b",
+									"c", "d",
+									"e", "f");
+							method6(
+									"a", "b", "c",
+									"d", "e", "f");
+							method4(
+									"a", "b",
+									"c", "d");
+							method9(
+									"a", "b", "c",
+									"d", "e", "f",
+									"g", "h", "i");
+							method8(
+									"a", "b", "c", "d",
+									"e", "f", "g", "h");
+						}
 					}"""
 			)
 		);

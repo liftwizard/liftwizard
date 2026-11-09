@@ -40,10 +40,10 @@ class Dropwizard3UtilMigrationTest
 						import java.util.Collections;
 
 						public final class Sets {
-						    @SafeVarargs
-						    public static <T> java.util.Set<T> of(T... elements) {
-						        return Collections.emptySet();
-						    }
+							@SafeVarargs
+							public static <T> java.util.Set<T> of(T... elements) {
+								return Collections.emptySet();
+							}
 						}
 						"""
 				)

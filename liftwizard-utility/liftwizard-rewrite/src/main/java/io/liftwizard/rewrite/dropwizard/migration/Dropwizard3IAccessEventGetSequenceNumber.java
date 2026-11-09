@@ -35,7 +35,7 @@ public class Dropwizard3IAccessEventGetSequenceNumber
 		package ch.qos.logback.access.spi;
 
 		public interface IAccessEvent {
-		    long getSequenceNumber();
+			long getSequenceNumber();
 		}
 		""";
 
@@ -88,9 +88,9 @@ public class Dropwizard3IAccessEventGetSequenceNumber
 				"""
 					@Override
 					public long getSequenceNumber() {
-					    throw new UnsupportedOperationException(
-					        this.getClass().getSimpleName() + ".getSequenceNumber() not implemented yet"
-					    );
+						throw new UnsupportedOperationException(
+							this.getClass().getSimpleName() + ".getSequenceNumber() not implemented yet"
+						);
 					}
 					"""
 			)

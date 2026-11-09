@@ -43,77 +43,77 @@ class EnforceConsistentAnnotationArgumentLineWrappingTest
 
 					@Repeatable(MyAnnotation.Container.class)
 					@interface MyAnnotation {
-					    String name() default "";
-					    String value() default "";
-					    int count() default 0;
-					    boolean enabled() default false;
-					    String description() default "";
+						String name() default "";
+						String value() default "";
+						int count() default 0;
+						boolean enabled() default false;
+						String description() default "";
 
-					    @interface Container {
-					        MyAnnotation[] value();
-					    }
+						@interface Container {
+							MyAnnotation[] value();
+						}
 					}
 
 					class Foo {
-					    @MyAnnotation(name = "first",
-					            value = "second",
-					            count = 1)
-					    void method1() {}
+						@MyAnnotation(name = "first",
+								value = "second",
+								count = 1)
+						void method1() {}
 
-					    @MyAnnotation(name = "first",
-					            value = "second")
-					    void method2() {}
+						@MyAnnotation(name = "first",
+								value = "second")
+						void method2() {}
 
-					    @MyAnnotation(
-					            name = "first", value = "second", count = 1)
-					    void method3() {}
+						@MyAnnotation(
+								name = "first", value = "second", count = 1)
+						void method3() {}
 
-					    @MyAnnotation(
-					            name = "first", value = "second", count = 1,
-					            enabled = true, description = "fifth")
-					    void method4() {}
+						@MyAnnotation(
+								name = "first", value = "second", count = 1,
+								enabled = true, description = "fifth")
+						void method4() {}
 					}""",
 				"""
 					import java.lang.annotation.Repeatable;
 
 					@Repeatable(MyAnnotation.Container.class)
 					@interface MyAnnotation {
-					    String name() default "";
-					    String value() default "";
-					    int count() default 0;
-					    boolean enabled() default false;
-					    String description() default "";
+						String name() default "";
+						String value() default "";
+						int count() default 0;
+						boolean enabled() default false;
+						String description() default "";
 
-					    @interface Container {
-					        MyAnnotation[] value();
-					    }
+						@interface Container {
+							MyAnnotation[] value();
+						}
 					}
 
 					class Foo {
-					    @MyAnnotation(
-					            name = "first",
-					            value = "second",
-					            count = 1)
-					    void method1() {}
+						@MyAnnotation(
+								name = "first",
+								value = "second",
+								count = 1)
+						void method1() {}
 
-					    @MyAnnotation(
-					            name = "first",
-					            value = "second")
-					    void method2() {}
+						@MyAnnotation(
+								name = "first",
+								value = "second")
+						void method2() {}
 
-					    @MyAnnotation(
-					            name = "first",
-					            value = "second",
-					            count = 1)
-					    void method3() {}
+						@MyAnnotation(
+								name = "first",
+								value = "second",
+								count = 1)
+						void method3() {}
 
-					    @MyAnnotation(
-					            name = "first",
-					            value = "second",
-					            count = 1,
-					            enabled = true,
-					            description = "fifth")
-					    void method4() {}
+						@MyAnnotation(
+								name = "first",
+								value = "second",
+								count = 1,
+								enabled = true,
+								description = "fifth")
+						void method4() {}
 					}"""
 			)
 		);
@@ -129,37 +129,37 @@ class EnforceConsistentAnnotationArgumentLineWrappingTest
 
 					@Repeatable(MyAnnotation.Container.class)
 					@interface MyAnnotation {
-					    String name() default "";
-					    String value() default "";
-					    int count() default 0;
-					    boolean enabled() default false;
-					    String description() default "";
+						String name() default "";
+						String value() default "";
+						int count() default 0;
+						boolean enabled() default false;
+						String description() default "";
 
-					    @interface Container {
-					        MyAnnotation[] value();
-					    }
+						@interface Container {
+							MyAnnotation[] value();
+						}
 					}
 
 					class Foo {
-					    @MyAnnotation(name = "first", value = "second", count = 1)
-					    void method1() {}
+						@MyAnnotation(name = "first", value = "second", count = 1)
+						void method1() {}
 
-					    @MyAnnotation(name = "first")
-					    void method2() {}
+						@MyAnnotation(name = "first")
+						void method2() {}
 
-					    @MyAnnotation(
-					            name = "first",
-					            value = "second",
-					            count = 1)
-					    void method3() {}
+						@MyAnnotation(
+								name = "first",
+								value = "second",
+								count = 1)
+						void method3() {}
 
-					    @MyAnnotation
-					    void method4() {}
+						@MyAnnotation
+						void method4() {}
 
-					    @MyAnnotation(
-					            name = "first", value = "second",
-					            count = 1, enabled = true)
-					    void method5() {}
+						@MyAnnotation(
+								name = "first", value = "second",
+								count = 1, enabled = true)
+						void method5() {}
 					}"""
 			)
 		);

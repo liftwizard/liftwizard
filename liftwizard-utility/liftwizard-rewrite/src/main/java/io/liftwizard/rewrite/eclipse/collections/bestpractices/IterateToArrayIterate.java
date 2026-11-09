@@ -43,19 +43,19 @@ public class IterateToArrayIterate
 		"""
 			package org.eclipse.collections.api.block.function;
 			public interface Function<T, V> {
-			    V valueOf(T each);
+				V valueOf(T each);
 			}
 			""",
 		"""
 			package org.eclipse.collections.api.block.predicate;
 			public interface Predicate<T> {
-			    boolean accept(T each);
+				boolean accept(T each);
 			}
 			""",
 		"""
 			package org.eclipse.collections.api.block.procedure;
 			public interface Procedure<T> {
-			    void value(T each);
+				void value(T each);
 			}
 			""",
 		"""
@@ -64,15 +64,15 @@ public class IterateToArrayIterate
 			import org.eclipse.collections.api.block.function.Function;
 			import org.eclipse.collections.api.block.procedure.Procedure;
 			public final class ArrayIterate {
-			    public static <T> boolean anySatisfy(T[] array, Predicate<? super T> predicate) { return false; }
-			    public static <T> boolean allSatisfy(T[] array, Predicate<? super T> predicate) { return false; }
-			    public static <T> boolean noneSatisfy(T[] array, Predicate<? super T> predicate) { return false; }
-			    public static <T> T detect(T[] array, Predicate<? super T> predicate) { return null; }
-			    public static <T> int count(T[] array, Predicate<? super T> predicate) { return 0; }
-			    public static <T, V> java.util.Collection<V> collect(T[] array, Function<? super T, ? extends V> function) { return null; }
-			    public static <T> void forEach(T[] array, Procedure<? super T> procedure) {}
-			    public static <T> T getFirst(T[] array) { return null; }
-			    public static <T> T getLast(T[] array) { return null; }
+				public static <T> boolean anySatisfy(T[] array, Predicate<? super T> predicate) { return false; }
+				public static <T> boolean allSatisfy(T[] array, Predicate<? super T> predicate) { return false; }
+				public static <T> boolean noneSatisfy(T[] array, Predicate<? super T> predicate) { return false; }
+				public static <T> T detect(T[] array, Predicate<? super T> predicate) { return null; }
+				public static <T> int count(T[] array, Predicate<? super T> predicate) { return 0; }
+				public static <T, V> java.util.Collection<V> collect(T[] array, Function<? super T, ? extends V> function) { return null; }
+				public static <T> void forEach(T[] array, Procedure<? super T> procedure) {}
+				public static <T> T getFirst(T[] array) { return null; }
+				public static <T> T getLast(T[] array) { return null; }
 			}
 			"""
 	);

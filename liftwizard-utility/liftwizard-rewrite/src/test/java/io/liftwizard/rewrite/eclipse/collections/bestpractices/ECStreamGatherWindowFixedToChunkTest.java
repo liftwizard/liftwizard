@@ -49,9 +49,9 @@ class ECStreamGatherWindowFixedToChunkTest
 		import java.util.List;
 
 		public class Gatherers {
-		    public static <T> Gatherer<T, ?, List<T>> windowFixed(int windowSize) {
-		        return null;
-		    }
+			public static <T> Gatherer<T, ?, List<T>> windowFixed(int windowSize) {
+				return null;
+			}
 		}
 		""";
 

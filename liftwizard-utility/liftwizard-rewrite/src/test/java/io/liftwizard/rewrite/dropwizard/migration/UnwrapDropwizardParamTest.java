@@ -39,13 +39,13 @@ class UnwrapDropwizardParamTest
 						package io.dropwizard.jersey.params;
 
 						public class BooleanParam {
-						    private final Boolean value;
-						    public BooleanParam(String input) {
-						        this.value = Boolean.valueOf(input);
-						    }
-						    public Boolean get() {
-						        return this.value;
-						    }
+							private final Boolean value;
+							public BooleanParam(String input) {
+								this.value = Boolean.valueOf(input);
+							}
+							public Boolean get() {
+								return this.value;
+							}
 						}
 						"""
 				)

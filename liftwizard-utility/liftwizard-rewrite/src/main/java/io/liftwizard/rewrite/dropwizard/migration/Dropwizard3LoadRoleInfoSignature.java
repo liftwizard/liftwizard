@@ -50,15 +50,15 @@ public class Dropwizard3LoadRoleInfoSignature
 		package org.eclipse.jetty.security;
 
 		public class UserPrincipal {
-		    public UserPrincipal(String name, Object credential) {}
-		    public String getName() { return null; }
+			public UserPrincipal(String name, Object credential) {}
+			public String getName() { return null; }
 		}
 		""";
 	private static final String ROLE_PRINCIPAL_STUB = """
 		package org.eclipse.jetty.security;
 
 		public class RolePrincipal {
-		    public RolePrincipal(String name) {}
+			public RolePrincipal(String name) {}
 		}
 		""";
 

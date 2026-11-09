@@ -40,29 +40,29 @@ class EnforceConsistentRecordComponentLineWrappingTest
 			java(
 				"""
 					record PartiallyWrapped(String first,
-					        String second,
-					        String third) {}
+							String second,
+							String third) {}
 
 					record TwoComponentsPartiallyWrapped(String first,
-					        String second) {}
+							String second) {}
 
 					record FirstWrappedOthersNot(
-					        String first, String second, String third) {}
+							String first, String second, String third) {}
 					""",
 				"""
 					record PartiallyWrapped(
-					        String first,
-					        String second,
-					        String third) {}
+							String first,
+							String second,
+							String third) {}
 
 					record TwoComponentsPartiallyWrapped(
-					        String first,
-					        String second) {}
+							String first,
+							String second) {}
 
 					record FirstWrappedOthersNot(
-					        String first,
-					        String second,
-					        String third) {}
+							String first,
+							String second,
+							String third) {}
 					"""
 			)
 		);
@@ -77,29 +77,29 @@ class EnforceConsistentRecordComponentLineWrappingTest
 					record SingleLine(String first, String second, String third) {}
 
 					record AlreadyFullyWrapped(
-					        String first,
-					        String second,
-					        String third) {}
+							String first,
+							String second,
+							String third) {}
 
 					record SingleComponent(String first) {}
 
 					record SingleComponentWrapped(
-					        String first) {}
+							String first) {}
 
 					record SixComponentsTwoPerLine(
-					        String a, String b,
-					        String c, String d,
-					        String e, String f) {}
+							String a, String b,
+							String c, String d,
+							String e, String f) {}
 
 					class RegularClass {
-					    private final String first;
-					    private final String second;
+						private final String first;
+						private final String second;
 
-					    RegularClass(String first,
-					            String second) {
-					        this.first = first;
-					        this.second = second;
-					    }
+						RegularClass(String first,
+								String second) {
+							this.first = first;
+							this.second = second;
+						}
 					}
 					"""
 			)
