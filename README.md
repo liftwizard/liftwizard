@@ -2,10 +2,9 @@
 
 ![Maven Central](https://img.shields.io/maven-central/v/io.liftwizard/liftwizard)
 ![GitHub](https://img.shields.io/github/license/liftwizard/liftwizard)
-![CircleCI](https://img.shields.io/circleci/build/gh/liftwizard/liftwizard/main)
+[![Build](https://github.com/liftwizard/liftwizard/actions/workflows/push.yml/badge.svg)](https://github.com/liftwizard/liftwizard/actions/workflows/push.yml)
 [![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-green?labelColor=blue)](https://github.com/jvm-repo-rebuild/reproducible-central#io.liftwizard:liftwizard)
 
-![Lines of code](https://img.shields.io/tokei/lines/github/liftwizard/liftwizard)
 ![GitHub repo size](https://img.shields.io/github/repo-size/liftwizard/liftwizard)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/liftwizard/liftwizard)
 
