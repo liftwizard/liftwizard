@@ -39,6 +39,18 @@ updates:
           - "org.slf4j*"
           - "ch.qos.logback*"
           - "net.logstash.logback*"
+    # Liftwizard stays on Dropwizard 2.x, which pins JUnit 5, Logback 1.2 and SLF4J 1.7. Logback 1.3+ requires SLF4J 2, and logstash-logback-encoder 7.3+ requires Logback 1.3.
+    ignore:
+      - dependency-name: "org.junit*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "io.dropwizard*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.slf4j*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "ch.qos.logback*"
+        versions: [">=1.3.0"]
+      - dependency-name: "net.logstash.logback*"
+        versions: [">=7.3"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
