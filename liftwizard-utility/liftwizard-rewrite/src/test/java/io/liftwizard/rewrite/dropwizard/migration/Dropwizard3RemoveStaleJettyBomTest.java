@@ -41,48 +41,48 @@ class Dropwizard3RemoveStaleJettyBomTest
 				"""
 					<?xml version="1.0" encoding="UTF-8"?>
 					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencyManagement>
-					        <dependencies>
-					            <dependency>
-					                <groupId>org.eclipse.jetty</groupId>
-					                <artifactId>jetty-bom</artifactId>
-					                <version>9.4.57.v20241219</version>
-					                <type>pom</type>
-					                <scope>import</scope>
-					            </dependency>
-					            <dependency>
-					                <groupId>io.dropwizard</groupId>
-					                <artifactId>dropwizard-bom</artifactId>
-					                <version>3.0.17</version>
-					                <type>pom</type>
-					                <scope>import</scope>
-					            </dependency>
-					        </dependencies>
-					    </dependencyManagement>
+						<modelVersion>4.0.0</modelVersion>
+						<groupId>com.example</groupId>
+						<artifactId>example</artifactId>
+						<version>1.0.0</version>
+						<dependencyManagement>
+							<dependencies>
+								<dependency>
+									<groupId>org.eclipse.jetty</groupId>
+									<artifactId>jetty-bom</artifactId>
+									<version>9.4.57.v20241219</version>
+									<type>pom</type>
+									<scope>import</scope>
+								</dependency>
+								<dependency>
+									<groupId>io.dropwizard</groupId>
+									<artifactId>dropwizard-bom</artifactId>
+									<version>3.0.17</version>
+									<type>pom</type>
+									<scope>import</scope>
+								</dependency>
+							</dependencies>
+						</dependencyManagement>
 					</project>
 					""",
 				"""
 					<?xml version="1.0" encoding="UTF-8"?>
 					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencyManagement>
-					        <dependencies>
-					            <dependency>
-					                <groupId>io.dropwizard</groupId>
-					                <artifactId>dropwizard-bom</artifactId>
-					                <version>3.0.17</version>
-					                <type>pom</type>
-					                <scope>import</scope>
-					            </dependency>
-					        </dependencies>
-					    </dependencyManagement>
+						<modelVersion>4.0.0</modelVersion>
+						<groupId>com.example</groupId>
+						<artifactId>example</artifactId>
+						<version>1.0.0</version>
+						<dependencyManagement>
+							<dependencies>
+								<dependency>
+									<groupId>io.dropwizard</groupId>
+									<artifactId>dropwizard-bom</artifactId>
+									<version>3.0.17</version>
+									<type>pom</type>
+									<scope>import</scope>
+								</dependency>
+							</dependencies>
+						</dependencyManagement>
 					</project>
 					"""
 			)
@@ -97,28 +97,28 @@ class Dropwizard3RemoveStaleJettyBomTest
 				"""
 					<?xml version="1.0" encoding="UTF-8"?>
 					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencyManagement>
-					        <dependencies>
-					            <dependency>
-					                <groupId>io.dropwizard</groupId>
-					                <artifactId>dropwizard-bom</artifactId>
-					                <version>3.0.17</version>
-					                <type>pom</type>
-					                <scope>import</scope>
-					            </dependency>
-					            <dependency>
-					                <groupId>com.fasterxml.jackson</groupId>
-					                <artifactId>jackson-bom</artifactId>
-					                <version>2.21.3</version>
-					                <type>pom</type>
-					                <scope>import</scope>
-					            </dependency>
-					        </dependencies>
-					    </dependencyManagement>
+						<modelVersion>4.0.0</modelVersion>
+						<groupId>com.example</groupId>
+						<artifactId>example</artifactId>
+						<version>1.0.0</version>
+						<dependencyManagement>
+							<dependencies>
+								<dependency>
+									<groupId>io.dropwizard</groupId>
+									<artifactId>dropwizard-bom</artifactId>
+									<version>3.0.17</version>
+									<type>pom</type>
+									<scope>import</scope>
+								</dependency>
+								<dependency>
+									<groupId>com.fasterxml.jackson</groupId>
+									<artifactId>jackson-bom</artifactId>
+									<version>2.21.3</version>
+									<type>pom</type>
+									<scope>import</scope>
+								</dependency>
+							</dependencies>
+						</dependencyManagement>
 					</project>
 					"""
 			)

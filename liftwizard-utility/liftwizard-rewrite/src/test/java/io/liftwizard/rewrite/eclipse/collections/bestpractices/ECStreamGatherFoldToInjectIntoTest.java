@@ -50,9 +50,9 @@ class ECStreamGatherFoldToInjectIntoTest
 		import java.util.function.Supplier;
 
 		public class Gatherers {
-		    public static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder) {
-		        return null;
-		    }
+			public static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder) {
+				return null;
+			}
 		}
 		""";
 

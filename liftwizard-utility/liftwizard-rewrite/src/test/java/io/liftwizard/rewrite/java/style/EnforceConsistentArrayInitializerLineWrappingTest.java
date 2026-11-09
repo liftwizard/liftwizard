@@ -40,53 +40,53 @@ class EnforceConsistentArrayInitializerLineWrappingTest
 			java(
 				"""
 					class Test {
-					    void test() {
-					        String[] a = new String[] { "first",
-					                "second",
-					                "third" };
-					        String[] b = new String[] { "first",
-					                "second" };
-					        String[] c = new String[] {
-					                "first", "second", "third" };
-					        String[] d = new String[] {
-					                "a", "b",
-					                "c", "d",
-					                "e" };
-					        String[] e = new String[] {
-					                "a", "b",
-					                "c", "d",
-					                "e", "f", "g" };
-					    }
+						void test() {
+							String[] a = new String[] { "first",
+									"second",
+									"third" };
+							String[] b = new String[] { "first",
+									"second" };
+							String[] c = new String[] {
+									"first", "second", "third" };
+							String[] d = new String[] {
+									"a", "b",
+									"c", "d",
+									"e" };
+							String[] e = new String[] {
+									"a", "b",
+									"c", "d",
+									"e", "f", "g" };
+						}
 					}""",
 				"""
 					class Test {
-					    void test() {
-					        String[] a = new String[] {
-					                "first",
-					                "second",
-					                "third" };
-					        String[] b = new String[] {
-					                "first",
-					                "second" };
-					        String[] c = new String[] {
-					                "first",
-					                "second",
-					                "third" };
-					        String[] d = new String[] {
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e" };
-					        String[] e = new String[] {
-					                "a",
-					                "b",
-					                "c",
-					                "d",
-					                "e",
-					                "f",
-					                "g" };
-					    }
+						void test() {
+							String[] a = new String[] {
+									"first",
+									"second",
+									"third" };
+							String[] b = new String[] {
+									"first",
+									"second" };
+							String[] c = new String[] {
+									"first",
+									"second",
+									"third" };
+							String[] d = new String[] {
+									"a",
+									"b",
+									"c",
+									"d",
+									"e" };
+							String[] e = new String[] {
+									"a",
+									"b",
+									"c",
+									"d",
+									"e",
+									"f",
+									"g" };
+						}
 					}"""
 			)
 		);
@@ -99,27 +99,27 @@ class EnforceConsistentArrayInitializerLineWrappingTest
 			java(
 				"""
 					class Test {
-					    void test() {
-					        String[] a = new String[] { "first", "second", "third" };
-					        String[] b = new String[] {
-					                "first",
-					                "second",
-					                "third" };
-					        String[] c = new String[] { "first" };
-					        String[] d = new String[] {
-					                "first" };
-					        String[] e = new String[] {
-					                "a", "b",
-					                "c", "d",
-					                "e", "f" };
-					        String[] f = new String[] {
-					                "a", "b", "c",
-					                "d", "e", "f" };
-					        String[] g = new String[] {
-					                "a", "b", "c",
-					                "d", "e", "f",
-					                "g", "h", "i" };
-					    }
+						void test() {
+							String[] a = new String[] { "first", "second", "third" };
+							String[] b = new String[] {
+									"first",
+									"second",
+									"third" };
+							String[] c = new String[] { "first" };
+							String[] d = new String[] {
+									"first" };
+							String[] e = new String[] {
+									"a", "b",
+									"c", "d",
+									"e", "f" };
+							String[] f = new String[] {
+									"a", "b", "c",
+									"d", "e", "f" };
+							String[] g = new String[] {
+									"a", "b", "c",
+									"d", "e", "f",
+									"g", "h", "i" };
+						}
 					}"""
 			)
 		);

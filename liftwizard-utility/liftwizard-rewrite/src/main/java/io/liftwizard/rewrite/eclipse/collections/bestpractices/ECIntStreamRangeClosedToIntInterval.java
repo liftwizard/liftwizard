@@ -62,9 +62,9 @@ public class ECIntStreamRangeClosedToIntInterval
 		"""
 			package org.eclipse.collections.impl.list.primitive;
 			public final class IntInterval {
-			    public static IntInterval fromTo(int from, int to) { return null; }
-			    public void forEach(java.util.function.IntConsumer procedure) {}
-			    public long sum() { return 0L; }
+				public static IntInterval fromTo(int from, int to) { return null; }
+				public void forEach(java.util.function.IntConsumer procedure) {}
+				public long sum() { return 0L; }
 			}
 			"""
 	);

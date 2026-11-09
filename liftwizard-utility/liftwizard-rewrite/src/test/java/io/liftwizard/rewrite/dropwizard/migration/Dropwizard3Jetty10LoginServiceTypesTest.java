@@ -38,13 +38,13 @@ class Dropwizard3Jetty10LoginServiceTypesTest
 						package org.eclipse.jetty.security;
 
 						public abstract class AbstractLoginService {
-						    public static class UserPrincipal {
-						        public UserPrincipal(String name, Object credential) {}
-						        public String getName() { return null; }
-						    }
-						    public static class RolePrincipal {
-						        public RolePrincipal(String name) {}
-						    }
+							public static class UserPrincipal {
+								public UserPrincipal(String name, Object credential) {}
+								public String getName() { return null; }
+							}
+							public static class RolePrincipal {
+								public RolePrincipal(String name) {}
+							}
 						}
 						"""
 				)

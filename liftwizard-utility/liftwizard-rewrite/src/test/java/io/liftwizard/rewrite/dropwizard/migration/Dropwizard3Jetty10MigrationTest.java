@@ -40,8 +40,8 @@ class Dropwizard3Jetty10MigrationTest
 						import java.util.EventListener;
 
 						public abstract class AbstractLifeCycle implements LifeCycle {
-						    public void addLifeCycleListener(LifeCycle.Listener listener) {}
-						    public void addEventListener(EventListener listener) {}
+							public void addLifeCycleListener(LifeCycle.Listener listener) {}
+							public void addEventListener(EventListener listener) {}
 						}
 						""",
 					"""
@@ -50,11 +50,11 @@ class Dropwizard3Jetty10MigrationTest
 						import java.util.EventListener;
 
 						public interface LifeCycle {
-						    void addLifeCycleListener(Listener listener);
-						    void addEventListener(EventListener listener);
+							void addLifeCycleListener(Listener listener);
+							void addEventListener(EventListener listener);
 
-						    interface Listener extends EventListener {
-						    }
+							interface Listener extends EventListener {
+							}
 						}
 						""",
 					"""

@@ -45,33 +45,33 @@ class Dropwizard3SwitchToLiftwizardRedirectBundleTest
 				"""
 					<?xml version="1.0" encoding="UTF-8"?>
 					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard-bundles</groupId>
-					            <artifactId>dropwizard-redirect-bundle</artifactId>
-					            <version>1.3.5</version>
-					        </dependency>
-					    </dependencies>
+						<modelVersion>4.0.0</modelVersion>
+						<groupId>com.example</groupId>
+						<artifactId>example</artifactId>
+						<version>1.0.0</version>
+						<dependencies>
+							<dependency>
+								<groupId>io.dropwizard-bundles</groupId>
+								<artifactId>dropwizard-redirect-bundle</artifactId>
+								<version>1.3.5</version>
+							</dependency>
+						</dependencies>
 					</project>
 					""",
 				"""
 					<?xml version="1.0" encoding="UTF-8"?>
 					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.liftwizard</groupId>
-					            <artifactId>liftwizard-redirect-bundle</artifactId>
-					            <version>${project.version}</version>
-					        </dependency>
-					    </dependencies>
+						<modelVersion>4.0.0</modelVersion>
+						<groupId>com.example</groupId>
+						<artifactId>example</artifactId>
+						<version>1.0.0</version>
+						<dependencies>
+							<dependency>
+								<groupId>io.liftwizard</groupId>
+								<artifactId>liftwizard-redirect-bundle</artifactId>
+								<version>${project.version}</version>
+							</dependency>
+						</dependencies>
 					</project>
 					"""
 			)
@@ -86,17 +86,17 @@ class Dropwizard3SwitchToLiftwizardRedirectBundleTest
 				"""
 					<?xml version="1.0" encoding="UTF-8"?>
 					<project xmlns="http://maven.apache.org/POM/4.0.0">
-					    <modelVersion>4.0.0</modelVersion>
-					    <groupId>com.example</groupId>
-					    <artifactId>example</artifactId>
-					    <version>1.0.0</version>
-					    <dependencies>
-					        <dependency>
-					            <groupId>io.dropwizard</groupId>
-					            <artifactId>dropwizard-core</artifactId>
-					            <version>3.0.17</version>
-					        </dependency>
-					    </dependencies>
+						<modelVersion>4.0.0</modelVersion>
+						<groupId>com.example</groupId>
+						<artifactId>example</artifactId>
+						<version>1.0.0</version>
+						<dependencies>
+							<dependency>
+								<groupId>io.dropwizard</groupId>
+								<artifactId>dropwizard-core</artifactId>
+								<version>3.0.17</version>
+							</dependency>
+						</dependencies>
 					</project>
 					"""
 			)

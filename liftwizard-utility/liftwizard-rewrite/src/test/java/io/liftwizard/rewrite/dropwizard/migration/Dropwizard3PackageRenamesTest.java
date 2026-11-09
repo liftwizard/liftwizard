@@ -38,7 +38,7 @@ class Dropwizard3PackageRenamesTest
 						package io.dropwizard;
 
 						public class Application<T> {
-						    public void run(String... args) {}
+							public void run(String... args) {}
 						}
 						""",
 					"""
@@ -57,8 +57,8 @@ class Dropwizard3PackageRenamesTest
 						package io.dropwizard;
 
 						public interface ConfiguredBundle<T> {
-						    void initialize(Object bootstrap);
-						    void run(T configuration, Object environment);
+							void initialize(Object bootstrap);
+							void run(T configuration, Object environment);
 						}
 						""",
 					"""
@@ -71,21 +71,21 @@ class Dropwizard3PackageRenamesTest
 						package io.dropwizard.setup;
 
 						public class Bootstrap<T> {
-						    public void addBundle(Object bundle) {}
+							public void addBundle(Object bundle) {}
 						}
 						""",
 					"""
 						package io.dropwizard.setup;
 
 						public class Environment {
-						    public String getName() { return null; }
+							public String getName() { return null; }
 						}
 						""",
 					"""
 						package io.dropwizard.cli;
 
 						public abstract class Command {
-						    public abstract void run(Object environment, Object namespace);
+							public abstract void run(Object environment, Object namespace);
 						}
 						""",
 					"""
@@ -122,7 +122,7 @@ class Dropwizard3PackageRenamesTest
 						package io.dropwizard.views;
 
 						public abstract class View {
-						    protected View(String templateName) {}
+							protected View(String templateName) {}
 						}
 						""",
 					"""
