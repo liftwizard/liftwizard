@@ -53,7 +53,7 @@
             ${errorprone.flags.strict.addon} \
             ${errorprone.flags.patch.addon} \
             ${errorprone.flags.untested.addon}</errorprone.xplugin>
-        <errorprone.version>2.50.0</errorprone.version>
+        <errorprone.version>2.51.0</errorprone.version>
         <error-prone-support.version>0.30.0</error-prone-support.version>
         <!--endregion Error Prone -->
     </properties>

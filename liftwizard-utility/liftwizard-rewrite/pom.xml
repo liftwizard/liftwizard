@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.google.errorprone</groupId>
             <artifactId>error_prone_refaster</artifactId>
-            <version>2.50.0</version>
+            <version>2.51.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -138,9 +138,13 @@
         <dependency>
             <groupId>com.google.errorprone</groupId>
             <artifactId>error_prone_core</artifactId>
-            <version>2.50.0</version>
+            <version>2.51.0</version>
             <scope>provided</scope>
             <exclusions>
+                <exclusion>
+                    <groupId>org.safere</groupId>
+                    <artifactId>safere</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>io.github.eisop</groupId>
                     <artifactId>dataflow-errorprone</artifactId>
