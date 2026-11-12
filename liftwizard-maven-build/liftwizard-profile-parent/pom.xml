@@ -32,6 +32,8 @@
 
     <properties>
         <spotless.check.skip>true</spotless.check.skip>
+        <!-- Synced from .mise/config.toml by the sync-prettier-java-next-line-version pre-commit hook. -->
+        <prettier-java-next-line.version>2.11.5</prettier-java-next-line.version>
 
         <!--region Error Prone: -Perrorprone[-strict|-patch|-untested] -->
         <!-- EqualsGetClass:OFF due to https://github.com/google/error-prone/issues/1144 -->
@@ -498,7 +500,7 @@
                                 <prettier>
                                     <devDependencies>
                                         <prettier>3.8.1</prettier>
-                                        <prettier-java-next-line>2.11.5</prettier-java-next-line>
+                                        <prettier-java-next-line>${prettier-java-next-line.version}</prettier-java-next-line>
                                     </devDependencies>
                                     <configFile>.prettierrc.json5</configFile>
                                     <config>
@@ -521,7 +523,7 @@
                                     <prettier>
                                         <devDependencies>
                                             <prettier>3.8.1</prettier>
-                                            <prettier-java-next-line>2.11.5</prettier-java-next-line>
+                                            <prettier-java-next-line>${prettier-java-next-line.version}</prettier-java-next-line>
                                         </devDependencies>
                                         <configFile>.prettierrc.json5</configFile>
                                         <config>
@@ -559,7 +561,7 @@
                                 <prettier>
                                     <devDependencies>
                                         <prettier>3.8.1</prettier>
-                                        <prettier-java-next-line>2.11.5</prettier-java-next-line>
+                                        <prettier-java-next-line>${prettier-java-next-line.version}</prettier-java-next-line>
                                     </devDependencies>
                                     <configFile>.prettierrc.json5</configFile>
                                     <config>
@@ -589,7 +591,7 @@
                                     <prettier>
                                         <devDependencies>
                                             <prettier>3.8.1</prettier>
-                                            <prettier-java-next-line>2.11.5</prettier-java-next-line>
+                                            <prettier-java-next-line>${prettier-java-next-line.version}</prettier-java-next-line>
                                         </devDependencies>
                                         <configFile>.prettierrc.json5</configFile>
                                         <config>
