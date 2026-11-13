@@ -149,7 +149,7 @@
                         <plugin>
                             <groupId>org.openrewrite.maven</groupId>
                             <artifactId>rewrite-maven-plugin</artifactId>
-                            <version>6.58.0</version>
+                            <version>6.60.0</version>
                             <configuration>
                                 <exclusions>
                                     <exclusion>liftwizard-utility/liftwizard-rewrite/**</exclusion>
@@ -197,7 +197,7 @@
                         <plugin>
                             <groupId>org.openrewrite.maven</groupId>
                             <artifactId>rewrite-maven-plugin</artifactId>
-                            <version>6.58.0</version>
+                            <version>6.60.0</version>
                             <configuration>
                                 <exclusions>
                                     <exclusion>liftwizard-utility/liftwizard-rewrite/**</exclusion>
@@ -255,7 +255,7 @@
                         <plugin>
                             <groupId>org.openrewrite.maven</groupId>
                             <artifactId>rewrite-maven-plugin</artifactId>
-                            <version>6.58.0</version>
+                            <version>6.60.0</version>
                             <configuration>
                                 <exclusions>
                                     <exclusion>liftwizard-utility/liftwizard-rewrite/**</exclusion>
@@ -292,7 +292,7 @@
                         <plugin>
                             <groupId>org.openrewrite.maven</groupId>
                             <artifactId>rewrite-maven-plugin</artifactId>
-                            <version>6.58.0</version>
+                            <version>6.60.0</version>
                             <configuration>
                                 <failOnDryRunResults>true</failOnDryRunResults>
                             </configuration>
