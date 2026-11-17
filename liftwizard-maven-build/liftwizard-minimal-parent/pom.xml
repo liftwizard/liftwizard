@@ -315,8 +315,15 @@
     <profiles>
         <profile>
             <id>rewrite-maven-plugin</id>
-            <!-- rewrite-maven-plugin releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. -->
+            <!-- rewrite-maven-plugin releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. Central comes first so that everything it has is downloaded from Central and cached as coming from Central. -->
             <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
                 <pluginRepository>
                     <id>codegenome</id>
                     <url>https://artifacts.codegenomeproject.org/maven</url>
@@ -326,8 +333,15 @@
 
         <profile>
             <id>rewrite-maven-plugin-one-off</id>
-            <!-- rewrite-maven-plugin releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. -->
+            <!-- rewrite-maven-plugin releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. Central comes first so that everything it has is downloaded from Central and cached as coming from Central. -->
             <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
                 <pluginRepository>
                     <id>codegenome</id>
                     <url>https://artifacts.codegenomeproject.org/maven</url>

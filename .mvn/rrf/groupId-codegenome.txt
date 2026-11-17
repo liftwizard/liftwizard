@@ -1,0 +1,6 @@
+org.openrewrite
+org.openrewrite.recipe
+org.openrewrite.maven
+org.openrewrite.meta
+org.openrewrite.tools
+io.moderne
