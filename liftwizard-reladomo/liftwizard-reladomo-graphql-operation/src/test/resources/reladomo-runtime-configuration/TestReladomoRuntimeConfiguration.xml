@@ -4,5 +4,6 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/goldmansachs/reladomo/master/reladomo/src/main/xsd/mithraruntime.xsd">
     <ConnectionManager className="io.liftwizard.reladomo.connectionmanager.h2.memory.H2InMemoryConnectionManager">
         <MithraObjectConfiguration className="io.liftwizard.reladomo.graphql.operation.model.Item" cacheType="partial" />
+        <MithraObjectConfiguration className="io.liftwizard.reladomo.graphql.operation.model.TemporalItem" cacheType="partial" />
     </ConnectionManager>
 </MithraRuntime>

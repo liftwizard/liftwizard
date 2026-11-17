@@ -27,6 +27,7 @@ import java.util.Set;
 
 import com.gs.fw.common.mithra.finder.Operation;
 import io.liftwizard.reladomo.graphql.operation.model.ItemFinder;
+import io.liftwizard.reladomo.graphql.operation.model.TemporalItemFinder;
 import io.liftwizard.reladomo.test.extension.ReladomoInitializeExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -48,7 +49,11 @@ class GraphQLQueryToOperationConverterTemporalInTest
 	@Test
 	void dateInParsesEachValue()
 	{
-		Operation actual = convert("createdOn", "in", List.of("2024-01-01", "2024-02-01"));
+		Operation actual = convert(
+			"createdOn",
+			"in",
+			List.of(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-02-01"))
+		);
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.createdOn().in(Set.of(DATE_1, DATE_2)))
@@ -59,7 +64,11 @@ class GraphQLQueryToOperationConverterTemporalInTest
 	@Test
 	void dateNotInParsesEachValue()
 	{
-		Operation actual = convert("createdOn", "notIn", List.of("2024-01-01", "2024-02-01"));
+		Operation actual = convert(
+			"createdOn",
+			"notIn",
+			List.of(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-02-01"))
+		);
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.createdOn().notIn(Set.of(DATE_1, DATE_2)))
@@ -70,7 +79,11 @@ class GraphQLQueryToOperationConverterTemporalInTest
 	@Test
 	void timestampInParsesEachValue()
 	{
-		Operation actual = convert("updatedAt", "in", List.of("2024-01-01T12:00:00Z", "2024-02-01T12:00:00Z"));
+		Operation actual = convert(
+			"updatedAt",
+			"in",
+			List.of(Instant.parse("2024-01-01T12:00:00Z"), Instant.parse("2024-02-01T12:00:00Z"))
+		);
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.updatedAt().in(Set.of(TIMESTAMP_1, TIMESTAMP_2)))
@@ -81,7 +94,11 @@ class GraphQLQueryToOperationConverterTemporalInTest
 	@Test
 	void timestampNotInParsesEachValue()
 	{
-		Operation actual = convert("updatedAt", "notIn", List.of("2024-01-01T12:00:00Z", "2024-02-01T12:00:00Z"));
+		Operation actual = convert(
+			"updatedAt",
+			"notIn",
+			List.of(Instant.parse("2024-01-01T12:00:00Z"), Instant.parse("2024-02-01T12:00:00Z"))
+		);
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.updatedAt().notIn(Set.of(TIMESTAMP_1, TIMESTAMP_2)))
@@ -92,7 +109,7 @@ class GraphQLQueryToOperationConverterTemporalInTest
 	@Test
 	void dateInKeepsNullValues()
 	{
-		Operation actual = convert("createdOn", "in", Arrays.asList("2024-01-01", null));
+		Operation actual = convert("createdOn", "in", Arrays.asList(LocalDate.parse("2024-01-01"), null));
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.createdOn().in(new LinkedHashSet<>(Arrays.asList(DATE_1, null))))
@@ -103,7 +120,7 @@ class GraphQLQueryToOperationConverterTemporalInTest
 	@Test
 	void timestampInKeepsNullValues()
 	{
-		Operation actual = convert("updatedAt", "in", Arrays.asList("2024-01-01T12:00:00Z", null));
+		Operation actual = convert("updatedAt", "in", Arrays.asList(Instant.parse("2024-01-01T12:00:00Z"), null));
 
 		Operation expected = ItemFinder.all().and(
 			ItemFinder.all().and(ItemFinder.updatedAt().in(new LinkedHashSet<>(Arrays.asList(TIMESTAMP_1, null))))
@@ -111,9 +128,44 @@ class GraphQLQueryToOperationConverterTemporalInTest
 		assertThat(actual).isEqualTo(expected);
 	}
 
-	private static Operation convert(String attributeName, String operationName, List<String> values)
+	@Test
+	void dateEqConvertsLocalDate()
 	{
-		Map<String, Object> input = Map.of(attributeName, Map.of(operationName, values));
+		Operation actual = convert("createdOn", "eq", LocalDate.parse("2024-01-01"));
+
+		Operation expected = ItemFinder.all().and(ItemFinder.all().and(ItemFinder.createdOn().eq(DATE_1)));
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	@Test
+	void timestampGreaterThanConvertsInstant()
+	{
+		Operation actual = convert("updatedAt", "greaterThan", Instant.parse("2024-01-01T12:00:00Z"));
+
+		Operation expected = ItemFinder.all().and(
+			ItemFinder.all().and(ItemFinder.updatedAt().greaterThan(TIMESTAMP_1))
+		);
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	@Test
+	void asOfEqConvertsInstant()
+	{
+		Map<String, Object> input = Map.of("system", Map.of("eq", Instant.parse("2024-01-01T12:00:00Z")));
+		Operation actual = new GraphQLQueryToOperationConverter().convert(
+			TemporalItemFinder.getFinderInstance(),
+			input
+		);
+
+		Operation expected = TemporalItemFinder.all().and(
+			TemporalItemFinder.all().and(TemporalItemFinder.system().eq(TIMESTAMP_1))
+		);
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	private static Operation convert(String attributeName, String operationName, Object value)
+	{
+		Map<String, Object> input = Map.of(attributeName, Map.of(operationName, value));
 		return new GraphQLQueryToOperationConverter().convert(ItemFinder.getFinderInstance(), input);
 	}
 }

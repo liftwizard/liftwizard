@@ -1,19 +1,17 @@
 {
 	"errors": [
 		{
-			"message": "Exception while fetching data (/itemByFinder) : Text '2024-13-45' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13",
+			"message": "Validation error (WrongType@[itemByFinder]) : argument 'operation.createdOn.in[0]' with value 'StringValue{value='2024-13-45'}' is not a valid 'LocalDate' - Invalid RFC3339 full date value: '2024-13-45'. because of: 'Text '2024-13-45' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13'",
 			"locations": [
 				{
 					"line": 2,
-					"column": 2
+					"column": 15
 				}
 			],
-			"path": ["itemByFinder"],
 			"extensions":
 			{
-				"classification": "DataFetchingException"
+				"classification": "ValidationError"
 			}
 		}
-	],
-	"data": null
+	]
 }
