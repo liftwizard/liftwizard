@@ -580,27 +580,27 @@ public class GraphQLQueryToOperationConverter
 		{
 			case "eq" -> operationParameter == null ?
 				attribute.isNull() :
-				attribute.eq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+				attribute.eq(GraphQLQueryToOperationConverter.getDate((LocalDate) operationParameter));
 			case "notEq" -> operationParameter == null ?
 				attribute.isNotNull() :
-				attribute.notEq(GraphQLQueryToOperationConverter.getDate((String) operationParameter));
+				attribute.notEq(GraphQLQueryToOperationConverter.getDate((LocalDate) operationParameter));
 			case "in" -> attribute.in(
-				GraphQLQueryToOperationConverter.getDates((Collection<String>) operationParameter)
+				GraphQLQueryToOperationConverter.getDates((Collection<LocalDate>) operationParameter)
 			);
 			case "notIn" -> attribute.notIn(
-				GraphQLQueryToOperationConverter.getDates((Collection<String>) operationParameter)
+				GraphQLQueryToOperationConverter.getDates((Collection<LocalDate>) operationParameter)
 			);
 			case "greaterThan" -> attribute.greaterThan(
-				GraphQLQueryToOperationConverter.getDate((String) operationParameter)
+				GraphQLQueryToOperationConverter.getDate((LocalDate) operationParameter)
 			);
 			case "greaterThanEquals" -> attribute.greaterThanEquals(
-				GraphQLQueryToOperationConverter.getDate((String) operationParameter)
+				GraphQLQueryToOperationConverter.getDate((LocalDate) operationParameter)
 			);
 			case "lessThan" -> attribute.lessThan(
-				GraphQLQueryToOperationConverter.getDate((String) operationParameter)
+				GraphQLQueryToOperationConverter.getDate((LocalDate) operationParameter)
 			);
 			case "lessThanEquals" -> attribute.lessThanEquals(
-				GraphQLQueryToOperationConverter.getDate((String) operationParameter)
+				GraphQLQueryToOperationConverter.getDate((LocalDate) operationParameter)
 			);
 			case "year" -> this.convertIntegerAttribute(
 				finderInstance,
@@ -650,27 +650,27 @@ public class GraphQLQueryToOperationConverter
 		{
 			case "eq" -> operationParameter == null ?
 				attribute.isNull() :
-				attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+				attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((Instant) operationParameter));
 			case "notEq" -> operationParameter == null ?
 				attribute.isNotNull() :
-				attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+				attribute.notEq(GraphQLQueryToOperationConverter.getTimestamp((Instant) operationParameter));
 			case "in" -> attribute.in(
-				GraphQLQueryToOperationConverter.getTimestamps((Collection<String>) operationParameter)
+				GraphQLQueryToOperationConverter.getTimestamps((Collection<Instant>) operationParameter)
 			);
 			case "notIn" -> attribute.notIn(
-				GraphQLQueryToOperationConverter.getTimestamps((Collection<String>) operationParameter)
+				GraphQLQueryToOperationConverter.getTimestamps((Collection<Instant>) operationParameter)
 			);
 			case "greaterThan" -> attribute.greaterThan(
-				GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter)
+				GraphQLQueryToOperationConverter.getTimestamp((Instant) operationParameter)
 			);
 			case "greaterThanEquals" -> attribute.greaterThanEquals(
-				GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter)
+				GraphQLQueryToOperationConverter.getTimestamp((Instant) operationParameter)
 			);
 			case "lessThan" -> attribute.lessThan(
-				GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter)
+				GraphQLQueryToOperationConverter.getTimestamp((Instant) operationParameter)
 			);
 			case "lessThanEquals" -> attribute.lessThanEquals(
-				GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter)
+				GraphQLQueryToOperationConverter.getTimestamp((Instant) operationParameter)
 			);
 			case "year" -> this.convertIntegerAttribute(
 				finderInstance,
@@ -724,7 +724,7 @@ public class GraphQLQueryToOperationConverter
 				{
 					return attribute.isNull();
 				}
-				return attribute.eq(GraphQLQueryToOperationConverter.getTimestamp((String) operationParameter));
+				return attribute.eq(Timestamp.from((Instant) operationParameter));
 			}
 			case "notEq":
 			{
@@ -764,10 +764,10 @@ public class GraphQLQueryToOperationConverter
 		return this.context.toList().toReversed().toImmutable();
 	}
 
-	private static Set<Date> getDates(Collection<String> operationParameter)
+	private static Set<Date> getDates(Collection<LocalDate> operationParameter)
 	{
 		Set<Date> result = new LinkedHashSet<>();
-		for (String each : operationParameter)
+		for (LocalDate each : operationParameter)
 		{
 			// Keep null elements, as the other attribute types do
 			result.add(each == null ? null : GraphQLQueryToOperationConverter.getDate(each));
@@ -775,25 +775,23 @@ public class GraphQLQueryToOperationConverter
 		return result;
 	}
 
-	private static Set<Timestamp> getTimestamps(Collection<String> operationParameter)
+	private static Set<Timestamp> getTimestamps(Collection<Instant> operationParameter)
 	{
 		Set<Timestamp> result = new LinkedHashSet<>();
-		for (String each : operationParameter)
+		for (Instant each : operationParameter)
 		{
-			result.add(each == null ? null : GraphQLQueryToOperationConverter.getTimestamp(each));
+			result.add(each == null ? null : Timestamp.from(each));
 		}
 		return result;
 	}
 
-	private static Timestamp getDate(String operationParameter)
+	private static Timestamp getDate(LocalDate operationParameter)
 	{
-		LocalDate localDate = LocalDate.parse(operationParameter);
-		return Timestamp.valueOf(localDate.atStartOfDay());
+		return Timestamp.valueOf(operationParameter.atStartOfDay());
 	}
 
-	private static Timestamp getTimestamp(String operationParameter)
+	private static Timestamp getTimestamp(Instant operationParameter)
 	{
-		Instant instant = Instant.parse(operationParameter);
-		return Timestamp.from(instant);
+		return Timestamp.from(operationParameter);
 	}
 }

@@ -129,15 +129,15 @@ input _FloatAttribute {
 }
 
 input _DateAttribute {
-    eq: String
-    notEq: String
-    in: [String]
-    notIn: [String]
+    eq: LocalDate
+    notEq: LocalDate
+    in: [LocalDate]
+    notIn: [LocalDate]
 
-    greaterThan: String
-    greaterThanEquals: String
-    lessThan: String
-    lessThanEquals: String
+    greaterThan: LocalDate
+    greaterThanEquals: LocalDate
+    lessThan: LocalDate
+    lessThanEquals: LocalDate
 
     year: _IntegerAttribute
     month: _IntegerAttribute
@@ -145,15 +145,15 @@ input _DateAttribute {
 }
 
 input _TimestampAttribute {
-    eq: String
-    notEq: String
-    in: [String]
-    notIn: [String]
+    eq: Instant
+    notEq: Instant
+    in: [Instant]
+    notIn: [Instant]
 
-    greaterThan: String
-    greaterThanEquals: String
-    lessThan: String
-    lessThanEquals: String
+    greaterThan: Instant
+    greaterThanEquals: Instant
+    lessThan: Instant
+    lessThanEquals: Instant
 
     year: _IntegerAttribute
     month: _IntegerAttribute
@@ -161,8 +161,8 @@ input _TimestampAttribute {
 }
 
 input _AsOfAttribute {
-    eq: String
-    notEq: String
+    eq: Instant
+    notEq: Instant
     equalsEdgePoint: _Empty
 }
 

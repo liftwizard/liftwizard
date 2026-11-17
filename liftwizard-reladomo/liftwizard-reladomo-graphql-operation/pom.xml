@@ -59,6 +59,13 @@
 
         <dependency>
             <groupId>io.liftwizard</groupId>
+            <artifactId>liftwizard-reladomo-utc-infinity-timestamp</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.liftwizard</groupId>
             <artifactId>liftwizard-graphql-reladomo-meta</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -88,6 +95,12 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
             <scope>test</scope>
         </dependency>
 
