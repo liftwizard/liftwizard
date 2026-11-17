@@ -37,4 +37,10 @@ class JCFSortedSetToMutableSortedSetTest
 	{
 		this.rewriteRun(this.javaFixture("replacePatterns/01"));
 	}
+
+	@Test
+	void doNotReplaceInvalidPatterns()
+	{
+		this.rewriteRun(this.javaFixtureUnchanged("doNotReplaceInvalidPatterns/01"));
+	}
 }

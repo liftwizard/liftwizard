@@ -630,6 +630,8 @@ Replace java.util.Map declarations with MutableMap when initialized with Eclipse
 - `Map<String, Integer> map = Maps.mutable.empty()` → `MutableMap<String, Integer> map = Maps.mutable.empty()`
 - `Map map = Maps.mutable.empty()` → `MutableMap map = Maps.mutable.empty()`
 
+The type declaration recipes leave a declaration alone when the variable is passed to a method with an overload that accepts the Eclipse Collections type but not the JCF type. `MutableMap` is both a `Map` and an `Iterable`, and `MutableSortedSet` is both a `SortedSet` and a `Comparable`, so changing the declared type would make AssertJ's `assertThat(map)` ambiguous and stop compiling.
+
 ### Formatting
 
 #### PreserveMethodChainLineBreaks

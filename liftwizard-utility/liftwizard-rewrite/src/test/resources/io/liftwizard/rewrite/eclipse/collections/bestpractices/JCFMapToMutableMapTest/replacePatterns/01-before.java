@@ -41,3 +41,16 @@ class WildcardExample
 		Map<?, ?> unboundedMap = Maps.mutable.empty();
 	}
 }
+
+class UnambiguousArgumentExample
+{
+	void test()
+	{
+		Map<String, Integer> passedToMethod = Maps.mutable.empty();
+		this.consume(passedToMethod);
+	}
+
+	void consume(Map<String, Integer> map)
+	{
+	}
+}
