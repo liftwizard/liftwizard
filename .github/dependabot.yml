@@ -40,8 +40,19 @@ updates:
           - "ch.qos.logback*"
           - "net.logstash.logback*"
     # Liftwizard stays on Dropwizard 2.x, which pins JUnit 5, Logback 1.2 and SLF4J 1.7. Logback 1.3+ requires SLF4J 2, and logstash-logback-encoder 7.3+ requires Logback 1.3.
+    # Dropwizard 2.1's dropwizard-testing calls ReflectionUtils.makeAccessible(AccessibleObject), which JUnit Platform 1.11 (JUnit 5.11) removed.
     ignore:
       - dependency-name: "org.junit*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.junit.platform*"
+        versions: [">=1.11"]
+      - dependency-name: "org.junit.jupiter*"
+        versions: [">=5.11"]
+      - dependency-name: "org.junit.vintage*"
+        versions: [">=5.11"]
+      - dependency-name: "org.junit:junit-bom"
+        versions: [">=5.11"]
+      - dependency-name: "com.graphql-java*"
         update-types: ["version-update:semver-major"]
       - dependency-name: "io.dropwizard*"
         update-types: ["version-update:semver-major"]
