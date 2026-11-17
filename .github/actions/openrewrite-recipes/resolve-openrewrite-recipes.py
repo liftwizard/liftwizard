@@ -18,7 +18,10 @@ NAMESPACE = {"m": "http://maven.apache.org/POM/4.0.0"}
 def curl(*arguments):
     # The credentials go through stdin so that they never appear in the process list. curl does not send them on to the storage host that Code Genome redirects to.
     config = 'user = "{}:{}"\n'.format(os.environ["CODEGENOME_USERNAME"], os.environ["CODEGENOME_TOKEN"])
-    return subprocess.run(["curl", "--silent", "--show-error", "--config", "-", *arguments], input=config, capture_output=True, text=True, check=True).stdout
+    result = subprocess.run(["curl", "--silent", "--show-error", "--config", "-", *arguments], input=config, capture_output=True, text=True)
+    if result.returncode != 0:
+        sys.exit(f"curl {' '.join(arguments)} failed with exit code {result.returncode}: {result.stderr.strip()}")
+    return result.stdout
 
 
 def on_central(artifact_id, version):
