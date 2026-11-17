@@ -101,8 +101,15 @@
 
     </dependencies>
 
-    <!-- OpenRewrite releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. -->
+    <!-- OpenRewrite releases newer than the last ones on Maven Central are only published here. Resolving them needs a server with id codegenome in settings.xml. Central comes first so that everything it has is downloaded from Central and cached as coming from Central. -->
     <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
         <repository>
             <id>codegenome</id>
             <url>https://artifacts.codegenomeproject.org/maven</url>
