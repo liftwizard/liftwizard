@@ -85,21 +85,21 @@ public class JsonPrettyPrinterSerializerProvider
 	public void serializeValue(JsonGenerator gen, Object value)
 		throws IOException
 	{
-		super.serializeValue(wrap(gen), value);
+		serializeWrapped(gen, (wrapped) -> super.serializeValue(wrapped, value));
 	}
 
 	@Override
 	public void serializeValue(JsonGenerator gen, Object value, JavaType rootType)
 		throws IOException
 	{
-		super.serializeValue(wrap(gen), value, rootType);
+		serializeWrapped(gen, (wrapped) -> super.serializeValue(wrapped, value, rootType));
 	}
 
 	@Override
 	public void serializeValue(JsonGenerator gen, Object value, JavaType rootType, JsonSerializer<Object> ser)
 		throws IOException
 	{
-		super.serializeValue(wrap(gen), value, rootType, ser);
+		serializeWrapped(gen, (wrapped) -> super.serializeValue(wrapped, value, rootType, ser));
 	}
 
 	@Override
@@ -112,11 +112,26 @@ public class JsonPrettyPrinterSerializerProvider
 	)
 		throws IOException
 	{
-		super.serializePolymorphic(wrap(gen), value, rootType, valueSer, typeSer);
+		serializeWrapped(gen, (wrapped) -> super.serializePolymorphic(wrapped, value, rootType, valueSer, typeSer));
 	}
 
-	private static JsonGenerator wrap(JsonGenerator gen)
+	private static void serializeWrapped(JsonGenerator gen, Serialization serialization)
+		throws IOException
 	{
-		return gen instanceof JsonPrettyPrinterGenerator ? gen : new JsonPrettyPrinterGenerator(gen);
+		if (gen instanceof JsonPrettyPrinterGenerator)
+		{
+			serialization.serialize(gen);
+			return;
+		}
+		var wrapped = new JsonPrettyPrinterGenerator(gen);
+		serialization.serialize(wrapped);
+		wrapped.finish();
+	}
+
+	@FunctionalInterface
+	private interface Serialization
+	{
+		void serialize(JsonGenerator gen)
+			throws IOException;
 	}
 }

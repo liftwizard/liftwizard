@@ -62,18 +62,86 @@ class JsonPrettyPrinterTest
 		// prettier-ignore
 		var expectedJson = """
 			{
-				"a": [
-					"b",
-					"c"
-				],
-				"d": [
-					"e",
-					"f"
-				]
+				"a": ["b", "c"],
+				"d": ["e", "f"]
 			}
 			""";
 
 		assertThat(actualJson).isEqualTo(expectedJson);
+	}
+
+	@Test
+	void arraysWithoutObjectsPrintOnOneLineWhenTheyFit()
+		throws JsonProcessingException
+	{
+		// "withComma" would be 121 columns with its trailing comma, and "last" is exactly 120 columns without one, counting a tab as 4 like oxfmt.
+		String withComma = "w".repeat(99);
+		String last = "z".repeat(104);
+
+		// language=JSON
+		var compactJson = """
+			{
+				"a": ["b", "c"],
+				"nums": [1, 2, 3],
+				"mixed": [1, "x", true, null],
+				"nested": {"path": ["itemByFinder"]},
+				"long": [
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx"
+				],
+				"objs": [{"k": 1}],
+				"empty": [],
+				"arrs": [[1, 2], [3]],
+				"withComma": ["%s"],
+				"last": ["%s"]
+			}
+			""".formatted(withComma, last);
+
+		// language=JSON
+		// prettier-ignore
+		var expectedJson = """
+			{
+				"a": ["b", "c"],
+				"nums": [1, 2, 3],
+				"mixed": [1, "x", true, null],
+				"nested":
+				{
+					"path": ["itemByFinder"]
+				},
+				"long": [
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx",
+					"xxxxxxxxxxxxxxxxxxxx"
+				],
+				"objs": [
+					{
+						"k": 1
+					}
+				],
+				"empty": [],
+				"arrs": [[1, 2], [3]],
+				"withComma": [
+					"%s"
+				],
+				"last": ["%s"]
+			}
+			""".formatted(withComma, last);
+
+		this.assertPrettyPrints(compactJson, expectedJson);
+	}
+
+	@Test
+	void rootArrayWithoutObjects()
+		throws JsonProcessingException
+	{
+		this.assertPrettyPrints("[\"x\", [1, 2]]", "[\"x\", [1, 2]]\n");
 	}
 
 	@Test
@@ -115,9 +183,7 @@ class JsonPrettyPrinterTest
 					"c": 1,
 					"g":
 					{
-						"h": [
-							1
-						]
+						"h": [1]
 					}
 				},
 				"d": [
