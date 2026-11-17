@@ -30,17 +30,26 @@ import com.fasterxml.jackson.core.util.Separators;
  *
  * <p>A non-empty object that is a field value starts on the next line, at the key's indentation. Empty objects, arrays, objects inside arrays, and the root object keep their opening bracket on the same line.
  *
- * <p>Jackson writes the field/value separator before it knows the value's type, so this printer needs {@link JsonPrettyPrinterGenerator} to announce objects. Install {@link JsonPrettyPrinterSerializerProvider} on the {@code ObjectMapper} to get it. Without it, every field value stays on the key's line.
+ * <p>An array that contains no objects goes on one line, like {@code ["a", [1, 2]]}, when that line fits in {@value #PRINT_WIDTH} columns, counting a tab as {@value #TAB_WIDTH} columns as oxfmt does.
+ *
+ * <p>Jackson writes the field/value separator before it knows the value's type, and gives no warning of an array's contents, so this printer needs {@link JsonPrettyPrinterGenerator} to announce objects and to decide which arrays fit on one line. Install {@link JsonPrettyPrinterSerializerProvider} on the {@code ObjectMapper} to get it. Without it, every field value stays on the key's line and every non-empty array is expanded.
  */
 public class JsonPrettyPrinter
 	extends DefaultPrettyPrinter
 {
+	static final int PRINT_WIDTH = 120;
+	static final int TAB_WIDTH = 4;
+
 	private static final DefaultIndenter TAB_INDENTER = new DefaultIndenter("\t", DefaultIndenter.SYS_LF);
 
 	// Set by JsonPrettyPrinterGenerator just before the generator asks for the separator
 	private boolean nextValueIsObject;
 	// The separator was written without its trailing space, and the '{' is deferred until we know whether the object is empty
 	private boolean objectOpenPending;
+	// Set by JsonPrettyPrinterGenerator just before it writes an array that fits on one line
+	private boolean nextArrayInline;
+	// How many arrays are open on the current line
+	private int inlineArrayDepth;
 
 	public JsonPrettyPrinter()
 	{
@@ -61,6 +70,16 @@ public class JsonPrettyPrinter
 	void beforeStartObject()
 	{
 		this.nextValueIsObject = true;
+	}
+
+	void beforeInlineArray()
+	{
+		this.nextArrayInline = true;
+	}
+
+	int getNesting()
+	{
+		return this._nesting;
 	}
 
 	@Override
@@ -123,11 +142,59 @@ public class JsonPrettyPrinter
 	}
 
 	@Override
+	public void writeStartArray(@Nonnull JsonGenerator jsonGenerator)
+		throws IOException
+	{
+		if (this.nextArrayInline || this.inlineArrayDepth > 0)
+		{
+			this.nextArrayInline = false;
+			this.inlineArrayDepth++;
+			jsonGenerator.writeRaw('[');
+		}
+		else
+		{
+			super.writeStartArray(jsonGenerator);
+		}
+	}
+
+	@Override
+	public void beforeArrayValues(@Nonnull JsonGenerator jsonGenerator)
+		throws IOException
+	{
+		if (this.inlineArrayDepth == 0)
+		{
+			super.beforeArrayValues(jsonGenerator);
+		}
+	}
+
+	@Override
+	public void writeArrayValueSeparator(@Nonnull JsonGenerator jsonGenerator)
+		throws IOException
+	{
+		if (this.inlineArrayDepth > 0)
+		{
+			jsonGenerator.writeRaw(", ");
+		}
+		else
+		{
+			super.writeArrayValueSeparator(jsonGenerator);
+		}
+	}
+
+	@Override
 	public void writeEndArray(@Nonnull JsonGenerator jsonGenerator, int nrOfValues)
 		throws IOException
 	{
-		super.writeEndArray(jsonGenerator, nrOfValues);
-		if (this._nesting == 0)
+		if (this.inlineArrayDepth > 0)
+		{
+			this.inlineArrayDepth--;
+			jsonGenerator.writeRaw(']');
+		}
+		else
+		{
+			super.writeEndArray(jsonGenerator, nrOfValues);
+		}
+		if (this._nesting == 0 && this.inlineArrayDepth == 0)
 		{
 			jsonGenerator.writeRaw(DefaultIndenter.SYS_LF);
 		}
