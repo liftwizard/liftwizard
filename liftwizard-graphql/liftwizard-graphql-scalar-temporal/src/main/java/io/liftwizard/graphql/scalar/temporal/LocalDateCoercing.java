@@ -18,9 +18,11 @@ package io.liftwizard.graphql.scalar.temporal;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -70,14 +72,26 @@ public class LocalDateCoercing
 			return temporalAccessor;
 		}
 
+		// Matches ReladomoLocalDateDataFetcher, which converts with java.sql.Date.toLocalDate() in the system default time zone
+		if (input instanceof java.sql.Date sqlDate)
+		{
+			return sqlDate.toLocalDate();
+		}
+
+		if (input instanceof Date date)
+		{
+			return LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault());
+		}
+
 		if (input instanceof String)
 		{
 			return this.parseLocalDate(input.toString(), CoercingSerializeException::new);
 		}
 
-		String error = "Expected a 'String' or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
-			LocalDateCoercing.typeName(input)
-		);
+		String error =
+			"Expected a 'String', 'java.util.Date', or 'java.time.temporal.TemporalAccessor' but was '%s'.".formatted(
+				LocalDateCoercing.typeName(input)
+			);
 		throw new CoercingSerializeException(error);
 	}
 
