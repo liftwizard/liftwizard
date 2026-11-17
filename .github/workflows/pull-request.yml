@@ -96,10 +96,11 @@ jobs:
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-rewrite-${{ hashFiles('**/pom.xml') }}
+          # Not prefixed with maven- so that the other jobs' maven- fallback never restores artifacts cached as coming from codegenome, which Maven rechecks against Central in builds without that repository.
+          key: codegenome-maven-rewrite-${{ hashFiles('**/pom.xml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-rewrite-
+            codegenome-maven-rewrite-
             maven-
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
