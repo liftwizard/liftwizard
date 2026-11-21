@@ -26,7 +26,7 @@ jobs:
             codegenome-maven-rewrite-
             maven-
 
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+      - uses: twosigma/maven-cache-cleaner@fbb04c12bb496d3c4f1818eb235dbb5114b227c6 # v2.4.0
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
