@@ -59,7 +59,7 @@ if [[ ${#RECIPES[@]} -eq 0 ]]; then
 fi
 
 # Some recipe modules build with a Java 25 toolchain. Installing it with mise does not change any mise configuration.
-TOOLCHAIN_JDK=temurin-25.0.4+7.0.LTS
+TOOLCHAIN_JDK=temurin-25.0.4.1+1.0.LTS
 mise install --quiet "java@$TOOLCHAIN_JDK"
 TOOLCHAIN_JDK_HOME="$(mise where "java@$TOOLCHAIN_JDK")"
 
