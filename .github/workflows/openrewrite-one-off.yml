@@ -3,9 +3,6 @@
 on:
   workflow_dispatch:
 
-env:
-  GROUP_ID: "io/liftwizard"
-
 permissions:
   contents: read
 
@@ -17,16 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          # Not prefixed with maven- so that the other jobs' maven- fallback never restores artifacts cached as coming from codegenome, which Maven rechecks against Central in builds without that repository.
-          key: codegenome-maven-rewrite-${{ hashFiles('**/pom.xml') }}
+          # Not prefixed with maven-main- so that the other jobs' maven-main- fallback never restores artifacts cached as coming from codegenome, which Maven rechecks against Central in builds without that repository.
+          key: codegenome-maven-rewrite-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            codegenome-maven-rewrite-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            codegenome-maven-rewrite-main-
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -62,7 +57,3 @@ jobs:
           git add .
           git commit -m "Apply OpenRewrite one-off recipes."
           git push origin "$BRANCH_NAME"
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}

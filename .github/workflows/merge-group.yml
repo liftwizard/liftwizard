@@ -8,9 +8,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  GROUP_ID: "io/liftwizard"
-
 permissions:
   contents: read
 
@@ -36,14 +33,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -62,10 +57,6 @@ jobs:
 
       - run: just test
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-spotbugs:
     runs-on: ubuntu-latest
     steps:
@@ -73,14 +64,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -94,10 +83,6 @@ jobs:
 
       - run: just spotbugs
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-errorprone:
     runs-on: ubuntu-latest
     steps:
@@ -105,14 +90,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -129,10 +112,6 @@ jobs:
 
       - run: just errorprone-strict
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-enforcer:
     runs-on: ubuntu-latest
     steps:
@@ -140,14 +119,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -162,10 +139,6 @@ jobs:
       - name: Run maven-enforcer-plugin
         run: just enforcer
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-dependency:
     runs-on: ubuntu-latest
     steps:
@@ -173,14 +146,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -195,10 +166,6 @@ jobs:
       - name: Run maven-dependency-plugin
         run: just dependency
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-javadoc:
     runs-on: ubuntu-latest
     steps:
@@ -206,14 +173,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -228,10 +193,6 @@ jobs:
       - name: Run maven-javadoc-plugin
         run: just javadoc
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   checkstyle-semantics:
     name: checkstyle xml (semantics)
     runs-on: ubuntu-latest
@@ -244,15 +205,12 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-checkstyle-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -271,10 +229,6 @@ jobs:
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   checkstyle-semantics-strict:
     name: checkstyle xml (semantics strict)
     runs-on: ubuntu-latest
@@ -287,15 +241,12 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-checkstyle-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -314,10 +265,6 @@ jobs:
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   checkstyle-formatting:
     name: checkstyle xml (formatting)
     runs-on: ubuntu-latest
@@ -330,15 +277,12 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-checkstyle-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-checkstyle-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -357,10 +301,6 @@ jobs:
         with:
           checkstyle_files: "**/checkstyle-result.xml"
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   maven-rewrite:
     runs-on: ubuntu-latest
     steps:
@@ -368,16 +308,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          # Not prefixed with maven- so that the other jobs' maven- fallback never restores artifacts cached as coming from codegenome, which Maven rechecks against Central in builds without that repository.
-          key: codegenome-maven-rewrite-${{ hashFiles('**/pom.xml') }}
+          # Not prefixed with maven-main- so that the other jobs' maven-main- fallback never restores artifacts cached as coming from codegenome, which Maven rechecks against Central in builds without that repository.
+          key: codegenome-maven-rewrite-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            codegenome-maven-rewrite-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            codegenome-maven-rewrite-main-
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -391,10 +329,6 @@ jobs:
       - name: Run rewrite-maven-plugin (dry run)
         run: just rewrite-dry-run
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   # Check for reproducible builds with artifact:check-buildplan
   maven-reproducible:
     runs-on: ubuntu-latest
@@ -403,14 +337,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -425,10 +357,6 @@ jobs:
       - name: Run artifact:check-buildplan
         run: just reproducible
 
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
-
   spotless:
     runs-on: ubuntu-latest
     steps:
@@ -437,15 +365,12 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: maven-spotless-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-spotless-
-            maven-
-
-      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
+            maven-main-
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -491,11 +416,6 @@ jobs:
           git restore -- .
           just spotless --name pom
           just _check-local-modifications
-
-      # Remove any jars we may have created before actions/cache caches .m2
-      - name: "Clean Maven cache"
-        if: ${{ !cancelled() }}
-        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
   reviewdog-markdownlint:
     runs-on: ubuntu-latest

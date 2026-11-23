@@ -16,6 +16,7 @@ permissions:
   contents: read
 
 jobs:
+  # Saves the Maven cache that every pull request and merge queue job restores. Those runs can only restore caches saved on main, so they never save their own. On a cache miss, the warm-up step runs the goals and profiles that only those jobs use, so the cache holds every plugin and plugin dependency they need. The key hashes this file so that changing the warm-up saves a fresh cache.
   maven:
     runs-on: ubuntu-latest
     steps:
@@ -24,11 +25,12 @@ jobs:
           persist-credentials: false
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: maven-cache
         with:
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
           path: ~/.m2/repository
           restore-keys: |
-            maven-
+            maven-main-
 
       - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
@@ -47,17 +49,34 @@ jobs:
 
       - run: just mvn
 
+      # `just mvn` already covers the tests and the spotless, enforcer, dependency, javadoc, and checkstyle-semantics profiles. It turns on errorprone-strict, which only sets a flag, without errorprone, so the warm-up adds errorprone to download the Error Prone plugins.
+      - name: Warm up the plugins of the other pull request and merge queue jobs
+        if: steps.maven-cache.outputs.cache-hit != 'true'
+        run: just mvn --target "verify artifact:check-buildplan checkstyle:check" --profiles="--activate-profiles errorprone,errorprone-patch,spotbugs-maven-plugin,jacoco-maven-plugin,checkstyle-formatting" -- --threads 2C -DskipTests -Dcheckstyle.failOnViolation=false
+
       # Remove any jars we may have created before actions/cache caches .m2
       - name: "Clean Maven cache"
         run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
 
-  # Saves the source-available OpenRewrite recipes cache on main, the only branch whose caches every pull request and merge queue run can restore. When the cache already exists, this job only restores it.
+  # Saves the source-available OpenRewrite recipes cache and the rewrite jobs' Maven cache on main, the only branch whose caches every pull request and merge queue run can restore. When the caches already exist, this job only restores them.
   openrewrite-recipes:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: maven-cache
+        with:
+          # Not prefixed with maven-main- so that the other jobs' maven-main- fallback never restores artifacts cached as coming from codegenome, which Maven rechecks against Central in builds without that repository.
+          key: codegenome-maven-rewrite-main-${{ hashFiles('**/pom.xml', '.github/workflows/push.yml') }}
+          path: ~/.m2/repository
+          restore-keys: |
+            codegenome-maven-rewrite-main-
+            maven-main-
+
+      - uses: twosigma/maven-cache-cleaner@8cc87ff622d543e1aad4085cbf5c05236b2d16d9 # v2.3.0
 
       - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         env:
@@ -67,3 +86,15 @@ jobs:
         with:
           codegenome-username: ${{ secrets.CODEGENOME_USERNAME }}
           codegenome-token: ${{ secrets.CODEGENOME_TOKEN }}
+
+      # The run, dryRun, and one-off profiles have different plugin dependencies, so the warm-up runs all three. The one-off command matches openrewrite-one-off.yml.
+      - name: Warm up the plugins of the rewrite jobs
+        if: steps.maven-cache.outputs.cache-hit != 'true'
+        run: |
+          just rewrite-run
+          just rewrite-dry-run
+          mvn rewrite:run -Prewrite-maven-plugin-one-off -DskipLiftwizardRewriteModule
+
+      # Remove any jars we may have created before actions/cache caches .m2
+      - name: "Clean Maven cache"
+        run: rm -rf ~/.m2/repository/${{ env.GROUP_ID }}
