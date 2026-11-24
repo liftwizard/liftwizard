@@ -32,6 +32,7 @@
         <module>liftwizard-graphql-data-fetcher</module>
         <module>liftwizard-graphql-exception</module>
         <module>liftwizard-graphql-finder-fetcher</module>
+        <module>liftwizard-graphql-instrumentation-limits</module>
         <module>liftwizard-graphql-instrumentation-logging</module>
         <module>liftwizard-graphql-instrumentation-metrics</module>
         <module>liftwizard-graphql-instrumentation</module>

@@ -15,6 +15,7 @@ graphql
     bundle
     instrumentation-logging
     instrumentation-metrics
+    instrumentation-limits
     data-fetcher-async
 reladomo
     reladomo-overview

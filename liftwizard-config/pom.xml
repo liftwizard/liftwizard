@@ -35,6 +35,7 @@
         <module>liftwizard-config-enabled</module>
         <module>liftwizard-config-executor-service</module>
         <module>liftwizard-config-graphql</module>
+        <module>liftwizard-config-graphql-limits</module>
         <module>liftwizard-config-h2</module>
         <module>liftwizard-config-healthcheck-common-pool</module>
         <module>liftwizard-config-liquibase-migration</module>

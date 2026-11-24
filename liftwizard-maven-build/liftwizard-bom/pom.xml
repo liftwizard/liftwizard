@@ -238,6 +238,12 @@
 
             <dependency>
                 <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-config-graphql-limits</artifactId>
+                <version>2.1.54-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-config-h2</artifactId>
                 <version>2.1.54-SNAPSHOT</version>
             </dependency>
@@ -327,6 +333,12 @@
             <dependency>
                 <groupId>io.liftwizard</groupId>
                 <artifactId>liftwizard-graphql-instrumentation</artifactId>
+                <version>2.1.54-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.liftwizard</groupId>
+                <artifactId>liftwizard-graphql-instrumentation-limits</artifactId>
                 <version>2.1.54-SNAPSHOT</version>
             </dependency>
 
