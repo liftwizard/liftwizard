@@ -15,13 +15,13 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" child.project.url.inherit.append.path="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" child.project.url.inherit.append.path="false" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
     <groupId>io.liftwizard</groupId>
     <artifactId>liftwizard-minimal-parent</artifactId>
-    <version>2.1.54-SNAPSHOT</version>
+    <version>2.1.54</version>
     <name>Liftwizard Maven Parent (minimal)</name>
 
     <description>Liftwizard is a collection of bundles and add-ons for Dropwizard, the Java framework for writing web services.</description>
@@ -50,7 +50,7 @@
         <url>https://github.com/liftwizard/liftwizard</url>
         <connection>scm:git:https://github.com/liftwizard/liftwizard.git</connection>
         <developerConnection>scm:git:git@github.com:liftwizard/liftwizard.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>2.1.54</tag>
     </scm>
 
     <inceptionYear>2020</inceptionYear>
@@ -69,7 +69,7 @@
         <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html#how-do-i-configure-my-maven-build -->
         <!-- Enable Reproducible Builds mode for plugins -->
         <!--region outputTimestamp-->
-        <project.build.outputTimestamp>2026-11-12T21:59:50Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2026-11-28T04:50:18Z</project.build.outputTimestamp>
         <!--endregion outputTimestamp-->
 
         <!-- This is necessary when using @argLine in maven-surefire-plugin, and maven profiles that may or may not initialize argLine -->
