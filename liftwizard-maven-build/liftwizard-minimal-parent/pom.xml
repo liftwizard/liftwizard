@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" child.project.url.inherit.append.path="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
@@ -46,10 +46,10 @@
         </license>
     </licenses>
 
-    <scm>
+    <scm child.scm.connection.inherit.append.path="false" child.scm.developerConnection.inherit.append.path="false" child.scm.url.inherit.append.path="false">
         <url>https://github.com/liftwizard/liftwizard</url>
         <connection>scm:git:https://github.com/liftwizard/liftwizard.git</connection>
-        <developerConnection>scm:git:https@github.com:liftwizard/liftwizard.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:liftwizard/liftwizard.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
